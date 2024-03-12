@@ -1,0 +1,1305 @@
+{
+  "StarterCards" : [{
+    "Front" : {
+      "Resources" : ["Insect"],
+      "CornerUpDx" : "Plant",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Insect",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "CornerUpDx" : "Plant",
+      "CornerUpSx" : "Fungi",
+      "CornerDownDx" : "Animal",
+      "CornerDownSx" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Resources" : ["Fungi"],
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Animal",
+      "CornerDownDx" : "Fungi",
+      "CornerDownSx" : null,
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "CornerUpDx" : "Animal",
+      "CornerUpSx" : "Plant",
+      "CornerDownDx" : "Insect",
+      "CornerDownSx" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Resources" : ["Plant", "Fungi"],
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "CornerUpDx" : "Animal",
+      "CornerUpSx" : "Insect",
+      "CornerDownDx" : "Plant",
+      "CornerDownSx" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Resources" : ["Animal", "Insect"],
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "CornerUpDx" : "Insect",
+      "CornerUpSx" : "Plant",
+      "CornerDownDx" : "Fungi",
+      "CornerDownSx" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Resources" : ["Animal", "Insect", "Plant"],
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Evil",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "CornerUpDx" : "Fungi",
+      "CornerUpSx" : "Insect",
+      "CornerDownDx" : "Animal",
+      "CornerDownSx" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Resources" : ["Plant", "Animal", "Fungi"],
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Evil",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "CornerUpDx" : "Animal",
+      "CornerUpSx" : "Fungi",
+      "CornerDownDx" : "Insect",
+      "CornerDownSx" : "Plant",
+      "ImgFile" : ""
+    }
+  }],
+
+  "ObjectiveCards" : [{
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Fungi", "Fungi", "Fungi"],
+      "Type" : "Diagonal DSx - UDx",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Plant", "Plant", "Plant"],
+      "Type" : "Diagonal USx - DDx",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Animal", "Animal", "Animal"],
+      "Type" : "Diagonal DSx - UDx",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Insect", "Insect", "Insect"],
+      "Type" : "Diagonal USx - DDx",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 3,
+      "Requirements" : ["Fungi", "Fungi", "Plant"],
+      "Type" : "L",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 3,
+      "Requirements" : ["Plant", "Plant", "Insect"],
+      "Type" : "L Rotated",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 3,
+      "Requirements" : ["Fungi", "Animal", "Animal"],
+      "Type" : "L Inverted",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 3,
+      "Requirements" : ["Animal", "Insect", "Insect"],
+      "Type" : "L Rotated - Inverted",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Fungi", "Fungi", "Fungi"],
+      "Type" : "Collection",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Plant", "Plant", "Plant"],
+      "Type" : "Collection",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Animal", "Animal", "Animal"],
+      "Type" : "Collection",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Insect", "Insect", "Insect"],
+      "Type" : "Collection",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 3,
+      "Requirements" : ["Quill", "Inkwell", "Manuscript"],
+      "Type" : "Collection",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Manuscript", "Manuscript"],
+      "Type" : "Collection",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  },{
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Inkwell", "Inkwell"],
+      "Type" : "Collection",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Points" : 2,
+      "Requirements" : ["Quill", "Quill"],
+      "Type" : "Collection",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "ImgFile" : ""
+    }
+  }],
+
+  "ResourceCards" : [{
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resources" : "Insect",
+      "ImgFile" : ""
+    }
+  }],
+
+  "GoldCards" : [{
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Plant",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Animal",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Fungi",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Insect",
+      "ImgFile" : ""
+    }
+  }, {
+    "Front" : {
+      "Requirements" : [],
+      "Constraint" : "",
+      "CornerUpDx" : "",
+      "CornerUpSx" : "",
+      "CornerDownDx" : "",
+      "CornerDownSx" : "",
+      "ImgFile" : ""
+    },
+    "Back" : {
+      "Resource" : "Insect",
+      "ImgFile" : ""
+    }
+  }]
+}
