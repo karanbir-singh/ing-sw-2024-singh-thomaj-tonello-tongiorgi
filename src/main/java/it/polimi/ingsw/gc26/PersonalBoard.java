@@ -52,7 +52,7 @@ public class PersonalBoard {
     }
     //end analyzing the point X+1, Y+1
 
-
+gyuqwggy
     //begin analyzing the point X-1,Y+1
     if(ifPresent(x-1,y+1,occupiedPositions) != null){
         Point p = ifPresent(x-1,y+1, occupiedPositions);
