@@ -3,11 +3,11 @@ import java.util.*;
 public class PersonalBoard {
     private int xMin, xMax, yMin, yMax;
     private int score;
-    private ArrayList<Point> occupiedPositions;
-    private ArrayList<Point> playablePositions;
-    private ArrayList<Point> blockedPositions;
-    private MissionCard secretMission;
-    private PersonalBoardSymbols personalBoardSymbols;
+    private final ArrayList<Point> occupiedPositions;
+    private final ArrayList<Point> playablePositions;
+    private final ArrayList<Point> blockedPositions;
+    private final MissionCard secretMission;
+    private final PersonalBoardSymbols personalBoardSymbols;
 
     public PersonalBoard(Side initialSide, MissionCard secretMission){
         score = 0;
@@ -28,8 +28,9 @@ public class PersonalBoard {
     public boolean checkIfPlayable(int x, int y){
         return ifPresent(x,y,playablePositions).isPresent();
     }
-    public void playSide(int x, int y, Side side) throws nullPointerException{//supponiamo sia una posizione valida
-        Point p = ifPresent(x,y, playablePositions).orElseThrow(() ->(new nullPointerException()));
+    public void playSide(int x, int y, Side side) throws NullPointerException{
+        //suppose is valid position
+        Point p = ifPresent(x,y, playablePositions).orElseThrow(() ->(new NullPointerException()));
         p.setSide(side);
         movePoint(x,y,occupiedPositions, playablePositions);
 
@@ -43,17 +44,18 @@ public class PersonalBoard {
             p.side.DOWNLEFT.isHidden = true;
         }else if(ifPresent(x+1,y+1,blockedPositions).isPresent()){
         }else if(ifPresent(x+1,y+1,playablePositions).isPresent()) {
-        }else
-        if(side.UPRIGHT.evil == true){
-            addPoint(x+1,y+1,blockedPositions);
-        }else {
-            addPoint(x + 1, y + 1, playablePositions);
+        }else{
+            if (side.UPRIGHT.evil == true) {
+                addPoint(x + 1, y + 1, blockedPositions);
+            } else {
+                addPoint(x + 1, y + 1, playablePositions);
+            }
         }
-    //end analyzing the point X+1, Y+1
+        //end analyzing the point X+1, Y+1
 
-    //begin analyzing the point X-1,Y+1
+        //begin analyzing the point X-1,Y+1
         if(ifPresent(x-1,y+1,occupiedPositions).isPresent()){
-            Point p = ifPresent(x-1,y+1, occupiedPositions).orElseThrow(() ->(new nullPointerException());
+            Point p = ifPresent(x-1,y+1, occupiedPositions).orElseThrow(() ->(new NullPointerException()));
             personalBoardSymbols.decreaseResource(p.side.DOWNRIGHT.resource);
             p.side.DOWNRIGHT.isHidden = true;
         }else if(ifPresent(x-1,y+1,blockedPositions).isPresent()){
@@ -65,12 +67,12 @@ public class PersonalBoard {
                 addPoint(x-1,y+1, playablePositions);
             }
         }
-    //end analyzing the point X-1, Y+1
+        //end analyzing the point X-1, Y+1
 
 
-    //begin analyzing the point X-1,Y-1
+        //begin analyzing the point X-1,Y-1
         if(ifPresent(x-1,y-1,occupiedPositions).isPresent()){
-            Point p = ifPresent(x-1,y-1, occupiedPositions).orElseThrow(() ->(new nullPointerException());
+            Point p = ifPresent(x-1,y-1, occupiedPositions).orElseThrow(() ->(new NullPointerException()));
             personalBoardSymbols.decreaseResource(p.side.UPRIGHT.resource);
             p.side.UPRIGHT.isHidden = true;
         }else if(ifPresent(x-1,y-1,blockedPositions).isPresent()){
@@ -86,11 +88,11 @@ public class PersonalBoard {
 
         //begin analyzing the point X+1,Y-1
         if(ifPresent(x+1,y-1,occupiedPositions).isPresent()){
-            Point p = ifPresent(x+1,y-1, occupiedPositions).orElseThrow(() ->(new nullPointerException());
+            Point p = ifPresent(x+1,y-1, occupiedPositions).orElseThrow(() ->(new NullPointerException()));
             personalBoardSymbols.decreaseResource(p.side.UPLEFT.resource);
             p.side.UPLEFT.isHidden = true;
         }else if(ifPresent(x+1,y-1,blockedPositions).isPresent()){
-        }else if(ifPresent(x+1,y-1,playablePositions).isPresent(){
+        }else if(ifPresent(x+1,y-1,playablePositions).isPresent()){
         }else{
             if(side.DOWNRIGHT.evil == true){
                 addPoint(x+1,y-1,blockedPositions);
@@ -131,7 +133,7 @@ private Optional<Point> ifPresent(int x, int y, ArrayList<Point> l){
 
 
 private void movePoint(int x, int y, ArrayList<Point> l1, ArrayList<Point> l2){
-    Point p = ifPresent(x,y,l2).orElseThrow(() ->(new nullPointerException()));
+    Point p = ifPresent(x,y,l2).orElseThrow(() ->(new NullPointerException()));
     l2.removePoint(x,y,l2);
     l1.add(p);
 }
@@ -142,5 +144,5 @@ private void addPoint(int x, int y, ArrayList<Point> l){
 }
 private void removePoint(int x, int y, ArrayList<Point> l){
 
-    l.remove(ifPresent(x,y,l).orElseThrow(() ->(new nullPointerException())));
+    l.remove(ifPresent(x,y,l).orElseThrow(() ->(new NullPointerException())));
 }
