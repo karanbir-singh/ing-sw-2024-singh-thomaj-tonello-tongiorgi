@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26.model;
 import java.util.*;
 public class Point {
     private final int x,y;

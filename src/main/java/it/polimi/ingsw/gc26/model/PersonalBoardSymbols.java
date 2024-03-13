@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26.model;
 import java.util.*;
 public class PersonalBoardSymbols {
     private Map<Symbol,Integer> visibleResources;
