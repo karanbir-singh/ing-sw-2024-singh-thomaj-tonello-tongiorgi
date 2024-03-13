@@ -17,7 +17,7 @@ public class Point {
     public int getY(){
         return y;
     }
-    public void setSide(Side side) throws nullPointerException{
+    public void setSide(Side side) throws NullPointerException{
         this.side = side;
     }
 

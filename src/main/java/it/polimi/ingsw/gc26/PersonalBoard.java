@@ -22,8 +22,6 @@ public class PersonalBoard {
         blockedPositions = new ArrayList<Point>();
         addPoint(0, 0, playablePositions);
         playSide(0, 0, initialSide);
-
-
     }
 
     public boolean checkIfPlayable(int x, int y) {
