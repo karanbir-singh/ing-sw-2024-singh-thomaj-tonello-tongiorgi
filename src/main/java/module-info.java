@@ -5,4 +5,6 @@ module it.polimi.ingsw.gc26 {
 
     opens it.polimi.ingsw.gc26 to javafx.fxml;
     exports it.polimi.ingsw.gc26;
+    exports it.polimi.ingsw.gc26.model;
+    opens it.polimi.ingsw.gc26.model to javafx.fxml;
 }
