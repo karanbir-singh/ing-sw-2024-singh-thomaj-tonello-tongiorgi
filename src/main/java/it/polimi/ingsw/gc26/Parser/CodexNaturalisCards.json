@@ -1233,12 +1233,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Insect", "Insect", "Plant"],
+      "Constraint" : "Quill",
+      "Points" : 1,
+      "CornerUpDx" : "Quill",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1247,12 +1248,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Insect", "Insect", "Animal"],
+      "Constraint" : "Manuscript",
+      "Points" : 1,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Manuscript",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1261,12 +1263,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Insect", "Insect", "Fungi"],
+      "Constraint" : "Inkwell",
+      "Points" : 1,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Inkwell",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -1275,12 +1278,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Insect", "Insect", "Insect", "Animal"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1289,12 +1293,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Insect", "Insect", "Insect", "Plant"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -1303,12 +1308,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Insect", "Insect", "Insect", "Fungi"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -1317,12 +1323,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Insect", "Insect", "Insect"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : "Inkwell",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -1331,12 +1338,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Insect", "Insect", "Insect"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : "Manuscript",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1345,12 +1353,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Insect", "Insect", "Insect"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Quill",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1359,12 +1368,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Insect", "Insect", "Insect", "Insect", "Insect"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 5,
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
