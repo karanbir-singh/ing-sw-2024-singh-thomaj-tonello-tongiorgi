@@ -7,7 +7,12 @@ public class PersonalBoard {
     private final ArrayList<Point> playablePositions;
     private final ArrayList<Point> blockedPositions;
     private final MissionCard secretMission;
+    private final MissionCard firstCommonMission;
+    private final MissionCard secondCommonMission;
     private final PersonalBoardSymbols personalBoardSymbols;
+
+    private int selectedX;
+    private int selectedY;
 
     public PersonalBoard(Side initialSide, MissionCard secretMission) {
         score = 0;
@@ -27,7 +32,11 @@ public class PersonalBoard {
     public boolean checkIfPlayable(int x, int y) {
         return ifPresent(x, y, playablePositions).isPresent();
     }
-
+    public void endGame(){
+        this.point = this.point + secretMission.getFront().checkPattern(personalBoardSymbols.visibleResources, occupiedPositions);
+        this.point = this.point + firstCommonMission.getFront().checkPattern(personalBoardSymbols.visibleResources, occupiedPositions);
+        this.point = this.point + secondCommonMission.getFront().checkPattern(personalBoardSymbols.visibleResources, occupiedPositions)
+    }
     public void playSide(int x, int y, Side side) throws NullPointerException {
         //suppose is valid position
         Point p = ifPresent(x, y, playablePositions).orElseThrow(() -> (new NullPointerException()));
@@ -118,6 +127,11 @@ public class PersonalBoard {
 
     }
 
+    public void setPosition(int selectedX, int selectedY){
+        this.selectedX = selectedX;
+        this.selectedY = selectedY;
+    }
+
     private Optional<Point> ifPresent(int x, int y, ArrayList<Point> l) {
         Optional<Point> o = Optional.empty();
         for (Point p : l) {
@@ -144,4 +158,6 @@ public class PersonalBoard {
 
         l.remove(ifPresent(x, y, l).orElseThrow(() -> (new NullPointerException())));
     }
+
+
 }
