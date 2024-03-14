@@ -261,10 +261,11 @@
 
   "ResourceCards" : [{
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Plant",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Plant",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -273,10 +274,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Plant",
+      "CornerUpSx" : "Plant",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -285,10 +287,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Plant",
+      "CornerDownSx" : "Plant",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -297,10 +300,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Plant",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Plant",
+      "CornerDownSx" : null,
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -309,10 +313,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Insect",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Plant",
+      "CornerDownSx" : "Quill",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -321,10 +326,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Plant",
+      "CornerUpSx" : "Fungi",
+      "CornerDownDx" : "Inkwell",
+      "CornerDownSx" : "Evil",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -333,10 +339,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : "Manuscript",
+      "CornerDownDx" : "Animal",
+      "CornerDownSx" : "Plant",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -345,10 +352,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Plant",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -357,10 +365,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Plant",
+      "CornerDownSx" : "Evil",
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -369,10 +378,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Plant",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -381,10 +391,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Animal",
+      "CornerUpSx" : "Animal",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -393,10 +404,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Animal",
+      "CornerDownSx" : "Animal",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -405,10 +417,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : "Animal",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Animal",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -417,10 +430,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Animal",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Animal",
+      "CornerDownSx" : "Evil",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -429,10 +443,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Insect",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Animal",
+      "CornerDownSx" : "Inkwell",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -441,10 +456,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Animal",
+      "CornerUpSx" : "Plant",
+      "CornerDownDx" : "Manuscript",
+      "CornerDownSx" : "Evil",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -453,10 +469,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : "Quill",
+      "CornerDownDx" : "Fungi",
+      "CornerDownSx" : "Animal",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -465,10 +482,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Animal",
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -477,10 +495,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Animal",
+      "CornerDownSx" : null,
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -489,10 +508,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Animal",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -501,10 +521,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Fungi",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Fungi",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -513,10 +534,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Fungi",
+      "CornerUpSx" : "Fungi",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -525,10 +547,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Fungi",
+      "CornerDownSx" : "Fungi",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -537,10 +560,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Fungi",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Fungi",
+      "CornerDownSx" : null,
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -549,10 +573,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Quill",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Fungi",
+      "CornerDownSx" : "Plant",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -561,10 +586,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Fungi",
+      "CornerUpSx" : "Inkwell",
+      "CornerDownDx" : "Animal",
+      "CornerDownSx" : "Evil",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -573,10 +599,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Insect",
+      "CornerUpSx" : "Fungi",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Manuscript",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -585,10 +612,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Fungi",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -597,10 +625,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : "Fungi",
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -609,10 +638,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Fungi",
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -621,10 +651,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Insect",
+      "CornerUpSx" : "Insect",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -633,10 +664,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Insect",
+      "CornerDownSx" : "Insect",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -645,10 +677,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : "Insect",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Insect",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -657,10 +690,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Insect",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Insect",
+      "CornerDownSx" : "Evil",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -669,10 +703,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Quill",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Insect",
+      "CornerDownSx" : "Animal",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -681,10 +716,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Insect",
+      "CornerUpSx" : "Manuscript",
+      "CornerDownDx" : "Fungi",
+      "CornerDownSx" : "Evil",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -693,10 +729,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Plant",
+      "CornerUpSx" : "Insect",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Inkwell",
+      "Points" : 0,
       "ImgFile" : ""
     },
     "Back" : {
@@ -705,10 +742,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : "Insect",
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -717,10 +755,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Insect",
+      "CornerDownSx" : "Evil",
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -729,10 +768,11 @@
     }
   }, {
     "Front" : {
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Insect",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
+      "Points" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -743,12 +783,13 @@
 
   "GoldCards" : [{
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Plant", "Plant", "Insect"],
+      "Constraint" : "Quill",
+      "Points" : 1,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Quill",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -757,12 +798,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Plant", "Plant", "Fungi"],
+      "Constraint" : "Manuscript",
+      "Points" : 1,
+      "CornerUpDx" : "Manuscript",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -771,12 +813,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Plant", "Plant", "Animal"],
+      "Constraint" : "Inkwell",
+      "Points" : 1,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Inkwell",
       "ImgFile" : ""
     },
     "Back" : {
@@ -785,12 +828,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Plant", "Plant", "Plant", "Insect"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -799,12 +843,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Plant", "Plant", "Plant", "Animal"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -813,12 +858,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Plant", "Plant", "Plant", "Fungi"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -827,12 +873,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Plant", "Plant", "Plant"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Quill",
       "ImgFile" : ""
     },
     "Back" : {
@@ -841,12 +888,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Plant", "Plant", "Plant"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Manuscript",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -855,12 +903,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Plant", "Plant", "Plant"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : "Inkwell",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -869,12 +918,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Plant", "Plant", "Plant", "Plant", "Plant"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 5,
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -883,12 +933,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Animal", "Animal", "Insect"],
+      "Constraint" : "Inkwell",
+      "Points" : 1,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Inkwell",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -897,12 +948,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Animal", "Animal", "Plant"],
+      "Constraint" : "Manuscript",
+      "Points" : 1,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Manuscript",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -911,12 +963,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Animal", "Animal", "Fungi"],
+      "Constraint" : "Quill",
+      "Points" : 1,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Quill",
       "ImgFile" : ""
     },
     "Back" : {
@@ -925,12 +978,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Animal", "Animal", "Animal", "Insect"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -939,12 +993,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Animal", "Animal", "Animal", "Fungi"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -953,12 +1008,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Animal", "Animal", "Animal", "Plant"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -967,12 +1023,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Animal", "Animal", "Animal"],
+      "Points" : 3,
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Manuscript",
       "ImgFile" : ""
     },
     "Back" : {
@@ -981,12 +1038,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Animal", "Animal", "Animal"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : "Inkwell",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -995,12 +1053,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Animal", "Animal", "Animal"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Quill",
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1009,12 +1068,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Animal", "Animal", "Animal", "Animal", "Animal"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 5,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1023,12 +1083,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Fungi", "Fungi", "Animal"],
+      "Constraint" : "Quill",
+      "Points" : 1,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : "Quill",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -1037,12 +1098,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Fungi", "Fungi", "Plant"],
+      "Constraint" : "Inkwell",
+      "Points" : 1,
+      "CornerUpDx" : "Inkwell",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1051,12 +1113,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Fungi", "Fungi", "Insect"],
+      "Constraint" : "Manuscript",
+      "Points" : 1,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Manuscript",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -1065,12 +1128,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Fungi", "Fungi", "Fungi", "Animal"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1079,12 +1143,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Fungi", "Fungi", "Fungi", "Plant"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : null,
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -1093,12 +1158,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
-      "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Requirements" : ["Plant", "Plant", "Plant", "Insect"],
+      "Constraint" : "Corner",
+      "Points" : 2,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : null,
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
@@ -1107,12 +1173,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Fungi", "Fungi", "Fungi"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Inkwell",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1121,12 +1188,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Fungi", "Fungi", "Fungi"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : null,
+      "CornerUpSx" : "Quill",
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1135,12 +1203,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Fungi", "Fungi", "Fungi"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 3,
+      "CornerUpDx" : "Manuscript",
+      "CornerUpSx" : "Evil",
+      "CornerDownDx" : null,
+      "CornerDownSx" : "Evil",
       "ImgFile" : ""
     },
     "Back" : {
@@ -1149,12 +1218,13 @@
     }
   }, {
     "Front" : {
-      "Requirements" : [],
+      "Requirements" : ["Fungi", "Fungi", "Fungi", "Fungi", "Fungi"],
       "Constraint" : "",
-      "CornerUpDx" : "",
-      "CornerUpSx" : "",
-      "CornerDownDx" : "",
-      "CornerDownSx" : "",
+      "Points" : 5,
+      "CornerUpDx" : "Evil",
+      "CornerUpSx" : null,
+      "CornerDownDx" : "Evil",
+      "CornerDownSx" : null,
       "ImgFile" : ""
     },
     "Back" : {
