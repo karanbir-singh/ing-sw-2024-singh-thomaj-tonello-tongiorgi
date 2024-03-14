@@ -29,5 +29,7 @@ public class Point {
     public void setSide(Side side) throws NullPointerException{
         this.side = side;
     }
-
+    public Side getSide(){
+        return this.side;
+    }
 }
