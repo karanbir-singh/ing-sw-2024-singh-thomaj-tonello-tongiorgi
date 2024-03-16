@@ -9,22 +9,22 @@ public class CommonTable {
     private final ArrayList<MissionCard> commonMissions;
     private final ArrayList<Card> resourceCardsOnTable;
     private final ArrayList<Card> goldCardsOnTable;
-    private Deck selectedDeck;
-    private Card selectedCard;
+    private Optional<Deck> selectedDeck;
+    private Optional<Card> selectedCard;
 
     public CommonTable(Deck resourceDeck, Deck goldDeck, Deck initialDeck, Deck missionDeck){
-        commonMission = null;
-        resourceCardsOnTable = null;
-        goldCardsOnTable = null;
+        commonMission = new ArrayList<MissionCard>();
+        resourceCardsOnTable = new ArrayList<Card>();
+        goldCardsOnTable = new ArrayList<Card>();
         this.resourceDeck = resourceDeck;
         this.goldDeck = goldDeck;
         this.initialDeck = initialDeck;
-        selectedDeck = null;
-        selectedCard = null;
+        selectedDeck = Optional.empty();
+        selectedCard = Optional.empty();
     }
 
     public void selectCard(Card cardSelected){
-        this.selectedCard = cardSelected;
+        this.selectedCard = Optional.of(cardSelected);
     }
 
     public void addCardToBoard(Card card){
@@ -39,33 +39,44 @@ public class CommonTable {
     }
 
 
-    public void removeCardFromBoard(){
+    public void removeCardFromBoard() throws NullPointerException{
         for(Card c: resourceCardsOnTable){
-            if(c.equals(selectedCard)){
+            if(c.equals(selectedCard.orElseThrow(() -> (new NullPointerException()))){
                 resourceCardsOnTable.remove(c);
             }
         }
-
+        //equals da ridefinire per il metodo card
         for(Card c: goldCardsOnTable){
-            if(c.equals(selectedCard)){
+            if(c.equals(selectedCard.orElseThrow(() -> (new NullPointerException()))){
                 resourceCardsOnTable.remove(c);
             }
         }
     }
 
     public void selectDeck(Deck deck){
-        this.selectedDeck = deck;
+        this.selectedDeck = Optional.of(deck);
     }
 
     public void drawFromDeck(){
-         this.selectedDeck.removeCard();
+        if(selectedDeck.isPresent()){
+            this.selectedDeck.get().removeCard();
+        }
+
     }
 
-    public Deck getSelectedDeck(){
-        return this.selectedDeck;
+    public Deck getSelectedDeck() throws NullPointerException{
+        return this.selectedDeck.orElseThrow(() -> (new NullPointerException());
     }
 
-    public Card getSelectedCard(){
-        return this.selectedCard;
+    public Card getSelectedCard() throws NullPointerException{
+        return this.selectedCard.orElseThrow(() -> (new NullPointerException());
     }
+
+    public ArrayList<Card> getResourceCardsOnTable(){
+        return new ArrayList<Card>(resourceCardsOnTable);
+    }
+    public ArrayList<Card> getResourceCardsOnTable(){
+        return new ArrayList<Card>(goldCardsOnTable);
+    }
+
 }
