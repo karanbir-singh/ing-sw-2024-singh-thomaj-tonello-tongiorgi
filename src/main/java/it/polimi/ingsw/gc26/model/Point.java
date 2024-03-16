@@ -10,7 +10,7 @@ public class Point {
         this.y = y;
         this.side = null;
         flags = new HashMap<Integer,Boolean>();
-        for(int i= 0; i < 16; i++){
+        for(int i= 0; i < 8; i++){
             flags.put(i,false);
         }
     }
