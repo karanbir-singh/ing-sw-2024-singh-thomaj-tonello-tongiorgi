@@ -24,4 +24,8 @@ public class PersonalBoardSymbols {
         visibleResources.put(symbol, visibleResources.get(symbol) - 1);
     }
 
+    public HashMap<Symbol,Integer> getResources(){
+        Map<Symbol,Integer> resources = new HashMap(visibleResources);
+        return resources;
+    }
 }

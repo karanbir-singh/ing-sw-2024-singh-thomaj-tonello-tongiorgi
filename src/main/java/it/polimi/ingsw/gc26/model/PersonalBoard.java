@@ -33,9 +33,9 @@ public class PersonalBoard {
         return ifPresent(x, y, playablePositions).isPresent();
     }
     public void endGame(){
-        this.point = this.point + secretMission.getFront().checkPattern(personalBoardSymbols.visibleResources, occupiedPositions);
-        this.point = this.point + firstCommonMission.getFront().checkPattern(personalBoardSymbols.visibleResources, occupiedPositions);
-        this.point = this.point + secondCommonMission.getFront().checkPattern(personalBoardSymbols.visibleResources, occupiedPositions)
+        this.point = this.point + secretMission.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
+        this.point = this.point + firstCommonMission.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
+        this.point = this.point + secondCommonMission.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
     }
     public void playSide(int x, int y, Side side) throws NullPointerException {
         //suppose is valid position
@@ -114,16 +114,16 @@ public class PersonalBoard {
         for (int i = 0; i < side.resource.length(); i++) {
             personalBoardSymbols.increaseResource(side.resource.get(i));
         }
-        this.incrementResource(side.UPRIGHT.resource);
-        this.incrementResource(side.UPLEFT.resource);
-        this.incrementResource(side.DOWNLEFT.resource);
-        this.incrementResource(side.DOWNRIGHT.resource);
+        personalBoardSymbols.increaseResource(side.UPRIGHT.resource);
+        personalBoardSymbols.increaseResource(side.UPLEFT.resource);
+        personalBoardSymbols.increaseResource(side.DOWNLEFT.resource);
+        personalBoardSymbols.increaseResource(side.DOWNRIGHT.resource);
 
         //adding points of the card played
         this.score = this.score + side.points;
 
         //adding points of the cart ability
-        this.score = this.score + side.useAbility(occupiedPositions, personalBoardSymbols.visibleResources);
+        this.score = this.score + side.useAbility(occupiedPositions, personalBoardSymbols.getResources());
 
     }
 
@@ -145,7 +145,7 @@ public class PersonalBoard {
 
     private void movePoint(int x, int y, ArrayList<Point> l1, ArrayList<Point> l2) throws NullPointerException {
         Point p = ifPresent(x, y, l2).orElseThrow(() -> (new NullPointerException()));
-        l2.removePoint(x, y, l2);
+        removePoint(x, y, l2);
         l1.add(p);
     }
 
