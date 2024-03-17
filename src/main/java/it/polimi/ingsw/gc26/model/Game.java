@@ -1,8 +1,6 @@
-package it.polimi.ingsw.gc26.Controller;
+package it.polimi.ingsw.gc26.model;
 
-import java.time.Period;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Game {
     private static final int MAX_NUM_PLAYERS = 4;
@@ -19,8 +17,8 @@ public class Game {
     public Game(int numberOfPlayers){
         this.numberOfPlayers = numberOfPlayers;
         this.gameState = GameState.INITIAL_STAGE;
-        this.Players = new ArrayList<Players>(this.numberOfPlayers);
-        this.personalBoards = new ArrayList< PersonalBoard> (this.numberOfPlayers);
+        this.Players = new ArrayList<>(this.numberOfPlayers);
+        this.personalBoards = new ArrayList<> (this.numberOfPlayers);
         this.commonTable = new CommonTable(Parser.getDecks()); // TODO
 
     }

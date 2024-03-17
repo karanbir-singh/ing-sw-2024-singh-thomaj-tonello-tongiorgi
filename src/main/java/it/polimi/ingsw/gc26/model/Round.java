@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.Controller;
+package it.polimi.ingsw.gc26.model;
 
 public class Round {
     private int round;
