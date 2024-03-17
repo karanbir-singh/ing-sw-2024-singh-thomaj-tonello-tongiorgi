@@ -7,7 +7,6 @@ public class Hand {
     private HandState state;
     private Card selectedCard;
     private Side selectedSide;
-    private Side playSide;
 
     public void setState(HandState state){
         this.state = state;
@@ -42,7 +41,7 @@ public class Hand {
     }
 
     public Side playCard(Side selectedSide, Card selectedCard){
-        return state.playCard(selectedSide);
+        return state.playCard(selectedSide, selectedCard);
     }
 
 }
