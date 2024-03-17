@@ -5,10 +5,12 @@ module it.polimi.ingsw.gc26 {
 
     exports it.polimi.ingsw.gc26.model.card_side;
     opens it.polimi.ingsw.gc26.model.card_side to javafx.fxml;
-    exports it.polimi.ingsw.gc26.model.side_ability;
-    opens it.polimi.ingsw.gc26.model.side_ability to javafx.fxml;
     exports it.polimi.ingsw.gc26.model.card;
     opens it.polimi.ingsw.gc26.model.card to javafx.fxml;
     exports it.polimi.ingsw.gc26;
     opens it.polimi.ingsw.gc26 to javafx.fxml;
+    exports it.polimi.ingsw.gc26.model.card_side.mission;
+    opens it.polimi.ingsw.gc26.model.card_side.mission to javafx.fxml;
+    exports it.polimi.ingsw.gc26.model.card_side.ability;
+    opens it.polimi.ingsw.gc26.model.card_side.ability to javafx.fxml;
 }

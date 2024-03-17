@@ -1,5 +1,7 @@
 package it.polimi.ingsw.gc26.model.card_side;
 
+import it.polimi.ingsw.gc26.model.player.Point;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
@@ -111,4 +113,6 @@ abstract public class Side {
     public void setDOWNRIGHT(Corner DOWNRIGHT) {
         this.DOWNRIGHT = DOWNRIGHT;
     }
+
+
 }
