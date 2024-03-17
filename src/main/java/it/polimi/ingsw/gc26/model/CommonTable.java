@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.model;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class CommonTable {
     private Card selectedCard;

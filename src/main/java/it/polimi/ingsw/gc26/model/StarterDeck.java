@@ -1,5 +1,7 @@
 package it.polimi.ingsw.gc26.model;
 
+import java.util.*;
+
 public class StarterDeck extends Deck {
     private final int DIMENSION = 6;
     private ArrayList<StarterCard> cards;

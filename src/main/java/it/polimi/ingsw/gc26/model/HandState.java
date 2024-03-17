@@ -1,6 +1,8 @@
 package it.polimi.ingsw.gc26.model;
 
-public class HandState {
+import java.util.*;
+
+abstract class HandState {
 
     protected Hand hand;
 

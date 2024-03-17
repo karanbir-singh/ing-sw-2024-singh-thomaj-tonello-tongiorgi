@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.model;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class ResourceDeck extends Deck {
     private final int DIMENSION = 40;

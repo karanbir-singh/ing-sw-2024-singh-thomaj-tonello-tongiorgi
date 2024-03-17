@@ -1,6 +1,8 @@
 package it.polimi.ingsw.gc26.model;
 
-public class HandNotPlayable {
+import java.util.*;
+
+public class HandNotPlayable extends HandState{
 
     public void transition(){
         hand.setState(new HandPlayable);
