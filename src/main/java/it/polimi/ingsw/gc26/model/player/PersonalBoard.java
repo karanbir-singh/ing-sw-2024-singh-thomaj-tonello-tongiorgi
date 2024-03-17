@@ -20,13 +20,15 @@ public class PersonalBoard {
     private int selectedX;
     private int selectedY;
 
-    public PersonalBoard(Side initialSide, MissionCard secretMission) {
+    public PersonalBoard(Side initialSide, MissionCard secretMission, MissionCard firstCommonMission, MissionCard secondCommonMission) {
         score = 0;
         xMin = -1;
         xMax = 1;
         yMin = -1;
         yMax = 1;
         this.secretMission = secretMission;
+        this.firstCommonMission = firstCommonMission;
+        this.secondCommonMission = secondCommonMission;
         personalBoardSymbols = new PersonalBoardSymbols();
         occupiedPositions = new ArrayList<Point>();
         playablePositions = new ArrayList<Point>();

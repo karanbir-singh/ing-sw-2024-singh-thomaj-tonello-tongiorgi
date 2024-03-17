@@ -45,13 +45,13 @@ public class CommonTable {
 
     public void removeCardFromBoard() throws NullPointerException{
         for(Card c: resourceCardsOnTable){
-            if(c.equals(selectedCard.orElseThrow(NullPointerException::new)){ // TODO in card ridefinisci equals
+            if(c.equals(selectedCard.orElseThrow(NullPointerException::new))){ // TODO in card ridefinisci equals
                 resourceCardsOnTable.remove(c);
             }
         }
         //equals da ridefinire per il metodo card
         for(Card c: goldCardsOnTable){
-            if(c.equals(selectedCard.orElseThrow(NullPointerException::new)){
+            if(c.equals(selectedCard.orElseThrow(NullPointerException::new))){
                 resourceCardsOnTable.remove(c);
             }
         }

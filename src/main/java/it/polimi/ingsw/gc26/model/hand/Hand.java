@@ -31,11 +31,14 @@ public class Hand {
     }
 
     public void turnSide(Side selectedSide){
-        /* mi servono i metodi di card */
+
     }
 
     public void removeCard(Card card){
-        cards.remove(card);
+        if(cards.size() > 0){
+            cards.remove(card);
+        }
+
     }
 
     public void addCard(Card card){
