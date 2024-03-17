@@ -5,8 +5,8 @@ import java.util.*;
 public class Hand {
     private ArrayList<Card> cards;
     private HandState state;
-    private Card selectedCard;
-    private Side selectedSide;
+    private Optional<Card> selectedCard;
+    private Optional<Side> selectedSide;
 
     public void setState(HandState state){
         this.state = state;
@@ -15,16 +15,16 @@ public class Hand {
     public Card getSelectedCard() {
         return this.selectedCard;
     }
-    /* setSelectedCard might be called by the controller */
-    public void setSelectedCard(Card selected){
+
+    public void setSelectedCard(Optional<Card> selected){
         this.selectedCard = selected;
-        if(selected == null){
+        if(selected.isEmpty()){
             this.selectedSide = null;
             return;
         }
-        this.selectedSide = /* selected.getFront() */;
+        this.selectedSide = getFront(selectedCard);
     }
-    public Side getSelectedSide(){
+    public Optional<Side> getSelectedSide(){
         return this.selectedSide;
     }
 
