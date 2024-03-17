@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 public abstract class Deck {
     public void addCard(){}
-    public Card drawCard(){}
+    public Card removeCard(){}
 }

@@ -11,14 +11,14 @@ public class GoldDeck extends Deck {
     }
 
     /* the last card of the Deck is saved in drawnCard, then removed from the Deck and return to the caller */
-    public GoldCard drawCard(){
-        GoldCard drawnCard;
+    public GoldCard removeCard(){
+        GoldCard cardToRemove;
         if(cards.isEmpty()){
             return null;
         }
 
-        drawnCard = cards.get(cards.size() - 1);
-        cards.remove(drawnCard);
-        return drawnCard;
+        cardToRemove = cards.get(cards.size() - 1);
+        cards.remove(cardToRemove);
+        return cardToRemove;
     }
 }

@@ -11,14 +11,14 @@ public class MissionDeck extends Deck {
     }
 
     /* the last card of the Deck is saved in drawnCard, then removed from the Deck and return to the caller */
-    public MissionCard drawCard(){
-        MissionCard drawnCard;
+    public MissionCard removeCard(){
+        MissionCard cardToRemove;
         if(cards.isEmpty()){
             return null;
         }
 
-        drawnCard = cards.get(cards.size() - 1);
-        cards.remove(drawnCard);
-        return drawnCard;
+        cardToRemove = cards.get(cards.size() - 1);
+        cards.remove(cardToRemove);
+        return cardToRemove;
     }
 }
