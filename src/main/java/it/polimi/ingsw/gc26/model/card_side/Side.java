@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.model.card_side;
 import it.polimi.ingsw.gc26.model.player.Point;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,18 +18,6 @@ abstract public class Side {
     private Corner DOWNLEFT;
     private Corner UPRIGHT;
     private Corner DOWNRIGHT;
-
-    public Side(Optional<Symbol> sideSymbol, ArrayList<Symbol> permanentResources, Map<Symbol, Integer> requestedResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
-        this.sideSymbol = sideSymbol;
-        this.permanentResources = permanentResources;
-        this.points = 0;
-        this.type = 0;
-        this.requestedResources = requestedResources;
-        this.UPLEFT = UPLEFT;
-        this.DOWNLEFT = DOWNLEFT;
-        this.UPRIGHT = UPRIGHT;
-        this.DOWNRIGHT = DOWNRIGHT;
-    }
 
     public int useAbility(Map<Symbol, Integer> resources, ArrayList<Point> occupiedPositions, Point p) {
         return 0;
@@ -71,7 +60,7 @@ abstract public class Side {
     }
 
     public void setPermanentResources(ArrayList<Symbol> permanentResources) {
-        this.permanentResources = permanentResources;
+        this.permanentResources = new ArrayList<>(permanentResources);
     }
 
     public Map<Symbol, Integer> getRequestedResources() {
@@ -79,7 +68,7 @@ abstract public class Side {
     }
 
     public void setRequestedResources(Map<Symbol, Integer> requestedResources) {
-        this.requestedResources = requestedResources;
+        this.requestedResources = new HashMap<>(requestedResources);
     }
 
     public Corner getUPLEFT() {
