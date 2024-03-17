@@ -15,10 +15,7 @@ public class Hand {
     }
 
     public Optional<Card> getSelectedCard() {
-        if(selectedCard.isPresent()){
-            return this.selectedCard;
-        }
-        return Optional.empty();
+        return this.selectedCard;
     }
 
     public void setSelectedCard(Optional<Card> selected){
