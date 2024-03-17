@@ -30,25 +30,50 @@ public class ParserCore {
     }
 
     public JsonNode getObjectiveCards() {
-        return getRootObject().get("ObjectiveCards");
-    }
+        JsonNode ObjectiveCardsJson = getRootObject().get("ObjectiveCards");
+        ArrayList<Card> ObjectiveCardDeck = new ArrayList<>();
+        for ( JsonNode cardJson : ObjectiveCardsJson) {
+            JsonNode frontCardJson = cardJson.get("Front");
+            JsonNode backCardJson = cardJson.get("Back");
 
-    public JsonNode getResourceCards() {
-        return getRootObject().get("ResourceCards");
-    }
+            // Corners
+            Corner cornerUpLeft = createCorner(frontCardJson, "UpSx");
+            Corner cornerUpRight = createCorner(frontCardJson, "UpDx");
+            Corner cornerDownLeft = createCorner(frontCardJson, "DownSx");
+            Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
 
-    private Corner createCorner(JsonNode side, String corner) {
-        boolean isEmpty = side.get("Corner" + corner).isNull();
-        boolean isEvil = side.get("Corner" + corner).asText().equals("Evil");
-        Corner newCorner;
-        if(isEmpty || isEvil) {
-            newCorner = new Corner(Optional.empty(), isEvil );
-        } else {
-            newCorner = new Corner(Optional.of(Symbol.valueOf(side.get("Corner" + corner).asText().toUpperCase())), isEvil );
+            Side front = new GoldCardFront(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, null, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+            front.setPoints(frontCardJson.get("Points").asInt());
+            Side back = front;
+            ObjectiveCardDeck.add(new GoldCard(front, back));
+
         }
-        return newCorner;
+        return ObjectiveCardsJson;
     }
 
+    public ArrayList<Card> getResourceCards() {
+
+        JsonNode ResourceCardsJson = getRootObject().get("ResourceCards");
+        ArrayList<Card> ResourceCardDeck = new ArrayList<>();
+        for ( JsonNode cardJson : ResourceCardsJson) {
+            JsonNode frontCardJson = cardJson.get("Front");
+            JsonNode backCardJson = cardJson.get("Back");
+
+            // Corners
+            Corner cornerUpLeft = createCorner(frontCardJson, "UpSx");
+            Corner cornerUpRight = createCorner(frontCardJson, "UpDx");
+            Corner cornerDownLeft = createCorner(frontCardJson, "DownSx");
+            Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
+
+            Side front = new ResourceCardFront(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, null, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+            front.setPoints(frontCardJson.get("Points").asInt());
+            Side back = front;
+            ResourceCardDeck.add(new GoldCard(front, back));
+
+        }
+        return ResourceCardDeck;
+
+    }
     public ArrayList<Card> getGoldCards() {
         JsonNode goldCardsJson = getRootObject().get("GoldCards");
         ArrayList<Card> goldCardDeck = new ArrayList<>();
@@ -79,13 +104,26 @@ public class ParserCore {
             } else {
                 front = new GoldCardFront(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             }
-
+            front.setPoints(frontCardJson.get("Points").asInt());
             Side back = front;
             goldCardDeck.add(new GoldCard(front, back));
 
         }
         return goldCardDeck;
     }
+
+    private Corner createCorner(JsonNode side, String corner) {
+        boolean isEmpty = side.get("Corner" + corner).isNull();
+        boolean isEvil = side.get("Corner" + corner).asText().equals("Evil");
+        Corner newCorner;
+        if(isEmpty || isEvil) {
+            newCorner = new Corner(Optional.empty(), isEvil );
+        } else {
+            newCorner = new Corner(Optional.of(Symbol.valueOf(side.get("Corner" + corner).asText().toUpperCase())), isEvil );
+        }
+        return newCorner;
+    }
+
 
 }
 
