@@ -13,7 +13,7 @@ public class HandPlayable extends HandState{
         Side playSide;
         playSide = side;
         hand.removeCard(card);
-        hand.setSelectedCard = null;
+        hand.setSelectedCard(java.util.Optional.empty());
         this.transition();
         return playSide;
     }

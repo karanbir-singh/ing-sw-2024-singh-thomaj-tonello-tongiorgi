@@ -7,9 +7,7 @@ abstract class HandState {
 
     protected Hand hand;
 
-    public Side playCard(Side side, Card card){
-        // To finish
-    }
+    public abstract Side playCard(Side side, Card card);
     public void transition(HandState state){}
 
 }

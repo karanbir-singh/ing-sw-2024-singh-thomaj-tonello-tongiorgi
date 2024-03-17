@@ -14,8 +14,11 @@ public class Hand {
         this.state = state;
     }
 
-    public Card getSelectedCard() {
-        return this.selectedCard.get();
+    public Optional<Card> getSelectedCard() {
+        if(selectedCard.isPresent()){
+            return this.selectedCard;
+        }
+        return Optional.empty();
     }
 
     public void setSelectedCard(Optional<Card> selected){
@@ -24,14 +27,21 @@ public class Hand {
             return;
         }
         this.selectedCard = selected;
-        this.selectedSide = Optional.of(selectedCard.get().getFront());
+        this.selectedSide = Optional.of(selected.get().getFront());
     }
     public Optional<Side> getSelectedSide(){
         return this.selectedSide;
     }
 
-    public void turnSide(Side selectedSide){
-        /* mi servono i metodi di card */
+    public void turnSide(Side currentSide){
+        if(selectedCard.isEmpty()){
+            return;
+        }
+        if(currentSide.equals(selectedCard.get().getFront())){
+            this.selectedSide = Optional.ofNullable(selectedCard.get().getBack());
+        } else {
+            this.selectedSide = Optional.ofNullable(selectedCard.get().getFront());
+        }
     }
 
     public void removeCard(Card card){
@@ -45,5 +55,4 @@ public class Hand {
     public Side playCard(Side selectedSide, Card selectedCard){
         return state.playCard(selectedSide, selectedCard);
     }
-
 }
