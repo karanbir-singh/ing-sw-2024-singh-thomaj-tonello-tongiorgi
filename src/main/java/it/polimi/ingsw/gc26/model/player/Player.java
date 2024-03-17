@@ -49,15 +49,15 @@ public class Player {
 
     public Hand getHand() {
         return this.hand;
-    }
+    } //qua va returnato una copia non il riferimento
 
     public void setPersonalBoard() {
-        this.personalBoard = new PersonalBoard();
+        this.personalBoard = new PersonalBoard(); // bisogna mettere i parametri giusti
     }
 
     public PersonalBoard getPersonalBoard() {
         return this.personalBoard;
-    }
+    } //qua va ritornato una copia non un riferimento
 
     public int getScore() {
         return this.personalBoard.getScore();

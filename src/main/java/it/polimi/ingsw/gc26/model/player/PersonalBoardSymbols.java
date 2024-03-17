@@ -18,12 +18,18 @@ public class PersonalBoardSymbols {
     public Integer getResourceQuantity(Symbol symbol){
         return visibleResources.get(symbol);
     }
-    public void increaseResource(Symbol symbol){
-        visibleResources.put(symbol, visibleResources.get(symbol) + 1);
+    public void increaseResource(Optional<Symbol> symbol){
+        if(symbol.isPresent()){
+            visibleResources.put(symbol.get(), visibleResources.get(symbol.get()) + 1);
+        }
+
     }
 
-    public void decreaseResource(Symbol symbol){
-        visibleResources.put(symbol, visibleResources.get(symbol) - 1);
+    public void decreaseResource(Optional<Symbol> symbol){
+        if(symbol.isPresent()){
+            visibleResources.put(symbol.get(), visibleResources.get(symbol.get()) - 1);
+        }
+
     }
 
     public Map<Symbol,Integer> getResources(){

@@ -55,13 +55,11 @@ public class PersonalBoard {
 
         //begin analyzing the point X+1,Y+1
         if (ifPresent(x + 1, y + 1, occupiedPositions).isPresent()) {
-            Point p = ifPresent(x + 1, y + 1, occupiedPositions);
+            Point p1 = ifPresent(x + 1, y + 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
-            // qua conviene usare una notazione funzionale con gli optional
-            // cioè decrementa valore se c'è il simbolo, altrimenti niente
-            personalBoardSymbols.decreaseResource(p.getSide().getDOWNLEFT().getSymbol().get());
+            personalBoardSymbols.decreaseResource(p1.getSide().getDOWNLEFT().getSymbol());
 
-            p.getSide().getDOWNLEFT().setHidden(true);
+            p1.getSide().getDOWNLEFT().setHidden(true);
         } else if (ifPresent(x + 1, y + 1, blockedPositions).isPresent()) {
         } else if (ifPresent(x + 1, y + 1, playablePositions).isPresent()) {
         } else {
@@ -75,13 +73,11 @@ public class PersonalBoard {
 
         //begin analyzing the point X-1,Y+1
         if (ifPresent(x - 1, y + 1, occupiedPositions).isPresent()) {
-            p = ifPresent(x - 1, y + 1, occupiedPositions).orElseThrow(NullPointerException::new);
+            Point p2 = ifPresent(x - 1, y + 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
-            // qua conviene usare una notazione funzionale con gli optional
-            // cioè decrementa valore se c'è il simbolo, altrimenti niente
-            personalBoardSymbols.decreaseResource(p.getSide().getDOWNRIGHT().getSymbol().get());
+            personalBoardSymbols.decreaseResource(p2.getSide().getDOWNRIGHT().getSymbol());
 
-            p.getSide().getDOWNRIGHT().setHidden(true);
+            p2.getSide().getDOWNRIGHT().setHidden(true);
         } else if (ifPresent(x - 1, y + 1, blockedPositions).isPresent()) {
         } else if (ifPresent(x - 1, y + 1, playablePositions).isPresent()) {
         } else {
@@ -95,13 +91,11 @@ public class PersonalBoard {
 
         //begin analyzing the point X-1,Y-1
         if (ifPresent(x - 1, y - 1, occupiedPositions).isPresent()) {
-            Point p = ifPresent(x - 1, y - 1, occupiedPositions).orElseThrow(NullPointerException::new);
+            Point p3 = ifPresent(x - 1, y - 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
-            // qua conviene usare una notazione funzionale con gli optional
-            // cioè decrementa valore se c'è il simbolo, altrimenti niente
-            personalBoardSymbols.decreaseResource(p.getSide().getUPRIGHT().getSymbol().get());
+            personalBoardSymbols.decreaseResource(p3.getSide().getUPRIGHT().getSymbol());
 
-            p.getSide().getUPRIGHT().setHidden(true);
+            p3.getSide().getUPRIGHT().setHidden(true);
         } else if (ifPresent(x - 1, y - 1, blockedPositions).isPresent()) {
         } else if (ifPresent(x - 1, y - 1, playablePositions).isPresent()) {
         } else {
@@ -115,13 +109,11 @@ public class PersonalBoard {
 
         //begin analyzing the point X+1,Y-1
         if (ifPresent(x + 1, y - 1, occupiedPositions).isPresent()) {
-            Point p = ifPresent(x + 1, y - 1, occupiedPositions).orElseThrow(NullPointerException::new);
+            Point p4 = ifPresent(x + 1, y - 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
-            // qua conviene usare una notazione funzionale con gli optional
-            // cioè decrementa valore se c'è il simbolo, altrimenti niente
-            personalBoardSymbols.decreaseResource(p.getSide().getUPLEFT().getSymbol().get());
+            personalBoardSymbols.decreaseResource(p4.getSide().getUPLEFT().getSymbol());
 
-            p.getSide().getUPLEFT().setHidden(true);
+            p4.getSide().getUPLEFT().setHidden(true);
         } else if (ifPresent(x + 1, y - 1, blockedPositions).isPresent()) {
         } else if (ifPresent(x + 1, y - 1, playablePositions).isPresent()) {
         } else {
@@ -136,21 +128,20 @@ public class PersonalBoard {
 
         //addSymbol
         for (Symbol s: side.getPermanentResources()) {
-            personalBoardSymbols.increaseResource(s);
+            personalBoardSymbols.increaseResource(Optional.of(s));
         }
 
         // qua conviene usare una notazione funzionale con gli optional
         // cioè decrementa valore se c'è il simbolo, altrimenti niente
-        personalBoardSymbols.increaseResource(side.getUPRIGHT().getSymbol().get());
-        personalBoardSymbols.increaseResource(side.getUPLEFT().getSymbol().get());
-        personalBoardSymbols.increaseResource(side.getDOWNLEFT().getSymbol().get());
-        personalBoardSymbols.increaseResource(side.getDOWNRIGHT().getSymbol().get());
+        personalBoardSymbols.increaseResource(side.getUPRIGHT().getSymbol());
+        personalBoardSymbols.increaseResource(side.getUPLEFT().getSymbol());
+        personalBoardSymbols.increaseResource(side.getDOWNLEFT().getSymbol());
+        personalBoardSymbols.increaseResource(side.getDOWNRIGHT().getSymbol());
 
         //adding points of the card played
         this.score = this.score + side.getPoints();
 
         //adding points of the cart ability
-        // TODO controlla che cabbo è p
         this.score = this.score + side.useAbility(personalBoardSymbols.getResources(), occupiedPositions, p);
 
     }
