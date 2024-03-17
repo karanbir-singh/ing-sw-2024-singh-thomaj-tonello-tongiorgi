@@ -32,4 +32,8 @@ public class Corner {
     public Optional<Symbol> getSymbol() {
         return symbol;
     }
+
+    public void setSymbol(Symbol symbol) {
+        this.symbol = Optional.of(symbol);
+    }
 }
