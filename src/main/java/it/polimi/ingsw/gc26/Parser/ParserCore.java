@@ -7,6 +7,7 @@ import java.util.*;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.card_side.*;
 
 public class ParserCore {
@@ -36,32 +37,54 @@ public class ParserCore {
         return getRootObject().get("ResourceCards");
     }
 
+    private Corner createCorner(JsonNode side, String corner) {
+        boolean isEmpty = side.get("Corner" + corner).isNull();
+        boolean isEvil = side.get("Corner" + corner).asText().equals("Evil");
+        Corner newCorner;
+        if(isEmpty || isEvil) {
+            newCorner = new Corner(Optional.empty(), isEvil );
+        } else {
+            newCorner = new Corner(Optional.of(Symbol.valueOf(side.get("Corner" + corner).asText().toUpperCase())), isEvil );
+        }
+        return newCorner;
+    }
+
     public ArrayList<Card> getGoldCards() {
         JsonNode goldCardsJson = getRootObject().get("GoldCards");
         ArrayList<Card> goldCardDeck = new ArrayList<>();
         for ( JsonNode cardJson : goldCardsJson) {
             JsonNode frontCardJson = cardJson.get("Front");
             JsonNode backCardJson = cardJson.get("Back");
-            HashMap<JsonNode, Integer> requestedResources = new HashMap<>();
+
+            HashMap<Symbol, Integer> requestedResources = new HashMap<>();
+
             for (JsonNode resource : frontCardJson.get("Requirements")) {
-                requestedResources.put(resource, 1);
+                requestedResources.put(Symbol.valueOf(resource.asText().toUpperCase()), 1);
             }
+            // Corners
+            Corner cornerUpLeft = createCorner(frontCardJson, "UpSx");
+            Corner cornerUpRight = createCorner(frontCardJson, "UpDx");
+            Corner cornerDownLeft = createCorner(frontCardJson, "DownSx");
+            Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
+            Side front;
+
             if (frontCardJson.get("Constraint").asText().equals("Corner")) {
-                //Side front = CornerCounter();
+                front = new CornerCounter(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else if (frontCardJson.get("Constraint").asText().equals("Inkwell")) {
-                // d
+                front = new InkwellCounter(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else if (frontCardJson.get("Constraint").asText().equals("Quill")) {
-                Side front = new QuillCounter(backCardJson.get("Resource"), null, requestedResources, frontCardJson.get("CornerUpSx"))
+                front = new QuillCounter(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else if (frontCardJson.get("Constraint").asText().equals("Manuscript")) {
-                //d
+                front = new ManuscriptCounter(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else {
-                //s
+                front = new GoldCardFront(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             }
-            Side front = new GoldCardFront(backCardJson.get("Resource"), null, requestedResources, frontCardJson.get());
-            //Side back = new CardBack();
+
+            Side back = front;
+            goldCardDeck.add(new GoldCard(front, back));
 
         }
-        return null;
+        return goldCardDeck;
     }
 
 }
