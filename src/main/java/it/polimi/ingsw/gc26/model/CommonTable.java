@@ -28,9 +28,9 @@ public class CommonTable {
     }
 
     public void addCardToBoard(Card card){
-        if(card istanceof ResourceCard){
+        if(card instanceof ResourceCard){
             resourceCardsOnTable.add(card);
-        }else if(card istanceof GoldCard){
+        }else if(card instanceof GoldCard){
             goldCardsOnTable.add(card);
         }
 
