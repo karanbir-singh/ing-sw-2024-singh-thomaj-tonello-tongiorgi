@@ -7,6 +7,12 @@ public class Corner {
     private boolean isHidden;
     private Optional<Symbol> symbol;
 
+    public Corner(boolean isEvil, Optional<Symbol> symbol) {
+        this.isEvil = isEvil;
+        this.isHidden = false;
+        this.symbol = symbol;
+    }
+
     public boolean isEvil() {
         return isEvil;
     }
@@ -25,9 +31,5 @@ public class Corner {
 
     public Optional<Symbol> getSymbol() {
         return symbol;
-    }
-
-    public void setSymbol(Optional<Symbol> symbol) {
-        this.symbol = symbol;
     }
 }

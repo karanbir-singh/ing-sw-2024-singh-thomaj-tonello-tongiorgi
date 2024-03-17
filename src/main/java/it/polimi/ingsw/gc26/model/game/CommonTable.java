@@ -1,4 +1,10 @@
-package it.polimi.ingsw.gc26.model;
+package it.polimi.ingsw.gc26.model.game;
+
+import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.card.GoldCard;
+import it.polimi.ingsw.gc26.model.card.MissionCard;
+import it.polimi.ingsw.gc26.model.card.ResourceCard;
+import it.polimi.ingsw.gc26.model.deck.Deck;
 
 import java.util.*;
 public class CommonTable {
@@ -13,12 +19,13 @@ public class CommonTable {
     private Optional<Card> selectedCard;
 
     public CommonTable(Deck resourceDeck, Deck goldDeck, Deck initialDeck, Deck missionDeck){
-        commonMission = new ArrayList<MissionCard>();
+        commonMissions = new ArrayList<MissionCard>();
         resourceCardsOnTable = new ArrayList<Card>();
         goldCardsOnTable = new ArrayList<Card>();
         this.resourceDeck = resourceDeck;
         this.goldDeck = goldDeck;
         this.initialDeck = initialDeck;
+        this.missionDeck = missionDeck;
         selectedDeck = Optional.empty();
         selectedCard = Optional.empty();
     }
@@ -33,21 +40,18 @@ public class CommonTable {
         }else if(card instanceof GoldCard){
             goldCardsOnTable.add(card);
         }
-
-        //NON GLI PIACE INSTANCEOF AL COMPILATORE PERCHé BHOO??
-        //NON è BUONA PRATICA USARE INSTACEOF, MA IN STO CASO è NECESSARIO
     }
 
 
     public void removeCardFromBoard() throws NullPointerException{
         for(Card c: resourceCardsOnTable){
-            if(c.equals(selectedCard.orElseThrow(() -> (new NullPointerException()))){
+            if(c.equals(selectedCard.orElseThrow(NullPointerException::new)){ // TODO in card ridefinisci equals
                 resourceCardsOnTable.remove(c);
             }
         }
         //equals da ridefinire per il metodo card
         for(Card c: goldCardsOnTable){
-            if(c.equals(selectedCard.orElseThrow(() -> (new NullPointerException()))){
+            if(c.equals(selectedCard.orElseThrow(NullPointerException::new)){
                 resourceCardsOnTable.remove(c);
             }
         }
@@ -65,17 +69,17 @@ public class CommonTable {
     }
 
     public Deck getSelectedDeck() throws NullPointerException{
-        return this.selectedDeck.orElseThrow(() -> (new NullPointerException());
+        return this.selectedDeck.orElseThrow(NullPointerException::new);
     }
 
     public Card getSelectedCard() throws NullPointerException{
-        return this.selectedCard.orElseThrow(() -> (new NullPointerException());
+        return this.selectedCard.orElseThrow(NullPointerException::new);
     }
 
     public ArrayList<Card> getResourceCardsOnTable(){
         return new ArrayList<Card>(resourceCardsOnTable);
     }
-    public ArrayList<Card> getResourceCardsOnTable(){
+    public ArrayList<Card> getGoldCardsOnTable(){
         return new ArrayList<Card>(goldCardsOnTable);
     }
 

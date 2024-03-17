@@ -1,15 +1,21 @@
-package it.polimi.ingsw.gc26.model;
-import java.util.*;
-public class MissionLPattern extends MissionCardFront{
+package it.polimi.ingsw.gc26.model.card_side.mission;
+import it.polimi.ingsw.gc26.model.card_side.Corner;
+import it.polimi.ingsw.gc26.model.card_side.MissionCardFront;
+import it.polimi.ingsw.gc26.model.card_side.Symbol;
+import it.polimi.ingsw.gc26.model.player.Point;
 
-    public MissionLPattern(int type){
-        super(type);
+import java.util.*;
+public class MissionLPattern extends MissionCardFront {
+
+    public MissionLPattern(Optional<Symbol> sideSymbol, ArrayList<Symbol> permanentResources, Map<Symbol, Integer> requestedResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
+        super(sideSymbol, permanentResources, requestedResources, UPLEFT, DOWNLEFT, UPRIGHT, DOWNRIGHT);
     }
-    public int checkPattern(Map<Symbol,Integer> visibleResources,ArrayList<Point> occupiedPositions){
+
+    public int checkPattern(Map<Symbol,Integer> visibleResources, ArrayList<Point> occupiedPositions){
         int points = 0;
         Optional<Point> findFirst = Optional.empty();
         Optional<Point> findSecond = Optional.empty();
-        if(type == 1){
+        if(getType() == 1){
             for(Point p: occupiedPositions){
                 if(p.getSide().checkSideSymbol(Symbol.PLANT) &&
                         !p.getFlag(4)){
@@ -43,7 +49,7 @@ public class MissionLPattern extends MissionCardFront{
             }
 
 
-        }else if(type == 2){
+        }else if(getType() == 2){
 
             for(Point p: occupiedPositions){
                 if(p.getSide().checkSideSymbol(Symbol.INSECT) &&
@@ -78,7 +84,7 @@ public class MissionLPattern extends MissionCardFront{
             }
 
 
-        }else if(type == 3){
+        }else if(getType() == 3){
 
             for(Point p: occupiedPositions){
                 if(p.getSide().checkSideSymbol(Symbol.FUNGI) &&
@@ -112,7 +118,7 @@ public class MissionLPattern extends MissionCardFront{
                 findSecond = Optional.empty();
             }
 
-        }else if(type == 4){
+        }else if(getType() == 4){
             for(Point p: occupiedPositions){
                 if(p.getSide().checkSideSymbol(Symbol.ANIMAL) &&
                         !p.getFlag(7)){
@@ -147,8 +153,5 @@ public class MissionLPattern extends MissionCardFront{
         }
 
         return points;
-    }
-    public int getType(){
-        return super.getType();
     }
 }
