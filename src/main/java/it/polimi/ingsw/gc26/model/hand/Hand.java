@@ -9,8 +9,8 @@ public class Hand {
     private Optional<Card> selectedCard;
     private Optional<Side> selectedSide;
 
-    public Hand(){
-        this.cards = null;
+    public Hand(ArrayList<Card> c){
+        this.cards = c;
         this.selectedCard = Optional.empty();
         this.selectedSide = Optional.empty();
     }
@@ -56,5 +56,9 @@ public class Hand {
         removeCard(selectedCard);
         setSelectedCard(java.util.Optional.empty());
         return playSide;
+    }
+
+    public ArrayList<Card> getCards(){
+        return new ArrayList<>(this.cards);
     }
 }
