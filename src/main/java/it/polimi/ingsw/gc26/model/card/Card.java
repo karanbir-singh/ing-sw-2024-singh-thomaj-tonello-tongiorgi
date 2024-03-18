@@ -26,6 +26,4 @@ abstract public class Card {
     public void setBack(Side back) {
         this.back = back;
     }
-
-    // TODO serve ridefinire la equals
 }
