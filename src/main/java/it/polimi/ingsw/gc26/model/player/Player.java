@@ -8,7 +8,7 @@ public class Player {
     private Pawn pawnColor;
     private Hand hand;
     private PersonalBoard personalBoard;
-    private Turn turn;
+    private int turn;
 
     /* ID is set automatically when a player connects to the game
         the nickname is asked in order to connect */
@@ -20,7 +20,7 @@ public class Player {
         this.pawnColor = null;
         this.hand = null;
         this.personalBoard = null;
-        this.turn = new Turn();
+        this.turn = 0;
     }
 
     public int getID() {
@@ -61,5 +61,13 @@ public class Player {
 
     public int getScore() {
         return this.personalBoard.getScore();
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public void increaseNumber() {
+        turn++;
     }
 }
