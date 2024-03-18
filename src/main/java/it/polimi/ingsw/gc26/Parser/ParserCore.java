@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.card_side.*;
+import it.polimi.ingsw.gc26.model.card_side.ability.*;
 
 public class ParserCore {
     private final String filePath;
@@ -36,14 +37,23 @@ public class ParserCore {
             JsonNode frontCardJson = cardJson.get("Front");
             JsonNode backCardJson = cardJson.get("Back");
 
+            HashMap<Symbol, Integer> requestedResources = new HashMap<>();
+
+            for (JsonNode resource : frontCardJson.get("Requirements")) {
+                if(requestedResources.containsKey(Symbol.valueOf(resource.asText().toUpperCase()))) {
+                    requestedResources.put(Symbol.valueOf(resource.asText().toUpperCase()), requestedResources.get(Symbol.valueOf(resource.asText().toUpperCase())) + 1);
+                } else {
+                    requestedResources.put(Symbol.valueOf(resource.asText().toUpperCase()), 1);
+                }
+            }
+
             // Corners
             Corner cornerUpLeft = createCorner(frontCardJson, "UpSx");
             Corner cornerUpRight = createCorner(frontCardJson, "UpDx");
             Corner cornerDownLeft = createCorner(frontCardJson, "DownSx");
             Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
 
-            Side front = new GoldCardFront(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, null, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
-            front.setPoints(frontCardJson.get("Points").asInt());
+            Side front = new GoldCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Point").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             Side back = front;
             ObjectiveCardDeck.add(new GoldCard(front, back));
 
@@ -65,8 +75,7 @@ public class ParserCore {
             Corner cornerDownLeft = createCorner(frontCardJson, "DownSx");
             Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
 
-            Side front = new ResourceCardFront(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, null, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
-            front.setPoints(frontCardJson.get("Points").asInt());
+            Side front = new ResourceCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             Side back = front;
             ResourceCardDeck.add(new GoldCard(front, back));
 
@@ -84,7 +93,11 @@ public class ParserCore {
             HashMap<Symbol, Integer> requestedResources = new HashMap<>();
 
             for (JsonNode resource : frontCardJson.get("Requirements")) {
-                requestedResources.put(Symbol.valueOf(resource.asText().toUpperCase()), 1);
+                if(requestedResources.containsKey(Symbol.valueOf(resource.asText().toUpperCase()))) {
+                    requestedResources.put(Symbol.valueOf(resource.asText().toUpperCase()), requestedResources.get(Symbol.valueOf(resource.asText().toUpperCase())) + 1);
+                } else {
+                    requestedResources.put(Symbol.valueOf(resource.asText().toUpperCase()), 1);
+                }
             }
             // Corners
             Corner cornerUpLeft = createCorner(frontCardJson, "UpSx");
@@ -94,15 +107,15 @@ public class ParserCore {
             Side front;
 
             if (frontCardJson.get("Constraint").asText().equals("Corner")) {
-                front = new CornerCounter(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new CornerCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()),  requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else if (frontCardJson.get("Constraint").asText().equals("Inkwell")) {
-                front = new InkwellCounter(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new InkwellCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else if (frontCardJson.get("Constraint").asText().equals("Quill")) {
-                front = new QuillCounter(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new QuillCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else if (frontCardJson.get("Constraint").asText().equals("Manuscript")) {
-                front = new ManuscriptCounter(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new ManuscriptCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else {
-                front = new GoldCardFront(Optional.of(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase())), null, requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new GoldCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             }
             front.setPoints(frontCardJson.get("Points").asInt());
             Side back = front;
@@ -113,18 +126,9 @@ public class ParserCore {
     }
 
     private Corner createCorner(JsonNode side, String corner) {
-        boolean isEmpty = side.get("Corner" + corner).isNull();
         boolean isEvil = side.get("Corner" + corner).asText().equals("Evil");
-        Corner newCorner;
-        if(isEmpty || isEvil) {
-            newCorner = new Corner(Optional.empty(), isEvil );
-        } else {
-            newCorner = new Corner(Optional.of(Symbol.valueOf(side.get("Corner" + corner).asText().toUpperCase())), isEvil );
-        }
-        return newCorner;
+        return new Corner(isEvil, Symbol.valueOf(side.get("Corner" + corner).asText().toUpperCase()));
     }
-
-
 }
 
 
