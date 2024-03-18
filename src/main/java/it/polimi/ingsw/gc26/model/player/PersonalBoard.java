@@ -1,6 +1,8 @@
 package it.polimi.ingsw.gc26.model.player;
 
+import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card.MissionCard;
+import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 
@@ -12,15 +14,15 @@ public class PersonalBoard {
     private final ArrayList<Point> occupiedPositions;
     private final ArrayList<Point> playablePositions;
     private final ArrayList<Point> blockedPositions;
-    private final MissionCard secretMission;
-    private final MissionCard firstCommonMission;
-    private final MissionCard secondCommonMission;
+    private final Card secretMission;
+    private final Card firstCommonMission;
+    private final Card secondCommonMission;
     private final PersonalBoardSymbols personalBoardSymbols;
 
     private int selectedX = 0;
     private int selectedY = 0;
 
-    public PersonalBoard(Side initialSide, MissionCard secretMission, MissionCard firstCommonMission, MissionCard secondCommonMission) {
+    public PersonalBoard(Side initialSide, Card secretMission, Card firstCommonMission, Card secondCommonMission) {
         score = 0;
         xMin = -1;
         xMax = 1;
@@ -153,6 +155,9 @@ public class PersonalBoard {
         this.selectedX = selectedX;
         this.selectedY = selectedY;
     }
+    public int getScore() {
+        return score;
+    }
 
     private Optional<Point> ifPresent(int x, int y, ArrayList<Point> l) {
         Optional<Point> o = Optional.empty();
@@ -180,7 +185,10 @@ public class PersonalBoard {
         l.remove(ifPresent(x, y, l).orElseThrow(NullPointerException::new));
     }
 
-    public int getScore() {
-        return score;
-    }
+
+
+
+
+
+
 }
