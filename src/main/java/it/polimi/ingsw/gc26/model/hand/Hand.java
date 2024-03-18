@@ -6,12 +6,13 @@ import java.util.*;
 
 public class Hand {
     private ArrayList<Card> cards;
-    private HandState state;
     private Optional<Card> selectedCard;
     private Optional<Side> selectedSide;
 
-    public void setState(HandState state){
-        this.state = state;
+    public Hand(){
+        this.cards = null;
+        this.selectedCard = Optional.empty();
+        this.selectedSide = Optional.empty();
     }
 
     public Optional<Card> getSelectedCard() {
@@ -50,6 +51,10 @@ public class Hand {
     }
 
     public Side playCard(Side selectedSide, Card selectedCard){
-        return state.playCard(selectedSide, selectedCard);
+        Side playSide;
+        playSide = selectedSide;
+        removeCard(selectedCard);
+        setSelectedCard(java.util.Optional.empty());
+        return playSide;
     }
 }

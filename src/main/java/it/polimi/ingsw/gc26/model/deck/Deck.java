@@ -8,6 +8,11 @@ public abstract class Deck {
 
     private ArrayList<Card> cards;
 
+    public Deck(ArrayList<Card> c) {
+        this.cards = c;
+        this.shuffleDeck();
+    }
+
     public void addCard(Card card){
         cards.add(card);
     }
@@ -28,5 +33,9 @@ public abstract class Deck {
         card = cards.get(cards.size() - 1);
         cards.remove(card);
         return card;
+    }
+
+    public void shuffleDeck(){
+        Collections.shuffle(cards);
     }
 }
