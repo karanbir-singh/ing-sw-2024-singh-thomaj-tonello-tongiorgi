@@ -1,11 +1,20 @@
 package it.polimi.ingsw.gc26.model.card_side;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Optional;
+import java.util.HashMap;
 
 public class StarterCardFront extends Side {
-    public StarterCardFront(Optional<Symbol> sideSymbol, ArrayList<Symbol> permanentResources, Map<Symbol, Integer> requestedResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
-        super(sideSymbol, permanentResources, requestedResources, UPLEFT, DOWNLEFT, UPRIGHT, DOWNRIGHT);
+
+    public StarterCardFront(ArrayList<Symbol> permanentResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
+        setPermanentResources(permanentResources);
+        setDOWNLEFT(DOWNLEFT);
+        setDOWNRIGHT(DOWNRIGHT);
+        setUPLEFT(UPLEFT);
+        setUPRIGHT(UPRIGHT);
+
+        setRequestedResources(new HashMap<>());
+        setType(0);
+        setPoints(0);
+        setSideSymbol(null);
     }
 }
