@@ -7,12 +7,10 @@ import it.polimi.ingsw.gc26.model.player.Point;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Optional;
 
 public class ManuscriptCounter extends GoldCardFront {
-
-    public ManuscriptCounter(Optional<Symbol> sideSymbol, ArrayList<Symbol> permanentResources, Map<Symbol, Integer> requestedResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
-        super(sideSymbol, permanentResources, requestedResources, UPLEFT, DOWNLEFT, UPRIGHT, DOWNRIGHT);
+    public ManuscriptCounter(Symbol sideSymbol, Map<Symbol, Integer> requestedResources, int points, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
+        super(sideSymbol, requestedResources, 1, UPLEFT, DOWNLEFT, UPRIGHT, DOWNRIGHT);
     }
 
     @Override

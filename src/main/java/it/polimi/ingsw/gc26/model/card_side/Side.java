@@ -51,8 +51,8 @@ abstract public class Side {
         return sideSymbol;
     }
 
-    public void setSideSymbol(Optional<Symbol> sideSymbol) {
-        this.sideSymbol = sideSymbol;
+    public void setSideSymbol(Symbol sideSymbol) {
+        this.sideSymbol = Optional.ofNullable(sideSymbol);
     }
 
     public ArrayList<Symbol> getPermanentResources() {

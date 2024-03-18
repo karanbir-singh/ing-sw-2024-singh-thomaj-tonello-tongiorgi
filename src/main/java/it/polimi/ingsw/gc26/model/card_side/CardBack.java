@@ -1,12 +1,48 @@
 package it.polimi.ingsw.gc26.model.card_side;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class CardBack extends Side {
+    // Mission Card Back constructor
+    public CardBack(){
+        setSideSymbol(null);
+        setDOWNLEFT(null);
+        setDOWNRIGHT(null);
+        setUPLEFT(null);
+        setUPRIGHT(null);
+        setType(0);
+        setPoints(0);
+        setPermanentResources(new ArrayList<>());
+        setRequestedResources(new HashMap<>());
+    }
 
-    public CardBack(Optional<Symbol> sideSymbol, ArrayList<Symbol> permanentResources, Map<Symbol, Integer> requestedResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
-        super(sideSymbol, permanentResources, requestedResources, UPLEFT, DOWNLEFT, UPRIGHT, DOWNRIGHT);
+    // Kingdom and Gold Card back constructor
+    public CardBack(Symbol side){
+        setSideSymbol(side);
+        setDOWNLEFT(new Corner(false, null));
+        setDOWNRIGHT(new Corner(false, null));
+        setUPLEFT(new Corner(false, null));
+        setUPRIGHT(new Corner(false, null));
+        setType(0);
+        setPoints(0);
+        setPermanentResources(new ArrayList<>());
+        setRequestedResources(new HashMap<>());
+    }
+
+    // Starter Card back constructor
+    public CardBack(ArrayList<Symbol> permanentResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT){
+        setPermanentResources(permanentResources);
+        setSideSymbol(null);
+        setDOWNLEFT(DOWNLEFT);
+        setDOWNRIGHT(DOWNRIGHT);
+        setUPLEFT(UPLEFT);
+        setUPRIGHT(UPRIGHT);
+        setType(0);
+        setPoints(0);
+        setPermanentResources(new ArrayList<>());
+        setRequestedResources(new HashMap<>());
     }
 }
