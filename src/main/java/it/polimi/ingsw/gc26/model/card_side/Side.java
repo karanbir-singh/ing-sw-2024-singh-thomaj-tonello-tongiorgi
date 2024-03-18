@@ -64,7 +64,7 @@ abstract public class Side {
     }
 
     public Map<Symbol, Integer> getRequestedResources() {
-        return requestedResources;
+        return new HashMap<Symbol,Integer>(this.requestedResources); //meglio per copia in questo caso
     }
 
     public void setRequestedResources(Map<Symbol, Integer> requestedResources) {
@@ -102,6 +102,7 @@ abstract public class Side {
     public void setDOWNRIGHT(Corner DOWNRIGHT) {
         this.DOWNRIGHT = DOWNRIGHT;
     }
+
 
 
 }

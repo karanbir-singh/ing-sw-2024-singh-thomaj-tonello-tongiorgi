@@ -17,7 +17,7 @@ public class PersonalBoard {
     private final Card secretMission;
     private final Card firstCommonMission;
     private final Card secondCommonMission;
-    private final PersonalBoardSymbols personalBoardSymbols;
+    private final Map<Symbol,Integer> visibleResources;
 
     private int selectedX = 0;
     private int selectedY = 0;
@@ -28,10 +28,19 @@ public class PersonalBoard {
         xMax = 1;
         yMin = -1;
         yMax = 1;
+        visibleResources = new HashMap<Symbol, Integer>();
+        visibleResources.put(Symbol.FUNGI,0);
+        visibleResources.put(Symbol.ANIMAL,0);
+        visibleResources.put(Symbol.PLANT,0);
+        visibleResources.put(Symbol.INSECT,0);
+        visibleResources.put(Symbol.INKWELL,0);
+        visibleResources.put(Symbol.QUILL,0);
+        visibleResources.put(Symbol.MANUSCRIPT,0);
+
         this.secretMission = secretMission;
         this.firstCommonMission = firstCommonMission;
         this.secondCommonMission = secondCommonMission;
-        personalBoardSymbols = new PersonalBoardSymbols();
+
         occupiedPositions = new ArrayList<Point>();
         playablePositions = new ArrayList<Point>();
         blockedPositions = new ArrayList<Point>();
@@ -40,15 +49,23 @@ public class PersonalBoard {
         playSide(initialSide); // inizialmente selectedX and selectedY sono 0.
     }
 
-    public boolean checkIfPlayable(int x, int y) {
+    public boolean checkIfPlayablePosition(int x, int y) {
         return ifPresent(x, y, playablePositions).isPresent();
     }
 
+    public boolean checkIfEnoughResources(Side side){
+        for(Symbol symbol: side.getRequestedResources().keySet()){
+            if(this.visibleResources.get(symbol) < side.getRequestedResources().get(symbol)){
+                return false;
+            }
+        }
+        return true;
+    }
     public void endGame() {
-        this.score = this.score + secretMission.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
+        this.score = this.score + secretMission.getFront().checkPattern(getResources(), occupiedPositions);
 
-        this.score = this.score + firstCommonMission.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
-        this.score = this.score + secondCommonMission.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
+        this.score = this.score + firstCommonMission.getFront().checkPattern(getResources(), occupiedPositions);
+        this.score = this.score + secondCommonMission.getFront().checkPattern(getResources(), occupiedPositions);
     }
 
     public void playSide(Side side) throws NullPointerException {
@@ -62,7 +79,7 @@ public class PersonalBoard {
         if (ifPresent(selectedX + 1, selectedY + 1, occupiedPositions).isPresent()) {
             Point p1 = ifPresent(selectedX + 1, selectedY + 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
-            personalBoardSymbols.decreaseResource(p1.getSide().getDOWNLEFT().getSymbol());
+            this.decreaseResource(p1.getSide().getDOWNLEFT().getSymbol());
             p1.getSide().getDOWNLEFT().setHidden(true);
 
         } else if (ifPresent(selectedX + 1, selectedY + 1, blockedPositions).isPresent()) {
@@ -80,7 +97,7 @@ public class PersonalBoard {
         if (ifPresent(selectedX - 1, selectedY + 1, occupiedPositions).isPresent()) {
             Point p2 = ifPresent(selectedX - 1, selectedY + 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
-            personalBoardSymbols.decreaseResource(p2.getSide().getDOWNRIGHT().getSymbol());
+            this.decreaseResource(p2.getSide().getDOWNRIGHT().getSymbol());
 
             p2.getSide().getDOWNRIGHT().setHidden(true);
         } else if (ifPresent(selectedX - 1, selectedY + 1, blockedPositions).isPresent()) {
@@ -98,7 +115,7 @@ public class PersonalBoard {
         if (ifPresent(selectedX - 1, selectedY - 1, occupiedPositions).isPresent()) {
             Point p3 = ifPresent(selectedX - 1, selectedY - 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
-            personalBoardSymbols.decreaseResource(p3.getSide().getUPRIGHT().getSymbol());
+            this.decreaseResource(p3.getSide().getUPRIGHT().getSymbol());
 
             p3.getSide().getUPRIGHT().setHidden(true);
         } else if (ifPresent(selectedX - 1, selectedY - 1, blockedPositions).isPresent()) {
@@ -116,7 +133,7 @@ public class PersonalBoard {
         if (ifPresent(selectedX + 1, selectedY - 1, occupiedPositions).isPresent()) {
             Point p4 = ifPresent(selectedX + 1, selectedY - 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
-            personalBoardSymbols.decreaseResource(p4.getSide().getUPLEFT().getSymbol());
+            this.decreaseResource(p4.getSide().getUPLEFT().getSymbol());
 
             p4.getSide().getUPLEFT().setHidden(true);
         } else if (ifPresent(selectedX + 1, selectedY - 1, blockedPositions).isPresent()) {
@@ -133,21 +150,21 @@ public class PersonalBoard {
 
         //addSymbol
         for (Symbol s: side.getPermanentResources()) {
-            personalBoardSymbols.increaseResource(Optional.of(s));
+            this.increaseResource(Optional.of(s));
         }
 
         // qua conviene usare una notazione funzionale con gli optional
         // cioè decrementa valore se c'è il simbolo, altrimenti niente
-        personalBoardSymbols.increaseResource(side.getUPRIGHT().getSymbol());
-        personalBoardSymbols.increaseResource(side.getUPLEFT().getSymbol());
-        personalBoardSymbols.increaseResource(side.getDOWNLEFT().getSymbol());
-        personalBoardSymbols.increaseResource(side.getDOWNRIGHT().getSymbol());
+        this.increaseResource(side.getUPRIGHT().getSymbol());
+        this.increaseResource(side.getUPLEFT().getSymbol());
+        this.increaseResource(side.getDOWNLEFT().getSymbol());
+        this.increaseResource(side.getDOWNRIGHT().getSymbol());
 
         //adding points of the card played
         this.score = this.score + side.getPoints();
 
         //adding points of the cart ability
-        this.score = this.score + side.useAbility(personalBoardSymbols.getResources(), occupiedPositions, p);
+        this.score = this.score + side.useAbility(getResources(), occupiedPositions, p);
 
     }
 
@@ -192,6 +209,29 @@ public class PersonalBoard {
 
     public int getSelectedY(){
         return this.selectedY;
+    }
+
+
+    public Integer getResourceQuantity(Symbol symbol){
+        return visibleResources.get(symbol);
+    }
+    public void increaseResource(Optional<Symbol> symbol){
+        if(symbol.isPresent()){
+            visibleResources.put(symbol.get(), visibleResources.get(symbol.get()) + 1);
+        }
+
+    }
+
+    public void decreaseResource(Optional<Symbol> symbol){
+        if(symbol.isPresent()){
+            visibleResources.put(symbol.get(), visibleResources.get(symbol.get()) - 1);
+        }
+
+    }
+
+    public Map<Symbol,Integer> getResources(){
+        Map<Symbol,Integer> resources = new HashMap(visibleResources);
+        return resources;
     }
 
 

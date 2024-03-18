@@ -60,12 +60,18 @@ public class CommonTable {
     }
 
     public Deck getResourceDeck(){
-        return resourceDeck;
+        return this.resourceDeck;
     }
 
 
     public Deck getGoldDeck(){
-        return goldDeck;
+        return this.goldDeck;
+    }
+    public Deck getInitialDeck(){
+        return this.initialDeck;
+    }
+    public Deck getMissionDeck(){
+        return this.missionDeck;
     }
 
 }
