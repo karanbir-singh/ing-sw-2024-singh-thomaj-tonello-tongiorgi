@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.model.game;
 
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
+import it.polimi.ingsw.gc26.Parser.ParserCore;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class Game {
         this.gameState = GameState.INITIAL_STAGE;
         this.Players = new ArrayList<>(this.numberOfPlayers);
         this.personalBoards = new ArrayList<>(this.numberOfPlayers);
-        this.commonTable = new CommonTable(Parser.getDecks()); // TODO
+        //this.commonTable = new CommonTable(ParserCore); // TODO
 
     }
 
@@ -36,7 +37,12 @@ public class Game {
     }
 
     public void goToNextPlayer() {
-        this.currentPlayer = Players.indexOf(this.currentPlayer) + 1;  // TODO da sistemare, propongo cycled linked list
+        if (Players.indexOf(this.currentPlayer) +1 == this.numberOfPlayers) {
+            this.currentPlayer = this.Players.getFirst();
+        } else {
+            this.currentPlayer = this.Players.get(this.Players.indexOf(this.currentPlayer) + 1);
+
+        }
     }
 
     public void setCurrentPlayer(Player currentPlayer) {
@@ -51,5 +57,6 @@ public class Game {
         this.Players.add(newPlayer);
     }
 
+    public CommonTable getCommonTable() { return this.commonTable;}
 
 }

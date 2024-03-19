@@ -1,6 +1,7 @@
 module it.polimi.ingsw.gc26 {
     requires javafx.controls;
     requires javafx.fxml;
+    requires com.fasterxml.jackson.databind;
 
 
     exports it.polimi.ingsw.gc26.model.card_side;

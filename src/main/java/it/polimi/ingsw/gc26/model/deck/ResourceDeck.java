@@ -6,4 +6,8 @@ import java.util.*;
 
 public class ResourceDeck extends Deck {
     private static final int DIMENSION = 40;
+
+    public ResourceDeck() {
+        super();
+    }
 }

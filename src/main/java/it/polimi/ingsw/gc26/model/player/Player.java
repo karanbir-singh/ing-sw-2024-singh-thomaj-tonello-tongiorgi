@@ -1,6 +1,10 @@
 package it.polimi.ingsw.gc26.model.player;
 
+import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
+
+import java.util.ArrayList;
 
 public class Player {
     private int ID;
@@ -8,7 +12,7 @@ public class Player {
     private Pawn pawnColor;
     private Hand hand;
     private PersonalBoard personalBoard;
-    private Turn turn;
+    private int turn;
 
     /* ID is set automatically when a player connects to the game
         the nickname is asked in order to connect */
@@ -20,7 +24,7 @@ public class Player {
         this.pawnColor = null;
         this.hand = null;
         this.personalBoard = null;
-        this.turn = new Turn();
+        this.turn = 0;
     }
 
     public int getID() {
@@ -44,22 +48,26 @@ public class Player {
     }
 
     public void setHand() {
-        this.hand = new Hand();
+        this.hand = new Hand(new ArrayList<>());
     }
 
     public Hand getHand() {
-        return this.hand;
-    } //qua va returnato una copia non il riferimento
-
-    public void setPersonalBoard() {
-        this.personalBoard = new PersonalBoard(); // bisogna mettere i parametri giusti
+        return new Hand(this.hand.getCards());
     }
 
-    public PersonalBoard getPersonalBoard() {
-        return this.personalBoard;
-    } //qua va ritornato una copia non un riferimento
+    public void setPersonalBoard(Side initialSide, Card secretMission) {
+        this.personalBoard = new PersonalBoard(initialSide, secretMission); // da cambiare parametri nel costruttore di Personal Board
+    }
 
     public int getScore() {
         return this.personalBoard.getScore();
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public void increaseNumber() {
+        turn++;
     }
 }
