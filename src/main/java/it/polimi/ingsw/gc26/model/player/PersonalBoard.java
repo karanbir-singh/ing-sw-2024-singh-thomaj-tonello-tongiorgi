@@ -1,6 +1,8 @@
 package it.polimi.ingsw.gc26.model.player;
 
+import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card.MissionCard;
+import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 
@@ -12,28 +14,30 @@ public class PersonalBoard {
     private final ArrayList<Point> occupiedPositions;
     private final ArrayList<Point> playablePositions;
     private final ArrayList<Point> blockedPositions;
-    private final MissionCard secretMission;
-    private final MissionCard firstCommonMission;
-    private final MissionCard secondCommonMission;
+    private final Card secretMission;
+    private final Card firstCommonMission;
+    private final Card secondCommonMission;
     private final PersonalBoardSymbols personalBoardSymbols;
 
-    private int selectedX;
-    private int selectedY;
+    private int selectedX = 0;
+    private int selectedY = 0;
 
-    public PersonalBoard(Side initialSide, MissionCard secretMission) {
+    public PersonalBoard(Side initialSide, Card secretMission, Card firstCommonMission, Card secondCommonMission) {
         score = 0;
         xMin = -1;
         xMax = 1;
         yMin = -1;
         yMax = 1;
         this.secretMission = secretMission;
+        this.firstCommonMission = firstCommonMission;
+        this.secondCommonMission = secondCommonMission;
         personalBoardSymbols = new PersonalBoardSymbols();
         occupiedPositions = new ArrayList<Point>();
         playablePositions = new ArrayList<Point>();
         blockedPositions = new ArrayList<Point>();
 
         addPoint(0, 0, playablePositions);
-        playSide(0, 0, initialSide);
+        playSide(initialSide); // inizialmente selectedX and selectedY sono 0.
     }
 
     public boolean checkIfPlayable(int x, int y) {
@@ -47,80 +51,81 @@ public class PersonalBoard {
         this.score = this.score + secondCommonMission.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
     }
 
-    public void playSide(int x, int y, Side side) throws NullPointerException {
+    public void playSide(Side side) throws NullPointerException {
+
         //suppose is valid position
-        Point p = ifPresent(x, y, playablePositions).orElseThrow(NullPointerException::new);
+        Point p = ifPresent(selectedX, selectedY, playablePositions).orElseThrow(NullPointerException::new);
         p.setSide(side);
-        movePoint(x, y, occupiedPositions, playablePositions);
+        movePoint(selectedX, selectedY, occupiedPositions, playablePositions);
 
         //begin analyzing the point X+1,Y+1
-        if (ifPresent(x + 1, y + 1, occupiedPositions).isPresent()) {
-            Point p1 = ifPresent(x + 1, y + 1, occupiedPositions).orElseThrow(NullPointerException::new);
+        if (ifPresent(selectedX + 1, selectedY + 1, occupiedPositions).isPresent()) {
+            Point p1 = ifPresent(selectedX + 1, selectedY + 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
             personalBoardSymbols.decreaseResource(p1.getSide().getDOWNLEFT().getSymbol());
-
             p1.getSide().getDOWNLEFT().setHidden(true);
-        } else if (ifPresent(x + 1, y + 1, blockedPositions).isPresent()) {
-        } else if (ifPresent(x + 1, y + 1, playablePositions).isPresent()) {
+
+        } else if (ifPresent(selectedX + 1, selectedY + 1, blockedPositions).isPresent()) {
+        } else if (ifPresent(selectedX + 1, selectedY + 1, playablePositions).isPresent()) {
         } else {
             if (side.getUPRIGHT().isEvil()) {
-                addPoint(x + 1, y + 1, blockedPositions);
+                addPoint(selectedX + 1, selectedY + 1, blockedPositions);
             } else {
-                addPoint(x + 1, y + 1, playablePositions);
+                addPoint(selectedX + 1, selectedY + 1, playablePositions);
             }
         }
         //end analyzing the point X+1, Y+1
 
         //begin analyzing the point X-1,Y+1
-        if (ifPresent(x - 1, y + 1, occupiedPositions).isPresent()) {
-            Point p2 = ifPresent(x - 1, y + 1, occupiedPositions).orElseThrow(NullPointerException::new);
+        if (ifPresent(selectedX - 1, selectedY + 1, occupiedPositions).isPresent()) {
+            Point p2 = ifPresent(selectedX - 1, selectedY + 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
             personalBoardSymbols.decreaseResource(p2.getSide().getDOWNRIGHT().getSymbol());
 
             p2.getSide().getDOWNRIGHT().setHidden(true);
-        } else if (ifPresent(x - 1, y + 1, blockedPositions).isPresent()) {
-        } else if (ifPresent(x - 1, y + 1, playablePositions).isPresent()) {
+        } else if (ifPresent(selectedX - 1, selectedY + 1, blockedPositions).isPresent()) {
+        } else if (ifPresent(selectedX - 1, selectedY + 1, playablePositions).isPresent()) {
         } else {
             if (side.getUPLEFT().isEvil()) {
-                addPoint(x - 1, y + 1, blockedPositions);
+                addPoint(selectedX - 1, selectedY + 1, blockedPositions);
             } else {
-                addPoint(x - 1, y + 1, playablePositions);
+                addPoint(selectedX - 1, selectedY + 1, playablePositions);
             }
         }
         //end analyzing the point X-1, Y+1
 
         //begin analyzing the point X-1,Y-1
-        if (ifPresent(x - 1, y - 1, occupiedPositions).isPresent()) {
-            Point p3 = ifPresent(x - 1, y - 1, occupiedPositions).orElseThrow(NullPointerException::new);
+        if (ifPresent(selectedX - 1, selectedY - 1, occupiedPositions).isPresent()) {
+            Point p3 = ifPresent(selectedX - 1, selectedY - 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
             personalBoardSymbols.decreaseResource(p3.getSide().getUPRIGHT().getSymbol());
 
             p3.getSide().getUPRIGHT().setHidden(true);
-        } else if (ifPresent(x - 1, y - 1, blockedPositions).isPresent()) {
-        } else if (ifPresent(x - 1, y - 1, playablePositions).isPresent()) {
+        } else if (ifPresent(selectedX - 1, selectedY - 1, blockedPositions).isPresent()) {
+        } else if (ifPresent(selectedX - 1, selectedY - 1, playablePositions).isPresent()) {
         } else {
             if (side.getDOWNLEFT().isEvil()) {
-                addPoint(x - 1, y - 1, blockedPositions);
+                addPoint(selectedX - 1, selectedY - 1, blockedPositions);
             } else {
-                addPoint(x - 1, y - 1, playablePositions);
+                addPoint(selectedX - 1, selectedY - 1, playablePositions);
             }
         }
         //end analyzing the point X-1, Y-1
 
         //begin analyzing the point X+1,Y-1
-        if (ifPresent(x + 1, y - 1, occupiedPositions).isPresent()) {
-            Point p4 = ifPresent(x + 1, y - 1, occupiedPositions).orElseThrow(NullPointerException::new);
+        if (ifPresent(selectedX + 1, selectedY - 1, occupiedPositions).isPresent()) {
+            Point p4 = ifPresent(selectedX + 1, selectedY - 1, occupiedPositions).orElseThrow(NullPointerException::new);
 
             personalBoardSymbols.decreaseResource(p4.getSide().getUPLEFT().getSymbol());
 
             p4.getSide().getUPLEFT().setHidden(true);
-        } else if (ifPresent(x + 1, y - 1, blockedPositions).isPresent()) {
-        } else if (ifPresent(x + 1, y - 1, playablePositions).isPresent()) {
+        } else if (ifPresent(selectedX + 1, selectedY - 1, blockedPositions).isPresent()) {
+        } else if (ifPresent(selectedX + 1, selectedY - 1, playablePositions).isPresent()) {
         } else {
             if (side.getDOWNRIGHT().isEvil()) {
-                addPoint(x + 1, y - 1, blockedPositions);
+                addPoint(selectedX + 1, selectedY - 1, blockedPositions);
             } else {
-                addPoint(x + 1, y - 1, playablePositions);
+                addPoint(selectedX + 1, selectedY - 1, playablePositions);
             }
         }
         //end analyzing the point X+1, Y-1
@@ -150,6 +155,9 @@ public class PersonalBoard {
         this.selectedX = selectedX;
         this.selectedY = selectedY;
     }
+    public int getScore() {
+        return score;
+    }
 
     private Optional<Point> ifPresent(int x, int y, ArrayList<Point> l) {
         Optional<Point> o = Optional.empty();
@@ -177,7 +185,19 @@ public class PersonalBoard {
         l.remove(ifPresent(x, y, l).orElseThrow(NullPointerException::new));
     }
 
-    public int getScore() {
-        return score;
+
+    public int getSelectedX(){
+        return this.selectedX;
     }
+
+    public int getSelectedY(){
+        return this.selectedY;
+    }
+
+
+
+
+
+
+
 }
