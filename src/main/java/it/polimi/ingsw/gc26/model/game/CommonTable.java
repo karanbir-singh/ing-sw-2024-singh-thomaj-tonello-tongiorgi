@@ -10,15 +10,15 @@ public class CommonTable {
     private final Deck goldDeck;
     private final Deck initialDeck;
     private final Deck missionDeck;
-    private final ArrayList<MissionCard> commonMissions;
+    private final ArrayList<Card> commonMissions;
     private final ArrayList<Card> resourceCardsOnTable;
     private final ArrayList<Card> goldCardsOnTable;
     private Optional<Card> selectedCard;
 
     public CommonTable(Deck resourceDeck, Deck goldDeck, Deck initialDeck, Deck missionDeck){
-        commonMissions = new ArrayList<MissionCard>();
-        resourceCardsOnTable = new ArrayList<Card>();
-        goldCardsOnTable = new ArrayList<Card>();
+        commonMissions = new ArrayList<>();
+        resourceCardsOnTable = new ArrayList<>();
+        goldCardsOnTable = new ArrayList<>();
         this.resourceDeck = resourceDeck;
         this.goldDeck = goldDeck;
         this.initialDeck = initialDeck;
@@ -33,8 +33,6 @@ public class CommonTable {
     public void addCardToTable(Card card, ArrayList<Card> cards, int index){
         cards.add(index,card);
     }
-
-
 
     //passi l'array su cui fare il controllo
     public Card removeCardFromTable(ArrayList<Card> cards, int index) {
@@ -57,8 +55,8 @@ public class CommonTable {
     public ArrayList<Card> getGoldCardsOnTable(){
         return goldCardsOnTable;
     }
-    public ArrayList<MissionCard> getCommonMissions(){
-        return new ArrayList<MissionCard>(commonMissions);
+    public ArrayList<Card> getCommonMissions(){
+        return new ArrayList<>(commonMissions);
     }
 
     public Deck getResourceDeck(){
