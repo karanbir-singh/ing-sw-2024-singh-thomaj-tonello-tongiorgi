@@ -70,4 +70,8 @@ public class Player {
     public void increaseNumber() {
         turn++;
     }
+
+    public PersonalBoard getPersonalBoard() {
+        return personalBoard;
+    }
 }
