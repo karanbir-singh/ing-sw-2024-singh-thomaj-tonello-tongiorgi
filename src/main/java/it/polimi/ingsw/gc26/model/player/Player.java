@@ -1,5 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
+import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
 
 public class Player {
@@ -51,8 +53,8 @@ public class Player {
         return new Hand(this.hand.getCards());
     }
 
-    public void setPersonalBoard() {
-        this.personalBoard = new PersonalBoard(); // da cambiare parametri nel costruttore di Personal Board
+    public void setPersonalBoard(Side initialSide, Card secretMission) {
+        this.personalBoard = new PersonalBoard(initialSide, secretMission); // da cambiare parametri nel costruttore di Personal Board
     }
 
     public int getScore() {

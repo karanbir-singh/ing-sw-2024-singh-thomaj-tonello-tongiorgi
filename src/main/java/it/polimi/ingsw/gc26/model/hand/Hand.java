@@ -19,23 +19,20 @@ public class Hand {
         return this.selectedCard;
     }
 
-    public void setSelectedCard(Optional<Card> selected){
-        if(selected.isEmpty()){
-            this.selectedSide = Optional.empty();
-            return;
-        }
-        this.selectedCard = selected;
-        this.selectedSide = Optional.of(selected.get().getFront());
+    public void setSelectedCard(Card selected){
+        this.selectedCard = Optional.ofNullable(selected);
+        if(selected != null)
+            this.selectedSide = Optional.of(selected.getFront());
     }
     public Optional<Side> getSelectedSide(){
         return this.selectedSide;
     }
 
-    public void turnSide(Side currentSide){
+    public void turnSide(){
         if(selectedCard.isEmpty()){
             return;
         }
-        if(currentSide.equals(selectedCard.get().getFront())){
+        if(selectedCard.get().getFront().equals(selectedSide)){
             this.selectedSide = Optional.ofNullable(selectedCard.get().getBack());
         } else {
             this.selectedSide = Optional.ofNullable(selectedCard.get().getFront());
