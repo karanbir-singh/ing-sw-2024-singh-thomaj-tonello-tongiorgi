@@ -53,13 +53,13 @@ public class CommonTable {
     }
 
     public ArrayList<Card> getResourceCardsOnTable(){
-        return new ArrayList<Card>(resourceCardsOnTable);
+        return resourceCardsOnTable;
     }
     public ArrayList<Card> getGoldCardsOnTable(){
-        return new ArrayList<Card>(goldCardsOnTable);
+        return goldCardsOnTable;
     }
     public ArrayList<MissionCard> getCommonMissions(){
-        return new ArrayList<MissionCard>(commonMission);
+        return new ArrayList<MissionCard>(commonMissions);
     }
 
 }

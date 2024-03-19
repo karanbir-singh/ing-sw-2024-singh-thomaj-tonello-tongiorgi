@@ -39,7 +39,7 @@ public class Controller {
         int index;
         index = game.commonTable.resourceCardsOnTable.indexOf(commonTable.getSelectedCard());
         if(index != -1){
-            game.commonTable.removeCardFromTable(game.commonTable.getResourceCards()); // matrice;
+            game.commonTable.removeCardFromTable(game.commonTable.getResourceCards());
         }
     }
 }

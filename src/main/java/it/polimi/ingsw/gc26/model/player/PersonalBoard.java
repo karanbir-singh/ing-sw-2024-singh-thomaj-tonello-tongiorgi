@@ -186,6 +186,15 @@ public class PersonalBoard {
     }
 
 
+    public int getSelectedX(){
+        return this.selectedX;
+    }
+
+    public int getSelectedY(){
+        return this.selectedY;
+    }
+
+
 
 
 
