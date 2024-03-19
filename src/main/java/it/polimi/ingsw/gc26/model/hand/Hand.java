@@ -6,35 +6,33 @@ import java.util.*;
 
 public class Hand {
     private ArrayList<Card> cards;
-    private HandState state;
     private Optional<Card> selectedCard;
     private Optional<Side> selectedSide;
 
-    public void setState(HandState state){
-        this.state = state;
+    public Hand(ArrayList<Card> c){
+        this.cards = c;
+        this.selectedCard = Optional.empty();
+        this.selectedSide = Optional.empty();
     }
 
     public Optional<Card> getSelectedCard() {
         return this.selectedCard;
     }
 
-    public void setSelectedCard(Optional<Card> selected){
-        if(selected.isEmpty()){
-            this.selectedSide = Optional.empty();
-            return;
-        }
-        this.selectedCard = selected;
-        this.selectedSide = Optional.of(selected.get().getFront());
+    public void setSelectedCard(Card selected){
+        this.selectedCard = Optional.ofNullable(selected);
+        if(selected != null)
+            this.selectedSide = Optional.of(selected.getFront());
     }
     public Optional<Side> getSelectedSide(){
         return this.selectedSide;
     }
 
-    public void turnSide(Side currentSide){
+    public void turnSide(){
         if(selectedCard.isEmpty()){
             return;
         }
-        if(currentSide.equals(selectedCard.get().getFront())){
+        if(selectedCard.get().getFront().equals(selectedSide)){
             this.selectedSide = Optional.ofNullable(selectedCard.get().getBack());
         } else {
             this.selectedSide = Optional.ofNullable(selectedCard.get().getFront());
@@ -50,6 +48,14 @@ public class Hand {
     }
 
     public Side playCard(Side selectedSide, Card selectedCard){
-        return state.playCard(selectedSide, selectedCard);
+        Side playSide;
+        playSide = selectedSide;
+        removeCard(selectedCard);
+        setSelectedCard(java.util.Optional.empty());
+        return playSide;
+    }
+
+    public ArrayList<Card> getCards(){
+        return new ArrayList<>(this.cards);
     }
 }
