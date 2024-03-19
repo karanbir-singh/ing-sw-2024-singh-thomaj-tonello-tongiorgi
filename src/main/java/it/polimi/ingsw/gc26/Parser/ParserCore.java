@@ -6,10 +6,11 @@ import java.io.IOException;
 import java.util.*;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.card.GoldCard;
+import it.polimi.ingsw.gc26.model.card.*;
 import it.polimi.ingsw.gc26.model.card_side.*;
 import it.polimi.ingsw.gc26.model.card_side.ability.*;
+import it.polimi.ingsw.gc26.model.card_side.mission.MissionDiagonalPattern;
+import it.polimi.ingsw.gc26.model.deck.*;
 
 public class ParserCore {
     private final String filePath;
@@ -26,13 +27,41 @@ public class ParserCore {
         }
     }
 
-    public JsonNode getStarterCards() {
-        return this.getRootObject().get("StarterCards");
+    public StarterDeck getStarterCards() {
+        JsonNode starterCardsJson = getRootObject().get("StarterCards");
+        StarterDeck starterCardDeck = new StarterDeck();
+        for ( JsonNode cardJson : starterCardsJson) {
+            JsonNode frontCardJson = cardJson.get("Front");
+            JsonNode backCardJson = cardJson.get("Back");
+
+            ArrayList<Symbol> permanentResources = new ArrayList<>();
+
+            for (JsonNode resource : frontCardJson.get("Resource")) {
+                permanentResources.add(Symbol.valueOf(resource.asText().toUpperCase()));
+            }
+
+            // Corners
+            Corner cornerUpLeft = createCorner(frontCardJson, "UpSx");
+            Corner cornerUpRight = createCorner(frontCardJson, "UpDx");
+            Corner cornerDownLeft = createCorner(frontCardJson, "DownSx");
+            Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
+
+            Side front = new StarterCardFront( permanentResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+            cornerUpLeft = createCorner(backCardJson, "UpSx");
+            cornerUpRight = createCorner(backCardJson, "UpDx");
+            cornerDownLeft = createCorner(backCardJson, "DownSx");
+            cornerDownRight = createCorner(backCardJson, "DownDx");
+            Side back = new CardBack(cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+
+            starterCardDeck.addCard(new StarterCard(front, back));
+
+        }
+        return starterCardDeck;
     }
 
-    public JsonNode getObjectiveCards() {
-        JsonNode ObjectiveCardsJson = getRootObject().get("ObjectiveCards");
-        ArrayList<Card> ObjectiveCardDeck = new ArrayList<>();
+    public MissionDeck getMissionCards() {
+        JsonNode ObjectiveCardsJson = getRootObject().get("MissionCards");
+        MissionDeck MissionCardDeck = new MissionDeck();
         for ( JsonNode cardJson : ObjectiveCardsJson) {
             JsonNode frontCardJson = cardJson.get("Front");
             JsonNode backCardJson = cardJson.get("Back");
@@ -47,24 +76,19 @@ public class ParserCore {
                 }
             }
 
-            // Corners
-            Corner cornerUpLeft = createCorner(frontCardJson, "UpSx");
-            Corner cornerUpRight = createCorner(frontCardJson, "UpDx");
-            Corner cornerDownLeft = createCorner(frontCardJson, "DownSx");
-            Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
+            //Side front = new MissionDiagonalPattern(requestedResources, frontCardJson.get("Point").asInt());
+            Side front = new MissionDiagonalPattern(0, frontCardJson.get("Point").asInt());
 
-            Side front = new GoldCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Point").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
-            Side back = front;
-            ObjectiveCardDeck.add(new GoldCard(front, back));
+            Side back = new CardBack();
 
+            MissionCardDeck.addCard(new MissionCard(front, back));
         }
-        return ObjectiveCardsJson;
+        return MissionCardDeck;
     }
 
-    public ArrayList<Card> getResourceCards() {
-
+    public ResourceDeck getResourceCards() {
         JsonNode ResourceCardsJson = getRootObject().get("ResourceCards");
-        ArrayList<Card> ResourceCardDeck = new ArrayList<>();
+        ResourceDeck ResourceCardDeck = new ResourceDeck();
         for ( JsonNode cardJson : ResourceCardsJson) {
             JsonNode frontCardJson = cardJson.get("Front");
             JsonNode backCardJson = cardJson.get("Back");
@@ -76,16 +100,17 @@ public class ParserCore {
             Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
 
             Side front = new ResourceCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
-            Side back = front;
-            ResourceCardDeck.add(new GoldCard(front, back));
+            Side back = new CardBack(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()));
+
+            ResourceCardDeck.addCard(new ResourceCard(front, back));
 
         }
         return ResourceCardDeck;
 
     }
-    public ArrayList<Card> getGoldCards() {
+    public GoldDeck getGoldCards() {
         JsonNode goldCardsJson = getRootObject().get("GoldCards");
-        ArrayList<Card> goldCardDeck = new ArrayList<>();
+        GoldDeck goldCardDeck = new GoldDeck();
         for ( JsonNode cardJson : goldCardsJson) {
             JsonNode frontCardJson = cardJson.get("Front");
             JsonNode backCardJson = cardJson.get("Back");
@@ -117,17 +142,20 @@ public class ParserCore {
             } else {
                 front = new GoldCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             }
-            front.setPoints(frontCardJson.get("Points").asInt());
-            Side back = front;
-            goldCardDeck.add(new GoldCard(front, back));
+            Side back = new CardBack(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()));
 
+            goldCardDeck.addCard(new GoldCard(front, back));
         }
         return goldCardDeck;
     }
 
     private Corner createCorner(JsonNode side, String corner) {
+        boolean isEmpty = side.get("Corner" + corner).isNull();
         boolean isEvil = side.get("Corner" + corner).asText().equals("Evil");
-        return new Corner(isEvil, Symbol.valueOf(side.get("Corner" + corner).asText().toUpperCase()));
+        if (isEmpty || isEvil) {
+            return new Corner(isEvil, null);
+        }
+        return new Corner( false, Symbol.valueOf(side.get("Corner" + corner).asText().toUpperCase()));
     }
 }
 

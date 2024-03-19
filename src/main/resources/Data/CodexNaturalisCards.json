@@ -97,7 +97,7 @@
     }
   }],
 
-  "ObjectiveCards" : [{
+  "MissionCards" : [{
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Fungi", "Fungi", "Fungi"],

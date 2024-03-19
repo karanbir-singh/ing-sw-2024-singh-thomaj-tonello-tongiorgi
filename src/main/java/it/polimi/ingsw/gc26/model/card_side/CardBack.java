@@ -33,8 +33,8 @@ public class CardBack extends Side {
     }
 
     // Starter Card back constructor
-    public CardBack(ArrayList<Symbol> permanentResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT){
-        setPermanentResources(permanentResources);
+    public CardBack(Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT){
+        setPermanentResources(new ArrayList<>());
         setSideSymbol(null);
         setDOWNLEFT(DOWNLEFT);
         setDOWNRIGHT(DOWNRIGHT);
