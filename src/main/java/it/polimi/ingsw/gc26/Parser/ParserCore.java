@@ -27,9 +27,9 @@ public class ParserCore {
         }
     }
 
-    public StarterDeck getStarterCards() {
+    public Deck getStarterCards() {
         JsonNode starterCardsJson = getRootObject().get("StarterCards");
-        StarterDeck starterCardDeck = new StarterDeck();
+        Deck starterCardDeck = new Deck();
         for ( JsonNode cardJson : starterCardsJson) {
             JsonNode frontCardJson = cardJson.get("Front");
             JsonNode backCardJson = cardJson.get("Back");
@@ -59,9 +59,9 @@ public class ParserCore {
         return starterCardDeck;
     }
 
-    public MissionDeck getMissionCards() {
+    public Deck getMissionCards() {
         JsonNode ObjectiveCardsJson = getRootObject().get("MissionCards");
-        MissionDeck MissionCardDeck = new MissionDeck();
+        Deck MissionCardDeck = new Deck();
         for ( JsonNode cardJson : ObjectiveCardsJson) {
             JsonNode frontCardJson = cardJson.get("Front");
             JsonNode backCardJson = cardJson.get("Back");
@@ -95,9 +95,9 @@ public class ParserCore {
         return MissionCardDeck;
     }
 
-    public ResourceDeck getResourceCards() {
+    public Deck getResourceCards() {
         JsonNode ResourceCardsJson = getRootObject().get("ResourceCards");
-        ResourceDeck ResourceCardDeck = new ResourceDeck();
+        Deck ResourceCardDeck = new Deck();
         for ( JsonNode cardJson : ResourceCardsJson) {
             JsonNode frontCardJson = cardJson.get("Front");
             JsonNode backCardJson = cardJson.get("Back");
@@ -117,9 +117,9 @@ public class ParserCore {
         return ResourceCardDeck;
 
     }
-    public GoldDeck getGoldCards() {
+    public Deck getGoldCards() {
         JsonNode goldCardsJson = getRootObject().get("GoldCards");
-        GoldDeck goldCardDeck = new GoldDeck();
+        Deck goldCardDeck = new Deck();
         for ( JsonNode cardJson : goldCardsJson) {
             JsonNode frontCardJson = cardJson.get("Front");
             JsonNode backCardJson = cardJson.get("Back");

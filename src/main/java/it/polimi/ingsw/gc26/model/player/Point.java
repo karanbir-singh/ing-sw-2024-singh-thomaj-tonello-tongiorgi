@@ -39,9 +39,6 @@ public class Point {
         this.side = side;
     }
 
-    public void setHidden(){
-        side
-    }
     public Side getSide() {
         return this.side;
     }

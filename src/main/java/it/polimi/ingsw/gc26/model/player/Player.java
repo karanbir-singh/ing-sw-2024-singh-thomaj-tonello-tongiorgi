@@ -55,8 +55,8 @@ public class Player {
         return new Hand(this.hand.getCards());
     }
 
-    public void setPersonalBoard(Side initialSide, Card secretMission) {
-        this.personalBoard = new PersonalBoard(initialSide, secretMission); // da cambiare parametri nel costruttore di Personal Board
+    public void setPersonalBoard(Side initialSide, Card secretMission, Card firstCommonMission, Card secondCommonMission) {
+        this.personalBoard = new PersonalBoard(initialSide, secretMission, firstCommonMission, secondCommonMission); // TODO da cambiare parametri nel costruttore di Personal Board
     }
 
     public int getScore() {

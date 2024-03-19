@@ -4,7 +4,7 @@ import it.polimi.ingsw.gc26.model.card.Card;
 
 import java.util.*;
 
-public abstract class Deck {
+public class Deck {
 
     private final ArrayList<Card> cards;
 

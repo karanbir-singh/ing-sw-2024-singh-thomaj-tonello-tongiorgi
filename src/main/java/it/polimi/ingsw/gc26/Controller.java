@@ -33,10 +33,10 @@ public class Controller {
             // TODO Gestire la non selezione di una carta con eccezione
             return;
         }
-        if (!(p.getSelectedX() && p.getSelectedY())) { // TODO controllare in altro modo
+        /*if (!(p.getSelectedX() && p.getSelectedY())) { // TODO controllare in altro modo
             // TODO Gestire la non selezione di una posizione con eccezione
             return;
-        }
+        }*/
         p.playSide(h.getSelectedSide().get());
         h.removeCard(h.getSelectedCard().get());
     }
