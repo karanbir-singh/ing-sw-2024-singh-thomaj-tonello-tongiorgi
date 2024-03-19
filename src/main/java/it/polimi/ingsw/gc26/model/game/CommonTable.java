@@ -37,16 +37,15 @@ public class CommonTable {
 
 
     //passi l'array su cui fare il controllo
-    public Card removeCardFromTable(ArrayList<Card> cards) throws NullPointerException{
-        return cards.remove(cards.indexOf(this.selectedCard.orElseThrow(NullPointerException::new)));
+    public Card removeCardFromTable(ArrayList<Card> cards, int index) {
+        return cards.remove(index);
     }
 
 
-    public Card removeCardFromDeck(Deck d){
-        return d.removeCard();
+    public Card removeCardFromDeck(Deck deck){
+        return deck.removeCard();
 
     }
-
 
     public Card getSelectedCard() throws NullPointerException{
         return this.selectedCard.orElseThrow(NullPointerException::new);
@@ -60,6 +59,15 @@ public class CommonTable {
     }
     public ArrayList<MissionCard> getCommonMissions(){
         return new ArrayList<MissionCard>(commonMissions);
+    }
+
+    public Deck getResourceDeck(){
+        return resourceDeck;
+    }
+
+
+    public Deck getGoldDeck(){
+        return goldDeck;
     }
 
 }
