@@ -6,4 +6,8 @@ import java.util.*;
 
 public class StarterDeck extends Deck {
     private static final int DIMENSION = 6;
+
+    public StarterDeck() {
+        super();
+    }
 }

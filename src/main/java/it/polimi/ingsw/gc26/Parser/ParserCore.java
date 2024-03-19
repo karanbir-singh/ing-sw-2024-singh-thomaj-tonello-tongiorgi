@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import it.polimi.ingsw.gc26.model.card.*;
 import it.polimi.ingsw.gc26.model.card_side.*;
 import it.polimi.ingsw.gc26.model.card_side.ability.*;
-import it.polimi.ingsw.gc26.model.card_side.mission.MissionDiagonalPattern;
+import it.polimi.ingsw.gc26.model.card_side.mission.*;
 import it.polimi.ingsw.gc26.model.deck.*;
 
 public class ParserCore {
@@ -66,18 +66,27 @@ public class ParserCore {
             JsonNode frontCardJson = cardJson.get("Front");
             JsonNode backCardJson = cardJson.get("Back");
 
-            HashMap<Symbol, Integer> requestedResources = new HashMap<>();
-
-            for (JsonNode resource : frontCardJson.get("Requirements")) {
-                if(requestedResources.containsKey(Symbol.valueOf(resource.asText().toUpperCase()))) {
-                    requestedResources.put(Symbol.valueOf(resource.asText().toUpperCase()), requestedResources.get(Symbol.valueOf(resource.asText().toUpperCase())) + 1);
-                } else {
-                    requestedResources.put(Symbol.valueOf(resource.asText().toUpperCase()), 1);
+            Side front;
+            String subclass = frontCardJson.get("Subclass").asText();
+            switch (subclass) {
+                case "Diagonal" : {
+                    front = new MissionDiagonalPattern(frontCardJson.get("Type").asInt(), frontCardJson.get("Points").asInt());
+                    break;
                 }
+                case "L" : {
+                    front = new MissionLPattern(frontCardJson.get("Type").asInt(), frontCardJson.get("Points").asInt());
+                    break;
+                }
+                case "Triplet" : {
+                    front = new MissionTripletPattern(frontCardJson.get("Type").asInt(), frontCardJson.get("Points").asInt());
+                    break;
+                }
+                case "Item" : {
+                    front = new MissionItemPattern(frontCardJson.get("Type").asInt(), frontCardJson.get("Points").asInt());
+                    break;
+                }
+                default: front = null;
             }
-
-            //Side front = new MissionDiagonalPattern(requestedResources, frontCardJson.get("Point").asInt());
-            Side front = new MissionDiagonalPattern(0, frontCardJson.get("Point").asInt());
 
             Side back = new CardBack();
 
@@ -156,6 +165,7 @@ public class ParserCore {
             return new Corner(isEvil, null);
         }
         return new Corner( false, Symbol.valueOf(side.get("Corner" + corner).asText().toUpperCase()));
+
     }
 }
 

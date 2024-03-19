@@ -101,7 +101,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Fungi", "Fungi", "Fungi"],
-      "Type" : "Diagonal DSx - UDx",
+      "Subclass" : "Diagonal",
+      "Type" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -111,7 +112,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Plant", "Plant", "Plant"],
-      "Type" : "Diagonal USx - DDx",
+      "Subclass" : "Diagonal",
+      "Type" : 2,
       "ImgFile" : ""
     },
     "Back" : {
@@ -121,7 +123,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Animal", "Animal", "Animal"],
-      "Type" : "Diagonal DSx - UDx",
+      "Subclass" : "Diagonal",
+      "Type" : 3,
       "ImgFile" : ""
     },
     "Back" : {
@@ -131,7 +134,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Insect", "Insect", "Insect"],
-      "Type" : "Diagonal USx - DDx",
+      "Subclass" : "Diagonal",
+      "Type" : 4,
       "ImgFile" : ""
     },
     "Back" : {
@@ -141,7 +145,8 @@
     "Front" : {
       "Points" : 3,
       "Requirements" : ["Fungi", "Fungi", "Plant"],
-      "Type" : "L",
+      "Subclass" : "L",
+      "Type" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -151,7 +156,8 @@
     "Front" : {
       "Points" : 3,
       "Requirements" : ["Plant", "Plant", "Insect"],
-      "Type" : "L Rotated",
+      "Subclass" : "L",
+      "Type" : 2,
       "ImgFile" : ""
     },
     "Back" : {
@@ -161,7 +167,8 @@
     "Front" : {
       "Points" : 3,
       "Requirements" : ["Fungi", "Animal", "Animal"],
-      "Type" : "L Inverted",
+      "Subclass" : "L",
+      "Type" : 3,
       "ImgFile" : ""
     },
     "Back" : {
@@ -171,7 +178,8 @@
     "Front" : {
       "Points" : 3,
       "Requirements" : ["Animal", "Insect", "Insect"],
-      "Type" : "L Rotated - Inverted",
+      "Subclass" : "L",
+      "Type" : 4,
       "ImgFile" : ""
     },
     "Back" : {
@@ -181,7 +189,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Fungi", "Fungi", "Fungi"],
-      "Type" : "Collection",
+      "Subclass" : "Triplet",
+      "Type" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -191,7 +200,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Plant", "Plant", "Plant"],
-      "Type" : "Collection",
+      "Subclass" : "Triplet",
+      "Type" : 2,
       "ImgFile" : ""
     },
     "Back" : {
@@ -201,7 +211,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Animal", "Animal", "Animal"],
-      "Type" : "Collection",
+      "Subclass" : "Triplet",
+      "Type" : 3,
       "ImgFile" : ""
     },
     "Back" : {
@@ -211,7 +222,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Insect", "Insect", "Insect"],
-      "Type" : "Collection",
+      "Subclass" : "Triplet",
+      "Type" : 4,
       "ImgFile" : ""
     },
     "Back" : {
@@ -221,7 +233,8 @@
     "Front" : {
       "Points" : 3,
       "Requirements" : ["Quill", "Inkwell", "Manuscript"],
-      "Type" : "Collection",
+      "Subclass" : "Item",
+      "Type" : 1,
       "ImgFile" : ""
     },
     "Back" : {
@@ -231,7 +244,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Manuscript", "Manuscript"],
-      "Type" : "Collection",
+      "Subclass" : "Item",
+      "Type" : 2,
       "ImgFile" : ""
     },
     "Back" : {
@@ -241,7 +255,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Inkwell", "Inkwell"],
-      "Type" : "Collection",
+      "Subclass" : "Item",
+      "Type" : 3,
       "ImgFile" : ""
     },
     "Back" : {
@@ -251,7 +266,8 @@
     "Front" : {
       "Points" : 2,
       "Requirements" : ["Quill", "Quill"],
-      "Type" : "Collection",
+      "Subclass" : "Item",
+      "Type" : 4,
       "ImgFile" : ""
     },
     "Back" : {

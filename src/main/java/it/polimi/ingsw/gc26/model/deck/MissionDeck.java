@@ -6,4 +6,8 @@ import java.util.*;
 
 public class MissionDeck extends Deck {
     private static final int DIMENSION=16;
+
+    public MissionDeck() {
+        super();
+    }
 }

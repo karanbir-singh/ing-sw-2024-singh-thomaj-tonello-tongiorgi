@@ -41,19 +41,14 @@ public class Hand {
 
     public void removeCard(Card card){
         cards.remove(card);
+        selectedSide = Optional.empty();
+        selectedCard = Optional.empty();
     }
 
     public void addCard(Card card){
         cards.add(card);
     }
 
-    public Side playCard(Side selectedSide, Card selectedCard){
-        Side playSide;
-        playSide = selectedSide;
-        removeCard(selectedCard);
-        setSelectedCard(java.util.Optional.empty());
-        return playSide;
-    }
 
     public ArrayList<Card> getCards(){
         return new ArrayList<>(this.cards);

@@ -13,8 +13,8 @@ public class PersonalBoard {
     private final ArrayList<Point> playablePositions;
     private final ArrayList<Point> blockedPositions;
     private final MissionCard secretMission;
-    private final MissionCard firstCommonMission;
-    private final MissionCard secondCommonMission;
+    //private final MissionCard firstCommonMission;
+    //private final MissionCard secondCommonMission;
     private final PersonalBoardSymbols personalBoardSymbols;
 
     private int selectedX;

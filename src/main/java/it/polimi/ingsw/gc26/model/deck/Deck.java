@@ -6,11 +6,10 @@ import java.util.*;
 
 public abstract class Deck {
 
-    private ArrayList<Card> cards;
+    private final ArrayList<Card> cards;
 
-    public Deck(ArrayList<Card> c) {
-        this.cards = c;
-        this.shuffleDeck();
+    public Deck() {
+        this.cards = new ArrayList<>();
     }
 
     public void addCard(Card card){

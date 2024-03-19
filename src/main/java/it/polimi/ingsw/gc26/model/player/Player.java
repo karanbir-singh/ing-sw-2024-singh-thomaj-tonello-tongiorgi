@@ -4,6 +4,8 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
 
+import java.util.ArrayList;
+
 public class Player {
     private int ID;
     private String nickname;
@@ -46,7 +48,7 @@ public class Player {
     }
 
     public void setHand() {
-        this.hand = new Hand();
+        this.hand = new Hand(new ArrayList<>());
     }
 
     public Hand getHand() {

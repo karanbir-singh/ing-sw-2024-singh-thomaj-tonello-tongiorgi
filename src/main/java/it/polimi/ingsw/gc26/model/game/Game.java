@@ -57,5 +57,6 @@ public class Game {
         this.Players.add(newPlayer);
     }
 
+    public CommonTable getCommonTable() { return this.commonTable;}
 
 }
