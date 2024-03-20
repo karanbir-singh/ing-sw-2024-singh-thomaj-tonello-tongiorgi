@@ -99,7 +99,7 @@
 
   "MissionCards" : [{
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Fungi", "Fungi", "Fungi"],
       "Subclass" : "Diagonal",
       "Type" : 1,
@@ -110,7 +110,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Plant", "Plant", "Plant"],
       "Subclass" : "Diagonal",
       "Type" : 2,
@@ -121,7 +121,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Animal", "Animal", "Animal"],
       "Subclass" : "Diagonal",
       "Type" : 3,
@@ -132,7 +132,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Insect", "Insect", "Insect"],
       "Subclass" : "Diagonal",
       "Type" : 4,
@@ -143,7 +143,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 3,
+      "Points" : 0,
       "Requirements" : ["Fungi", "Fungi", "Plant"],
       "Subclass" : "L",
       "Type" : 1,
@@ -154,7 +154,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 3,
+      "Points" : 0,
       "Requirements" : ["Plant", "Plant", "Insect"],
       "Subclass" : "L",
       "Type" : 2,
@@ -165,7 +165,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 3,
+      "Points" : 0,
       "Requirements" : ["Fungi", "Animal", "Animal"],
       "Subclass" : "L",
       "Type" : 3,
@@ -176,7 +176,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 3,
+      "Points" : 0,
       "Requirements" : ["Animal", "Insect", "Insect"],
       "Subclass" : "L",
       "Type" : 4,
@@ -187,7 +187,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Fungi", "Fungi", "Fungi"],
       "Subclass" : "Triplet",
       "Type" : 1,
@@ -198,7 +198,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Plant", "Plant", "Plant"],
       "Subclass" : "Triplet",
       "Type" : 2,
@@ -209,7 +209,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Animal", "Animal", "Animal"],
       "Subclass" : "Triplet",
       "Type" : 3,
@@ -220,7 +220,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Insect", "Insect", "Insect"],
       "Subclass" : "Triplet",
       "Type" : 4,
@@ -231,7 +231,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 3,
+      "Points" : 0,
       "Requirements" : ["Quill", "Inkwell", "Manuscript"],
       "Subclass" : "Item",
       "Type" : 1,
@@ -242,7 +242,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Manuscript", "Manuscript"],
       "Subclass" : "Item",
       "Type" : 2,
@@ -253,7 +253,7 @@
     }
   },{
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Inkwell", "Inkwell"],
       "Subclass" : "Item",
       "Type" : 3,
@@ -264,7 +264,7 @@
     }
   }, {
     "Front" : {
-      "Points" : 2,
+      "Points" : 0,
       "Requirements" : ["Quill", "Quill"],
       "Subclass" : "Item",
       "Type" : 4,
