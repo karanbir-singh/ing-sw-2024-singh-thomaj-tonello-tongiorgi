@@ -33,6 +33,24 @@ public class Main {
         pb.playSide(goldDeck.getDeck().get(0).getFront());
         pb.setPosition(1,3);
         pb.playSide(goldDeck.getDeck().get(3).getFront());
-        pb = null;
+        for(int i = 0; i < 50; i++){
+
+            for(int j = 0; j< 50; j++){
+                for(int k = 0; k< 100; k++){
+
+                }
+                for(int k = 0; k< 100; k++){
+
+                }
+                for(int k = 0; k< 100; k++){
+                    if(k == 99){
+                        System.out.print(k);
+                    }
+
+                }
+            }
+            System.out.println(" ");
+        }
+        System.out.println("\n");
     }
 }

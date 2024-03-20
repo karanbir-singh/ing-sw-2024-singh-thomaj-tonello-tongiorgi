@@ -8,6 +8,7 @@ import it.polimi.ingsw.gc26.model.card_side.Symbol;
 
 import java.util.*;
 
+
 public class PersonalBoard {
     private int xMin, xMax, yMin, yMax;
     private int score;
@@ -18,16 +19,15 @@ public class PersonalBoard {
     private final Card firstCommonMission;
     private final Card secondCommonMission;
     private final Map<Symbol,Integer> visibleResources;
-
     private int selectedX = 0;
     private int selectedY = 0;
 
     public PersonalBoard(Side initialSide, Card secretMission, Card firstCommonMission, Card secondCommonMission) {
         score = 0;
-        xMin = -1;
-        xMax = 1;
-        yMin = -1;
-        yMax = 1;
+        xMin = 0;
+        xMax = 0;
+        yMin = 0;
+        yMax = 0;
         visibleResources = new HashMap<Symbol, Integer>();
         visibleResources.put(Symbol.FUNGI,0);
         visibleResources.put(Symbol.ANIMAL,0);
@@ -90,6 +90,14 @@ public class PersonalBoard {
             } else {
                 addPoint(selectedX + 1, selectedY + 1, playablePositions);
             }
+
+
+            if(selectedX + 1 > xMax){
+                xMax = selectedX + 1;
+            }
+            if(selectedY + 1 > yMax){
+                yMax = selectedY + 1;
+            }
         }
         //end analyzing the point X+1, Y+1
 
@@ -107,6 +115,14 @@ public class PersonalBoard {
                 addPoint(selectedX - 1, selectedY + 1, blockedPositions);
             } else {
                 addPoint(selectedX - 1, selectedY + 1, playablePositions);
+            }
+
+
+            if(selectedX - 1 < xMin){
+                xMin = selectedX - 1;
+            }
+            if(selectedY + 1 > yMax){
+                yMax = selectedY + 1;
             }
         }
         //end analyzing the point X-1, Y+1
@@ -126,6 +142,15 @@ public class PersonalBoard {
             } else {
                 addPoint(selectedX - 1, selectedY - 1, playablePositions);
             }
+
+
+
+            if(selectedX - 1 < xMin){
+                xMin = selectedX - 1;
+            }
+            if(selectedY - 1 < yMin){
+                yMin = selectedY - 1;
+            }
         }
         //end analyzing the point X-1, Y-1
 
@@ -144,8 +169,16 @@ public class PersonalBoard {
             } else {
                 addPoint(selectedX + 1, selectedY - 1, playablePositions);
             }
+
+            if(selectedX + 1 > xMax){
+                xMax = selectedX + 1;
+            }
+            if(selectedY - 1 < yMin){
+                yMin = selectedY - 1;
+            }
         }
         //end analyzing the point X+1, Y-1
+
 
 
         //addSymbol
