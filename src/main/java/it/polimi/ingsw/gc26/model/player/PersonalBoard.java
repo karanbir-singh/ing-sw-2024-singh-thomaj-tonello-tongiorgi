@@ -287,7 +287,9 @@ public class PersonalBoard {
 
         }
     }
-
+    public ArrayList<Point> getOccupiedPositions(){
+        return  this.occupiedPositions;
+    }
 
 
 

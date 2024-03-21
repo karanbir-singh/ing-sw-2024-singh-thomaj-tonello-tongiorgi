@@ -23,6 +23,6 @@ public class GoldCardFront extends Side {
 
     @Override
     public int useAbility(Map<Symbol, Integer> resources, ArrayList<Point> occupiedPositions, Point p) {
-        return getPoints();
+        return 0;
     }
 }
