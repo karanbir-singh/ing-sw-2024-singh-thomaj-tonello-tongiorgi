@@ -1,4 +1,5 @@
 package it.polimi.ingsw.gc26.model;
+import java.time.LocalTime;
 import java.util.*;
 import it.polimi.ingsw.gc26.model.player.Player;
 
@@ -6,6 +7,7 @@ public class Message {
     private String text;
     private ArrayList<Player> receivers;
     private Player sender;
+    private LocalTime time;
 
     public Message(String text, ArrayList<Player> receivers, Player sender){
         this.text = text;

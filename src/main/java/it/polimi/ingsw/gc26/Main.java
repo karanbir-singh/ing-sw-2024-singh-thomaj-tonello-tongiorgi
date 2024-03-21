@@ -33,24 +33,48 @@ public class Main {
         pb.playSide(goldDeck.getDeck().get(0).getFront());
         pb.setPosition(1,3);
         pb.playSide(goldDeck.getDeck().get(3).getFront());
-        for(int i = 0; i < 50; i++){
+        pb.setPosition(3,3);
+        pb.playSide(resourceDeck.getDeck().get(2).getBack());
+        pb.setPosition(4,4);
+//        pb.playSide(resourceDeck.getDeck().get(3).getBack());
+//        pb.setPosition(5,5);
+//        pb.playSide(resourceDeck.getDeck().get(4).getBack());
+//        pb.setPosition(6,6);
+//        pb.playSide(resourceDeck.getDeck().get(5).getBack());
+//        pb.setPosition(7,7);
+//        pb.playSide(resourceDeck.getDeck().get(6).getBack());
+//        pb.setPosition(8,8);
+//        pb.playSide(resourceDeck.getDeck().get(7).getBack());
+//        pb.setPosition(9,9);
+//        pb.playSide(resourceDeck.getDeck().get(8).getBack());
+//        pb.setPosition(10,10);
+//        pb.playSide(resourceDeck.getDeck().get(9).getBack());
+//        pb.setPosition(11,11);
+//        pb.playSide(resourceDeck.getDeck().get(10).getBack());
+//        pb.setPosition(12,12);
+//        pb.playSide(resourceDeck.getDeck().get(11).getBack());
+//        pb.setPosition(13,13);
+//        pb.playSide(resourceDeck.getDeck().get(12).getBack());
+//        pb.setPosition(14,14);
+//        pb.playSide(resourceDeck.getDeck().get(13).getBack());
+//        pb.setPosition(15,15);
+//        pb.playSide(resourceDeck.getDeck().get(14).getBack());
+//        pb.setPosition(16,16);
+//        pb.playSide(resourceDeck.getDeck().get(15).getBack());
+//        pb.setPosition(17,17);
+//        pb.playSide(resourceDeck.getDeck().get(16).getBack());
+//        pb.setPosition(18,18);
+//        pb.playSide(resourceDeck.getDeck().get(17).getBack());
+//        pb.setPosition(19,19);
+//        pb.playSide(resourceDeck.getDeck().get(18).getBack());
+//        pb.setPosition(20,20);
+//        pb.playSide(resourceDeck.getDeck().get(19).getBack());
+//        pb.setPosition(21,21);
+//        pb.playSide(resourceDeck.getDeck().get(20).getBack());
 
-            for(int j = 0; j< 50; j++){
-                for(int k = 0; k< 100; k++){
 
-                }
-                for(int k = 0; k< 100; k++){
 
-                }
-                for(int k = 0; k< 100; k++){
-                    if(k == 99){
-                        System.out.print(k);
-                    }
 
-                }
-            }
-            System.out.println(" ");
-        }
-        System.out.println("\n");
+        pb.showBoard();
     }
 }

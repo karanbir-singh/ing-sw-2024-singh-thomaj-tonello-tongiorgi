@@ -267,7 +267,26 @@ public class PersonalBoard {
         return resources;
     }
 
+    public void showBoard(){
+        for(int i = xMin -1; i <= xMax ; i++){
+            for(int j = yMax + 1; j >= yMin; j--){
 
+                if(ifPresent(i,j,blockedPositions).isPresent()){
+                    System.out.print("X   ");
+                }
+                else if(ifPresent(i,j,playablePositions).isPresent()){
+                    System.out.print("o   ");
+                }
+                else if(ifPresent(i,j,occupiedPositions).isPresent()){
+                    System.out.print("C   ");
+                }else{
+                    System.out.print("    ");
+                }
+            }
+            System.out.println("\n");
+
+        }
+    }
 
 
 
