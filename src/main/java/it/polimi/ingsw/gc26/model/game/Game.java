@@ -31,6 +31,9 @@ public class Game {
         this.round = 1;
     }
 
+    public int getNumberOfPlayers(){
+        return this.numberOfPlayers;
+    }
     public GameState getState() {
         return this.gameState;
     }

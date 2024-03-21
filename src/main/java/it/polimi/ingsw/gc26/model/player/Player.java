@@ -10,6 +10,7 @@ public class Player {
     private int ID;
     private String nickname;
     private Pawn pawnColor;
+    private boolean amIFirstPlayer;
     private Hand hand;
     private PersonalBoard personalBoard;
     private int turn;
@@ -46,6 +47,8 @@ public class Player {
     public Pawn getPawnColor() {
         return this.pawnColor;
     }
+    public void setFirstPlayer(){this.amIFirstPlayer = true;}
+    public boolean isFirstPlayer(){return this.amIFirstPlayer;}
 
     public void setHand() {
         this.hand = new Hand(new ArrayList<>());
