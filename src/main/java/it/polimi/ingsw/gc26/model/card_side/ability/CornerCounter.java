@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class CornerCounter extends GoldCardFront {
     public CornerCounter(Symbol sideSymbol, Map<Symbol, Integer> requestedResources, int points, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
-        super(sideSymbol, requestedResources, 2, UPLEFT, DOWNLEFT, UPRIGHT, DOWNRIGHT);
+        super(sideSymbol, requestedResources, points, UPLEFT, DOWNLEFT, UPRIGHT, DOWNRIGHT);
     }
 
     @Override
