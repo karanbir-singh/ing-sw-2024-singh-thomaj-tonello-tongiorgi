@@ -9,9 +9,9 @@ import java.util.*;
 
 public class MissionTripletPattern extends MissionCardFront {
 
-    public MissionTripletPattern(int type, int points) {
+    public MissionTripletPattern(int type) {
         setType(type);
-        setPoints(points);
+        setPoints(0);
 
         setSideSymbol(null);
         setDOWNLEFT(null);

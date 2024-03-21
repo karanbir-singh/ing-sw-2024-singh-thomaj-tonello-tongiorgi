@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class Game {
     private static final int MAX_NUM_PLAYERS = 4;
     private final int numberOfPlayers;
-    private ArrayList<PersonalBoard> personalBoards;
 
     private GameState gameState;
     private Player currentPlayer;
@@ -23,7 +22,6 @@ public class Game {
         this.numberOfPlayers = numberOfPlayers;
         this.gameState = GameState.INITIAL_STAGE;
         this.Players = new ArrayList<>();
-        this.personalBoards = new ArrayList<>();
         ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
         Deck resourceCardDeck = p.getResourceCards();
