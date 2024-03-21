@@ -34,7 +34,7 @@ class PersonalBoardTest {
         pb.playSide(goldDeck.getDeck().get(3).getFront());
         pb.setPosition(3,3);
         pb.playSide(resourceDeck.getDeck().get(2).getBack());
-        pb.setPosition(4,4);
+        //non conto le risorse permanenti dei back delle carte, aspetto gabi
         assertEquals(pb.getResourceQuantity(Symbol.INSECT) , 2);
         assertEquals(pb.getResourceQuantity(Symbol.PLANT) , 1);
         assertEquals(pb.getResourceQuantity(Symbol.FUNGI) , 0);
@@ -80,6 +80,7 @@ class PersonalBoardTest {
         pb.playSide(resourceDeck.getDeck().get(36).getFront());
         pb.setPosition(-4,0);
         pb.playSide(goldDeck.getDeck().get(38).getFront());
+        //non conto le risorse permanenti dei back delle carte, aspetto gabi
         assertEquals(pb.getResourceQuantity(Symbol.INSECT) , 3);
         assertEquals(pb.getResourceQuantity(Symbol.PLANT) , 2);
         assertEquals(pb.getResourceQuantity(Symbol.FUNGI) , 1);
