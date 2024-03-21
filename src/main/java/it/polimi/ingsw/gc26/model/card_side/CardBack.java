@@ -28,7 +28,9 @@ public class CardBack extends Side {
         setUPRIGHT(new Corner(false, null));
         setType(0);
         setPoints(0);
-        setPermanentResources(new ArrayList<>());
+        ArrayList<Symbol> resources = new ArrayList<>();
+        resources.add(side);
+        setPermanentResources(resources);
         setRequestedResources(new HashMap<>());
     }
 
