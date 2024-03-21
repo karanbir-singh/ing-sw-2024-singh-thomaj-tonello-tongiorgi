@@ -8,9 +8,9 @@ import it.polimi.ingsw.gc26.model.player.Point;
 import java.util.*;
 
 public class MissionDiagonalPattern extends MissionCardFront {
-    public MissionDiagonalPattern(int type, int points) {
+    public MissionDiagonalPattern(int type) {
         setType(type);
-        setPoints(points);
+        setPoints(0);
 
         setSideSymbol(null);
         setDOWNLEFT(null);
