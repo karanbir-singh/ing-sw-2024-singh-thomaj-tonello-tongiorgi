@@ -70,19 +70,19 @@ public class ParserCore {
             String subclass = frontCardJson.get("Subclass").asText();
             switch (subclass) {
                 case "Diagonal" : {
-                    front = new MissionDiagonalPattern(frontCardJson.get("Type").asInt(), frontCardJson.get("Points").asInt());
+                    front = new MissionDiagonalPattern(frontCardJson.get("Type").asInt());
                     break;
                 }
                 case "L" : {
-                    front = new MissionLPattern(frontCardJson.get("Type").asInt(), frontCardJson.get("Points").asInt());
+                    front = new MissionLPattern(frontCardJson.get("Type").asInt());
                     break;
                 }
                 case "Triplet" : {
-                    front = new MissionTripletPattern(frontCardJson.get("Type").asInt(), frontCardJson.get("Points").asInt());
+                    front = new MissionTripletPattern(frontCardJson.get("Type").asInt());
                     break;
                 }
                 case "Item" : {
-                    front = new MissionItemPattern(frontCardJson.get("Type").asInt(), frontCardJson.get("Points").asInt());
+                    front = new MissionItemPattern(frontCardJson.get("Type").asInt());
                     break;
                 }
                 default: front = null;
@@ -141,13 +141,13 @@ public class ParserCore {
             Side front;
 
             if (frontCardJson.get("Constraint").asText().equals("Corner")) {
-                front = new CornerCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()),  requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new CornerCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()),  requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else if (frontCardJson.get("Constraint").asText().equals("Inkwell")) {
-                front = new InkwellCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new InkwellCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else if (frontCardJson.get("Constraint").asText().equals("Quill")) {
-                front = new QuillCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new QuillCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else if (frontCardJson.get("Constraint").asText().equals("Manuscript")) {
-                front = new ManuscriptCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new ManuscriptCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             } else {
                 front = new GoldCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
             }
