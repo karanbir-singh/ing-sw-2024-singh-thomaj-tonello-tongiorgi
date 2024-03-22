@@ -104,4 +104,64 @@ class PersonalBoardTest {
     }
 
 
+    @Test
+    void Diagonal6PlantCombinationMission() throws Exception{
+        Game game = new Game(2);
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        Player p1 = new Player(3,"Bob");
+        game.addPlayer(p1);
+        game.setCurrentPlayer(p1);
+        game.getCurrentPlayer().setPersonalBoard(initialDeck.getDeck().get(0).getFront(),
+                missionDeck.getDeck().get(2), missionDeck.getDeck().get(6), missionDeck.getDeck().get(3));
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+
+        pb.setPosition(1,-1);
+        pb.playSide(resourceDeck.getDeck().get(0).getBack());
+        pb.setPosition(2,-2);
+        pb.playSide(resourceDeck.getDeck().get(1).getBack());
+        pb.setPosition(3,-3);
+        pb.playSide(resourceDeck.getDeck().get(2).getBack());
+        pb.setPosition(4,-4);
+        pb.playSide(resourceDeck.getDeck().get(3).getBack());
+        pb.setPosition(5,-5);
+        pb.playSide(resourceDeck.getDeck().get(4).getBack());
+        pb.setPosition(6,-6);
+        pb.playSide(resourceDeck.getDeck().get(5).getBack());
+        pb.endGame();
+        assertEquals(pb.getScore(), 4);
+    }
+
+    @Test
+    void DiagonalAndLpatternCombinationMission() throws Exception{
+        Game game = new Game(2);
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        Player p1 = new Player(3,"Bob");
+        game.addPlayer(p1);
+        game.setCurrentPlayer(p1);
+        game.getCurrentPlayer().setPersonalBoard(initialDeck.getDeck().get(0).getFront(),
+                missionDeck.getDeck().get(0), missionDeck.getDeck().get(2), missionDeck.getDeck().get(6));
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+
+        pb.setPosition(1,1);
+        pb.playSide(resourceDeck.getDeck().get(10).getBack());
+        pb.setPosition(2,2);
+        pb.playSide(resourceDeck.getDeck().get(11).getBack());
+        pb.setPosition(3,3);
+        pb.playSide(resourceDeck.getDeck().get(12).getBack());
+        pb.setPosition(2,4);
+        pb.playSide(resourceDeck.getDeck().get(13).getBack());
+        pb.setPosition(3,5);
+        pb.playSide(resourceDeck.getDeck().get(20).getBack());
+        pb.endGame();
+        assertEquals(pb.getScore(), 5);
+    }
+
+
+
 }

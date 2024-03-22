@@ -111,7 +111,7 @@ public class MissionLPattern extends MissionCardFront {
                     for (Point p2 : occupiedPositions) {
                         if (p2.getSide().checkSideSymbol(Symbol.ANIMAL) &&
                                 p2.getX() == p.getX() - 1 &&
-                                p2.getY() == p.getY() - 2 &&
+                                p2.getY() == p.getY() - 3 &&
                                 !p2.getFlag(6)) {
                             findSecond = Optional.of(p2);
 
