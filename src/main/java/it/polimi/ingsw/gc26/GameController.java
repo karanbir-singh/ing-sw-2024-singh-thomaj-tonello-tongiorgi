@@ -6,8 +6,12 @@ import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 
-public class Controller {
+public class GameController {
     private Game game;
+
+    public GameController(Game game) {
+        this.game = game;
+    }
 
     public void selectCardFromHand(Card card) {
         game.getCurrentPlayer().getHand().setSelectedCard(card);
@@ -78,6 +82,7 @@ public class Controller {
         }
     }
 
-
-
+    public Game getGame() {
+        return game;
+    }
 }

@@ -19,6 +19,11 @@ abstract public class Side {
     private Corner UPRIGHT;
     private Corner DOWNRIGHT;
 
+    protected int calculatePoints(int firstX, int firstY, int secondX, int secondY, ArrayList<Point> occupiedPositions, Symbol diagSymbol, Symbol vertSymbol, int flag, int points) {
+        return 0;
+    }
+
+
     public int useAbility(Map<Symbol, Integer> resources, ArrayList<Point> occupiedPositions, Point p) {
         return 0;
     }

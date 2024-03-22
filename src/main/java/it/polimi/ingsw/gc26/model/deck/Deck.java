@@ -28,10 +28,7 @@ public class Deck {
         if(cards.isEmpty()){
             return null;
         }
-
-        card = cards.get(cards.size() - 1);
-        cards.remove(card);
-        return card;
+        return cards.removeLast();
     }
 
     public void shuffleDeck(){
