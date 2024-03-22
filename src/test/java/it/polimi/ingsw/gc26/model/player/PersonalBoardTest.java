@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.model.player;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.game.Game;
+import jdk.jfr.Experimental;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -162,6 +163,18 @@ class PersonalBoardTest {
         pb.playSide(resourceDeck.getDeck().get(20).getBack()); //questo è FUNGI
         pb.endGame();
         assertEquals(pb.getScore(), 5);
+    }
+
+    @Test
+    void SinglePlayer() throws Exception{
+        Game game = new Game(-1);
+    }
+
+    @Test
+    void InitialCardBack() throws Exception {
+        Game game = new Game(2);
+
+
     }
 
 
