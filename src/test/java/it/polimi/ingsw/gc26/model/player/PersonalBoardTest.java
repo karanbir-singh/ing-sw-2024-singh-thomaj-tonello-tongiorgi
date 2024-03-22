@@ -36,7 +36,7 @@ class PersonalBoardTest {
         pb.playSide(resourceDeck.getDeck().get(2).getBack());
         //non conto le risorse permanenti dei back delle carte, aspetto gabi
         assertEquals(pb.getResourceQuantity(Symbol.INSECT) , 2);
-        assertEquals(pb.getResourceQuantity(Symbol.PLANT) , 1);
+        assertEquals(pb.getResourceQuantity(Symbol.PLANT) , 2);
         assertEquals(pb.getResourceQuantity(Symbol.FUNGI) , 0);
         assertEquals(pb.getResourceQuantity(Symbol.ANIMAL) , 0);
         assertEquals(pb.getResourceQuantity(Symbol.QUILL) , 1);
@@ -115,8 +115,9 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().setPersonalBoard(initialDeck.getDeck().get(0).getFront(),
-                missionDeck.getDeck().get(2), missionDeck.getDeck().get(6), missionDeck.getDeck().get(3));
+                missionDeck.getDeck().get(1), missionDeck.getDeck().get(6), missionDeck.getDeck().get(3));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+        //get(1) è la missione corretta
 
         pb.setPosition(1,-1);
         pb.playSide(resourceDeck.getDeck().get(0).getBack());
@@ -146,10 +147,11 @@ class PersonalBoardTest {
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().setPersonalBoard(initialDeck.getDeck().get(0).getFront(),
                 missionDeck.getDeck().get(0), missionDeck.getDeck().get(2), missionDeck.getDeck().get(6));
-        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard(); //get(2) per diagonale e get(6) per L
+        //usiamo animals e un fungi in alto a destra
 
         pb.setPosition(1,1);
-        pb.playSide(resourceDeck.getDeck().get(10).getBack());
+        pb.playSide(resourceDeck.getDeck().get(10).getBack()); //questi sono tutti ANIMALS
         pb.setPosition(2,2);
         pb.playSide(resourceDeck.getDeck().get(11).getBack());
         pb.setPosition(3,3);
@@ -157,7 +159,7 @@ class PersonalBoardTest {
         pb.setPosition(2,4);
         pb.playSide(resourceDeck.getDeck().get(13).getBack());
         pb.setPosition(3,5);
-        pb.playSide(resourceDeck.getDeck().get(20).getBack());
+        pb.playSide(resourceDeck.getDeck().get(20).getBack()); //questo è FUNGI
         pb.endGame();
         assertEquals(pb.getScore(), 5);
     }
