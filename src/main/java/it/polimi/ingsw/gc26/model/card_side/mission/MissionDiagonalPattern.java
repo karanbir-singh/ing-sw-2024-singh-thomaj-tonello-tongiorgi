@@ -21,141 +21,55 @@ public class MissionDiagonalPattern extends MissionCardFront {
         setRequestedResources(new HashMap<>());
     }
 
-    public int checkPattern(Map<Symbol, Integer> visibleResources, ArrayList<Point> occupiedPositions) {
-        int points = 0;
+    @Override
+    protected int calculatePoints(int firstX, int firstY, int secondX, int secondY, ArrayList<Point> occupiedPositions, Symbol diagSymbol, Symbol vertSymbol, int flag, int points) {
+        int value = 0;
         Optional<Point> findFirst = Optional.empty();
         Optional<Point> findSecond = Optional.empty();
-        if (getType() == 1) {
-            for (Point p : occupiedPositions) {
-                if (p.getSide().checkSideSymbol(Symbol.FUNGI) &&
-                        !p.getFlag(0)) {
-                    for (Point p1 : occupiedPositions) {
-                        if (p1.getSide().checkSideSymbol(Symbol.FUNGI) &&
-                                p1.getX() == p.getX() + 1 &&
-                                p1.getY() == p.getY() + 1 &&
-                                !p1.getFlag(0)) {
-                            findFirst = Optional.of(p1);
-                        }
-                    }
-                    for (Point p2 : occupiedPositions) {
-                        if (p2.getSide().checkSideSymbol(Symbol.FUNGI) &&
-                                p2.getX() == p.getX() + 2 &&
-                                p2.getY() == p.getY() + 2 &&
-                                !p2.getFlag(0)) {
-                            findSecond = Optional.of(p2);
-
-                        }
-                    }
-                    if (findFirst.isPresent() && findSecond.isPresent()) {
-                        points = points + 2;
-                        findFirst.get().setFlag(0, true);
-                        findSecond.get().setFlag(0, true);
-                        p.setFlag(0, true);
+        for (Point p : occupiedPositions) {
+            if (p.getSide().checkSideSymbol(diagSymbol) &&
+                    !p.getFlag(flag)) {
+                for (Point p1 : occupiedPositions) {
+                    if (p1.getSide().checkSideSymbol(vertSymbol) &&
+                            p1.getX() == p.getX() + firstX &&
+                            p1.getY() == p.getY() + firstY &&
+                            !p1.getFlag(flag)) {
+                        findFirst = Optional.of(p1);
                     }
                 }
-                findFirst = Optional.empty();
-                findSecond = Optional.empty();
-            }
-        } else if (getType() == 2) {
-
-            for (Point p : occupiedPositions) {
-                if (p.getSide().checkSideSymbol(Symbol.PLANT)
-                        && !p.getFlag(1)) {
-                    for (Point p1 : occupiedPositions) {
-                        if (p1.getSide().checkSideSymbol(Symbol.PLANT) &&
-                                p1.getX() == p.getX() + 1 &&
-                                p1.getY() == p.getY() - 1 &&
-                                !p1.getFlag(1)) {
-                            findFirst = Optional.of(p1);
-                        }
-                    }
-                    for (Point p2 : occupiedPositions) {
-                        if (p2.getSide().checkSideSymbol(Symbol.PLANT) &&
-                                p2.getX() == p.getX() + 2 &&
-                                p2.getY() == p.getY() - 2 &&
-                                !p2.getFlag(1)) {
-                            findSecond = Optional.of(p2);
-                        }
-                    }
-                    if (findFirst.isPresent() && findSecond.isPresent()) {
-                        points = points + 2;
-                        findFirst.get().setFlag(1, true);
-                        findSecond.get().setFlag(1, true);
-                        p.setFlag(1, true);
+                for (Point p2 : occupiedPositions) {
+                    if (p2.getSide().checkSideSymbol(vertSymbol) &&
+                            p2.getX() == p.getX() + secondX &&
+                            p2.getY() == p.getY() + secondY &&
+                            !p2.getFlag(flag)) {
+                        findSecond = Optional.of(p2);
 
                     }
                 }
-                findFirst = Optional.empty();
-                findSecond = Optional.empty();
-            }
-
-        } else if (getType() == 3) {
-            for (Point p : occupiedPositions) {
-                if (p.getSide().checkSideSymbol(Symbol.ANIMAL) &&
-                        !p.getFlag(2)) {
-                    for (Point p1 : occupiedPositions) {
-                        if (p1.getSide().checkSideSymbol(Symbol.ANIMAL) &&
-                                p1.getX() == p.getX() + 1 &&
-                                p1.getY() == p.getY() + 1 &&
-                                !p1.getFlag(2)) {
-                            findFirst = Optional.of(p1);
-
-                        }
-                    }
-                    for (Point p2 : occupiedPositions) {
-                        if (p2.getSide().checkSideSymbol(Symbol.ANIMAL) &&
-                                p2.getX() == p.getX() + 2 &&
-                                p2.getY() == p.getY() + 2 &&
-                                !p2.getFlag(2)) {
-                            findSecond = Optional.of(p2);
-
-                        }
-                    }
-                    if (findFirst.isPresent() && findSecond.isPresent()) {
-                        points = points + 2;
-                        findFirst.get().setFlag(2, true);
-                        findSecond.get().setFlag(2, true);
-                        p.setFlag(2, true);
-                    }
+                if (findFirst.isPresent() && findSecond.isPresent()) {
+                    value = value + points;
+                    findFirst.get().setFlag(flag, true);
+                    findSecond.get().setFlag(flag, true);
+                    p.setFlag(flag, true);
                 }
-                findFirst = Optional.empty();
-                findSecond = Optional.empty();
             }
-        } else if (getType() == 4) {
-            for (Point p : occupiedPositions) {
-                if (p.getSide().checkSideSymbol(Symbol.INSECT)
-                        && !p.getFlag(3)) {
-                    for (Point p1 : occupiedPositions) {
-                        if (p1.getSide().checkSideSymbol(Symbol.INSECT) &&
-                                p1.getX() == p.getX() + 1 &&
-                                p1.getY() == p.getY() - 1 &&
-                                !p1.getFlag(3)) {
-                            findFirst = Optional.of(p1);
-                        }
-                    }
-                    for (Point p2 : occupiedPositions) {
-                        if (p2.getSide().checkSideSymbol(Symbol.PLANT) &&
-                                p2.getX() == p.getX() + 2 &&
-                                p2.getY() == p.getY() - 2 &&
-                                !p2.getFlag(3)) {
-                            findSecond = Optional.of(p2);
-                        }
-                    }
-                    if (findFirst.isPresent() && findSecond.isPresent()) {
-                        points = points + 2;
-                        findFirst.get().setFlag(3, true);
-                        findSecond.get().setFlag(3, true);
-                        p.setFlag(3, true);
-
-                    }
-                }
-
-                findFirst = Optional.empty();
-                findSecond = Optional.empty();
-            }
+            findFirst = Optional.empty();
+            findSecond = Optional.empty();
         }
-
-        return points;
+        return value;
     }
 
+    public int checkPattern(Map<Symbol, Integer> visibleResources, ArrayList<Point> occupiedPositions) {
+        int points = 0;
+        if(getType() == 1)
+            points = calculatePoints(1, 1, 2,2, occupiedPositions, Symbol.FUNGI, Symbol.FUNGI, 0, 2);
+        else if (getType() == 2) {
+            points = calculatePoints(1, -1, 2, -2, occupiedPositions, Symbol.PLANT,Symbol.PLANT, 1, 2);
+        } else if (getType() == 3) {
+            points = calculatePoints(1, 1, 2, 2, occupiedPositions, Symbol.ANIMAL, Symbol.ANIMAL, 2, 2);
+        } else if (getType() == 4) {
+            points = calculatePoints(1, -1, 2, -2, occupiedPositions, Symbol.INSECT, Symbol.INSECT, 3, 2);
+        }
+        return points;
+    }
 }
