@@ -17,7 +17,8 @@ public class Game {
     private int round;
 
 
-    public Game(int numberOfPlayers) {
+    public Game(int numberOfPlayers) throws Exception {
+        if (numberOfPlayers < 2 || numberOfPlayers > 4) { throw new Exception("Number of players invalid!");}
         this.numberOfPlayers = numberOfPlayers;
         this.gameState = GameState.INITIAL_STAGE;
         this.players = new ArrayList<>();
