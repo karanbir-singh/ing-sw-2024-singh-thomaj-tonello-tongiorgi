@@ -14,10 +14,10 @@ public class MissionTripletPattern extends MissionCardFront {
         setPoints(0);
 
         setSideSymbol(null);
-        setDOWNLEFT(null);
-        setDOWNRIGHT(null);
-        setUPLEFT(null);
-        setUPRIGHT(null);
+        setDOWNLEFT(new Corner(true, null));
+        setDOWNRIGHT(new Corner(true, null));
+        setUPLEFT(new Corner(true, null));
+        setUPRIGHT(new Corner(true, null));
         setPermanentResources(new ArrayList<>());
         setRequestedResources(new HashMap<>());
     }
