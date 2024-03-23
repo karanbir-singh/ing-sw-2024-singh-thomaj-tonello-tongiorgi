@@ -31,53 +31,51 @@ public class GameController {
     }
 
     public void playCardFromHand() {
-        PersonalBoard p = game.getCurrentPlayer().getPersonalBoard();
+        PersonalBoard personalBoard = game.getCurrentPlayer().getPersonalBoard();
         Hand h = game.getCurrentPlayer().getHand();
         if (h.getSelectedCard().isEmpty()) {
             // TODO Gestire la non selezione di una carta con eccezione
             return;
         }
-        /*if (!(p.getSelectedX() && p.getSelectedY())) { // TODO controllare in altro modo
-            // TODO Gestire la non selezione di una posizione con eccezione
-            return;
-        }*/
-        p.playSide(h.getSelectedSide().get());
+        personalBoard.playSide(h.getSelectedSide().get());
         h.removeCard(h.getSelectedCard().get());
     }
 
-    public void selectCardFromCommonBoard(Card card) {
+    public void selectCardFromCommonTable(Card card) {
         game.getCommonTable().selectCard(card);
     }
 
     public void drawSelectedCard() {
-        CommonTable c = game.getCommonTable();
+        CommonTable commonTable = game.getCommonTable();
         Hand hand = game.getCurrentPlayer().getHand();
 
         // TODO si può migliorare questo codice
         int index;
-        index = c.getResourceCardsOnTable().indexOf(c.getSelectedCard());
+        index = commonTable.getResourceCards().indexOf(commonTable.getSelectedCard());
         if (index != -1){
-            Card removedCard = c.removeCardFromTable(c.getResourceCardsOnTable(), index);
+            Card removedCard = commonTable.removeCard(commonTable.getResourceCards(), index);
             hand.addCard(removedCard);
-            Card replacingCard = c.removeCardFromDeck(c.getResourceDeck());
-            c.addCardToTable(replacingCard, c.getResourceCardsOnTable(), index);
+
+            Card replacingCard = commonTable.getResourceDeck().removeCard();
+            commonTable.addCard(replacingCard, commonTable.getResourceCards(), index);
         }
 
-        index = c.getGoldCardsOnTable().indexOf(c.getSelectedCard());
+        index = commonTable.getGoldCards().indexOf(commonTable.getSelectedCard());
         if (index != -1){
-            Card removedCard = c.removeCardFromTable(c.getGoldCardsOnTable(), index);
+            Card removedCard = commonTable.removeCard(commonTable.getGoldCards(), index);
             hand.addCard(removedCard);
-            Card replacingCard = c.removeCardFromDeck(c.getGoldDeck());
-            c.addCardToTable(replacingCard, c.getGoldCardsOnTable(), index);
+
+            Card replacingCard = commonTable.getGoldDeck().removeCard();
+            commonTable.addCard(replacingCard, commonTable.getGoldCards(), index);
         }
 
-        if (c.getResourceDeck().getTopCard().equals(c.getSelectedCard())){
-            Card removedCard = c.getResourceDeck().removeCard();
+        if (commonTable.getResourceDeck().getTopCard().equals(commonTable.getSelectedCard())){
+            Card removedCard = commonTable.getResourceDeck().removeCard();
             hand.addCard(removedCard);
         }
 
-        if (c.getGoldDeck().getTopCard().equals(c.getSelectedCard())){
-            Card removedCard = c.getGoldDeck().removeCard();
+        if (commonTable.getGoldDeck().getTopCard().equals(commonTable.getSelectedCard())){
+            Card removedCard = commonTable.getGoldDeck().removeCard();
             hand.addCard(removedCard);
         }
     }

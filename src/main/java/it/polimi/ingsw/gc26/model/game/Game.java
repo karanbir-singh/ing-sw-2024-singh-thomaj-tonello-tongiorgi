@@ -39,7 +39,7 @@ public class Game {
     }
 
     public void goToNextPlayer() {
-        if (players.indexOf(this.currentPlayer) +1 == this.numberOfPlayers) {
+        if (players.indexOf(this.currentPlayer) + 1 == this.numberOfPlayers) {
             this.currentPlayer = this.players.getFirst();
         } else {
             this.currentPlayer = this.players.get(this.players.indexOf(this.currentPlayer) + 1);
@@ -54,7 +54,9 @@ public class Game {
         return this.currentPlayer;
     }
 
-    public CommonTable getCommonTable() { return this.commonTable;}
+    public CommonTable getCommonTable() {
+        return this.commonTable;
+    }
 
     private void increaseRound() {
         this.round += 1;
@@ -64,9 +66,10 @@ public class Game {
         return this.round;
     }
 
-    public int getNumberOfPlayers(){
+    public int getNumberOfPlayers() {
         return this.numberOfPlayers;
     }
+
     public GameState getState() {
         return this.gameState;
     }
