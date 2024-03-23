@@ -55,11 +55,11 @@ public class Player {
     }
 
     public Hand getHand() {
-        return new Hand(this.hand.getCards());
+        return this.hand;
     }
 
-    public void setPersonalBoard(Side initialSide, Card secretMission, Card firstCommonMission, Card secondCommonMission) {
-        this.personalBoard = new PersonalBoard(initialSide, secretMission, firstCommonMission, secondCommonMission); // TODO da cambiare parametri nel costruttore di Personal Board
+    public void setPersonalBoard(Side initialSide, Card secretMission) {
+        this.personalBoard = new PersonalBoard(initialSide, secretMission); // TODO da cambiare parametri nel costruttore di Personal Board
     }
 
     public int getScore() {
