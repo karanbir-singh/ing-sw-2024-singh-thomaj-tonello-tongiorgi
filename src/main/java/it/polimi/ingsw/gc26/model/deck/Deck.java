@@ -18,16 +18,9 @@ public class Deck {
 
     /* the last card of the Deck is saved in drawnCard, then removed from the Deck and return to the caller */
     public Card getTopCard(){
-        if(cards.isEmpty()){
-            return null;
-        }
-        return cards.get(cards.size() - 1);
+        return cards.getLast();
     }
     public Card removeCard(){
-        Card card;
-        if(cards.isEmpty()){
-            return null;
-        }
         return cards.removeLast();
     }
 
