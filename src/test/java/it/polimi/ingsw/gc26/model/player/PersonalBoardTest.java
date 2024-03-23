@@ -186,14 +186,14 @@ class PersonalBoardTest {
         pb.playSide(resourceDeck.getDeck().get(1).getFront());
         pb.endGame();
 
-        assertEquals(pb.getScore(), 0);
-        assertEquals(pb.getResourceQuantity(Symbol.INSECT) , 1);
-        assertEquals(pb.getResourceQuantity(Symbol.ANIMAL) ,1);
-        assertEquals(pb.getResourceQuantity(Symbol.FUNGI) , 0);
-        assertEquals(pb.getResourceQuantity(Symbol.PLANT) , 4);
-        assertEquals(pb.getResourceQuantity(Symbol.MANUSCRIPT) , 0);
-        assertEquals(pb.getResourceQuantity(Symbol.QUILL) , 0);
-        assertEquals(pb.getResourceQuantity(Symbol.INKWELL) , 0);
+        assertEquals(0, pb.getScore());
+        assertEquals(1, pb.getResourceQuantity(Symbol.INSECT));
+        assertEquals(1, pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(4, pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL) );
         //initial card
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPRIGHT().isHidden());
