@@ -80,12 +80,38 @@ class ParserCoreTest {
     @Test
     void getResourceCards() {
         Deck resourceCardDeck = parser.getResourceCards();
-        Card firstCard = resourceCardDeck.removeCard();
+        Card firstCard = resourceCardDeck.getDeck().getFirst();
+        //check decks's length
+        assertEquals(40, resourceCardDeck.getDeck().size());
+        //check front side
+        assertEquals(Optional.empty(), firstCard.getFront().getUPRIGHT().getSymbol());
+        assertEquals(Optional.of(Symbol.PLANT), firstCard.getFront().getUPLEFT().getSymbol());
+        assertEquals(Optional.empty(), firstCard.getFront().getDOWNRIGHT().getSymbol());
+        assertTrue(firstCard.getFront().getDOWNRIGHT().isEvil());
+        assertEquals(Optional.of(Symbol.PLANT), firstCard.getFront().getDOWNLEFT().getSymbol());
+        assertEquals(0, firstCard.getFront().getPoints());
+        assertEquals(0, firstCard.getFront().getRequestedResources().size());
+        assertEquals(0, firstCard.getFront().getRequestedResources().size());
+        assertTrue(firstCard.getFront().getPermanentResources().isEmpty());
+        assertEquals(0, firstCard.getFront().getType());
+        //check backside
+        assertEquals(Optional.of(Symbol.PLANT), firstCard.getBack().getSideSymbol());
+        assertEquals(Optional.empty(), firstCard.getBack().getUPRIGHT().getSymbol());
+        assertEquals(Optional.empty(), firstCard.getBack().getUPLEFT().getSymbol());
+        assertEquals(Optional.empty(), firstCard.getBack().getDOWNRIGHT().getSymbol());
+        assertEquals(Optional.empty(), firstCard.getBack().getDOWNLEFT().getSymbol());
+        assertEquals(0, firstCard.getBack().getPoints());
+        assertTrue(firstCard.getBack().getRequestedResources().isEmpty());
+        assertEquals(1, firstCard.getBack().getPermanentResources().size());
+        assertEquals(0, firstCard.getFront().getType());
+
     }
 
     @Test
     void getGoldCards() {
         Deck goldCardDeck = parser.getGoldCards();
-        Card firstCard = goldCardDeck.removeCard();
+        Card firstCard = goldCardDeck.getDeck().getFirst();
+        //check decks's length
+        assertEquals(40, goldCardDeck.getDeck().size());
     }
 }
