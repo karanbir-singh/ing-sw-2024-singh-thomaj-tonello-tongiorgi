@@ -15,26 +15,22 @@ public class PersonalBoard {
     private final ArrayList<Point> playablePositions;
     private final ArrayList<Point> blockedPositions;
     private final Card secretMission;
-    private final Card firstCommonMission;
-    private final Card secondCommonMission;
     private final PersonalBoardSymbols personalBoardSymbols;
 
     private int selectedX = 0;
     private int selectedY = 0;
 
-    public PersonalBoard(Side initialSide, Card secretMission, Card firstCommonMission, Card secondCommonMission) {
+    public PersonalBoard(Side initialSide, Card secretMission) {
         score = 0;
         xMin = -1;
         xMax = 1;
         yMin = -1;
         yMax = 1;
         this.secretMission = secretMission;
-        this.firstCommonMission = firstCommonMission;
-        this.secondCommonMission = secondCommonMission;
         personalBoardSymbols = new PersonalBoardSymbols();
-        occupiedPositions = new ArrayList<Point>();
-        playablePositions = new ArrayList<Point>();
-        blockedPositions = new ArrayList<Point>();
+        occupiedPositions = new ArrayList<>();
+        playablePositions = new ArrayList<>();
+        blockedPositions = new ArrayList<>();
 
         addPoint(0, 0, playablePositions);
         playSide(initialSide); // inizialmente selectedX and selectedY sono 0.
@@ -44,11 +40,12 @@ public class PersonalBoard {
         return ifPresent(x, y, playablePositions).isPresent();
     }
 
-    public void endGame() {
+    public void endGame(ArrayList<Card> commonMissions) {
         this.score = this.score + secretMission.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
 
-        this.score = this.score + firstCommonMission.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
-        this.score = this.score + secondCommonMission.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
+        for (Card card : commonMissions){
+            this.score = this.score + card.getFront().checkPattern(personalBoardSymbols.getResources(), occupiedPositions);
+        }
     }
 
     public void playSide(Side side) throws NullPointerException {
@@ -193,11 +190,4 @@ public class PersonalBoard {
     public int getSelectedY(){
         return this.selectedY;
     }
-
-
-
-
-
-
-
 }
