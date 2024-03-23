@@ -32,7 +32,7 @@ public class Hand {
         if(selectedCard.isEmpty()){
             return;
         }
-        if(selectedCard.get().getFront().equals(selectedSide)){
+        if(selectedCard.get().getFront().equals(selectedSide.get())){
             this.selectedSide = Optional.ofNullable(selectedCard.get().getBack());
         } else {
             this.selectedSide = Optional.ofNullable(selectedCard.get().getFront());
