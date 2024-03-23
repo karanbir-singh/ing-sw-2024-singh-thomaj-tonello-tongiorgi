@@ -166,17 +166,51 @@ class PersonalBoardTest {
     }
 
     @Test
-    void SinglePlayer() throws Exception{
-        Game game = new Game(-1);
-    }
-
-    @Test
     void InitialCardBack() throws Exception {
+        //random test to check if the algorithm works with the initial card backwards
         Game game = new Game(2);
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        Player p1 = new Player(3,"Bob");
+        game.addPlayer(p1);
+        game.setCurrentPlayer(p1);
+        game.getCurrentPlayer().setPersonalBoard(initialDeck.getDeck().get(0).getBack(),
+                missionDeck.getDeck().get(0), missionDeck.getDeck().get(2), missionDeck.getDeck().get(6));
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
+        pb.setPosition(1,1);
+        pb.playSide(resourceDeck.getDeck().get(0).getFront());
+        pb.setPosition(-1, 1);
+        pb.playSide(resourceDeck.getDeck().get(1).getFront());
+        pb.endGame();
+
+        assertEquals(pb.getScore(), 0);
+        assertEquals(pb.getResourceQuantity(Symbol.INSECT) , 1);
+        assertEquals(pb.getResourceQuantity(Symbol.ANIMAL) ,1);
+        assertEquals(pb.getResourceQuantity(Symbol.FUNGI) , 0);
+        assertEquals(pb.getResourceQuantity(Symbol.PLANT) , 4);
+        assertEquals(pb.getResourceQuantity(Symbol.MANUSCRIPT) , 0);
+        assertEquals(pb.getResourceQuantity(Symbol.QUILL) , 0);
+        assertEquals(pb.getResourceQuantity(Symbol.INKWELL) , 0);
+        //initial card
+        assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(0).getSide().getDOWNLEFT().isHidden());
+
+        //First resource card
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getDOWNRIGHT().isHidden());
+
+        //Second resource card
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNRIGHT().isHidden());
 
     }
-
-
 
 }
