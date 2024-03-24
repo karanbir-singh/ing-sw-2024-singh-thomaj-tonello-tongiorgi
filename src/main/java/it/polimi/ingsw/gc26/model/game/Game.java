@@ -12,22 +12,25 @@ public class Game {
 
     private GameState gameState;
     private Player currentPlayer;
-    private ArrayList<Player> players;
-    private CommonTable commonTable;
+    private final ArrayList<Player> players;
+    private final CommonTable commonTable;
     private int round;
 
 
     public Game(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
-        this.gameState = GameState.INITIAL_STAGE;
         this.players = new ArrayList<>();
+
+        this.gameState = GameState.INITIAL_STAGE;
+
         ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
         Deck resourceCardDeck = p.getResourceCards();
         Deck missionDeck = p.getMissionCards();
         Deck starterDeck = p.getStarterCards();
+
         this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck);
-        this.round = 1;
+        this.round = 0;
     }
 
     public void addPlayer(Player newPlayer) throws Exception {
