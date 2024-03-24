@@ -1,23 +1,18 @@
 package it.polimi.ingsw.gc26.model.player;
 
-import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
 
 import java.util.ArrayList;
 
 public class Player {
-    private int ID;
+    private final int ID;
     private String nickname;
     private Pawn pawnColor;
     private boolean amIFirstPlayer;
     private Hand hand;
     private PersonalBoard personalBoard;
     private int turn;
-
-    /* ID is set automatically when a player connects to the game
-        the nickname is asked in order to connect */
-    /* the pawn, the hand and the personalBoard are set during the initial stage of the game */
 
     public Player(int id, String name) {
         this.ID = id;
@@ -47,10 +42,16 @@ public class Player {
     public Pawn getPawnColor() {
         return this.pawnColor;
     }
-    public void setFirstPlayer(){this.amIFirstPlayer = true;}
-    public boolean isFirstPlayer(){return this.amIFirstPlayer;}
 
-    public void setHand() {
+    public void setFirstPlayer() {
+        this.amIFirstPlayer = true;
+    }
+
+    public boolean isFirstPlayer() {
+        return this.amIFirstPlayer;
+    }
+
+    public void createHand() {
         this.hand = new Hand(new ArrayList<>());
     }
 
@@ -58,12 +59,8 @@ public class Player {
         return this.hand;
     }
 
-    public void setPersonalBoard(Side initialSide, Card secretMission) {
-        this.personalBoard = new PersonalBoard(initialSide, secretMission); // TODO da cambiare parametri nel costruttore di Personal Board
-    }
-
-    public int getScore() {
-        return this.personalBoard.getScore();
+    public void createPersonalBoard(Side initialSide) {
+        this.personalBoard = new PersonalBoard(initialSide);
     }
 
     public int getTurn() {
