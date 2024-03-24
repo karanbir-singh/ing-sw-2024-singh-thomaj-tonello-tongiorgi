@@ -7,7 +7,7 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 
 public class GameController {
-    private Game game;
+    private final Game game;
 
     public GameController(Game game) {
         this.game = game;
@@ -50,33 +50,35 @@ public class GameController {
         Hand hand = game.getCurrentPlayer().getHand();
 
         // TODO si può migliorare questo codice
-        int index;
-        index = commonTable.getResourceCards().indexOf(commonTable.getSelectedCard());
-        if (index != -1){
-            Card removedCard = commonTable.removeCard(commonTable.getResourceCards(), index);
-            hand.addCard(removedCard);
+        if (commonTable.getSelectedCard().isPresent()) {
+            int index;
+            index = commonTable.getResourceCards().indexOf(commonTable.getSelectedCard().get());
+            if (index != -1) {
+                Card removedCard = commonTable.removeCard(commonTable.getResourceCards(), index);
+                hand.addCard(removedCard);
 
-            Card replacingCard = commonTable.getResourceDeck().removeCard();
-            commonTable.addCard(replacingCard, commonTable.getResourceCards(), index);
-        }
+                Card replacingCard = commonTable.getResourceDeck().removeCard();
+                commonTable.addCard(replacingCard, commonTable.getResourceCards(), index);
+            }
 
-        index = commonTable.getGoldCards().indexOf(commonTable.getSelectedCard());
-        if (index != -1){
-            Card removedCard = commonTable.removeCard(commonTable.getGoldCards(), index);
-            hand.addCard(removedCard);
+            index = commonTable.getGoldCards().indexOf(commonTable.getSelectedCard().get());
+            if (index != -1) {
+                Card removedCard = commonTable.removeCard(commonTable.getGoldCards(), index);
+                hand.addCard(removedCard);
 
-            Card replacingCard = commonTable.getGoldDeck().removeCard();
-            commonTable.addCard(replacingCard, commonTable.getGoldCards(), index);
-        }
+                Card replacingCard = commonTable.getGoldDeck().removeCard();
+                commonTable.addCard(replacingCard, commonTable.getGoldCards(), index);
+            }
 
-        if (commonTable.getResourceDeck().getTopCard().equals(commonTable.getSelectedCard())){
-            Card removedCard = commonTable.getResourceDeck().removeCard();
-            hand.addCard(removedCard);
-        }
+            if (commonTable.getResourceDeck().getTopCard().equals(commonTable.getSelectedCard().get())) {
+                Card removedCard = commonTable.getResourceDeck().removeCard();
+                hand.addCard(removedCard);
+            }
 
-        if (commonTable.getGoldDeck().getTopCard().equals(commonTable.getSelectedCard())){
-            Card removedCard = commonTable.getGoldDeck().removeCard();
-            hand.addCard(removedCard);
+            if (commonTable.getGoldDeck().getTopCard().equals(commonTable.getSelectedCard().get())) {
+                Card removedCard = commonTable.getGoldDeck().removeCard();
+                hand.addCard(removedCard);
+            }
         }
     }
 
