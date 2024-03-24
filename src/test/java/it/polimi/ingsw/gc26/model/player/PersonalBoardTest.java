@@ -35,15 +35,16 @@ class PersonalBoardTest {
         pb.playSide(goldDeck.getDeck().get(3).getFront());
         pb.setPosition(3,3);
         pb.playSide(resourceDeck.getDeck().get(2).getBack());
-        //non conto le risorse permanenti dei back delle carte, aspetto gabi
-        assertEquals(pb.getResourceQuantity(Symbol.INSECT) , 2);
-        assertEquals(pb.getResourceQuantity(Symbol.PLANT) , 2);
-        assertEquals(pb.getResourceQuantity(Symbol.FUNGI) , 0);
-        assertEquals(pb.getResourceQuantity(Symbol.ANIMAL) , 0);
-        assertEquals(pb.getResourceQuantity(Symbol.QUILL) , 1);
-        assertEquals(pb.getResourceQuantity(Symbol.MANUSCRIPT) , 0);
-        assertEquals(pb.getResourceQuantity(Symbol.INKWELL) , 0);
-        assertEquals(pb.getScore(), 5);
+
+
+        assertEquals( 2,pb.getResourceQuantity(Symbol.INSECT) );
+        assertEquals( 2, pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(0,pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(0, pb.getResourceQuantity(Symbol.ANIMAL) );
+        assertEquals( 1, pb.getResourceQuantity(Symbol.QUILL) );
+        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
+        assertEquals( 0, pb.getResourceQuantity(Symbol.INKWELL) );
+        assertEquals( 5, pb.getScore());
 
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPRIGHT().isHidden());
 
@@ -82,14 +83,14 @@ class PersonalBoardTest {
         pb.setPosition(-4,0);
         pb.playSide(goldDeck.getDeck().get(38).getFront());
         //non conto le risorse permanenti dei back delle carte, aspetto gabi
-        assertEquals(pb.getResourceQuantity(Symbol.INSECT) , 3);
-        assertEquals(pb.getResourceQuantity(Symbol.PLANT) , 2);
-        assertEquals(pb.getResourceQuantity(Symbol.FUNGI) , 1);
-        assertEquals(pb.getResourceQuantity(Symbol.ANIMAL) , 1);
-        assertEquals(pb.getResourceQuantity(Symbol.QUILL) , 1);
-        assertEquals(pb.getResourceQuantity(Symbol.MANUSCRIPT) , 0);
-        assertEquals(pb.getResourceQuantity(Symbol.INKWELL) , 0);
-        assertEquals(pb.getScore(), 5);
+        assertEquals( 3,pb.getResourceQuantity(Symbol.INSECT));
+        assertEquals(2,pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(1,pb.getResourceQuantity(Symbol.FUNGI) );
+        assertEquals( 1,pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(1,pb.getResourceQuantity(Symbol.QUILL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT) );
+        assertEquals( 0, pb.getResourceQuantity(Symbol.INKWELL));
+        assertEquals(5, pb.getScore());
 
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
 
@@ -133,7 +134,7 @@ class PersonalBoardTest {
         pb.setPosition(6,-6);
         pb.playSide(resourceDeck.getDeck().get(5).getBack());
         pb.endGame();
-        assertEquals(pb.getScore(), 4);
+        assertEquals( 4, pb.getScore());
     }
 
     @Test
@@ -162,7 +163,7 @@ class PersonalBoardTest {
         pb.setPosition(3,5);
         pb.playSide(resourceDeck.getDeck().get(20).getBack()); //questo è FUNGI
         pb.endGame();
-        assertEquals(pb.getScore(), 5);
+        assertEquals( 5,pb.getScore());
     }
 
     @Test
