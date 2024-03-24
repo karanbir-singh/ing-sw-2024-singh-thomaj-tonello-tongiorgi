@@ -5,12 +5,12 @@ import java.util.Optional;
 public class Corner {
     private boolean isEvil;
     private boolean isHidden;
-    private Optional<Symbol> symbol;
+    private Symbol symbol;
 
     public Corner(boolean isEvil, Symbol symbol) {
         this.isEvil = isEvil;
         this.isHidden = false;
-        this.symbol = Optional.ofNullable(symbol);
+        this.symbol = symbol;
     }
 
     public boolean isEvil() {
@@ -30,10 +30,10 @@ public class Corner {
     }
 
     public Optional<Symbol> getSymbol() {
-        return symbol;
+        return Optional.ofNullable(symbol);
     }
 
     public void setSymbol(Symbol symbol) {
-        this.symbol = Optional.ofNullable(symbol);
+        this.symbol = symbol;
     }
 }
