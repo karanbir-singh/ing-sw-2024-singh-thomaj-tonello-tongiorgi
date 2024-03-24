@@ -13,7 +13,7 @@ public class CommonTable {
     private final ArrayList<Card> commonMissions;
     private final ArrayList<Card> resourceCards;
     private final ArrayList<Card> goldCards;
-    private Optional<Card> selectedCard;
+    private Card selectedCard;
 
     public CommonTable(Deck resourceDeck, Deck goldDeck, Deck initialDeck, Deck missionDeck) {
         commonMissions = new ArrayList<>();
@@ -23,11 +23,11 @@ public class CommonTable {
         this.goldDeck = goldDeck;
         this.initialDeck = initialDeck;
         this.missionDeck = missionDeck;
-        selectedCard = Optional.empty();
+        selectedCard = null;
     }
 
     public void selectCard(Card cardSelected) {
-        this.selectedCard = Optional.of(cardSelected);
+        this.selectedCard = cardSelected;
     }
 
     // TODO controlla se servono veramente il metodo addCard e removeCard (si può passare direttamente dagli array
@@ -39,8 +39,8 @@ public class CommonTable {
         return cards.remove(index);
     }
 
-    public Card getSelectedCard() throws NullPointerException {
-        return this.selectedCard.orElseThrow(NullPointerException::new);
+    public Optional<Card> getSelectedCard() {
+        return Optional.ofNullable(this.selectedCard);
     }
 
     public ArrayList<Card> getResourceCards() {
