@@ -18,7 +18,7 @@ public class PersonalBoard {
     private final Card secretMission;
     private final Card firstCommonMission;
     private final Card secondCommonMission;
-    private final Map<Symbol,Integer> visibleResources;
+    private final Map<Symbol, Integer> visibleResources;
     private int selectedX = 0;
     private int selectedY = 0;
 
@@ -29,13 +29,13 @@ public class PersonalBoard {
         yMin = 0;
         yMax = 0;
         visibleResources = new HashMap<Symbol, Integer>();
-        visibleResources.put(Symbol.FUNGI,0);
-        visibleResources.put(Symbol.ANIMAL,0);
-        visibleResources.put(Symbol.PLANT,0);
-        visibleResources.put(Symbol.INSECT,0);
-        visibleResources.put(Symbol.INKWELL,0);
-        visibleResources.put(Symbol.QUILL,0);
-        visibleResources.put(Symbol.MANUSCRIPT,0);
+        visibleResources.put(Symbol.FUNGI, 0);
+        visibleResources.put(Symbol.ANIMAL, 0);
+        visibleResources.put(Symbol.PLANT, 0);
+        visibleResources.put(Symbol.INSECT, 0);
+        visibleResources.put(Symbol.INKWELL, 0);
+        visibleResources.put(Symbol.QUILL, 0);
+        visibleResources.put(Symbol.MANUSCRIPT, 0);
 
         this.secretMission = secretMission;
         this.firstCommonMission = firstCommonMission;
@@ -53,158 +53,28 @@ public class PersonalBoard {
         return ifPresent(x, y, playablePositions).isPresent();
     }
 
-    public boolean checkIfEnoughResources(Side side){
-        for(Symbol symbol: side.getRequestedResources().keySet()){
-            if(this.visibleResources.get(symbol) < side.getRequestedResources().get(symbol)){
+    public boolean checkIfEnoughResources(Side side) {
+        for (Symbol symbol : side.getRequestedResources().keySet()) {
+            if (this.visibleResources.get(symbol) < side.getRequestedResources().get(symbol)) {
                 return false;
             }
         }
         return true;
     }
+
     public void endGame() {
-        this.score = this.score + secretMission.getFront().checkPattern(getResources(), occupiedPositions);
+        this.score = this.score + secretMission.getFront().checkPattern(this.getResources(), occupiedPositions);
 
-        this.score = this.score + firstCommonMission.getFront().checkPattern(getResources(), occupiedPositions);
-        this.score = this.score + secondCommonMission.getFront().checkPattern(getResources(), occupiedPositions);
+        this.score = this.score + firstCommonMission.getFront().checkPattern(this.getResources(), occupiedPositions);
+        this.score = this.score + secondCommonMission.getFront().checkPattern(this.getResources(), occupiedPositions);
     }
 
-    public void playSide(Side side) throws NullPointerException {
-
-        //suppose is valid position
-        Point p = ifPresent(selectedX, selectedY, playablePositions).orElseThrow(NullPointerException::new);
-        p.setSide(side);
-        movePoint(selectedX, selectedY, occupiedPositions, playablePositions);
-
-        //begin analyzing the point X+1,Y+1
-        if (ifPresent(selectedX + 1, selectedY + 1, occupiedPositions).isPresent()) {
-            Point p1 = ifPresent(selectedX + 1, selectedY + 1, occupiedPositions).orElseThrow(NullPointerException::new);
-
-            this.decreaseResource(p1.getSide().getDOWNLEFT().getSymbol());
-            p1.getSide().getDOWNLEFT().setHidden(true);
-
-        } else if (ifPresent(selectedX + 1, selectedY + 1, blockedPositions).isPresent()) {
-        } else if (ifPresent(selectedX + 1, selectedY + 1, playablePositions).isPresent()) {
-        } else {
-            if (side.getUPRIGHT().isEvil()) {
-                addPoint(selectedX + 1, selectedY + 1, blockedPositions);
-            } else {
-                addPoint(selectedX + 1, selectedY + 1, playablePositions);
-            }
-
-
-            if(selectedX + 1 > xMax){
-                xMax = selectedX + 1;
-            }
-            if(selectedY + 1 > yMax){
-                yMax = selectedY + 1;
-            }
-        }
-        //end analyzing the point X+1, Y+1
-
-        //begin analyzing the point X-1,Y+1
-        if (ifPresent(selectedX - 1, selectedY + 1, occupiedPositions).isPresent()) {
-            Point p2 = ifPresent(selectedX - 1, selectedY + 1, occupiedPositions).orElseThrow(NullPointerException::new);
-
-            this.decreaseResource(p2.getSide().getDOWNRIGHT().getSymbol());
-
-            p2.getSide().getDOWNRIGHT().setHidden(true);
-        } else if (ifPresent(selectedX - 1, selectedY + 1, blockedPositions).isPresent()) {
-        } else if (ifPresent(selectedX - 1, selectedY + 1, playablePositions).isPresent()) {
-        } else {
-            if (side.getUPLEFT().isEvil()) {
-                addPoint(selectedX - 1, selectedY + 1, blockedPositions);
-            } else {
-                addPoint(selectedX - 1, selectedY + 1, playablePositions);
-            }
-
-
-            if(selectedX - 1 < xMin){
-                xMin = selectedX - 1;
-            }
-            if(selectedY + 1 > yMax){
-                yMax = selectedY + 1;
-            }
-        }
-        //end analyzing the point X-1, Y+1
-
-        //begin analyzing the point X-1,Y-1
-        if (ifPresent(selectedX - 1, selectedY - 1, occupiedPositions).isPresent()) {
-            Point p3 = ifPresent(selectedX - 1, selectedY - 1, occupiedPositions).orElseThrow(NullPointerException::new);
-
-            this.decreaseResource(p3.getSide().getUPRIGHT().getSymbol());
-
-            p3.getSide().getUPRIGHT().setHidden(true);
-        } else if (ifPresent(selectedX - 1, selectedY - 1, blockedPositions).isPresent()) {
-        } else if (ifPresent(selectedX - 1, selectedY - 1, playablePositions).isPresent()) {
-        } else {
-            if (side.getDOWNLEFT().isEvil()) {
-                addPoint(selectedX - 1, selectedY - 1, blockedPositions);
-            } else {
-                addPoint(selectedX - 1, selectedY - 1, playablePositions);
-            }
-
-
-
-            if(selectedX - 1 < xMin){
-                xMin = selectedX - 1;
-            }
-            if(selectedY - 1 < yMin){
-                yMin = selectedY - 1;
-            }
-        }
-        //end analyzing the point X-1, Y-1
-
-        //begin analyzing the point X+1,Y-1
-        if (ifPresent(selectedX + 1, selectedY - 1, occupiedPositions).isPresent()) {
-            Point p4 = ifPresent(selectedX + 1, selectedY - 1, occupiedPositions).orElseThrow(NullPointerException::new);
-
-            this.decreaseResource(p4.getSide().getUPLEFT().getSymbol());
-
-            p4.getSide().getUPLEFT().setHidden(true);
-        } else if (ifPresent(selectedX + 1, selectedY - 1, blockedPositions).isPresent()) {
-        } else if (ifPresent(selectedX + 1, selectedY - 1, playablePositions).isPresent()) {
-        } else {
-            if (side.getDOWNRIGHT().isEvil()) {
-                addPoint(selectedX + 1, selectedY - 1, blockedPositions);
-            } else {
-                addPoint(selectedX + 1, selectedY - 1, playablePositions);
-            }
-
-            if(selectedX + 1 > xMax){
-                xMax = selectedX + 1;
-            }
-            if(selectedY - 1 < yMin){
-                yMin = selectedY - 1;
-            }
-        }
-        //end analyzing the point X+1, Y-1
-
-
-
-        //addSymbol
-        for (Symbol s: side.getPermanentResources()) {
-            this.increaseResource(Optional.of(s));
-        }
-
-        // qua conviene usare una notazione funzionale con gli optional
-        // cioè decrementa valore se c'è il simbolo, altrimenti niente
-        this.increaseResource(side.getUPRIGHT().getSymbol());
-        this.increaseResource(side.getUPLEFT().getSymbol());
-        this.increaseResource(side.getDOWNLEFT().getSymbol());
-        this.increaseResource(side.getDOWNRIGHT().getSymbol());
-
-        //adding points of the card played
-        this.score = this.score + side.getPoints();
-
-        //adding points of the cart ability
-        this.score = this.score + side.useAbility(getResources(), occupiedPositions, p);
-
-    }
 
     public void setPosition(int selectedX, int selectedY) {
         this.selectedX = selectedX;
         this.selectedY = selectedY;
     }
+
     public int getScore() {
         return score;
     }
@@ -236,50 +106,51 @@ public class PersonalBoard {
     }
 
 
-    public int getSelectedX(){
+    public int getSelectedX() {
         return this.selectedX;
     }
 
-    public int getSelectedY(){
+    public int getSelectedY() {
         return this.selectedY;
     }
 
 
-    public Integer getResourceQuantity(Symbol symbol){
+    public Integer getResourceQuantity(Symbol symbol) {
         return visibleResources.get(symbol);
     }
-    public void increaseResource(Optional<Symbol> symbol){
-        if(symbol.isPresent()){
+
+    public void increaseResource(Optional<Symbol> symbol) {
+        if (symbol.isPresent()) {
             visibleResources.put(symbol.get(), visibleResources.get(symbol.get()) + 1);
         }
 
     }
 
-    public void decreaseResource(Optional<Symbol> symbol){
-        if(symbol.isPresent()){
+    public void decreaseResource(Optional<Symbol> symbol) {
+        if (symbol.isPresent()) {
             visibleResources.put(symbol.get(), visibleResources.get(symbol.get()) - 1);
         }
 
     }
 
-    public Map<Symbol,Integer> getResources(){
-        Map<Symbol,Integer> resources = new HashMap(visibleResources);
-        return resources;
+    public Map<Symbol, Integer> getResources() {
+        return new HashMap<>(this.visibleResources);
     }
 
-    public void showBoard(){
-        for(int i = xMin -1; i <= xMax ; i++){
-            for(int j = yMax + 1; j >= yMin; j--){
-
-                if(ifPresent(i,j,blockedPositions).isPresent()){
+    public void showBoard() {
+        for (int currY = yMax + 1; currY >= yMin; currY--) {
+            for (int currX =  xMin - 1; currX <= xMax; currX++) {
+                if(currY == yMax + 1 && currX != xMin - 1){
+                    System.out.print(currX + "   ");
+                }else if(currX == xMin - 1 && currY != yMax + 1){//anche questo
+                    System.out.print(currY+ "   ");
+                }else if (ifPresent(currX, currY, blockedPositions).isPresent()) {
                     System.out.print("X   ");
-                }
-                else if(ifPresent(i,j,playablePositions).isPresent()){
+                } else if (ifPresent(currX, currY, playablePositions).isPresent()) {
                     System.out.print("o   ");
-                }
-                else if(ifPresent(i,j,occupiedPositions).isPresent()){
+                } else if (ifPresent(currX, currY, occupiedPositions).isPresent()) {
                     System.out.print("C   ");
-                }else{
+                } else {
                     System.out.print("    ");
                 }
             }
@@ -287,11 +158,97 @@ public class PersonalBoard {
 
         }
     }
-    public ArrayList<Point> getOccupiedPositions(){
-        return  this.occupiedPositions;
+
+    public ArrayList<Point> getOccupiedPositions() {
+        return this.occupiedPositions;
     }
 
 
+    private void analyzePoint(Corner checkingCorner, int checkingX, int checkingY) {
+        Optional<Point> checkingPoint = ifPresent(selectedX + checkingX, selectedY + checkingY, occupiedPositions);
+        if (checkingPoint.isPresent()) {
+            Side checkingSide = checkingPoint.get().getSide();
 
+            // // Decrease counter of symbols in personal board, based on the given coordinates
+            if (checkingX == 1 && checkingY == 1) {
+                this.decreaseResource(checkingSide.getDOWNLEFT().getSymbol());
+                checkingSide.getDOWNLEFT().setHidden(true);
+
+            } else if (checkingX == 1 && checkingY == -1) {
+                this.decreaseResource(checkingSide.getUPLEFT().getSymbol());
+                checkingSide.getUPLEFT().setHidden(true);
+
+            } else if (checkingX == -1 && checkingY == 1) {
+                this.decreaseResource(checkingSide.getDOWNRIGHT().getSymbol());
+                checkingSide.getDOWNRIGHT().setHidden(true);
+                checkingSide.getDOWNRIGHT().setHidden(true);
+
+            } else if (checkingX == -1 && checkingY == -1) {
+                this.decreaseResource(checkingSide.getUPRIGHT().getSymbol());
+                checkingSide.getUPRIGHT().setHidden(true);
+            }
+
+        } else if (ifPresent(selectedX + checkingX, selectedY + checkingY, blockedPositions).isEmpty() &&
+                ifPresent(selectedX + checkingX, selectedY + checkingY, playablePositions).isEmpty()) {
+
+            if (checkingCorner.isEvil()) {
+                addPoint(selectedX + checkingX, selectedY + checkingY, blockedPositions);
+            } else {
+                addPoint(selectedX + checkingX, selectedY + checkingY, playablePositions);
+            }
+
+            if(selectedX + checkingX >= xMax){
+                xMax = selectedX + checkingX;
+            }
+            if(selectedX + checkingX <= xMin){
+                xMin = selectedX + checkingX;
+            }
+            if(selectedY + checkingY >= yMax){
+                yMax = selectedY + checkingY;
+            }
+            if(selectedY + checkingY <= yMin){
+                yMin = selectedY + checkingY;
+            }
+        }
+    }
+
+
+    public void playSide(Side side) throws NullPointerException {
+        // Suppose is valid position
+        Point playingPoint = ifPresent(selectedX, selectedY, playablePositions).orElseThrow(NullPointerException::new);
+        playingPoint.setSide(side);
+        movePoint(selectedX, selectedY, occupiedPositions, playablePositions);
+
+        // Analyze point selectedX+1, selectedY+1
+        analyzePoint(side.getUPRIGHT(), 1, 1);
+
+        // Analyze point selectedX-1, selectedY+1
+        analyzePoint(side.getUPLEFT(), -1, 1);
+
+        // Analyze point selectedX+1, selectedY-1
+        analyzePoint(side.getDOWNRIGHT(), 1, -1);
+
+        // Analyze point selectedX-1, selectedY-1
+        analyzePoint(side.getDOWNLEFT(), -1, -1);
+
+        // Increase
+        for (Symbol resource : side.getPermanentResources()) {
+            this.increaseResource(Optional.of(resource));
+        }
+
+        // qua conviene usare una notazione funzionale con gli optional
+        // cioè decrementa valore se c'è il simbolo, altrimenti niente
+        this.increaseResource(side.getUPRIGHT().getSymbol());
+        this.increaseResource(side.getUPLEFT().getSymbol());
+        this.increaseResource(side.getDOWNLEFT().getSymbol());
+        this.increaseResource(side.getDOWNRIGHT().getSymbol());
+
+        // Add points of the played side
+        this.score = this.score + side.getPoints();
+
+        // Use card ability to add points if it has it
+        this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
+    }
 
 }
+

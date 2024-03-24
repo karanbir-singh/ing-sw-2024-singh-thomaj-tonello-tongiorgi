@@ -55,7 +55,7 @@ class PersonalBoardTest {
         assertTrue(pb.getOccupiedPositions().get(2).getSide().getUPLEFT().isHidden());
 
         assertTrue(pb.getOccupiedPositions().get(3).getSide().getUPRIGHT().isHidden());
-
+        pb.showBoard();
 
 
     }
@@ -100,7 +100,7 @@ class PersonalBoardTest {
         assertTrue(pb.getOccupiedPositions().get(2).getSide().getUPLEFT().isHidden());
 
         assertTrue(pb.getOccupiedPositions().get(3).getSide().getDOWNLEFT().isHidden());
-
+        pb.showBoard();
 
 
     }
@@ -135,6 +135,7 @@ class PersonalBoardTest {
         pb.playSide(resourceDeck.getDeck().get(5).getBack());
         pb.endGame();
         assertEquals( 4, pb.getScore());
+        pb.showBoard();
     }
 
     @Test
@@ -164,6 +165,7 @@ class PersonalBoardTest {
         pb.playSide(resourceDeck.getDeck().get(20).getBack()); //questo è FUNGI
         pb.endGame();
         assertEquals( 5,pb.getScore());
+        pb.showBoard();
     }
 
     @Test
@@ -248,6 +250,8 @@ class PersonalBoardTest {
         assertFalse(pb.getOccupiedPositions().get(7).getSide().getUPRIGHT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(7).getSide().getDOWNLEFT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(7).getSide().getDOWNRIGHT().isHidden());
+        pb.showBoard();
+
     }
 
 
@@ -328,6 +332,7 @@ class PersonalBoardTest {
         assertFalse(pb.getOccupiedPositions().get(6).getSide().getUPRIGHT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(6).getSide().getDOWNLEFT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(6).getSide().getDOWNRIGHT().isHidden());
+        pb.showBoard();
     }
 
     @Test
@@ -375,6 +380,7 @@ class PersonalBoardTest {
         assertFalse(pb.getOccupiedPositions().get(2).getSide().getUPRIGHT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNLEFT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNRIGHT().isHidden());
+        pb.showBoard();
 
     }
 
