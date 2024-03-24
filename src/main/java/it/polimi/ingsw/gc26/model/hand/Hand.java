@@ -5,52 +5,55 @@ import it.polimi.ingsw.gc26.model.card_side.Side;
 import java.util.*;
 
 public class Hand {
-    private ArrayList<Card> cards;
-    private Optional<Card> selectedCard;
-    private Optional<Side> selectedSide;
+    private final ArrayList<Card> cards;
+    private Card selectedCard;
+    private Side selectedSide;
 
     public Hand(ArrayList<Card> c){
         this.cards = c;
-        this.selectedCard = Optional.empty();
-        this.selectedSide = Optional.empty();
+        this.selectedCard = null;
+        this.selectedSide = null;
     }
 
     public Optional<Card> getSelectedCard() {
-        return this.selectedCard;
+        return Optional.ofNullable(this.selectedCard);
     }
 
-    public void setSelectedCard(Card selected){
-        this.selectedCard = Optional.ofNullable(selected);
-        if(selected != null)
-            this.selectedSide = Optional.of(selected.getFront());
+    public void setSelectedCard(Card selectedCard){
+        if(Optional.ofNullable(selectedCard).isPresent()){
+            this.selectedCard = selectedCard;
+            this.selectedSide = selectedCard.getFront();
+        }
     }
     public Optional<Side> getSelectedSide(){
-        return this.selectedSide;
+        return Optional.ofNullable(this.selectedSide);
     }
 
     public void turnSide(){
-        if(selectedCard.isEmpty()){
-            return;
+        Optional<Card> selectedCard = Optional.ofNullable(this.selectedCard);
+        if(selectedCard.isPresent()){
+            if(selectedCard.get().getFront().equals(selectedSide)){
+                this.selectedSide = selectedCard.get().getBack();
+            } else {
+                this.selectedSide = selectedCard.get().getFront();
+            }
+        }else{
+            // TODO lancia eccezione di carta non selezionata
         }
-        if(selectedCard.get().getFront().equals(selectedSide)){
-            this.selectedSide = Optional.ofNullable(selectedCard.get().getBack());
-        } else {
-            this.selectedSide = Optional.ofNullable(selectedCard.get().getFront());
-        }
+
     }
 
     public void removeCard(Card card){
         cards.remove(card);
-        selectedSide = Optional.empty();
-        selectedCard = Optional.empty();
+        selectedSide = null;
+        selectedCard = null;
     }
 
     public void addCard(Card card){
         cards.add(card);
     }
 
-
     public ArrayList<Card> getCards(){
-        return new ArrayList<>(this.cards);
+        return cards;
     }
 }

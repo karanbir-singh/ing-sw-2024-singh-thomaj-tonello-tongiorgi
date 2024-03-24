@@ -10,7 +10,7 @@ import java.util.Optional;
 abstract public class Side {
     private int points;
     private int type;
-    private Optional<Symbol> sideSymbol;
+    private Symbol sideSymbol;
     private ArrayList<Symbol> permanentResources;
     private Map<Symbol, Integer> requestedResources;
 
@@ -33,7 +33,7 @@ abstract public class Side {
     }
 
     public boolean checkSideSymbol(Symbol sideSymbol) {
-        return this.sideSymbol.map(symbol -> symbol.equals(sideSymbol)).orElse(false);
+        return Optional.ofNullable(this.sideSymbol).map(symbol -> symbol.equals(sideSymbol)).orElse(false);
     }
 
     public int getPoints() {
@@ -53,11 +53,11 @@ abstract public class Side {
     }
 
     public Optional<Symbol> getSideSymbol() {
-        return sideSymbol;
+        return Optional.ofNullable(sideSymbol);
     }
 
     public void setSideSymbol(Symbol sideSymbol) {
-        this.sideSymbol = Optional.ofNullable(sideSymbol);
+        this.sideSymbol = sideSymbol;
     }
 
     public ArrayList<Symbol> getPermanentResources() {
@@ -69,7 +69,7 @@ abstract public class Side {
     }
 
     public Map<Symbol, Integer> getRequestedResources() {
-        return requestedResources;
+        return new HashMap<>(this.requestedResources);
     }
 
     public void setRequestedResources(Map<Symbol, Integer> requestedResources) {
@@ -107,6 +107,7 @@ abstract public class Side {
     public void setDOWNRIGHT(Corner DOWNRIGHT) {
         this.DOWNRIGHT = DOWNRIGHT;
     }
+
 
 
 }

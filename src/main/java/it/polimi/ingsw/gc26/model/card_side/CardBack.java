@@ -9,10 +9,10 @@ public class CardBack extends Side {
     // Mission Card Back constructor
     public CardBack(){
         setSideSymbol(null);
-        setDOWNLEFT(null);
-        setDOWNRIGHT(null);
-        setUPLEFT(null);
-        setUPRIGHT(null);
+        setDOWNLEFT(new Corner(true, null));
+        setDOWNRIGHT(new Corner(true, null));
+        setUPLEFT(new Corner(true, null));
+        setUPRIGHT(new Corner(true, null));
         setType(0);
         setPoints(0);
         setPermanentResources(new ArrayList<>());

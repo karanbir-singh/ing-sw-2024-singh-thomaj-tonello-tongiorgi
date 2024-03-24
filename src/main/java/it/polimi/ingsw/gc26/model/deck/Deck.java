@@ -12,29 +12,23 @@ public class Deck {
         this.cards = new ArrayList<>();
     }
 
-    public void addCard(Card card){
+    public void addCard(Card card) {
         cards.add(card);
     }
 
-    /* the last card of the Deck is saved in drawnCard, then removed from the Deck and return to the caller */
-    public Card getTopCard(){
-        if(cards.isEmpty()){
-            return null;
-        }
-        return cards.get(cards.size() - 1);
+    public Card getTopCard() {
+        return cards.getLast();
     }
-    public Card removeCard(){
-        Card card;
-        if(cards.isEmpty()){
-            return null;
-        }
+
+    public Card removeCard() {
         return cards.removeLast();
     }
 
-    public void shuffleDeck(){
+    public void shuffleDeck() {
         Collections.shuffle(cards);
     }
-    public ArrayList<Card> getDeck(){//da togliere serve per prova
+
+    public ArrayList<Card> getCards() {//da togliere serve per prova
         return this.cards;
     }
 }
