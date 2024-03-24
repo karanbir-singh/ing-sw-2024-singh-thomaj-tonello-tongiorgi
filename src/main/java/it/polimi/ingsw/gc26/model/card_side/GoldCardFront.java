@@ -20,9 +20,4 @@ public class GoldCardFront extends Side {
         setPermanentResources(new ArrayList<>());
         setType(0);
     }
-
-    @Override
-    public int useAbility(Map<Symbol, Integer> resources, ArrayList<Point> occupiedPositions, Point p) {
-        return 0;
-    }
 }
