@@ -14,20 +14,18 @@ public class PersonalBoard {
     private final ArrayList<Point> occupiedPositions;
     private final ArrayList<Point> playablePositions;
     private final ArrayList<Point> blockedPositions;
-    private final Card secretMission;
-    private final Card firstCommonMission;
-    private final Card secondCommonMission;
+    private Card secretMission;
     private final Map<Symbol, Integer> visibleResources;
     private int selectedX = 0;
     private int selectedY = 0;
 
-    public PersonalBoard(Side initialSide, Card secretMission) {
+    public PersonalBoard(Side initialSide) {
         score = 0;
         xMin = 0;
         xMax = 0;
         yMin = 0;
         yMax = 0;
-        visibleResources = new HashMap<Symbol, Integer>();
+        visibleResources = new HashMap<>();
         visibleResources.put(Symbol.FUNGI, 0);
         visibleResources.put(Symbol.ANIMAL, 0);
         visibleResources.put(Symbol.PLANT, 0);
@@ -36,9 +34,7 @@ public class PersonalBoard {
         visibleResources.put(Symbol.QUILL, 0);
         visibleResources.put(Symbol.MANUSCRIPT, 0);
 
-        this.secretMission = secretMission;
-        this.firstCommonMission = firstCommonMission;
-        this.secondCommonMission = secondCommonMission;
+        this.secretMission = null;
 
         occupiedPositions = new ArrayList<>();
         playablePositions = new ArrayList<>();
@@ -46,6 +42,14 @@ public class PersonalBoard {
 
         addPoint(0, 0, playablePositions);
         playSide(initialSide); // inizialmente selectedX and selectedY sono 0.
+    }
+
+    public Card getSecretMission() {
+        return secretMission;
+    }
+
+    public void setSecretMission(Card secretMission) {
+        this.secretMission = secretMission;
     }
 
     public boolean checkIfPlayablePosition(int x, int y) {
@@ -61,18 +65,19 @@ public class PersonalBoard {
         return true;
     }
 
-    public void endGame() {
+    public void endGame(ArrayList<Card> commonMissions) {
         this.score = this.score + secretMission.getFront().checkPattern(this.getResources(), occupiedPositions);
 
-        this.score = this.score + firstCommonMission.getFront().checkPattern(this.getResources(), occupiedPositions);
-        this.score = this.score + secondCommonMission.getFront().checkPattern(this.getResources(), occupiedPositions);
+        for (Card mission : commonMissions) {
+            this.score = this.score + mission.getFront().checkPattern(this.getResources(), occupiedPositions);
+        }
     }
-
 
     public void setPosition(int selectedX, int selectedY) {
         this.selectedX = selectedX;
         this.selectedY = selectedY;
     }
+
     public int getScore() {
         return score;
     }
@@ -118,17 +123,11 @@ public class PersonalBoard {
     }
 
     public void increaseResource(Optional<Symbol> symbol) {
-        if (symbol.isPresent()) {
-            visibleResources.put(symbol.get(), visibleResources.get(symbol.get()) + 1);
-        }
-
+        symbol.ifPresent(value -> visibleResources.put(value, visibleResources.get(value) + 1));
     }
 
     public void decreaseResource(Optional<Symbol> symbol) {
-        if (symbol.isPresent()) {
-            visibleResources.put(symbol.get(), visibleResources.get(symbol.get()) - 1);
-        }
-
+        symbol.ifPresent(value -> visibleResources.put(value, visibleResources.get(value) - 1));
     }
 
     public Map<Symbol, Integer> getResources() {
@@ -137,12 +136,12 @@ public class PersonalBoard {
 
     public void showBoard() {
         for (int currY = yMax + 1; currY >= yMin; currY--) {
-            for (int currX =  xMin - 1; currX <= xMax; currX++) {
-                if(currY == yMax + 1 && currX != xMin - 1){
+            for (int currX = xMin - 1; currX <= xMax; currX++) {
+                if (currY == yMax + 1 && currX != xMin - 1) {
                     System.out.print(currX + "   ");
-                }else if(currX == xMin - 1 && currY != yMax + 1){//anche questo
-                    System.out.print(currY+ "   ");
-                }else if (ifPresent(currX, currY, blockedPositions).isPresent()) {
+                } else if (currX == xMin - 1 && currY != yMax + 1) {//anche questo
+                    System.out.print(currY + "   ");
+                } else if (ifPresent(currX, currY, blockedPositions).isPresent()) {
                     System.out.print("X   ");
                 } else if (ifPresent(currX, currY, playablePositions).isPresent()) {
                     System.out.print("o   ");
@@ -195,16 +194,16 @@ public class PersonalBoard {
                 addPoint(selectedX + checkingX, selectedY + checkingY, playablePositions);
             }
 
-            if(selectedX + checkingX >= xMax){
+            if (selectedX + checkingX >= xMax) {
                 xMax = selectedX + checkingX;
             }
-            if(selectedX + checkingX <= xMin){
+            if (selectedX + checkingX <= xMin) {
                 xMin = selectedX + checkingX;
             }
-            if(selectedY + checkingY >= yMax){
+            if (selectedY + checkingY >= yMax) {
                 yMax = selectedY + checkingY;
             }
-            if(selectedY + checkingY <= yMin){
+            if (selectedY + checkingY <= yMin) {
                 yMin = selectedY + checkingY;
             }
         }
@@ -231,7 +230,7 @@ public class PersonalBoard {
 
         // Increase
         for (Symbol resource : side.getPermanentResources()) {
-            this.increaseResource(Optional.of(resource));
+            this.increaseResource(Optional.ofNullable(resource));
         }
 
         // qua conviene usare una notazione funzionale con gli optional
