@@ -13,7 +13,7 @@ public class Point {
         this.x = x;
         this.y = y;
         this.side = null;
-        flags = new HashMap<Integer, Boolean>();
+        flags = new HashMap<>();
         for (int i = 0; i < 8; i++) {
             flags.put(i, false);
         }
@@ -35,7 +35,7 @@ public class Point {
         flags.put(flag, value);
     }
 
-    public void setSide(Side side) throws NullPointerException {
+    public void setSide(Side side) {
         this.side = side;
     }
 
