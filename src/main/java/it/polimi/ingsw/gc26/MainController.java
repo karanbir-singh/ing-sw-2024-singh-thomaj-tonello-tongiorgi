@@ -79,22 +79,24 @@ public class MainController {
         // TODO la creazione della personalBoard è da cambiare
         gameController.getGame().getCommonTable().getMissionDeck().shuffleDeck();
         Card p1Secret = gameController.getGame().getCommonTable().getMissionDeck().removeCard();
-        gameController.getGame().getCurrentPlayer().setPersonalBoard(p1Starter.getFront(), p1Secret);
+        gameController.getGame().getCurrentPlayer().createPersonalBoard(p1Starter.getFront());
+        gameController.getGame().getCurrentPlayer().getPersonalBoard().setSecretMission(p1Secret);
 
         gameController.getGame().getCommonTable().getMissionDeck().shuffleDeck();
         Card p2Secret = gameController.getGame().getCommonTable().getMissionDeck().removeCard();
-        p2.setPersonalBoard(p2Starter.getBack(), p2Secret);
+        p2.createPersonalBoard(p2Starter.getBack());
+        p2.getPersonalBoard().setSecretMission(p2Secret);
 
         // Assegna le prime carte ai giocatori
         gameController.getGame().getCommonTable().getResourceDeck().shuffleDeck();
         gameController.getGame().getCommonTable().getGoldDeck().shuffleDeck();
         // Giocatore 1
-        p1.setHand();
+        p1.createHand();
         p1.getHand().addCard(gameController.getGame().getCommonTable().getResourceDeck().removeCard());
         p1.getHand().addCard(gameController.getGame().getCommonTable().getResourceDeck().removeCard());
         p1.getHand().addCard(gameController.getGame().getCommonTable().getGoldDeck().removeCard());
         // Giocatore 2
-        p2.setHand();
+        p2.createHand();
         p2.getHand().addCard(gameController.getGame().getCommonTable().getResourceDeck().removeCard());
         p2.getHand().addCard(gameController.getGame().getCommonTable().getResourceDeck().removeCard());
         p2.getHand().addCard(gameController.getGame().getCommonTable().getGoldDeck().removeCard());
