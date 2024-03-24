@@ -23,7 +23,7 @@ public class GameController {
 
     public void selectPositionOnBoard(int x, int y) {
         PersonalBoard p = game.getCurrentPlayer().getPersonalBoard();
-        if (!p.checkIfPlayable(x, y)) {
+        if (!p.checkIfPlayablePosition(x, y)) {
             // TODO Gestire posizione errata con eccezione
             return;
         }
