@@ -21,6 +21,7 @@ public class MissionItemPattern extends MissionCardFront {
         setRequestedResources(new HashMap<>());
     }
 
+    @Override
     public int checkPattern(Map<Symbol, Integer> visibleResources, ArrayList<Point> occupiedPositions) {
         int points = 0;
         if (getType() == 1) {
