@@ -34,4 +34,7 @@ public class Deck {
     public void shuffleDeck(){
         Collections.shuffle(cards);
     }
+    public ArrayList<Card> getDeck(){//da togliere serve per prova
+        return this.cards;
+    }
 }

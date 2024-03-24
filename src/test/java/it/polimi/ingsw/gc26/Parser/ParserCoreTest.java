@@ -91,7 +91,6 @@ class ParserCoreTest {
         assertEquals(Optional.of(Symbol.PLANT), firstCard.getFront().getDOWNLEFT().getSymbol());
         assertEquals(0, firstCard.getFront().getPoints());
         assertEquals(0, firstCard.getFront().getRequestedResources().size());
-        assertEquals(0, firstCard.getFront().getRequestedResources().size());
         assertTrue(firstCard.getFront().getPermanentResources().isEmpty());
         assertEquals(0, firstCard.getFront().getType());
         //check backside
@@ -113,5 +112,30 @@ class ParserCoreTest {
         Card firstCard = goldCardDeck.getDeck().getFirst();
         //check decks's length
         assertEquals(40, goldCardDeck.getDeck().size());
+        //check front side
+        assertEquals(Optional.empty(), firstCard.getFront().getUPRIGHT().getSymbol());
+        assertEquals(Optional.of(Symbol.QUILL), firstCard.getFront().getUPLEFT().getSymbol());
+        assertEquals(Optional.empty(), firstCard.getFront().getDOWNRIGHT().getSymbol());
+        assertTrue(firstCard.getFront().getDOWNRIGHT().isEvil());
+        assertEquals(Optional.empty(), firstCard.getFront().getDOWNLEFT().getSymbol());
+        assertEquals(0, firstCard.getFront().getPoints());
+        assertEquals(2, firstCard.getFront().getRequestedResources().size());
+        assertTrue(firstCard.getFront().getRequestedResources().containsKey(Symbol.PLANT));
+        assertTrue(firstCard.getFront().getRequestedResources().containsKey(Symbol.INSECT));
+        assertEquals(2, firstCard.getFront().getRequestedResources().get(Symbol.PLANT));
+        assertEquals(1, firstCard.getFront().getRequestedResources().get(Symbol.INSECT));
+        assertTrue(firstCard.getFront().getPermanentResources().isEmpty());
+        assertEquals(0, firstCard.getFront().getType());
+        //check backside
+        assertEquals(Optional.of(Symbol.PLANT), firstCard.getBack().getSideSymbol());
+        assertEquals(Optional.empty(), firstCard.getBack().getUPRIGHT().getSymbol());
+        assertEquals(Optional.empty(), firstCard.getBack().getUPLEFT().getSymbol());
+        assertEquals(Optional.empty(), firstCard.getBack().getDOWNRIGHT().getSymbol());
+        assertEquals(Optional.empty(), firstCard.getBack().getDOWNLEFT().getSymbol());
+        assertEquals(0, firstCard.getBack().getPoints());
+        assertTrue(firstCard.getBack().getRequestedResources().isEmpty());
+        assertEquals(1, firstCard.getBack().getPermanentResources().size());
+        assertEquals(0, firstCard.getFront().getType());
+
     }
 }
