@@ -18,9 +18,9 @@ class ParserCoreTest {
     void getStarterCards() {
         Deck starterDeck = parser.getStarterCards();
         //check deck's length
-        assertEquals(6, starterDeck.getDeck().size());
+        assertEquals(6, starterDeck.getCards().size());
 
-        Card firstCard = starterDeck.getDeck().getFirst();
+        Card firstCard = starterDeck.getCards().getFirst();
         //check front side
         assertEquals(Optional.of(Symbol.PLANT), firstCard.getFront().getUPRIGHT().getSymbol());
         assertEquals(Optional.empty(), firstCard.getFront().getUPLEFT().getSymbol());
@@ -48,9 +48,9 @@ class ParserCoreTest {
     @Test
     void getMissionCards() {
         Deck missionDeck = parser.getMissionCards();
-        Card firstCard = missionDeck.getDeck().getFirst();
+        Card firstCard = missionDeck.getCards().getFirst();
         //check deck's length
-        assertEquals(16, missionDeck.getDeck().size());
+        assertEquals(16, missionDeck.getCards().size());
 
         //check front side
         assertEquals(Optional.empty(), firstCard.getFront().getUPRIGHT().getSymbol());
@@ -58,11 +58,9 @@ class ParserCoreTest {
         assertEquals(Optional.empty(), firstCard.getFront().getDOWNRIGHT().getSymbol());
         assertEquals(Optional.empty(), firstCard.getFront().getDOWNLEFT().getSymbol());
         assertEquals(0, firstCard.getFront().getPoints());
-        assertTrue(firstCard.getFront().getRequestedResources().containsKey(Symbol.FUNGI));
-        assertEquals(1, firstCard.getFront().getRequestedResources().size());
-        assertEquals(3, firstCard.getFront().getRequestedResources().get(Symbol.FUNGI));
+        assertEquals(0, firstCard.getFront().getRequestedResources().size());
         assertTrue(firstCard.getFront().getPermanentResources().isEmpty());
-        assertEquals(0, firstCard.getFront().getType());
+        assertEquals(1, firstCard.getFront().getType());
 
         //check backside
         assertEquals(Optional.empty(), firstCard.getBack().getSideSymbol());
@@ -73,16 +71,16 @@ class ParserCoreTest {
         assertEquals(0, firstCard.getBack().getPoints());
         assertTrue(firstCard.getBack().getRequestedResources().isEmpty());
         assertTrue(firstCard.getBack().getPermanentResources().isEmpty());
-        assertEquals(0, firstCard.getFront().getType());
+        assertEquals(0, firstCard.getBack().getType());
 
     }
 
     @Test
     void getResourceCards() {
         Deck resourceCardDeck = parser.getResourceCards();
-        Card firstCard = resourceCardDeck.getDeck().getFirst();
+        Card firstCard = resourceCardDeck.getCards().getFirst();
         //check decks's length
-        assertEquals(40, resourceCardDeck.getDeck().size());
+        assertEquals(40, resourceCardDeck.getCards().size());
         //check front side
         assertEquals(Optional.empty(), firstCard.getFront().getUPRIGHT().getSymbol());
         assertEquals(Optional.of(Symbol.PLANT), firstCard.getFront().getUPLEFT().getSymbol());
@@ -109,9 +107,9 @@ class ParserCoreTest {
     @Test
     void getGoldCards() {
         Deck goldCardDeck = parser.getGoldCards();
-        Card firstCard = goldCardDeck.getDeck().getFirst();
+        Card firstCard = goldCardDeck.getCards().getFirst();
         //check decks's length
-        assertEquals(40, goldCardDeck.getDeck().size());
+        assertEquals(40, goldCardDeck.getCards().size());
         //check front side
         assertEquals(Optional.empty(), firstCard.getFront().getUPRIGHT().getSymbol());
         assertEquals(Optional.of(Symbol.QUILL), firstCard.getFront().getUPLEFT().getSymbol());
