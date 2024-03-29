@@ -27,7 +27,6 @@ public class MissionTripletPattern extends MissionCardFront {
         setRequestedResources(new HashMap<>());
     }
 
-
     /**
      * This method returns the extra points that are awarded considering the card position in the Player's board.
      * @param visibleResources Player's visible resources in the board
@@ -39,7 +38,7 @@ public class MissionTripletPattern extends MissionCardFront {
         if (getType() == 1) {
             points = points + 3 * Arrays.stream(new int[] {visibleResources.get(Symbol.INKWELL),
                     visibleResources.get(Symbol.QUILL),
-                    visibleResources.get(Symbol.MANUSCRIPT)}).max().getAsInt();
+                    visibleResources.get(Symbol.MANUSCRIPT)}).min().getAsInt();
         } else if (getType() == 2) {
             points = points + 2 * (visibleResources.get(Symbol.MANUSCRIPT) / 2);
         } else if (getType() == 3) {
