@@ -397,4 +397,84 @@ class PersonalBoardTest {
 
     }
 
+
+    /**
+     * test where we check a particular case where a position is blocked for one card but playable for another card like
+     *   X
+     * C   C
+     * and also I tested the use of a gold card with points.
+     * @throws Exception
+     */
+    @Test
+    void NonPlayablePositionAndBlockedPositionTest() throws Exception{
+        //TODO TO COMPLETE
+        Game game = new Game(2);
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        Player p1 = new Player(3,"Bob");
+        game.addPlayer(p1);
+        game.setCurrentPlayer(p1);
+        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(7));
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+        //missione L pattern tipo 4 con ANIMAL e INSECT e INSECT
+
+        //la carta iniziale ha una risorsa permanente INSECT
+        pb.setPosition(1,1); //Tipo PLANT
+        pb.playSide(resourceDeck.getCards().get(10).getBack());
+        pb.setPosition(-1,1);//tipo PLANT
+        pb.playSide(resourceDeck.getCards().get(11).getBack());
+        pb.setPosition(1,-1);//tipo plant
+        pb.playSide(resourceDeck.getCards().get(12).getBack());
+        pb.setPosition(2,0);//tipo plant
+        pb.playSide(goldDeck.getCards().get(15).getFront()); //carta che da 1 punto per ogni animal
+        //pb.playSide(resourceDeck.getCards().get(4).getBack());
+        ArrayList<Card> commonMissions = new ArrayList<>();
+        commonMissions.add(missionDeck.getCards().get(1));
+        commonMissions.add(missionDeck.getCards().get(0));
+        pb.endGame(commonMissions);
+
+        assertEquals(0,pb.getResourceQuantity(Symbol.INSECT)); // a causa della carta iniziale
+        assertEquals(1,pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(1,pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(4,pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(0,pb.getResourceQuantity(Symbol.MANUSCRIPT));
+        assertEquals(0,pb.getResourceQuantity(Symbol.QUILL));
+        assertEquals(1,pb.getResourceQuantity(Symbol.INKWELL));
+
+        assertEquals(3, pb.getScore());
+        //check carta iniziale
+        assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(0).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(0).getSide().getDOWNRIGHT().isHidden());
+
+        //check carta 1
+        assertTrue(pb.getOccupiedPositions().get(1).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getDOWNRIGHT().isHidden());
+
+        //check carta 2
+        assertTrue(pb.getOccupiedPositions().get(2).getSide().getUPLEFT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(2).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNRIGHT().isHidden());
+        //check carta 3
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getDOWNRIGHT().isHidden());
+        //check carta 4
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getDOWNRIGHT().isHidden());
+        pb.showBoard();
+    }
+
+
+
 }

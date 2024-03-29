@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
@@ -11,12 +12,13 @@ import java.util.UUID;
 
 public class MainController {
     private Map<String, GameController> gamesControllers;
+    //private Map<ID ,  GameController> //TODO controllare qua
 
     public MainController() {
         this.gamesControllers = new HashMap<>();
     }
 
-    public void createGame(int numPlayers) {
+    public void createGame(int numPlayers) throws Exception{
         if (numPlayers > 1 && numPlayers <= Game.MAX_NUM_PLAYERS) {
             String gameID = UUID.randomUUID().toString();
             gamesControllers.put(gameID, new GameController(new Game(numPlayers)));
