@@ -11,7 +11,9 @@ import it.polimi.ingsw.gc26.model.card_side.mission.*;
 import it.polimi.ingsw.gc26.model.deck.*;
 
 public class ParserCore {
-
+    /**
+     * File path where the json file is located
+     */
     private final String filePath;
 
     /**

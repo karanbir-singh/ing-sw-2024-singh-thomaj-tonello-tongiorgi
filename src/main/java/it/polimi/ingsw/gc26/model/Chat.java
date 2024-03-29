@@ -1,21 +1,45 @@
 package it.polimi.ingsw.gc26.model;
 import java.util.*;
 import it.polimi.ingsw.gc26.model.player.Player;
+
+/**
+ * This class represents the chat between players managed by the server
+ */
 public class Chat {
+    /**
+     * This attribute represents all the messages sent and received by every player.
+     * All messages are saved in this array and then filtered by player.
+     */
     private final ArrayList<Message> messages;
 
+    /**
+     * Initializes the chat with an empty ArrayList
+     */
     public Chat(){
         messages = new ArrayList<Message>();
     }
 
+    /**
+     * Returns all messages in the server
+     * @return messages
+     */
     public ArrayList<Message> getChat(){
         return this.messages;
     }
 
+    /**
+     * Adds a new message to the chat
+     * @param message new message
+     */
     public void addMessage(Message message){
-        messages.add(message); //chiamata di comunicazione con il client
+        messages.add(message); //TODO chiamata di comunicazione con il client
     }
 
+    /**
+     * Filters all the messages present by a player
+     * @param receiverPlayer the player that receives the message
+     * @return arrayList containing the messages for the player
+     */
     public ArrayList<Message> filterMessages(Player receiverPlayer){
         ArrayList<Message> copy = new ArrayList<Message>();
         for(Message m : this.messages){
@@ -29,7 +53,4 @@ public class Chat {
 
         return copy;
     }
-
-
-
 }

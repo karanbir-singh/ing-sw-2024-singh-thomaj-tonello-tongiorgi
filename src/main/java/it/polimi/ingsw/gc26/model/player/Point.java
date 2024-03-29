@@ -4,11 +4,28 @@ import it.polimi.ingsw.gc26.model.card_side.Side;
 
 import java.util.*;
 
+/**
+ * This class represents a point
+ */
 public class Point {
+    /**
+     * This attributes represents the coordinate x and y in the Cartesian Plane
+     */
     private final int x, y;
+    /**
+     * This attribute represents the side of the card in a specific point
+     */
     private Side side;
+    /**
+     *
+     */
     private final Map<Integer, Boolean> flags;
 
+    /**
+     * Initializes the point
+     * @param x x coordinate
+     * @param y y coordinate
+     */
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
@@ -19,26 +36,52 @@ public class Point {
         }
     }
 
+    /**
+     * Returns X coordinate
+     * @return x
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Returns Y coordinate
+     * @return y
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Returns a boolean for the flag in the position given
+     * @param flag key
+     * @return TODO
+     */
     public boolean getFlag(int flag) {
         return flags.get(flag);
     }
 
+    /**
+     * Sets a boolean for a flag
+     * @param flag flag to be modified
+     * @param value new flag's value
+     */
     public void setFlag(int flag, boolean value) {
         flags.put(flag, value);
     }
 
+    /**
+     * Sets the side present in the point
+     * @param side new side
+     */
     public void setSide(Side side) {
         this.side = side;
     }
 
+    /**
+     * Returns the side in the point
+     * @return side
+     */
     public Side getSide() {
         return this.side;
     }
