@@ -6,10 +6,13 @@ import it.polimi.ingsw.gc26.Parser.ParserCore;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents an entire Game play. It has a minimum number of player of two and a maximum number of player of four.
+ *
+ */
 public class Game {
     public static final int MAX_NUM_PLAYERS = 4;
     private final int numberOfPlayers;
-
     private GameState gameState;
     private Player currentPlayer;
     private final ArrayList<Player> players;

@@ -7,11 +7,17 @@ import it.polimi.ingsw.gc26.model.player.Point;
 
 import java.util.*;
 
+/**
+ * This class represents a mission card with an L pattern.
+ */
 public class MissionLPattern extends MissionCardFront {
+    /**
+     * Creates a new instance of MissionLPattern
+     * @param type represent which L combination is needed to this card give points
+     */
     public MissionLPattern(int type) {
         setType(type);
         setPoints(0);
-
         setSideSymbol(null);
         setDOWNLEFT(new Corner(true, null));
         setDOWNRIGHT(new Corner(true, null));
@@ -21,6 +27,12 @@ public class MissionLPattern extends MissionCardFront {
         setRequestedResources(new HashMap<>());
     }
 
+    /**
+     * This method returns the extra points that are awarded considering the card position in the Player's board.
+     * @param visibleResources Player's visible resources in the board
+     * @param occupiedPositions list of the position occupied in the Player's board
+     * @return points given by this card
+     */
     @Override
     public int checkPattern(Map<Symbol, Integer> visibleResources, ArrayList<Point> occupiedPositions) {
         int points = 0;

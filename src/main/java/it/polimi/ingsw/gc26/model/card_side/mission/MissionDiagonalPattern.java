@@ -7,7 +7,14 @@ import it.polimi.ingsw.gc26.model.player.Point;
 
 import java.util.*;
 
+/**
+ * This class represents a mission card with a Diagonal pattern.
+ */
 public class MissionDiagonalPattern extends MissionCardFront {
+    /**
+     * Creates a new instance of MissionDiagonalPattern
+     * @param type represent which diagonal combination is needed to this card give points
+     */
     public MissionDiagonalPattern(int type) {
         setType(type);
         setPoints(0);
@@ -20,6 +27,13 @@ public class MissionDiagonalPattern extends MissionCardFront {
         setPermanentResources(new ArrayList<>());
         setRequestedResources(new HashMap<>());
     }
+
+    /**
+     * This method returns the extra points that are awarded considering its position in the Player's board.
+     * @param visibleResources Player's visible resources in the board
+     * @param occupiedPositions list of the position occupied in the Player's board
+     * @return points given by this card
+     */
     @Override
     public int checkPattern(Map<Symbol, Integer> visibleResources, ArrayList<Point> occupiedPositions) {
         int points = 0;
