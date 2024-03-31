@@ -17,7 +17,7 @@ public class Point {
      */
     private Side side;
     /**
-     *
+     * This attribute represents the selected side present in the point
      */
     private final Map<Integer, Boolean> flags;
 
@@ -54,8 +54,8 @@ public class Point {
 
     /**
      * Returns a boolean for the flag in the position given
-     * @param flag key
-     * @return TODO
+     * @param flag flag's key
+     * @return flag's value to know whether a pattern has already been counted or not
      */
     public boolean getFlag(int flag) {
         return flags.get(flag);
