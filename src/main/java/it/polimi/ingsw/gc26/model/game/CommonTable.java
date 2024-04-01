@@ -8,20 +8,20 @@ import java.util.*;
 public class CommonTable {
     private final Deck resourceDeck;
     private final Deck goldDeck;
-    private final Deck initialDeck;
+    private final Deck starterDeck;
     private final Deck missionDeck;
     private final ArrayList<Card> commonMissions;
     private final ArrayList<Card> resourceCards;
     private final ArrayList<Card> goldCards;
     private Card selectedCard;
 
-    public CommonTable(Deck resourceDeck, Deck goldDeck, Deck initialDeck, Deck missionDeck) {
+    public CommonTable(Deck resourceDeck, Deck goldDeck, Deck starterDeck, Deck missionDeck) {
         commonMissions = new ArrayList<>();
         resourceCards = new ArrayList<>();
         goldCards = new ArrayList<>();
         this.resourceDeck = resourceDeck;
         this.goldDeck = goldDeck;
-        this.initialDeck = initialDeck;
+        this.starterDeck = starterDeck;
         this.missionDeck = missionDeck;
         selectedCard = null;
     }
@@ -52,7 +52,7 @@ public class CommonTable {
     }
 
     public ArrayList<Card> getCommonMissions() {
-        return new ArrayList<>(commonMissions);
+        return commonMissions;
     }
 
     public Deck getResourceDeck() {
@@ -64,8 +64,8 @@ public class CommonTable {
         return goldDeck;
     }
 
-    public Deck getInitialDeck() {
-        return initialDeck;
+    public Deck getStarterDeck() {
+        return starterDeck;
     }
 
     public Deck getMissionDeck() {
