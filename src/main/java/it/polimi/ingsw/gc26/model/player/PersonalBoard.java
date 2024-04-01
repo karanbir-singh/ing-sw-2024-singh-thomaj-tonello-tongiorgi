@@ -19,7 +19,7 @@ public class PersonalBoard {
     private int selectedX = 0;
     private int selectedY = 0;
 
-    public PersonalBoard(Side initialSide) {
+    public PersonalBoard(Side starterSide) {
         score = 0;
         xMin = 0;
         xMax = 0;
@@ -41,7 +41,7 @@ public class PersonalBoard {
         blockedPositions = new ArrayList<>();
 
         addPoint(0, 0, playablePositions);
-        playSide(initialSide); // inizialmente selectedX and selectedY sono 0.
+        playSide(starterSide);
     }
 
     public Card getSecretMission() {
