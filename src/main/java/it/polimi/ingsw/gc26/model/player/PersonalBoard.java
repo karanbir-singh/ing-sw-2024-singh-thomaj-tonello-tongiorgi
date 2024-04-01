@@ -19,6 +19,12 @@ public class PersonalBoard {
     private int selectedX = 0;
     private int selectedY = 0;
 
+    /**
+     * initialized everything. The score, the resource, missions occupiedPosions , playablePositions, blockedPositions.
+     * here we make our first move, we play the initial card
+     *
+     * @param starterSide side chosen by the player that he wants to play
+     */
     public PersonalBoard(Side starterSide) {
         score = 0;
         xMin = 0;
@@ -44,18 +50,37 @@ public class PersonalBoard {
         playSide(starterSide);
     }
 
+    /**
+     * secretMission getter
+     * @return the reference of the secretMission card
+     */
     public Card getSecretMission() {
         return secretMission;
     }
 
+    /**
+     * secretMission setter
+     * @param secretMission card that you want to set
+     */
     public void setSecretMission(Card secretMission) {
         this.secretMission = secretMission;
     }
 
+    /**
+     * check if a position is playable or not
+     * @param x a coordinate x of the personal board
+     * @param y a coordinate t of the personal board
+     * @return true if the position is playable, false otherwise
+     */
     public boolean checkIfPlayablePosition(int x, int y) {
         return ifPresent(x, y, playablePositions).isPresent();
     }
 
+    /**
+     * check if the player has enough resources to play a particular card
+     * @param side side that the player wants to play
+     * @return true if the board has enough resources, otherwise false
+     */
     public boolean checkIfEnoughResources(Side side) {
         for (Symbol symbol : side.getRequestedResources().keySet()) {
             if (this.visibleResources.get(symbol) < side.getRequestedResources().get(symbol)) {
@@ -65,6 +90,10 @@ public class PersonalBoard {
         return true;
     }
 
+    /**
+     * Calculate the points of the commonMissions and secretMission
+     * @param commonMissions commonMissions that are present in CommonBoard
+     */
     public void endGame(ArrayList<Card> commonMissions) {
         this.score = this.score + secretMission.getFront().checkPattern(this.getResources(), occupiedPositions);
 
@@ -73,15 +102,40 @@ public class PersonalBoard {
         }
     }
 
+    /**
+     * set the posizion choosen by the player.
+     * if the position is valid we set it
+     * otherwise we print NOT VALID POSITION
+     * @param selectedX the X coordinate of the personalBoard that the player wants to choose
+     * @param selectedY the Y coordinate of the personalBoard that the player wants to choose
+     */
+
     public void setPosition(int selectedX, int selectedY) {
+        //check se è una posizione valida
+        if(!checkIfPlayablePosition(selectedX, selectedY)){
+            //update view
+            System.err.println("NOT VALID POSITION");
+            return;
+        }
         this.selectedX = selectedX;
         this.selectedY = selectedY;
     }
 
+    /**
+     * score player getter
+     * @return score of a particular player
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * check if there is a point in arrayList l with coordinate x and y and return it, otherwise return Optional.empty()
+     * @param x coordinate x that you want to search
+     * @param y coordinate y that you want to search
+     * @param l arrayList where you need to search
+     * @return
+     */
     private Optional<Point> ifPresent(int x, int y, ArrayList<Point> l) {
         Optional<Point> o = Optional.empty();
         for (Point p : l) {
@@ -92,44 +146,99 @@ public class PersonalBoard {
         return o;
     }
 
+    /**
+     * move a point to list L2 to L1
+     * @param x coordinate X
+     * @param y coordinate Y
+     * @param l1 arrayList where you want to add the point
+     * @param l2 arrayList where you want to remove the point
+     */
+    private void movePoint(int x, int y, ArrayList<Point> l1, ArrayList<Point> l2){
+        Point p;
+        try{
+            p = ifPresent(x, y, l2).orElseThrow(NullPointerException::new);
+        }catch (NullPointerException nullPointerException){
+            nullPointerException.printStackTrace();
+            System.err.println("null pointer exception in movePoint");
+            return;
+        }
 
-    private void movePoint(int x, int y, ArrayList<Point> l1, ArrayList<Point> l2) throws NullPointerException {
-        Point p = ifPresent(x, y, l2).orElseThrow(NullPointerException::new);
         removePoint(x, y, l2);
         l1.add(p);
     }
 
+    /**
+     * add point with coordinate x and y to an arrayList
+     * @param x coordinate x of the point
+     * @param y coordinate y of the point
+     * @param l arrayList where you want to add the point
+     */
     private void addPoint(int x, int y, ArrayList<Point> l) {
         Point p = new Point(x, y);
         l.add(p);
     }
 
-    private void removePoint(int x, int y, ArrayList<Point> l) throws NullPointerException {
-        l.remove(ifPresent(x, y, l).orElseThrow(NullPointerException::new));
+    /**
+     * remove point with coordinate x and y to an arrayList
+     * @param x coordinate x of the point
+     * @param y coordinate y of the point
+     * @param l arrayList where you want to remove the point
+     */
+    private void removePoint(int x, int y, ArrayList<Point> l){
+        try{
+            l.remove(ifPresent(x, y, l).orElseThrow(NullPointerException::new));
+        }catch(NullPointerException nullPointerException){
+            nullPointerException.printStackTrace();
+            System.err.println("Null Pointer Exception in removePoint");
+        }
     }
 
-
+    /**
+     * selectedX getter
+     * @return the selected X
+     */
     public int getSelectedX() {
         return this.selectedX;
     }
 
+    /**
+     * selectedY
+     * @return the selected Y
+     */
     public int getSelectedY() {
         return this.selectedY;
     }
 
 
+    /**
+     * getter
+     * @param symbol symbol that you want to find
+     * @return number of symbols "symbol" in your personalBoard
+     */
     public Integer getResourceQuantity(Symbol symbol) {
         return visibleResources.get(symbol);
     }
 
+    /**
+     * increase by 1 the number of symbols "symbol" in your personalBoard
+     * @param symbol symbol that you want to find
+     */
     public void increaseResource(Optional<Symbol> symbol) {
         symbol.ifPresent(value -> visibleResources.put(value, visibleResources.get(value) + 1));
     }
 
+    /**
+     * decrease by 1 the number of symbols "symbol" in your personalBoard
+     * @param symbol symbol that you want to find
+     */
     public void decreaseResource(Optional<Symbol> symbol) {
         symbol.ifPresent(value -> visibleResources.put(value, visibleResources.get(value) - 1));
     }
 
+    /**
+     * getter of resources in you personalBoard
+     * @return map which contains all of the resources on the personal boards
+     */
     public Map<Symbol, Integer> getResources() {
         return new HashMap<>(this.visibleResources);
     }
@@ -156,11 +265,21 @@ public class PersonalBoard {
         }
     }
 
+    /**
+     * getter of all the occupied positions on the personal board
+     * @return the List of occupied Positions
+     */
     public ArrayList<Point> getOccupiedPositions() {
         return this.occupiedPositions;
     }
 
 
+    /**
+     * private methods that check characteristic of a particular point on the personalBoard
+     * @param checkingCorner corner that you want to check
+     * @param checkingX coordinate X of the point that you want to check
+     * @param checkingY coordinate Y of the point that you want to check
+     */
     private void analyzePoint(Corner checkingCorner, int checkingX, int checkingY) {
         Optional<Point> checkingPoint = ifPresent(selectedX + checkingX, selectedY + checkingY, occupiedPositions);
         if (checkingPoint.isPresent()) {
@@ -210,10 +329,30 @@ public class PersonalBoard {
     }
 
 
-    public void playSide(Side side) throws NullPointerException {
-        // Suppose is valid position
-        Point playingPoint = ifPresent(selectedX, selectedY, playablePositions).orElseThrow(NullPointerException::new);
-        playingPoint.setSide(side);
+    /**
+     * permits to play the selected card and update all of the resources and points
+     * @param side side selected of the card chosen by the player
+     */
+    public void playSide(Side side){
+        // you need to check if the board has enough resources for the side.
+        if(!checkIfEnoughResources(side)){
+            System.err.println("NOT ENOUGH RESOURCES");
+            //update della view
+            return;
+        }
+
+        Point playingPoint;
+        try{
+            playingPoint = ifPresent(selectedX, selectedY, playablePositions).orElseThrow(NullPointerException::new);
+            playingPoint.setSide(side);
+        }catch (NullPointerException nullEx){
+            nullEx.printStackTrace();
+            System.err.println("Null Pointer Exception");
+            return;
+        }
+
+
+
         movePoint(selectedX, selectedY, occupiedPositions, playablePositions);
 
         // Analyze point selectedX+1, selectedY+1
