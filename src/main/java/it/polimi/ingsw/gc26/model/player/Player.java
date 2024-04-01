@@ -11,6 +11,7 @@ public class Player {
     private Pawn pawnColor;
     private boolean amIFirstPlayer;
     private Hand hand;
+    private Hand secretMissionHand;
     private PersonalBoard personalBoard;
     private int turn;
 
@@ -53,6 +54,14 @@ public class Player {
 
     public void createHand() {
         this.hand = new Hand(new ArrayList<>());
+    }
+
+    public void createSecretMissionHand() {
+        this.secretMissionHand = new Hand(new ArrayList<>());;
+    }
+
+    public Hand getSecretMissionHand() {
+        return secretMissionHand;
     }
 
     public Hand getHand() {
