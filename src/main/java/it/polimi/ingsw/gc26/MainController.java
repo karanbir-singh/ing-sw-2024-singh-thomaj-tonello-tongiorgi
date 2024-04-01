@@ -4,10 +4,7 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MainController {
     private Map<String, GameController> gamesControllers;
@@ -16,7 +13,7 @@ public class MainController {
         this.gamesControllers = new HashMap<>();
     }
 
-    public void createGame(int numPlayers) {
+    public void createGame(int numPlayers) throws Exception {
         if (numPlayers > 1 && numPlayers <= Game.MAX_NUM_PLAYERS) {
             String gameID = UUID.randomUUID().toString();
             gamesControllers.put(gameID, new GameController(new Game(numPlayers)));
@@ -24,7 +21,7 @@ public class MainController {
         // TODO gestire cosa fare in cui il numero di giocatori è negativo o maggiori di Game.MAX_NUM_PLAYERS
     }
 
-    public void joinGame(String gameID, Player newPlayer) throws Exception {
+    public void joinGame(String gameID, Player newPlayer) {
         Game game = gamesControllers.get(gameID).getGame();
         if (game.getPlayers().size() < gamesControllers.get(gameID).getGame().getNumberOfPlayers()) {
             game.addPlayer(newPlayer);
@@ -41,6 +38,10 @@ public class MainController {
         return gamesControllers.get(gameID);
     }
 
+    public ArrayList<GameController> getGameControllers() {
+        return new ArrayList<>(new HashSet<>(gamesControllers.values()));
+    }
+
     public void deleteGame(String gameID) {
         gamesControllers.remove(gameID);
     }
@@ -48,87 +49,129 @@ public class MainController {
     public static void main(String[] args) throws Exception {
         MainController mainController = new MainController();
 
-        // Crea partita, quindi il suo controller e i giocatori
+        // Create a game and players
         mainController.createGame(2);
-        Player p1 = new Player(0, "guest1");
-        Player p2 = new Player(1, "guest2");
+        Player player1 = new Player(0, "Player 1");
+        Player player2 = new Player(1, "Player 2");
 
-        // Aggiungi i giocatori
-        mainController.joinGame(mainController.getGamesIDs().getFirst(), p1);
-        mainController.joinGame(mainController.getGamesIDs().getFirst(), p2);
+        // Add players
+        mainController.joinGame(mainController.getGamesIDs().getFirst(), player1);
+        mainController.joinGame(mainController.getGamesIDs().getFirst(), player2);
 
-        // Ottieni il controller
+        // PHASE 1: Game preparation
+        // Get controller
         GameController gameController = mainController.getGameController(mainController.getGamesIDs().getFirst());
+        // Set first player
+        gameController.setFirstPlayer(player1.getID());
+        Player currentPlayer = gameController.getGame().getCurrentPlayer();
 
-        // imposta il giocatore corrente
-        gameController.getGame().setCurrentPlayer(p1);
+        // Prepare game common table
+        gameController.prepareCommonTable();
 
-        // prendo la carta iniziale dal mazzo e la assegno al primo giocatore
-//        gameController.getGame().getCommonTable().getInitialDeck().shuffleDeck();
-        Card p1Starter = gameController.getGame().getCommonTable().getInitialDeck().removeCard();
-//        gameController.getGame().getCurrentPlayer().setHand();
-//        gameController.getGame().getCurrentPlayer().getHand().addCard(p1Starter);
+        // Give 1 starter card to each player
+        gameController.prepareStarterCards();
 
-        // prendo la carta iniziale dal mazzo e la assegno al seconda giocatore
-//        gameController.getGame().getCommonTable().getInitialDeck().shuffleDeck();
-        Card p2Starter = gameController.getGame().getCommonTable().getInitialDeck().removeCard();
-//        gameController.getGame().getCurrentPlayer().setHand();
-//        gameController.getGame().getCurrentPlayer().getHand().addCard(p2Starter);
+        /* Players choose which side of starter card to play */
+        // Player 1
+        Scanner scanner = new Scanner(System.in);
 
-        // Questa parte ora fa schifo
-        // TODO la creazione della personalBoard è da cambiare
-        gameController.getGame().getCommonTable().getMissionDeck().shuffleDeck();
-        Card p1Secret = gameController.getGame().getCommonTable().getMissionDeck().removeCard();
-        gameController.getGame().getCurrentPlayer().createPersonalBoard(p1Starter.getFront());
-        gameController.getGame().getCurrentPlayer().getPersonalBoard().setSecretMission(p1Secret);
+        System.out.println(currentPlayer.getNickname());
+        gameController.selectCardFromHand(0, currentPlayer.getID());
+        System.out.println("Do you want to change turn? y/n");
+        String turnSideDecision = scanner.nextLine();
+        if (turnSideDecision.equals("yes") || turnSideDecision.equals("y")) {
+            gameController.turnSelectedCardSide(currentPlayer.getID());
+            System.out.println("side changed");
+        }
+        gameController.playCardFromHand(currentPlayer.getID());
 
-        gameController.getGame().getCommonTable().getMissionDeck().shuffleDeck();
-        Card p2Secret = gameController.getGame().getCommonTable().getMissionDeck().removeCard();
-        p2.createPersonalBoard(p2Starter.getBack());
-        p2.getPersonalBoard().setSecretMission(p2Secret);
+        gameController.changeTurn();
+        currentPlayer = gameController.getGame().getCurrentPlayer();
 
-        // Assegna le prime carte ai giocatori
-        gameController.getGame().getCommonTable().getResourceDeck().shuffleDeck();
-        gameController.getGame().getCommonTable().getGoldDeck().shuffleDeck();
-        // Giocatore 1
-        p1.createHand();
-        p1.getHand().addCard(gameController.getGame().getCommonTable().getResourceDeck().removeCard());
-        p1.getHand().addCard(gameController.getGame().getCommonTable().getResourceDeck().removeCard());
-        p1.getHand().addCard(gameController.getGame().getCommonTable().getGoldDeck().removeCard());
-        // Giocatore 2
-        p2.createHand();
-        p2.getHand().addCard(gameController.getGame().getCommonTable().getResourceDeck().removeCard());
-        p2.getHand().addCard(gameController.getGame().getCommonTable().getResourceDeck().removeCard());
-        p2.getHand().addCard(gameController.getGame().getCommonTable().getGoldDeck().removeCard());
+        System.out.println(currentPlayer.getNickname());
+        // Player 2
+        gameController.selectCardFromHand(0, currentPlayer.getID());
+        System.out.println("Do you want to change turn? y/n");
+        turnSideDecision = scanner.nextLine();
+        if (turnSideDecision.equals("yes") || turnSideDecision.equals("y")) {
+            gameController.turnSelectedCardSide(currentPlayer.getID());
+            System.out.println("side changed");
+        }
+        gameController.playCardFromHand(currentPlayer.getID());
 
-        // Qui prepara il common table
-        gameController.getGame().getCommonTable().getResourceCards().add(
-                gameController.getGame().getCommonTable().getResourceDeck().removeCard()
-        );
-        gameController.getGame().getCommonTable().getResourceCards().add(
-                gameController.getGame().getCommonTable().getResourceDeck().removeCard()
-        );
-        gameController.getGame().getCommonTable().getGoldCards().add(
-                gameController.getGame().getCommonTable().getGoldDeck().removeCard()
-        );
-        gameController.getGame().getCommonTable().getGoldCards().add(
-                gameController.getGame().getCommonTable().getGoldDeck().removeCard()
-        );
+        // Prepare players hand with 2 resource cards and 1 gold card
+        gameController.preparePlayersHand();
 
-        // Ora testing
-        Card p1FirstCard = gameController.getGame().getCurrentPlayer().getHand().getCards().getFirst();
-        gameController.selectCardFromHand(p1FirstCard);
-        gameController.turnSelectedCardSide();
+        // Prepare common table
+        gameController.prepareCommonMissions();
 
-        gameController.selectPositionOnBoard(1,1);
-        gameController.playCardFromHand();
+        // Give 2 secret missions to each player
+        gameController.prepareSecretMissions();
 
-        // Pescaggio
-        Card selected = gameController.getGame().getCommonTable().getResourceCards().getFirst();
-        gameController.selectCardFromCommonTable(selected);
-        gameController.drawSelectedCard();
+        gameController.changeTurn();
+        currentPlayer = gameController.getGame().getCurrentPlayer();
+        /* Players choose their secret mission */
+        // Player 1
+        System.out.println(currentPlayer.getNickname());
+        System.out.println("Insert mission card index: ");
+        int missionCardIndex = Integer.parseInt(scanner.nextLine());
+        gameController.selectSecretMission(missionCardIndex, currentPlayer.getID());
+        gameController.setSecretMission(currentPlayer.getID());
 
-        // Controllo se è avvenuto con successo
-        System.out.println("SIIIII");
+        gameController.changeTurn();
+        currentPlayer = gameController.getGame().getCurrentPlayer();
+
+        System.out.println(currentPlayer.getNickname());
+        // Player 2
+        System.out.println("Insert mission card index: ");
+        missionCardIndex = Integer.parseInt(scanner.nextLine());
+        gameController.selectSecretMission(missionCardIndex, currentPlayer.getID());
+        gameController.setSecretMission(currentPlayer.getID());
+
+        // Set first player
+        gameController.setFirstPlayer(player1.getID());
+        currentPlayer = gameController.getGame().getCurrentPlayer();
+        // PHASE 2: Game flow
+        while (true) {
+            System.out.println("----" + currentPlayer.getNickname() +"'s turn----");
+            currentPlayer.getPersonalBoard().showBoard();
+
+            System.out.println("Insert the card index you want to select:");
+            int cardIndex = Integer.parseInt(scanner.nextLine());
+
+            gameController.selectCardFromHand(cardIndex, currentPlayer.getID());
+
+            System.out.println("Do you want to change side? y/n");
+            turnSideDecision = scanner.nextLine();
+
+            if (turnSideDecision.equals("yes") || turnSideDecision.equals("y")) {
+                gameController.turnSelectedCardSide(currentPlayer.getID());
+                System.out.println("side changed");
+            }
+
+            System.out.println("Choose the position on the board where you want to place the card:");
+            System.out.print("X: ");
+            int selectedX = Integer.parseInt(scanner.nextLine());
+            System.out.print("Y: ");
+            int selectedY = Integer.parseInt(scanner.nextLine());
+            gameController.selectPositionOnBoard(selectedX, selectedY, currentPlayer.getID());
+            gameController.playCardFromHand(currentPlayer.getID());
+
+            // Pescaggio
+            System.out.println("Insert the position of the card you want to draw");
+            System.out.print("X: ");
+            int cardX = Integer.parseInt(scanner.nextLine());
+            System.out.print("Y: ");
+            int cardY = Integer.parseInt(scanner.nextLine());
+            gameController.selectCardFromCommonTable(cardX, cardY, currentPlayer.getID());
+            gameController.drawSelectedCard(currentPlayer.getID());
+
+            // Cambio turno
+            gameController.changeTurn();
+
+            currentPlayer = gameController.getGame().getCurrentPlayer();
+        }
+
+        // PHASE 3: End Game
     }
 }

@@ -22,7 +22,7 @@ public class Game {
         this.numberOfPlayers = numberOfPlayers;
         this.players = new ArrayList<>();
 
-        this.gameState = GameState.INITIAL_STAGE;
+        this.gameState = GameState.WAITING;
 
         ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
@@ -34,11 +34,12 @@ public class Game {
         this.round = 0;
     }
 
-    public void addPlayer(Player newPlayer) throws Exception {
-        if (this.players.size() < numberOfPlayers) {
+    public void addPlayer(Player newPlayer) {
+        if (gameState == GameState.WAITING && this.players.size() < numberOfPlayers) {
             this.players.add(newPlayer);
-        } else {
-            throw new Exception();
+        }
+        if(this.players.size() == numberOfPlayers){
+            gameState = GameState.INITIAL_STAGE;
         }
     }
 
