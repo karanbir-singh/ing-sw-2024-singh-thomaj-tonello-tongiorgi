@@ -17,7 +17,7 @@ class PersonalBoardTest {
         Game game = new Game(2);
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
-        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
         Player p1 = new Player(3,"Bob");
         game.addPlayer(p1);
@@ -65,7 +65,7 @@ class PersonalBoardTest {
         Game game = new Game(2);
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
-        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
         Player p1 = new Player(3,"Bob");
         game.addPlayer(p1);
@@ -110,7 +110,7 @@ class PersonalBoardTest {
         Game game = new Game(2);
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
-        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
         Player p1 = new Player(3,"Bob");
         game.addPlayer(p1);
@@ -145,7 +145,7 @@ class PersonalBoardTest {
         Game game = new Game(2);
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
-        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
         Player p1 = new Player(3,"Bob");
         game.addPlayer(p1);
@@ -178,7 +178,7 @@ class PersonalBoardTest {
         Game game = new Game(2);
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
-        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
         Player p1 = new Player(3,"Bob");
         game.addPlayer(p1);
@@ -267,7 +267,7 @@ class PersonalBoardTest {
         Game game = new Game(2);
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
-        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
         Player p1 = new Player(3,"Bob");
         game.addPlayer(p1);
@@ -350,7 +350,7 @@ class PersonalBoardTest {
         Game game = new Game(2);
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
-        Deck initialDeck = game.getCommonTable().getInitialDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
         Player p1 = new Player(3,"Bob");
         game.addPlayer(p1);

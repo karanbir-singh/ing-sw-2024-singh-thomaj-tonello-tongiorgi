@@ -30,7 +30,11 @@ public class Player {
      */
     private Hand hand;
     /**
-     * This attribute represents then player's personal board
+     * This attribute represents the player's secret mission hand (used only in the initial game state)
+     */
+    private Hand secretMissionHand;
+    /**
+     * This attribute represents the player's personal board
      */
     private PersonalBoard personalBoard;
     /**
@@ -112,6 +116,21 @@ public class Player {
      */
     public void createHand() {
         this.hand = new Hand(new ArrayList<>());
+    }
+
+    /**
+     * Creates an empty secret mission hand
+     */
+    public void createSecretMissionHand() {
+        this.secretMissionHand = new Hand(new ArrayList<>());;
+    }
+
+    /**
+     * Return the player's secret mission hand
+     * @return secretMissionHand
+     */
+    public Hand getSecretMissionHand() {
+        return secretMissionHand;
     }
 
     /**

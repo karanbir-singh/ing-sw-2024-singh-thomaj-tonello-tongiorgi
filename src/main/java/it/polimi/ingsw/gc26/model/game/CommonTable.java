@@ -20,7 +20,7 @@ public class CommonTable {
     /**
      * This attribute represents the initial cards decl
      */
-    private final Deck initialDeck;
+    private final Deck starterDeck;
     /**
      * This attribute represents the mission cards deck
      */
@@ -46,16 +46,16 @@ public class CommonTable {
      * Initializes the common table with the decks
      * @param resourceDeck resources cards deck
      * @param goldDeck gold cards deck
-     * @param initialDeck initial cards deck
+     * @param starterDeck initial cards deck
      * @param missionDeck mission cards deck
      */
-    public CommonTable(Deck resourceDeck, Deck goldDeck, Deck initialDeck, Deck missionDeck) {
+    public CommonTable(Deck resourceDeck, Deck goldDeck, Deck starterDeck, Deck missionDeck) {
         commonMissions = new ArrayList<>();
         resourceCards = new ArrayList<>();
         goldCards = new ArrayList<>();
         this.resourceDeck = resourceDeck;
         this.goldDeck = goldDeck;
-        this.initialDeck = initialDeck;
+        this.starterDeck = starterDeck;
         this.missionDeck = missionDeck;
         selectedCard = null;
     }
@@ -119,7 +119,7 @@ public class CommonTable {
      * @return common mission
      */
     public ArrayList<Card> getCommonMissions() {
-        return new ArrayList<>(commonMissions);
+        return commonMissions;
     }
 
     /**
@@ -142,8 +142,8 @@ public class CommonTable {
      * Returns the initial cards deck
      * @return initial cards deck
      */
-    public Deck getInitialDeck() {
-        return initialDeck;
+    public Deck getStarterDeck() {
+        return starterDeck;
     }
 
     /**
