@@ -21,7 +21,7 @@ public class MainController {
         // TODO gestire cosa fare in cui il numero di giocatori è negativo o maggiori di Game.MAX_NUM_PLAYERS
     }
 
-    public void joinGame(String gameID, Player newPlayer) {
+    public void joinGame(String gameID, Player newPlayer) throws Exception {
         Game game = gamesControllers.get(gameID).getGame();
         if (game.getPlayers().size() < gamesControllers.get(gameID).getGame().getNumberOfPlayers()) {
             game.addPlayer(newPlayer);
