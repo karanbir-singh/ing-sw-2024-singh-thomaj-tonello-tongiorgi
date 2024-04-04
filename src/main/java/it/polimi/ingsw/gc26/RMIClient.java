@@ -6,7 +6,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
-public class RMIClient extends UnicastRemoteObject implements VirtualView {
+/*public class RMIClient extends UnicastRemoteObject implements VirtualView {
     private final VirtualServer server;
     private String playerId;
     public RMIClient(VirtualServer server) throws RemoteException {
@@ -69,4 +69,4 @@ public class RMIClient extends UnicastRemoteObject implements VirtualView {
 
         }
     }
-}
+}*/

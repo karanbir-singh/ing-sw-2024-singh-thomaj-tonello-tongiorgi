@@ -11,7 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class RMIServer implements VirtualServer{
+/*public class RMIServer implements VirtualServer{
     final MainController mainController;
     public static void main(String args[]) throws RemoteException { //TODO ALL REMOTE EXCEPTIONS MUST BE HANDLED BY A TRY AND CATCH
         final String serverName = "addressServer";
@@ -101,4 +101,4 @@ public class RMIServer implements VirtualServer{
         mainController.getGameController(id).setSecretMission(id);
     }
 
-}
+}*/

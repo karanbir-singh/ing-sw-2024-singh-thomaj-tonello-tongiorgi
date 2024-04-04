@@ -255,7 +255,12 @@ public class PersonalBoard {
                 } else if (ifPresent(currX, currY, playablePositions).isPresent()) {
                     System.out.print("o   ");
                 } else if (ifPresent(currX, currY, occupiedPositions).isPresent()) {
-                    System.out.print("C   ");
+                    if(ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().getSideSymbol().isPresent()){
+                        System.out.print(ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().getSideSymbol().orElseThrow(NullPointerException::new).getAlias() + "   ");
+                    } else {
+                        System.out.print("S   ");
+                    }
+
                 } else {
                     System.out.print("    ");
                 }
