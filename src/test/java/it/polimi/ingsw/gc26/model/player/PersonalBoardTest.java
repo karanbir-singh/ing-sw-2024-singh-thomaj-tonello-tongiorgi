@@ -477,7 +477,7 @@ class PersonalBoardTest {
     }
 
     @Test
-    void playFromHand() throws Exception{
+    void fourCorners() throws Exception{
         Game game = new Game(2);
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
@@ -508,8 +508,8 @@ class PersonalBoardTest {
 
 
         assertEquals(13, pb.getScore());
-        assertEquals(2, pb.getResourceQuantity(Symbol.INSECT));
-        assertEquals(0, pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(3, pb.getResourceQuantity(Symbol.INSECT));
+        assertEquals(1, pb.getResourceQuantity(Symbol.ANIMAL));
         assertEquals(0, pb.getResourceQuantity(Symbol.FUNGI));
         assertEquals(4, pb.getResourceQuantity(Symbol.PLANT));
         assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
@@ -523,10 +523,46 @@ class PersonalBoardTest {
         assertFalse(pb.getOccupiedPositions().get(0).getSide().getDOWNRIGHT().isHidden());
 
         //Card in 1,1
-        assertFalse(pb.getOccupiedPositions().get(1).getSide().getUPLEFT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(1).getSide().getUPLEFT().isHidden());
         assertTrue(pb.getOccupiedPositions().get(1).getSide().getUPRIGHT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(1).getSide().getDOWNLEFT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(1).getSide().getDOWNRIGHT().isHidden());
+
+        //Card in -1,1
+        assertTrue(pb.getOccupiedPositions().get(2).getSide().getUPRIGHT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(2).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNRIGHT().isHidden());
+
+        //Card in 2,2
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getUPRIGHT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(3).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getDOWNRIGHT().isHidden());
+
+        //Card in -2,2
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getUPLEFT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(4).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getDOWNRIGHT().isHidden());
+
+        //Card in -1,3
+        assertFalse(pb.getOccupiedPositions().get(5).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(5).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(5).getSide().getDOWNLEFT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(5).getSide().getDOWNRIGHT().isHidden());
+
+        //Card in 1,3
+        assertFalse(pb.getOccupiedPositions().get(6).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(6).getSide().getUPRIGHT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(6).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(6).getSide().getDOWNRIGHT().isHidden());
+
+        //Card in 0,2
+        assertFalse(pb.getOccupiedPositions().get(7).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(7).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(7).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(7).getSide().getDOWNRIGHT().isHidden());
 
         pb.showBoard();
     }
