@@ -141,6 +141,44 @@ class PersonalBoardTest {
         pb.showBoard();
     }
 
+    /**
+     * test to check that, when two diagonal combination overlap, the resource and gold cards are considered just once
+     * @throws Exception
+     */
+    @Test
+    void OverlappingDiagonalCombinationMission() throws Exception{
+        Game game = new Game(2);
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        Player p1 = new Player(3,"Bob");
+        game.addPlayer(p1);
+        game.setCurrentPlayer(p1);
+        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(1));
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+        //get(1) è la missione corretta
+
+        pb.setPosition(1,-1);
+        pb.playSide(resourceDeck.getCards().get(0).getBack());
+        pb.setPosition(2,-2);
+        pb.playSide(resourceDeck.getCards().get(1).getBack());
+        pb.setPosition(3,-3);
+        pb.playSide(resourceDeck.getCards().get(2).getBack());
+        pb.setPosition(4,-4);
+        pb.playSide(resourceDeck.getCards().get(3).getBack());
+        pb.setPosition(5,-5);
+        pb.playSide(resourceDeck.getCards().get(4).getBack());
+
+        ArrayList<Card> commonMissions = new ArrayList<>();
+        commonMissions.add(missionDeck.getCards().get(6));
+        commonMissions.add(missionDeck.getCards().get(3));
+        pb.endGame(commonMissions);
+        assertEquals( 2, pb.getScore());
+        pb.showBoard();
+    }
+
     @Test
     void DiagonalAndLpatternCombinationMission() throws Exception{
         Game game = new Game(2);
@@ -476,6 +514,10 @@ class PersonalBoardTest {
         pb.showBoard();
     }
 
+    /**
+     * test to check the case where the goldCard that assigns the points proportionally to the covered corners is played, covering 4 corners
+     * @throws Exception
+     */
     @Test
     void fourCorners() throws Exception{
         Game game = new Game(2);
