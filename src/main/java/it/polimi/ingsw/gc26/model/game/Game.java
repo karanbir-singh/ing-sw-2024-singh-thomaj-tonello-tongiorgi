@@ -40,18 +40,21 @@ public class Game {
      */
     private int round;
 
+    /**
+     * This attribute represents the
+     */
+    private int finalRound;
+
 
     /**
      * Initializes the game, creates the decks and sets the common table
-     * @param numberOfPlayers number of players in this game, min: 2 - max: 4
-     * @throws Exception number of players invalid
+     * @param players list of players of the game
      */
-    public Game(int numberOfPlayers) throws Exception {
-        if (numberOfPlayers < 2 || numberOfPlayers > 4) { throw new Exception("Number of players invalid!");}
-        this.numberOfPlayers = numberOfPlayers;
-        this.players = new ArrayList<>();
+    public Game(ArrayList<Player> players) {
+        this.numberOfPlayers = players.size();
 
-        this.gameState = GameState.WAITING;
+        this.players = new ArrayList<>();
+        this.players.addAll(players);
 
         ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
@@ -61,6 +64,7 @@ public class Game {
 
         this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck);
         this.round = 0;
+        this.finalRound = -1;
     }
 
     /**
@@ -80,8 +84,16 @@ public class Game {
      * Sets the currentPlayer to the next one in an infinite cycle
      */
     public void goToNextPlayer() {
+        if(this.gameState.equals(GameState.END_STAGE) && this.round == this.finalRound &&
+                players.indexOf(this.currentPlayer) + 1 == this.numberOfPlayers){
+            for(Player player: this.players){
+                player.getPersonalBoard().endGame(commonTable.getCommonMissions());
+            }
+        }
+
         if (players.indexOf(this.currentPlayer) + 1 == this.numberOfPlayers) {
             this.currentPlayer = this.players.getFirst();
+            this.round++;
         } else {
             this.currentPlayer = this.players.get(this.players.indexOf(this.currentPlayer) + 1);
         }
@@ -114,7 +126,7 @@ public class Game {
     /**
      * Increases number of rounds
      */
-    private void increaseRound() {
+    public void increaseRound() {
         this.round += 1;
     }
 
@@ -122,7 +134,7 @@ public class Game {
      * Return the current round
      * @return round
      */
-    private int getRound() {
+    public int getRound() {
         return this.round;
     }
 
@@ -156,5 +168,22 @@ public class Game {
      */
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public int getFinalRound() {
+        return finalRound;
+    }
+
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public void setFinalRound(int finalRound) {
+        this.finalRound = finalRound;
     }
 }
