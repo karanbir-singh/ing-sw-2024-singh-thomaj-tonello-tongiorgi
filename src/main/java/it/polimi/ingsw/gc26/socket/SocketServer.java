@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class SocketServer {
-    private final static String filePath = "src/main/java/it.polimi.ingsw.gc26/socket/envServer.json";
+    private final static String filePath = "src/main/resources/envServer.json";
     private final ArrayList<SocketClientHandler> clients = new ArrayList<>();
     private final ServerSocket listenSocket;
     private final GameController controller;
@@ -23,6 +23,7 @@ public class SocketServer {
 
     private void runServer() throws  IOException {
         Socket clientSocket = null;
+        System.out.println("Listening in port:" + this.listenSocket.getLocalPort());
         while ((clientSocket = this.listenSocket.accept()) != null) {
             InputStreamReader socketRx = new InputStreamReader(clientSocket.getInputStream());
             OutputStreamWriter socketTx = new OutputStreamWriter(clientSocket.getOutputStream());
@@ -61,7 +62,7 @@ public class SocketServer {
         }
         try {
             ServerSocket listenSocket = new ServerSocket(portNumber);
-            new SocketServer(listenSocket, new GameController(new Game(3))); //TODO non creare sempre un nuovo gioco
+            new SocketServer(listenSocket, new GameController(new Game(3))).runServer(); //TODO qui ci va il main controller
         } catch (Exception e) {
             //TODO handle exception
         }

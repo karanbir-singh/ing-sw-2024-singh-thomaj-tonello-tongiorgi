@@ -16,7 +16,7 @@ public class MainController {
         this.gamesControllers = new HashMap<>();
     }
 
-    public void createGame(int numPlayers) {
+    public void createGame(int numPlayers) throws Exception {
         if (numPlayers > 1 && numPlayers <= Game.MAX_NUM_PLAYERS) {
             String gameID = UUID.randomUUID().toString();
             gamesControllers.put(gameID, new GameController(new Game(numPlayers)));

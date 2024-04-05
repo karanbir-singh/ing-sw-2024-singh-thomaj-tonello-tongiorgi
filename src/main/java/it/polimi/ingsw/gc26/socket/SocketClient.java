@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 public class SocketClient implements VirtualView {
-    private final static String filePath = "src/main/java/it.polimi.ingsw.gc26/socket/envClient.json";
+    private final static String filePath = "src/main/resources/envClient.json";
     private final BufferedReader input;
     private final VirtualSocketServer server;
 
@@ -20,6 +20,7 @@ public class SocketClient implements VirtualView {
     }
 
     private void run() throws RemoteException {
+
         new Thread(() -> {
             try {
                 this.runVirtualServer();
@@ -33,9 +34,10 @@ public class SocketClient implements VirtualView {
     private void runVirtualServer() throws IOException {
         String line;
         while((line = input.readLine()) != null) {
-            switch (line) {
-                //TODO
-            }
+            showMessage(new Message(line, null, null, null));
+            /*switch (line) {
+                case ""
+            }*/
         }
     }
 
@@ -43,6 +45,7 @@ public class SocketClient implements VirtualView {
         Scanner scan  = new Scanner(System.in);
         while (true) {
             System.out.println("> ");
+            server.
         }
     }
 
