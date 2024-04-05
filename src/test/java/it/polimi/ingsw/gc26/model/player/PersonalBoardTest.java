@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.model.player;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.deck.Deck;
+import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.game.Game;
 import org.junit.jupiter.api.Test;
 
@@ -361,26 +362,35 @@ class PersonalBoardTest {
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
         pb.setPosition(1,1);
-        pb.playSide(resourceDeck.getCards().get(0).getFront());
+        pb.playSide(resourceDeck.getCards().get(8).getFront());
         pb.setPosition(-1, 1);
-        pb.playSide(resourceDeck.getCards().get(1).getFront());
-        ArrayList<Card> commonMissions = new ArrayList<>();
-        commonMissions.add(missionDeck.getCards().get(2));
-        commonMissions.add(missionDeck.getCards().get(6));
-        pb.endGame(commonMissions);
+        pb.playSide(resourceDeck.getCards().get(0).getBack());
+        pb.setPosition(2,2);
+        pb.playSide(resourceDeck.getCards().get(33).getFront());
+        pb.setPosition(-2, 2);
+        pb.playSide(resourceDeck.getCards().get(2).getBack());
+        pb.setPosition(-1, 3);
+        pb.playSide(resourceDeck.getCards().get(9).getFront());
+        pb.setPosition(1,3);
+        pb.playSide(goldDeck.getCards().get(6).getFront());
+        pb.setPosition(0,2);
+        pb.playSide(goldDeck.getCards().get(3).getFront());
 
-        assertEquals(0, pb.getScore());
-        assertEquals(1, pb.getResourceQuantity(Symbol.INSECT));
-        assertEquals(1, pb.getResourceQuantity(Symbol.ANIMAL));
+
+        assertEquals(13, pb.getScore());
+        assertEquals(2, pb.getResourceQuantity(Symbol.INSECT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.ANIMAL));
         assertEquals(0, pb.getResourceQuantity(Symbol.FUNGI));
         assertEquals(4, pb.getResourceQuantity(Symbol.PLANT));
         assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
         assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
         assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL) );
+
         //initial card
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPRIGHT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(0).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(0).getSide().getDOWNRIGHT().isHidden());
 
         //First resource card
         assertFalse(pb.getOccupiedPositions().get(1).getSide().getUPLEFT().isHidden());
@@ -472,6 +482,44 @@ class PersonalBoardTest {
         assertFalse(pb.getOccupiedPositions().get(4).getSide().getUPRIGHT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(4).getSide().getDOWNLEFT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(4).getSide().getDOWNRIGHT().isHidden());
+        pb.showBoard();
+    }
+
+    @Test
+    void goldFourCorners() throws Exception{
+        Game game = new Game(2);
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        Player p1 = new Player(3,"Bob");
+        game.addPlayer(p1);
+        game.setCurrentPlayer(p1);
+        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
+        game.getCurrentPlayer().createHand();
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(7));
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+
+        assertEquals(0, pb.getScore());
+        assertEquals(2, pb.getResourceQuantity(Symbol.INSECT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(2, pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL) );
+        //initial card
+        assertFalse(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(0).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(0).getSide().getDOWNLEFT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(0).getSide().getDOWNRIGHT().isHidden());
+
+        //First resource card
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getDOWNRIGHT().isHidden());
+
         pb.showBoard();
     }
 
