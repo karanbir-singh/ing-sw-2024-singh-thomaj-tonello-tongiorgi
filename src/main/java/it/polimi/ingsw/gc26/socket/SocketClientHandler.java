@@ -5,45 +5,48 @@ import it.polimi.ingsw.gc26.GameController;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import it.polimi.ingsw.gc26.model.Message;
+import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.model.player.Player;
 
 /**
- * logica con cui vado a leggere i messaggi
+ * logica con cui vado a leggere i messaggi, Fa parte del server
  */
 public class SocketClientHandler implements VirtualView {
     final GameController controller;
     final SocketServer server;
-    final BufferedReader input;
-    final PrintWriter output;
+    final BufferedReader inputFromClient;
+    final PrintWriter outputToClient;
 
     public SocketClientHandler(GameController controller, SocketServer server, BufferedReader input, PrintWriter output) {
         this.controller = controller;
         this.server = server;
-        this.input = input;
-        this.output = output;
+        this.inputFromClient = input;
+        this.outputToClient = output;
+        System.out.println("New client!");
     }
 
     public void runVirtualView() throws IOException {
         String line;
-        while ((line = input.readLine()) != null) {
-            switch(line) {
-                //logica
-            }
+        while ((line = inputFromClient.readLine()) != null) {
+            Message message = new Message(line);
+            System.out.println(message);
+            this.controller.addMessage( message);
+            this.server.broadCastUpdate(message, this);
         }
     }
 
     @Override
     public void showMessage(Message message) {
-        synchronized (this.output) {
-            this.output.println(message);
-            this.output.flush();
+        synchronized (this.outputToClient) {
+            this.outputToClient.println(message.toJson());
+            this.outputToClient.flush();
         }
     }
 
     @Override
     public void reportError(String errorMessage) {
-        synchronized (this.output) {
-            this.output.println(errorMessage);
+        synchronized (this.outputToClient) {
+            this.outputToClient.println(errorMessage);
         }
     }
  }

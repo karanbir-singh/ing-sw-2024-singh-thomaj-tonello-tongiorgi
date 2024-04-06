@@ -39,6 +39,10 @@ public class Game {
      * This attribute represents how many rounds have been played
      */
     private int round;
+    /**
+     * This attribute represents the chat. It stores all the messages.
+     */
+    private final Chat chat;
 
 
     /**
@@ -60,6 +64,7 @@ public class Game {
 
         this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck);
         this.round = 0;
+        this.chat = new Chat();
     }
 
     /**
@@ -155,5 +160,13 @@ public class Game {
      */
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    /**
+     * Returns the group's chat
+     * @return chat
+     */
+    public Chat getChat() {
+        return this.chat;
     }
 }

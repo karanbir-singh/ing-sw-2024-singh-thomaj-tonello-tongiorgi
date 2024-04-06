@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26;
 
+import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.CommonTable;
 import it.polimi.ingsw.gc26.model.game.Game;
@@ -8,6 +9,7 @@ import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 
 public class GameController {
     private final Game game;
+
 
     public GameController(Game game) {
         this.game = game;
@@ -84,5 +86,9 @@ public class GameController {
 
     public Game getGame() {
         return game;
+    }
+
+    public void addMessage(Message message) {
+        this.getGame().getChat().addMessage(message);
     }
 }

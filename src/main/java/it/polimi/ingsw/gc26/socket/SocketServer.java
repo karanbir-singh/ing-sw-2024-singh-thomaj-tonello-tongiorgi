@@ -3,7 +3,7 @@ package it.polimi.ingsw.gc26.socket;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.GameController;
-import it.polimi.ingsw.gc26.model.Message;
+import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.game.Game;
 
 import java.io.*;
@@ -40,10 +40,12 @@ public class SocketServer {
         }
     }
 
-    public void broadCastUpdate(Message message) {
+    public void broadCastUpdate(Message message, SocketClientHandler sender) {
         synchronized (this.clients) {
             for (var client : this.clients) {
-                client.showMessage(message);
+                if (!client.equals(sender)) {
+                    client.showMessage(message);
+                }
             }
         }
 
