@@ -78,8 +78,8 @@ public class Game {
      *
      * @param newPlayer new player to be added in the game
      */
-    public void addPlayer(Player newPlayer) throws Exception {
-        if (gameState == GameState.WAITING && this.players.size() < numberOfPlayers) {
+    public void addPlayer(Player newPlayer) {
+        if (this.players.size() < numberOfPlayers) {
             this.players.add(newPlayer);
         }
         if (this.players.size() == numberOfPlayers) {
