@@ -10,9 +10,9 @@ import java.util.ArrayList;
  */
 public class Player {
     /**
-     * This attributes represents the player with an unique id
+     * This attributes represents the player with a unique id
      */
-    private final int ID;
+    private final String ID;
     /**
      * This attribute represents the player's name and will be shown to the other players
      */
@@ -47,7 +47,7 @@ public class Player {
      * @param id unique number that represent the player
      * @param name player's nickname
      */
-    public Player(int id, String name) {
+    public Player(String id, String name) {
         this.ID = id;
         this.nickname = name;
         this.pawnColor = null;
@@ -60,7 +60,7 @@ public class Player {
      * Returns the player's id
      * @return player's id
      */
-    public int getID() {
+    public String getID() {
         return this.ID;
     }
 

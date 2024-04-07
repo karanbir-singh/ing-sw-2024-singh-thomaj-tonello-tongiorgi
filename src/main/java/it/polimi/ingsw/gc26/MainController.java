@@ -1,177 +1,90 @@
 package it.polimi.ingsw.gc26;
 
-import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 
 import java.util.*;
 
 public class MainController {
-    private Map<String, GameController> gamesControllers;
+    /**
+     * This attribute represents the list of players who are waiting for a new game
+     */
+    private ArrayList<Player> waitingPlayer;
 
+    /**
+     * This attribute represents the list of game controllers of started games
+     */
+    private final ArrayList<GameController> gamesControllers;
+
+    /**
+     * This attribute represents the number of player that needs to wait until a game is created
+     */
+    private int maxNumWaitingPlayers;
+
+    /**
+     * Initializes waiting players' list and games controllers' list
+     */
     public MainController() {
-        this.gamesControllers = new HashMap<>();
+        this.waitingPlayer = new ArrayList<>();
+        this.gamesControllers = new ArrayList<>();
+        maxNumWaitingPlayers = 0;
     }
 
-    public void createGame(int numPlayers) throws Exception {
+    /**
+     * Check if there are players waiting
+     * @return true if there are players waiting, false otherwise
+     */
+    public boolean existsWaitingGame() {
+        return !waitingPlayer.isEmpty();
+    }
+
+    /**
+     * Initializes the waiting list of players and updating max numbers of players for the next game
+     * @param numPlayers number of players of the next game
+     * @param playerID ID of the player who is initializing the waiting list
+     * @param playerNickname nickname of the player who is initializing the waiting list
+     */
+    public void createWaitingList(int numPlayers, String playerID, String playerNickname) {
+        // Check if given number of players is correct
         if (numPlayers > 1 && numPlayers <= Game.MAX_NUM_PLAYERS) {
-            String gameID = UUID.randomUUID().toString();
-            gamesControllers.put(gameID, new GameController(new Game(numPlayers)));
-        }
-        // TODO gestire cosa fare in cui il numero di giocatori è negativo o maggiori di Game.MAX_NUM_PLAYERS
-    }
+            // Re-initialize waiting player with the new dimension of the list
+            this.waitingPlayer = new ArrayList<>(numPlayers);
 
-    public void joinGame(String gameID, Player newPlayer) throws Exception {
-        Game game = gamesControllers.get(gameID).getGame();
-        if (game.getPlayers().size() < gamesControllers.get(gameID).getGame().getNumberOfPlayers()) {
-            game.addPlayer(newPlayer);
+            // Add in the list the player
+            this.waitingPlayer.add(new Player(playerID, playerNickname));
+
+            // Update the max numbers of players for the game
+            this.maxNumWaitingPlayers = numPlayers;
         } else {
-            // TODO gestire in altro modo questo ramo
+            // TODO gestire cosa fare in cui il numero di giocatori è negativo o maggiori di Game.MAX_NUM_PLAYERS
         }
     }
 
-    public ArrayList<String> getGamesIDs() {
-        return new ArrayList<>(gamesControllers.keySet());
-    }
+    /**
+     * Adds a player into the waiting list, if exists
+     * @param playerID ID of the player who is joining the waiting list
+     * @param playerNickname Nickname of the player who is joining the waiting list
+     */
+    public void joinWaitingList(String playerID, String playerNickname) {
+        Player newPlayer = new Player(playerID, playerNickname);
 
-    public GameController getGameController(String gameID) {
-        return gamesControllers.get(gameID);
-    }
+        // Add player to the waiting list
+        this.waitingPlayer.add(newPlayer);
 
-    public ArrayList<GameController> getGameControllers() {
-        return new ArrayList<>(new HashSet<>(gamesControllers.values()));
-    }
+        // Check if waiting list is full
+        if (waitingPlayer.size() >= maxNumWaitingPlayers) {
+            // Then, create a new game controller and add to the list
+            GameController gameController = new GameController(new Game(this.waitingPlayer));
+            gamesControllers.add(gameController);
 
-    public void deleteGame(String gameID) {
-        gamesControllers.remove(gameID);
-    }
+            // TODO notify and return GameController to each player of the game
 
-    public static void main(String[] args) throws Exception {
-        MainController mainController = new MainController();
-
-        // Create a game and players
-        mainController.createGame(2);
-        Player player1 = new Player(0, "Player 1");
-        Player player2 = new Player(1, "Player 2");
-
-        // Add players
-        mainController.joinGame(mainController.getGamesIDs().getFirst(), player1);
-        mainController.joinGame(mainController.getGamesIDs().getFirst(), player2);
-
-        // PHASE 1: Game preparation
-        // Get controller
-        GameController gameController = mainController.getGameController(mainController.getGamesIDs().getFirst());
-        // Set first player
-        gameController.setFirstPlayer(player1.getID());
-        Player currentPlayer = gameController.getGame().getCurrentPlayer();
-
-        // Prepare game common table
-        gameController.prepareCommonTable();
-
-        // Give 1 starter card to each player
-        gameController.prepareStarterCards();
-
-        /* Players choose which side of starter card to play */
-        // Player 1
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println(currentPlayer.getNickname());
-        gameController.selectCardFromHand(0, currentPlayer.getID());
-        System.out.println("Do you want to change turn? y/n");
-        String turnSideDecision = scanner.nextLine();
-        if (turnSideDecision.equals("yes") || turnSideDecision.equals("y")) {
-            gameController.turnSelectedCardSide(currentPlayer.getID());
-            System.out.println("side changed");
+            // Clear waiting list
+            this.waitingPlayer.clear();
+            this.waitingPlayer = null;
         }
-        gameController.playCardFromHand(currentPlayer.getID());
+    }
 
-        gameController.changeTurn();
-        currentPlayer = gameController.getGame().getCurrentPlayer();
-
-        System.out.println(currentPlayer.getNickname());
-        // Player 2
-        gameController.selectCardFromHand(0, currentPlayer.getID());
-        System.out.println("Do you want to change turn? y/n");
-        turnSideDecision = scanner.nextLine();
-        if (turnSideDecision.equals("yes") || turnSideDecision.equals("y")) {
-            gameController.turnSelectedCardSide(currentPlayer.getID());
-            System.out.println("side changed");
-        }
-        gameController.playCardFromHand(currentPlayer.getID());
-
-        // Prepare players hand with 2 resource cards and 1 gold card
-        gameController.preparePlayersHand();
-
-        // Prepare common table
-        gameController.prepareCommonMissions();
-
-        // Give 2 secret missions to each player
-        gameController.prepareSecretMissions();
-
-        gameController.changeTurn();
-        currentPlayer = gameController.getGame().getCurrentPlayer();
-        /* Players choose their secret mission */
-        // Player 1
-        System.out.println(currentPlayer.getNickname());
-        System.out.println("Insert mission card index: ");
-        int missionCardIndex = Integer.parseInt(scanner.nextLine());
-        gameController.selectSecretMission(missionCardIndex, currentPlayer.getID());
-        gameController.setSecretMission(currentPlayer.getID());
-
-        gameController.changeTurn();
-        currentPlayer = gameController.getGame().getCurrentPlayer();
-
-        System.out.println(currentPlayer.getNickname());
-        // Player 2
-        System.out.println("Insert mission card index: ");
-        missionCardIndex = Integer.parseInt(scanner.nextLine());
-        gameController.selectSecretMission(missionCardIndex, currentPlayer.getID());
-        gameController.setSecretMission(currentPlayer.getID());
-
-        // Set first player
-        gameController.setFirstPlayer(player1.getID());
-        currentPlayer = gameController.getGame().getCurrentPlayer();
-        // PHASE 2: Game flow
-        while (true) {
-            System.out.println("----" + currentPlayer.getNickname() +"'s turn----");
-            currentPlayer.getPersonalBoard().showBoard();
-
-            System.out.println("Insert the card index you want to select:");
-            int cardIndex = Integer.parseInt(scanner.nextLine());
-
-            gameController.selectCardFromHand(cardIndex, currentPlayer.getID());
-
-            System.out.println("Do you want to change side? y/n");
-            turnSideDecision = scanner.nextLine();
-
-            if (turnSideDecision.equals("yes") || turnSideDecision.equals("y")) {
-                gameController.turnSelectedCardSide(currentPlayer.getID());
-                System.out.println("side changed");
-            }
-
-            System.out.println("Choose the position on the board where you want to place the card:");
-            System.out.print("X: ");
-            int selectedX = Integer.parseInt(scanner.nextLine());
-            System.out.print("Y: ");
-            int selectedY = Integer.parseInt(scanner.nextLine());
-            gameController.selectPositionOnBoard(selectedX, selectedY, currentPlayer.getID());
-            gameController.playCardFromHand(currentPlayer.getID());
-
-            // Pescaggio
-            System.out.println("Insert the position of the card you want to draw");
-            System.out.print("X: ");
-            int cardX = Integer.parseInt(scanner.nextLine());
-            System.out.print("Y: ");
-            int cardY = Integer.parseInt(scanner.nextLine());
-            gameController.selectCardFromCommonTable(cardX, cardY, currentPlayer.getID());
-            gameController.drawSelectedCard(currentPlayer.getID());
-
-            // Cambio turno
-            gameController.changeTurn();
-
-            currentPlayer = gameController.getGame().getCurrentPlayer();
-        }
-
-        // PHASE 3: End Game
+    public static void main(String[] args) {
     }
 }
