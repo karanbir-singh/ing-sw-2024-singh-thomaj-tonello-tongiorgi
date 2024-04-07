@@ -544,9 +544,9 @@ class PersonalBoardTest {
         pb.setPosition(-1, 3);
         pb.playSide(resourceDeck.getCards().get(9).getFront());
         pb.setPosition(1,3);
-        pb.playSide(goldDeck.getCards().get(6).getFront());
+        pb.playSide(goldDeck.getCards().get(6).getFront()); //gold card that requires 3 plants, +3 points
         pb.setPosition(0,2);
-        pb.playSide(goldDeck.getCards().get(3).getFront());
+        pb.playSide(goldDeck.getCards().get(3).getFront()); ////gold card that requires 3 plants and 1 insect (corner property)
 
 
         assertEquals(13, pb.getScore());
@@ -609,6 +609,57 @@ class PersonalBoardTest {
         pb.showBoard();
     }
 
+    @Test
+    void notEnoughResources() throws Exception {
+        Game game = new Game(2);
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        Player p1 = new Player(3, "Bob");
+        game.addPlayer(p1);
+        game.setCurrentPlayer(p1);
+        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
 
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+
+        pb.setPosition(1, 1);
+        pb.playSide(goldDeck.getCards().get(6).getFront());
+
+        assertEquals(0, pb.getScore());
+
+        pb.showBoard();
+    }
+
+    @Test
+    void notEnoughResourcesButPlayedOnBack() throws Exception {
+        Game game = new Game(2);
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        Player p1 = new Player(3, "Bob");
+        game.addPlayer(p1);
+        game.setCurrentPlayer(p1);
+        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
+
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+
+        pb.setPosition(1, 1);
+        pb.playSide(goldDeck.getCards().get(6).getBack());
+
+        assertEquals(0, pb.getScore());
+        assertEquals(1, pb.getResourceQuantity(Symbol.INSECT));
+        assertEquals(1, pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(1, pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(1, pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL) );
+
+        pb.showBoard();
+    }
 
 }
