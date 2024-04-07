@@ -143,12 +143,12 @@ class PersonalBoardTest {
 
     @Test
     void OverlappingDiagonalCombinationMission() {
-        Game game = new Game(2);
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3, "Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
