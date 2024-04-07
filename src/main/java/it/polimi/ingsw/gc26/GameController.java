@@ -26,6 +26,7 @@ public class GameController {
 
     /**
      * Returns the player associated to the playerID
+     *
      * @param playerID ID of the searched player
      */
     private Player getPlayer(String playerID) {
@@ -154,8 +155,9 @@ public class GameController {
 
     /**
      * Selects the chosen secret mission card
+     *
      * @param cardIndex index of the selected mission card
-     * @param playerID ID of the player who is selecting the secret mission card
+     * @param playerID  ID of the player who is selecting the secret mission card
      */
     public void selectSecretMission(int cardIndex, String playerID) {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
@@ -178,6 +180,7 @@ public class GameController {
 
     /**
      * Sets the selected secret mission card on the personal board of the player
+     *
      * @param playerID ID of the player who is setting the secret mission card
      */
     public void setSecretMission(String playerID) {
@@ -202,6 +205,7 @@ public class GameController {
 
     /**
      * Sets the first player of the game
+     *
      * @param playerID ID of the first player of the games
      */
     public void setFirstPlayer(String playerID) {
@@ -224,14 +228,25 @@ public class GameController {
 
     /**
      * Selects the chosen card in the hand
+     *
      * @param cardIndex index of the card in the player's hand
-     * @param playerID ID of the player who is selected the card to play
+     * @param playerID  ID of the player who is selected the card to play
      */
     public void selectCardFromHand(int cardIndex, String playerID) {
-        if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
-            // Get the player who is selected the card to play
-            Player player = getPlayer(playerID);
+        // Get the player who is selected the card to play
+        Player player = getPlayer(playerID);
 
+        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+            // Check if the given starter card index is correct
+            if (cardIndex == 0) {
+                Card selectedCard = player.getHand().getCards().get(cardIndex);
+
+                // Set the selected card
+                player.getHand().setSelectedCard(selectedCard);
+            } else {
+                // TODO gestire indice non è corretto
+            }
+        } else {
             // Check if the given index is correct
             if (cardIndex >= 0 && cardIndex < 3) {
                 Card selectedCard = player.getHand().getCards().get(cardIndex);
@@ -241,51 +256,43 @@ public class GameController {
             } else {
                 // TODO gestire indice non è corretto
             }
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
         }
     }
 
     /**
      * Turns the side of the selected card
+     *
      * @param playerID ID of the player who is turning the side of the selected card
      */
     public void turnSelectedCardSide(String playerID) {
-        if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
-            // Get player who is turning the selected card side
-            Player player = getPlayer(playerID);
+        // Get player who is turning the selected card side
+        Player player = getPlayer(playerID);
 
-            // Turn selected card side
-            player.getHand().turnSide();
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
-        }
+        // Turn selected card side
+        player.getHand().turnSide();
     }
 
     /**
      * Selects a position on the personal board where the player wants to place the selected card
+     *
      * @param selectedX coordinate on the X axis of the chosen position on the personal board
      * @param selectedY coordinate on the Y axis of the chosen position on the personal board
-     * @param playerID ID of the player who is selecting the position on the personal board
+     * @param playerID  ID of the player who is selecting the position on the personal board
      */
     public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) {
-        if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
-            // Get the player who is selecting the position on his personal board
-            Player player = getPlayer(playerID);
+        // Get the player who is selecting the position on his personal board
+        Player player = getPlayer(playerID);
 
-            // Get the personal board
-            PersonalBoard personalBoard = player.getPersonalBoard();
+        // Get the personal board
+        PersonalBoard personalBoard = player.getPersonalBoard();
 
-            // Set the selected position
-            personalBoard.setPosition(selectedX, selectedY);
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
-        }
-
+        // Set the selected position
+        personalBoard.setPosition(selectedX, selectedY);
     }
 
     /**
      * Places the selected side on the personal board
+     *
      * @param playerID ID of the player who is playing the selected side of the card in the hand
      */
     public void playCardFromHand(String playerID) {
@@ -321,52 +328,30 @@ public class GameController {
 
                     // Remove card from the hand
                     hand.removeCard(hand.getSelectedCard().get());
-                }else{
+                } else {
                     // TODO gestire cosa fare quando la carta non è selezionata
                 }
 
             }
+        } else {
+            // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
         }
     }
 
     /**
      * Selects the card on the common table that the currentPlayer wants to draw
-     * @param cardX coordinate on the X axis of the card on the common table
-     * @param cardY  coordinate on the Y axis of the card on the common table
+     *
+     * @param cardX    coordinate on the X axis of the card on the common table
+     * @param cardY    coordinate on the Y axis of the card on the common table
      * @param playerID ID of the player who is trying to select the card on the common table
      */
     public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
         if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
-            Card selectedCard = null;
-
             // Check if it's the current player
-            if(getPlayer(playerID).equals(game.getCurrentPlayer())) {
-                if (cardY == 0) {
-                    if (cardX == 0) {
-                        selectedCard = game.getCommonTable().getResourceCards().get(0);
-                    } else if (cardX == 1) {
-                        selectedCard = game.getCommonTable().getResourceCards().get(1);
-                    } else if (cardX == 2) {
-                        selectedCard = game.getCommonTable().getResourceDeck().getTopCard();
-                    } else {
-                        // TODO gestire indice X non corretto
-                    }
-                } else if (cardY == 1) {
-                    if (cardX == 0) {
-                        selectedCard = game.getCommonTable().getGoldCards().get(0);
-                    } else if (cardX == 1) {
-                        selectedCard = game.getCommonTable().getGoldCards().get(1);
-                    } else if (cardX == 2) {
-                        selectedCard = game.getCommonTable().getGoldDeck().getTopCard();
-                    } else {
-                        // TODO gestire indice X non corretto
-                    }
-                } else {
-                    // TODO gestire indice Y non corretto
-                }
+            if (getPlayer(playerID).equals(game.getCurrentPlayer())) {
+                // Set the selected card on the common table
+                game.getCommonTable().selectCard(cardX, cardY);
             }
-            // Set the selected card on the common table
-            game.getCommonTable().selectCard(selectedCard);
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
@@ -374,6 +359,7 @@ public class GameController {
 
     /**
      * Draw a card from the common table and places it on the current player's hand
+     *
      * @param playerID ID of the player who is trying to draw the selected card on the common table
      */
     public void drawSelectedCard(String playerID) {
@@ -387,41 +373,16 @@ public class GameController {
                 CommonTable commonTable = game.getCommonTable();
                 Hand hand = player.getHand();
 
-                // TODO si può migliorare questo codice
                 // Check if there is a selected card on the common table
                 if (commonTable.getSelectedCard().isPresent()) {
-                    int index;
-                    index = commonTable.getResourceCards().indexOf(commonTable.getSelectedCard().get());
-                    if (index != -1) {
-                        Card removedCard = commonTable.removeCard(commonTable.getResourceCards(), index);
-                        hand.addCard(removedCard);
-
-                        Card replacingCard = commonTable.getResourceDeck().removeCard();
-                        commonTable.addCard(replacingCard, commonTable.getResourceCards(), index);
-                    }
-
-                    index = commonTable.getGoldCards().indexOf(commonTable.getSelectedCard().get());
-                    if (index != -1) {
-                        Card removedCard = commonTable.removeCard(commonTable.getGoldCards(), index);
-                        hand.addCard(removedCard);
-
-                        Card replacingCard = commonTable.getGoldDeck().removeCard();
-                        commonTable.addCard(replacingCard, commonTable.getGoldCards(), index);
-                    }
-
-                    if (commonTable.getResourceDeck().getTopCard().equals(commonTable.getSelectedCard().get())) {
-                        Card removedCard = commonTable.getResourceDeck().removeCard();
-                        hand.addCard(removedCard);
-                    }
-
-                    if (commonTable.getGoldDeck().getTopCard().equals(commonTable.getSelectedCard().get())) {
-                        Card removedCard = commonTable.getGoldDeck().removeCard();
-                        hand.addCard(removedCard);
-                    }
+                    Card removedCard = commonTable.removeSelectedCard();
+                    hand.addCard(removedCard);
                 }
 
-                // Check if player's score is greater or equal then 20 points
-                if (player.getPersonalBoard().getScore() >= 20) {
+                // Check if player's score is greater or equal then 20 points OR decks are both empty
+                if (player.getPersonalBoard().getScore() >= 20 ||
+                        (commonTable.getResourceDeck().getCards().isEmpty() &&
+                                commonTable.getGoldDeck().getCards().isEmpty())) {
                     // Change game state into END_STAGE
                     game.setGameState(GameState.END_STAGE);
 
@@ -438,7 +399,7 @@ public class GameController {
         game.goToNextPlayer();
     }
 
-    // PHASE 3: End game
+// PHASE 3: End game
 
 
     public Game getGame() {
