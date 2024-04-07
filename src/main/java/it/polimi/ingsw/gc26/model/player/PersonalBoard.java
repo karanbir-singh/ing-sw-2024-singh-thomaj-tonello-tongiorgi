@@ -309,8 +309,15 @@ public class PersonalBoard {
                 checkingSide.getUPRIGHT().setHidden(true);
             }
 
-        } else if (ifPresent(selectedX + checkingX, selectedY + checkingY, blockedPositions).isEmpty() &&
-                ifPresent(selectedX + checkingX, selectedY + checkingY, playablePositions).isEmpty()) {
+        } else if (ifPresent(selectedX + checkingX, selectedY + checkingY, blockedPositions).isPresent()) {
+
+        } else if (ifPresent(selectedX + checkingX, selectedY + checkingY, playablePositions).isPresent()) {
+            if (checkingCorner.isEvil()) {
+                movePoint(selectedX + checkingX, selectedY + checkingY, blockedPositions, playablePositions);
+            }
+
+        } else {
+
 
             if (checkingCorner.isEvil()) {
                 addPoint(selectedX + checkingX, selectedY + checkingY, blockedPositions);
@@ -332,7 +339,6 @@ public class PersonalBoard {
             }
         }
     }
-
 
     /**
      * permits to play the selected card and update all of the resources and points

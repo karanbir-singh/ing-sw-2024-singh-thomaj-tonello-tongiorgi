@@ -169,12 +169,20 @@ class PersonalBoardTest {
         pb.playSide(resourceDeck.getCards().get(3).getBack());
         pb.setPosition(5,-5);
         pb.playSide(resourceDeck.getCards().get(4).getBack());
+        pb.setPosition(6,-6);
+        pb.playSide(resourceDeck.getCards().get(5).getBack());
+        pb.setPosition(7,-7);
+        pb.playSide(resourceDeck.getCards().get(6).getBack());
+        pb.setPosition(8,-8);
+        pb.playSide(resourceDeck.getCards().get(7).getBack());
+        pb.setPosition(9,-9);
+        pb.playSide(resourceDeck.getCards().get(8).getBack());
 
         ArrayList<Card> commonMissions = new ArrayList<>();
         commonMissions.add(missionDeck.getCards().get(6));
         commonMissions.add(missionDeck.getCards().get(3));
         pb.endGame(commonMissions);
-        assertEquals( 2, pb.getScore());
+        assertEquals( 6, pb.getScore());
         pb.showBoard();
     }
 
@@ -692,7 +700,6 @@ class PersonalBoardTest {
 
         pb.showBoard();
     }
-
 
     @Test
     void cardOnPlayableCornerAndEvilCorner2() throws Exception {
