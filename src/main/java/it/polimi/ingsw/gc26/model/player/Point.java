@@ -5,7 +5,7 @@ import it.polimi.ingsw.gc26.model.card_side.Side;
 import java.util.*;
 
 /**
- * This class represents a point
+ * This class represents a point of the PersonalBoard
  */
 public class Point {
     /**
