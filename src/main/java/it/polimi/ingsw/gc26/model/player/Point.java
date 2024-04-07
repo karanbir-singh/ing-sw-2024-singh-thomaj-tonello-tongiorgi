@@ -5,24 +5,24 @@ import it.polimi.ingsw.gc26.model.card_side.Side;
 import java.util.*;
 
 /**
- * This class represents a point
+ * This class represents a point of the PersonalBoard
  */
 public class Point {
     /**
-     * This attributes represents the coordinate x and y in the Cartesian Plane
+     * These attributes represent the coordinates x and y of the Cartesian Plane
      */
     private final int x, y;
     /**
-     * This attribute represents the side of the card in a specific point
+     * This attribute represents the side of the card played in a specific point
      */
     private Side side;
     /**
-     * This attribute represents the selected side present in the point
+     * This attribute is a flag to mark when a card has already been used for a certain mission
      */
     private final Map<Integer, Boolean> flags;
 
     /**
-     * Initializes the point
+     * Initializes the point with the coordinates
      * @param x x coordinate
      * @param y y coordinate
      */
@@ -55,7 +55,7 @@ public class Point {
     /**
      * Returns a boolean for the flag in the position given
      * @param flag flag's key
-     * @return flag's value to know whether a pattern has already been counted or not
+     * @return flag's value to know whether the side has already been counted for a pattern or not
      */
     public boolean getFlag(int flag) {
         return flags.get(flag);
@@ -71,7 +71,7 @@ public class Point {
     }
 
     /**
-     * Sets the side present in the point
+     * Sets the card's side present in the point
      * @param side new side
      */
     public void setSide(Side side) {

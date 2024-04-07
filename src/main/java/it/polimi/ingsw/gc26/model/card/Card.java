@@ -41,7 +41,7 @@ abstract public class Card {
     }
 
     /**
-     * Returs the card's back reference.
+     * Returns the card's back reference.
      * @return card.back
      */
     public Side getBack() {

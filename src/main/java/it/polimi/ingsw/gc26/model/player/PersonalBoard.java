@@ -20,8 +20,8 @@ public class PersonalBoard {
     private int selectedY = 0;
 
     /**
-     * initialized everything. The score, the resource, missions occupiedPosions , playablePositions, blockedPositions.
-     * here we make our first move, we play the initial card
+     * The constructor initializes everything: the score, the resource, missions occupiedPositions , playablePositions, blockedPositions.
+     * Here, the first move is made playing the initial card.
      *
      * @param starterSide side chosen by the player that he wants to play
      */
@@ -67,7 +67,7 @@ public class PersonalBoard {
     }
 
     /**
-     * check if a position is playable or not
+     * Check if a position is playable or not
      * @param x a coordinate x of the personal board
      * @param y a coordinate t of the personal board
      * @return true if the position is playable, false otherwise
@@ -77,7 +77,7 @@ public class PersonalBoard {
     }
 
     /**
-     * check if the player has enough resources to play a particular card
+     * Check if the player has enough resources to play a particular card
      * @param side side that the player wants to play
      * @return true if the board has enough resources, otherwise false
      */
@@ -91,7 +91,7 @@ public class PersonalBoard {
     }
 
     /**
-     * Calculate the points of the commonMissions and secretMission
+     * Calculate the points earned from commonMissions and secretMission at the end of the game
      * @param commonMissions commonMissions that are present in CommonBoard
      */
     public void endGame(ArrayList<Card> commonMissions) {
@@ -103,15 +103,15 @@ public class PersonalBoard {
     }
 
     /**
-     * set the posizion choosen by the player.
-     * if the position is valid we set it
+     * set the position chosen by the player.
+     * if valid, the position is set
      * otherwise we print NOT VALID POSITION
      * @param selectedX the X coordinate of the personalBoard that the player wants to choose
      * @param selectedY the Y coordinate of the personalBoard that the player wants to choose
      */
 
     public void setPosition(int selectedX, int selectedY) {
-        //check se è una posizione valida
+        //check if the position is valid
         if(!checkIfPlayablePosition(selectedX, selectedY)){
             //update view
             System.err.println("NOT VALID POSITION");
@@ -130,11 +130,11 @@ public class PersonalBoard {
     }
 
     /**
-     * check if there is a point in arrayList l with coordinate x and y and return it, otherwise return Optional.empty()
+     * check if there is a point with coordinate x and y in an arrayList l and return it, otherwise return Optional.empty()
      * @param x coordinate x that you want to search
      * @param y coordinate y that you want to search
      * @param l arrayList where you need to search
-     * @return
+     * @return the reference to the point if present, otherwise an Optional.empty()
      */
     private Optional<Point> ifPresent(int x, int y, ArrayList<Point> l) {
         Optional<Point> o = Optional.empty();
@@ -147,7 +147,7 @@ public class PersonalBoard {
     }
 
     /**
-     * move a point to list L2 to L1
+     * move a point from list L2 to L1
      * @param x coordinate X
      * @param y coordinate Y
      * @param l1 arrayList where you want to add the point
@@ -179,7 +179,7 @@ public class PersonalBoard {
     }
 
     /**
-     * remove point with coordinate x and y to an arrayList
+     * remove point with coordinate x and y from an arrayList
      * @param x coordinate x of the point
      * @param y coordinate y of the point
      * @param l arrayList where you want to remove the point
@@ -202,7 +202,7 @@ public class PersonalBoard {
     }
 
     /**
-     * selectedY
+     * selectedY getter
      * @return the selected Y
      */
     public int getSelectedY() {
@@ -211,7 +211,7 @@ public class PersonalBoard {
 
 
     /**
-     * getter
+     * return how many resources of a certain kind the player has
      * @param symbol symbol that you want to find
      * @return number of symbols "symbol" in your personalBoard
      */
@@ -220,7 +220,7 @@ public class PersonalBoard {
     }
 
     /**
-     * increase by 1 the number of symbols "symbol" in your personalBoard
+     * increase by 1 the number of symbols of a given kind in the player's personalBoard
      * @param symbol symbol that you want to find
      */
     public void increaseResource(Optional<Symbol> symbol) {
@@ -228,7 +228,7 @@ public class PersonalBoard {
     }
 
     /**
-     * decrease by 1 the number of symbols "symbol" in your personalBoard
+     * decrease by 1 the number of symbols of a given kind in the player's personalBoard
      * @param symbol symbol that you want to find
      */
     public void decreaseResource(Optional<Symbol> symbol) {
@@ -236,8 +236,8 @@ public class PersonalBoard {
     }
 
     /**
-     * getter of resources in you personalBoard
-     * @return map which contains all of the resources on the personal boards
+     * getter of all the resource counters in the player's personalBoard
+     * @return map which contains all the resources on the personal boards
      */
     public Map<Symbol, Integer> getResources() {
         return new HashMap<>(this.visibleResources);
@@ -255,7 +255,12 @@ public class PersonalBoard {
                 } else if (ifPresent(currX, currY, playablePositions).isPresent()) {
                     System.out.print("o   ");
                 } else if (ifPresent(currX, currY, occupiedPositions).isPresent()) {
-                    System.out.print("C   ");
+                    if(ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().getSideSymbol().isPresent()){
+                        System.out.print(ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().getSideSymbol().orElseThrow(NullPointerException::new).getAlias() + "   ");
+                    } else {
+                        System.out.print("S   ");
+                    }
+
                 } else {
                     System.out.print("    ");
                 }
@@ -266,7 +271,7 @@ public class PersonalBoard {
     }
 
     /**
-     * getter of all the occupied positions on the personal board
+     * getter of all the occupied positions on the personalBoard
      * @return the List of occupied Positions
      */
     public ArrayList<Point> getOccupiedPositions() {
@@ -275,7 +280,9 @@ public class PersonalBoard {
 
 
     /**
-     * private methods that check characteristic of a particular point on the personalBoard
+     * private methods that handles the effects that a certain corner of the last played card has on the adjacent points
+     * if the point is in occupiedPositions, the eventual covered resource is removed from the counter
+     * otherwise, the point is moved in blockedPosition or playablePositions, depending on the corner's nature
      * @param checkingCorner corner that you want to check
      * @param checkingX coordinate X of the point that you want to check
      * @param checkingY coordinate Y of the point that you want to check
@@ -304,8 +311,15 @@ public class PersonalBoard {
                 checkingSide.getUPRIGHT().setHidden(true);
             }
 
-        } else if (ifPresent(selectedX + checkingX, selectedY + checkingY, blockedPositions).isEmpty() &&
-                ifPresent(selectedX + checkingX, selectedY + checkingY, playablePositions).isEmpty()) {
+        } else if (ifPresent(selectedX + checkingX, selectedY + checkingY, blockedPositions).isPresent()) {
+
+        } else if (ifPresent(selectedX + checkingX, selectedY + checkingY, playablePositions).isPresent()) {
+            if (checkingCorner.isEvil()) {
+                movePoint(selectedX + checkingX, selectedY + checkingY, blockedPositions, playablePositions);
+            }
+
+        } else {
+
 
             if (checkingCorner.isEvil()) {
                 addPoint(selectedX + checkingX, selectedY + checkingY, blockedPositions);
@@ -328,9 +342,8 @@ public class PersonalBoard {
         }
     }
 
-
     /**
-     * permits to play the selected card and update all of the resources and points
+     * permits to play the selected card and update all the resources and points
      * @param side side selected of the card chosen by the player
      */
     public void playSide(Side side){
