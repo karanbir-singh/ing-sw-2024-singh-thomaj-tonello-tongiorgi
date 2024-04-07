@@ -14,12 +14,12 @@ class PersonalBoardTest {
 
     @Test
     void firstPlaySide() throws Exception {
-        Game game = new Game(2);
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player("3","Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
@@ -62,12 +62,12 @@ class PersonalBoardTest {
     }
     @Test
     void secondPlaySide() throws Exception {
-        Game game = new Game(2);
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player("3","Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(5).getFront());
@@ -107,12 +107,12 @@ class PersonalBoardTest {
 
     @Test
     void Diagonal6PlantCombinationMission() throws Exception{
-        Game game = new Game(2);
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player("3","Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
@@ -142,12 +142,12 @@ class PersonalBoardTest {
 
     @Test
     void DiagonalAndLpatternCombinationMission() throws Exception{
-        Game game = new Game(2);
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player("3","Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
@@ -175,12 +175,12 @@ class PersonalBoardTest {
 
     @Test
     void itemPatternFUNGIMission() throws Exception{
-        Game game = new Game(2);
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player("3","Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
@@ -264,12 +264,12 @@ class PersonalBoardTest {
 
     @Test
     void overlappingTwoLPattern() throws Exception{
-        Game game = new Game(2);
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player("3","Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
@@ -347,12 +347,12 @@ class PersonalBoardTest {
     @Test
     void InitialCardBack() throws Exception {
         //random test to check if the algorithm works with the initial card backwards
-        Game game = new Game(2);
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player("3","Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
@@ -408,12 +408,12 @@ class PersonalBoardTest {
     @Test
     void NonPlayablePositionAndBlockedPositionTest() throws Exception{
         //TODO TO COMPLETE
-        Game game = new Game(2);
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player("3","Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
