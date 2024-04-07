@@ -3,7 +3,6 @@ package it.polimi.ingsw.gc26.model.player;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.deck.Deck;
-import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.game.Game;
 import org.junit.jupiter.api.Test;
 
@@ -14,39 +13,39 @@ import static org.junit.jupiter.api.Assertions.*;
 class PersonalBoardTest {
 
     @Test
-    void firstPlaySide() throws Exception {
+    void firstPlaySide() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player("3","Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
 
-        pb.setPosition(1,1);
+        pb.setPosition(1, 1);
         pb.playSide(resourceDeck.getCards().get(0).getFront());
-        pb.setPosition(2,2);
+        pb.setPosition(2, 2);
         pb.playSide(resourceDeck.getCards().get(1).getFront());
-        pb.setPosition(0,2);
+        pb.setPosition(0, 2);
         pb.playSide(goldDeck.getCards().get(0).getFront());
-        pb.setPosition(1,3);
+        pb.setPosition(1, 3);
         pb.playSide(goldDeck.getCards().get(3).getFront());
-        pb.setPosition(3,3);
+        pb.setPosition(3, 3);
         pb.playSide(resourceDeck.getCards().get(2).getBack());
 
 
-        assertEquals( 2,pb.getResourceQuantity(Symbol.INSECT) );
-        assertEquals( 2, pb.getResourceQuantity(Symbol.PLANT));
-        assertEquals(0,pb.getResourceQuantity(Symbol.FUNGI));
-        assertEquals(0, pb.getResourceQuantity(Symbol.ANIMAL) );
-        assertEquals( 1, pb.getResourceQuantity(Symbol.QUILL) );
+        assertEquals(2, pb.getResourceQuantity(Symbol.INSECT));
+        assertEquals(2, pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(0, pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(1, pb.getResourceQuantity(Symbol.QUILL));
         assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
-        assertEquals( 0, pb.getResourceQuantity(Symbol.INKWELL) );
-        assertEquals( 5, pb.getScore());
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
+        assertEquals(5, pb.getScore());
 
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPRIGHT().isHidden());
 
@@ -61,36 +60,37 @@ class PersonalBoardTest {
 
 
     }
+
     @Test
-    void secondPlaySide() throws Exception {
+    void secondPlaySide() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player("3","Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(5).getFront());
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
 
-        pb.setPosition(-1,1);
+        pb.setPosition(-1, 1);
         pb.playSide(resourceDeck.getCards().get(39).getFront());
-        pb.setPosition(-2,0);
+        pb.setPosition(-2, 0);
         pb.playSide(resourceDeck.getCards().get(38).getFront());
-        pb.setPosition(-3,1);
+        pb.setPosition(-3, 1);
         pb.playSide(resourceDeck.getCards().get(36).getFront());
-        pb.setPosition(-4,0);
+        pb.setPosition(-4, 0);
         pb.playSide(goldDeck.getCards().get(38).getFront());
         //non conto le risorse permanenti dei back delle carte, aspetto gabi
-        assertEquals( 3,pb.getResourceQuantity(Symbol.INSECT));
-        assertEquals(2,pb.getResourceQuantity(Symbol.PLANT));
-        assertEquals(1,pb.getResourceQuantity(Symbol.FUNGI) );
-        assertEquals( 1,pb.getResourceQuantity(Symbol.ANIMAL));
-        assertEquals(1,pb.getResourceQuantity(Symbol.QUILL));
-        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT) );
-        assertEquals( 0, pb.getResourceQuantity(Symbol.INKWELL));
+        assertEquals(3, pb.getResourceQuantity(Symbol.INSECT));
+        assertEquals(2, pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(1, pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(1, pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(1, pb.getResourceQuantity(Symbol.QUILL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
         assertEquals(5, pb.getScore());
 
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
@@ -107,13 +107,13 @@ class PersonalBoardTest {
     }
 
     @Test
-    void Diagonal6PlantCombinationMission() throws Exception{
+    void Diagonal6PlantCombinationMission() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player("3","Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
@@ -121,79 +121,75 @@ class PersonalBoardTest {
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
         //get(1) è la missione corretta
 
-        pb.setPosition(1,-1);
+        pb.setPosition(1, -1);
         pb.playSide(resourceDeck.getCards().get(0).getBack());
-        pb.setPosition(2,-2);
+        pb.setPosition(2, -2);
         pb.playSide(resourceDeck.getCards().get(1).getBack());
-        pb.setPosition(3,-3);
+        pb.setPosition(3, -3);
         pb.playSide(resourceDeck.getCards().get(2).getBack());
-        pb.setPosition(4,-4);
+        pb.setPosition(4, -4);
         pb.playSide(resourceDeck.getCards().get(3).getBack());
-        pb.setPosition(5,-5);
+        pb.setPosition(5, -5);
         pb.playSide(resourceDeck.getCards().get(4).getBack());
-        pb.setPosition(6,-6);
+        pb.setPosition(6, -6);
         pb.playSide(resourceDeck.getCards().get(5).getBack());
         ArrayList<Card> commonMissions = new ArrayList<>();
         commonMissions.add(missionDeck.getCards().get(6));
         commonMissions.add(missionDeck.getCards().get(3));
         pb.endGame(commonMissions);
-        assertEquals( 4, pb.getScore());
+        assertEquals(4, pb.getScore());
         pb.showBoard();
     }
 
-    /**
-     * test to check that, when two diagonal combination overlap, the resource and gold cards are considered just once
-     * @throws Exception
-     */
     @Test
-    void OverlappingDiagonalCombinationMission() throws Exception{
+    void OverlappingDiagonalCombinationMission() {
         Game game = new Game(2);
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player(3, "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(1));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
-        pb.setPosition(1,-1);
+        pb.setPosition(1, -1);
         pb.playSide(resourceDeck.getCards().get(0).getBack());
-        pb.setPosition(2,-2);
+        pb.setPosition(2, -2);
         pb.playSide(resourceDeck.getCards().get(1).getBack());
-        pb.setPosition(3,-3);
+        pb.setPosition(3, -3);
         pb.playSide(resourceDeck.getCards().get(2).getBack());
-        pb.setPosition(4,-4);
+        pb.setPosition(4, -4);
         pb.playSide(resourceDeck.getCards().get(3).getBack());
-        pb.setPosition(5,-5);
+        pb.setPosition(5, -5);
         pb.playSide(resourceDeck.getCards().get(4).getBack());
-        pb.setPosition(6,-6);
+        pb.setPosition(6, -6);
         pb.playSide(resourceDeck.getCards().get(5).getBack());
-        pb.setPosition(7,-7);
+        pb.setPosition(7, -7);
         pb.playSide(resourceDeck.getCards().get(6).getBack());
-        pb.setPosition(8,-8);
+        pb.setPosition(8, -8);
         pb.playSide(resourceDeck.getCards().get(7).getBack());
-        pb.setPosition(9,-9);
+        pb.setPosition(9, -9);
         pb.playSide(resourceDeck.getCards().get(8).getBack());
 
         ArrayList<Card> commonMissions = new ArrayList<>();
         commonMissions.add(missionDeck.getCards().get(6));
         commonMissions.add(missionDeck.getCards().get(3));
         pb.endGame(commonMissions);
-        assertEquals( 6, pb.getScore());
+        assertEquals(6, pb.getScore());
         pb.showBoard();
     }
 
     @Test
-    void DiagonalAndLpatternCombinationMission() throws Exception{
+    void DiagonalAndLpatternCombinationMission() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player("3","Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
@@ -201,32 +197,32 @@ class PersonalBoardTest {
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard(); //get(2) per diagonale e get(6) per L
         //usiamo animals e un fungi in alto a destra
 
-        pb.setPosition(1,1);
+        pb.setPosition(1, 1);
         pb.playSide(resourceDeck.getCards().get(10).getBack()); //questi sono tutti ANIMALS
-        pb.setPosition(2,2);
+        pb.setPosition(2, 2);
         pb.playSide(resourceDeck.getCards().get(11).getBack());
-        pb.setPosition(3,3);
+        pb.setPosition(3, 3);
         pb.playSide(resourceDeck.getCards().get(12).getBack());
-        pb.setPosition(2,4);
+        pb.setPosition(2, 4);
         pb.playSide(resourceDeck.getCards().get(13).getBack());
-        pb.setPosition(3,5);
+        pb.setPosition(3, 5);
         pb.playSide(resourceDeck.getCards().get(20).getBack()); //questo è FUNGI
         ArrayList<Card> commonMissions = new ArrayList<>();
         commonMissions.add(missionDeck.getCards().get(2));
         commonMissions.add(missionDeck.getCards().get(6));
         pb.endGame(commonMissions);
-        assertEquals( 5,pb.getScore());
+        assertEquals(5, pb.getScore());
         pb.showBoard();
     }
 
     @Test
-    void itemPatternFUNGIMission() throws Exception{
+    void itemPatternFUNGIMission() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player("3","Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
@@ -234,32 +230,32 @@ class PersonalBoardTest {
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
         //la carta iniziale ha una risorsa permanente INSECT
-        pb.setPosition(-1,-1);
+        pb.setPosition(-1, -1);
         pb.playSide(resourceDeck.getCards().get(20).getBack()); //questi sono tutti FUNGI
-        pb.setPosition(-2,-2);
+        pb.setPosition(-2, -2);
         pb.playSide(resourceDeck.getCards().get(21).getBack());
-        pb.setPosition(-1,-3);
+        pb.setPosition(-1, -3);
         pb.playSide(resourceDeck.getCards().get(22).getBack());
-        pb.setPosition(0,-2);
+        pb.setPosition(0, -2);
         pb.playSide(resourceDeck.getCards().get(23).getBack());
-        pb.setPosition(1,-1);
+        pb.setPosition(1, -1);
         pb.playSide(resourceDeck.getCards().get(24).getBack()); //questo è FUNGI
-        pb.setPosition(2,-2);
+        pb.setPosition(2, -2);
         pb.playSide(resourceDeck.getCards().get(25).getBack()); //questo è FUNGI
-        pb.setPosition(1,1);
+        pb.setPosition(1, 1);
         pb.playSide(resourceDeck.getCards().get(26).getBack()); //questo è FUNGI
         ArrayList<Card> commonMissions = new ArrayList<>();
         commonMissions.add(missionDeck.getCards().get(2));
         commonMissions.add(missionDeck.getCards().get(6));
         pb.endGame(commonMissions);
 
-        assertEquals(1,pb.getResourceQuantity(Symbol.INSECT));
-        assertEquals(0,pb.getResourceQuantity(Symbol.ANIMAL));
-        assertEquals(7,pb.getResourceQuantity(Symbol.FUNGI));
-        assertEquals(0,pb.getResourceQuantity(Symbol.PLANT));
-        assertEquals(0,pb.getResourceQuantity(Symbol.MANUSCRIPT));
-        assertEquals(0,pb.getResourceQuantity(Symbol.QUILL));
-        assertEquals(0,pb.getResourceQuantity(Symbol.INKWELL));
+        assertEquals(1, pb.getResourceQuantity(Symbol.INSECT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(7, pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(0, pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
 
         assertEquals(4, pb.getScore());
         //check carta iniziale
@@ -309,13 +305,13 @@ class PersonalBoardTest {
     }
 
     @Test
-    void overlappingTwoLPattern() throws Exception{
+    void overlappingTwoLPattern() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player("3","Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
@@ -324,30 +320,30 @@ class PersonalBoardTest {
         //missione L pattern tipo 4 con ANIMAL e INSECT e INSECT
 
         //la carta iniziale ha una risorsa permanente INSECT
-        pb.setPosition(1,-1); //Tipo ANIMAL
+        pb.setPosition(1, -1); //Tipo ANIMAL
         pb.playSide(resourceDeck.getCards().get(10).getBack());
-        pb.setPosition(2,-2);//tipo INSECT
+        pb.setPosition(2, -2);//tipo INSECT
         pb.playSide(resourceDeck.getCards().get(30).getBack());
-        pb.setPosition(3,-3);//tipo INSECT
+        pb.setPosition(3, -3);//tipo INSECT
         pb.playSide(resourceDeck.getCards().get(31).getBack());
-        pb.setPosition(2,-4);//tipo INSECT
+        pb.setPosition(2, -4);//tipo INSECT
         pb.playSide(resourceDeck.getCards().get(32).getBack());
-        pb.setPosition(2,0);//tipo INSECT
+        pb.setPosition(2, 0);//tipo INSECT
         pb.playSide(resourceDeck.getCards().get(33).getBack());
-        pb.setPosition(1,1);//tipo ANIMAL
+        pb.setPosition(1, 1);//tipo ANIMAL
         pb.playSide(resourceDeck.getCards().get(11).getBack());
         ArrayList<Card> commonMissions = new ArrayList<>();
         commonMissions.add(missionDeck.getCards().get(1));
         commonMissions.add(missionDeck.getCards().get(0));
         pb.endGame(commonMissions);
 
-        assertEquals(6,pb.getResourceQuantity(Symbol.INSECT)); // a causa della carta iniziale
-        assertEquals(2,pb.getResourceQuantity(Symbol.ANIMAL));
-        assertEquals(0,pb.getResourceQuantity(Symbol.FUNGI));
-        assertEquals(0,pb.getResourceQuantity(Symbol.PLANT));
-        assertEquals(0,pb.getResourceQuantity(Symbol.MANUSCRIPT));
-        assertEquals(0,pb.getResourceQuantity(Symbol.QUILL));
-        assertEquals(0,pb.getResourceQuantity(Symbol.INKWELL));
+        assertEquals(6, pb.getResourceQuantity(Symbol.INSECT)); // a causa della carta iniziale
+        assertEquals(2, pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(0, pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
 
         assertEquals(3, pb.getScore());
         //check carta iniziale
@@ -391,14 +387,14 @@ class PersonalBoardTest {
     }
 
     @Test
-    void InitialCardBack() throws Exception {
+    void InitialCardBack() {
         //random test to check if the algorithm works with the initial card backwards
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player("3","Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
@@ -406,7 +402,7 @@ class PersonalBoardTest {
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
-        pb.setPosition(1,1);
+        pb.setPosition(1, 1);
         pb.playSide(resourceDeck.getCards().get(0).getFront());
         pb.setPosition(-1, 1);
         pb.playSide(resourceDeck.getCards().get(1).getFront());
@@ -422,7 +418,7 @@ class PersonalBoardTest {
         assertEquals(4, pb.getResourceQuantity(Symbol.PLANT));
         assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
         assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
-        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL) );
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
         //initial card
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPRIGHT().isHidden());
@@ -443,23 +439,15 @@ class PersonalBoardTest {
 
     }
 
-
-    /**
-     * test where we check a particular case where a position is blocked for one card but playable for another card like
-     *   X
-     * C   C
-     * and also I tested the use of a gold card with points.
-     * @throws Exception
-     */
     @Test
-    void NonPlayablePositionAndBlockedPositionTest() throws Exception{
+    void NonPlayablePositionAndBlockedPositionTest() {
         //TODO TO COMPLETE
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player("3","Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
@@ -468,27 +456,26 @@ class PersonalBoardTest {
         //missione L pattern tipo 4 con ANIMAL e INSECT e INSECT
 
         //la carta iniziale ha una risorsa permanente INSECT
-        pb.setPosition(1,1); //Tipo PLANT
+        pb.setPosition(1, 1); //Tipo PLANT
         pb.playSide(resourceDeck.getCards().get(10).getBack());
-        pb.setPosition(-1,1);//tipo PLANT
+        pb.setPosition(-1, 1);//tipo PLANT
         pb.playSide(resourceDeck.getCards().get(11).getBack());
-        pb.setPosition(1,-1);//tipo plant
+        pb.setPosition(1, -1);//tipo plant
         pb.playSide(resourceDeck.getCards().get(12).getBack());
-        pb.setPosition(2,0);//tipo plant
+        pb.setPosition(2, 0);//tipo plant
         pb.playSide(goldDeck.getCards().get(15).getFront()); //carta che da 1 punto per ogni animal
-        //pb.playSide(resourceDeck.getCards().get(4).getBack());
         ArrayList<Card> commonMissions = new ArrayList<>();
         commonMissions.add(missionDeck.getCards().get(1));
         commonMissions.add(missionDeck.getCards().get(0));
         pb.endGame(commonMissions);
 
-        assertEquals(0,pb.getResourceQuantity(Symbol.INSECT)); // a causa della carta iniziale
-        assertEquals(1,pb.getResourceQuantity(Symbol.ANIMAL));
-        assertEquals(1,pb.getResourceQuantity(Symbol.FUNGI));
-        assertEquals(4,pb.getResourceQuantity(Symbol.PLANT));
-        assertEquals(0,pb.getResourceQuantity(Symbol.MANUSCRIPT));
-        assertEquals(0,pb.getResourceQuantity(Symbol.QUILL));
-        assertEquals(1,pb.getResourceQuantity(Symbol.INKWELL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.INSECT)); // a causa della carta iniziale
+        assertEquals(1, pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(1, pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(4, pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
+        assertEquals(1, pb.getResourceQuantity(Symbol.INKWELL));
 
         assertEquals(3, pb.getScore());
         //check carta iniziale
@@ -521,18 +508,14 @@ class PersonalBoardTest {
         pb.showBoard();
     }
 
-    /**
-     * test to check the case where the goldCard that assigns the points proportionally to the covered corners is played, covering 4 corners
-     * @throws Exception
-     */
     @Test
-    void fourCorners() throws Exception{
-        Game game = new Game(2);
+    void fourCorners() {
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
@@ -540,19 +523,19 @@ class PersonalBoardTest {
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
-        pb.setPosition(1,1);
+        pb.setPosition(1, 1);
         pb.playSide(resourceDeck.getCards().get(8).getFront());
         pb.setPosition(-1, 1);
         pb.playSide(resourceDeck.getCards().get(0).getBack());
-        pb.setPosition(2,2);
+        pb.setPosition(2, 2);
         pb.playSide(resourceDeck.getCards().get(33).getFront());
         pb.setPosition(-2, 2);
         pb.playSide(resourceDeck.getCards().get(2).getBack());
         pb.setPosition(-1, 3);
         pb.playSide(resourceDeck.getCards().get(9).getFront());
-        pb.setPosition(1,3);
+        pb.setPosition(1, 3);
         pb.playSide(goldDeck.getCards().get(6).getFront()); //gold card that requires 3 plants, +3 points
-        pb.setPosition(0,2);
+        pb.setPosition(0, 2);
         pb.playSide(goldDeck.getCards().get(3).getFront()); ////gold card that requires 3 plants and 1 insect (corner property)
 
 
@@ -563,7 +546,7 @@ class PersonalBoardTest {
         assertEquals(4, pb.getResourceQuantity(Symbol.PLANT));
         assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
         assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
-        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL) );
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
 
         //initial card
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
@@ -617,13 +600,13 @@ class PersonalBoardTest {
     }
 
     @Test
-    void cardOnPlayableCornerAndEvilCorner1() throws Exception{
-        Game game = new Game(2);
+    void cardOnPlayableCornerAndEvilCorner1() {
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3,"Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
@@ -631,19 +614,19 @@ class PersonalBoardTest {
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
-        pb.setPosition(1,1);
+        pb.setPosition(1, 1);
         pb.playSide(resourceDeck.getCards().get(8).getFront());
         pb.setPosition(-1, 1);
         pb.playSide(resourceDeck.getCards().get(0).getBack());
-        pb.setPosition(2,2);
+        pb.setPosition(2, 2);
         pb.playSide(resourceDeck.getCards().get(33).getFront());
         pb.setPosition(-2, 2);
         pb.playSide(resourceDeck.getCards().get(2).getBack());
         pb.setPosition(-1, 3);
         pb.playSide(resourceDeck.getCards().get(9).getFront());
-        pb.setPosition(1,3);
+        pb.setPosition(1, 3);
         pb.playSide(goldDeck.getCards().get(8).getFront()); //gold card with down left evil
-        pb.setPosition(0,2);
+        pb.setPosition(0, 2);
         pb.playSide(goldDeck.getCards().get(3).getFront()); ////gold card that requires 3 plants and 1 insect (corner property)
 
 
@@ -654,7 +637,7 @@ class PersonalBoardTest {
         assertEquals(4, pb.getResourceQuantity(Symbol.PLANT));
         assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
         assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
-        assertEquals(1, pb.getResourceQuantity(Symbol.INKWELL) );
+        assertEquals(1, pb.getResourceQuantity(Symbol.INKWELL));
 
         //initial card
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
@@ -702,13 +685,13 @@ class PersonalBoardTest {
     }
 
     @Test
-    void cardOnPlayableCornerAndEvilCorner2() throws Exception {
-        Game game = new Game(2);
+    void cardOnPlayableCornerAndEvilCorner2() {
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3, "Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
@@ -731,7 +714,7 @@ class PersonalBoardTest {
         assertEquals(1, pb.getResourceQuantity(Symbol.PLANT));
         assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
         assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
-        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL) );
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
 
         //initial card
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
@@ -753,18 +736,14 @@ class PersonalBoardTest {
 
     }
 
-    /**
-     * test to check the case where there are not enough resources to play the front side of a goldCard
-     * @throws Exception
-     */
     @Test
-    void notEnoughResources() throws Exception {
-        Game game = new Game(2);
+    void notEnoughResources() {
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3, "Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
@@ -780,18 +759,14 @@ class PersonalBoardTest {
         pb.showBoard();
     }
 
-    /**
-     * test to check the case where there are not enough resources to play the front side of a goldCard, but it is played on the back
-     * @throws Exception
-     */
     @Test
-    void notEnoughResourcesButPlayedOnBack() throws Exception {
-        Game game = new Game(2);
+    void notEnoughResourcesButPlayedOnBack() {
+        Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        Player p1 = new Player(3, "Bob");
+        Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
@@ -809,11 +784,8 @@ class PersonalBoardTest {
         assertEquals(1, pb.getResourceQuantity(Symbol.PLANT));
         assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
         assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
-        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL) );
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
 
         pb.showBoard();
     }
-
-
-
 }
