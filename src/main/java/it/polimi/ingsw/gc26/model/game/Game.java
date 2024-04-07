@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.Parser.ParserCore;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * This class represents an entire Game play. It has a minimum number of player of two and a maximum number of player of four.
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Game {
     /**
-    This attribute represents the maximum number of players per game
+     * This attribute represents the maximum number of players per game
      */
     public static final int MAX_NUM_PLAYERS = 4;
     /**
@@ -41,13 +42,17 @@ public class Game {
     private int round;
 
     /**
-     * This attribute represents the
+     * This attribute represents the final round of the game
      */
     private int finalRound;
-
+    /**
+     * This attribute represents the winners of the game
+     */
+    private ArrayList<Player> winners;
 
     /**
      * Initializes the game, creates the decks and sets the common table
+     *
      * @param players list of players of the game
      */
     public Game(ArrayList<Player> players) {
@@ -55,6 +60,7 @@ public class Game {
 
         this.players = new ArrayList<>();
         this.players.addAll(players);
+        this.winners = null;
 
         ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
@@ -69,13 +75,14 @@ public class Game {
 
     /**
      * Adds a player in the game
+     *
      * @param newPlayer new player to be added in the game
      */
     public void addPlayer(Player newPlayer) throws Exception {
         if (gameState == GameState.WAITING && this.players.size() < numberOfPlayers) {
             this.players.add(newPlayer);
         }
-        if(this.players.size() == numberOfPlayers){
+        if (this.players.size() == numberOfPlayers) {
             gameState = GameState.INITIAL_STAGE;
         }
     }
@@ -84,13 +91,26 @@ public class Game {
      * Sets the currentPlayer to the next one in an infinite cycle
      */
     public void goToNextPlayer() {
-        if(this.gameState.equals(GameState.END_STAGE) && this.round == this.finalRound &&
-                players.indexOf(this.currentPlayer) + 1 == this.numberOfPlayers){
-            for(Player player: this.players){
-                player.getPersonalBoard().endGame(commonTable.getCommonMissions());
-            }
+        // Check if game is on END_STAGE state, if the round it's the final round and if the next player is the first
+        if (this.gameState.equals(GameState.END_STAGE) && this.round == this.finalRound &&
+                players.indexOf(this.currentPlayer) + 1 == this.numberOfPlayers) {
+
+            // Call end game to update score (valuate missions)
+            players.forEach(player -> player.getPersonalBoard().endGame(commonTable.getCommonMissions()));
+
+            // Calculate the max score
+            int maxScore = players.stream()
+                    .mapToInt(player -> player.getPersonalBoard().getScore())
+                    .max()
+                    .orElse(-1);
+
+            // Get winners of the game
+            winners = players.stream()
+                    .filter(player -> player.getPersonalBoard().getScore() == maxScore)
+                    .collect(Collectors.toCollection(ArrayList::new));
         }
 
+        // Check if the next player is the first
         if (players.indexOf(this.currentPlayer) + 1 == this.numberOfPlayers) {
             this.currentPlayer = this.players.getFirst();
             this.round++;
@@ -101,6 +121,7 @@ public class Game {
 
     /**
      * Sets the current Player to the parameter given
+     *
      * @param currentPlayer new current player
      */
     public void setCurrentPlayer(Player currentPlayer) {
@@ -109,6 +130,7 @@ public class Game {
 
     /**
      * Returns the current player
+     *
      * @return current player
      */
     public Player getCurrentPlayer() {
@@ -117,6 +139,7 @@ public class Game {
 
     /**
      * Return the common table for every player
+     *
      * @return common table
      */
     public CommonTable getCommonTable() {
@@ -132,6 +155,7 @@ public class Game {
 
     /**
      * Return the current round
+     *
      * @return round
      */
     public int getRound() {
@@ -140,6 +164,7 @@ public class Game {
 
     /**
      * Returns the number of player for the game
+     *
      * @return number of player
      */
     public int getNumberOfPlayers() {
@@ -148,6 +173,7 @@ public class Game {
 
     /**
      * Return the game state
+     *
      * @return game state
      */
     public GameState getState() {
@@ -156,6 +182,7 @@ public class Game {
 
     /**
      * Sets the game state to the parameter given
+     *
      * @param newGameState new game state
      */
     public void setGameState(GameState newGameState) {
@@ -164,6 +191,7 @@ public class Game {
 
     /**
      * Returns an array of players
+     *
      * @return players
      */
     public ArrayList<Player> getPlayers() {
