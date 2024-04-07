@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * This class represent a card's back.
+ * This class represent a card's back side.
  */
 public class CardBack extends Side {
 

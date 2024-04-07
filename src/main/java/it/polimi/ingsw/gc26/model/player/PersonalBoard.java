@@ -130,11 +130,11 @@ public class PersonalBoard {
     }
 
     /**
-     * check if there is a point in an arrayList l with coordinate x and y and return it, otherwise return Optional.empty()
+     * check if there is a point with coordinate x and y in an arrayList l and return it, otherwise return Optional.empty()
      * @param x coordinate x that you want to search
      * @param y coordinate y that you want to search
      * @param l arrayList where you need to search
-     * @return
+     * @return the reference to the point if present, otherwise an Optional.empty()
      */
     private Optional<Point> ifPresent(int x, int y, ArrayList<Point> l) {
         Optional<Point> o = Optional.empty();
