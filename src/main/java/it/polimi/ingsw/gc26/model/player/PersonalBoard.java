@@ -246,6 +246,8 @@ public class PersonalBoard {
     public void showBoard() {
         int xDim = (xMax - xMin)*3;
         int yDim = (yMax - yMin)*3;
+        int xOff = xMin - 1;
+        int yOff = yMin - 1;
         String[][] board = new String[xDim][yDim];
 
         for(int i=0; i<xDim; i++){
@@ -257,12 +259,58 @@ public class PersonalBoard {
             }
         }
 
+        for(Point p: playablePositions) {
+            for (int x = (p.getX() - xOff) * 2-2; x <= (p.getX() - xOff) * 2 ; x++) {
+                for (int y = (p.getY() - yOff) * 2-2; y <= (p.getY() - yOff) * 2 ; y+=2) {
+                    if(x < xDim && y < yDim){
+                        board[x][y] = Character.toString(0x2B1B);
+                    };
+                }
+                int y = (p.getY() - yOff) * 2 -1;
+
+                if(x == (p.getX() - xOff) * 2-2 && (y<yDim)){
+                    board[x][y] = "‾ " + Character.toString(0x2B1B) + " ‾";
+                } else if(x == (p.getX() - xOff) * 2 -1 && (y<yDim)){
+                    board[x][y] = "  " + Character.toString(0x1F7E4	) + "  ";;
+                } else if(x == (p.getX() - xOff) * 2 && (y<yDim)){
+                    board[x][y] = "_ " + Character.toString(0x2B1B) + " _";
+                }
+            }
+        }
+
+        for(Point p: blockedPositions) {
+            for (int x = (p.getX() - xOff) * 2-2; x <= (p.getX() - xOff) * 2 ; x++) {
+                for (int y = (p.getY() - yOff) * 2-2; y <= (p.getY() - yOff) * 2 ; y+=2) {
+                    if(x < xDim && y < yDim){
+                        board[x][y] = Character.toString(0x2B1B);
+                    };
+                }
+                int y = (p.getY() - yOff) * 2 -1;
+
+                if(x == (p.getX() - xOff) * 2-2 && (y<yDim)){
+                    board[x][y] = "  " + Character.toString(0x2B1B) + "  ";
+                } else if(x == (p.getX() - xOff) * 2 -1 && (y<yDim)){
+                    board[x][y] = "  " + Character.toString(0x2B55	) + "  ";;
+                } else if(x == (p.getX() - xOff) * 2 && (y<yDim)){
+                    board[x][y] = "  " + Character.toString(0x2B1B) + "  ";
+                }
+            }
+
+            /*for (int x = (p.getX() - xOff) * 2 -1; x <= (p.getX() - xOff) * 2 + 1; x++) {
+                for (int y = (p.getY() - yOff) * 2 -1 ; y < (p.getY() - yOff) * 2 + 1; y+=2) {
+                    board[x][y] = Character.toString(0x2B1B);;
+                }
+                int y = (p.getY() - yOff) * 2;
+                board[x][y] = "  " + Character.toString(0x2B1B) + "  ";
+            }*/
+        }
+
         for(Point p: occupiedPositions) {
             String[][] s = p.getSide().printableSide();
             int i=0;
-            for(int x=(p.getX()-xMin)*2-1; x<=(p.getX()-xMin)*2+1; x++){
+            for(int x=(p.getX()-xOff)*2 -2; x<=(p.getX()-xOff)*2; x++){
                 int j=0;
-                for(int y=(p.getY()-yMin)*2-1; y<=(p.getY()-yMin)*2+1; y++){
+                for(int y=(p.getY()-yOff)*2 -2; y<=(p.getY()-yOff)*2; y++){
                     board[x][y] = s[i][j];
                     j++;
                 }
