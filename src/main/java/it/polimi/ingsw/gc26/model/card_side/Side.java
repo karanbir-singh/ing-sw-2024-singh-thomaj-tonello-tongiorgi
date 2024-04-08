@@ -244,79 +244,78 @@ abstract public class Side {
         String empty = Character.toString(0x2B1C);
         String evil = Character.toString(0x2B1B);
         Symbol kingdom;
-        String background;
+        //String background = Character.toString(0x2B1B	);
+        String background = "  ";
         String filler;
 
         kingdom = sideSymbol;
         if (kingdom == Symbol.INSECT){
-            background = Character.toString(0x1F7EA);
             filler = Character.toString(0x1F7E3);
         } else if(kingdom == Symbol.PLANT) {
-            background = Character.toString(0x1F7E9);
             filler = Character.toString(0x1F7E2);
         } else if(kingdom == Symbol.ANIMAL) {
-            background = Character.toString(0x1F7E6);
             filler = Character.toString(0x1F535);
         } else if(kingdom == Symbol.FUNGI) {
-            background = Character.toString(0x1F7E5);
             filler = Character.toString(0x1F534);
         } else {
-                background = Character.toString(0x1F7E8);
                 filler = Character.toString(0x1F7E1);
         }
 
         if(UPLEFT.getSymbol().isPresent()){
-            s[0][0] = "|" + UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias();
+            s[0][0] = UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() ;
 
         } else if(UPLEFT.isEvil()) {
-            s[0][0] = evil + "|";
+            s[0][0] = evil ;
         } else {
-            s[0][0] = empty + "|";
+            s[0][0] = empty  ;
         }
 
-        s[0][1] = background + background + background;
+        s[0][1] = background + background + background + background;
 
         if(UPRIGHT.getSymbol().isPresent()){
-            s[0][2] = UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + "|";
+            s[0][2] = UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias()  ;
 
         } else if(UPRIGHT.isEvil()) {
-            s[0][2] = evil + "|";
+            s[0][2] = evil;
         } else {
-            s[0][2] = empty + "|";
+            s[0][2] = empty  ;
         }
 
-        s[1][0] = background;
+        s[1][0] = "|" + background;
         if(permanentResources.isEmpty()){
-            s[1][1] = background + filler + filler + background;
+            s[1][1] = filler + filler + filler;
         } else {
             s[1][1] = "";
-            for (Symbol permanentResource : permanentResources) {
-                s[1][1] = s[1][1] + permanentResource.getAlias();
-            }
-            for(int i= 3-permanentResources.size(); i>0; i--){
-                s[1][1] = filler + s[1][1] + filler;
+            if(permanentResources.size() == 1){
+                s[1][1] = filler + permanentResources.get(0).getAlias() + filler;
+            } else if(permanentResources.size() == 2){
+                s[1][1] = permanentResources.get(0).getAlias() + filler + permanentResources.get(1).getAlias();
+            } else if(permanentResources.size() == 3){
+                for (Symbol permanentResource : permanentResources) {
+                    s[1][1] = s[1][1] + permanentResource.getAlias();
+                }
             }
         }
-        s[1][2] = background;
+        s[1][2] = background + "|" ;
 
         if(DOWNLEFT.getSymbol().isPresent()){
-            s[2][0] = "|" + DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias();
+            s[2][0] = DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() ;
 
         } else if(DOWNLEFT.isEvil()) {
-            s[2][0] = "|" + evil ;
+            s[2][0] =  evil ;
         } else {
-            s[2][0] = "|" + empty ;
+            s[2][0] =  empty  ;
         }
 
-        s[2][1] = background + background + background;
+        s[2][1] = background + background + background + background;
 
         if(DOWNRIGHT.getSymbol().isPresent()){
-            s[2][2] = DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + "|";
+            s[2][2] = DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias();
 
         } else if(DOWNRIGHT.isEvil()) {
-            s[2][2] = evil + "|";
+            s[2][2] =  evil  ;
         } else {
-            s[2][2] = empty + "|";
+            s[2][2] =  empty ;
         }
 
         for(int i=0; i<3; i++){
