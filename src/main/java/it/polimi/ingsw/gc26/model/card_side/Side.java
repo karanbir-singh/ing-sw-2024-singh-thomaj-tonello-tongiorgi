@@ -243,20 +243,41 @@ abstract public class Side {
         String[][] s = new String[3][3];
         String empty = Character.toString(0x2B1C);
         String evil = Character.toString(0x2B1B);
+        Symbol kingdom;
+        String background;
+        String filler;
 
-        if(UPLEFT.getSymbol().isPresent()){
-            s[0][0] = "|" + Character.toString(UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias()) + "|";
-
-        } else if(UPLEFT.isEvil()) {
-            s[0][0] = "|" + evil ;
+        kingdom = sideSymbol;
+        if (kingdom == Symbol.INSECT){
+            background = Character.toString(0x1F7EA);
+            filler = Character.toString(0x1F7E3);
+        } else if(kingdom == Symbol.PLANT) {
+            background = Character.toString(0x1F7E9);
+            filler = Character.toString(0x1F7E2);
+        } else if(kingdom == Symbol.ANIMAL) {
+            background = Character.toString(0x1F7E6);
+            filler = Character.toString(0x1F535);
+        } else if(kingdom == Symbol.FUNGI) {
+            background = Character.toString(0x1F7E5);
+            filler = Character.toString(0x1F534);
         } else {
-            s[0][0] = "|" + empty;
+                background = Character.toString(0x1F7E8);
+                filler = Character.toString(0x1F7E1);
         }
 
-        s[0][1] = "¯¯¯¯¯¯¯¯";
+        if(UPLEFT.getSymbol().isPresent()){
+            s[0][0] = "|" + UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias();
+
+        } else if(UPLEFT.isEvil()) {
+            s[0][0] = evil + "|";
+        } else {
+            s[0][0] = empty + "|";
+        }
+
+        s[0][1] = background + background + background;
 
         if(UPRIGHT.getSymbol().isPresent()){
-            s[0][2] = "|" + Character.toString(UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias()) + "|";
+            s[0][2] = UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + "|";
 
         } else if(UPRIGHT.isEvil()) {
             s[0][2] = evil + "|";
@@ -264,22 +285,22 @@ abstract public class Side {
             s[0][2] = empty + "|";
         }
 
-        s[1][0] = "|";
+        s[1][0] = background;
         if(permanentResources.isEmpty()){
-            s[1][1] = "             ";
+            s[1][1] = background + filler + filler + background;
         } else {
             s[1][1] = "";
             for (Symbol permanentResource : permanentResources) {
-                s[1][1] = s[1][1] + Character.toString(permanentResource.getAlias());
+                s[1][1] = s[1][1] + permanentResource.getAlias();
             }
-            for(int i= 6-permanentResources.size(); i>0; i--){
-                s[1][1] = " " + s[1][1] + " ";
+            for(int i= 3-permanentResources.size(); i>0; i--){
+                s[1][1] = filler + s[1][1] + filler;
             }
         }
-        s[1][2] = "|";
+        s[1][2] = background;
 
         if(DOWNLEFT.getSymbol().isPresent()){
-            s[2][0] = "|" + Character.toString(DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias()) + "|";
+            s[2][0] = "|" + DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias();
 
         } else if(DOWNLEFT.isEvil()) {
             s[2][0] = "|" + evil ;
@@ -287,10 +308,10 @@ abstract public class Side {
             s[2][0] = "|" + empty ;
         }
 
-        s[2][1] = "________";
+        s[2][1] = background + background + background;
 
         if(DOWNRIGHT.getSymbol().isPresent()){
-            s[2][2] = "|" + Character.toString(DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias()) + "|";
+            s[2][2] = DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + "|";
 
         } else if(DOWNRIGHT.isEvil()) {
             s[2][2] = evil + "|";

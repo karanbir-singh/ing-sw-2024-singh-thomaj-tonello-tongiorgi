@@ -21,14 +21,16 @@ public class CLITest {
         Side starter = initialDeck.getCards().get(3).getFront();
         Side starter1 = initialDeck.getCards().get(4).getFront();
         Side s1 = resourceDeck.getCards().get(0).getBack();
-        Side s5 = resourceDeck.getCards().get(10).getBack();
-        Side s6 = resourceDeck.getCards().get(20).getBack();
-        Side s2 = resourceDeck.getCards().get(30).getBack();
+        Side s5 = goldDeck.getCards().get(10).getFront();
+        Side s6 = goldDeck.getCards().get(1).getFront();
+        Side s2 = resourceDeck.getCards().get(30).getFront();
         Side s3 = goldDeck.getCards().get(0).getFront();
         Side s4 = goldDeck.getCards().get(30).getFront();
 
         starter.printSide();
+        System.out.print("\n");
         starter1.printSide();
+        System.out.print("\n");
         s1.printSide();
         System.out.print("\n");
         s5.printSide();
