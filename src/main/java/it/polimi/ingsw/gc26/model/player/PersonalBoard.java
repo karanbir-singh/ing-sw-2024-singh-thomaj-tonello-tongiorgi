@@ -256,9 +256,9 @@ public class PersonalBoard {
                     System.out.print("o   ");
                 } else if (ifPresent(currX, currY, occupiedPositions).isPresent()) {
                     if(ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().getSideSymbol().isPresent()){
-                        System.out.print(ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().getSideSymbol().orElseThrow(NullPointerException::new).getAlias() + "   ");
+                        System.out.print(Character.toString(ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().getSideSymbol().orElseThrow(NullPointerException::new).getAlias()) + "   ");
                     } else {
-                        System.out.print("S   ");
+                        System.out.print(Character.toString(0x1F96E) + "   ");
                     }
 
                 } else {

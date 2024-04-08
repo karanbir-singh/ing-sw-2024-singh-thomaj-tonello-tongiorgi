@@ -239,6 +239,71 @@ abstract public class Side {
         this.DOWNRIGHT = DOWNRIGHT;
     }
 
+    public void printSide(){
+        String[][] s = new String[3][3];
+        String empty = Character.toString(0x2B1C);
+        String evil = Character.toString(0x2B1B);
 
+        if(UPLEFT.getSymbol().isPresent()){
+            s[0][0] = "|" + Character.toString(UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias()) + "|";
+
+        } else if(UPLEFT.isEvil()) {
+            s[0][0] = "|" + evil ;
+        } else {
+            s[0][0] = "|" + empty;
+        }
+
+        s[0][1] = "¯¯¯¯¯¯¯¯";
+
+        if(UPRIGHT.getSymbol().isPresent()){
+            s[0][2] = "|" + Character.toString(UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias()) + "|";
+
+        } else if(UPRIGHT.isEvil()) {
+            s[0][2] = evil + "|";
+        } else {
+            s[0][2] = empty + "|";
+        }
+
+        s[1][0] = "|";
+        if(permanentResources.isEmpty()){
+            s[1][1] = "             ";
+        } else {
+            s[1][1] = "";
+            for (Symbol permanentResource : permanentResources) {
+                s[1][1] = s[1][1] + Character.toString(permanentResource.getAlias());
+            }
+            for(int i= 6-permanentResources.size(); i>0; i--){
+                s[1][1] = " " + s[1][1] + " ";
+            }
+        }
+        s[1][2] = "|";
+
+        if(DOWNLEFT.getSymbol().isPresent()){
+            s[2][0] = "|" + Character.toString(DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias()) + "|";
+
+        } else if(DOWNLEFT.isEvil()) {
+            s[2][0] = "|" + evil ;
+        } else {
+            s[2][0] = "|" + empty ;
+        }
+
+        s[2][1] = "________";
+
+        if(DOWNRIGHT.getSymbol().isPresent()){
+            s[2][2] = "|" + Character.toString(DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias()) + "|";
+
+        } else if(DOWNRIGHT.isEvil()) {
+            s[2][2] = evil + "|";
+        } else {
+            s[2][2] = empty + "|";
+        }
+
+        for(int i=0; i<3; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+    }
 
 }
