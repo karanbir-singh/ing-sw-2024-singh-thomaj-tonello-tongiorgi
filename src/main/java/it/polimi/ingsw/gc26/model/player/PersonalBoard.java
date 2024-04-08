@@ -244,29 +244,55 @@ public class PersonalBoard {
     }
 
     public void showBoard() {
-        for (int currY = yMax + 1; currY >= yMin; currY--) {
+        int xDim = (xMax - xMin)*3;
+        int yDim = (yMax - yMin)*3;
+        String[][] board = new String[xDim][yDim];
+
+        for(int i=0; i<xDim; i++){
+            for(int j=0; j<yDim; j+=2) {
+                board[i][j] = Character.toString(0x2B1B);
+            }
+            for(int j=1; j<yDim; j+=2){
+                board[i][j]= "  " + Character.toString(0x2B1B	) + "  ";
+            }
+        }
+
+        for(Point p: occupiedPositions) {
+            String[][] s = p.getSide().printableSide();
+            int i=0;
+            for(int x=(p.getX()-xMin)*2-1; x<=(p.getX()-xMin)*2+1; x++){
+                int j=0;
+                for(int y=(p.getY()-yMin)*2-1; y<=(p.getY()-yMin)*2+1; y++){
+                    board[x][y] = s[i][j];
+                    j++;
+                }
+                i++;
+            }
+
+        /*(int currY = yMax + 1; currY >= yMin; currY--) {
             for (int currX = xMin - 1; currX <= xMax; currX++) {
                 if (currY == yMax + 1 && currX != xMin - 1) {
-                    System.out.print(currX + "   ");
+                    System.out.print("   " + (currX-xMin) + "   ");
                 } else if (currX == xMin - 1 && currY != yMax + 1) {//anche questo
-                    System.out.print(currY + "   ");
+                    System.out.print((currY-yMin) + "   ");
                 } else if (ifPresent(currX, currY, blockedPositions).isPresent()) {
                     System.out.print("X   ");
                 } else if (ifPresent(currX, currY, playablePositions).isPresent()) {
                     System.out.print("o   ");
                 } else if (ifPresent(currX, currY, occupiedPositions).isPresent()) {
-                    if(ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().getSideSymbol().isPresent()){
-                        System.out.print(ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().getSideSymbol().orElseThrow(NullPointerException::new).getAlias() + "   ");
-                    } else {
-                        System.out.print(Character.toString(0x1F96E) + "   ");
-                    }
-
+                    ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().printSide();
                 } else {
                     System.out.print("    ");
                 }
-            }
-            System.out.println("\n");
+            }*/
 
+        }
+
+        for(int i=0; i<xDim; i++){
+            for(int j=0; j<yDim; j++){
+                System.out.print(board[i][j]);
+            }
+            System.out.print("\n");
         }
     }
 

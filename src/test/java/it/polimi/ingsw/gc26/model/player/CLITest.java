@@ -27,7 +27,7 @@ public class CLITest {
         Side s3 = goldDeck.getCards().get(0).getFront();
         Side s4 = goldDeck.getCards().get(30).getFront();
 
-        starter.printSide();
+        /*starter.printSide();
         System.out.print("\n");
         starter1.printSide();
         System.out.print("\n");
@@ -42,6 +42,8 @@ public class CLITest {
         s3.printSide();
         System.out.print("\n");
         s4.printSide();
+        */
+
     }
 
 }

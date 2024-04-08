@@ -13,6 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class PersonalBoardTest {
 
     @Test
+    void emptyBoard() {
+        Game game = new Game(new ArrayList<>());
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
+        PersonalBoard pb = new PersonalBoard(initialDeck.getCards().get(0).getFront());
+
+        pb.showBoard();;
+    }
+    @Test
     void firstPlaySide() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();

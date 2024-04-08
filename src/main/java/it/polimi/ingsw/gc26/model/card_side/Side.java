@@ -239,13 +239,13 @@ abstract public class Side {
         this.DOWNRIGHT = DOWNRIGHT;
     }
 
-    public void printSide(){
+    public String[][] printableSide(){
         String[][] s = new String[3][3];
         String empty = Character.toString(0x2B1C);
         String evil = Character.toString(0x2B1B);
         Symbol kingdom;
         //String background = Character.toString(0x2B1B	);
-        String background = "  ";
+        String background = " ";
         String filler;
 
         kingdom = sideSymbol;
@@ -263,14 +263,13 @@ abstract public class Side {
 
         if(UPLEFT.getSymbol().isPresent()){
             s[0][0] = UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() ;
-
         } else if(UPLEFT.isEvil()) {
             s[0][0] = evil ;
         } else {
             s[0][0] = empty  ;
         }
 
-        s[0][1] = background + background + background + background;
+        s[0][1] = "‾" + background + filler + background + "‾";
 
         if(UPRIGHT.getSymbol().isPresent()){
             s[0][2] = UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias()  ;
@@ -307,7 +306,7 @@ abstract public class Side {
             s[2][0] =  empty  ;
         }
 
-        s[2][1] = background + background + background + background;
+        s[2][1] = "_" + background + filler + background + "_";
 
         if(DOWNRIGHT.getSymbol().isPresent()){
             s[2][2] = DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias();
@@ -318,12 +317,13 @@ abstract public class Side {
             s[2][2] =  empty ;
         }
 
-        for(int i=0; i<3; i++){
+        /*for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
                 System.out.print(s[i][j]);
             }
             System.out.print("\n");
-        }
+        }*/
+        return s;
     }
 
 }
