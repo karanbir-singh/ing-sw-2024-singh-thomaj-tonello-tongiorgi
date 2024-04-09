@@ -277,8 +277,7 @@ public class PersonalBoard {
     public ArrayList<Point> getOccupiedPositions() {
         return this.occupiedPositions;
     }
-
-
+            
     /**
      * private methods that handles the effects that a certain corner of the last played card has on the adjacent points
      * if the point is in occupiedPositions, the eventual covered resource is removed from the counter
