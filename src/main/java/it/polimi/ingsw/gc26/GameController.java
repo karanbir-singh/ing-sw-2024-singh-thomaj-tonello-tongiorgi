@@ -92,18 +92,18 @@ public class GameController {
     /**
      * Gives the first three playable cards to each player
      */
-    public void preparePlayersHand() {
+    public void preparePlayersHand(String playerID) {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
-            for (Player p : game.getPlayers()) {
-                // Add 2 Resources Card to the hand
-                p.getHand().addCard(commonTable.getResourceDeck().removeCard());
-                p.getHand().addCard(commonTable.getResourceDeck().removeCard());
+            Player player = getPlayer(playerID);
 
-                // Add 1 Gold Card to the hand
-                p.getHand().addCard(commonTable.getGoldDeck().removeCard());
-            }
+            // Add 2 Resources Card to the hand
+            player.getHand().addCard(commonTable.getResourceDeck().removeCard());
+            player.getHand().addCard(commonTable.getResourceDeck().removeCard());
+
+            // Add 1 Gold Card to the hand
+            player.getHand().addCard(commonTable.getGoldDeck().removeCard());
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
@@ -124,6 +124,9 @@ public class GameController {
             // Place common mission cards on the table
             commonTable.addCard(firstCommonMission, commonTable.getCommonMissions(), 0);
             commonTable.addCard(secondCommonMission, commonTable.getCommonMissions(), 1);
+
+            // Give two secret missions to each player
+            this.prepareSecretMissions();
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
@@ -299,24 +302,27 @@ public class GameController {
         // Get player who is trying to place the selected side
         Player player = getPlayer(playerID);
 
-        // Check if it's the player's turn
-        if (player.equals(game.getCurrentPlayer())) {
-            // Check if it's the INITIAL_STAGE: the player is placing the starter card
-            if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
-                // If the player doesn't have a personal board, it means he's placing a starter card
-                if (player.getPersonalBoard() == null) {
-                    // Check if there is a selected card
-                    if (player.getHand().getSelectedCard().isPresent()) {
-                        // Create the personal board with the selected starter card side
-                        player.createPersonalBoard(player.getHand().getSelectedSide().get());
+        // Check if it's the INITIAL_STAGE: the player is placing the starter card
+        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+            // If the player doesn't have a personal board, it means he's placing a starter card
+            if (player.getPersonalBoard() == null) {
+                // Check if there is a selected card
+                if (player.getHand().getSelectedCard().isPresent()) {
+                    // Create the personal board with the selected starter card side
+                    player.createPersonalBoard(player.getHand().getSelectedSide().get());
 
-                        // Remove the starter card from the hand
-                        player.getHand().removeCard(player.getHand().getSelectedCard().get());
-                    } else {
-                        // TODO gestire cosa fare quando la carta non è selezionata
-                    }
+                    // Remove the starter card from the hand
+                    player.getHand().removeCard(player.getHand().getSelectedCard().get());
+
+                    // Give playable cards to player
+                    this.preparePlayersHand(playerID);
+                } else {
+                    // TODO gestire cosa fare quando la carta non è selezionata
                 }
-            } else {
+            }
+        } else {
+            // Check if it's the player's turn
+            if (player.equals(game.getCurrentPlayer())) {
                 // Otherwise get the player's personal board and his hand
                 PersonalBoard personalBoard = player.getPersonalBoard();
                 Hand hand = player.getHand();
@@ -332,9 +338,9 @@ public class GameController {
                     // TODO gestire cosa fare quando la carta non è selezionata
                 }
 
+            } else {
+                // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
             }
-        } else {
-            // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
         }
     }
 
@@ -377,17 +383,22 @@ public class GameController {
                 if (commonTable.getSelectedCard().isPresent()) {
                     Card removedCard = commonTable.removeSelectedCard();
                     hand.addCard(removedCard);
-                }
 
-                // Check if player's score is greater or equal then 20 points OR decks are both empty
-                if (player.getPersonalBoard().getScore() >= 20 ||
-                        (commonTable.getResourceDeck().getCards().isEmpty() &&
-                                commonTable.getGoldDeck().getCards().isEmpty())) {
-                    // Change game state into END_STAGE
-                    game.setGameState(GameState.END_STAGE);
+                    // Check if player's score is greater or equal then 20 points OR decks are both empty
+                    if (player.getPersonalBoard().getScore() >= 20 ||
+                            (commonTable.getResourceDeck().getCards().isEmpty() &&
+                                    commonTable.getGoldDeck().getCards().isEmpty())) {
+                        // Change game state into END_STAGE
+                        game.setGameState(GameState.END_STAGE);
 
-                    // Set the final round
-                    game.setFinalRound(game.getRound() + 1);
+                        // Set the final round
+                        game.setFinalRound(game.getRound() + 1);
+                    }
+
+                    // Change turn to next player
+                    this.changeTurn();
+                }else{
+                    // TODO gestire cosa fare quando non è stata selezionata una carta da pescare
                 }
             }
         } else {
