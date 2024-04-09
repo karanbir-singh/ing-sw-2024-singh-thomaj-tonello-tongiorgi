@@ -25,7 +25,7 @@ public class PersonalBoard {
      *
      * @param starterSide side chosen by the player that he wants to play
      */
-    public PersonalBoard(Side starterSide) {
+    public PersonalBoard() {
         score = 0;
         xMin = 0;
         xMax = 0;
@@ -47,7 +47,6 @@ public class PersonalBoard {
         blockedPositions = new ArrayList<>();
 
         addPoint(0, 0, playablePositions);
-        playSide(starterSide);
     }
 
     /**

@@ -22,7 +22,7 @@ public class GameController {
      */
     public GameController(Game game) {
         this.game = game;
-        game.setGameState(GameState.INITIAL_STAGE);
+        this.game.setGameState(GameState.INITIAL_STAGE);
     }
 
     /**
@@ -309,8 +309,11 @@ public class GameController {
             if (player.getPersonalBoard() == null) {
                 // Check if there is a selected card
                 if (player.getHand().getSelectedCard().isPresent()) {
-                    // Create the personal board with the selected starter card side
-                    player.createPersonalBoard(player.getHand().getSelectedSide().get());
+                    // Create the personal board
+                    player.createPersonalBoard();
+
+                    // Place starter card
+                    player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get());
 
                     // Remove the starter card from the hand
                     player.getHand().removeCard(player.getHand().getSelectedCard().get());
