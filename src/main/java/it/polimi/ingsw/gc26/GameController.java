@@ -8,7 +8,9 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 
-public class GameController {
+import java.rmi.server.UnicastRemoteObject;
+
+public class GameController extends UnicastRemoteObject implements GameControllerInterface {
 
     /**
      * This attribute represents the game that the game controller controls
