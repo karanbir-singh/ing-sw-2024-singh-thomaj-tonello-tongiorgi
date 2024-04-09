@@ -22,6 +22,7 @@ public class GameController {
      */
     public GameController(Game game) {
         this.game = game;
+        game.setGameState(GameState.INITIAL_STAGE);
     }
 
     /**
