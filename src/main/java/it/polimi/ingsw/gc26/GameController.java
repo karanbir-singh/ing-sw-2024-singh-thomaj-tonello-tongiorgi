@@ -25,6 +25,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      */
     public GameController(Game game) throws RemoteException {
         this.game = game;
+        game.setGameState(GameState.INITIAL_STAGE);
     }
 
     /**
