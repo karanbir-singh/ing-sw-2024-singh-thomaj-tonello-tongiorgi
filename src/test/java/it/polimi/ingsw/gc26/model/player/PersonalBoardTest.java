@@ -742,6 +742,7 @@ class PersonalBoardTest {
         assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNLEFT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNRIGHT().isHidden());
 
+        pb.showBoard();
     }
 
     @Test
