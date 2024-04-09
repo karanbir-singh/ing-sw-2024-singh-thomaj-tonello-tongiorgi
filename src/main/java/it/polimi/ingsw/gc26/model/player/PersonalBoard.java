@@ -244,8 +244,8 @@ public class PersonalBoard {
     }
 
     public void showBoard() {
-        int xDim = (xMax - xMin)*3 + 1;
-        int yDim = (yMax - yMin)*3 + 1;
+        int xDim = (xMax - xMin)*3 -1;
+        int yDim = (yMax - yMin)*3 -1;
         int xOff = xMin*2 -1;
         int yOff = yMin*2 -1;
         String[][] board = new String[xDim][yDim];
@@ -308,9 +308,9 @@ public class PersonalBoard {
         for(Point p: occupiedPositions) {
             String[][] s = p.getSide().printableSide();
             int i=0;
-            for(int x = p.getX()*2 - xOff -1; x <= (p.getX())*2 - xOff +1; x++){
+            for(int x = p.getX()*2 - xOff +1; x >= (p.getX())*2 - xOff -1; x--){
                 int j=0;
-                for(int y=(p.getY())*2 -yOff +1; y>=(p.getY())*2 -yOff - 1; y--){
+                for(int y=(p.getY())*2 -yOff -1; y<=(p.getY())*2 -yOff + 1; y++){
                     board[x][y] = s[i][j];
                     j++;
                 }
@@ -336,10 +336,36 @@ public class PersonalBoard {
 
         }
 
-        for(int i=0; i<xDim; i++){
-            for(int j=yDim-1; j>=0; j--){
+        for(int i=xMin; i<=xMax; i++){
+            if(i<0){
+                System.out.print("    " + i + "   " );
+            } else {
+                System.out.print("    " + i + "   " );
+            }
+        }
+
+        System.out.print("\n");
+
+        int y = yMax;
+        boolean flagY = false;
+
+        for(int i=xDim-1; i>=0; i--){
+
+            for(int j=0; j<yDim; j++){
                 System.out.print(board[i][j]);
             }
+            if(!flagY){
+                flagY = true;
+            } else {
+                if(y<0 || y>9){
+                    System.out.print(y);
+                } else {
+                    System.out.print(" " + y);
+                }
+                y--;
+                flagY = false;
+            }
+
             System.out.print("\n");
         }
     }
