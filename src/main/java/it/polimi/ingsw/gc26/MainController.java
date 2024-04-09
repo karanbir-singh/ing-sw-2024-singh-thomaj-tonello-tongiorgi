@@ -88,7 +88,7 @@ public class MainController {
     }
 
 
-    public GameController getG() throws RemoteException {//METODO FITTIZZIO
+    public GameControllerInterface getG() throws RemoteException {//METODO FITTIZZIO
         GameController gameController = new GameController(new Game(this.waitingPlayer));
         gamesControllers.add(gameController);
         return gameController;

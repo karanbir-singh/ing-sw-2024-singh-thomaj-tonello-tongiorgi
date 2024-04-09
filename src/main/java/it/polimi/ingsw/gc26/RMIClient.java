@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class RMIClient extends UnicastRemoteObject implements VirtualView {
     private final VirtualServer server;
     private String playerId;
+    private GameControllerInterface gameController;
     public RMIClient(VirtualServer server) throws RemoteException {
         this.server = server;
     }
@@ -43,6 +44,15 @@ public class RMIClient extends UnicastRemoteObject implements VirtualView {
     private void run() throws  Exception{
         this.playerId = this.server.connect(this); //TODO HOW TO ASSOCIATE A CLIENT WITH A PLAYER?
         System.out.println("YOU CONNECTED TO THE SERVER");
+        Scanner scanner = new Scanner(System.in);
+        if(this.server.existsWaitingGame()){
+            this.server.joinWaitingList(this.playerId,"kevin");
+        }else{
+            System.out.println("HOW MANY PLAYER MAX");
+            String numOfPlayer = scanner.nextLine();
+            this.server.createWaitingList(Integer.parseInt(numOfPlayer), "12334", "kevin");
+        }
+        this.gameController = server.getG();
 
 
     }

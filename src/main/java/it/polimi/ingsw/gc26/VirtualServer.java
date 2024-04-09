@@ -15,6 +15,6 @@ public interface VirtualServer extends Remote {
     boolean existsWaitingGame() throws RemoteException;
     void createWaitingList(int numPlayers, String playerID, String playerNickname) throws RemoteException;
     void joinWaitingList(String playerID, String playerNickname) throws RemoteException;
-    GameController getG() throws RemoteException;
+    GameControllerInterface getG() throws RemoteException;
 }
 

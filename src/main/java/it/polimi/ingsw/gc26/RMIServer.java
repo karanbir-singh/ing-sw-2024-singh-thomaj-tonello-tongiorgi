@@ -55,7 +55,7 @@ public class RMIServer implements VirtualServer{
         this.mainController.joinWaitingList(playerID,playerNickname);
     }
 
-    public GameController getG() throws RemoteException{
+    public GameControllerInterface getG() throws RemoteException{
         return this.mainController.getG();
     }
 

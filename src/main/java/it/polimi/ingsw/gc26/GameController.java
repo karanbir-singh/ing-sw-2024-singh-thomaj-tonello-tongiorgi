@@ -32,7 +32,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      *
      * @param playerID ID of the searched player
      */
-    private Player getPlayer(String playerID) {
+    private Player getPlayer(String playerID) throws RemoteException{
         return game.getPlayers().stream().filter((Player p) -> p.getID().equals(playerID)).findAny().get();
     }
 
@@ -41,7 +41,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
     /**
      * Places two resource cards and two gold cards on the common table
      */
-    public void prepareCommonTable() {
+    public void prepareCommonTable() throws RemoteException {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
@@ -71,7 +71,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
     /**
      * + Gives starter cards to each player
      */
-    public void prepareStarterCards() {
+    public void prepareStarterCards() throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
@@ -95,7 +95,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
     /**
      * Gives the first three playable cards to each player
      */
-    public void preparePlayersHand() {
+    public void preparePlayersHand() throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
@@ -115,7 +115,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
     /**
      * Places two common mission cards on the common table
      */
-    public void prepareCommonMissions() {
+    public void prepareCommonMissions()throws RemoteException {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
@@ -135,7 +135,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
     /**
      * Gives two mission cards to each player
      */
-    public void prepareSecretMissions() {
+    public void prepareSecretMissions() throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
@@ -162,7 +162,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      * @param cardIndex index of the selected mission card
      * @param playerID  ID of the player who is selecting the secret mission card
      */
-    public void selectSecretMission(int cardIndex, String playerID) {
+    public void selectSecretMission(int cardIndex, String playerID) throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             // Get the player who is selecting the card by his ID
             Player player = getPlayer(playerID);
@@ -186,7 +186,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      *
      * @param playerID ID of the player who is setting the secret mission card
      */
-    public void setSecretMission(String playerID) {
+    public void setSecretMission(String playerID) throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             // Get the player who is setting the card by his ID
             Player player = getPlayer(playerID);
@@ -211,7 +211,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      *
      * @param playerID ID of the first player of the games
      */
-    public void setFirstPlayer(String playerID) {
+    public void setFirstPlayer(String playerID) throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             // Get the player by his ID
             Player player = getPlayer(playerID);
@@ -235,7 +235,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      * @param cardIndex index of the card in the player's hand
      * @param playerID  ID of the player who is selected the card to play
      */
-    public void selectCardFromHand(int cardIndex, String playerID) {
+    public void selectCardFromHand(int cardIndex, String playerID) throws RemoteException{
         // Get the player who is selected the card to play
         Player player = getPlayer(playerID);
 
@@ -267,7 +267,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      *
      * @param playerID ID of the player who is turning the side of the selected card
      */
-    public void turnSelectedCardSide(String playerID) {
+    public void turnSelectedCardSide(String playerID) throws RemoteException{
         // Get player who is turning the selected card side
         Player player = getPlayer(playerID);
 
@@ -282,7 +282,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      * @param selectedY coordinate on the Y axis of the chosen position on the personal board
      * @param playerID  ID of the player who is selecting the position on the personal board
      */
-    public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) {
+    public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) throws RemoteException{
         // Get the player who is selecting the position on his personal board
         Player player = getPlayer(playerID);
 
@@ -298,7 +298,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      *
      * @param playerID ID of the player who is playing the selected side of the card in the hand
      */
-    public void playCardFromHand(String playerID) {
+    public void playCardFromHand(String playerID) throws RemoteException{
         // Get player who is trying to place the selected side
         Player player = getPlayer(playerID);
 
@@ -348,7 +348,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      * @param cardY    coordinate on the Y axis of the card on the common table
      * @param playerID ID of the player who is trying to select the card on the common table
      */
-    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
+    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) throws RemoteException {
         if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
             // Check if it's the current player
             if (getPlayer(playerID).equals(game.getCurrentPlayer())) {
@@ -365,7 +365,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      *
      * @param playerID ID of the player who is trying to draw the selected card on the common table
      */
-    public void drawSelectedCard(String playerID) {
+    public void drawSelectedCard(String playerID) throws RemoteException{
         if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
             // Get the player who is trying to draw the selected card on the common table
             Player player = getPlayer(playerID);
@@ -398,14 +398,14 @@ public class GameController extends UnicastRemoteObject implements GameControlle
         }
     }
 
-    public void changeTurn() {
+    public void changeTurn()throws RemoteException {
         game.goToNextPlayer();
     }
 
 // PHASE 3: End game
 
 
-    public Game getGame() {
+    public Game getGame()throws RemoteException {
         return game;
     }
 }
