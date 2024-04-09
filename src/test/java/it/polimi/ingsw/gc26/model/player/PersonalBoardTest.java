@@ -21,7 +21,7 @@ class PersonalBoardTest {
         PersonalBoard pb = new PersonalBoard(initialDeck.getCards().get(0).getFront());
         pb.setPosition(-1, -1);
         pb.playSide(resourceDeck.getCards().get(38).getFront());
-        pb.setPosition(1, 1);
+        pb.setPosition(1, -1);
         pb.playSide(resourceDeck.getCards().get(0).getFront());
 
         pb.showBoard();;
