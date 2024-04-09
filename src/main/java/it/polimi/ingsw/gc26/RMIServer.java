@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26;
 
 import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.player.Player;
 
@@ -29,6 +30,7 @@ public class RMIServer implements VirtualServer{
         //now the registry
         Registry registry = LocateRegistry.createRegistry(1099);
         registry.rebind(serverName, stub);
+        System.out.println("SERVER IS ON");
     }
 
     public RMIServer(MainController mainController){
@@ -51,6 +53,10 @@ public class RMIServer implements VirtualServer{
 
     public void joinWaitingList(String playerID, String playerNickname)throws RemoteException{
         this.mainController.joinWaitingList(playerID,playerNickname);
+    }
+
+    public GameController getG() throws RemoteException{
+        return this.mainController.getG();
     }
 
 

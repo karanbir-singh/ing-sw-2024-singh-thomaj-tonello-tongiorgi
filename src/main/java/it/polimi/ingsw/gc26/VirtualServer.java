@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26;
 
 import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 
 import java.rmi.Remote;
@@ -14,5 +15,6 @@ public interface VirtualServer extends Remote {
     boolean existsWaitingGame() throws RemoteException;
     void createWaitingList(int numPlayers, String playerID, String playerNickname) throws RemoteException;
     void joinWaitingList(String playerID, String playerNickname) throws RemoteException;
+    GameController getG() throws RemoteException;
 }
 

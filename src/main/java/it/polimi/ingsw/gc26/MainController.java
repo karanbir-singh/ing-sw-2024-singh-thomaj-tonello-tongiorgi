@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 public class MainController {
@@ -74,8 +75,9 @@ public class MainController {
         // Check if waiting list is full
         if (waitingPlayer.size() >= maxNumWaitingPlayers) {
             // Then, create a new game controller and add to the list
-            GameController gameController = new GameController(new Game(this.waitingPlayer));
-            gamesControllers.add(gameController);
+            //GameController gameController = new GameController(new Game(this.waitingPlayer));
+            //gamesControllers.add(gameController);
+
 
             // TODO notify and return GameController to each player of the game
 
@@ -85,6 +87,12 @@ public class MainController {
         }
     }
 
+
+    public GameController getG() throws RemoteException {//METODO FITTIZZIO
+        GameController gameController = new GameController(new Game(this.waitingPlayer));
+        gamesControllers.add(gameController);
+        return gameController;
+    }
     public static void main(String[] args) {
     }
 }

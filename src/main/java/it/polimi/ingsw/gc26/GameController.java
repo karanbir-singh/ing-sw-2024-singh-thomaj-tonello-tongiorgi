@@ -8,6 +8,7 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 
+import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class GameController extends UnicastRemoteObject implements GameControllerInterface {
@@ -22,7 +23,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
      *
      * @param game the object that represents the game
      */
-    public GameController(Game game) {
+    public GameController(Game game) throws RemoteException {
         this.game = game;
     }
 
