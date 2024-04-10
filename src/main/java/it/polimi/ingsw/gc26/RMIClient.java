@@ -53,9 +53,13 @@ public class RMIClient extends UnicastRemoteObject implements VirtualView {
             this.server.createWaitingList(Integer.parseInt(numOfPlayer), "12334", "kevin");
         }
         this.gameController = server.getG();
+        while(this.gameController == null){
+            this.gameController = server.getG();
+        }
         System.out.println("IT FUNCTIONS");
-        this.gameController.prepareCommonTable();
+        //this.gameController.prepareCommonTable();
 
 
     }
 }
+

@@ -468,6 +468,7 @@ class PersonalBoardTest {
         commonMissions.add(missionDeck.getCards().get(1));
         commonMissions.add(missionDeck.getCards().get(0));
         pb.endGame(commonMissions);
+        pb.showBoard();
 
         assertEquals(0, pb.getResourceQuantity(Symbol.INSECT)); // a causa della carta iniziale
         assertEquals(1, pb.getResourceQuantity(Symbol.ANIMAL));

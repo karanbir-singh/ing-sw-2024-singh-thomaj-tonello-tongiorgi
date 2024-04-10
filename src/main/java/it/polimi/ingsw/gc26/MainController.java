@@ -66,7 +66,7 @@ public class MainController {
      * @param playerID ID of the player who is joining the waiting list
      * @param playerNickname Nickname of the player who is joining the waiting list
      */
-    public void joinWaitingList(String playerID, String playerNickname) {
+    public void joinWaitingList(String playerID, String playerNickname) throws RemoteException {
         Player newPlayer = new Player(playerID, playerNickname);
 
         // Add player to the waiting list
@@ -75,8 +75,8 @@ public class MainController {
         // Check if waiting list is full
         if (waitingPlayer.size() >= maxNumWaitingPlayers) {
             // Then, create a new game controller and add to the list
-            //GameController gameController = new GameController(new Game(this.waitingPlayer));
-            //gamesControllers.add(gameController);
+            GameController gameController = new GameController(new Game(this.waitingPlayer));
+            gamesControllers.add(gameController);
 
 
             // TODO notify and return GameController to each player of the game
@@ -89,9 +89,12 @@ public class MainController {
 
 
     public GameControllerInterface getG() throws RemoteException {//METODO FITTIZZIO
-        GameController gameController = new GameController(new Game(this.waitingPlayer));
-        gamesControllers.add(gameController);
-        return gameController;
+        if(!gamesControllers.isEmpty()){
+            return gamesControllers.getFirst();
+        }else{
+            return null;
+        }
+
     }
     public static void main(String[] args) {
     }
