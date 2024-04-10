@@ -13,16 +13,20 @@ import static org.junit.jupiter.api.Assertions.*;
 class PersonalBoardTest {
 
     @Test
-    void emptyBoard() {
+    void aestheticBoard() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         PersonalBoard pb = new PersonalBoard(initialDeck.getCards().get(0).getFront());
         pb.setPosition(-1, -1);
-        pb.playSide(resourceDeck.getCards().get(38).getFront());
+        pb.playSide(resourceDeck.getCards().get(10).getFront());
         pb.setPosition(1, -1);
         pb.playSide(resourceDeck.getCards().get(0).getFront());
+        pb.setPosition(-1, 1);
+        pb.playSide(resourceDeck.getCards().get(20).getFront());
+        pb.setPosition(1, 1);
+        pb.playSide(resourceDeck.getCards().get(39).getFront());
 
         pb.showBoard();;
     }

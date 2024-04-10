@@ -243,22 +243,22 @@ abstract public class Side {
         String[][] s = new String[3][3];
         String empty = Character.toString(0x2B1C);
         String evil = Character.toString(0x2B1B);
-        Symbol kingdom;
-        String background = " ";
+        String background = "  ";
+        String fontColor;
+        String styleReset = "\u001B[0m";
         String filler;
 
-        kingdom = sideSymbol;
-        if (kingdom == Symbol.INSECT){
-            filler = Character.toString(0x1F7E3);
-        } else if(kingdom == Symbol.PLANT) {
-            filler = Character.toString(0x1F7E2);
-        } else if(kingdom == Symbol.ANIMAL) {
-            //background = "\u001B[44m" + " " + "\u001B[0m";
-            filler = Character.toString(0x1F535);
-        } else if(kingdom == Symbol.FUNGI) {
-            filler = Character.toString(0x1F534);
+        /*if(sideSymbol!=null){
+            background = sideSymbol.getBackground()+ "  " + styleReset;
+            kingdomColor = sideSymbol.getBackground();
+        }*/
+
+        if (sideSymbol != null){
+            filler = sideSymbol.getFiller();
+            fontColor = sideSymbol.getFontColor();
         } else {
-                filler = Character.toString(0x1F7E1);
+            filler = Character.toString(0x1F7E1);
+            fontColor = "";
         }
 
         if(UPLEFT.getSymbol().isPresent()){
@@ -269,7 +269,7 @@ abstract public class Side {
             s[0][0] = empty  ;
         }
 
-        s[0][1] = "‾" + background + filler + background + "‾";
+        s[0][1] = fontColor + "‾‾‾"  + filler  + "‾‾‾" + styleReset;
 
 
         if(UPRIGHT.getSymbol().isPresent()){
@@ -281,7 +281,7 @@ abstract public class Side {
             s[0][2] = empty  ;
         }
 
-        s[1][0] = "|" + background;
+        s[1][0] = fontColor + "|" + background + styleReset;
         if(permanentResources.isEmpty()){
             s[1][1] = filler + filler + filler;
         } else {
@@ -296,7 +296,7 @@ abstract public class Side {
                 }
             }
         }
-        s[1][2] = background + "|" ;
+        s[1][2] = fontColor + background + "|" + styleReset;
 
         if(DOWNLEFT.getSymbol().isPresent()){
             s[2][0] = DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() ;
@@ -307,7 +307,7 @@ abstract public class Side {
             s[2][0] =  empty  ;
         }
 
-        s[2][1] = "_" + background + filler + background + "_";
+        s[2][1] = fontColor + "___"  + filler  + "___" + styleReset;
 
         if(DOWNRIGHT.getSymbol().isPresent()){
             s[2][2] = DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias();

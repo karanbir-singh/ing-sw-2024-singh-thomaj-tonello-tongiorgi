@@ -250,28 +250,31 @@ public class PersonalBoard {
         int yOff = yMin*2 -1;
         String[][] board = new String[yDim][xDim];
         String blackSquare = Character.toString(0x2B1B);
-        String playable = Character.toString(0x1F7E4);
-        String blocked =  Character.toString(0x2B55);
+        String playable = Character.toString(0x26AA	);
+        //String playable = Character.toString(0x1F7E4);
+        String blocked =  Character.toString(0x274C);
+        //String blocked =  Character.toString(0x2B55);
+        String background = "   ";
 
         for(int j=0; j<yDim; j++) {
             for(int i=0; i<xDim; i+=2){
                 board[j][i] = blackSquare;
             }
             for(int i=1; i<xDim; i+=2){
-                board[j][i]= "  " + blackSquare + "  ";
+                board[j][i]= background + blackSquare + background;
             }
         }
 
         for(Point p: playablePositions) {
             int x = p.getX()*2 - xOff;
             int y = p.getY()*2 - yOff;
-            board[y][x] = "  " + playable + "  ";
+            board[y][x] = background + playable + background;
         }
 
         for(Point p: blockedPositions) {
             int x = p.getX()*2 - xOff;
             int y = p.getY()*2 - yOff;
-            board[y][x] = "  " + blocked + "  ";
+            board[y][x] = background + blocked + background;
         }
 
         for(Point p: occupiedPositions) {
@@ -304,12 +307,12 @@ public class PersonalBoard {
             }*/
 
         }
-
+        System.out.print(blackSquare);
         for(int i=xMin; i<=xMax; i++){
             if(i<0){
-                System.out.print("    " + i + "   ·" );
+                System.out.print(blackSquare + " " + i + "   " + blackSquare );
             } else {
-                System.out.print("   " + i + "    ·" );
+                System.out.print( blackSquare + "  " + i + "   " + blackSquare );
             }
         }
 
@@ -328,9 +331,9 @@ public class PersonalBoard {
                 flagY = true;
             } else {
                 if(y<0 || y>9){
-                    System.out.print(y);
+                    System.out.print(" " +y);
                 } else {
-                    System.out.print(" " + y);
+                    System.out.print("  " + y);
                 }
                 y--;
                 flagY = false;
