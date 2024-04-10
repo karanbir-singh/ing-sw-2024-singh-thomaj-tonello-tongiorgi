@@ -244,7 +244,6 @@ abstract public class Side {
         String empty = Character.toString(0x2B1C);
         String evil = Character.toString(0x2B1B);
         Symbol kingdom;
-        //String background = Character.toString(0x2B1B	);
         String background = " ";
         String filler;
 
@@ -254,6 +253,7 @@ abstract public class Side {
         } else if(kingdom == Symbol.PLANT) {
             filler = Character.toString(0x1F7E2);
         } else if(kingdom == Symbol.ANIMAL) {
+            //background = "\u001B[44m" + " " + "\u001B[0m";
             filler = Character.toString(0x1F535);
         } else if(kingdom == Symbol.FUNGI) {
             filler = Character.toString(0x1F534);
@@ -270,6 +270,7 @@ abstract public class Side {
         }
 
         s[0][1] = "‾" + background + filler + background + "‾";
+
 
         if(UPRIGHT.getSymbol().isPresent()){
             s[0][2] = UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias()  ;

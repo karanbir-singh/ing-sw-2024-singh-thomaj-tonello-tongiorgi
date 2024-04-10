@@ -244,77 +244,46 @@ public class PersonalBoard {
     }
 
     public void showBoard() {
-        int xDim = (xMax - xMin)*3 -1;
-        int yDim = (yMax - yMin)*3 -1;
+        int xDim = (xMax - xMin)*2 + 3;
+        int yDim = (yMax - yMin)*2 + 3;
         int xOff = xMin*2 -1;
         int yOff = yMin*2 -1;
         String[][] board = new String[yDim][xDim];
+        String blackSquare = Character.toString(0x2B1B);
+        String playable = Character.toString(0x1F7E4);
+        String blocked =  Character.toString(0x2B55);
 
         for(int j=0; j<yDim; j++) {
             for(int i=0; i<xDim; i+=2){
-                board[j][i] = Character.toString(0x2B1B);
+                board[j][i] = blackSquare;
             }
             for(int i=1; i<xDim; i+=2){
-                board[j][i]= "  " + Character.toString(0x2B1B	) + "  ";
+                board[j][i]= "  " + blackSquare + "  ";
             }
         }
 
         for(Point p: playablePositions) {
             int x = p.getX()*2 - xOff;
             int y = p.getY()*2 - yOff;
-            board[y][x] = "  " + Character.toString(0x1F7E4	) + "  ";
-                /*if(x == (p.getX() - xOff) * 2-2 && (y<yDim)){
-                    board[x][y] = "‾ " + Character.toString(0x2B1B) + " ‾";
-                } else if(x == (p.getX() - xOff) * 2 -1 && (y<yDim)){
-                    board[x][y] = "  " + Character.toString(0x1F7E4	) + "  ";;
-                } else if(x == (p.getX() - xOff) * 2 && (y<yDim)){
-                    board[x][y] = "_ " + Character.toString(0x2B1B) + " _";
-                }
-            }*/
+            board[y][x] = "  " + playable + "  ";
         }
 
         for(Point p: blockedPositions) {
             int x = p.getX()*2 - xOff;
             int y = p.getY()*2 - yOff;
-            board[y][x] = "  " + Character.toString(0x2B55	) + "  ";
-
-        /*
-            for (int x = p.getX()*2 - xOff -1; x <= (p.getX())*2 - xOff +1; x++) {
-                for (int y = (p.getY())* 2 - yOff -1; y <= (p.getY())* 2 - yOff +1; y+=2) {
-                    if(x < xDim && y < yDim){
-                        board[x][y] = Character.toString(0x2B1B);
-                    };
-                }
-                int y = (p.getY())* 2 - yOff -1;
-
-                if(x == (p.getX() - xOff) * 2-2 && (y<yDim)){
-                    board[x][y] = "  " + Character.toString(0x2B1B) + "  ";
-                } else if(x == (p.getX() - xOff) * 2 -1 && (y<yDim)){
-                    board[x][y] = "  " + Character.toString(0x2B55	) + "  ";;
-                } else if(x == (p.getX() - xOff) * 2 && (y<yDim)){
-                    board[x][y] = "  " + Character.toString(0x2B1B) + "  ";
-                }*/
-            }
-
-            /*for (int x = (p.getX() - xOff) * 2 -1; x <= (p.getX() - xOff) * 2 + 1; x++) {
-                for (int y = (p.getY() - yOff) * 2 -1 ; y < (p.getY() - yOff) * 2 + 1; y+=2) {
-                    board[x][y] = Character.toString(0x2B1B);;
-                }
-                int y = (p.getY() - yOff) * 2;
-                board[x][y] = "  " + Character.toString(0x2B1B) + "  ";
-            }
-        }*/
+            board[y][x] = "  " + blocked + "  ";
+        }
 
         for(Point p: occupiedPositions) {
             String[][] s = p.getSide().printableSide();
-            int i=0;
+            int j=0;
             for(int y=(p.getY())*2 -yOff +1; y>=(p.getY())*2 -yOff - 1; y--){
-                int j=0;
+                int i=2;
                 for(int x = p.getX()*2 - xOff +1; x >= (p.getX())*2 - xOff -1; x--){
-                board[y][x] = s[i][j];
-                j++;
+                board[y][x] = s[j][i];
+                i--;
                 }
-                i++;
+                j++;
             }
 
         /*(int currY = yMax + 1; currY >= yMin; currY--) {
@@ -338,9 +307,9 @@ public class PersonalBoard {
 
         for(int i=xMin; i<=xMax; i++){
             if(i<0){
-                System.out.print("    " + i + "   " );
+                System.out.print("    " + i + "   ·" );
             } else {
-                System.out.print("    " + i + "   " );
+                System.out.print("   " + i + "    ·" );
             }
         }
 
