@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26;
+/*package it.polimi.ingsw.gc26;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -63,3 +63,5 @@ public class RMIClient extends UnicastRemoteObject implements VirtualView {
     }
 }
 
+
+ */

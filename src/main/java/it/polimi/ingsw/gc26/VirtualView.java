@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26;
+/*package it.polimi.ingsw.gc26;
 
 import java.rmi.Remote;
 
@@ -7,3 +7,6 @@ public interface VirtualView extends Remote {
 
 
 }
+
+
+ */
