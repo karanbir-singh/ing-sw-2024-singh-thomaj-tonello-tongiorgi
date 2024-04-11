@@ -5,7 +5,6 @@ import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.Parser.ParserCore;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
  * This class represents an entire Game play. It has a minimum number of player of two and a maximum number of player of four.
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
  */
 public class Game {
     /**
-     * This attribute represents the maximum number of players per game
+    This attribute represents the maximum number of players per game
      */
     public static final int MAX_NUM_PLAYERS = 4;
     /**
@@ -40,27 +39,22 @@ public class Game {
      * This attribute represents how many rounds have been played
      */
     private int round;
+    /**
+     * This attribute represents the chat. It stores all the messages.
+     */
+    private final Chat chat;
 
-    /**
-     * This attribute represents the final round of the game
-     */
-    private int finalRound;
-    /**
-     * This attribute represents the winners of the game
-     */
-    private ArrayList<Player> winners;
 
     /**
      * Initializes the game, creates the decks and sets the common table
-     *
-     * @param players list of players of the game
+     * @param numberOfPlayers number of players in this game, min: 2 - max: 4
+     * @throws Exception number of players invalid
      */
-    public Game(ArrayList<Player> players) {
-        this.numberOfPlayers = players.size();
-
+    public Game(int numberOfPlayers) throws Exception {
+        if (numberOfPlayers < 2 || numberOfPlayers > 4) { throw new Exception("Number of players invalid!");}
+        this.numberOfPlayers = numberOfPlayers;
         this.players = new ArrayList<>();
-        this.players.addAll(players);
-        this.winners = null;
+        this.gameState = GameState.INITIAL_STAGE;
 
         ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
@@ -70,20 +64,19 @@ public class Game {
 
         this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck);
         this.round = 0;
-        this.finalRound = -1;
+        this.chat = new Chat();
     }
 
     /**
      * Adds a player in the game
-     *
      * @param newPlayer new player to be added in the game
+     * @throws Exception number of players already maximum
      */
-    public void addPlayer(Player newPlayer) {
+    public void addPlayer(Player newPlayer) throws Exception {
         if (this.players.size() < numberOfPlayers) {
             this.players.add(newPlayer);
-        }
-        if (this.players.size() == numberOfPlayers) {
-            gameState = GameState.INITIAL_STAGE;
+        } else {
+            throw new Exception();
         }
     }
 
@@ -91,29 +84,8 @@ public class Game {
      * Sets the currentPlayer to the next one in an infinite cycle
      */
     public void goToNextPlayer() {
-        // Check if game is on END_STAGE state, if the round it's the final round and if the next player is the first
-        if (this.gameState.equals(GameState.END_STAGE) && this.round == this.finalRound &&
-                players.indexOf(this.currentPlayer) + 1 == this.numberOfPlayers) {
-
-            // Call end game to update score (valuate missions)
-            players.forEach(player -> player.getPersonalBoard().endGame(commonTable.getCommonMissions()));
-
-            // Calculate the max score
-            int maxScore = players.stream()
-                    .mapToInt(player -> player.getPersonalBoard().getScore())
-                    .max()
-                    .orElse(-1);
-
-            // Get winners of the game
-            winners = players.stream()
-                    .filter(player -> player.getPersonalBoard().getScore() == maxScore)
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
-
-        // Check if the next player is the first
         if (players.indexOf(this.currentPlayer) + 1 == this.numberOfPlayers) {
             this.currentPlayer = this.players.getFirst();
-            this.round++;
         } else {
             this.currentPlayer = this.players.get(this.players.indexOf(this.currentPlayer) + 1);
         }
@@ -121,7 +93,6 @@ public class Game {
 
     /**
      * Sets the current Player to the parameter given
-     *
      * @param currentPlayer new current player
      */
     public void setCurrentPlayer(Player currentPlayer) {
@@ -130,7 +101,6 @@ public class Game {
 
     /**
      * Returns the current player
-     *
      * @return current player
      */
     public Player getCurrentPlayer() {
@@ -139,7 +109,6 @@ public class Game {
 
     /**
      * Return the common table for every player
-     *
      * @return common table
      */
     public CommonTable getCommonTable() {
@@ -149,22 +118,20 @@ public class Game {
     /**
      * Increases number of rounds
      */
-    public void increaseRound() {
+    private void increaseRound() {
         this.round += 1;
     }
 
     /**
      * Return the current round
-     *
      * @return round
      */
-    public int getRound() {
+    private int getRound() {
         return this.round;
     }
 
     /**
      * Returns the number of player for the game
-     *
      * @return number of player
      */
     public int getNumberOfPlayers() {
@@ -173,7 +140,6 @@ public class Game {
 
     /**
      * Return the game state
-     *
      * @return game state
      */
     public GameState getState() {
@@ -182,7 +148,6 @@ public class Game {
 
     /**
      * Sets the game state to the parameter given
-     *
      * @param newGameState new game state
      */
     public void setGameState(GameState newGameState) {
@@ -191,27 +156,17 @@ public class Game {
 
     /**
      * Returns an array of players
-     *
      * @return players
      */
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
-    public GameState getGameState() {
-        return gameState;
-    }
-
-    public int getFinalRound() {
-        return finalRound;
-    }
-
-
-    public void setRound(int round) {
-        this.round = round;
-    }
-
-    public void setFinalRound(int finalRound) {
-        this.finalRound = finalRound;
+    /**
+     * Returns the group's chat
+     * @return chat
+     */
+    public Chat getChat() {
+        return this.chat;
     }
 }

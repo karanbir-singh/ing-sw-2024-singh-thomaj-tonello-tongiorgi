@@ -15,4 +15,5 @@ module it.polimi.ingsw.gc26 {
     opens it.polimi.ingsw.gc26.model.card_side.mission to javafx.fxml;
     exports it.polimi.ingsw.gc26.model.card_side.ability;
     opens it.polimi.ingsw.gc26.model.card_side.ability to javafx.fxml;
+
 }
