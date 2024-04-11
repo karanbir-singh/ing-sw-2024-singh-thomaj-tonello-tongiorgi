@@ -64,7 +64,7 @@ public class SocketServer {
         }
         try {
             ServerSocket listenSocket = new ServerSocket(portNumber);
-            new SocketServer(listenSocket, new GameController(new Game(3))).runServer(); //TODO qui ci va il main controller
+            new SocketServer(listenSocket, new GameController(new Game(null))).runServer(); //TODO qui ci va il main controller
         } catch (Exception e) {
             //TODO handle exception
         }
