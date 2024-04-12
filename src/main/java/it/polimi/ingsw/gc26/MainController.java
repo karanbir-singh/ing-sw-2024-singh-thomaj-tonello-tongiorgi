@@ -77,8 +77,8 @@ public class MainController {
             GameController gameController = new GameController(new Game(this.waitingPlayer));
             gamesControllers.add(gameController);
 
-            // Start game preparation
-            gameController.prepareCommonMissions();
+            // Prepare game
+            gameController.prepareCommonTable();
 
             // TODO notify and return GameController to each player of the game
 
