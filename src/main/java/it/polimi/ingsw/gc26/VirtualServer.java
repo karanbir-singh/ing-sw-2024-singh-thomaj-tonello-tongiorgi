@@ -1,4 +1,4 @@
-/*package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26;
 
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Game;
@@ -18,5 +18,5 @@ public interface VirtualServer extends Remote {
     GameControllerInterface getG() throws RemoteException;
 }
 
- */
+
 

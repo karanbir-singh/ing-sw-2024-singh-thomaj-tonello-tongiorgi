@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 public interface GameControllerInterface extends Remote {
     void prepareCommonTable() throws RemoteException;
     void prepareStarterCards() throws RemoteException;
-    void preparePlayersHand() throws RemoteException;
+    void preparePlayersHand(String id) throws RemoteException;
     void prepareCommonMissions() throws RemoteException;
     void prepareSecretMissions()throws RemoteException;
     void selectSecretMission(int cardIndex, String playerID) throws RemoteException;

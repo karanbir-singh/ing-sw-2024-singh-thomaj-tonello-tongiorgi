@@ -1,4 +1,4 @@
-/*package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26;
 
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Game;
@@ -11,9 +11,12 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.function.ToDoubleBiFunction;
 
 public class RMIServer implements VirtualServer{
-    final MainController mainController;
+    private final MainController mainController;
+    private ArrayList<VirtualView> clientsInGame;
+    private ArrayList<VirtualView> clientsWaiting;
     public static void main(String args[]) throws RemoteException { //TODO ALL REMOTE EXCEPTIONS MUST BE HANDLED BY A TRY AND CATCH
         final String serverName = "addressServer";
         VirtualServer server = new RMIServer(new MainController());
@@ -35,10 +38,13 @@ public class RMIServer implements VirtualServer{
 
     public RMIServer(MainController mainController){
         this.mainController = mainController;
+        this.clientsInGame = new ArrayList<>();
+        this.clientsWaiting = new ArrayList<>();
     }
 
     //waiting phase
     public String connect(VirtualView client) throws RemoteException{
+        this.clientsWaiting.add(client);
         //TODO I DON T KNOW WHAT TO PUT
         return UUID.randomUUID().toString();
     }
@@ -56,11 +62,13 @@ public class RMIServer implements VirtualServer{
     }
 
     public GameControllerInterface getG() throws RemoteException{
+        //TODO IDEA MAYBE WRONG
+        clientsInGame.addAll(clientsWaiting);
+        //maybe it s bettere to do the next thing in mainController.getG()
+        clientsWaiting.clear();
         return this.mainController.getG();
     }
 
 
 
 }
-
- */

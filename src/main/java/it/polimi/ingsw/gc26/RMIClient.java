@@ -1,12 +1,13 @@
-/*package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26;
 
+import java.io.ByteArrayOutputStream;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
-public class RMIClient extends UnicastRemoteObject implements VirtualView {
+public class RMIClient extends UnicastRemoteObject implements VirtualView{
     private final VirtualServer server;
     private String playerId;
     private GameControllerInterface gameController;
@@ -41,7 +42,7 @@ public class RMIClient extends UnicastRemoteObject implements VirtualView {
     //implementare interfacce remote
 
 
-    private void run() throws  Exception{
+    private void run() throws Exception{
         this.playerId = this.server.connect(this); //TODO HOW TO ASSOCIATE A CLIENT WITH A PLAYER?
         System.out.println("YOU CONNECTED TO THE SERVER");
         Scanner scanner = new Scanner(System.in);
@@ -50,18 +51,37 @@ public class RMIClient extends UnicastRemoteObject implements VirtualView {
         }else{
             System.out.println("HOW MANY PLAYER MAX");
             String numOfPlayer = scanner.nextLine();
-            this.server.createWaitingList(Integer.parseInt(numOfPlayer), "12334", "kevin");
+            this.server.createWaitingList(Integer.parseInt(numOfPlayer), this.playerId, "kevin");
         }
         this.gameController = server.getG();
         while(this.gameController == null){
             this.gameController = server.getG();
         }
-        System.out.println("IT FUNCTIONS");
-        //this.gameController.prepareCommonTable();
+        System.out.println("I M IN THE GAME, VAMOSS");
+
+        System.out.println("SELECT THE CARD");
+        String index = scanner.nextLine();
+        this.gameController.selectCardFromHand(Integer.parseInt(index),this.playerId);
+        System.out.println("SELECTED STARTER CARD");
+
+        System.out.println("DO YOU WANT TO CHANGE SIDE? yes/no");
+        String decision = scanner.nextLine();
+        if(decision.equals("yes")){
+            this.gameController.turnSelectedCardSide(this.playerId);
+            System.out.println("TURNED STARTER CARD SIDE");
+        }else{
+            System.out.println("YOU DON T WANT TO CHANGE STARTER CARD SIDE");
+        }
+        String decisionCard = scanner.nextLine();
+        if(decisionCard.equals("playStarterCard")){
+            this.gameController.playCardFromHand(this.playerId);
+            System.out.println("PLAYED STARTER CARD");
+        }
+
+
+
 
 
     }
 }
 
-
- */

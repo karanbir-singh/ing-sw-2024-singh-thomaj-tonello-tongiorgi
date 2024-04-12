@@ -77,7 +77,8 @@ public class MainController {
             // Then, create a new game controller and add to the list
             GameController gameController = new GameController(new Game(this.waitingPlayer));
             gamesControllers.add(gameController);
-
+            gameController.prepareCommonTable();
+            gameController.prepareStarterCards();
 
             // TODO notify and return GameController to each player of the game
 
