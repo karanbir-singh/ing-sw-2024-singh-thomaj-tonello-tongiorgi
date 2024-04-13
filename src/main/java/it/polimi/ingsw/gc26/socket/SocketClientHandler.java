@@ -14,7 +14,7 @@ import it.polimi.ingsw.gc26.model.game.Message;
  * logica con cui vado a leggere i messaggi, Fa parte del server
  */
 public class SocketClientHandler implements VirtualServer {
-    final MainController controller;
+    final MainController mainController;
     final GameController gameController;
     final SocketServer server;
     final BufferedReader inputFromClient;
@@ -28,12 +28,12 @@ public class SocketClientHandler implements VirtualServer {
         System.out.println("New client!");
     }
 
-    public void runVirtualView() throws IOException {
+    public void runClientHandler() throws IOException {
         String line;
         while ((line = inputFromClient.readLine()) != null) {
             Message message = new Message(line);
             System.out.println(message);
-            this.controller.addMessage( message);
+            this.gameController.addMessage( message);
             this.server.broadCastUpdate(message, this);
             if (gameController) {
                 this.virtualClient.showMessage();

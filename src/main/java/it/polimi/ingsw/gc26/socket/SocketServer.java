@@ -32,7 +32,7 @@ public class SocketServer {
             synchronized (this.clients) { this.clients.add(handler);}
             new Thread(() -> {
                 try {
-                    handler.runVirtualView();
+                    handler.runClientHandler();
                 } catch (IOException e) {
                     throw new RuntimeException();
                 }
@@ -44,7 +44,7 @@ public class SocketServer {
         synchronized (this.clients) {
             for (var client : this.clients) {
                 if (!client.equals(sender)) {
-                    client.showMessage(message);
+                    client.virtualClient.showMessage(message);
                 }
             }
         }
