@@ -3,8 +3,8 @@ package it.polimi.ingsw.gc26.socket;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.GameController;
+import it.polimi.ingsw.gc26.MainController;
 import it.polimi.ingsw.gc26.model.game.Message;
-import it.polimi.ingsw.gc26.model.game.Game;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -15,8 +15,8 @@ public class SocketServer {
     private final static String filePath = "src/main/resources/envServer.json";
     private final ArrayList<SocketClientHandler> clients = new ArrayList<>();
     private final ServerSocket listenSocket;
-    private final GameController controller;
-    public SocketServer(ServerSocket listenSocket, GameController controller) {
+    private final MainController controller;
+    public SocketServer(ServerSocket listenSocket, MainController controller) {
         this.listenSocket = listenSocket;
         this.controller = controller;
     }
@@ -64,7 +64,7 @@ public class SocketServer {
         }
         try {
             ServerSocket listenSocket = new ServerSocket(portNumber);
-            new SocketServer(listenSocket, new GameController(new Game(null))).runServer(); //TODO qui ci va il main controller
+            new SocketServer(listenSocket, new MainController()).runServer(); //TODO qui ci va il main controller
         } catch (Exception e) {
             //TODO handle exception
         }

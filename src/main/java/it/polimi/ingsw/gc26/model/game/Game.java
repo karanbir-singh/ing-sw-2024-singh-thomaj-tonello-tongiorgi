@@ -83,11 +83,11 @@ public class Game {
      * @param newPlayer new player to be added in the game
      * @throws Exception number of players already maximum
      */
-    public void addPlayer(Player newPlayer) throws Exception {
+    public void addPlayer(Player newPlayer)  {
         if (this.players.size() < numberOfPlayers) {
             this.players.add(newPlayer);
         } else {
-            throw new Exception();
+            //throw new Exception();
         }
     }
 

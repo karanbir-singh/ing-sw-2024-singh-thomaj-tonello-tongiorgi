@@ -57,8 +57,8 @@ public class Message {
         ObjectMapper JsonMapper = new ObjectMapper();
         JsonNode root = JsonMapper.readTree(json_text);
         this.text = root.get("text").asText();
-        this.receiver = new Player(0, root.get("receiver").asText());
-        this.sender = new Player(0, root.get("sender").asText());
+        this.receiver = new Player("0", root.get("receiver").asText());
+        this.sender = new Player("0", root.get("sender").asText());
         this.time = LocalTime.parse(root.get("time").asText());
     }
 

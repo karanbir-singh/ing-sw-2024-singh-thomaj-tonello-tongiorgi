@@ -22,7 +22,7 @@ public class SocketClient implements VirtualView {
     protected SocketClient(BufferedReader input, BufferedWriter output, String username) {
         this.inputFromServer = input;
         this.server = new VirtualSocketServer(output);
-        this.user = new Player(0, username);
+        this.user = new Player("0", username);
     }
 
     private void run() throws RemoteException {
@@ -55,7 +55,7 @@ public class SocketClient implements VirtualView {
                 receiver = line.substring(1, line.indexOf(" "));
                 line = line.substring(line.indexOf(" ")+1);
             }
-            this.server.addMessage(new Message(line, new Player(0,receiver), this.user, null));
+            this.server.addMessage(new Message(line, new Player("0",receiver), this.user, null));
         }
     }
 
