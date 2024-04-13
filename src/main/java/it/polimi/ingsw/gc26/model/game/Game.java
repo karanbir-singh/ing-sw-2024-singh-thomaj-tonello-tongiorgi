@@ -88,12 +88,19 @@ public class Game {
     }
 
     /**
+     * Returns the next player
+     */
+    public Player getNextPlayer() {
+        return players.get((players.indexOf(this.currentPlayer) + 1) % this.numberOfPlayers);
+    }
+
+    /**
      * Sets the currentPlayer to the next one in an infinite cycle
      */
     public void goToNextPlayer() {
         // Check if game is on END_STAGE state, if the round it's the final round and if the next player is the first
         if (this.gameState.equals(GameState.END_STAGE) && this.round == this.finalRound &&
-                players.indexOf(this.currentPlayer) + 1 == this.numberOfPlayers) {
+                getNextPlayer().isFirstPlayer()) {
 
             // Call end game to update score (valuate missions)
             players.forEach(player -> player.getPersonalBoard().endGame(commonTable.getCommonMissions()));
@@ -110,13 +117,8 @@ public class Game {
                     .collect(Collectors.toCollection(ArrayList::new));
         }
 
-        // Check if the next player is the first
-        if (players.indexOf(this.currentPlayer) + 1 == this.numberOfPlayers) {
-            this.currentPlayer = this.players.getFirst();
-            this.round++;
-        } else {
-            this.currentPlayer = this.players.get(this.players.indexOf(this.currentPlayer) + 1);
-        }
+        // Change current player
+        this.currentPlayer = getNextPlayer();
     }
 
     /**
