@@ -1,7 +1,6 @@
 package it.polimi.ingsw.gc26.model.player;
 
 import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.card.MissionCard;
 import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
@@ -255,7 +254,9 @@ public class PersonalBoard {
         String blocked =  Character.toString(0x274C);
         //String blocked =  Character.toString(0x2B55);
         String background = "   ";
+        String playableSeparator = Character.toString(0x1F538);
 
+        //initialize empty board
         for(int j=0; j<yDim; j++) {
             for(int i=0; i<xDim; i+=2){
                 board[j][i] = blackSquare;
@@ -265,18 +266,38 @@ public class PersonalBoard {
             }
         }
 
+        //mark playable positions
         for(Point p: playablePositions) {
             int x = p.getX()*2 - xOff;
             int y = p.getY()*2 - yOff;
-            board[y][x] = background + playable + background;
+
+            //align x
+            if(p.getX() <= -10){
+                board[y][x] = p.getX() + playableSeparator;
+            } else if (p.getX() < 0 || p.getX() >= 10){
+                board[y][x] = " " + p.getX() + playableSeparator;
+            } else {
+                board[y][x] = "  " + p.getX() + playableSeparator;
+            }
+
+            //align y
+            if(p.getY() <= -10){
+                board[y][x] = board[y][x] + p.getY();
+            } else if (p.getY() < 0 || p.getY() >= 10){
+                board[y][x] = board[y][x] + p.getY() + " ";
+            } else {
+                board[y][x] = board[y][x] + p.getY() + "  ";
+            }
         }
 
+        //mark blocked positions
         for(Point p: blockedPositions) {
             int x = p.getX()*2 - xOff;
             int y = p.getY()*2 - yOff;
             board[y][x] = background + blocked + background;
         }
 
+        //represent played cards
         for(Point p: occupiedPositions) {
             String[][] s = p.getSide().printableSide();
             int j=0;
@@ -307,36 +328,12 @@ public class PersonalBoard {
             }*/
 
         }
-        System.out.print(blackSquare);
-        for(int i=xMin; i<=xMax; i++){
-            if(i<0){
-                System.out.print(blackSquare + " " + i + "   " + blackSquare );
-            } else {
-                System.out.print( blackSquare + "  " + i + "   " + blackSquare );
-            }
-        }
 
-        System.out.print("\n");
-
-        int y = yMax;
-        boolean flagY = false;
-
-
+        //print the board with y axis
         for(int j=yDim-1; j>=0; j--){
             for(int i=0; i<xDim; i++){
 
                 System.out.print(board[j][i]);
-            }
-            if(!flagY){
-                flagY = true;
-            } else {
-                if(y<0 || y>9){
-                    System.out.print(" " +y);
-                } else {
-                    System.out.print("  " + y);
-                }
-                y--;
-                flagY = false;
             }
 
             System.out.print("\n");
