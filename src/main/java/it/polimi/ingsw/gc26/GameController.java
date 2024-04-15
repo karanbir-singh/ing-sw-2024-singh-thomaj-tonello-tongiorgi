@@ -42,7 +42,7 @@ public class GameController extends UnicastRemoteObject implements GameControlle
     /**
      * Places two resource cards and two gold cards on the common table
      */
-    public void prepareCommonTable() throws RemoteException {
+    public void prepareCommonTable() throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 

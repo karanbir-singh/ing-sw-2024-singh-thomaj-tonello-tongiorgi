@@ -59,6 +59,7 @@ public class RMIServer implements VirtualServer{
 
     public void joinWaitingList(String playerID, String playerNickname)throws RemoteException{
         this.mainController.joinWaitingList(playerID,playerNickname);
+
     }
 
     public GameControllerInterface getG() throws RemoteException{
