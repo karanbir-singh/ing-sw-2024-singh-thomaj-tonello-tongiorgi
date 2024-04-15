@@ -994,7 +994,6 @@ class PersonalBoardTest {
         pb.setPosition(0,-2);
         pb.playSide(goldDeck.getCards().get(9).getFront());
 
-        pb.showBoard();
 
         assertEquals(6, pb.getScore());
         assertEquals(0, pb.getResourceQuantity(Symbol.INSECT));
