@@ -36,15 +36,16 @@ public class Message {
      * @param sender Player that send the message
      * @param time Time the message was created
      */
-    public Message(String text, Player receiver, Player sender, LocalTime time){
+    public Message(String text, String receiver, String sender, LocalTime time){
         this.text = text;
-        this.sender = sender;
+        //TODO get sender
+        this.sender = new Player("0", sender);
         if (time == null) {
             this.time = LocalTime.now();
         } else {
             this.time = time;
         }
-        this.receiver = receiver;
+        this.receiver = new Player("2", receiver);
     }
 
 

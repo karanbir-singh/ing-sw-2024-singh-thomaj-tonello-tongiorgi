@@ -8,6 +8,7 @@ import it.polimi.ingsw.gc26.GameController;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalTime;
 import java.util.UUID;
 
 import it.polimi.ingsw.gc26.MainController;
@@ -46,9 +47,14 @@ public class SocketClientHandler implements VirtualServer {
                 msg = JsonMapper.readTree(line);
                 switch (msg.get("function").textValue()) {
                     case "addMessage":
-                        this.addMessage(msg.get("value").asText());
+                        Message newMessage = new Message(msg.get("value").asText());
+                        this.addMessage(newMessage.getText(), newMessage.getReceiver().getNickname(), newMessage.getSender().getNickname(), LocalTime.now().toString());
                         break;
-                    case "":
+                    case "selectCardFromHand":
+                        JsonMapper = new ObjectMapper();
+                        msg = JsonMapper.readTree(msg.get("value").asText());
+                        this.selectCardFromHand(msg.get("cardIndex").asInt(), msg.get("playerID").asText());
+                        break;
                         //do something
                 }
             } else {
@@ -59,13 +65,13 @@ public class SocketClientHandler implements VirtualServer {
     }
 
     @Override
-    public void selectCardFromHand(Card card) {
-        this.gameController.selectCardFromHand(0, "");
+    public void selectCardFromHand(int cardIndex, String playerID) {
+        this.gameController.selectCardFromHand(cardIndex, playerID);
     }
 
     @Override
-    public void turnSelectedCardSide() {
-
+    public void turnSelectedCardSide(String playerID) {
+        this.gameController.turnSelectedCardSide(playerID);
     }
 
     @Override
@@ -89,13 +95,9 @@ public class SocketClientHandler implements VirtualServer {
     }
 
     @Override
-    public void addMessage(String message) {
+    public void addMessage(String line, String nicknameReceiver,String nicknameSender, String time) {
         Message msg = null;
-        try {
-            msg = new Message(message);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        msg = new Message(line, nicknameReceiver, nicknameSender, LocalTime.now());
         System.out.println(msg);
         this.gameController.addMessage(msg);
         this.server.broadCastUpdate(msg, this);

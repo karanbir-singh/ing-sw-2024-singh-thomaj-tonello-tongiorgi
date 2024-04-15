@@ -4,14 +4,15 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Message;
 
 public interface VirtualServer {
-    void selectCardFromHand(Card card);
-    void turnSelectedCardSide();
+    void selectCardFromHand(int cardIndex, String playerID);
+    void turnSelectedCardSide(String playerID);
     void selectPositionOnBoard(int x, int y);
     void playCardFromHand();
     void selectCardFromCommonTable(Card card);
     void drawSelectedCard();
 
-    void addMessage(String message);
+    void addMessage(String line, String nicknameReceiver,String nicknameSender, String time);
     void sendText(String text);
 
 }
+

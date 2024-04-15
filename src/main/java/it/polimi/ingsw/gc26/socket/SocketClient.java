@@ -76,13 +76,20 @@ public class SocketClient implements VirtualView {
                 chat = true;
                 receiver = line.substring(1, line.indexOf(" "));
                 line = line.substring(line.indexOf(" ")+1);
+                if (line.startsWith("/")) {
+                    receiver = line.substring(1, line.indexOf(" "));
+                    line = line.substring(line.indexOf(" ")+1);
+                }
             }
-            if (line.startsWith("/")) {
-                receiver = line.substring(1, line.indexOf(" "));
-                line = line.substring(line.indexOf(" ")+1);
+
+            switch (line) {
+                case "1":
+                    this.server.selectCardFromHand(0, this.username);
+                    break;
             }
+
             if (chat) {
-                this.server.addMessage(JsonClientBuilder.buildMessage(line, receiver, this.username, ""));
+                this.server.addMessage(line, receiver, this.username, "");
             } else {
                 this.server.sendText(line);
             }
