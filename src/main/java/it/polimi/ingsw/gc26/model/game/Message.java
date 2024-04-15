@@ -59,7 +59,7 @@ public class Message {
         this.text = root.get("text").asText();
         this.receiver = new Player("0", root.get("receiver").asText());
         this.sender = new Player("0", root.get("sender").asText());
-        this.time = LocalTime.parse(root.get("time").asText());
+        this.time = null; //TODO LocalTime.parse(root.get("time").asText());
     }
 
     /**
@@ -104,7 +104,7 @@ public class Message {
        data.put("text", this.getText());
        data.put("receiver", this.getReceiver().getNickname());
        data.put("sender", this.getSender().getNickname());
-       data.put("time", this.getTime().toString());
+       data.put("time", ""); //TODO this.getTime().toString()
        ObjectMapper objectMapper = new ObjectMapper();
        try {
            return objectMapper.writeValueAsString(data);

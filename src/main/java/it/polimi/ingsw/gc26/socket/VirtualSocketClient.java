@@ -12,13 +12,23 @@ public class VirtualSocketClient implements  VirtualView {
     }
 
     @Override
-    public void showMessage(Message message) {
-        this.outputToServer.println(message.toString());
+    public void showMessage(String message) {
+        this.outputToServer.println(message);
+        this.outputToServer.flush();
+    }
+
+    @Override
+    public void reportMessage(String message) {
+        String msg = STR."{\"function\": \"reportMessage\", \"value\" : \" \{message} \"}";
+        this.outputToServer.println(msg);
+        this.outputToServer.flush();
     }
 
     @Override
     public void reportError(String errorMessage) {
-        this.outputToServer.println(errorMessage);
+        String msg = STR."{\"function\": \"reportError\", \"value\" : \" \{errorMessage} \"}";
+        this.outputToServer.println(msg);
+        this.outputToServer.flush();
 
     }
 }

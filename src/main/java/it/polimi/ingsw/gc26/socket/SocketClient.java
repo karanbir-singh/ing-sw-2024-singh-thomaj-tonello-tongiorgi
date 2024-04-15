@@ -1,28 +1,27 @@
 package it.polimi.ingsw.gc26.socket;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.player.Player;
 
 import java.io.*;
 import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.Scanner;
-import java.util.concurrent.Callable;
-import java.util.function.Function;
 
 
 public class SocketClient implements VirtualView {
     private final static String filePath = "src/main/resources/envClient.json";
     private final BufferedReader inputFromServer;
     private final VirtualSocketServer server;
-    private final Player user;
+    private String username;
 
     protected SocketClient(BufferedReader input, BufferedWriter output, String username) {
         this.inputFromServer = input;
         this.server = new VirtualSocketServer(output);
-        this.user = new Player("0", username);
+        this.username = username;
     }
 
     private void run() throws RemoteException {
@@ -31,7 +30,7 @@ public class SocketClient implements VirtualView {
             try {
                 this.runVirtualServer();
             } catch (Exception e) {
-                throw new RuntimeException();
+                e.printStackTrace();
             }
         }).start();
         this.runCLI();
@@ -40,8 +39,25 @@ public class SocketClient implements VirtualView {
     private void runVirtualServer() throws IOException {
         String line;
         while((line = inputFromServer.readLine()) != null) {
-            //switch per capire il comando
-            this.showMessage(new Message(line));
+            JsonNode root = null;
+            try {
+                ObjectMapper JsonMapper = new ObjectMapper();
+                root = JsonMapper.readTree(line);
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
+            }
+
+            switch (root.get("function").asText()) {
+                case "showMessage":
+                    this.showMessage(root.get("value").asText());
+                    break;
+                case "reportMessage":
+                    this.reportMessage(root.get("value").asText());
+                    break;
+                case "reportError":
+                    this.reportError(root.get("value").asText());
+                    break;
+            }
         }
     }
 
@@ -49,18 +65,45 @@ public class SocketClient implements VirtualView {
         Scanner scan  = new Scanner(System.in);
         while (true) {
             //System.out.println("> ");
+            boolean chat = false;
             String line = scan.nextLine();
+            if (this.username.equals("")) {
+                this.username = line;
+            }
+
             String receiver = "";
+            if (line.startsWith("/chat")) {
+                chat = true;
+                receiver = line.substring(1, line.indexOf(" "));
+                line = line.substring(line.indexOf(" ")+1);
+            }
             if (line.startsWith("/")) {
                 receiver = line.substring(1, line.indexOf(" "));
                 line = line.substring(line.indexOf(" ")+1);
             }
-            this.server.addMessage(new Message(line, new Player("0",receiver), this.user, null));
+            if (chat) {
+                this.server.addMessage(JsonClientBuilder.buildMessage(line, receiver, this.username, ""));
+            } else {
+                this.server.sendText(line);
+            }
         }
     }
 
-    public void showMessage(Message message) {
-        System.out.println(message);
+    public void showMessage(String line) {
+        JsonNode message = null;
+        try {
+            ObjectMapper JsonMapper = new ObjectMapper();
+            message = JsonMapper.readTree(line);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("[" + message.get("sender").asText() + "]: " + message.get("text").asText());
+    }
+
+    @Override
+    public void reportMessage(String message) {
+        System.out.println("[SERVER]: " + message);
     }
 
     public void reportError(String errorMessage) {
@@ -82,8 +125,9 @@ public class SocketClient implements VirtualView {
         Socket serverSocket = new Socket(hostName, portNumber);
         InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
         OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
-        String username = simpleLogin(); System.out.println("\n");
-        new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx), username).run();
+        //String username = simpleLogin();
+        //System.out.println("Waiting for other players ..."); System.out.println("\n");
+        new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx), "").run();
     }
 
     private static String simpleLogin() {
@@ -92,7 +136,6 @@ public class SocketClient implements VirtualView {
         return scan.nextLine();
     }
 
-    private void wrap_message(Callable<Object> function, String values) {
-
-    }
 }
+
+

@@ -11,6 +11,7 @@ public interface VirtualServer {
     void selectCardFromCommonTable(Card card);
     void drawSelectedCard();
 
-    void addMessage(Message message);
+    void addMessage(String message);
+    void sendText(String text);
 
 }

@@ -34,7 +34,7 @@ public class SocketServer {
                 try {
                     handler.runClientHandler();
                 } catch (IOException e) {
-                    throw new RuntimeException();
+                    e.printStackTrace();
                 }
             }).start();
         }
@@ -44,12 +44,32 @@ public class SocketServer {
         synchronized (this.clients) {
             for (var client : this.clients) {
                 if (!client.equals(sender)) {
-                    client.virtualClient.showMessage(message);
+                    client.virtualClient.showMessage(JsonServerBuilder.buildMessage(message));
                 }
             }
         }
 
     }
+
+    public void broadCastReport(String text, SocketClientHandler sender) {
+        synchronized (this.clients) {
+            for (var client : this.clients) {
+                client.virtualClient.reportMessage(text);
+            }
+        }
+
+    }
+
+    public void setGameController(GameController gameController) {
+        synchronized (this.clients) {
+            for (var client : this.clients) {
+                client.setGameController(gameController);
+
+
+            }
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         String hostName;
         int portNumber;

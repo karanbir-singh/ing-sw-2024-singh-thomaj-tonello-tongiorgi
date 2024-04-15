@@ -46,14 +46,18 @@ public class VirtualSocketServer implements VirtualServer {
     }
 
     @Override
-    public void addMessage(Message message) {
-        this.outputToServer.println(message.toJson());
+    public void addMessage(String message)  {
+        this.outputToServer.println(message);
         this.outputToServer.flush();
     }
-    private String wrapMessage(Callable<Objects> function,  String valuesToWrap) {
-        String functionName = function.toString();
-        System.out.print(functionName);
-        return valuesToWrap;
+
+    @Override
+    public void sendText(String text) {
+        this.outputToServer.println(text);
+        this.outputToServer.flush();
     }
 
+
 }
+
+
