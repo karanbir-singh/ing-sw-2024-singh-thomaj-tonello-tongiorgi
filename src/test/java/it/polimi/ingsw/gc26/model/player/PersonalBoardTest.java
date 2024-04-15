@@ -934,8 +934,104 @@ class PersonalBoardTest {
         assertFalse(pb.getOccupiedPositions().get(7).getSide().getDOWNLEFT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(7).getSide().getDOWNRIGHT().isHidden());
         pb.showBoard();
+    }
+
+    @Test
+    void notPlayablePosition(){
+        Game game = new Game(new ArrayList<>());
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        Player p1 = new Player("3", "Bob");
+        game.addPlayer(p1);
+        game.setCurrentPlayer(p1);
+        game.getCurrentPlayer().createPersonalBoard();
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(1));
+
+        ArrayList<Card> commonMissions = new ArrayList<>();
+        commonMissions.add(missionDeck.getCards().get(4));
+        commonMissions.add(missionDeck.getCards().get(0));
+
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+
+        pb.setPosition(0,0);
+        pb.playSide(initialDeck.getCards().get(0).getBack());
+        pb.setPosition(1,0);
+        pb.playSide(resourceDeck.getCards().get(0).getFront());
+        //MUST PRINT ON SCREEN, NOT VALID POSITION
+    }
+
+    @Test
+    void cardThatGives5PointPlants(){
+        Game game = new Game(new ArrayList<>());
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        Player p1 = new Player("3", "Bob");
+        game.addPlayer(p1);
+        game.setCurrentPlayer(p1);
+        game.getCurrentPlayer().createPersonalBoard();
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(2));
+
+        ArrayList<Card> commonMissions = new ArrayList<>();
+        commonMissions.add(missionDeck.getCards().get(4));
+        commonMissions.add(missionDeck.getCards().get(0));
+
+        PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
+        pb.setPosition(0,0);
+        pb.playSide(initialDeck.getCards().get(2).getFront());
+
+        pb.setPosition(1,1);
+        pb.playSide(resourceDeck.getCards().get(1).getBack());
+        pb.setPosition(1,-1);
+        pb.playSide(resourceDeck.getCards().get(0).getFront());
+
+        pb.setPosition(-1,1);
+        pb.playSide(resourceDeck.getCards().get(8).getFront());
+
+        pb.setPosition(0,-2);
+        pb.playSide(goldDeck.getCards().get(9).getFront());
+
+        pb.showBoard();
+
+        assertEquals(6, pb.getScore());
+        assertEquals(0, pb.getResourceQuantity(Symbol.INSECT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.ANIMAL));
+        assertEquals(1, pb.getResourceQuantity(Symbol.FUNGI));
+        assertEquals(4, pb.getResourceQuantity(Symbol.PLANT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.MANUSCRIPT));
+        assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
+        assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
 
 
+        assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(0).getSide().getDOWNLEFT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(0).getSide().getDOWNRIGHT().isHidden());
+
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(1).getSide().getDOWNRIGHT().isHidden());
+
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getUPRIGHT().isHidden());
+        assertTrue(pb.getOccupiedPositions().get(2).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(2).getSide().getDOWNRIGHT().isHidden());
+
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(3).getSide().getDOWNRIGHT().isHidden());
+
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getUPLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getUPRIGHT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getDOWNLEFT().isHidden());
+        assertFalse(pb.getOccupiedPositions().get(4).getSide().getDOWNRIGHT().isHidden());
+
+        pb.showBoard();
 
     }
 }
