@@ -327,4 +327,10 @@ abstract public class Side {
         return s;
     }
 
+    public void getPrintableProperties(){
+        ArrayList<String> properties = new ArrayList<>();
+
+
+    }
+
 }

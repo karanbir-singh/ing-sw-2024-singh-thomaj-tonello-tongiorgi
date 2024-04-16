@@ -40,7 +40,7 @@ public class CLITest {
         ArrayList<Card> cards = new ArrayList<>();
         Hand myHand;
 
-        cards.add(resourceDeck.getCards().get(10));
+        cards.add(resourceDeck.getCards().get(6));
         cards.add(resourceDeck.getCards().get(20));
         cards.add(goldDeck.getCards().get(10));
 
