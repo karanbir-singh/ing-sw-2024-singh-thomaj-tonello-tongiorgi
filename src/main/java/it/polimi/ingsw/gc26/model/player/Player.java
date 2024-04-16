@@ -44,7 +44,8 @@ public class Player {
 
     /**
      * Initializes the player with an id and a name
-     * @param id unique number that represent the player
+     *
+     * @param id   unique number that represent the player
      * @param name player's nickname
      */
     public Player(String id, String name) {
@@ -58,6 +59,7 @@ public class Player {
 
     /**
      * Returns the player's id
+     *
      * @return player's id
      */
     public String getID() {
@@ -66,6 +68,7 @@ public class Player {
 
     /**
      * Sets the player nickname
+     *
      * @param name new nickname
      */
     public void setNickname(String name) {
@@ -74,6 +77,7 @@ public class Player {
 
     /**
      * Returns the player's nickname
+     *
      * @return nickname
      */
     public String getNickname() {
@@ -82,14 +86,31 @@ public class Player {
 
     /**
      * Sets the pawn color to the chosen one
-     * @param chosenColor new pawn color
+     *
+     * @param color new pawn color
      */
-    public void setPawn(Pawn chosenColor) {
-        this.pawnColor = chosenColor;
+    public void setPawn(String color, ArrayList<Pawn> availableColors) {
+        Pawn pawn;
+        switch (color) {
+            case "B" -> pawn = Pawn.BLUE;
+            case "R" -> pawn = Pawn.RED;
+            case "Y" -> pawn = Pawn.YELLOW;
+            case "G" -> pawn = Pawn.GREEN;
+            default -> pawn = null;
+        }
+
+        if (pawn == null) {
+            // TODO gestire cosa fare nella view quando l'utente passa un colore non corretto
+        } else if (availableColors.contains(pawn)) {
+            // TODO gestire cosa fare nella view quando l'utente passa un colore non disponibile
+        } else{
+            this.pawnColor = pawn;
+        }
     }
 
     /**
      * Return the pawn color
+     *
      * @return pawn color
      */
     public Pawn getPawnColor() {
@@ -104,7 +125,15 @@ public class Player {
     }
 
     /**
+     * Sets boolean that indicates the player is not the first one to false
+     */
+    public void setNotFirstPlayer() {
+        this.amIFirstPlayer = false;
+    }
+
+    /**
      * Returns a boolean that equals true if the player is the first one to play in the round
+     *
      * @return amIFirstPlayer
      */
     public boolean isFirstPlayer() {
@@ -122,11 +151,13 @@ public class Player {
      * Creates an empty secret mission hand
      */
     public void createSecretMissionHand() {
-        this.secretMissionHand = new Hand(new ArrayList<>());;
+        this.secretMissionHand = new Hand(new ArrayList<>());
+        ;
     }
 
     /**
      * Return the player's secret mission hand
+     *
      * @return secretMissionHand
      */
     public Hand getSecretMissionHand() {
@@ -135,6 +166,7 @@ public class Player {
 
     /**
      * Return the player's hand
+     *
      * @return hand
      */
     public Hand getHand() {
@@ -150,6 +182,7 @@ public class Player {
 
     /**
      * Returns the current player's turn
+     *
      * @return turn
      */
     public int getTurn() {
@@ -165,6 +198,7 @@ public class Player {
 
     /**
      * Returns the player's personal board
+     *
      * @return personal board
      */
     public PersonalBoard getPersonalBoard() {
