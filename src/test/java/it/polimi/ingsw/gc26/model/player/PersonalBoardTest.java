@@ -22,7 +22,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
+        game.getCurrentPlayer().createPersonalBoard();
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
 
@@ -71,7 +71,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(5).getFront());
+        game.getCurrentPlayer().createPersonalBoard();
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
 
@@ -116,7 +116,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
+        game.getCurrentPlayer().createPersonalBoard();
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(1));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
         //get(1) è la missione corretta
@@ -151,7 +151,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
+        game.getCurrentPlayer().createPersonalBoard();
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(1));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
@@ -192,7 +192,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
+        game.getCurrentPlayer().createPersonalBoard();
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard(); //get(2) per diagonale e get(6) per L
         //usiamo animals e un fungi in alto a destra
@@ -225,7 +225,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
+        game.getCurrentPlayer().createPersonalBoard(); //get(12) mission 2 punti per ogni 3FUNGI
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(12));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
@@ -314,7 +314,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
+        game.getCurrentPlayer().createPersonalBoard(); //get(12) mission 2 punti per ogni 3FUNGI
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(7));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
         //missione L pattern tipo 4 con ANIMAL e INSECT e INSECT
@@ -397,7 +397,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
+        game.getCurrentPlayer().createPersonalBoard();
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
@@ -450,7 +450,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront()); //get(12) mission 2 punti per ogni 3FUNGI
+        game.getCurrentPlayer().createPersonalBoard(); //get(12) mission 2 punti per ogni 3FUNGI
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(7));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
         //missione L pattern tipo 4 con ANIMAL e INSECT e INSECT
@@ -518,7 +518,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
+        game.getCurrentPlayer().createPersonalBoard();
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
@@ -609,7 +609,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
+        game.getCurrentPlayer().createPersonalBoard();
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
@@ -694,7 +694,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getFront());
+        game.getCurrentPlayer().createPersonalBoard();
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
@@ -746,7 +746,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
+        game.getCurrentPlayer().createPersonalBoard();
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
@@ -769,7 +769,7 @@ class PersonalBoardTest {
         Player p1 = new Player("3", "Bob");
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
-        game.getCurrentPlayer().createPersonalBoard(initialDeck.getCards().get(0).getBack());
+        game.getCurrentPlayer().createPersonalBoard();
         game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
