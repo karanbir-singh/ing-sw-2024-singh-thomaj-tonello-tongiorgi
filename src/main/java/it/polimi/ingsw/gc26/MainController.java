@@ -65,7 +65,7 @@ public class MainController {
      * @param playerID ID of the player who is joining the waiting list
      * @param playerNickname Nickname of the player who is joining the waiting list
      */
-    public GameController joinWaitingList(String playerID, String playerNickname) {
+    public void joinWaitingList(String playerID, String playerNickname) throws RemoteException {
         Player newPlayer = new Player(playerID, playerNickname);
 
         // Add player to the waiting list
@@ -77,13 +77,11 @@ public class MainController {
             GameController gameController = new GameController(new Game(this.waitingPlayer));
             gamesControllers.add(gameController);
 
-
             // TODO notify and return GameController to each player of the game
 
             // Clear waiting list
             this.waitingPlayer.clear();
             this.waitingPlayer = null;
-            return gameController;
         }
         return null;
     }
@@ -92,6 +90,13 @@ public class MainController {
         return waitingPlayer;
     }
 
-    public static void main(String[] args) {
+
+    public GameControllerInterface getG() throws RemoteException {//METODO FITTIZZIO
+        if(!gamesControllers.isEmpty()){
+            return gamesControllers.getFirst();
+        }else{
+            return null;
+        }
+
     }
 }

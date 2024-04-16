@@ -1,24 +1,26 @@
 package it.polimi.ingsw.gc26;
 
+import java.io.ByteArrayOutputStream;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
-/*public class RMIClient extends UnicastRemoteObject implements VirtualView {
+public class RMIClient extends UnicastRemoteObject implements VirtualView{
     private final VirtualServer server;
     private String playerId;
+    private GameControllerInterface gameController;
     public RMIClient(VirtualServer server) throws RemoteException {
         this.server = server;
     }
-    public static void main(String args[]) throws  RemoteException{
+    public static void main(String args[]) throws Exception{
         //Il registro è online
         //L’oggetto remoto è gia stato pubblicato dal server
 
         final String remoteObjectName = "addressServer";
         //connect to registry
-        Registry registry = LocateRegistry.getRegistry(args[0]); //TODO we need to change the parameter
+        Registry registry = LocateRegistry.getRegistry(1099);
         //we instanciate the server stub, the remote object
         VirtualServer server = (VirtualServer) registry.lookup(remoteObjectName);
         new RMIClient(server).run();
@@ -40,33 +42,46 @@ import java.util.Scanner;
     //implementare interfacce remote
 
 
-    private void run() throws  Exception{
+    private void run() throws Exception{
         this.playerId = this.server.connect(this); //TODO HOW TO ASSOCIATE A CLIENT WITH A PLAYER?
         System.out.println("YOU CONNECTED TO THE SERVER");
-        while(true){
-            Scanner scanner = new Scanner(System.in);
-            String userInput;
-            int decision;
-            System.out.println("Choose a nickName");
-            userInput = scanner.nextLine();
-
-            decision =  this.server.login(userInput, this.playerId);
-            while(decision == 0){
-                System.out.println("Choose a new nickName because it's not new");
-                userInput = scanner.nextLine();
-                decision = this.server.login(userInput, this.playerId);
-            }
-
-            if(decision == 1){
-                System.out.println("You are entering in a game");
-                this.server.joinGame(this.playerId);
-            }
-            if(decision == 2){
-                System.out.println("Choose how many player you want in your new game");
-                int numPlayerGame = Integer.parseInt(scanner.nextLine());
-                this.server.createGame(numPlayerGame,this.playerId);
-            }
-
+        Scanner scanner = new Scanner(System.in);
+        if(this.server.existsWaitingGame()){
+            this.server.joinWaitingList(this.playerId,"kevin");
+        }else{
+            System.out.println("HOW MANY PLAYER MAX");
+            String numOfPlayer = scanner.nextLine();
+            this.server.createWaitingList(Integer.parseInt(numOfPlayer), this.playerId, "kevin");
         }
+        this.gameController = server.getG();
+        while(this.gameController == null){
+            this.gameController = server.getG();
+        }
+        System.out.println("I M IN THE GAME, VAMOSS");
+
+        System.out.println("SELECT THE CARD");
+        String index = scanner.nextLine();
+        this.gameController.selectCardFromHand(Integer.parseInt(index),this.playerId);
+        System.out.println("SELECTED STARTER CARD");
+
+        System.out.println("DO YOU WANT TO CHANGE SIDE? yes/no");
+        String decision = scanner.nextLine();
+        if(decision.equals("yes")){
+            this.gameController.turnSelectedCardSide(this.playerId);
+            System.out.println("TURNED STARTER CARD SIDE");
+        }else{
+            System.out.println("YOU DON T WANT TO CHANGE STARTER CARD SIDE");
+        }
+        String decisionCard = scanner.nextLine();
+        if(decisionCard.equals("playStarterCard")){
+            this.gameController.playCardFromHand(this.playerId);
+            System.out.println("PLAYED STARTER CARD");
+        }
+
+
+
+
+
     }
-}*/
+}
+

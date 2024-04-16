@@ -9,7 +9,10 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 
-public class GameController {
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+
+public class GameController extends UnicastRemoteObject implements GameControllerInterface {
 
     /**
      * This attribute represents the game that the game controller controls
@@ -21,8 +24,9 @@ public class GameController {
      *
      * @param game the object that represents the game
      */
-    public GameController(Game game) {
+    public GameController(Game game) throws RemoteException {
         this.game = game;
+        this.game.setGameState(GameState.INITIAL_STAGE);
     }
 
     /**
@@ -30,7 +34,7 @@ public class GameController {
      *
      * @param playerID ID of the searched player
      */
-    private Player getPlayer(String playerID) {
+    private Player getPlayer(String playerID) throws RemoteException{
         return game.getPlayers().stream().filter((Player p) -> p.getID().equals(playerID)).findAny().get();
     }
 
@@ -39,7 +43,7 @@ public class GameController {
     /**
      * Places two resource cards and two gold cards on the common table
      */
-    public void prepareCommonTable() {
+    public void prepareCommonTable() throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
@@ -69,7 +73,7 @@ public class GameController {
     /**
      * + Gives starter cards to each player
      */
-    public void prepareStarterCards() {
+    public void prepareStarterCards() throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
@@ -93,18 +97,18 @@ public class GameController {
     /**
      * Gives the first three playable cards to each player
      */
-    public void preparePlayersHand() {
+    public void preparePlayersHand(String playerID) throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
-            for (Player p : game.getPlayers()) {
-                // Add 2 Resources Card to the hand
-                p.getHand().addCard(commonTable.getResourceDeck().removeCard());
-                p.getHand().addCard(commonTable.getResourceDeck().removeCard());
+            Player player = getPlayer(playerID);
 
-                // Add 1 Gold Card to the hand
-                p.getHand().addCard(commonTable.getGoldDeck().removeCard());
-            }
+            // Add 2 Resources Card to the hand
+            player.getHand().addCard(commonTable.getResourceDeck().removeCard());
+            player.getHand().addCard(commonTable.getResourceDeck().removeCard());
+
+            // Add 1 Gold Card to the hand
+            player.getHand().addCard(commonTable.getGoldDeck().removeCard());
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
@@ -113,7 +117,7 @@ public class GameController {
     /**
      * Places two common mission cards on the common table
      */
-    public void prepareCommonMissions() {
+    public void prepareCommonMissions()throws RemoteException {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
@@ -125,6 +129,9 @@ public class GameController {
             // Place common mission cards on the table
             commonTable.addCard(firstCommonMission, commonTable.getCommonMissions(), 0);
             commonTable.addCard(secondCommonMission, commonTable.getCommonMissions(), 1);
+
+            // Give two secret missions to each player
+            this.prepareSecretMissions();
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
@@ -133,7 +140,7 @@ public class GameController {
     /**
      * Gives two mission cards to each player
      */
-    public void prepareSecretMissions() {
+    public void prepareSecretMissions() throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
@@ -160,7 +167,7 @@ public class GameController {
      * @param cardIndex index of the selected mission card
      * @param playerID  ID of the player who is selecting the secret mission card
      */
-    public void selectSecretMission(int cardIndex, String playerID) {
+    public void selectSecretMission(int cardIndex, String playerID) throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             // Get the player who is selecting the card by his ID
             Player player = getPlayer(playerID);
@@ -184,7 +191,7 @@ public class GameController {
      *
      * @param playerID ID of the player who is setting the secret mission card
      */
-    public void setSecretMission(String playerID) {
+    public void setSecretMission(String playerID) throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             // Get the player who is setting the card by his ID
             Player player = getPlayer(playerID);
@@ -209,7 +216,7 @@ public class GameController {
      *
      * @param playerID ID of the first player of the games
      */
-    public void setFirstPlayer(String playerID) {
+    public void setFirstPlayer(String playerID) throws RemoteException{
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             // Get the player by his ID
             Player player = getPlayer(playerID);
@@ -233,7 +240,7 @@ public class GameController {
      * @param cardIndex index of the card in the player's hand
      * @param playerID  ID of the player who is selected the card to play
      */
-    public void selectCardFromHand(int cardIndex, String playerID) {
+    public void selectCardFromHand(int cardIndex, String playerID) throws RemoteException{
         // Get the player who is selected the card to play
         Player player = getPlayer(playerID);
 
@@ -265,7 +272,7 @@ public class GameController {
      *
      * @param playerID ID of the player who is turning the side of the selected card
      */
-    public void turnSelectedCardSide(String playerID) {
+    public void turnSelectedCardSide(String playerID) throws RemoteException{
         // Get player who is turning the selected card side
         Player player = getPlayer(playerID);
 
@@ -280,7 +287,7 @@ public class GameController {
      * @param selectedY coordinate on the Y axis of the chosen position on the personal board
      * @param playerID  ID of the player who is selecting the position on the personal board
      */
-    public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) {
+    public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) throws RemoteException{
         // Get the player who is selecting the position on his personal board
         Player player = getPlayer(playerID);
 
@@ -296,28 +303,34 @@ public class GameController {
      *
      * @param playerID ID of the player who is playing the selected side of the card in the hand
      */
-    public void playCardFromHand(String playerID) {
+    public void playCardFromHand(String playerID) throws RemoteException{
         // Get player who is trying to place the selected side
         Player player = getPlayer(playerID);
 
-        // Check if it's the player's turn
-        if (player.equals(game.getCurrentPlayer())) {
-            // Check if it's the INITIAL_STAGE: the player is placing the starter card
-            if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
-                // If the player doesn't have a personal board, it means he's placing a starter card
-                if (player.getPersonalBoard() == null) {
-                    // Check if there is a selected card
-                    if (player.getHand().getSelectedCard().isPresent()) {
-                        // Create the personal board with the selected starter card side
-                        player.createPersonalBoard(player.getHand().getSelectedSide().get());
+        // Check if it's the INITIAL_STAGE: the player is placing the starter card
+        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+            // If the player doesn't have a personal board, it means he's placing a starter card
+            if (player.getPersonalBoard() == null) {
+                // Check if there is a selected card
+                if (player.getHand().getSelectedCard().isPresent()) {
+                    // Create the personal board
+                    player.createPersonalBoard();
 
-                        // Remove the starter card from the hand
-                        player.getHand().removeCard(player.getHand().getSelectedCard().get());
-                    } else {
-                        // TODO gestire cosa fare quando la carta non è selezionata
-                    }
+                    // Place starter card
+                    player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get());
+
+                    // Remove the starter card from the hand
+                    player.getHand().removeCard(player.getHand().getSelectedCard().get());
+
+                    // Give playable cards to player
+                    this.preparePlayersHand(playerID);
+                } else {
+                    // TODO gestire cosa fare quando la carta non è selezionata
                 }
-            } else {
+            }
+        } else {
+            // Check if it's the player's turn
+            if (player.equals(game.getCurrentPlayer())) {
                 // Otherwise get the player's personal board and his hand
                 PersonalBoard personalBoard = player.getPersonalBoard();
                 Hand hand = player.getHand();
@@ -333,9 +346,9 @@ public class GameController {
                     // TODO gestire cosa fare quando la carta non è selezionata
                 }
 
+            } else {
+                // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
             }
-        } else {
-            // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
         }
     }
 
@@ -346,7 +359,7 @@ public class GameController {
      * @param cardY    coordinate on the Y axis of the card on the common table
      * @param playerID ID of the player who is trying to select the card on the common table
      */
-    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
+    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) throws RemoteException {
         if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
             // Check if it's the current player
             if (getPlayer(playerID).equals(game.getCurrentPlayer())) {
@@ -363,7 +376,7 @@ public class GameController {
      *
      * @param playerID ID of the player who is trying to draw the selected card on the common table
      */
-    public void drawSelectedCard(String playerID) {
+    public void drawSelectedCard(String playerID) throws RemoteException{
         if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
             // Get the player who is trying to draw the selected card on the common table
             Player player = getPlayer(playerID);
@@ -378,17 +391,22 @@ public class GameController {
                 if (commonTable.getSelectedCard().isPresent()) {
                     Card removedCard = commonTable.removeSelectedCard();
                     hand.addCard(removedCard);
-                }
 
-                // Check if player's score is greater or equal then 20 points OR decks are both empty
-                if (player.getPersonalBoard().getScore() >= 20 ||
-                        (commonTable.getResourceDeck().getCards().isEmpty() &&
-                                commonTable.getGoldDeck().getCards().isEmpty())) {
-                    // Change game state into END_STAGE
-                    game.setGameState(GameState.END_STAGE);
+                    // Check if player's score is greater or equal then 20 points OR decks are both empty
+                    if (player.getPersonalBoard().getScore() >= 20 ||
+                            (commonTable.getResourceDeck().getCards().isEmpty() &&
+                                    commonTable.getGoldDeck().getCards().isEmpty())) {
+                        // Change game state into END_STAGE
+                        game.setGameState(GameState.END_STAGE);
 
-                    // Set the final round
-                    game.setFinalRound(game.getRound() + 1);
+                        // Set the final round
+                        game.setFinalRound(game.getRound() + 1);
+                    }
+
+                    // Change turn to next player
+                    this.changeTurn();
+                }else{
+                    // TODO gestire cosa fare quando non è stata selezionata una carta da pescare
                 }
             }
         } else {
@@ -396,14 +414,14 @@ public class GameController {
         }
     }
 
-    public void changeTurn() {
+    public void changeTurn()throws RemoteException {
         game.goToNextPlayer();
     }
 
 // PHASE 3: End game
 
 
-    public Game getGame() {
+    public Game getGame()throws RemoteException {
         return game;
     }
 

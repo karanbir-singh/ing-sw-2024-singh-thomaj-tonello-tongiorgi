@@ -143,10 +143,9 @@ public class Player {
 
     /**
      * Creates the player's personal board
-     * @param initialSide initial card side
      */
-    public void createPersonalBoard(Side initialSide) {
-        this.personalBoard = new PersonalBoard(initialSide);
+    public void createPersonalBoard() {
+        this.personalBoard = new PersonalBoard();
     }
 
     /**

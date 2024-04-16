@@ -25,7 +25,7 @@ public class PersonalBoard {
      *
      * @param starterSide side chosen by the player that he wants to play
      */
-    public PersonalBoard(Side starterSide) {
+    public PersonalBoard() {
         score = 0;
         xMin = 0;
         xMax = 0;
@@ -47,7 +47,6 @@ public class PersonalBoard {
         blockedPositions = new ArrayList<>();
 
         addPoint(0, 0, playablePositions);
-        playSide(starterSide);
     }
 
     /**
@@ -277,8 +276,7 @@ public class PersonalBoard {
     public ArrayList<Point> getOccupiedPositions() {
         return this.occupiedPositions;
     }
-
-
+            
     /**
      * private methods that handles the effects that a certain corner of the last played card has on the adjacent points
      * if the point is in occupiedPositions, the eventual covered resource is removed from the counter
