@@ -91,13 +91,33 @@ public class GameController {
                 player.createHand();
 
                 // Place starter card to the player's hand
-                player.getHand().addCard(starterCard);;
+                player.getHand().addCard(starterCard);
 
                 // Make it permanently selected
                 player.getHand().setSelectedCard(starterCard);
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+        }
+    }
+
+    /**
+     * Sets the pawn color
+     *
+     * @param color chosen color index
+     * @param playerID ID of the player who is choosing the color
+     */
+    public void choosePawnColor(String color, String playerID) {
+        // Get the player who is choosing the color by his ID
+        Player player = getPlayer(playerID);
+
+        // Set color
+        player.setPawn(color, game.getAvailablePawns());
+
+        // Check if the next player is the first
+        if(game.getNextPlayer().isFirstPlayer()){
+            // Then prepare common missions
+            this.prepareCommonMissions();
         }
     }
 
@@ -204,7 +224,7 @@ public class GameController {
             Player player = getPlayer(playerID);
 
             // Check if it's the current player
-            if(player.equals(game.getCurrentPlayer())) {
+            if (player.equals(game.getCurrentPlayer())) {
                 // Check if the player selected a card
                 if (player.getSecretMissionHand().getSelectedCard().isPresent()) {
                     // Set the secret mission on the personal board of the players
@@ -242,6 +262,7 @@ public class GameController {
             Player player = getPlayer(playerID);
 
             // Set the player as the first
+            game.getPlayers().getFirst().setNotFirstPlayer();
             player.setFirstPlayer();
             game.setCurrentPlayer(player);
 
@@ -340,10 +361,10 @@ public class GameController {
                         this.preparePlayersHand(playerID);
 
                         // Check if the next player is the first
-                        if (game.getNextPlayer().isFirstPlayer()) {
-                            // Then prepare common missions
-                            this.prepareCommonMissions();
-                        }
+                        //if (game.getNextPlayer().isFirstPlayer()) {
+                        // Then prepare common missions
+                        //this.prepareCommonMissions();
+                        //}
 
                         // Change turn
                         this.changeTurn();
@@ -438,6 +459,10 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+    }
+
+    public void printPersonalBoard(){
+
     }
 
     public void changeTurn() {
