@@ -211,6 +211,7 @@ public class Hand {
         x = 1;
 
         for(Card c: cards) {
+            myHand[y][x] = " ";
             if(c.getFront().getRequestedResources() != null){
                 int n;
                 int spaces = 5;
@@ -224,21 +225,16 @@ public class Hand {
                 }
 
                 while (spaces>0){
-                    myHand[y][x] = myHand[y][x] + "▪\uFE0F";
+                    myHand[y][x] = myHand[y][x] + "  ";
                     spaces--;
                 }
 
-                myHand[y][x] = myHand[y][x] + " ";
-
             }
             if(c != cards.getLast()){
-                myHand[y][x] = myHand[y][x] + "▪\uFE0F"+"▪\uFE0F"+"▪\uFE0F" + " " ;
+                myHand[y][x] = "  " + myHand[y][x] + "▪\uFE0F"+"▪\uFE0F"+"▪\uFE0F" ;
             }
             x++;
         }
-
-
-
 
         for(y=0; y<yMax; y++){
             for(x=0; x<xMax; x++){
@@ -246,5 +242,6 @@ public class Hand {
             }
         }
 
+        System.out.print("\n");
     }
 }
