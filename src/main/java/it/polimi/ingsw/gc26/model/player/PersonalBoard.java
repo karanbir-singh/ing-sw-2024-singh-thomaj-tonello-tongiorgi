@@ -248,13 +248,19 @@ public class PersonalBoard {
         int xOff = xMin*2 -1;
         int yOff = yMin*2 -1;
         String[][] board = new String[yDim][xDim];
-        String blackSquare = Character.toString(0x2B1B);
+
+        String blackSquare = "▪\uFE0F";
+        String whiteSquare = "▫️";
+        //String blackSquare = Character.toString(0x2B1B);
         String playable = Character.toString(0x26AA	);
         //String playable = Character.toString(0x1F7E4);
-        String blocked =  Character.toString(0x274C);
+        String blocked =  "✖️";
+        //String blocked =  Character.toString(0x1F512	);
+        //String blocked =  Character.toString(0x274C);
         //String blocked =  Character.toString(0x2B55);
         String background = "   ";
         String playableSeparator = Character.toString(0x1F538);
+        String styleReset = "\u001B[0m";
 
         //initialize empty board
         for(int j=0; j<yDim; j++) {
@@ -288,6 +294,15 @@ public class PersonalBoard {
             } else {
                 board[y][x] = board[y][x] + p.getY() + "  ";
             }
+
+            board[y+1][x] = "‾ ‾" + blackSquare + "‾ ‾";
+            board[y-1][x] = "_ _" + blackSquare + "_ _";
+            board[y-1][x-1] = blackSquare;
+            board[y][x-1] = whiteSquare;
+            board[y+1][x-1] = blackSquare;
+            board[y][x+1] = whiteSquare;
+            board[y-1][x+1] = blackSquare;
+            board[y+1][x+1] = blackSquare;
         }
 
         //mark blocked positions
@@ -331,12 +346,13 @@ public class PersonalBoard {
 
         //print the board with y axis
         for(int j=yDim-1; j>=0; j--){
+            //System.out.print("\33[47m");
             for(int i=0; i<xDim; i++){
 
                 System.out.print(board[j][i]);
             }
 
-            System.out.print("\n");
+            System.out.print(styleReset + "\n");
         }
     }
 

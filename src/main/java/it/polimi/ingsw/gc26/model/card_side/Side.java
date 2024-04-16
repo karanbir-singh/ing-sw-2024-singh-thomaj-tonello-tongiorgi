@@ -258,7 +258,7 @@ abstract public class Side {
             fontColor = sideSymbol.getFontColor();
         } else {
             filler = Character.toString(0x1F7E1);
-            fontColor = "";
+            fontColor = "\33[93m";
         }
 
         if(UPLEFT.getSymbol().isPresent()){
@@ -320,10 +320,10 @@ abstract public class Side {
 
         /*for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
+                s[i][j] = "\33[40m" + s[i][j] + styleReset;
             }
-            System.out.print("\n");
         }*/
+
         return s;
     }
 

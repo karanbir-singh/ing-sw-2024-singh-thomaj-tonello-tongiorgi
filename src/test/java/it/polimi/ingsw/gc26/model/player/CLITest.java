@@ -6,6 +6,7 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.game.Game;
+import it.polimi.ingsw.gc26.model.hand.Hand;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -28,6 +29,27 @@ public class CLITest {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
+
+
+    @Test
+    public void showHand(){
+        Game game = new Game(new ArrayList<>());
+        Deck goldDeck = game.getCommonTable().getGoldDeck();
+        Deck resourceDeck = game.getCommonTable().getResourceDeck();
+        Deck initialDeck = game.getCommonTable().getStarterDeck();
+        ArrayList<Card> cards = new ArrayList<>();
+        Hand myHand;
+
+        cards.add(resourceDeck.getCards().get(10));
+        cards.add(resourceDeck.getCards().get(20));
+        cards.add(goldDeck.getCards().get(10));
+
+        myHand = new Hand(cards);
+
+        myHand.showHand();
+
+    }
+
     @Test
     public void printSide(){
         Game game = new Game(new ArrayList<>());

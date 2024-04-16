@@ -100,4 +100,36 @@ public class Hand {
     public ArrayList<Card> getCards(){
         return cards;
     }
+
+    public void showHand(){
+        int xMax = 5;
+        int yMax = (cards.size()+1) * 3;
+        String[][] myHand = new String[yMax][xMax];
+        int y=0, x=0;
+
+        for(int j=0; j<yMax; j++) {
+            for(int i=0; i<xMax; i++){
+                myHand[j][i] = "";
+            }
+        }
+
+        for(Card c: cards){
+            for(int j=0; j<3; j++){
+                x=0;
+                for(int i=0;i<3;i++){
+                    myHand[y][x] = c.getFront().printableSide()[j][i];
+                    x++;
+                }
+                myHand[y][x] = "\n";
+                y++;
+            }
+        }
+
+        for(y=0; y<yMax; y++){
+            for(x=0; x<xMax; x++){
+                System.out.print(myHand[y][x]);
+            }
+        }
+
+    }
 }
