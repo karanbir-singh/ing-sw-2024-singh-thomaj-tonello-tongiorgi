@@ -40,26 +40,97 @@ public class VirtualSocketServer implements VirtualServer {
 
     @Override
     public void turnSelectedCardSide(String playerID) {
+        HashMap<String, String> data = VirtualSocketServer.getBasicMessage();
+        data.replace("function", "turnSelectedCardSide");
+        HashMap<String, String> value = new HashMap<>();
+        value.put("playerID", playerID);
+        ObjectMapper mappedmsg = new ObjectMapper();
+        try {
+            data.replace("value", mappedmsg.writeValueAsString(value));
+            ObjectMapper mappedData = new ObjectMapper();
+
+            this.outputToServer.println(mappedData.writeValueAsString(data));
+            this.outputToServer.flush();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void selectPositionOnBoard(int x, int y, String playerID) {
+        HashMap<String, String> data = VirtualSocketServer.getBasicMessage();
+        data.replace("function", "selectPositionOnBoard");
+        HashMap<String, String> value = new HashMap<>();
+        value.put("x", String.valueOf(x));
+        value.put("y", String.valueOf(y));
+        value.put("playerID", playerID);
+        ObjectMapper mappedmsg = new ObjectMapper();
+        try {
+            data.replace("value", mappedmsg.writeValueAsString(value));
+            ObjectMapper mappedData = new ObjectMapper();
+
+            this.outputToServer.println(mappedData.writeValueAsString(data));
+            this.outputToServer.flush();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void playCardFromHand(String playerID) {
+        HashMap<String, String> data = VirtualSocketServer.getBasicMessage();
+        data.replace("function", "playCardFromHand");
+        HashMap<String, String> value = new HashMap<>();
+        value.put("playerID", playerID);
+        ObjectMapper mappedmsg = new ObjectMapper();
+        try {
+            data.replace("value", mappedmsg.writeValueAsString(value));
+            ObjectMapper mappedData = new ObjectMapper();
+
+            this.outputToServer.println(mappedData.writeValueAsString(data));
+            this.outputToServer.flush();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
-    public void selectPositionOnBoard(int x, int y) {
+    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
+        HashMap<String, String> data = VirtualSocketServer.getBasicMessage();
+        data.replace("function", "selectCardFromCommonTable");
+        HashMap<String, String> value = new HashMap<>();
+        value.put("cardX", String.valueOf(cardX));
+        value.put("cardY", String.valueOf(cardY));
+        value.put("playerID", playerID);
+        ObjectMapper mappedmsg = new ObjectMapper();
+        try {
+            data.replace("value", mappedmsg.writeValueAsString(value));
+            ObjectMapper mappedData = new ObjectMapper();
 
+            this.outputToServer.println(mappedData.writeValueAsString(data));
+            this.outputToServer.flush();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void playCardFromHand() {
+    public void drawSelectedCard(String playerID) {
+        HashMap<String, String> data = VirtualSocketServer.getBasicMessage();
+        data.replace("function", "drawSelectedCard");
+        HashMap<String, String> value = new HashMap<>();
+        value.put("playerID", playerID);
+        ObjectMapper mappedmsg = new ObjectMapper();
+        try {
+            data.replace("value", mappedmsg.writeValueAsString(value));
+            ObjectMapper mappedData = new ObjectMapper();
 
-    }
-
-    @Override
-    public void selectCardFromCommonTable(Card card) {
-
-    }
-
-    @Override
-    public void drawSelectedCard() {
+            this.outputToServer.println(mappedData.writeValueAsString(data));
+            this.outputToServer.flush();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
     }
 

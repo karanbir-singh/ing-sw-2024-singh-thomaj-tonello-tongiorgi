@@ -55,7 +55,33 @@ public class SocketClientHandler implements VirtualServer {
                         msg = JsonMapper.readTree(msg.get("value").asText());
                         this.selectCardFromHand(msg.get("cardIndex").asInt(), msg.get("playerID").asText());
                         break;
-                        //do something
+                    case "turnSelectedCardSide":
+                        JsonMapper = new ObjectMapper();
+                        msg = JsonMapper.readTree(msg.get("value").asText());
+                        this.turnSelectedCardSide(msg.get("playerID").asText());
+                        break;
+                    case "selectPositionOnBoard":
+                        JsonMapper = new ObjectMapper();
+                        msg = JsonMapper.readTree(msg.get("value").asText());
+                        this.selectPositionOnBoard(msg.get("x").asInt(), msg.get("y").asInt(), msg.get("playerID").asText());
+                        break;
+                    case "playCardFromHand":
+                        JsonMapper = new ObjectMapper();
+                        msg = JsonMapper.readTree(msg.get("value").asText());
+                        this.playCardFromHand(msg.get("playerID").asText());
+                        break;
+                    case "selectCardFromCommonTable":
+                        JsonMapper = new ObjectMapper();
+                        msg = JsonMapper.readTree(msg.get("value").asText());
+                        this.selectCardFromCommonTable(msg.get("cardX").asInt(), msg.get("cardY").asInt(), msg.get("playerID").asText());
+                        break;
+                    case "drawSelectedCard":
+                        JsonMapper = new ObjectMapper();
+                        msg = JsonMapper.readTree(msg.get("value").asText());
+                        this.drawSelectedCard(msg.get("playerID").asText());
+                        break;
+                    case null, default:
+                        break;
                 }
             } else {
                 this.virtualClient.reportError("The game is being initialized! Please wait!");
@@ -75,23 +101,25 @@ public class SocketClientHandler implements VirtualServer {
     }
 
     @Override
-    public void selectPositionOnBoard(int x, int y) {
+    public void selectPositionOnBoard(int x, int y, String playerID) {
+        this.gameController.selectPositionOnBoard(x, y, playerID);
 
     }
 
     @Override
-    public void playCardFromHand() {
+    public void playCardFromHand(String playerID) {
+        this.gameController.playCardFromHand(playerID);
 
     }
 
     @Override
-    public void selectCardFromCommonTable(Card card) {
-
+    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
+        this.gameController.selectCardFromCommonTable(cardX, cardY, playerID);
     }
 
     @Override
-    public void drawSelectedCard() {
-
+    public void drawSelectedCard(String playerID) {
+        this.gameController.drawSelectedCard(playerID);
     }
 
     @Override
