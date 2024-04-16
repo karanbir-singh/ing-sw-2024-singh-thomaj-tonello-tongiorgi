@@ -22,8 +22,6 @@ public class PersonalBoard {
     /**
      * The constructor initializes everything: the score, the resource, missions occupiedPositions , playablePositions, blockedPositions.
      * Here, the first move is made playing the initial card.
-     *
-     * @param starterSide side chosen by the player that he wants to play
      */
     public PersonalBoard() {
         score = 0;
@@ -126,6 +124,14 @@ public class PersonalBoard {
      */
     public int getScore() {
         return score;
+    }
+
+    /**
+     * set score
+     * @param score
+     */
+    public void setScore(int score) {
+        this.score = score;
     }
 
     /**
