@@ -78,8 +78,9 @@ public class MainController {
         // Check if waiting list is full
         if (waitingPlayer.size() >= maxNumWaitingPlayers) {
             // Then, create a new game controller and add to the list
+            GameController gameController = null;
             try {
-                GameController gameController = new GameController(new Game(waitingPlayer));
+                gameController = new GameController(new Game(waitingPlayer));
                 gamesControllers.add(gameController);
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -88,7 +89,9 @@ public class MainController {
             // Clear waiting list
             this.waitingPlayer.clear();
             this.waitingPlayer = null;
+            return gameController;
         }
+        return null;
     }
 
     public ArrayList<Player> getWaitingPlayer() {

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.network.socket;
+package it.polimi.ingsw.gc26.network.socket.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,16 +7,16 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
-public class VirtualSocketClient implements VirtualView {
+public class VirtualSocketView implements VirtualView {
     final PrintWriter outputToServer;
 
-    public VirtualSocketClient(PrintWriter output) {
+    public VirtualSocketView(PrintWriter output) {
         this.outputToServer = output;
     }
 
     @Override
     public void showMessage(String message) {
-        HashMap<String, String> data = VirtualSocketClient.getBasicMessage();
+        HashMap<String, String> data = VirtualSocketView.getBasicMessage();
         data.replace("function", "showMessage");
         data.replace("value", message);
         try {

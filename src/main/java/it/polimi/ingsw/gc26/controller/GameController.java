@@ -11,6 +11,7 @@ import it.polimi.ingsw.gc26.model.player.Player;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalTime;
 
 public class GameController extends UnicastRemoteObject {
 
@@ -416,5 +417,10 @@ public class GameController extends UnicastRemoteObject {
 
     public void changeTurn() throws RemoteException {
         game.goToNextPlayer();
+    }
+
+    public void addMessage(String line, String nicknameReceiver,String nicknameSender, String time) throws RemoteException {
+        Message msg = new Message(line, nicknameReceiver, nicknameSender, LocalTime.now()); // TODO
+        this.game.getChat().addMessage(msg);
     }
 }

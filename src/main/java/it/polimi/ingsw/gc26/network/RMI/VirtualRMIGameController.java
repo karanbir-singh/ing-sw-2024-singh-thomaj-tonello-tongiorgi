@@ -87,4 +87,9 @@ public class VirtualRMIGameController implements VirtualGameController {
     public void changeTurn() throws RemoteException {
         this.gameController.changeTurn();
     }
+
+    @Override
+    public void addMessage(String line, String nicknameReceiver, String nicknameSender, String time) throws RemoteException {
+        this.gameController.addMessage(line, nicknameReceiver, nicknameReceiver, time);
+    }
 }

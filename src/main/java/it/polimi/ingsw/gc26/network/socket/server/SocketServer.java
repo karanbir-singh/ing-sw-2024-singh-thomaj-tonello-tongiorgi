@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.network.socket;
+package it.polimi.ingsw.gc26.network.socket.server;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
