@@ -83,8 +83,23 @@ public class SocketClient implements VirtualView {
             }
 
             switch (line) {
-                case "1":
+                case "/1":
                     this.server.selectCardFromHand(0, this.username);
+                    break;
+                case "/2":
+                    this.server.turnSelectedCardSide(this.username);
+                    break;
+                case "/3":
+                    this.server.selectPositionOnBoard(0, 0, this.username);
+                    break;
+                case "/4":
+                    this.server.playCardFromHand(this.username);
+                    break;
+                case "/5":
+                    this.server.selectCardFromCommonTable(0, 0, this.username);
+                    break;
+                case "/6":
+                    this.server.drawSelectedCard(this.username);
                     break;
             }
 
@@ -132,8 +147,6 @@ public class SocketClient implements VirtualView {
         Socket serverSocket = new Socket(hostName, portNumber);
         InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
         OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
-        //String username = simpleLogin();
-        //System.out.println("Waiting for other players ..."); System.out.println("\n");
         new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx), "").run();
     }
 

@@ -44,7 +44,7 @@ public class SocketServer {
         synchronized (this.clients) {
             for (var client : this.clients) {
                 if (!client.equals(sender)) {
-                    client.virtualClient.showMessage(JsonServerBuilder.buildMessage(message));
+                    client.virtualClient.showMessage(message.toJson());
                 }
             }
         }

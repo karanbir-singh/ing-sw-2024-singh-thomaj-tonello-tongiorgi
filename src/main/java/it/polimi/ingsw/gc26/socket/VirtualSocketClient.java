@@ -1,8 +1,11 @@
 package it.polimi.ingsw.gc26.socket;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.model.game.Message;
 
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 public class VirtualSocketClient implements  VirtualView {
     final PrintWriter outputToServer;
@@ -13,8 +16,17 @@ public class VirtualSocketClient implements  VirtualView {
 
     @Override
     public void showMessage(String message) {
-        this.outputToServer.println(message);
-        this.outputToServer.flush();
+        HashMap<String, String> data = VirtualSocketClient.getBasicMessage();
+        data.replace("function", "showMessage");
+        data.replace("value", message);
+        try {
+            ObjectMapper mappedData = new ObjectMapper();
+            this.outputToServer.println(mappedData.writeValueAsString(data));
+            this.outputToServer.flush();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -30,5 +42,12 @@ public class VirtualSocketClient implements  VirtualView {
         this.outputToServer.println(msg);
         this.outputToServer.flush();
 
+    }
+
+    private static HashMap<String, String> getBasicMessage() {
+        HashMap<String, String> data = new HashMap<>();
+        data.put("function", "");
+        data.put("value", "");
+        return data;
     }
 }

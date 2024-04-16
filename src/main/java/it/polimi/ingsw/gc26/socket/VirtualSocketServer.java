@@ -9,7 +9,6 @@ import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.concurrent.Callable;
 
 public class VirtualSocketServer implements VirtualServer {
     private final PrintWriter outputToServer;
