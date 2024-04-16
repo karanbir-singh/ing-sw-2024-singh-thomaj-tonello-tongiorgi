@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.model.game;
 
 import it.polimi.ingsw.gc26.model.deck.Deck;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.Parser.ParserCore;
 
@@ -113,12 +114,18 @@ public class Game {
 
             // Get winners of the game
             winners = players.stream()
-                    .filter(player -> player.getPersonalBoard().getScore() == maxScore)
+                    .filter(player -> player.getPersonalBoard().getScore() == (maxScore % 29))
                     .collect(Collectors.toCollection(ArrayList::new));
         }
 
         // Change current player
         this.currentPlayer = getNextPlayer();
+
+        // Check if the next current player is the first player
+        if (this.currentPlayer.isFirstPlayer()) {
+            // Then increase the round
+            this.increaseRound();
+        }
     }
 
     /**
@@ -200,6 +207,25 @@ public class Game {
         return players;
     }
 
+    /**
+     * Returns a list of available pawn color
+     *
+     * @return list of available colors
+     */
+    public ArrayList<Pawn> getAvailablePawns() {
+        ArrayList<Pawn> availableColors = new ArrayList<>();
+        availableColors.add(Pawn.BLUE);
+        availableColors.add(Pawn.RED);
+        availableColors.add(Pawn.YELLOW);
+        availableColors.add(Pawn.GREEN);
+
+        for (Player player : players) {
+            availableColors.remove(player.getPawnColor());
+        }
+
+        return availableColors;
+    }
+
     public GameState getGameState() {
         return gameState;
     }
@@ -215,5 +241,9 @@ public class Game {
 
     public void setFinalRound(int finalRound) {
         this.finalRound = finalRound;
+    }
+
+    public ArrayList<Player> getWinners() {
+        return winners;
     }
 }
