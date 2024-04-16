@@ -1,8 +1,9 @@
-package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26.controller;
 
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 public class MainController {
@@ -32,6 +33,7 @@ public class MainController {
 
     /**
      * Check if there are players waiting
+     *
      * @return true if there are players waiting, false otherwise
      */
     public boolean existsWaitingGame() {
@@ -40,8 +42,9 @@ public class MainController {
 
     /**
      * Initializes the waiting list of players and updating max numbers of players for the next game
-     * @param numPlayers number of players of the next game
-     * @param playerID ID of the player who is initializing the waiting list
+     *
+     * @param numPlayers     number of players of the next game
+     * @param playerID       ID of the player who is initializing the waiting list
      * @param playerNickname nickname of the player who is initializing the waiting list
      */
     public void createWaitingList(int numPlayers, String playerID, String playerNickname) {
@@ -62,10 +65,11 @@ public class MainController {
 
     /**
      * Adds a player into the waiting list, if exists
-     * @param playerID ID of the player who is joining the waiting list
+     *
+     * @param playerID       ID of the player who is joining the waiting list
      * @param playerNickname Nickname of the player who is joining the waiting list
      */
-    public void joinWaitingList(String playerID, String playerNickname) throws RemoteException {
+    public GameController joinWaitingList(String playerID, String playerNickname) {
         Player newPlayer = new Player(playerID, playerNickname);
 
         // Add player to the waiting list
@@ -74,29 +78,20 @@ public class MainController {
         // Check if waiting list is full
         if (waitingPlayer.size() >= maxNumWaitingPlayers) {
             // Then, create a new game controller and add to the list
-            GameController gameController = new GameController(new Game(this.waitingPlayer));
-            gamesControllers.add(gameController);
-
-            // TODO notify and return GameController to each player of the game
+            try {
+                GameController gameController = new GameController(new Game(waitingPlayer));
+                gamesControllers.add(gameController);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
 
             // Clear waiting list
             this.waitingPlayer.clear();
             this.waitingPlayer = null;
         }
-        return null;
     }
 
     public ArrayList<Player> getWaitingPlayer() {
         return waitingPlayer;
-    }
-
-
-    public GameControllerInterface getG() throws RemoteException {//METODO FITTIZZIO
-        if(!gamesControllers.isEmpty()){
-            return gamesControllers.getFirst();
-        }else{
-            return null;
-        }
-
     }
 }

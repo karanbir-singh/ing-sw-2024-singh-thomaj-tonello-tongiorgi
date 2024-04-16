@@ -1,10 +1,10 @@
-package it.polimi.ingsw.gc26.socket;
+package it.polimi.ingsw.gc26.network.socket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.model.player.Player;
+import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.*;
 import java.net.Socket;

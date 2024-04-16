@@ -15,5 +15,9 @@ module it.polimi.ingsw.gc26 {
     opens it.polimi.ingsw.gc26.model.card_side.mission to javafx.fxml;
     exports it.polimi.ingsw.gc26.model.card_side.ability;
     opens it.polimi.ingsw.gc26.model.card_side.ability to javafx.fxml;
+    exports it.polimi.ingsw.gc26.network.RMI;
+    opens it.polimi.ingsw.gc26.network.RMI to javafx.fxml;
+    exports it.polimi.ingsw.gc26.controller;
+    opens it.polimi.ingsw.gc26.controller to javafx.fxml;
 
 }

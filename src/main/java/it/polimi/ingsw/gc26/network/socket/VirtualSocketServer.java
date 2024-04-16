@@ -1,14 +1,11 @@
-package it.polimi.ingsw.gc26.socket;
+package it.polimi.ingsw.gc26.network.socket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.game.Message;
 
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class VirtualSocketServer implements VirtualServer {
     private final PrintWriter outputToServer;

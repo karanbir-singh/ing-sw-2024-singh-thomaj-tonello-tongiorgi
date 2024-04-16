@@ -1,9 +1,9 @@
-package it.polimi.ingsw.gc26.socket;
+package it.polimi.ingsw.gc26.network.socket;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.GameController;
-import it.polimi.ingsw.gc26.MainController;
+import it.polimi.ingsw.gc26.controller.GameController;
+import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.model.game.Message;
 
 import java.io.*;

@@ -1,9 +1,8 @@
-package it.polimi.ingsw.gc26.socket;
+package it.polimi.ingsw.gc26.network.socket;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.GameController;
+import it.polimi.ingsw.gc26.controller.GameController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,8 +10,7 @@ import java.io.PrintWriter;
 import java.time.LocalTime;
 import java.util.UUID;
 
-import it.polimi.ingsw.gc26.MainController;
-import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.model.game.Message;
 
 /**

@@ -1,13 +1,13 @@
-package it.polimi.ingsw.gc26.socket;
+package it.polimi.ingsw.gc26.network.socket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
 
-public class VirtualSocketClient implements  VirtualView {
+public class VirtualSocketClient implements VirtualView {
     final PrintWriter outputToServer;
 
     public VirtualSocketClient(PrintWriter output) {
