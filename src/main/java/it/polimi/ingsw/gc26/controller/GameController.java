@@ -113,11 +113,11 @@ public class GameController {
         Player player = getPlayer(playerID);
 
         // Set color
-        if(player.equals(game.getCurrentPlayer())){
+        if (player.equals(game.getCurrentPlayer())) {
             player.setPawn(color, game.getAvailablePawns());
 
             // Check if the next player is the first
-            if(game.getNextPlayer().isFirstPlayer()){
+            if (game.getNextPlayer().isFirstPlayer()) {
                 // Then prepare common missions
                 this.prepareCommonMissions();
             }
@@ -458,15 +458,12 @@ public class GameController {
         }
     }
 
+    // TODO print personal board
     public void printPersonalBoard(){
 
     }
 
-    public void changeTurn() {
+    private void changeTurn() {
         game.goToNextPlayer();
-    }
-
-    public Game getGame() {
-        return game;
     }
 }
