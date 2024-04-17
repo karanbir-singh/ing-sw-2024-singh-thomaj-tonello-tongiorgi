@@ -1,12 +1,19 @@
 package it.polimi.ingsw.gc26.controller;
 
+import it.polimi.ingsw.gc26.StateClient;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
+import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.rmi.RemoteException;
 import java.util.*;
 
 public class MainController {
+    /**
+     * This attribute represents the list of clients who are waiting for a new game
+     */
+    private ArrayList<VirtualView> waitingClients;
+
     /**
      * This attribute represents the list of players who are waiting for a new game
      */
@@ -20,16 +27,34 @@ public class MainController {
     /**
      * This attribute represents the number of player that needs to wait until a game is created
      */
-    private int maxNumWaitingPlayers;
+    private int maxNumWaitingClients;
 
     /**
      * Initializes waiting players' list and games controllers' list
      */
     public MainController() {
+        this.waitingClients = new ArrayList<>();
         this.waitingPlayers = new ArrayList<>();
         this.gamesControllers = new ArrayList<>();
-        maxNumWaitingPlayers = 0;
-        this.waitingPlayers = new ArrayList<>();
+        maxNumWaitingClients = 0;
+    }
+
+    public String connect(VirtualView client, String nickname) {
+        // For now, ID it's random string
+        String clientID = UUID.randomUUID().toString();
+
+        // Check if there is a waiting game
+        if (this.existsWaitingGame()) {
+            // Then join in waiting list
+            this.joinWaitingList(client, clientID, nickname);
+        } else {
+            try {
+                client.updateState(StateClient.CREATION_GAME);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return clientID;
     }
 
     /**
@@ -37,25 +62,32 @@ public class MainController {
      *
      * @return true if there are players waiting, false otherwise
      */
-    public boolean existsWaitingGame(){
-        return !waitingPlayers.isEmpty() ;
+    private boolean existsWaitingGame() {
+        return !waitingClients.isEmpty();
     }
 
     /**
      * Initializes the waiting list of players and updating max numbers of players for the next game
      *
      * @param numPlayers     number of players of the next game
-     * @param playerID       ID of the player who is initializing the waiting list
-     * @param playerNickname nickname of the player who is initializing the waiting list
+     * @param clientID       ID of the player who is initializing the waiting list
+     * @param nickname nickname of the player who is initializing the waiting list
      */
-    public void createWaitingList(int numPlayers, String playerID, String playerNickname) {
+    public void createWaitingList(VirtualView client, String clientID, String nickname, int numPlayers) {
         // Check if given number of players is correct
         if (numPlayers > 1 && numPlayers <= Game.MAX_NUM_PLAYERS) {
-            // Add in the list the player
-            this.waitingPlayers.add(new Player(playerID, playerNickname));
+            // Add client in the waiting list
+            this.waitingClients.add(client);
+            this.waitingPlayers.add(new Player(clientID, nickname));
 
             // Update the max numbers of players for the game
-            this.maxNumWaitingPlayers = numPlayers;
+            this.maxNumWaitingClients = numPlayers;
+
+            try {
+                client.updateState(StateClient.WAITING_GAME);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         } else {
             // TODO gestire cosa fare in cui il numero di giocatori è negativo o maggiori di Game.MAX_NUM_PLAYERS
         }
@@ -67,31 +99,53 @@ public class MainController {
      * @param playerID       ID of the player who is joining the waiting list
      * @param playerNickname Nickname of the player who is joining the waiting list
      */
-    public GameController joinWaitingList(String playerID, String playerNickname) {
-        Player newPlayer = new Player(playerID, playerNickname);
+    private GameController joinWaitingList(VirtualView client, String playerID, String playerNickname) {
         GameController gameController = null;
 
-        // Add player to the waiting list
-        this.waitingPlayers.add(newPlayer);
+        // Add client in waiting list
+        this.waitingClients.add(client);
+        this.waitingPlayers.add(new Player(playerID, playerNickname));
 
-        // Check if waiting list is full
-        if (waitingPlayers.size() >= maxNumWaitingPlayers) {
-            // Then, create a new game controller and add to the list
+        // Check number of clients in waiting list
+        if (waitingClients.size() >= maxNumWaitingClients) {
+            // Then, create a new game controller
+            gameController = new GameController(new Game(waitingPlayers));
+            gamesControllers.add(gameController);
+
+            // Update of the view
+            for (VirtualView view : waitingClients) {
+                try {
+                    view.updateState(StateClient.BEGIN);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Start game
+            gameController.prepareCommonTable();
+
+            // Clear waiting lists
+            waitingClients.clear();
+            waitingPlayers.clear();
+        } else {
+            // Otherwise client state is on WAITING_GAME
             try {
-                gameController = new GameController(new Game(waitingPlayers));
-                gamesControllers.add(gameController);
-
+                client.updateState(StateClient.WAITING_GAME);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-
-            // Clear waiting list
-            this.waitingPlayers.clear();
         }
+
         return gameController;
     }
 
-    public ArrayList<Player> getWaitingPlayers() {
-        return waitingPlayers;
+    public ArrayList<VirtualView> getWaitingClients() {
+        return waitingClients;
+    }
+
+    public GameController getGameController() {
+        if (!gamesControllers.isEmpty())
+            return gamesControllers.getLast();
+        return null;
     }
 }
