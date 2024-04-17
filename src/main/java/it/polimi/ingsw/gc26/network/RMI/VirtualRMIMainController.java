@@ -83,9 +83,6 @@ public class VirtualRMIMainController extends UnicastRemoteObject implements Vir
     // This is for testing
     @Override
     public VirtualGameController getVirtualGameController() throws RemoteException {
-        for(VirtualView client: clients){
-            client.updateState(StateClient.BEGIN);
-        }
         if (!virtualGameControllers.isEmpty())
             return virtualGameControllers.getLast();
         return null;
