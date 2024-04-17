@@ -6,6 +6,7 @@ import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
 public class VirtualRMIView implements VirtualView {
@@ -15,12 +16,10 @@ public class VirtualRMIView implements VirtualView {
     private VirtualGameController virtualGameController;
     StateClient currState;
 
-
-
-
-    public VirtualRMIView(VirtualMainController virtualMainController) {
+    public VirtualRMIView(VirtualMainController virtualMainController) throws RemoteException {
         this.virtualMainController = virtualMainController;
         currState = StateClient.CONNECTION;
+        UnicastRemoteObject.exportObject(this, 0);
     }
 
     // This are examples of view updating methods

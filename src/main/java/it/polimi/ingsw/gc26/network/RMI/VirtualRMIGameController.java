@@ -7,14 +7,13 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Stack;
 
-public class VirtualRMIGameController extends UnicastRemoteObject implements VirtualGameController  {
+public class VirtualRMIGameController implements VirtualGameController  {
 
     private final GameController gameController;
 
     public VirtualRMIGameController(GameController gameController) throws RemoteException{
             this.gameController = gameController;
-
-
+            UnicastRemoteObject.exportObject(this, 0);
     }
 
     @Override

@@ -12,7 +12,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class VirtualRMIMainController extends UnicastRemoteObject implements VirtualMainController {
+public class VirtualRMIMainController implements VirtualMainController {
     // This attributes is only for testing now
     private final ArrayList<VirtualGameController> virtualGameControllers;
     private final ArrayList<VirtualView> clients;
@@ -23,7 +23,7 @@ public class VirtualRMIMainController extends UnicastRemoteObject implements Vir
             this.mainController = mainController;
             this.virtualGameControllers = new ArrayList<>();
             this.clients = new ArrayList<>();
-
+            UnicastRemoteObject.exportObject(this, 0);
     }
 
     @Override

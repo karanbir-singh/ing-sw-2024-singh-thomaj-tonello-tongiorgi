@@ -22,5 +22,6 @@ module it.polimi.ingsw.gc26 {
     opens it.polimi.ingsw.gc26.network.RMI to javafx.fxml;
     exports it.polimi.ingsw.gc26.controller;
     opens it.polimi.ingsw.gc26.controller to javafx.fxml;
-
+    exports it.polimi.ingsw.gc26.network;
+    opens it.polimi.ingsw.gc26.network to javafx.fxml;
 }
