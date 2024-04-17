@@ -71,6 +71,7 @@ public class MainController {
      */
     public GameController joinWaitingList(String playerID, String playerNickname) {
         Player newPlayer = new Player(playerID, playerNickname);
+        GameController gameController = null;
 
         // Add player to the waiting list
         this.waitingPlayer.add(newPlayer);
@@ -79,7 +80,7 @@ public class MainController {
         if (waitingPlayer.size() >= maxNumWaitingPlayers) {
             // Then, create a new game controller and add to the list
             try {
-                GameController gameController = new GameController(new Game(waitingPlayer));
+                gameController = new GameController(new Game(waitingPlayer));
                 gamesControllers.add(gameController);
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -88,7 +89,9 @@ public class MainController {
             // Clear waiting list
             this.waitingPlayer.clear();
             this.waitingPlayer = null;
+
         }
+        return gameController;
     }
 
     public ArrayList<Player> getWaitingPlayer() {

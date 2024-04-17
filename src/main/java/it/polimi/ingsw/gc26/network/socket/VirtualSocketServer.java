@@ -1,3 +1,4 @@
+/*
 package it.polimi.ingsw.gc26.network.socket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -166,5 +167,5 @@ public class VirtualSocketServer implements VirtualServer {
     }
 
 }
-
+*/
 

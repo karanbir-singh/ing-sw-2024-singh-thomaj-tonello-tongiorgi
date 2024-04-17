@@ -1,4 +1,5 @@
-package it.polimi.ingsw.gc26.network.socket;
+
+//package it.polimi.ingsw.gc26.network.socket;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import it.polimi.ingsw.gc26.model.game.Message;
 /**
  * logica con cui vado a leggere i messaggi, Fa parte del server
  */
+/*
 public class SocketClientHandler implements VirtualServer {
     final MainController mainController;
     GameController gameController = null;
@@ -37,6 +39,7 @@ public class SocketClientHandler implements VirtualServer {
         /*ArrayList<Player> players = new ArrayList<Player>();
         players.add(new Player("0", "j"));
         this.gameController = new GameController(new Game(players));*/
+/*
         this.connect();
         while ((line = inputFromClient.readLine()) != null) {
             if (this.gameController != null) {
@@ -167,3 +170,4 @@ public class SocketClientHandler implements VirtualServer {
     }
 
 }
+ */

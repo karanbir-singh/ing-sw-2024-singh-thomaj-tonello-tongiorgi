@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.network.RMI;
 
+import it.polimi.ingsw.gc26.StateClient;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
@@ -10,16 +11,26 @@ import java.util.Scanner;
 public class VirtualRMIView implements VirtualView {
     private final VirtualMainController virtualMainController;
     private String clientID;
+    private String nickName;
     private VirtualGameController virtualGameController;
+    StateClient currState;
+
+
+
 
     public VirtualRMIView(VirtualMainController virtualMainController) {
         this.virtualMainController = virtualMainController;
+        currState = StateClient.CONNECTION;
     }
 
     // This are examples of view updating methods
     @Override
     public void showMessage(String message) throws RemoteException {
 
+    }
+
+    public void updateState(StateClient stateClient){
+        this.currState = stateClient;
     }
 
     @Override
@@ -35,42 +46,28 @@ public class VirtualRMIView implements VirtualView {
     // Method for running Terminal UI
     public void runTUI() throws RemoteException {
         // TODO gestire la Remote Exception
-
-        this.clientID = this.virtualMainController.connect(this, "kevin");
+        //Initial state in CONNECTION
         System.out.println("YOU CONNECTED TO THE SERVER");
-
         Scanner scanner = new Scanner(System.in);
-        if(this.virtualMainController.existsWaitingGame()){
-            this.virtualMainController.joinWaitingList(this.clientID, "kevin");
-        }else{
-            System.out.println("HOW MANY PLAYER MAX");
-            String numOfPlayer = scanner.nextLine();
-            this.virtualMainController.createWaitingList(Integer.parseInt(numOfPlayer), this.clientID, "kevin");
-        }
-        this.virtualGameController = virtualMainController.getVirtualGameController();
-        while(this.virtualGameController == null){
-            this.virtualGameController = virtualMainController.getVirtualGameController();
-        }
-        System.out.println("I M IN THE GAME, VAMOSS");
+        System.out.println("INSERISCI IL NICKNAME");
+        this.nickName = scanner.nextLine();
+        this.clientID = this.virtualMainController.connect(this, this.nickName);
 
-        System.out.println("SELECT THE CARD");
-        String index = scanner.nextLine();
-        this.virtualGameController.selectCardFromHand(Integer.parseInt(index),this.clientID);
-        System.out.println("SELECTED STARTER CARD");
 
-        System.out.println("DO YOU WANT TO CHANGE SIDE? yes/no");
-        String decision = scanner.nextLine();
-        if(decision.equals("yes")){
-            this.virtualGameController.turnSelectedCardSide(this.clientID);
-            System.out.println("TURNED STARTER CARD SIDE");
-        }else{
-            System.out.println("YOU DON T WANT TO CHANGE STARTER CARD SIDE");
+        if(currState == StateClient.CREATION_GAME){
+            System.out.println("THERE ARE NO GAME FREE, YOU MUST CREATE A NEW GAME, HOW MANY PLAYER?");
+            String decision = scanner.nextLine();
+            this.virtualMainController.createWaitingList(Integer.parseInt(decision),this.clientID, this.nickName);
         }
-        String decisionCard = scanner.nextLine();
-        if(decisionCard.equals("playStarterCard")){
-            this.virtualGameController.playCardFromHand(this.clientID);
-            System.out.println("PLAYED STARTER CARD");
+        while(currState == StateClient.WAITING_GAME){
+            System.out.println("WAITING...");
+
         }
+
+        virtualGameController = this.virtualMainController.getVirtualGameController();
+
+        System.out.println("GAME BEGIN");
+
     }
 
     // Method for running Graphic UI

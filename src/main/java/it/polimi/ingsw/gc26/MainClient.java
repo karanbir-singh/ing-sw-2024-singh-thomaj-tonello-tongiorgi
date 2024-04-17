@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26;
 
+import it.polimi.ingsw.gc26.network.RMI.VirtualRMIMainController;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 
@@ -17,9 +18,11 @@ public class MainClient {
         final String remoteObjectName = "RMIMainController";
 
         try {
+            //finding the registry and getting the stub of virtualMainController in the registry
             Registry registry = LocateRegistry.getRegistry(1099);
             VirtualMainController virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
 
+            //running the RMI TUI
             new VirtualRMIView(virtualMainController).runTUI();
         } catch (RemoteException e) {
             e.printStackTrace();

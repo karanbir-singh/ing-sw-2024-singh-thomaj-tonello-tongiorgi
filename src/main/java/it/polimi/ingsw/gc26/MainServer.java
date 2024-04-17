@@ -16,10 +16,14 @@ public class MainServer {
         final String serverName = "RMIMainController";
 
         try {
-            VirtualMainController virtualMainController = new VirtualRMIMainController(new MainController());
+            //publication and binding of the virtualMainController in the registry
+            System.out.println("Constructing server implementation...");
+            MainController mainController = new MainController();
+            System.out.println("Constructing server implementation...");
 
-            Registry registry = registry = LocateRegistry.createRegistry(1099);
-
+            VirtualMainController virtualMainController = new VirtualRMIMainController(mainController);
+            System.out.println("Binding server implementation to registry...");
+            Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind(serverName, virtualMainController);
         } catch (RemoteException e) {
             e.printStackTrace();

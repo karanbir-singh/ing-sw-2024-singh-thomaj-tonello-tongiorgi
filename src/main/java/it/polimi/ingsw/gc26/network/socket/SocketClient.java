@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
-
+/*
 public class SocketClient implements VirtualView {
     private final static String filePath = "src/main/resources/envClient.json";
     private final BufferedReader inputFromServer;
@@ -157,5 +157,5 @@ public class SocketClient implements VirtualView {
     }
 
 }
-
+*/
 

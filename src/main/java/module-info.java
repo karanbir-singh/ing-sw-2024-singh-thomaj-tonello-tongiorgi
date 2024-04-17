@@ -3,6 +3,9 @@ module it.polimi.ingsw.gc26 {
     requires javafx.fxml;
     requires com.fasterxml.jackson.databind;
     requires java.rmi;
+    requires jdk.jfr;
+    requires java.sql;
+    requires java.desktop;
 
 
     exports it.polimi.ingsw.gc26.model.card_side;
