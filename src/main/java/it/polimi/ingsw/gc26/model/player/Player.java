@@ -101,7 +101,7 @@ public class Player {
 
         if (pawn == null) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non corretto
-        } else if (availableColors.contains(pawn)) {
+        } else if (!availableColors.contains(pawn)) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non disponibile
         } else{
             this.pawnColor = pawn;
