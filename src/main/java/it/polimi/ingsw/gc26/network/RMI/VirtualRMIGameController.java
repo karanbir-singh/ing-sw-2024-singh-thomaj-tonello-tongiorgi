@@ -2,8 +2,6 @@ package it.polimi.ingsw.gc26.network.RMI;
 
 import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
-import javafx.scene.chart.StackedAreaChart;
-import jdk.jfr.StackTrace;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

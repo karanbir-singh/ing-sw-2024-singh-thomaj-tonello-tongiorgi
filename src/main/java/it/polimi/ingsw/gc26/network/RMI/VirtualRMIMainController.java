@@ -66,7 +66,7 @@ public class VirtualRMIMainController extends UnicastRemoteObject implements Vir
         GameController gameController = this.mainController.joinWaitingList(playerID, playerNickname);
         if (gameController == null) {
             // Here clients are still waiting
-            System.out.printf("CLIENT JOINED WAITING LIST\n");
+            System.out.println("CLIENT JOINED WAITING LIST\n");
         } else {
             VirtualGameController virtualGameController = new VirtualRMIGameController(gameController);
             virtualGameControllers.add(virtualGameController);
