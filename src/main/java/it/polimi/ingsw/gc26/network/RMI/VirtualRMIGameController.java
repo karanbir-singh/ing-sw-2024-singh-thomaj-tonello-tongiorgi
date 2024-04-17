@@ -7,162 +7,82 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Stack;
 
-public class VirtualRMIGameController implements VirtualGameController  {
+public class VirtualRMIGameController implements VirtualGameController {
 
     private final GameController gameController;
 
-    public VirtualRMIGameController(GameController gameController) throws RemoteException{
-            this.gameController = gameController;
-            UnicastRemoteObject.exportObject(this, 0);
+    public VirtualRMIGameController(GameController gameController) throws RemoteException {
+        this.gameController = gameController;
+        UnicastRemoteObject.exportObject(this, 0);
     }
 
     @Override
-    public void prepareCommonTable() {
-        try {
-            this.gameController.prepareCommonTable();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from prepareCommonBoard");
-        }
+    public void prepareCommonTable() throws RemoteException {
+        this.gameController.prepareCommonTable();
     }
 
     @Override
-    public void prepareStarterCards(){
-        try {
-            this.gameController.prepareStarterCards();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from prepareStarterCards");
-        }
+    public void prepareStarterCards() throws RemoteException {
+        this.gameController.prepareStarterCards();
     }
 
     @Override
-    public void preparePlayersHand(String playerID) {
-        try {
-            this.gameController.preparePlayersHand(playerID);
-        }catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from preparePlayersHand");
-        }
+    public void preparePlayersHand(String playerID) throws RemoteException {
+        this.gameController.preparePlayersHand(playerID);
     }
 
     @Override
-    public void prepareCommonMissions(){
-        try {
-            this.gameController.prepareCommonMissions();
-        }catch(RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from prepareCommonMission");
-        }
+    public void prepareCommonMissions() throws RemoteException {
+        this.gameController.prepareCommonMissions();
     }
 
     @Override
-    public void prepareSecretMissions() {
-        try {
-            this.gameController.prepareSecretMissions();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from prepareSecretMission");
-        }
+    public void prepareSecretMissions() throws RemoteException {
+        this.gameController.prepareSecretMissions();
     }
 
     @Override
-    public void selectSecretMission(int cardIndex, String playerID){
-        try {
-            this.gameController.selectSecretMission(cardIndex, playerID);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from selectSecretMission");
-        }
+    public void selectSecretMission(int cardIndex, String playerID) throws RemoteException  {
+        this.gameController.selectSecretMission(cardIndex, playerID);
     }
 
     @Override
-    public void setSecretMission(String playerID){
-        try {
-            this.gameController.setSecretMission(playerID);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from setSecretMission");
-        }
+    public void setSecretMission(String playerID) throws RemoteException  {
+        this.gameController.setSecretMission(playerID);
     }
 
     @Override
-    public void setFirstPlayer(String playerID){
-        try {
-            this.gameController.setFirstPlayer(playerID);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from setFirstPlayer");
-        }
+    public void setFirstPlayer(String playerID) throws RemoteException  {
+        this.gameController.setFirstPlayer(playerID);
     }
 
     @Override
-    public void selectCardFromHand(int cardIndex, String playerID){
-        try {
-            this.gameController.selectCardFromHand(cardIndex, playerID);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from selectCardFromHand");
-        }
+    public void selectCardFromHand(int cardIndex, String playerID) throws RemoteException  {
+        this.gameController.selectCardFromHand(cardIndex, playerID);
     }
 
     @Override
-    public void turnSelectedCardSide(String playerID){
-        try {
-            this.gameController.turnSelectedCardSide(playerID);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from turnSelectedCardSide");
-        }
+    public void turnSelectedCardSide(String playerID) throws RemoteException  {
+        this.gameController.turnSelectedCardSide(playerID);
     }
 
     @Override
-    public void selectPositionOnBoard(int selectedX, int selectedY, String playerID){
-        try {
-            this.gameController.selectPositionOnBoard(selectedX, selectedY, playerID);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from selectPositionOnBoard");
-        }
+    public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) throws RemoteException  {
+        this.gameController.selectPositionOnBoard(selectedX, selectedY, playerID);
     }
 
     @Override
-    public void playCardFromHand(String playerID) {
-        try {
-            this.gameController.playCardFromHand(playerID);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from playCardFromHand");
-        }
+    public void playCardFromHand(String playerID) throws RemoteException  {
+        this.gameController.playCardFromHand(playerID);
     }
 
     @Override
-    public void selectCardFromCommonTable(int cardX, int cardY, String playerID){
-        try {
-            this.gameController.selectCardFromCommonTable(cardX, cardY, playerID);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from selectCardFromCommonTable");
-        }
+    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) throws RemoteException  {
+        this.gameController.selectCardFromCommonTable(cardX, cardY, playerID);
     }
 
     @Override
-    public void drawSelectedCard(String playerID){
-        try {
-            this.gameController.drawSelectedCard(playerID);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from drawSelectedCard");
-        }
-    }
-
-    @Override
-    public void changeTurn() {
-        try {
-            this.gameController.changeTurn();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            System.err.println("REMOTE EXCEPTION CATCHED from changeTurn");
-        }
+    public void drawSelectedCard(String playerID) throws RemoteException  {
+        this.gameController.drawSelectedCard(playerID);
     }
 }
