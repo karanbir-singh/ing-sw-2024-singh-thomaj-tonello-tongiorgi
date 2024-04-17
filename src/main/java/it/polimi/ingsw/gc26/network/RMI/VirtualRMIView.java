@@ -59,13 +59,14 @@ public class VirtualRMIView implements VirtualView {
             this.virtualMainController.createWaitingList(Integer.parseInt(decision),this.clientID, this.nickName);
         }
         while(currState == StateClient.WAITING_GAME){
-            System.out.println("WAITING...");
+            System.out.flush();
 
         }
 
         virtualGameController = this.virtualMainController.getVirtualGameController();
 
         System.out.println("GAME BEGIN");
+        virtualGameController.prepareCommonTable();
 
     }
 

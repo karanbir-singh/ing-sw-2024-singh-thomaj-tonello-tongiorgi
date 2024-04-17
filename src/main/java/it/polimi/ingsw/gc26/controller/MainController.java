@@ -10,7 +10,7 @@ public class MainController {
     /**
      * This attribute represents the list of players who are waiting for a new game
      */
-    private ArrayList<Player> waitingPlayer;
+    private ArrayList<Player> waitingPlayers;
 
     /**
      * This attribute represents the list of game controllers of started games
@@ -26,9 +26,10 @@ public class MainController {
      * Initializes waiting players' list and games controllers' list
      */
     public MainController() {
-        this.waitingPlayer = new ArrayList<>();
+        this.waitingPlayers = new ArrayList<>();
         this.gamesControllers = new ArrayList<>();
         maxNumWaitingPlayers = 0;
+        this.waitingPlayers = new ArrayList<>();
     }
 
     /**
@@ -36,8 +37,8 @@ public class MainController {
      *
      * @return true if there are players waiting, false otherwise
      */
-    public boolean existsWaitingGame() {
-        return !waitingPlayer.isEmpty();
+    public boolean existsWaitingGame(){
+        return !waitingPlayers.isEmpty() ;
     }
 
     /**
@@ -50,11 +51,8 @@ public class MainController {
     public void createWaitingList(int numPlayers, String playerID, String playerNickname) {
         // Check if given number of players is correct
         if (numPlayers > 1 && numPlayers <= Game.MAX_NUM_PLAYERS) {
-            // Re-initialize waiting player with the new dimension of the list
-            this.waitingPlayer = new ArrayList<>(numPlayers);
-
             // Add in the list the player
-            this.waitingPlayer.add(new Player(playerID, playerNickname));
+            this.waitingPlayers.add(new Player(playerID, playerNickname));
 
             // Update the max numbers of players for the game
             this.maxNumWaitingPlayers = numPlayers;
@@ -74,27 +72,25 @@ public class MainController {
         GameController gameController = null;
 
         // Add player to the waiting list
-        this.waitingPlayer.add(newPlayer);
+        this.waitingPlayers.add(newPlayer);
 
         // Check if waiting list is full
-        if (waitingPlayer.size() >= maxNumWaitingPlayers) {
+        if (waitingPlayers.size() >= maxNumWaitingPlayers) {
             // Then, create a new game controller and add to the list
             try {
-                gameController = new GameController(new Game(waitingPlayer));
+                gameController = new GameController(new Game(waitingPlayers));
                 gamesControllers.add(gameController);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
 
             // Clear waiting list
-            this.waitingPlayer.clear();
-            this.waitingPlayer = null;
-
+            this.waitingPlayers.clear();
         }
         return gameController;
     }
 
-    public ArrayList<Player> getWaitingPlayer() {
-        return waitingPlayer;
+    public ArrayList<Player> getWaitingPlayers() {
+        return waitingPlayers;
     }
 }

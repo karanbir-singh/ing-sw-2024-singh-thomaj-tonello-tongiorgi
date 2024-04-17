@@ -30,11 +30,12 @@ public class VirtualRMIMainController implements VirtualMainController {
     public String connect(VirtualView client, String nickname){
         String clientID = UUID.randomUUID().toString();
         try{
+            mainController.addView(client)
             clients.add(client);
             if(this.existsWaitingGame()){
                 this.joinWaitingList(clientID,nickname);
                 System.out.println("Connected to waiting game");
-                client.updateState(StateClient.WAITING_GAME); //go to this state
+                //client.updateState(StateClient.WAITING_GAME); //go to this state
 
                 //TODO notificare il client che è entrato in partita
             }else{
@@ -66,7 +67,7 @@ public class VirtualRMIMainController implements VirtualMainController {
         GameController gameController = this.mainController.joinWaitingList(playerID, playerNickname);
         if (gameController == null) {
             // Here clients are still waiting
-            System.out.println("CLIENT JOINED WAITING LIST\n");
+            clients.getLast().updateState(StateClient.WAITING_GAME);
         } else {
             VirtualGameController virtualGameController = new VirtualRMIGameController(gameController);
             virtualGameControllers.add(virtualGameController);
@@ -74,6 +75,7 @@ public class VirtualRMIMainController implements VirtualMainController {
             for(VirtualView client : clients){
                 client.updateState(StateClient.BEGIN);
             }
+            clients.clear();
             // Here we have to give/notify clients about
             // For now we use a getVirtualGameController
             // TODO gestisci come fare con la lista dei client e client in waiting
