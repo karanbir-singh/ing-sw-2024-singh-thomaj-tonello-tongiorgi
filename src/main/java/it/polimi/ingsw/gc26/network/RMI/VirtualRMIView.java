@@ -28,7 +28,7 @@ public class VirtualRMIView implements VirtualView {
 
     }
 
-    public void updateState(StateClient stateClient){
+    public void updateState(StateClient stateClient) {
         this.currState = stateClient;
     }
 
@@ -53,12 +53,12 @@ public class VirtualRMIView implements VirtualView {
         this.clientID = this.virtualMainController.connect(this, this.nickName);
 
 
-        if(currState == StateClient.CREATION_GAME){
+        if (currState == StateClient.CREATION_GAME) {
             System.out.println("THERE ARE NO GAME FREE, YOU MUST CREATE A NEW GAME, HOW MANY PLAYER?");
             String decision = scanner.nextLine();
-            this.virtualMainController.createWaitingList(Integer.parseInt(decision),this.clientID, this.nickName);
+            this.virtualMainController.createWaitingList(this, this.clientID, this.nickName, Integer.parseInt(decision));
         }
-        while(currState == StateClient.WAITING_GAME){
+        while (currState == StateClient.WAITING_GAME) {
             System.out.flush();
 
         }
@@ -66,7 +66,6 @@ public class VirtualRMIView implements VirtualView {
         virtualGameController = this.virtualMainController.getVirtualGameController();
 
         System.out.println("GAME BEGIN");
-        virtualGameController.prepareCommonTable();
 
     }
 
