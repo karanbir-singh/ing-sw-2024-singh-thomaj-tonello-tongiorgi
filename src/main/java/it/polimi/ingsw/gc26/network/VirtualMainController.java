@@ -4,14 +4,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface VirtualMainController extends Remote {
-    String connect(VirtualView client, String nickname) throws RemoteException;
+    String connect(VirtualView client, String nickName) throws RemoteException;
 
-    boolean existsWaitingGame() throws RemoteException;
+    void createWaitingList(VirtualView client, String clientID, String nickname, int numPlayers) throws RemoteException;
 
-    void createWaitingList(int numPlayers, String playerID, String playerNickname) throws RemoteException;
-
-    void joinWaitingList(String playerID, String playerNickname) throws RemoteException;
-
-    // This is for testing
     VirtualGameController getVirtualGameController() throws RemoteException;
 }
