@@ -1,5 +1,6 @@
-package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26.controller;
 
+import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.CommonTable;
 import it.polimi.ingsw.gc26.model.game.Game;
@@ -112,12 +113,14 @@ public class GameController {
         Player player = getPlayer(playerID);
 
         // Set color
-        player.setPawn(color, game.getAvailablePawns());
+        if(player.equals(game.getCurrentPlayer())){
+            player.setPawn(color, game.getAvailablePawns());
 
-        // Check if the next player is the first
-        if(game.getNextPlayer().isFirstPlayer()){
-            // Then prepare common missions
-            this.prepareCommonMissions();
+            // Check if the next player is the first
+            if(game.getNextPlayer().isFirstPlayer()){
+                // Then prepare common missions
+                this.prepareCommonMissions();
+            }
         }
     }
 
@@ -359,12 +362,6 @@ public class GameController {
 
                         // Give playable cards to player
                         this.preparePlayersHand(playerID);
-
-                        // Check if the next player is the first
-                        //if (game.getNextPlayer().isFirstPlayer()) {
-                        // Then prepare common missions
-                        //this.prepareCommonMissions();
-                        //}
 
                         // Change turn
                         this.changeTurn();

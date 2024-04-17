@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * This class represents an entire Game play. It has a minimum number of player of two and a maximum number of player of four.
- * To play more that one game, more instances of game have to be created
+ * To play more than one game, more instances of game have to be created
  */
 public class Game {
     /**
@@ -41,7 +41,6 @@ public class Game {
      * This attribute represents how many rounds have been played
      */
     private int round;
-
     /**
      * This attribute represents the final round of the game
      */
@@ -50,6 +49,11 @@ public class Game {
      * This attribute represents the winners of the game
      */
     private ArrayList<Player> winners;
+    /**
+     * This attribute represents the chat. It stores all the messages.
+     */
+    private final Chat chat;
+
 
     /**
      * Initializes the game, creates the decks and sets the common table
@@ -72,6 +76,7 @@ public class Game {
         this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck);
         this.round = 0;
         this.finalRound = -1;
+        this.chat = new Chat();
     }
 
     /**
@@ -245,5 +250,13 @@ public class Game {
 
     public ArrayList<Player> getWinners() {
         return winners;
+    }
+
+    /**
+     * Returns the group's chat
+     * @return chat
+     */
+    public Chat getChat() {
+        return this.chat;
     }
 }

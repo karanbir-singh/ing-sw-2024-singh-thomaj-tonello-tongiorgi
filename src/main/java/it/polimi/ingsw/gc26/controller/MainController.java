@@ -1,15 +1,16 @@
-package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26.controller;
 
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 public class MainController {
     /**
      * This attribute represents the list of players who are waiting for a new game
      */
-    private ArrayList<Player> waitingPlayer;
+    private ArrayList<Player> waitingPlayers;
 
     /**
      * This attribute represents the list of game controllers of started games
@@ -25,33 +26,33 @@ public class MainController {
      * Initializes waiting players' list and games controllers' list
      */
     public MainController() {
-        this.waitingPlayer = new ArrayList<>();
+        this.waitingPlayers = new ArrayList<>();
         this.gamesControllers = new ArrayList<>();
         maxNumWaitingPlayers = 0;
+        this.waitingPlayers = new ArrayList<>();
     }
 
     /**
      * Check if there are players waiting
+     *
      * @return true if there are players waiting, false otherwise
      */
-    public boolean existsWaitingGame() {
-        return !waitingPlayer.isEmpty();
+    public boolean existsWaitingGame(){
+        return !waitingPlayers.isEmpty() ;
     }
 
     /**
      * Initializes the waiting list of players and updating max numbers of players for the next game
-     * @param numPlayers number of players of the next game
-     * @param playerID ID of the player who is initializing the waiting list
+     *
+     * @param numPlayers     number of players of the next game
+     * @param playerID       ID of the player who is initializing the waiting list
      * @param playerNickname nickname of the player who is initializing the waiting list
      */
     public void createWaitingList(int numPlayers, String playerID, String playerNickname) {
         // Check if given number of players is correct
         if (numPlayers > 1 && numPlayers <= Game.MAX_NUM_PLAYERS) {
-            // Re-initialize waiting player with the new dimension of the list
-            this.waitingPlayer = new ArrayList<>(numPlayers);
-
             // Add in the list the player
-            this.waitingPlayer.add(new Player(playerID, playerNickname));
+            this.waitingPlayers.add(new Player(playerID, playerNickname));
 
             // Update the max numbers of players for the game
             this.maxNumWaitingPlayers = numPlayers;
@@ -62,32 +63,35 @@ public class MainController {
 
     /**
      * Adds a player into the waiting list, if exists
-     * @param playerID ID of the player who is joining the waiting list
+     *
+     * @param playerID       ID of the player who is joining the waiting list
      * @param playerNickname Nickname of the player who is joining the waiting list
      */
-    public void joinWaitingList(String playerID, String playerNickname) {
+    public GameController joinWaitingList(String playerID, String playerNickname) {
         Player newPlayer = new Player(playerID, playerNickname);
+        GameController gameController = null;
 
         // Add player to the waiting list
-        this.waitingPlayer.add(newPlayer);
+        this.waitingPlayers.add(newPlayer);
 
         // Check if waiting list is full
-        if (waitingPlayer.size() >= maxNumWaitingPlayers) {
+        if (waitingPlayers.size() >= maxNumWaitingPlayers) {
             // Then, create a new game controller and add to the list
-            GameController gameController = new GameController(new Game(this.waitingPlayer));
-            gamesControllers.add(gameController);
+            try {
+                gameController = new GameController(new Game(waitingPlayers));
+                gamesControllers.add(gameController);
 
-            // Prepare game
-            gameController.prepareCommonTable();
-
-            // TODO notify and return GameController to each player of the game
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
 
             // Clear waiting list
-            this.waitingPlayer.clear();
-            this.waitingPlayer = null;
+            this.waitingPlayers.clear();
         }
+        return gameController;
     }
 
-    public static void main(String[] args) {
+    public ArrayList<Player> getWaitingPlayers() {
+        return waitingPlayers;
     }
 }
