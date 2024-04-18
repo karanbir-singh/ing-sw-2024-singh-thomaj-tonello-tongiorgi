@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.network.socket;
+package it.polimi.ingsw.gc26.network.socket.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -15,13 +15,15 @@ import java.util.Scanner;
 public class SocketClient implements VirtualView {
     private final static String filePath = "src/main/resources/envClient.json";
     private final BufferedReader inputFromServer;
-    private final VirtualSocketServer server;
+    private final VirtualSocketMainController virtualMainController;
+    private final VirtualSocketGameController virtualGameController;
     private String username;
 
     protected SocketClient(BufferedReader input, BufferedWriter output, String username) {
         this.inputFromServer = input;
-        this.server = new VirtualSocketServer(output);
+        this.virtualMainController = new VirtualSocketMainController(output);
         this.username = username;
+        this.virtualGameController = new VirtualSocketGameController(output);
     }
 
     private void run() throws RemoteException {
@@ -84,29 +86,30 @@ public class SocketClient implements VirtualView {
 
             switch (line) {
                 case "/1":
-                    this.server.selectCardFromHand(0, this.username);
+                    this.virtualGameController.selectCardFromHand(0, this.username);
                     break;
                 case "/2":
-                    this.server.turnSelectedCardSide(this.username);
+                    this.virtualGameController.turnSelectedCardSide(this.username);
                     break;
                 case "/3":
-                    this.server.selectPositionOnBoard(0, 0, this.username);
+                    this.virtualGameController.selectPositionOnBoard(0, 0, this.username);
                     break;
                 case "/4":
-                    this.server.playCardFromHand(this.username);
+                    this.virtualGameController.playCardFromHand(this.username);
                     break;
                 case "/5":
-                    this.server.selectCardFromCommonTable(0, 0, this.username);
+                    this.virtualGameController.selectCardFromCommonTable(0, 0, this.username);
                     break;
                 case "/6":
-                    this.server.drawSelectedCard(this.username);
+                    this.virtualGameController.drawSelectedCard(this.username);
                     break;
             }
 
             if (chat) {
-                this.server.addMessage(line, receiver, this.username, "");
+                this.virtualGameController.addMessage(line, receiver, this.username, "");
             } else {
-                this.server.sendText(line);
+                //this.virtualGameController.sendText(line);
+                this.virtualMainController.connect(this, this.username);
             }
         }
     }

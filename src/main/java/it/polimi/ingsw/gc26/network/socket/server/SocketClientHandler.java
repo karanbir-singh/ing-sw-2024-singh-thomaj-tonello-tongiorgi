@@ -1,5 +1,4 @@
-
-//package it.polimi.ingsw.gc26.network.socket;
+package it.polimi.ingsw.gc26.network.socket.server;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,29 +7,28 @@ import it.polimi.ingsw.gc26.controller.GameController;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.util.UUID;
 
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.network.VirtualGameController;
 
-/**
- * logica con cui vado a leggere i messaggi, Fa parte del server
- */
-/*
-public class SocketClientHandler implements VirtualServer {
+
+public class SocketClientHandler implements VirtualGameController {
     final MainController mainController;
     GameController gameController = null;
     final SocketServer server;
     final BufferedReader inputFromClient;
-    final VirtualSocketClient virtualClient;
+    final VirtualSocketView virtualClient;
     String nickname = null;
 
     public SocketClientHandler(MainController controller, SocketServer server, BufferedReader input, PrintWriter output) {
         this.mainController = controller;
         this.server = server;
         this.inputFromClient = input;
-        this.virtualClient = new VirtualSocketClient(output);
+        this.virtualClient = new VirtualSocketView(output);
         System.out.println("New client!");
     }
 
@@ -39,7 +37,6 @@ public class SocketClientHandler implements VirtualServer {
         /*ArrayList<Player> players = new ArrayList<Player>();
         players.add(new Player("0", "j"));
         this.gameController = new GameController(new Game(players));*/
-/*
         this.connect();
         while ((line = inputFromClient.readLine()) != null) {
             if (this.gameController != null) {
@@ -92,52 +89,95 @@ public class SocketClientHandler implements VirtualServer {
     }
 
     @Override
-    public void selectCardFromHand(int cardIndex, String playerID) {
+    public void prepareCommonTable() throws RemoteException {
+
+    }
+
+    @Override
+    public void prepareStarterCards() throws RemoteException {
+
+    }
+
+    @Override
+    public void preparePlayersHand(String playerID) throws RemoteException {
+
+    }
+
+    @Override
+    public void prepareCommonMissions() throws RemoteException {
+
+    }
+
+    @Override
+    public void prepareSecretMissions() throws RemoteException {
+
+    }
+
+    @Override
+    public void selectSecretMission(int cardIndex, String playerID) throws RemoteException {
+
+    }
+
+    @Override
+    public void setSecretMission(String playerID) throws RemoteException {
+
+    }
+
+    @Override
+    public void setFirstPlayer(String playerID) throws RemoteException {
+
+    }
+
+    @Override
+    public void selectCardFromHand(int cardIndex, String playerID) throws RemoteException {
         this.gameController.selectCardFromHand(cardIndex, playerID);
     }
 
     @Override
-    public void turnSelectedCardSide(String playerID) {
+    public void turnSelectedCardSide(String playerID) throws RemoteException {
         this.gameController.turnSelectedCardSide(playerID);
     }
 
     @Override
-    public void selectPositionOnBoard(int x, int y, String playerID) {
+    public void selectPositionOnBoard(int x, int y, String playerID) throws RemoteException {
         this.gameController.selectPositionOnBoard(x, y, playerID);
 
     }
 
     @Override
-    public void playCardFromHand(String playerID) {
+    public void playCardFromHand(String playerID) throws RemoteException {
         this.gameController.playCardFromHand(playerID);
 
     }
 
     @Override
-    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
+    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) throws RemoteException {
         this.gameController.selectCardFromCommonTable(cardX, cardY, playerID);
     }
 
     @Override
-    public void drawSelectedCard(String playerID) {
+    public void drawSelectedCard(String playerID) throws RemoteException {
         this.gameController.drawSelectedCard(playerID);
     }
 
     @Override
-    public void addMessage(String line, String nicknameReceiver,String nicknameSender, String time) {
-        Message msg = null;
-        msg = new Message(line, nicknameReceiver, nicknameSender, LocalTime.now());
-        System.out.println(msg);
-        this.gameController.addMessage(msg);
-        this.server.broadCastUpdate(msg, this);
-        //this.virtualClient.showMessage(message);
+    public void changeTurn() throws RemoteException {
 
     }
 
     @Override
-    public void sendText(String text) {
+    public void addMessage(String line, String nicknameReceiver,String nicknameSender, String time) throws RemoteException {
+        //System.out.println(msg);
+        this.gameController.addMessage(line, nicknameReceiver, nicknameSender, time);
+        //this.server.broadCastUpdate(msg, this);
+        //this.virtualClient.showMessage(message);
 
     }
+
+    /*@Override
+    public void sendText(String text) {
+
+    }*/
 
     public void connect() throws IOException {
         while (this.nickname == null) {
@@ -170,4 +210,3 @@ public class SocketClientHandler implements VirtualServer {
     }
 
 }
- */
