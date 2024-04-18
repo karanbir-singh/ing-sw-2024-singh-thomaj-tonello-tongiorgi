@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.controller;
 
-import it.polimi.ingsw.gc26.StateClient;
+import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
@@ -39,17 +39,36 @@ public class MainController {
         maxNumWaitingClients = 0;
     }
 
+    /**
+     * Checks if the given nickname is alreadyUsed
+     *
+     * @param nickname
+     * @return Returns true if waitingPlayer not contains other players with the given nickname, otherwise false
+     */
+    private boolean isNicknameValid(String nickname) {
+        return !waitingPlayers.stream().anyMatch(p -> p.getNickname().equals(nickname));
+    }
+
     public String connect(VirtualView client, String nickname) {
         // For now, ID it's random string
         String clientID = UUID.randomUUID().toString();
 
         // Check if there is a waiting game
         if (this.existsWaitingGame()) {
-            // Then join in waiting list
-            this.joinWaitingList(client, clientID, nickname);
+            // Check if there is another player with same nickname
+            if (this.isNicknameValid(nickname)) {
+                // Then join in waiting list
+                this.joinWaitingList(client, clientID, nickname);
+            } else {
+                try {
+                    client.updateState(ClientState.INVALID_NICKNAME);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         } else {
             try {
-                client.updateState(StateClient.CREATION_GAME);
+                client.updateState(ClientState.CREATOR);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -69,11 +88,11 @@ public class MainController {
     /**
      * Initializes the waiting list of players and updating max numbers of players for the next game
      *
-     * @param numPlayers     number of players of the next game
-     * @param clientID       ID of the player who is initializing the waiting list
-     * @param nickname nickname of the player who is initializing the waiting list
+     * @param numPlayers number of players of the next game
+     * @param clientID   ID of the player who is initializing the waiting list
+     * @param nickname   nickname of the player who is initializing the waiting list
      */
-    public void createWaitingList(VirtualView client, String clientID, String nickname, int numPlayers) {
+    public synchronized void createWaitingList(VirtualView client, String clientID, String nickname, int numPlayers) {
         // Check if given number of players is correct
         if (numPlayers > 1 && numPlayers <= Game.MAX_NUM_PLAYERS) {
             // Add client in the waiting list
@@ -84,12 +103,16 @@ public class MainController {
             this.maxNumWaitingClients = numPlayers;
 
             try {
-                client.updateState(StateClient.WAITING_GAME);
+                client.updateState(ClientState.WAITING);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         } else {
-            // TODO gestire cosa fare in cui il numero di giocatori è negativo o maggiori di Game.MAX_NUM_PLAYERS
+            try {
+                client.updateState(ClientState.INVALID_NUMBER_OF_PLAYER);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -115,7 +138,7 @@ public class MainController {
             // Update of the view
             for (VirtualView view : waitingClients) {
                 try {
-                    view.updateState(StateClient.BEGIN);
+                    view.updateState(ClientState.BEGIN);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -130,7 +153,7 @@ public class MainController {
         } else {
             // Otherwise client state is on WAITING_GAME
             try {
-                client.updateState(StateClient.WAITING_GAME);
+                client.updateState(ClientState.WAITING);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -139,10 +162,9 @@ public class MainController {
         return gameController;
     }
 
-    public ArrayList<VirtualView> getWaitingClients() {
-        return waitingClients;
-    }
-
+    /**
+     * @return Returns the last created game controller
+     */
     public GameController getGameController() {
         if (!gamesControllers.isEmpty())
             return gamesControllers.getLast();
