@@ -80,6 +80,24 @@ public class Game {
     }
 
     /**
+     * Returns the player associated to the playerID
+     *
+     * @param playerID ID of the searched player
+     */
+    public Player getPlayerByID(String playerID) {
+        return players.stream().filter((Player p) -> p.getID().equals(playerID)).findAny().get();
+    }
+
+    /**
+     * Returns the player associated to the playerNickname
+     *
+     * @param playerNickname Nickname of the searched player
+     */
+    public Player getPlayerByNickname(String playerNickname) {
+        return players.stream().filter((Player p) -> p.getNickname().equals(playerNickname)).findAny().get();
+    }
+
+    /**
      * Adds a player in the game
      *
      * @param newPlayer new player to be added in the game
@@ -231,25 +249,20 @@ public class Game {
         return availableColors;
     }
 
+    /**
+     * Returns game state
+     * @return gameState
+     */
     public GameState getGameState() {
         return gameState;
     }
 
-    public int getFinalRound() {
-        return finalRound;
-    }
-
-
-    public void setRound(int round) {
-        this.round = round;
-    }
-
+    /**
+     * Sets final round
+     * @param finalRound
+     */
     public void setFinalRound(int finalRound) {
         this.finalRound = finalRound;
-    }
-
-    public ArrayList<Player> getWinners() {
-        return winners;
     }
 
     /**
