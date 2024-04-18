@@ -32,15 +32,6 @@ public class GameController {
         this.game.setCurrentPlayer(game.getPlayers().getFirst());
     }
 
-    /**
-     * Returns the player associated to the playerID
-     *
-     * @param playerID ID of the searched player
-     */
-    private Player getPlayer(String playerID) {
-        return game.getPlayers().stream().filter((Player p) -> p.getID().equals(playerID)).findAny().get();
-    }
-
     // PHASE 1: Game preparation
 
     /**
@@ -105,12 +96,12 @@ public class GameController {
     /**
      * Sets the pawn color
      *
-     * @param color chosen color index
+     * @param color    chosen color index
      * @param playerID ID of the player who is choosing the color
      */
     public void choosePawnColor(String color, String playerID) {
         // Get the player who is choosing the color by his ID
-        Player player = getPlayer(playerID);
+        Player player = game.getPlayerByID(playerID);
 
         // Set color
         if (player.equals(game.getCurrentPlayer())) {
@@ -131,7 +122,7 @@ public class GameController {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             CommonTable commonTable = game.getCommonTable();
 
-            Player player = getPlayer(playerID);
+            Player player = game.getPlayerByID(playerID);
 
             // Add 2 Resources Card to the hand
             player.getHand().addCard(commonTable.getResourceDeck().removeCard());
@@ -200,7 +191,7 @@ public class GameController {
     public void selectSecretMission(int cardIndex, String playerID) {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             // Get the player who is selecting the card by his ID
-            Player player = getPlayer(playerID);
+            Player player = game.getPlayerByID(playerID);
 
             // Check if the given index is correct
             if (cardIndex >= 0 && cardIndex < 2) {
@@ -224,7 +215,7 @@ public class GameController {
     public void setSecretMission(String playerID) {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             // Get the player who is setting the card by his ID
-            Player player = getPlayer(playerID);
+            Player player = game.getPlayerByID(playerID);
 
             // Check if it's the current player
             if (player.equals(game.getCurrentPlayer())) {
@@ -262,7 +253,7 @@ public class GameController {
     public void setFirstPlayer(String playerID) {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             // Get the player by his ID
-            Player player = getPlayer(playerID);
+            Player player = game.getPlayerByID(playerID);
 
             // Set the player as the first
             game.getPlayers().getFirst().setNotFirstPlayer();
@@ -290,7 +281,7 @@ public class GameController {
      */
     public void selectCardFromHand(int cardIndex, String playerID) {
         // Get the player who is selected the card to play
-        Player player = getPlayer(playerID);
+        Player player = game.getPlayerByID(playerID);
 
         // Check if the given index is correct
         if (cardIndex >= 0 && cardIndex < 3) {
@@ -310,7 +301,7 @@ public class GameController {
      */
     public void turnSelectedCardSide(String playerID) {
         // Get player who is turning the selected card side
-        Player player = getPlayer(playerID);
+        Player player = game.getPlayerByID(playerID);
 
         // Turn selected card side
         player.getHand().turnSide();
@@ -325,7 +316,7 @@ public class GameController {
      */
     public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) {
         // Get the player who is selecting the position on his personal board
-        Player player = getPlayer(playerID);
+        Player player = game.getPlayerByID(playerID);
 
         // Get the personal board
         PersonalBoard personalBoard = player.getPersonalBoard();
@@ -341,7 +332,7 @@ public class GameController {
      */
     public void playCardFromHand(String playerID) {
         // Get player who is trying to place the selected side
-        Player player = getPlayer(playerID);
+        Player player = game.getPlayerByID(playerID);
 
         // Check if it's the INITIAL_STAGE: the player is placing the starter card
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
@@ -406,7 +397,7 @@ public class GameController {
     public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
         if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
             // Check if it's the current player
-            if (getPlayer(playerID).equals(game.getCurrentPlayer())) {
+            if (game.getPlayerByID(playerID).equals(game.getCurrentPlayer())) {
                 // Set the selected card on the common table
                 game.getCommonTable().selectCard(cardX, cardY);
             }
@@ -423,7 +414,7 @@ public class GameController {
     public void drawSelectedCard(String playerID) {
         if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
             // Get the player who is trying to draw the selected card on the common table
-            Player player = getPlayer(playerID);
+            Player player = game.getPlayerByID(playerID);
 
             // Check if it's the turn of the player
             if (player.equals(game.getCurrentPlayer())) {
@@ -437,9 +428,7 @@ public class GameController {
                     hand.addCard(removedCard);
 
                     // Check if player's score is greater or equal then 20 points OR decks are both empty
-                    if (player.getPersonalBoard().getScore() >= 20 ||
-                            (commonTable.getResourceDeck().getCards().isEmpty() &&
-                                    commonTable.getGoldDeck().getCards().isEmpty())) {
+                    if (player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
                         // Change game state into END_STAGE
                         game.setGameState(GameState.END_STAGE);
 
@@ -458,11 +447,34 @@ public class GameController {
         }
     }
 
-    // TODO print personal board
-    public void printPersonalBoard(){
-
+    /**
+     * Add a new message into the chat
+     *
+     * @param message          body of the message
+     * @param senderID         ID of the sender
+     * @param receiverNickname nickname of the receiver
+     * @param time             local time of the client
+     */
+    public void addMessage(String message, String receiverNickname, String senderID, String time) {
+        Message msg = new Message(message, game.getPlayerByNickname(receiverNickname), game.getPlayerByID(senderID), time);
+        game.getChat().addMessage(msg);
     }
 
+    /**
+     * Prints the personal board of given player nickname
+     *
+     * @param nickname nickname of the player
+     * @param playerID ID of the player who is requesting to print personal board
+     */
+    public void printPersonalBoard(String nickname, String playerID) {
+        Player player = game.getPlayerByNickname(nickname);
+
+        // TODO need to add a method in PersonalBoard
+    }
+
+    /**
+     * Changes the current player
+     */
     private void changeTurn() {
         game.goToNextPlayer();
     }
