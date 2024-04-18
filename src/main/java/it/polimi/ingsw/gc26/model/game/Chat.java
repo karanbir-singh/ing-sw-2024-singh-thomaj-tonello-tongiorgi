@@ -41,7 +41,7 @@ public class Chat {
      * @return arrayList containing the messages for the player
      */
     public ArrayList<Message> filterMessages(Player receiverPlayer){
-        ArrayList<Message> copy = new ArrayList<Message>();
+        ArrayList<Message> copy = new ArrayList<>();
         for(Message m : this.messages){
             if(m.getReceiver().equals(receiverPlayer)){
                 copy.add(m);
