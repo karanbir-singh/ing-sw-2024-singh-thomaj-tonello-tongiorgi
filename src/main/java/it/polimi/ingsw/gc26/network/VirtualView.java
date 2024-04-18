@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.network;
 
-import it.polimi.ingsw.gc26.StateClient;
+import it.polimi.ingsw.gc26.ClientState;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -13,6 +13,6 @@ public interface VirtualView extends Remote {
 
     void reportError(String errorMessage) throws RemoteException;
 
-    void updateState(StateClient stateClient) throws RemoteException;
+    void updateState(ClientState clientState) throws RemoteException;
     // Then other method for updating...
 }

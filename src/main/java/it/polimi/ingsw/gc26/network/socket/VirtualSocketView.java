@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.network.socket;
 
-import it.polimi.ingsw.gc26.StateClient;
+import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.rmi.RemoteException;
@@ -23,7 +23,7 @@ public class VirtualSocketView implements VirtualView {
 
     }
     @Override
-    public void updateState(StateClient stateClient) throws RemoteException{
+    public void updateState(ClientState clientState) throws RemoteException{
 
     }
 }

@@ -2,7 +2,7 @@ package it.polimi.ingsw.gc26.network.socket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.StateClient;
+import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.PrintWriter;
@@ -52,7 +52,7 @@ public class VirtualSocketClient implements VirtualView {
         return data;
     }
 
-    public void updateState(StateClient stateClient){
+    public void updateState(ClientState clientState){
 
     }
 }
