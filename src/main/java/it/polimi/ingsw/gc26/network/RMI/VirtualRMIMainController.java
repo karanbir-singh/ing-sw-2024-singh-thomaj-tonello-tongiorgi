@@ -1,7 +1,5 @@
 package it.polimi.ingsw.gc26.network.RMI;
 
-import it.polimi.ingsw.gc26.StateClient;
-import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
@@ -9,8 +7,6 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.UUID;
 
 public class VirtualRMIMainController implements VirtualMainController {
     private final MainController mainController;
