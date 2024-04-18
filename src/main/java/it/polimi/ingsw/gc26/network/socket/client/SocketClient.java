@@ -15,13 +15,13 @@ import java.util.Scanner;
 public class SocketClient implements VirtualView {
     private final static String filePath = "src/main/resources/envClient.json";
     private final BufferedReader inputFromServer;
-    private final VirtualSocketMainController server;
+    private final VirtualSocketMainController virtualMainController;
     private final VirtualSocketGameController virtualGameController;
     private String username;
 
     protected SocketClient(BufferedReader input, BufferedWriter output, String username) {
         this.inputFromServer = input;
-        this.server = new VirtualSocketMainController(output);
+        this.virtualMainController = new VirtualSocketMainController(output);
         this.username = username;
         this.virtualGameController = new VirtualSocketGameController(output);
     }
@@ -109,6 +109,7 @@ public class SocketClient implements VirtualView {
                 this.virtualGameController.addMessage(line, receiver, this.username, "");
             } else {
                 //this.virtualGameController.sendText(line);
+                this.virtualMainController.connect(this, this.username);
             }
         }
     }
