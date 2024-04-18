@@ -17,28 +17,8 @@ public class VirtualRMIGameController implements VirtualGameController {
     }
 
     @Override
-    public void prepareCommonTable() throws RemoteException {
-        this.gameController.prepareCommonTable();
-    }
+    public void choosePawnColor(String color, String playerID) throws RemoteException {
 
-    @Override
-    public void prepareStarterCards() throws RemoteException {
-        this.gameController.prepareStarterCards();
-    }
-
-    @Override
-    public void preparePlayersHand(String playerID) throws RemoteException {
-        this.gameController.preparePlayersHand(playerID);
-    }
-
-    @Override
-    public void prepareCommonMissions() throws RemoteException {
-        this.gameController.prepareCommonMissions();
-    }
-
-    @Override
-    public void prepareSecretMissions() throws RemoteException {
-        this.gameController.prepareSecretMissions();
     }
 
     @Override
@@ -49,11 +29,6 @@ public class VirtualRMIGameController implements VirtualGameController {
     @Override
     public void setSecretMission(String playerID) throws RemoteException  {
         this.gameController.setSecretMission(playerID);
-    }
-
-    @Override
-    public void setFirstPlayer(String playerID) throws RemoteException  {
-        this.gameController.setFirstPlayer(playerID);
     }
 
     @Override
@@ -84,5 +59,15 @@ public class VirtualRMIGameController implements VirtualGameController {
     @Override
     public void drawSelectedCard(String playerID) throws RemoteException  {
         this.gameController.drawSelectedCard(playerID);
+    }
+
+    @Override
+    public void addMessage(String message, String receiverNickname, String senderID, String time) throws RemoteException {
+        this.gameController.addMessage(message, receiverNickname, senderID, time);
+    }
+
+    @Override
+    public void printPersonalBoard(String nickname, String playerID) throws RemoteException {
+        this.gameController.printPersonalBoard(nickname, playerID);
     }
 }
