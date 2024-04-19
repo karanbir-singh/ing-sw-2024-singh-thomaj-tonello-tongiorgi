@@ -1,6 +1,8 @@
 package it.polimi.ingsw.gc26.network.socket.client;
 
 import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.MainClient;
+import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
@@ -16,12 +18,16 @@ public class SocketClient {
     private final SocketServerHandler handler;
     protected String nickname = null;
     protected String clientID = null;
+    private final MainClient mainClient;
 
-    public SocketClient(BufferedReader input, BufferedWriter output) {
+
+    public SocketClient(BufferedReader input, BufferedWriter output, MainClient mainClient) {
         this.virtualMainController = new VirtualSocketMainController(output);
         this.handler = new SocketServerHandler(this, input);
         this.output = output;
         this.clientID = "";
+        this.mainClient = mainClient;
+        this.virtualGameController = new VirtualSocketGameController(this.output);
 
     }
 
@@ -86,47 +92,10 @@ public class SocketClient {
 
         this.virtualMainController.getVirtualGameController();
         System.out.println("Game begin");
-        return this;
+        this.mainClient.setNickname(this.nickname);
+        this.mainClient.setClientID(this.clientID);
+        return this.virtualGameController;
 
-        while (true) {
-            //game started
-            boolean chat = false;
-            String line = scan.nextLine();
-            String receiver = "";
-            if (line.startsWith("/chat")) {
-                chat = true;
-                line = line.substring(line.indexOf(" ")+1);
-                if (line.startsWith("/")) {
-                    receiver = line.substring(1, line.indexOf(" "));
-                    line = line.substring(line.indexOf(" ")+1);
-                }
-            }
-
-            switch (line) {
-                case "/1":
-                    this.virtualGameController.selectCardFromHand(0, this.nickname);
-                    break;
-                case "/2":
-                    this.virtualGameController.turnSelectedCardSide(this.nickname);
-                    break;
-                case "/3":
-                    this.virtualGameController.selectPositionOnBoard(0, 0, this.nickname);
-                    break;
-                case "/4":
-                    this.virtualGameController.playCardFromHand(this.nickname);
-                    break;
-                case "/5":
-                    this.virtualGameController.selectCardFromCommonTable(0, 0, this.nickname);
-                    break;
-                case "/6":
-                    this.virtualGameController.drawSelectedCard(this.nickname);
-                    break;
-            }
-
-            if (chat) {
-                this.virtualGameController.addMessage(line, receiver, this.clientID, "");
-            }
-        }
     }
 
     public void runGUI(){

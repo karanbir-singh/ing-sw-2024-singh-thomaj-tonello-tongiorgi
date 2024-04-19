@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
@@ -36,7 +37,23 @@ public class MainClient {
     /**
      * Game controller, it can be instanced as a SocketGameController or a RMIGameController
      */
-    private VirtualGameController virtualGameController;
+
+
+    private String clientID;
+    private String nickname;
+
+    public MainClient() {
+        clientID = null;
+    }
+
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setClientID(String clientID) {
+        this.clientID = clientID;
+    }
 
     /**
      * Starts RMI Client view
@@ -73,17 +90,58 @@ public class MainClient {
         // Get connection channels
         InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
         OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
-
+        MainClient client = new MainClient();
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            this.virtualGameController = new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runTUI();
+            VirtualGameController gameController = new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx), client).runTUI();
+            client.runGenericTui(gameController);
+
         } else if (userInterface == UserInterface.gui) {
-            new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runGUI();
+            new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx), client).runGUI();
         }
     }
 
-    public void runGenericTui() {
+    public void runGenericTui(VirtualGameController virtualGameController) throws RemoteException{
+        Scanner scan = new Scanner(System.in);
+        while (true) {
+            //game started
+            boolean chat = false;
+            String line = scan.nextLine();
+            String receiver = "";
+            if (line.startsWith("/chat")) {
+                chat = true;
+                line = line.substring(line.indexOf(" ")+1);
+                if (line.startsWith("/")) {
+                    receiver = line.substring(1, line.indexOf(" "));
+                    line = line.substring(line.indexOf(" ")+1);
+                }
+            }
 
+            switch (line) {
+                case "/1":
+                    virtualGameController.selectCardFromHand(0, this.nickname);
+                    break;
+                case "/2":
+                    virtualGameController.turnSelectedCardSide(this.nickname);
+                    break;
+                case "/3":
+                    virtualGameController.selectPositionOnBoard(0, 0, this.nickname);
+                    break;
+                case "/4":
+                    virtualGameController.playCardFromHand(this.nickname);
+                    break;
+                case "/5":
+                    virtualGameController.selectCardFromCommonTable(0, 0, this.nickname);
+                    break;
+                case "/6":
+                    virtualGameController.drawSelectedCard(this.nickname);
+                    break;
+            }
+
+            if (chat) {
+                virtualGameController.addMessage(line, receiver, this.clientID, "");
+            }
+        }
     }
 
     public static void main(String args[]) {
