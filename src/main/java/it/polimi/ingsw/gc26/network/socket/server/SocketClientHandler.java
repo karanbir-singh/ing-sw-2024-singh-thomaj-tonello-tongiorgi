@@ -14,14 +14,15 @@ import java.util.UUID;
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
+import it.polimi.ingsw.gc26.network.VirtualView;
 
 
-public class SocketClientHandler implements VirtualGameController {
+public class SocketClientHandler  {
     final MainController mainController;
     GameController gameController = null;
     final SocketServer server;
     final BufferedReader inputFromClient;
-    final VirtualSocketView virtualClient;
+    final VirtualView virtualClient;
     String nickname = null;
 
     public SocketClientHandler(MainController controller, SocketServer server, BufferedReader input, PrintWriter output) {

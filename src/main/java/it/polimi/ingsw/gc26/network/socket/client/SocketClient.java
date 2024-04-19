@@ -1,66 +1,39 @@
 package it.polimi.ingsw.gc26.network.socket.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
-import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
-public class SocketClient implements VirtualView {
-    private final BufferedReader inputFromServer;
+public class SocketClient {
     private final VirtualMainController virtualMainController;
     private final VirtualGameController virtualGameController;
+    private final SocketServerHandler handler;
+    private final String username;
 
     public SocketClient(BufferedReader input, BufferedWriter output) {
-        this.inputFromServer = input;
         this.virtualMainController = new VirtualSocketMainController(output);
-
         // TODO create virtual game controller only when it's available
         this.virtualGameController = new VirtualSocketGameController(output);
+        this.handler = new SocketServerHandler(input);
+
     }
 
-    private void onServerListening() throws IOException {
-        String line;
-        while((line = inputFromServer.readLine()) != null) {
-            JsonNode root = null;
-            try {
-                ObjectMapper JsonMapper = new ObjectMapper();
-                root = JsonMapper.readTree(line);
-            } catch (JsonMappingException e) {
-                e.printStackTrace();
-            }
-
-            switch (root.get("function").asText()) {
-                case "showMessage":
-                    this.showMessage(root.get("value").asText());
-                    break;
-                case "reportMessage":
-                    this.reportMessage(root.get("value").asText());
-                    break;
-                case "reportError":
-                    this.reportError(root.get("value").asText());
-                    break;
-            }
-        }
-    }
-
-    public void runTUI() throws RemoteException {
+    private void runServerListener() {
         // Create a thread for listening server
         new Thread(() -> {
             try {
-                this.onServerListening();
+                this.handler.onServerListening();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
+    }
 
+    public void runTUI() throws RemoteException {
+        this.runServerListener();
         // Start CLI
         Scanner scan  = new Scanner(System.in);
         while (true) {
@@ -113,49 +86,11 @@ public class SocketClient implements VirtualView {
     }
 
     public void runGUI(){
-        // Create a thread for listening server
-        new Thread(() -> {
-            try {
-                this.onServerListening();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        this.runServerListener();
 
         // TODO
     }
 
-    public void showMessage(String line) {
-        JsonNode message = null;
-        try {
-            ObjectMapper JsonMapper = new ObjectMapper();
-            message = JsonMapper.readTree(line);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("[" + message.get("sender").asText() + "]: " + message.get("text").asText());
-    }
-
-    @Override
-    public void reportMessage(String message) {
-        System.out.println("[SERVER]: " + message);
-    }
-
-    public void reportError(String errorMessage) {
-        System.out.println("[ERROR]: " + errorMessage);
-    }
-
-    @Override
-    public void updateState(ClientState clientState) throws RemoteException {
-
-    }
-
-    private static String simpleLogin() {
-        Scanner scan  = new Scanner(System.in);
-        System.out.println("Insert your name: ");
-        return scan.nextLine();
-    }
 
 }
 
