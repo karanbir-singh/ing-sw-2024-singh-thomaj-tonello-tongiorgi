@@ -6,5 +6,6 @@ public enum ClientState {
     CREATOR,
     BEGIN,
     INVALID_NICKNAME,
-    INVALID_NUMBER_OF_PLAYER
+    INVALID_NUMBER_OF_PLAYER,
+    INVALID_PAWN
 }

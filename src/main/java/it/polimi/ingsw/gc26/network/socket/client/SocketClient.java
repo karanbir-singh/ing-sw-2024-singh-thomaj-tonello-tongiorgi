@@ -4,41 +4,29 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.network.VirtualGameController;
+import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.*;
-import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
-/*
 public class SocketClient implements VirtualView {
-    private final static String filePath = "src/main/resources/envClient.json";
     private final BufferedReader inputFromServer;
-    private final VirtualSocketMainController virtualMainController;
-    private final VirtualSocketGameController virtualGameController;
-    private String username;
+    private final VirtualMainController virtualMainController;
+    private final VirtualGameController virtualGameController;
 
-    protected SocketClient(BufferedReader input, BufferedWriter output, String username) {
+    public SocketClient(BufferedReader input, BufferedWriter output) {
         this.inputFromServer = input;
         this.virtualMainController = new VirtualSocketMainController(output);
-        this.username = username;
+
+        // TODO create virtual game controller only when it's available
         this.virtualGameController = new VirtualSocketGameController(output);
     }
 
-    private void run() throws RemoteException {
-
-        new Thread(() -> {
-            try {
-                this.runVirtualServer();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-        this.runCLI();
-    }
-
-    private void runVirtualServer() throws IOException {
+    private void onServerListening() throws IOException {
         String line;
         while((line = inputFromServer.readLine()) != null) {
             JsonNode root = null;
@@ -63,7 +51,17 @@ public class SocketClient implements VirtualView {
         }
     }
 
-    private void runCLI() throws RemoteException {
+    public void runTUI() throws RemoteException {
+        // Create a thread for listening server
+        new Thread(() -> {
+            try {
+                this.onServerListening();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        // Start CLI
         Scanner scan  = new Scanner(System.in);
         while (true) {
             //System.out.println("> ");
@@ -114,6 +112,19 @@ public class SocketClient implements VirtualView {
         }
     }
 
+    public void runGUI(){
+        // Create a thread for listening server
+        new Thread(() -> {
+            try {
+                this.onServerListening();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+
+        // TODO
+    }
+
     public void showMessage(String line) {
         JsonNode message = null;
         try {
@@ -134,23 +145,10 @@ public class SocketClient implements VirtualView {
     public void reportError(String errorMessage) {
         System.out.println("[ERROR]: " + errorMessage);
     }
-    public static void main(String[] args) throws IOException {
-        String hostName;
-        int portNumber;
-        if (args.length == 2) {
-            hostName = args[0];
-            portNumber = Integer.parseInt(args[1]);
-        } else {
-            ObjectMapper JsonMapper = new ObjectMapper();
-            JsonNode root = JsonMapper.readTree(new FileReader(SocketClient.filePath));
-            hostName = root.get("hostName").asText();
-            portNumber = root.get("portNumber").asInt();
-        }
 
-        Socket serverSocket = new Socket(hostName, portNumber);
-        InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
-        OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
-        new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx), "").run();
+    @Override
+    public void updateState(ClientState clientState) throws RemoteException {
+
     }
 
     private static String simpleLogin() {
@@ -160,5 +158,4 @@ public class SocketClient implements VirtualView {
     }
 
 }
-*/
 

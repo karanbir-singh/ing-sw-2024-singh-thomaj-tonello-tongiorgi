@@ -9,17 +9,17 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
-public class VirtualRMIView implements VirtualView {
+public class VirtualRMIView  implements VirtualView {
     private final VirtualMainController virtualMainController;
+    private VirtualGameController virtualGameController;
     private String clientID;
     private String nickName;
-    private VirtualGameController virtualGameController;
-    ClientState currState;
+    ClientState clientState;
 
     public VirtualRMIView(VirtualMainController virtualMainController) throws RemoteException {
         this.virtualMainController = virtualMainController;
+        clientState = ClientState.CONNECTION;
 
-        currState = ClientState.CONNECTION;
         UnicastRemoteObject.exportObject(this, 0);
     }
 
@@ -30,7 +30,7 @@ public class VirtualRMIView implements VirtualView {
     }
 
     public void updateState(ClientState clientState) {
-        this.currState = clientState;
+        this.clientState = clientState;
     }
 
     @Override
@@ -54,19 +54,19 @@ public class VirtualRMIView implements VirtualView {
         this.nickName = scanner.nextLine();
         this.clientID = this.virtualMainController.connect(this, this.nickName);
 
-        while (currState == ClientState.INVALID_NICKNAME || currState == ClientState.CONNECTION) {
+        while (clientState == ClientState.INVALID_NICKNAME || clientState == ClientState.CONNECTION) {
             System.out.println("NICKNAME GIA' PRESO\nNickname:");
             this.nickName = scanner.nextLine();
             this.clientID = this.virtualMainController.connect(this, this.nickName);
         }
 
-        if (currState == ClientState.CREATOR) {
+        if (clientState == ClientState.CREATOR) {
             System.out.println("THERE ARE NO GAME FREE, YOU MUST CREATE A NEW GAME, HOW MANY PLAYER?");
             String decision = scanner.nextLine();
             this.virtualMainController.createWaitingList(this, this.clientID, this.nickName, Integer.parseInt(decision));
         }
         System.out.println("WAITING PLAYERS...");
-        while (currState == ClientState.WAITING){
+        while (clientState == ClientState.WAITING){
             System.out.flush();
         }
 

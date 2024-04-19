@@ -9,10 +9,10 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 
 public class VirtualSocketView implements VirtualView {
-    final PrintWriter outputToServer;
+    final PrintWriter outputToClient;
 
     public VirtualSocketView(PrintWriter output) {
-        this.outputToServer = output;
+        this.outputToClient = output;
     }
 
     @Override
@@ -22,26 +22,25 @@ public class VirtualSocketView implements VirtualView {
         data.replace("value", message);
         try {
             ObjectMapper mappedData = new ObjectMapper();
-            this.outputToServer.println(mappedData.writeValueAsString(data));
-            this.outputToServer.flush();
+            this.outputToClient.println(mappedData.writeValueAsString(data));
+            this.outputToClient.flush();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void reportMessage(String message) {
         String msg = STR."{\"function\": \"reportMessage\", \"value\" : \" \{message} \"}";
-        this.outputToServer.println(msg);
-        this.outputToServer.flush();
+        this.outputToClient.println(msg);
+        this.outputToClient.flush();
     }
 
     @Override
     public void reportError(String errorMessage) {
         String msg = STR."{\"function\": \"reportError\", \"value\" : \" \{errorMessage} \"}";
-        this.outputToServer.println(msg);
-        this.outputToServer.flush();
+        this.outputToClient.println(msg);
+        this.outputToClient.flush();
 
     }
 

@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class SocketServer {
-    private final static String filePath = "src/main/resources/envServer.json";
+    public final static String filePath = "src/main/resources/envServer.json";
     private final ArrayList<SocketClientHandler> clients = new ArrayList<>();
     private final ServerSocket listenSocket;
     private final MainController controller;
@@ -21,7 +21,7 @@ public class SocketServer {
         this.controller = controller;
     }
 
-    private void runServer() throws  IOException {
+    public void runServer() throws  IOException {
         Socket clientSocket = null;
         System.out.println("Listening in port:" + this.listenSocket.getLocalPort());
         while ((clientSocket = this.listenSocket.accept()) != null) {
@@ -69,26 +69,4 @@ public class SocketServer {
             }
         }
     }
-
-    public static void main(String[] args) throws IOException {
-        String hostName;
-        int portNumber;
-        if (args.length == 2) {
-            hostName = args[0];
-            portNumber = Integer.parseInt(args[1]);
-        } else {
-            ObjectMapper JsonMapper = new ObjectMapper();
-            JsonNode root = JsonMapper.readTree(new FileReader(SocketServer.filePath));
-            hostName = root.get("hostName").asText();
-            portNumber = root.get("portNumber").asInt();
-        }
-        try {
-            ServerSocket listenSocket = new ServerSocket(portNumber);
-            new SocketServer(listenSocket, new MainController()).runServer(); //TODO qui ci va il main controller
-        } catch (Exception e) {
-            //TODO handle exception
-        }
-
-    }
-
 }

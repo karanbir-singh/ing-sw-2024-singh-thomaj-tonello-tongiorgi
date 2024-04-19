@@ -18,6 +18,21 @@ public class VirtualSocketGameController implements VirtualGameController {
     }
 
     @Override
+    public void choosePawnColor(String color, String playerID) throws RemoteException {
+
+    }
+
+    @Override
+    public void selectSecretMission(int cardIndex, String playerID) throws RemoteException {
+
+    }
+
+    @Override
+    public void setSecretMission(String playerID) throws RemoteException {
+
+    }
+
+    @Override
     public void selectCardFromHand(int cardIndex, String playerID) {
         HashMap<String, String> data = VirtualSocketGameController.getBasicMessage();
         data.replace("function", "selectCardFromHand");
@@ -152,6 +167,11 @@ public class VirtualSocketGameController implements VirtualGameController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
+    }
+
+    @Override
+    public void printPersonalBoard(String nickname, String playerID) throws RemoteException {
 
     }
 

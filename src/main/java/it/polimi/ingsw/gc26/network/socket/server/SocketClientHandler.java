@@ -89,27 +89,7 @@ public class SocketClientHandler implements VirtualGameController {
     }
 
     @Override
-    public void prepareCommonTable() throws RemoteException {
-
-    }
-
-    @Override
-    public void prepareStarterCards() throws RemoteException {
-
-    }
-
-    @Override
-    public void preparePlayersHand(String playerID) throws RemoteException {
-
-    }
-
-    @Override
-    public void prepareCommonMissions() throws RemoteException {
-
-    }
-
-    @Override
-    public void prepareSecretMissions() throws RemoteException {
+    public void choosePawnColor(String color, String playerID) throws RemoteException {
 
     }
 
@@ -120,11 +100,6 @@ public class SocketClientHandler implements VirtualGameController {
 
     @Override
     public void setSecretMission(String playerID) throws RemoteException {
-
-    }
-
-    @Override
-    public void setFirstPlayer(String playerID) throws RemoteException {
 
     }
 
@@ -161,11 +136,6 @@ public class SocketClientHandler implements VirtualGameController {
     }
 
     @Override
-    public void changeTurn() throws RemoteException {
-
-    }
-
-    @Override
     public void addMessage(String line, String nicknameReceiver,String nicknameSender, String time) throws RemoteException {
         //System.out.println(msg);
         this.gameController.addMessage(line, nicknameReceiver, nicknameSender, time);
@@ -174,10 +144,10 @@ public class SocketClientHandler implements VirtualGameController {
 
     }
 
-    /*@Override
-    public void sendText(String text) {
+    @Override
+    public void printPersonalBoard(String nickname, String playerID) throws RemoteException {
 
-    }*/
+    }
 
     public void connect() throws IOException {
         while (this.nickname == null) {

@@ -15,24 +15,13 @@ public class VirtualSocketMainController implements VirtualMainController {
         this.outputToServer = new PrintWriter(output);
     }
 
-
     @Override
-    public String connect(VirtualView client, String nickname) throws RemoteException {
+    public String connect(VirtualView client, String nickName) throws RemoteException {
         return "";
     }
 
     @Override
-    public boolean existsWaitingGame() throws RemoteException {
-        return false;
-    }
-
-    @Override
-    public void createWaitingList(int numPlayers, String playerID, String playerNickname) throws RemoteException {
-
-    }
-
-    @Override
-    public void joinWaitingList(String playerID, String playerNickname) throws RemoteException {
+    public void createWaitingList(VirtualView client, String clientID, String nickname, int numPlayers) throws RemoteException {
 
     }
 
