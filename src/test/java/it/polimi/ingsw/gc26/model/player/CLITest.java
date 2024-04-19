@@ -40,11 +40,18 @@ public class CLITest {
         ArrayList<Card> cards = new ArrayList<>();
         Hand myHand;
 
-        cards.add(resourceDeck.getCards().get(6));
-        cards.add(resourceDeck.getCards().get(20));
+        cards.add(resourceDeck.getCards().get(7));
+        cards.add(goldDeck.getCards().get(4));
         cards.add(goldDeck.getCards().get(10));
 
         myHand = new Hand(cards);
+
+        myHand.setSelectedCard(goldDeck.getCards().get(4));
+        myHand.turnSide();
+        myHand.turnSide();
+        myHand.turnSide();
+        myHand.setSelectedCard(goldDeck.getCards().get(10));
+        myHand.turnSide();
 
         myHand.showHand();
 

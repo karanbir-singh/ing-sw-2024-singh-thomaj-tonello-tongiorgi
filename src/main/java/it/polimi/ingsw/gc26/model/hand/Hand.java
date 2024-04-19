@@ -4,6 +4,10 @@ import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.card.ResourceCard;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
+import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
+import it.polimi.ingsw.gc26.model.card_side.ability.InkwellCounter;
+import it.polimi.ingsw.gc26.model.card_side.ability.ManuscriptCounter;
+import it.polimi.ingsw.gc26.model.card_side.ability.QuillCounter;
 
 import java.util.*;
 
@@ -127,9 +131,17 @@ public class Hand {
         x=1;
 
         for(Card c: cards) {
-            myHand[y][x] = "   Front  " + cards.indexOf(c);
+            if(c == this.selectedCard){
+                if(this.selectedSide == c.getBack()){
+                    myHand[y][x] = "   \u001B[46m \u001B[30mBack  " + cards.indexOf(c) + " \u001B[0m  ";
+                } else {
+                    myHand[y][x] = "   \u001B[46m \u001B[30mFront " + cards.indexOf(c) + " \u001B[0m  ";
+                }
+            } else {
+                myHand[y][x] = "   Front " + cards.indexOf(c) + "   ";
+            }
             if(c != cards.getLast()){
-                myHand[y][x] = myHand[y][x] + "  " + "▪\uFE0F"+"▪\uFE0F"+"▪\uFE0F";
+                myHand[y][x] = myHand[y][x]  + "▪\uFE0F"+"▪\uFE0F"+"▪\uFE0F";
             }
             x++;
         }
@@ -141,10 +153,14 @@ public class Hand {
         for (int j = 0; j < 3; j++) {
             for(Card c: cards) {
                 for (int i = 0; i < 3; i++) {
-                    myHand[y][x] = c.getFront().printableSide()[j][i];
+                    if(c == this.selectedCard && this.selectedSide.equals(c.getBack())){
+                        myHand[y][x] = c.getBack().printableSide()[j][i];
+                    } else {
+                        myHand[y][x] = c.getFront().printableSide()[j][i];
+                    }
                     x++;
                 }
-                myHand[y][x] = "       ";
+                myHand[y][x] = "        ";
                 x++;
             }
             myHand[y][x] = "\n";
@@ -184,9 +200,9 @@ public class Hand {
 */
         for(Card c: cards) {
             if(c instanceof GoldCard){
-                myHand[y][x] = " Gold    ";
+                myHand[y][x] = " Gold         ";
             } else if(c instanceof ResourceCard){
-                myHand[y][x] = " Resource    ";
+                myHand[y][x] = " Resource     ";
             }
             if(c != cards.getLast()){
                 myHand[y][x] = myHand[y][x] + "▪\uFE0F"+"▪\uFE0F"+"▪\uFE0F";
@@ -199,10 +215,29 @@ public class Hand {
         x = 1;
 
         for(Card c: cards) {
-            myHand[y][x] = " " + c.getFront().getPoints() + " pt        ";
-            if(c != cards.getLast()){
-                myHand[y][x] = myHand[y][x] + "▪\uFE0F"+"▪\uFE0F"+"▪\uFE0F";
+            if(!(c == this.selectedCard && this.selectedSide.equals(c.getBack()))){
+                switch (c.getFront()) {
+                    case CornerCounter cornerCounter -> myHand[y][x] = " 2 pt " + "x" + Character.toString(0x2B1C);
+                    case InkwellCounter inkwellCounter -> myHand[y][x] =  " 1 pt " + "x" + Symbol.INKWELL.getAlias();
+                    case ManuscriptCounter manuscriptCounter -> myHand[y][x] = " 1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
+                    case QuillCounter quillCounter -> myHand[y][x] = " 1 pt " + "x" + Symbol.QUILL.getAlias();
+                    case null, default -> myHand[y][x] = " " + c.getFront().getPoints() + " pt " + "        ";
+                }
+                if(c != cards.getLast()){
+                    if(c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter){
+                        myHand[y][x] = myHand[y][x] + "       " + "▪\uFE0F"+"▪\uFE0F";
+                    } else {
+                        myHand[y][x] = myHand[y][x] + "▪\uFE0F"+"▪\uFE0F"+"▪\uFE0F";
+                    }
+                }
+            } else {
+                myHand[y][x] = " 0 pt         ";
+                if(c != cards.getLast()){
+                    myHand[y][x] = myHand[y][x] + "▪\uFE0F"+"▪\uFE0F"+"▪\uFE0F";
+                }
             }
+
+
             x++;
         }
 
@@ -212,10 +247,10 @@ public class Hand {
 
         for(Card c: cards) {
             myHand[y][x] = " ";
-            if(c.getFront().getRequestedResources() != null){
-                int n;
-                int spaces = 5;
+            int n;
+            int spaces = 5;
 
+            if(!(c == this.selectedCard && this.selectedSide.equals(c.getBack()))){
                 for(Symbol s: c.getFront().getRequestedResources().keySet()){
                     n = c.getFront().getRequestedResources().get(s);
                     for(int i=0; i<n; i++){
@@ -223,15 +258,16 @@ public class Hand {
                     }
                     spaces = spaces - n;
                 }
-
-                while (spaces>0){
-                    myHand[y][x] = myHand[y][x] + "  ";
-                    spaces--;
-                }
-
             }
+
+            while (spaces>0){
+                myHand[y][x] = myHand[y][x] + "▪\uFE0F";
+                spaces--;
+            }
+
+
             if(c != cards.getLast()){
-                myHand[y][x] = "  " + myHand[y][x] + "▪\uFE0F"+"▪\uFE0F"+"▪\uFE0F" ;
+                myHand[y][x] = myHand[y][x] + "      "+"▪\uFE0F" ;
             }
             x++;
         }
