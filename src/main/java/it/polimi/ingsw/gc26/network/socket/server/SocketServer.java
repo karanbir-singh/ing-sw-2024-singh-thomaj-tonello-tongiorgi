@@ -16,6 +16,7 @@ public class SocketServer {
     private final ArrayList<SocketClientHandler> clients = new ArrayList<>();
     private final ServerSocket listenSocket;
     private final MainController controller;
+
     public SocketServer(ServerSocket listenSocket, MainController controller) {
         this.listenSocket = listenSocket;
         this.controller = controller;
@@ -23,7 +24,7 @@ public class SocketServer {
 
     public void runServer() throws  IOException {
         Socket clientSocket = null;
-        System.out.println("Listening in port:" + this.listenSocket.getLocalPort());
+        System.out.println(STR."Listening in port: \{this.listenSocket.getLocalPort()}");
         while ((clientSocket = this.listenSocket.accept()) != null) {
             InputStreamReader socketRx = new InputStreamReader(clientSocket.getInputStream());
             OutputStreamWriter socketTx = new OutputStreamWriter(clientSocket.getOutputStream());
@@ -40,32 +41,11 @@ public class SocketServer {
         }
     }
 
-    public void broadCastUpdate(Message message, SocketClientHandler sender) {
-        synchronized (this.clients) {
-            for (var client : this.clients) {
-                if (!client.equals(sender)) {
-                    client.virtualClient.showMessage(message.toJson());
-                }
-            }
-        }
-
-    }
-
-    public void broadCastReport(String text, SocketClientHandler sender) {
-        synchronized (this.clients) {
-            for (var client : this.clients) {
-                client.virtualClient.reportMessage(text);
-            }
-        }
-
-    }
 
     public void setGameController(GameController gameController) {
         synchronized (this.clients) {
             for (var client : this.clients) {
                 client.setGameController(gameController);
-
-
             }
         }
     }

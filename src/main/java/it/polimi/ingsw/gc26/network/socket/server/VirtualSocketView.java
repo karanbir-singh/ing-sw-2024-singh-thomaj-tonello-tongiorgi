@@ -52,6 +52,15 @@ public class VirtualSocketView implements VirtualView {
     }
 
     public void updateState(ClientState clientState){
-
+        HashMap<String, String> data = VirtualSocketView.getBasicMessage();
+        data.replace("function", "updateState");
+        data.replace("value", clientState.toString());
+        try {
+            ObjectMapper mappedData = new ObjectMapper();
+            this.outputToClient.println(mappedData.writeValueAsString(data));
+            this.outputToClient.flush();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }
