@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.network.socket.client;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
+import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.*;
 import java.rmi.RemoteException;
@@ -10,16 +11,17 @@ import java.util.Scanner;
 
 public class SocketClient {
     private final VirtualMainController virtualMainController;
-    private final VirtualGameController virtualGameController;
+    private VirtualGameController virtualGameController;
+    private final BufferedWriter output;
     private final SocketServerHandler handler;
-    private String nickname = null;
-    private String clientID = null;
+    protected String nickname = null;
+    protected String clientID = null;
 
     public SocketClient(BufferedReader input, BufferedWriter output) {
         this.virtualMainController = new VirtualSocketMainController(output);
-        // TODO create virtual game controller only when it's available
-        this.virtualGameController = new VirtualSocketGameController(output);
-        this.handler = new SocketServerHandler(input);
+        this.handler = new SocketServerHandler(this, input);
+        this.output = output;
+        this.clientID = "";
 
     }
 
@@ -34,48 +36,65 @@ public class SocketClient {
         }).start();
     }
 
-    public void runTUI() throws RemoteException {
+    public VirtualGameController runTUI() throws RemoteException {
         this.runServerListener();
         // Start CLI
         Scanner scan  = new Scanner(System.in);
+
+        // TODO gestire la Remote Exception
+        //Initial state in CONNECTION
+        System.out.println("Connected to the server successfully!");
+        System.out.println("Insert your nickname: ");
+        this.nickname = scan.nextLine();
+        this.virtualMainController.connect(this.handler, this.nickname);
+
+        // wait to give the server the time to update the state
+        while(true) {
+            synchronized (this.clientID) {
+                if (this.clientID != "") {break;}
+            }
+        };
+        while(true) {
+            synchronized (this.handler.clientState) {
+                if (this.handler.changeState == true) {
+                    this.handler.changeState = false;
+                    if (handler.clientState == ClientState.INVALID_NICKNAME || handler.clientState == ClientState.CONNECTION) {
+                        System.out.println("Nickname not available \nInsert new nickname: ");
+                        this.nickname = scan.nextLine();
+                        this.virtualMainController.connect(this.handler, this.nickname);
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (handler.clientState == ClientState.CREATOR) {
+            System.out.println("You must initialize a new game \n Insert number of players: ");
+            Integer numberPlayers = Integer.parseInt(scan.nextLine());
+            this.virtualMainController.createWaitingList(this.handler, this.clientID, this.nickname, numberPlayers);
+        }
+        System.out.println("Waiting for other players ...");
+
         while (true) {
-            // TODO gestire la Remote Exception
-            //Initial state in CONNECTION
-            System.out.println("Connected to the server successfully!");
-            System.out.println("Insert your nickname: ");
-            this.nickname = scan.nextLine();
-            this.virtualMainController.connect(this.handler, this.nickname);
-
-            while (handler.clientState == ClientState.INVALID_NICKNAME || handler.clientState == ClientState.CONNECTION) {
-                System.out.println("Nickname not available \nInsert new nickname: ");
-                this.nickname = scan.nextLine();
-                this.virtualMainController.connect(this.handler, this.nickname);
+            synchronized (this.handler.clientState) {
+                if (handler.clientState == ClientState.BEGIN){
+                    break;
+                }
             }
+        }
 
-            if (handler.clientState == ClientState.CREATOR) {
-                System.out.println("You must initialize a new game \n Insert number of players: ");
-                Integer numberPlayers = Integer.parseInt(scan.nextLine());
-                this.virtualMainController.createWaitingList(this.handler, this.clientID, this.nickname, numberPlayers);
-            }
-            System.out.println("Waiting for other players ...");
-            while (handler.clientState == ClientState.WAITING){
-                System.out.flush();
-            }
+        this.virtualMainController.getVirtualGameController();
+        System.out.println("Game begin");
+        return this;
 
-            this.virtualMainController.getVirtualGameController();
-            System.out.println("Game begin");
-
+        while (true) {
             //game started
             boolean chat = false;
             String line = scan.nextLine();
-            if (this.nickname == null) {
-                this.nickname = line;
-            }
-
             String receiver = "";
             if (line.startsWith("/chat")) {
                 chat = true;
-                receiver = line.substring(1, line.indexOf(" "));
                 line = line.substring(line.indexOf(" ")+1);
                 if (line.startsWith("/")) {
                     receiver = line.substring(1, line.indexOf(" "));
@@ -105,10 +124,7 @@ public class SocketClient {
             }
 
             if (chat) {
-                this.virtualGameController.addMessage(line, receiver, this.nickname, "");
-            } else {
-                //this.virtualGameController.sendText(line);
-                this.virtualMainController.connect(this.handler , this.nickname);
+                this.virtualGameController.addMessage(line, receiver, this.clientID, "");
             }
         }
     }
@@ -117,6 +133,14 @@ public class SocketClient {
         this.runServerListener();
 
         // TODO
+    }
+
+    public void setClientID(String clientID) {
+        this.clientID = clientID;
+    }
+
+    public void setVirtualGameController() {
+        this.virtualGameController = new VirtualSocketGameController(this.output);
     }
 
 

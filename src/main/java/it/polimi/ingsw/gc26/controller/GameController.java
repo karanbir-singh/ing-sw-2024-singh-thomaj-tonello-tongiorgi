@@ -458,6 +458,8 @@ public class GameController {
     public void addMessage(String message, String receiverNickname, String senderID, String time) {
         Message msg = new Message(message, game.getPlayerByNickname(receiverNickname), game.getPlayerByID(senderID), time);
         game.getChat().addMessage(msg);
+        System.out.println(msg);
+
     }
 
     /**

@@ -12,12 +12,16 @@ import java.rmi.RemoteException;
 import it.polimi.ingsw.gc26.ClientState;
 
 public class SocketServerHandler implements VirtualView {
-    BufferedReader inputFromServer;
-    ClientState clientState;
+    private final SocketClient socketClient;
+    private BufferedReader inputFromServer;
+    protected ClientState clientState;
+    protected boolean changeState;
 
-    public SocketServerHandler(BufferedReader inputFromServer ) {
+    public SocketServerHandler(SocketClient client, BufferedReader inputFromServer ) {
+        this.socketClient = client;
         this.inputFromServer = inputFromServer;
         clientState = ClientState.CONNECTION;
+        changeState = false;
     }
 
     public void onServerListening() throws IOException {
@@ -32,6 +36,12 @@ public class SocketServerHandler implements VirtualView {
             }
 
             switch (root.get("function").asText()) {
+                case "setClientID":
+                    this.setClientID(root.get("value").asText());
+                    break;
+                case "setGameController":
+                    this.setGameController();
+                    break;
                 case "updateState":
                     this.updateState(ClientState.valueOf(root.get("value").asText()));
                     break;
@@ -58,23 +68,37 @@ public class SocketServerHandler implements VirtualView {
             e.printStackTrace();
         }
 
-        System.out.println("[" + message.get("sender").asText() + "]: " + message.get("text").asText());
+        System.out.println(STR."[\{message.get("sender").asText()}]: \{message.get("text").asText()}");
     }
 
     @Override
     public void reportMessage(String message) {
-        System.out.println("[SERVER]: " + message);
+        System.out.println(STR."[SERVER]: \{message}");
     }
 
     @Override
     public void reportError(String errorMessage) {
-        System.out.println("[ERROR]: " + errorMessage);
+        System.out.println(STR."[ERROR]: \{errorMessage}");
     }
 
     public void updateState(ClientState clientState) throws RemoteException {
-        this.clientState = clientState;
+        synchronized (this.clientState) {
+            this.clientState = clientState;
+            this.changeState = true;
+        }
     }
 
+    @Override
+    public void setClientID(String clientID) throws RemoteException {
+        synchronized (this.socketClient.clientID) {
+            this.socketClient.setClientID(clientID);
+        }
+    }
+
+    @Override
+    public void setGameController() {
+        this.socketClient.setVirtualGameController();
+    }
 
 
 }

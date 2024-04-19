@@ -18,6 +18,7 @@ public class VirtualRMIMainController implements VirtualMainController {
 
     @Override
     public String connect(VirtualView client, String nickname) throws RemoteException {
+        System.out.println("New client from RMI!");
         return this.mainController.connect(client, nickname);
     }
 

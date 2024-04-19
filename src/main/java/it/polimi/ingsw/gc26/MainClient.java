@@ -3,7 +3,9 @@ package it.polimi.ingsw.gc26;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
+import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
+import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.network.socket.client.SocketClient;
 import it.polimi.ingsw.gc26.network.socket.server.SocketServer;
 
@@ -30,6 +32,11 @@ public class MainClient {
      * Client view types
      */
     private enum ClientViewType {rmi, socket}
+
+    /**
+     * Game controller, it can be instanced as a SocketGameController or a RMIGameController
+     */
+    private VirtualGameController virtualGameController;
 
     /**
      * Starts RMI Client view
@@ -69,10 +76,14 @@ public class MainClient {
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runTUI();
+            this.virtualGameController = new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runTUI();
         } else if (userInterface == UserInterface.gui) {
             new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runGUI();
         }
+    }
+
+    public void runGenericTui() {
+
     }
 
     public static void main(String args[]) {
@@ -94,7 +105,7 @@ public class MainClient {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            serverHostname = root.get("hostname").asText();
+            serverHostname = root.get("server-hostname").asText();
             serverPort = root.get("port").asInt();
         }
 

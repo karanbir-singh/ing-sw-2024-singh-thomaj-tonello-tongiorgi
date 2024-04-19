@@ -24,7 +24,7 @@ public class SocketServer {
 
     public void runServer() throws  IOException {
         Socket clientSocket = null;
-        System.out.println(STR."Listening in port: \{this.listenSocket.getLocalPort()}");
+        System.out.println(STR."Starting Socket Server... \nListening in port: \{this.listenSocket.getLocalPort()}");
         while ((clientSocket = this.listenSocket.accept()) != null) {
             InputStreamReader socketRx = new InputStreamReader(clientSocket.getInputStream());
             OutputStreamWriter socketTx = new OutputStreamWriter(clientSocket.getOutputStream());
@@ -41,12 +41,4 @@ public class SocketServer {
         }
     }
 
-
-    public void setGameController(GameController gameController) {
-        synchronized (this.clients) {
-            for (var client : this.clients) {
-                client.setGameController(gameController);
-            }
-        }
-    }
 }

@@ -6,6 +6,7 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.PrintWriter;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 
 public class VirtualSocketView implements VirtualView {
@@ -55,6 +56,33 @@ public class VirtualSocketView implements VirtualView {
         HashMap<String, String> data = VirtualSocketView.getBasicMessage();
         data.replace("function", "updateState");
         data.replace("value", clientState.toString());
+        try {
+            ObjectMapper mappedData = new ObjectMapper();
+            this.outputToClient.println(mappedData.writeValueAsString(data));
+            this.outputToClient.flush();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setClientID(String clientID) throws RemoteException {
+        HashMap<String, String> data = VirtualSocketView.getBasicMessage();
+        data.replace("function", "setClientID");
+        data.replace("value", clientID);
+        try {
+            ObjectMapper mappedData = new ObjectMapper();
+            this.outputToClient.println(mappedData.writeValueAsString(data));
+            this.outputToClient.flush();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setGameController() throws RemoteException{
+        HashMap<String, String> data = VirtualSocketView.getBasicMessage();
+        data.replace("function", "setGameController");
         try {
             ObjectMapper mappedData = new ObjectMapper();
             this.outputToClient.println(mappedData.writeValueAsString(data));

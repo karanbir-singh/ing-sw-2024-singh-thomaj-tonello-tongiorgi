@@ -94,6 +94,9 @@ public class Game {
      * @param playerNickname Nickname of the searched player
      */
     public Player getPlayerByNickname(String playerNickname) {
+        if (playerNickname.equals("")) {
+            return null;
+        }
         return players.stream().filter((Player p) -> p.getNickname().equals(playerNickname)).findAny().get();
     }
 

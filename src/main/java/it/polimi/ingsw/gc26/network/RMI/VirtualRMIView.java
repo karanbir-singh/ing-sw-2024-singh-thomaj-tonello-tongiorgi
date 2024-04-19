@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
@@ -31,6 +32,16 @@ public class VirtualRMIView  implements VirtualView {
 
     public void updateState(ClientState clientState) {
         this.clientState = clientState;
+    }
+
+    @Override
+    public void setClientID(String clientID) throws RemoteException {
+
+    }
+
+    @Override
+    public void setGameController() throws RemoteException {
+
     }
 
     @Override
@@ -72,6 +83,24 @@ public class VirtualRMIView  implements VirtualView {
 
         virtualGameController = this.virtualMainController.getVirtualGameController();
         System.out.println("GAME BEGIN");
+
+        while (true) {
+            //game started
+            boolean chat = false;
+            String line = scanner.nextLine();
+            String receiver = "";
+            if (line.startsWith("/chat")) {
+                chat = true;
+                line = line.substring(line.indexOf(" ") + 1);
+                if (line.startsWith("/")) {
+                    receiver = line.substring(1, line.indexOf(" "));
+                    line = line.substring(line.indexOf(" ") + 1);
+                }
+            }
+            if (chat) {
+                this.virtualGameController.addMessage(line, receiver, this.clientID, "");
+            }
+        }
 
     }
 
