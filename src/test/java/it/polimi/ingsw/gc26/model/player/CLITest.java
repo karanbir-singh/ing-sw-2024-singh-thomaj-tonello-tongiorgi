@@ -58,6 +58,175 @@ public class CLITest {
     }
 
     @Test
+    public void missionCardAesthetic(){
+        Game game = new Game(new ArrayList<>());
+        Deck missionDeck = game.getCommonTable().getMissionDeck();
+        String[][] s = missionDeck.getCards().get(0).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(2).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(1).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(3).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(4).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(5).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(6).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(7).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(8).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(9).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(10).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(11).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(12).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(13).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(14).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\n");
+
+        s = missionDeck.getCards().get(15).getFront().printableSide();
+
+        for(int i=0; i<5; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(s[i][j]);
+            }
+            System.out.print("\n");
+        }
+    }
+
+    @Test
     public void printSide(){
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
@@ -72,8 +241,6 @@ public class CLITest {
         Side s2 = resourceDeck.getCards().get(30).getFront();
         Side s3 = goldDeck.getCards().get(0).getFront();
         Side s4 = goldDeck.getCards().get(30).getFront();
-
-        System.out.println(ANSI_BLUE_BACKGROUND + ANSI_BLACK + "This text has a green background but default text!" + ANSI_RESET);
 
         /*starter.printSide();
         System.out.print("\n");
@@ -96,7 +263,7 @@ public class CLITest {
 
 
     @Test
-    void emptyBoard() {
+    void personalBoardAesthetic() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
@@ -107,7 +274,9 @@ public class CLITest {
         pb.setPosition(1, -1);
         pb.playSide(resourceDeck.getCards().get(0).getFront());
 
-        pb.showBoard();;
+        pb.showBoard();
+        System.out.print("\n");
+
     }
 
 }

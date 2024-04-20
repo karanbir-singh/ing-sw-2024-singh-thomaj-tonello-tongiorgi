@@ -239,7 +239,7 @@ abstract public class Side {
         this.DOWNRIGHT = DOWNRIGHT;
     }
 
-    public String[][] printableSide(){
+    /*public String[][] printableSide(){
         String[][] s = new String[3][3];
         String empty = Character.toString(0x2B1C);
         String evil = Character.toString(0x2B1B);
@@ -252,7 +252,7 @@ abstract public class Side {
             background = sideSymbol.getBackground()+ "  " + styleReset;
             kingdomColor = sideSymbol.getBackground();
         }*/
-
+/*
         if (sideSymbol != null){
             filler = sideSymbol.getFiller();
             fontColor = sideSymbol.getFontColor();
@@ -281,7 +281,7 @@ abstract public class Side {
             s[0][2] = empty  ;
         }
 
-        s[1][0] = fontColor + "|" + background + styleReset;
+        s[1][0] = fontColor + "│" + background + styleReset;
         if(permanentResources.isEmpty()){
             s[1][1] = filler + filler + filler;
         } else {
@@ -296,7 +296,7 @@ abstract public class Side {
                 }
             }
         }
-        s[1][2] = fontColor + background + "|" + styleReset;
+        s[1][2] = fontColor + background + "│" + styleReset;
 
         if(DOWNLEFT.getSymbol().isPresent()){
             s[2][0] = DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() ;
@@ -323,9 +323,99 @@ abstract public class Side {
                 s[i][j] = "\33[40m" + s[i][j] + styleReset;
             }
         }*/
+/*
+        return s;
+    }*/
+
+    //with background
+    public String[][] printableSide(){
+        String[][] s = new String[3][3];
+        String empty = "▫️";
+        //String evil = Character.toString(0x2B1B);
+        String background = "  ";
+        String fontColor;
+        String styleReset = "\u001B[0m";
+        String filler;
+        String kingdomColor = "\u001B[48;2;255;209;56m";
+        String cornerBackground = "\u001B[48;2;255;255;255m";
+
+        if (sideSymbol != null){
+            filler = sideSymbol.getFiller();
+            fontColor = sideSymbol.getFontColor();
+            kingdomColor = sideSymbol.getBackground();
+        } else {
+            filler = Character.toString(0x1F7E1);
+            fontColor = "\33[93m";
+        }
+
+        if(UPLEFT.getSymbol().isPresent()){
+        s[0][0] = cornerBackground + UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+        } else if(UPLEFT.isEvil()) {
+        s[0][0] = filler ;
+        } else {
+        s[0][0] = cornerBackground + empty + kingdomColor ;
+        }
+
+
+        s[0][1] = fontColor + "   " + filler  + "   " + styleReset;
+
+
+        if(UPRIGHT.getSymbol().isPresent()){
+            s[0][2] = cornerBackground + UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+
+        } else if(UPRIGHT.isEvil()) {
+            s[0][2] = filler;
+        } else {
+            s[0][2] = cornerBackground + empty  + kingdomColor ;
+        }
+
+        s[1][0] = fontColor + " " + background + styleReset;
+
+        if(permanentResources.isEmpty()){
+            s[1][1] = filler + filler + filler;
+        } else {
+            s[1][1] = "";
+            if(permanentResources.size() == 1){
+                s[1][1] = filler + cornerBackground + permanentResources.get(0).getAlias() + kingdomColor + filler;
+            } else if(permanentResources.size() == 2){
+                s[1][1] = cornerBackground + permanentResources.get(0).getAlias() + kingdomColor + filler + cornerBackground + permanentResources.get(1).getAlias() + kingdomColor;
+            } else if(permanentResources.size() == 3){
+                s[1][1] = cornerBackground;
+                for (Symbol permanentResource : permanentResources) {
+                    s[1][1] = s[1][1] + permanentResource.getAlias();
+                }
+                s[1][1] = s[1][1] + kingdomColor;
+            }
+        }
+        s[1][2] = fontColor + background + " " + styleReset;
+
+        if(DOWNLEFT.getSymbol().isPresent()){
+        s[2][0] = cornerBackground + DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+
+        } else if(DOWNLEFT.isEvil()) {
+        s[2][0] = filler ;
+        } else {
+        s[2][0] =  cornerBackground + empty + kingdomColor;
+        }
+
+        s[2][1] = fontColor + "   "  + filler  + "   " + styleReset;
+
+        if(DOWNRIGHT.getSymbol().isPresent()){
+        s[2][2] = cornerBackground + DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+
+        } else if(DOWNRIGHT.isEvil()) {
+        s[2][2] = filler;
+        } else {
+        s[2][2] = cornerBackground +  empty  + kingdomColor;
+        }
+
+        for(int i=0; i<3; i++){
+            for(int j=0; j<3; j++){
+                s[i][j] = kingdomColor + s[i][j] + styleReset;
+            }
+        }
 
         return s;
-    }
-
+        }
 
 }

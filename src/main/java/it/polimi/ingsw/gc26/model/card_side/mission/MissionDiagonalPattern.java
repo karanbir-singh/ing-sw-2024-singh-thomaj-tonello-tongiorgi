@@ -48,4 +48,69 @@ public class MissionDiagonalPattern extends MissionCardFront {
         }
         return points;
     }
+
+
+    @Override
+    public String[][] printableSide(){
+        String[][] s = new String[5][3];
+        String styleReset = "\u001B[0m";
+        String decoration = Character.toString(0x1F3C6);
+        String diamond = "\uD83D\uDD38";
+        String alias;
+        String background;
+        String fontColor = "\33[93m";
+        String whiteFont = "\u001B[37m";
+        String whiteBackground = "\u001B[48;2;255;255;255m";
+        String filler;
+
+
+        s[0][0] = fontColor + " ╔";
+        s[0][2] = "╗ ";
+        s[0][1] = "═════" + decoration + diamond + decoration + "═════";
+        for(int i=1; i<4; i++){
+            s[i][0] = diamond + " ";
+            s[i][2] = " " + diamond ;
+        }
+        s[4][0] = " ╚";
+        s[4][1] = "═════" + diamond + diamond + diamond + "═════";
+        s[4][2] = "╝ ";
+
+        if(getType() == 1 || getType() == 3){
+            if(getType() == 1){
+                alias = Symbol.FUNGI.getAlias();
+                background = Symbol.FUNGI.getBackground();
+                //filler = Symbol.FUNGI.getFiller();
+            } else {
+                alias = Symbol.ANIMAL.getAlias();
+                background = Symbol.ANIMAL.getBackground();
+            }
+            for(int i=0; i<5; i++){
+                s[i][0] = fontColor + background + s[i][0];
+                s[i][2] = s[i][2] + styleReset;
+            }
+            s[1][1] =  "        " + whiteBackground + "[" + alias + "]" + background + "  ";
+            s[2][1] =  "     " + whiteBackground + "[" + alias + "]" + background +"     ";
+            s[3][1] = "  " + whiteBackground + "[" + alias + "]" + background + "        ";
+        }
+
+        if(getType() == 2 || getType() == 4){
+            if(getType() == 2){
+                alias = Symbol.PLANT.getAlias();
+                background = Symbol.PLANT.getBackground();
+                //filler = Symbol.FUNGI.getFiller();
+            } else {
+                alias = Symbol.INSECT.getAlias();
+                background = Symbol.INSECT.getBackground();
+            }
+            for(int i=0; i<5; i++){
+                s[i][0] = fontColor + background + s[i][0];
+                s[i][2] = s[i][2] + styleReset;
+            }
+            s[3][1] =  "        " + whiteBackground + "[" + alias + "]" + background + "  ";
+            s[2][1] =  "     " + whiteBackground + "[" + alias + "]" + background +"     ";
+            s[1][1] = "  " + whiteBackground + "[" + alias + "]" + background + "        ";
+        }
+
+        return s;
+    }
 }

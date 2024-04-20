@@ -56,4 +56,5 @@ public abstract class MissionCardFront extends Side {
         }
         return value;
     }
+
 }

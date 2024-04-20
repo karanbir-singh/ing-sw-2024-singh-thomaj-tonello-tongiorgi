@@ -13,19 +13,27 @@ import static org.junit.jupiter.api.Assertions.*;
 class PersonalBoardTest {
 
     @Test
-    void aestheticBoard() {
+    void boardAesthetic() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
         PersonalBoard pb = new PersonalBoard(initialDeck.getCards().get(0).getFront());
         pb.setPosition(-1, -1);
-        pb.playSide(resourceDeck.getCards().get(10).getFront());
+        pb.playSide(resourceDeck.getCards().get(10).getBack());
         pb.setPosition(1, -1);
-        pb.playSide(resourceDeck.getCards().get(0).getFront());
+        pb.playSide(resourceDeck.getCards().get(0).getBack());
         pb.setPosition(-1, 1);
-        pb.playSide(resourceDeck.getCards().get(20).getFront());
+        pb.playSide(resourceDeck.getCards().get(20).getBack());
         pb.setPosition(1, 1);
+        pb.playSide(resourceDeck.getCards().get(39).getBack());
+        pb.setPosition(-2, -2);
+        pb.playSide(resourceDeck.getCards().get(10).getFront());
+        pb.setPosition(2, -2);
+        pb.playSide(resourceDeck.getCards().get(0).getFront());
+        pb.setPosition(-2, 2);
+        pb.playSide(resourceDeck.getCards().get(20).getFront());
+        pb.setPosition(2, 2);
         pb.playSide(resourceDeck.getCards().get(39).getFront());
 
         pb.showBoard();;
@@ -191,7 +199,7 @@ class PersonalBoardTest {
         pb.playSide(resourceDeck.getCards().get(7).getBack());
         pb.setPosition(-9, -9);
         pb.playSide(resourceDeck.getCards().get(8).getBack());
-        pb.setPosition(-10, -10);
+        pb.setPosition(- 10, -10);
         pb.playSide(resourceDeck.getCards().get(9).getBack());
 
         ArrayList<Card> commonMissions = new ArrayList<>();

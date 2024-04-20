@@ -250,7 +250,7 @@ public class PersonalBoard {
         String[][] board = new String[yDim][xDim];
 
         String blackSquare = "▪\uFE0F";
-        String whiteSquare = "▫️";
+        String whiteSquare = "❕";
         //String blackSquare = Character.toString(0x2B1B);
         String playable = Character.toString(0x26AA	);
         //String playable = Character.toString(0x1F7E4);
@@ -295,8 +295,8 @@ public class PersonalBoard {
                 board[y][x] = board[y][x] + p.getY() + "  ";
             }
 
-            board[y+1][x] = "‾ ‾" + blackSquare + "‾ ‾";
-            board[y-1][x] = "_ _" + blackSquare + "_ _";
+            board[y+1][x] = "‾‾‾" + blackSquare + "‾‾‾";
+            board[y-1][x] = "___" + blackSquare + "___";
             board[y-1][x-1] = blackSquare;
             board[y][x-1] = whiteSquare;
             board[y+1][x-1] = blackSquare;
