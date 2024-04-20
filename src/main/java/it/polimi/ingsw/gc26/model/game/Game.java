@@ -4,7 +4,9 @@ import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.Parser.ParserCore;
+import it.polimi.ingsw.gc26.network.VirtualView;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -53,6 +55,10 @@ public class Game {
      * This attribute represents the chat. It stores all the messages.
      */
     private final Chat chat;
+    /**
+     * This attribute represents the available pawns in the game
+     */
+    private final ArrayList<Pawn> availablePawns;
 
 
     /**
@@ -77,6 +83,12 @@ public class Game {
         this.round = 0;
         this.finalRound = -1;
         this.chat = new Chat();
+
+        availablePawns = new ArrayList<>();
+        availablePawns.add(Pawn.BLUE);
+        availablePawns.add(Pawn.RED);
+        availablePawns.add(Pawn.YELLOW);
+        availablePawns.add(Pawn.GREEN);
     }
 
     /**
@@ -107,7 +119,7 @@ public class Game {
             this.players.add(newPlayer);
         }
         if (this.players.size() == numberOfPlayers) {
-            gameState = GameState.INITIAL_STAGE;
+            gameState = GameState.COMMON_TABLE_PREPARATION;
         }
     }
 
@@ -203,13 +215,14 @@ public class Game {
         return this.numberOfPlayers;
     }
 
+
     /**
-     * Return the game state
+     * Returns game state
      *
-     * @return game state
+     * @return gameState
      */
     public GameState getState() {
-        return this.gameState;
+        return gameState;
     }
 
     /**
@@ -217,8 +230,25 @@ public class Game {
      *
      * @param newGameState new game state
      */
-    public void setGameState(GameState newGameState) {
+    public void setState(GameState newGameState) {
         this.gameState = newGameState;
+
+        String message = null;
+
+        switch (newGameState) {
+            case COMMON_TABLE_PREPARATION -> message = "Common Table Preparation...";
+            case STARTER_CARDS_DISTRIBUTION -> message = "Starter Cards Distribution...";
+            case WAITING_STARTER_CARD_PLACEMENT -> message = "Waiting players for placing starter card...";
+            case WAITING_PAWNS_SELECTION -> message = "Waiting players for selecting pawns...\n" + getAvailablePawns();
+            case HAND_PREPARATION -> message = "Prepare players hand...";
+            case COMMON_MISSION_PREPARATION -> message = "Common Mission Preparation...";
+            case SECRET_MISSION_DISTRIBUTION -> message = "Secret Mission Distribution...";
+            case WAITING_SECRET_MISSION_CHOICE -> message = "Waiting players for choosing secret mission...";
+            case FIRST_PLAYER_EXTRACTION -> message = "First player extraction...";
+            case GAME_STARTED -> message = "GAME STARTED!";
+        }
+
+        // TODO Update view
     }
 
     /**
@@ -236,29 +266,12 @@ public class Game {
      * @return list of available colors
      */
     public ArrayList<Pawn> getAvailablePawns() {
-        ArrayList<Pawn> availableColors = new ArrayList<>();
-        availableColors.add(Pawn.BLUE);
-        availableColors.add(Pawn.RED);
-        availableColors.add(Pawn.YELLOW);
-        availableColors.add(Pawn.GREEN);
-
-        for (Player player : players) {
-            availableColors.remove(player.getPawnColor());
-        }
-
-        return availableColors;
-    }
-
-    /**
-     * Returns game state
-     * @return gameState
-     */
-    public GameState getGameState() {
-        return gameState;
+        return availablePawns;
     }
 
     /**
      * Sets final round
+     *
      * @param finalRound
      */
     public void setFinalRound(int finalRound) {
@@ -267,9 +280,15 @@ public class Game {
 
     /**
      * Returns the group's chat
+     *
      * @return chat
      */
     public Chat getChat() {
         return this.chat;
+    }
+
+    // THIS IS FOR TESTING
+    public ArrayList<Player> getWinners() {
+        return winners;
     }
 }
