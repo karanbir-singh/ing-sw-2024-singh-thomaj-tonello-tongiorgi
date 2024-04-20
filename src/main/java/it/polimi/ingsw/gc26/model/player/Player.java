@@ -92,10 +92,10 @@ public class Player {
     public void setPawn(String color, ArrayList<Pawn> availableColors) {
         Pawn pawn;
         switch (color) {
-            case "B" -> pawn = Pawn.BLUE;
-            case "R" -> pawn = Pawn.RED;
-            case "Y" -> pawn = Pawn.YELLOW;
-            case "G" -> pawn = Pawn.GREEN;
+            case "BLUE" -> pawn = Pawn.BLUE;
+            case "RED" -> pawn = Pawn.RED;
+            case "YELLOW" -> pawn = Pawn.YELLOW;
+            case "GREEN" -> pawn = Pawn.GREEN;
             default -> pawn = null;
         }
 
@@ -103,7 +103,8 @@ public class Player {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non corretto
         } else if (!availableColors.contains(pawn)) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non disponibile
-        } else{
+        } else {
+            availableColors.remove(pawn);
             this.pawnColor = pawn;
         }
     }
