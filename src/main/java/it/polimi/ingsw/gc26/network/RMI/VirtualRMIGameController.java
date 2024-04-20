@@ -18,7 +18,7 @@ public class VirtualRMIGameController implements VirtualGameController {
 
     @Override
     public void choosePawnColor(String color, String playerID) throws RemoteException {
-
+        this.gameController.choosePawnColor(color, playerID);
     }
 
     @Override
