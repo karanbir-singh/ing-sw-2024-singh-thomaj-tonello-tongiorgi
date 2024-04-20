@@ -7,12 +7,11 @@ import java.rmi.RemoteException;
 
 public interface VirtualView extends Remote {
     // This are examples of view updating methods
-    void showMessage(String message) throws RemoteException;
+    void notifyMessage(String message) throws RemoteException;
 
     void reportMessage(String message) throws RemoteException;
 
     void reportError(String errorMessage) throws RemoteException;
 
     void updateState(ClientState clientState) throws RemoteException;
-    // Then other method for updating...
 }
