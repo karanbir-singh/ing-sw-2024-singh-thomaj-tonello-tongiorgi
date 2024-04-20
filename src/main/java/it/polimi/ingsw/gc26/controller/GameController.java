@@ -9,14 +9,19 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameController {
-
     /**
      * This attribute represents the game that the game controller controls
      */
     private final Game game;
+
+    /**
+     * This attribute represents the list of players that need to do an action, used only in the game preparation phase
+     */
+    private ArrayList<Player> playersToWait;
 
     /**
      * Initializes the game (provided by the main controller)
@@ -25,11 +30,9 @@ public class GameController {
      */
     public GameController(Game game) {
         this.game = game;
-        this.game.setGameState(GameState.INITIAL_STAGE);
+        this.game.setState(GameState.COMMON_TABLE_PREPARATION);
 
-        // First element is a fake first and current player
-        game.getPlayers().getFirst().setFirstPlayer();
-        this.game.setCurrentPlayer(game.getPlayers().getFirst());
+        this.playersToWait = new ArrayList<>();
     }
 
     // PHASE 1: Game preparation
@@ -38,7 +41,7 @@ public class GameController {
      * Places two resource cards and two gold cards on the common table
      */
     public void prepareCommonTable() {
-        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+        if (game.getState().equals(GameState.COMMON_TABLE_PREPARATION)) {
             CommonTable commonTable = game.getCommonTable();
 
             // Set and shuffle resource cards deck
@@ -59,6 +62,9 @@ public class GameController {
             commonTable.addCard(firstGoldCard, commonTable.getGoldCards(), 0);
             commonTable.addCard(secondGoldCard, commonTable.getGoldCards(), 1);
 
+            // Change game state
+            game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
+
             // Then prepare starter cards
             this.prepareStarterCards();
         } else {
@@ -70,7 +76,7 @@ public class GameController {
      * + Gives starter cards to each player
      */
     public void prepareStarterCards() {
-        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+        if (game.getState().equals(GameState.STARTER_CARDS_DISTRIBUTION)) {
             CommonTable commonTable = game.getCommonTable();
 
             // Set and shuffle starter cards deck
@@ -88,6 +94,12 @@ public class GameController {
                 // Make it permanently selected
                 player.getHand().setSelectedCard(starterCard);
             }
+
+            // Add all players to list
+            playersToWait.addAll(game.getPlayers());
+
+            // Change game state
+            game.setState(GameState.WAITING_STARTER_CARD_PLACEMENT);
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
@@ -100,36 +112,51 @@ public class GameController {
      * @param playerID ID of the player who is choosing the color
      */
     public void choosePawnColor(String color, String playerID) {
-        // Get the player who is choosing the color by his ID
-        Player player = game.getPlayerByID(playerID);
+        if (game.getState().equals(GameState.WAITING_PAWNS_SELECTION)) {
+            // Get the player who is choosing the color by his ID
+            Player player = game.getPlayerByID(playerID);
 
-        // Set color
-        if (player.equals(game.getCurrentPlayer())) {
+            // Set pawn
             player.setPawn(color, game.getAvailablePawns());
 
-            // Check if the next player is the first
-            if (game.getNextPlayer().isFirstPlayer()) {
-                // Then prepare common missions
-                this.prepareCommonMissions();
+            // Remove from list
+            playersToWait.remove(player);
+
+            // Check if all players have chosen the pawn
+            if (playersToWait.isEmpty()) {
+                // Change game state
+                game.setState(GameState.HAND_PREPARATION);
+
+                // Prepare hand for each player
+                this.preparePlayersHand();
             }
+        } else {
+            // TODO gestire ome cambiare il model quando lo stato e' errato
         }
     }
 
     /**
      * Gives the first three playable cards to each player
      */
-    public void preparePlayersHand(String playerID) {
-        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+    public void preparePlayersHand() {
+        if (game.getState().equals(GameState.HAND_PREPARATION)) {
             CommonTable commonTable = game.getCommonTable();
 
-            Player player = game.getPlayerByID(playerID);
+            // Give hand cards to each player
+            for (Player player : game.getPlayers()) {
+                // Add 2 Resources Card to the hand
+                player.getHand().addCard(commonTable.getResourceDeck().removeCard());
+                player.getHand().addCard(commonTable.getResourceDeck().removeCard());
 
-            // Add 2 Resources Card to the hand
-            player.getHand().addCard(commonTable.getResourceDeck().removeCard());
-            player.getHand().addCard(commonTable.getResourceDeck().removeCard());
+                // Add 1 Gold Card to the hand
+                player.getHand().addCard(commonTable.getGoldDeck().removeCard());
+            }
 
-            // Add 1 Gold Card to the hand
-            player.getHand().addCard(commonTable.getGoldDeck().removeCard());
+            // Change game state
+            game.setState(GameState.COMMON_MISSION_PREPARATION);
+
+            // Then prepare common mission
+            this.prepareCommonMissions();
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
@@ -139,7 +166,7 @@ public class GameController {
      * Places two common mission cards on the common table
      */
     public void prepareCommonMissions() {
-        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+        if (game.getState().equals(GameState.COMMON_MISSION_PREPARATION)) {
             CommonTable commonTable = game.getCommonTable();
 
             // Set and shuffle mission cards deck
@@ -150,6 +177,9 @@ public class GameController {
             // Place common mission cards on the table
             commonTable.addCard(firstCommonMission, commonTable.getCommonMissions(), 0);
             commonTable.addCard(secondCommonMission, commonTable.getCommonMissions(), 1);
+
+            // Change game state
+            game.setState(GameState.SECRET_MISSION_DISTRIBUTION);
 
             // Then give two secret missions to each player
             this.prepareSecretMissions();
@@ -162,21 +192,27 @@ public class GameController {
      * Gives two mission cards to each player
      */
     public void prepareSecretMissions() {
-        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+        if (game.getState().equals(GameState.SECRET_MISSION_DISTRIBUTION)) {
             CommonTable commonTable = game.getCommonTable();
 
-            for (Player p : game.getPlayers()) {
+            for (Player player : game.getPlayers()) {
                 // Get two mission cards from the table
                 Card firstSecretMission = commonTable.getMissionDeck().removeCard();
                 Card secondSecretMission = commonTable.getMissionDeck().removeCard();
 
                 // Create the secondary hand
-                p.createSecretMissionHand();
+                player.createSecretMissionHand();
 
                 // Place starter card to the player's secondary hand
-                p.getSecretMissionHand().addCard(firstSecretMission);
-                p.getSecretMissionHand().addCard(secondSecretMission);
+                player.getSecretMissionHand().addCard(firstSecretMission);
+                player.getSecretMissionHand().addCard(secondSecretMission);
             }
+
+            // Add all players to list
+            playersToWait.addAll(game.getPlayers());
+
+            // Change game state
+            game.setState(GameState.WAITING_SECRET_MISSION_CHOICE);
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
@@ -189,18 +225,16 @@ public class GameController {
      * @param playerID  ID of the player who is selecting the secret mission card
      */
     public void selectSecretMission(int cardIndex, String playerID) {
-        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+        if (game.getState().equals(GameState.WAITING_SECRET_MISSION_CHOICE)) {
             // Get the player who is selecting the card by his ID
             Player player = game.getPlayerByID(playerID);
 
-            // Check if the given index is correct
-            if (cardIndex >= 0 && cardIndex < 2) {
-                Card secretMission = player.getSecretMissionHand().getCards().get(cardIndex);
+            // Get selected secret mission
+            Card secretMission = player.getSecretMissionHand().getCard(0, 2, cardIndex);
 
-                // Select the chosen card
+            // Select the chosen card
+            if (secretMission != null) {
                 player.getSecretMissionHand().setSelectedCard(secretMission);
-            } else {
-                // TODO gestire indice non è corretto
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
@@ -213,31 +247,30 @@ public class GameController {
      * @param playerID ID of the player who is setting the secret mission card
      */
     public void setSecretMission(String playerID) {
-        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+        if (game.getState().equals(GameState.WAITING_SECRET_MISSION_CHOICE)) {
             // Get the player who is setting the card by his ID
             Player player = game.getPlayerByID(playerID);
 
-            // Check if it's the current player
-            if (player.equals(game.getCurrentPlayer())) {
-                // Check if the player selected a card
-                if (player.getSecretMissionHand().getSelectedCard().isPresent()) {
-                    // Set the secret mission on the personal board of the players
-                    player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard().get());
+            // Set the secret mission on the personal board of the players
+            Card secretMission = player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard());
 
-                    // Remove the card from the secondary hand
-                    player.getSecretMissionHand().removeCard(player.getSecretMissionHand().getSelectedCard().get());
+            if (secretMission != null) {
+                // Remove the card from the secondary hand
+                player.getSecretMissionHand().removeCard(secretMission);
 
-                    // Check if the next player is the first
-                    if (game.getNextPlayer().isFirstPlayer()) {
-                        // Set first player and start game
-                        String firstPlayerID = game.getPlayers().get(new Random().nextInt(game.getPlayers().size())).getID();
-                        this.setFirstPlayer(firstPlayerID);
-                    } else {
-                        // Change turn
-                        this.changeTurn();
-                    }
-                } else {
-                    // TODO gestire se non è stata selezionata la missione
+                // Remove player from list
+                playersToWait.remove(player);
+
+                // Check if all players have chosen the secret
+                if (playersToWait.isEmpty()) {
+                    // Get first player ID randomly and start game
+                    String firstPlayerID = game.getPlayers().get(new Random().nextInt(game.getPlayers().size())).getID();
+
+                    // Change game state
+                    game.setState(GameState.FIRST_PLAYER_EXTRACTION);
+
+                    // Then extract first player
+                    this.setFirstPlayer(firstPlayerID);
                 }
             }
         } else {
@@ -251,7 +284,7 @@ public class GameController {
      * @param playerID ID of the first player of the games
      */
     public void setFirstPlayer(String playerID) {
-        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+        if (game.getState().equals(GameState.FIRST_PLAYER_EXTRACTION)) {
             // Get the player by his ID
             Player player = game.getPlayerByID(playerID);
 
@@ -265,13 +298,13 @@ public class GameController {
             game.getPlayers().addFirst(player);
 
             // Change game state into GAME_IN_PROGRESS
-            game.setGameState(GameState.GAME_IN_PROGRESS);
+            game.setState(GameState.GAME_STARTED);
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
     }
 
-    // PHASE 2: Game Flow
+// PHASE 2: Game Flow
 
     /**
      * Selects the chosen card in the hand
@@ -283,15 +316,11 @@ public class GameController {
         // Get the player who is selected the card to play
         Player player = game.getPlayerByID(playerID);
 
-        // Check if the given index is correct
-        if (cardIndex >= 0 && cardIndex < 3) {
-            Card selectedCard = player.getHand().getCards().get(cardIndex);
+        // Get card to select
+        Card selectedCard = player.getHand().getCard(0, 3, cardIndex);
 
-            // Set the selected card
-            player.getHand().setSelectedCard(selectedCard);
-        } else {
-            // TODO gestire indice non è corretto
-        }
+        // Set the selected card
+        player.getHand().setSelectedCard(selectedCard);
     }
 
     /**
@@ -335,33 +364,30 @@ public class GameController {
         Player player = game.getPlayerByID(playerID);
 
         // Check if it's the INITIAL_STAGE: the player is placing the starter card
-        if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
-            // Check if it's the current player
-            if (player.equals(game.getCurrentPlayer())) {
-                // If the player doesn't have a personal board, it means he's placing a starter card
-                if (player.getPersonalBoard() == null) {
-                    // Check if there is a selected card
-                    if (player.getHand().getSelectedCard().isPresent()) {
-                        // Create the personal board
-                        player.createPersonalBoard();
+        if (game.getState().equals(GameState.WAITING_STARTER_CARD_PLACEMENT)) {
+            // If the player doesn't have a personal board, it means he's placing a starter card
+            if (player.getPersonalBoard() == null) {
+                // Check if there is a selected card
+                if (player.getHand().getSelectedCard().isPresent()) {
+                    // Create the personal board
+                    player.createPersonalBoard();
 
-                        // Place starter card
-                        player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get());
+                    // Place starter card
+                    player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get());
 
-                        // Remove the starter card from the hand
-                        player.getHand().removeCard(player.getHand().getSelectedCard().get());
+                    // Remove the starter card from the hand
+                    player.getHand().removeCard(player.getHand().getSelectedCard().get());
 
-                        // Give playable cards to player
-                        this.preparePlayersHand(playerID);
+                    playersToWait.remove(player);
 
-                        // Change turn
-                        this.changeTurn();
-                    } else {
-                        // TODO gestire cosa fare quando la carta non è selezionata
+                    // Check if all players played the starter card
+                    if (playersToWait.isEmpty()) {
+                        playersToWait.addAll(game.getPlayers());
+
+                        // Change game state
+                        game.setState(GameState.WAITING_PAWNS_SELECTION);
                     }
                 }
-            } else {
-                // TODO gestire cosa fare quando non è il giocatore corrente
             }
         } else {
             // Check if it's the player's turn
@@ -380,7 +406,6 @@ public class GameController {
                 } else {
                     // TODO gestire cosa fare quando la carta non è selezionata
                 }
-
             } else {
                 // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
             }
@@ -395,7 +420,7 @@ public class GameController {
      * @param playerID ID of the player who is trying to select the card on the common table
      */
     public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
-        if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
+        if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
             // Check if it's the current player
             if (game.getPlayerByID(playerID).equals(game.getCurrentPlayer())) {
                 // Set the selected card on the common table
@@ -412,7 +437,7 @@ public class GameController {
      * @param playerID ID of the player who is trying to draw the selected card on the common table
      */
     public void drawSelectedCard(String playerID) {
-        if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
+        if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
             // Get the player who is trying to draw the selected card on the common table
             Player player = game.getPlayerByID(playerID);
 
@@ -422,15 +447,17 @@ public class GameController {
                 CommonTable commonTable = game.getCommonTable();
                 Hand hand = player.getHand();
 
-                // Check if there is a selected card on the common table
-                if (commonTable.getSelectedCard().isPresent()) {
-                    Card removedCard = commonTable.removeSelectedCard();
+                // Get removed card
+                Card removedCard = commonTable.removeSelectedCard();
+
+                if (removedCard != null) {
+                    // Add card in player's hand
                     hand.addCard(removedCard);
 
                     // Check if player's score is greater or equal then 20 points OR decks are both empty
                     if (player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
                         // Change game state into END_STAGE
-                        game.setGameState(GameState.END_STAGE);
+                        game.setState(GameState.END_STAGE);
 
                         // Set the final round
                         game.setFinalRound(game.getRound() + 1);
@@ -438,8 +465,6 @@ public class GameController {
 
                     // Change turn to next player
                     this.changeTurn();
-                } else {
-                    // TODO gestire cosa fare quando non è stata selezionata una carta da pescare
                 }
             }
         } else {
@@ -469,13 +494,13 @@ public class GameController {
     public void printPersonalBoard(String nickname, String playerID) {
         Player player = game.getPlayerByNickname(nickname);
 
-        // TODO need to add a method in PersonalBoard
+        // TODO need to add a method in PersonalBoard for update view
     }
 
     /**
      * Changes the current player
      */
-    private void changeTurn() {
+    public void changeTurn() {
         game.goToNextPlayer();
     }
 }
