@@ -19,17 +19,32 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     @Override
     public void choosePawnColor(String color, String playerID) throws RemoteException {
+        HashMap<String, String> data = VirtualSocketGameController.getBasicMessage();
+        data.replace("function", "choosePawnColor");
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("color", color);
+        msg.put("playerID", playerID);
+        writeToServer(data, msg);
 
     }
 
     @Override
     public void selectSecretMission(int cardIndex, String playerID) throws RemoteException {
-
+        HashMap<String, String> data = VirtualSocketGameController.getBasicMessage();
+        data.replace("function", "selectSecretMission");
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("cardIndex", String.valueOf(cardIndex));
+        msg.put("playerID", playerID);
+        writeToServer(data, msg);
     }
 
     @Override
     public void setSecretMission(String playerID) throws RemoteException {
-
+        HashMap<String, String> data = VirtualSocketGameController.getBasicMessage();
+        data.replace("function", "setSecretMission");
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("playerID", playerID);
+        writeToServer(data, msg);
     }
 
     @Override
@@ -39,16 +54,7 @@ public class VirtualSocketGameController implements VirtualGameController {
         HashMap<String, String> msg = new HashMap<>();
         msg.put("cardIndex", String.valueOf(cardIndex));
         msg.put("playerID", playerID);
-        ObjectMapper mappedmsg = new ObjectMapper();
-        try {
-            data.replace("value", mappedmsg.writeValueAsString(msg));
-            ObjectMapper mappedData = new ObjectMapper();
-
-            this.outputToServer.println(mappedData.writeValueAsString(data));
-            this.outputToServer.flush();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        writeToServer(data, msg);
 
     }
 
@@ -58,16 +64,7 @@ public class VirtualSocketGameController implements VirtualGameController {
         data.replace("function", "turnSelectedCardSide");
         HashMap<String, String> value = new HashMap<>();
         value.put("playerID", playerID);
-        ObjectMapper mappedmsg = new ObjectMapper();
-        try {
-            data.replace("value", mappedmsg.writeValueAsString(value));
-            ObjectMapper mappedData = new ObjectMapper();
-
-            this.outputToServer.println(mappedData.writeValueAsString(data));
-            this.outputToServer.flush();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        writeToServer(data, value);
     }
 
     @Override
@@ -78,16 +75,7 @@ public class VirtualSocketGameController implements VirtualGameController {
         value.put("x", String.valueOf(x));
         value.put("y", String.valueOf(y));
         value.put("playerID", playerID);
-        ObjectMapper mappedmsg = new ObjectMapper();
-        try {
-            data.replace("value", mappedmsg.writeValueAsString(value));
-            ObjectMapper mappedData = new ObjectMapper();
-
-            this.outputToServer.println(mappedData.writeValueAsString(data));
-            this.outputToServer.flush();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        writeToServer(data, value);
     }
 
     @Override
@@ -96,16 +84,7 @@ public class VirtualSocketGameController implements VirtualGameController {
         data.replace("function", "playCardFromHand");
         HashMap<String, String> value = new HashMap<>();
         value.put("playerID", playerID);
-        ObjectMapper mappedmsg = new ObjectMapper();
-        try {
-            data.replace("value", mappedmsg.writeValueAsString(value));
-            ObjectMapper mappedData = new ObjectMapper();
-
-            this.outputToServer.println(mappedData.writeValueAsString(data));
-            this.outputToServer.flush();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        writeToServer(data, value);
 
     }
 
@@ -117,16 +96,7 @@ public class VirtualSocketGameController implements VirtualGameController {
         value.put("cardX", String.valueOf(cardX));
         value.put("cardY", String.valueOf(cardY));
         value.put("playerID", playerID);
-        ObjectMapper mappedmsg = new ObjectMapper();
-        try {
-            data.replace("value", mappedmsg.writeValueAsString(value));
-            ObjectMapper mappedData = new ObjectMapper();
-
-            this.outputToServer.println(mappedData.writeValueAsString(data));
-            this.outputToServer.flush();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        writeToServer(data, value);
     }
 
     @Override
@@ -135,16 +105,7 @@ public class VirtualSocketGameController implements VirtualGameController {
         data.replace("function", "drawSelectedCard");
         HashMap<String, String> value = new HashMap<>();
         value.put("playerID", playerID);
-        ObjectMapper mappedmsg = new ObjectMapper();
-        try {
-            data.replace("value", mappedmsg.writeValueAsString(value));
-            ObjectMapper mappedData = new ObjectMapper();
-
-            this.outputToServer.println(mappedData.writeValueAsString(data));
-            this.outputToServer.flush();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        writeToServer(data, value);
 
     }
 
@@ -156,23 +117,20 @@ public class VirtualSocketGameController implements VirtualGameController {
         msg.put("text", line);
         msg.put("receiver", nicknameReceiver);
         msg.put("sender", nicknameSender);
-        msg.put("time", null);
-        ObjectMapper mappedmsg = new ObjectMapper();
-        try {
-            data.replace("value", mappedmsg.writeValueAsString(msg));
-            ObjectMapper mappedData = new ObjectMapper();
-
-            this.outputToServer.println(mappedData.writeValueAsString(data));
-            this.outputToServer.flush();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        msg.put("time", time);
+        writeToServer(data, msg);
 
     }
 
+
     @Override
     public void printPersonalBoard(String nickname, String playerID) throws RemoteException {
-
+        HashMap<String, String> data = VirtualSocketGameController.getBasicMessage();
+        data.replace("function", "printPersonalBoard");
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("nickname", nickname);
+        msg.put("playerID", playerID);
+        writeToServer(data, msg);
     }
 
     private static HashMap<String, String> getBasicMessage() {
@@ -181,5 +139,18 @@ public class VirtualSocketGameController implements VirtualGameController {
         data.put("value", "");
         return data;
     }
+
+    private void writeToServer(HashMap<String, String> data, HashMap<String, String> msg) {
+        ObjectMapper mappedmsg = new ObjectMapper();
+        try {
+            data.replace("value", mappedmsg.writeValueAsString(msg));
+            ObjectMapper mappedData = new ObjectMapper();
+            this.outputToServer.println(mappedData.writeValueAsString(data));
+            this.outputToServer.flush();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

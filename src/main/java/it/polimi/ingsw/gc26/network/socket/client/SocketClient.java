@@ -2,10 +2,12 @@ package it.polimi.ingsw.gc26.network.socket.client;
 
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
+import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import javafx.util.Pair;
 
 import java.io.*;
 import java.rmi.RemoteException;
@@ -18,15 +20,13 @@ public class SocketClient {
     private final SocketServerHandler handler;
     protected String nickname = null;
     protected String clientID = null;
-    private final MainClient mainClient;
 
 
-    public SocketClient(BufferedReader input, BufferedWriter output, MainClient mainClient) {
+    public SocketClient(BufferedReader input, BufferedWriter output) {
         this.virtualMainController = new VirtualSocketMainController(output);
         this.handler = new SocketServerHandler(this, input);
         this.output = output;
         this.clientID = "";
-        this.mainClient = mainClient;
         this.virtualGameController = new VirtualSocketGameController(this.output);
 
     }
@@ -42,7 +42,7 @@ public class SocketClient {
         }).start();
     }
 
-    public VirtualGameController runTUI() throws RemoteException {
+    public Pair<VirtualGameController, String> runTUI() throws RemoteException {
         this.runServerListener();
         // Start CLI
         Scanner scan  = new Scanner(System.in);
@@ -92,9 +92,7 @@ public class SocketClient {
 
         this.virtualMainController.getVirtualGameController();
         System.out.println("Game begin");
-        this.mainClient.setNickname(this.nickname);
-        this.mainClient.setClientID(this.clientID);
-        return this.virtualGameController;
+        return new Pair<>(this.virtualGameController, this.clientID);
 
     }
 

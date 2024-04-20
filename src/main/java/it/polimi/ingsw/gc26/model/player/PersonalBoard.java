@@ -111,7 +111,7 @@ public class PersonalBoard {
         //check if the position is valid
         if(!checkIfPlayablePosition(selectedX, selectedY)){
             //update view
-            System.err.println("NOT VALID POSITION");
+            System.out.println(STR."[\{selectedX}, \{selectedY}] is not a valid position");
             return;
         }
         this.selectedX = selectedX;

@@ -6,6 +6,8 @@ module it.polimi.ingsw.gc26 {
     requires jdk.jfr;
     requires java.sql;
     requires java.desktop;
+    requires jdk.compiler;
+    requires java.management;
 
 
     exports it.polimi.ingsw.gc26.model.card_side;

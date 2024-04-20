@@ -17,6 +17,7 @@ public class GameController {
      * This attribute represents the game that the game controller controls
      */
     private final Game game;
+    private final boolean isDebug;
 
     /**
      * Initializes the game (provided by the main controller)
@@ -30,6 +31,9 @@ public class GameController {
         // First element is a fake first and current player
         game.getPlayers().getFirst().setFirstPlayer();
         this.game.setCurrentPlayer(game.getPlayers().getFirst());
+        this.isDebug = java.lang.management.ManagementFactory.
+                getRuntimeMXBean().
+                getInputArguments().toString().indexOf("jdwp") >= 0;
     }
 
     // PHASE 1: Game preparation
@@ -39,6 +43,9 @@ public class GameController {
      */
     public void prepareCommonTable() {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+            if (this.isDebug) {
+                System.out.println("Preparing Common Table...");
+            }
             CommonTable commonTable = game.getCommonTable();
 
             // Set and shuffle resource cards deck
@@ -71,6 +78,9 @@ public class GameController {
      */
     public void prepareStarterCards() {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+            if (isDebug) {
+                System.out.println("Preparing Starter Cards...");
+            }
             CommonTable commonTable = game.getCommonTable();
 
             // Set and shuffle starter cards deck
@@ -105,6 +115,9 @@ public class GameController {
 
         // Set color
         if (player.equals(game.getCurrentPlayer())) {
+            if (isDebug) {
+                System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
+            }
             player.setPawn(color, game.getAvailablePawns());
 
             // Check if the next player is the first
@@ -120,6 +133,9 @@ public class GameController {
      */
     public void preparePlayersHand(String playerID) {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+            if (isDebug) {
+                System.out.println("Preparing Players Hand...");
+            }
             CommonTable commonTable = game.getCommonTable();
 
             Player player = game.getPlayerByID(playerID);
@@ -140,6 +156,9 @@ public class GameController {
      */
     public void prepareCommonMissions() {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+            if (isDebug) {
+                System.out.println("Preparing Common Missions...");
+            }
             CommonTable commonTable = game.getCommonTable();
 
             // Set and shuffle mission cards deck
@@ -163,6 +182,9 @@ public class GameController {
      */
     public void prepareSecretMissions() {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+            if (isDebug) {
+                System.out.println("Preparing Secret Missions...");
+            }
             CommonTable commonTable = game.getCommonTable();
 
             for (Player p : game.getPlayers()) {
@@ -190,6 +212,7 @@ public class GameController {
      */
     public void selectSecretMission(int cardIndex, String playerID) {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
+
             // Get the player who is selecting the card by his ID
             Player player = game.getPlayerByID(playerID);
 
@@ -199,6 +222,9 @@ public class GameController {
 
                 // Select the chosen card
                 player.getSecretMissionHand().setSelectedCard(secretMission);
+                if (isDebug) {
+                    System.out.println(STR."\{player.getNickname()} selected mission: \{secretMission}");
+                }
             } else {
                 // TODO gestire indice non è corretto
             }
@@ -221,6 +247,9 @@ public class GameController {
             if (player.equals(game.getCurrentPlayer())) {
                 // Check if the player selected a card
                 if (player.getSecretMissionHand().getSelectedCard().isPresent()) {
+                    if (isDebug) {
+                        System.out.println(STR."\{player.getNickname()} set secret mission");
+                    }
                     // Set the secret mission on the personal board of the players
                     player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard().get());
 
@@ -254,6 +283,10 @@ public class GameController {
         if (game.getGameState().equals(GameState.INITIAL_STAGE)) {
             // Get the player by his ID
             Player player = game.getPlayerByID(playerID);
+
+            if (isDebug) {
+                System.out.println(STR."\{player.getNickname()} set as the first player");
+            }
 
             // Set the player as the first
             game.getPlayers().getFirst().setNotFirstPlayer();
@@ -289,6 +322,9 @@ public class GameController {
 
             // Set the selected card
             player.getHand().setSelectedCard(selectedCard);
+            if (isDebug) {
+                System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
+            }
         } else {
             // TODO gestire indice non è corretto
         }
@@ -303,6 +339,9 @@ public class GameController {
         // Get player who is turning the selected card side
         Player player = game.getPlayerByID(playerID);
 
+        if (isDebug) {
+            System.out.println(STR."\{player.getNickname()} turn selected card side");
+        }
         // Turn selected card side
         player.getHand().turnSide();
     }
@@ -317,6 +356,10 @@ public class GameController {
     public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) {
         // Get the player who is selecting the position on his personal board
         Player player = game.getPlayerByID(playerID);
+
+        if (isDebug) {
+            System.out.println(STR."\{player.getNickname()} selected position [\{selectedX}, \{selectedY}] board");
+        }
 
         // Get the personal board
         PersonalBoard personalBoard = player.getPersonalBoard();
@@ -342,6 +385,9 @@ public class GameController {
                 if (player.getPersonalBoard() == null) {
                     // Check if there is a selected card
                     if (player.getHand().getSelectedCard().isPresent()) {
+                        if (isDebug) {
+                            System.out.println(STR."\{player.getNickname()} played card from hand");
+                        }
                         // Create the personal board
                         player.createPersonalBoard();
 
@@ -366,6 +412,9 @@ public class GameController {
         } else {
             // Check if it's the player's turn
             if (player.equals(game.getCurrentPlayer())) {
+                if (isDebug) {
+                    System.out.println(STR."\{player.getNickname()} played card from hand");
+                }
                 // Otherwise get the player's personal board and his hand
                 PersonalBoard personalBoard = player.getPersonalBoard();
                 Hand hand = player.getHand();
@@ -398,6 +447,9 @@ public class GameController {
         if (game.getGameState().equals(GameState.GAME_IN_PROGRESS) || game.getGameState().equals(GameState.END_STAGE)) {
             // Check if it's the current player
             if (game.getPlayerByID(playerID).equals(game.getCurrentPlayer())) {
+                if (isDebug) {
+                    System.out.println(STR."[\{cardX}, \{cardY}] card selected from common table");
+                }
                 // Set the selected card on the common table
                 game.getCommonTable().selectCard(cardX, cardY);
             }
@@ -424,6 +476,9 @@ public class GameController {
 
                 // Check if there is a selected card on the common table
                 if (commonTable.getSelectedCard().isPresent()) {
+                    if (isDebug) {
+                        System.out.println(STR."\{player.getNickname()} drew selected card");
+                    }
                     Card removedCard = commonTable.removeSelectedCard();
                     hand.addCard(removedCard);
 
@@ -458,7 +513,9 @@ public class GameController {
     public void addMessage(String message, String receiverNickname, String senderID, String time) {
         Message msg = new Message(message, game.getPlayerByNickname(receiverNickname), game.getPlayerByID(senderID), time);
         game.getChat().addMessage(msg);
-        System.out.println(msg);
+        if (isDebug) {
+            System.out.println(msg);
+        }
 
     }
 
@@ -469,7 +526,12 @@ public class GameController {
      * @param playerID ID of the player who is requesting to print personal board
      */
     public void printPersonalBoard(String nickname, String playerID) {
+
         Player player = game.getPlayerByNickname(nickname);
+
+        if (isDebug) {
+            System.out.println(player.getNickname() + " printed personal board");
+        }
 
         // TODO need to add a method in PersonalBoard
     }
@@ -478,6 +540,9 @@ public class GameController {
      * Changes the current player
      */
     private void changeTurn() {
+        if (isDebug) {
+            System.out.println("changed turn");
+        }
         game.goToNextPlayer();
     }
 }

@@ -37,59 +37,53 @@ public class SocketClientHandler  {
         String line;
         while ((line = inputFromClient.readLine()) != null) {
             if (true) {
-                JsonNode msg;
                 ObjectMapper jsonMapper = new ObjectMapper();
-                msg = jsonMapper.readTree(line);
+                JsonNode msg = jsonMapper.readTree(line);
+                ObjectMapper valueMapper = new ObjectMapper();
+                JsonNode value = valueMapper.readTree(msg.get("value").asText());
                 switch (msg.get("function").textValue()) {
                     case "connect" :
-                        jsonMapper = new ObjectMapper();
-                        msg = jsonMapper.readTree(msg.get("value").asText());
-                        String clientID = this.mainController.connect(this.virtualClient, msg.get("nickname").asText());
+                        String clientID = this.mainController.connect(this.virtualClient, value.get("nickname").asText());
                         this.virtualClient.setClientID(clientID);
                         break;
                     case "createWaitingList":
-                        jsonMapper = new ObjectMapper();
-                        msg = jsonMapper.readTree(msg.get("value").asText());
-                        this.mainController.createWaitingList(this.virtualClient, msg.get("clientID").asText(), msg.get("nickname").asText(), msg.get("numPlayers").asInt());
+                        this.mainController.createWaitingList(this.virtualClient, value.get("clientID").asText(), value.get("nickname").asText(), value.get("numPlayers").asInt());
                         break;
                     case "getVirtualGameController":
                         this.gameController = this.mainController.getGameController();
                         this.virtualClient.setGameController();
                         break;
                     case "addMessage":
-                        Message newMessage = new Message(msg.get("value").asText());
-                        this.gameController.addMessage(newMessage.getText(), newMessage.getReceiver().getNickname(), newMessage.getSender().getNickname(), LocalTime.now().toString());
+                        this.gameController.addMessage(value.get("text").asText(), value.get("receiver").asText(), value.get("sender").asText(), value.get("time").asText());
                         break;
                     case "selectCardFromHand":
-                        jsonMapper = new ObjectMapper();
-                        msg = jsonMapper.readTree(msg.get("value").asText());
-                        this.gameController.selectCardFromHand(msg.get("cardIndex").asInt(), msg.get("playerID").asText());
+                        this.gameController.selectCardFromHand(value.get("cardIndex").asInt(), value.get("playerID").asText());
                         break;
                     case "turnSelectedCardSide":
-                        jsonMapper = new ObjectMapper();
-                        msg = jsonMapper.readTree(msg.get("value").asText());
-                        this.gameController.turnSelectedCardSide(msg.get("playerID").asText());
+                        this.gameController.turnSelectedCardSide(value.get("playerID").asText());
                         break;
                     case "selectPositionOnBoard":
-                        jsonMapper = new ObjectMapper();
-                        msg = jsonMapper.readTree(msg.get("value").asText());
-                        this.gameController.selectPositionOnBoard(msg.get("x").asInt(), msg.get("y").asInt(), msg.get("playerID").asText());
+                        this.gameController.selectPositionOnBoard(value.get("x").asInt(), value.get("y").asInt(), value.get("playerID").asText());
                         break;
                     case "playCardFromHand":
-                        jsonMapper = new ObjectMapper();
-                        msg = jsonMapper.readTree(msg.get("value").asText());
-                        this.gameController.playCardFromHand(msg.get("playerID").asText());
+                        this.gameController.playCardFromHand(value.get("playerID").asText());
                         break;
                     case "selectCardFromCommonTable":
-                        jsonMapper = new ObjectMapper();
-                        msg = jsonMapper.readTree(msg.get("value").asText());
-                        this.gameController.selectCardFromCommonTable(msg.get("cardX").asInt(), msg.get("cardY").asInt(), msg.get("playerID").asText());
+                        this.gameController.selectCardFromCommonTable(value.get("cardX").asInt(), value.get("cardY").asInt(), value.get("playerID").asText());
                         break;
                     case "drawSelectedCard":
-                        jsonMapper = new ObjectMapper();
-                        msg = jsonMapper.readTree(msg.get("value").asText());
-                        this.gameController.drawSelectedCard(msg.get("playerID").asText());
+                        this.gameController.drawSelectedCard(value.get("playerID").asText());
                         break;
+                    case "choosePawnColor":
+                        this.gameController.choosePawnColor(value.get("color").asText(), value.get("playerID").asText());
+                        break;
+                    case "selectSecretMission":
+                        this.gameController.selectSecretMission(value.get("cardIndex").asInt(), value.get("playerID").asText());
+                        break;
+                    case "setSecretMission":
+                        this.gameController.setSecretMission(value.get("playerID").asText());
+                    case "printPersonalBoard":
+                        this.gameController.printPersonalBoard(value.get("nickname").asText(), value.get("playerID").asText());
                     case null, default:
                         break;
                 }

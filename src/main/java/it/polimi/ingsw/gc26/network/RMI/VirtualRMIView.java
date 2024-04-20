@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import javafx.util.Pair;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -55,7 +56,7 @@ public class VirtualRMIView  implements VirtualView {
     }
 
     // Method for running Terminal UI
-    public void runTUI() throws RemoteException {
+    public Pair<VirtualGameController, String> runTUI() throws RemoteException {
         // TODO gestire la Remote Exception
         //Initial state in CONNECTION
         System.out.println("YOU CONNECTED TO THE SERVER");
@@ -83,25 +84,7 @@ public class VirtualRMIView  implements VirtualView {
 
         virtualGameController = this.virtualMainController.getVirtualGameController();
         System.out.println("GAME BEGIN");
-
-        while (true) {
-            //game started
-            boolean chat = false;
-            String line = scanner.nextLine();
-            String receiver = "";
-            if (line.startsWith("/chat")) {
-                chat = true;
-                line = line.substring(line.indexOf(" ") + 1);
-                if (line.startsWith("/")) {
-                    receiver = line.substring(1, line.indexOf(" "));
-                    line = line.substring(line.indexOf(" ") + 1);
-                }
-            }
-            if (chat) {
-                this.virtualGameController.addMessage(line, receiver, this.clientID, "");
-            }
-        }
-
+        return new Pair<>(this.virtualGameController, this.clientID);
     }
 
     // Method for running Graphic UI
