@@ -90,6 +90,12 @@ public class MainClient {
         }
     }
 
+    /**
+     * Runs the TUI for socket and RMI connection
+     * @param virtualGameController socket or rmi game controller
+     * @param clientID client's ID
+     * @throws RemoteException
+     */
     public static void runGenericTui(VirtualGameController virtualGameController, String clientID) throws RemoteException{
         Scanner scan = new Scanner(System.in);
         while (true) {

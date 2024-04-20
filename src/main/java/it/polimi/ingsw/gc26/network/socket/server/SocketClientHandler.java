@@ -16,23 +16,45 @@ import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
-
+/**
+ * This class represents the handler to decode json from the client.
+ */
 public class SocketClientHandler  {
+    /**
+     * This attribute represents the main controller
+     */
     final MainController mainController;
+    /**
+     * This attribute represents the game controller
+     */
     GameController gameController = null;
-    final SocketServer server;
-    final BufferedReader inputFromClient;
-    final VirtualView virtualClient;
-    String nickname = null;
 
-    public SocketClientHandler(MainController controller, SocketServer server, BufferedReader input, PrintWriter output) {
+    /**
+     * This attribute represents the input from the client
+     */
+    final BufferedReader inputFromClient;
+    /**
+     * This attribute represents the virtual client
+     */
+    final VirtualView virtualClient;
+
+    /**
+     * Socket client handler constructor. Initialized the controllers and the virtual view.
+     * @param controller main controller used during the first part of the game (to connect the clients)
+     * @param input      buffered reader to read data from the client
+     * @param output     print writer to write to the client
+     */
+    public SocketClientHandler(MainController controller, BufferedReader input, PrintWriter output) {
         this.mainController = controller;
-        this.server = server;
         this.inputFromClient = input;
         this.virtualClient = new VirtualSocketView(output);
         System.out.println("New client from Socket!");
     }
 
+    /**
+     * Starts an infinite loop listening to clients data
+     * @throws IOException
+     */
     public void runClientHandler() throws IOException {
         String line;
         while ((line = inputFromClient.readLine()) != null) {
