@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26;
 
+import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.model.card.StarterCard;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 class GameControllerTest {
     private static GameController gameController;
 
+    private static Game game;
+
     private static ArrayList<Player> players;
 
     @BeforeAll
@@ -25,107 +28,61 @@ class GameControllerTest {
         players.add(new Player("2", "Carlo"));
 
         // Create game controller
-        gameController = new GameController(new Game(players));
-    }
-
-    @Test
-    void totalGamePreparation() {
-        // Start game preparation
-        gameController.prepareCommonTable();
-
-        // Each player should play their starter card
-        for (Player player : players) {
-            gameController.playCardFromHand(player.getID());
-        }
-
-        // Common missions preparing and secret missions giving are automatically done
-
-        // Each player should set their secret mission
-        for (Player player : players) {
-            gameController.selectSecretMission(0, player.getID());
-            gameController.setSecretMission(player.getID());
-        }
-
-        // First player it's automatically selected
-
-        // Check with assertions
-        assertFalse(gameController.getGame().getCommonTable().getResourceCards().isEmpty());
-        assertFalse(gameController.getGame().getCommonTable().getGoldCards().isEmpty());
-        assertEquals(2, gameController.getGame().getCommonTable().getResourceCards().size());
-        assertEquals(2, gameController.getGame().getCommonTable().getGoldCards().size());
-        assertEquals(40 - 2 - players.size() * 2, gameController.getGame().getCommonTable().getResourceDeck().getCards().size());
-        assertEquals(40 - 2 - players.size(), gameController.getGame().getCommonTable().getGoldDeck().getCards().size());
-
-        for (Player player : gameController.getGame().getPlayers()) {
-            assertNotNull(player.getHand());
-            assertNotNull(player.getPersonalBoard());
-            assertNotNull(player.getSecretMissionHand());
-            assertNotNull(player.getPersonalBoard().getSecretMission());
-
-            assertEquals(3, player.getHand().getCards().size());
-            assertEquals(0, player.getPersonalBoard().getScore());
-            assertEquals(1, player.getPersonalBoard().getOccupiedPositions().size());
-            assertEquals(1, player.getSecretMissionHand().getCards().size());
-
-        }
-        int numStarterCards = 6 - players.size();
-        assertEquals(numStarterCards, gameController.getGame().getCommonTable().getStarterDeck().getCards().size());
-
-        assertEquals(2, gameController.getGame().getCommonTable().getCommonMissions().size());
-
-        assertEquals(gameController.getGame().getPlayers().getFirst(), gameController.getGame().getCurrentPlayer());
+        game = new Game(players);
+        gameController = new GameController(game);
     }
 
     @Test
     void commonTablePreparation() {
+        game.setState(GameState.COMMON_TABLE_PREPARATION);
         gameController.prepareCommonTable();
+        assertEquals(GameState.WAITING_STARTER_CARD_PLACEMENT, game.getState());
 
         // Check with assertions
-        assertFalse(gameController.getGame().getCommonTable().getResourceCards().isEmpty());
-        assertFalse(gameController.getGame().getCommonTable().getGoldCards().isEmpty());
-        assertEquals(2, gameController.getGame().getCommonTable().getResourceCards().size());
-        assertEquals(2, gameController.getGame().getCommonTable().getGoldCards().size());
-        assertEquals(38, gameController.getGame().getCommonTable().getResourceDeck().getCards().size());
-        assertEquals(38, gameController.getGame().getCommonTable().getGoldDeck().getCards().size());
+        assertFalse(game.getCommonTable().getResourceCards().isEmpty());
+        assertFalse(game.getCommonTable().getGoldCards().isEmpty());
+        assertEquals(2, game.getCommonTable().getResourceCards().size());
+        assertEquals(2, game.getCommonTable().getGoldCards().size());
+        assertEquals(38, game.getCommonTable().getResourceDeck().getCards().size());
+        assertEquals(38, game.getCommonTable().getGoldDeck().getCards().size());
     }
 
     @Test
     void starterCardsPreparation() {
+        game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
         gameController.prepareStarterCards();
+        assertEquals(GameState.WAITING_STARTER_CARD_PLACEMENT, game.getState());
 
         // Check with assertions
-        for (Player player : gameController.getGame().getPlayers()) {
+        for (Player player : game.getPlayers()) {
             assertNotNull(player.getHand());
             assertEquals(1, player.getHand().getCards().size());
         }
-        assertEquals(6 - players.size(), gameController.getGame().getCommonTable().getStarterDeck().getCards().size());
+        assertEquals(6 - players.size(), game.getCommonTable().getStarterDeck().getCards().size());
     }
 
     @Test
     void starterCardPlacement() {
+        game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
         gameController.prepareStarterCards();
+        assertEquals(GameState.WAITING_STARTER_CARD_PLACEMENT, game.getState());
 
-        // Each player select (and eventually turn) the starter card
-        gameController.selectCardFromHand(0, players.get(0).getID());
+        // Each player select (and eventually turn) the starter card side
         gameController.turnSelectedCardSide(players.get(0).getID());
 
-        gameController.selectCardFromHand(0, players.get(1).getID());
-
-        gameController.selectCardFromHand(0, players.get(2).getID());
         gameController.turnSelectedCardSide(players.get(2).getID());
 
-        // Each player plays the selected turn
-        for (Player player : gameController.getGame().getPlayers()) {
+        // Each player plays the selected starter card
+        for (Player player : game.getPlayers()) {
             gameController.playCardFromHand(player.getID());
         }
 
-        assertEquals(40 - players.size() * 2, gameController.getGame().getCommonTable().getResourceDeck().getCards().size());
-        assertEquals(40 - players.size(), gameController.getGame().getCommonTable().getGoldDeck().getCards().size());
+        assertEquals(GameState.WAITING_PAWNS_SELECTION, game.getState());
 
         // Check with assertions
-        for (Player player : gameController.getGame().getPlayers()) {
+        for (Player player : game.getPlayers()) {
             assertNotNull(player.getPersonalBoard());
-            assertEquals(3, player.getHand().getCards().size());
+            assertEquals(0, player.getHand().getCards().size());
             assertEquals(0, player.getPersonalBoard().getScore());
             assertEquals(1, player.getPersonalBoard().getOccupiedPositions().size());
         }
@@ -134,33 +91,42 @@ class GameControllerTest {
     @Test
     void commonMissionsPreparation() {
         // Call the tested method
+        game.setState(GameState.COMMON_MISSION_PREPARATION);
         gameController.prepareCommonMissions();
 
+        assertEquals(GameState.WAITING_SECRET_MISSION_CHOICE, game.getState());
+
         // Check with assertions
-        assertEquals(2, gameController.getGame().getCommonTable().getCommonMissions().size());
+        assertEquals(2, game.getCommonTable().getCommonMissions().size());
     }
 
     @Test
     void secretMissionsSetting() {
         // First of all, each player has their starter card placed
+        game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
         gameController.prepareStarterCards();
+        assertEquals(GameState.WAITING_STARTER_CARD_PLACEMENT, game.getState());
 
-        // Each player select (and eventually turn) the starter card
-        gameController.selectCardFromHand(0, players.get(0).getID());
+        // Each player select (and eventually turn) the starter card side
         gameController.turnSelectedCardSide(players.get(0).getID());
 
-        gameController.selectCardFromHand(0, players.get(1).getID());
-
-        gameController.selectCardFromHand(0, players.get(2).getID());
         gameController.turnSelectedCardSide(players.get(2).getID());
 
         // Each player plays the selected turn
-        for (Player player : gameController.getGame().getPlayers()) {
+        for (Player player : game.getPlayers()) {
             gameController.playCardFromHand(player.getID());
         }
 
+        assertEquals(GameState.WAITING_PAWNS_SELECTION, game.getState());
+
+        gameController.choosePawnColor("BLUE", players.get(0).getID());
+        gameController.choosePawnColor("GREEN", players.get(1).getID());
+        gameController.choosePawnColor("YELLOW", players.get(2).getID());
+
         // Secret mission are automatically prepared
         gameController.prepareCommonMissions();
+
+        assertEquals(GameState.WAITING_SECRET_MISSION_CHOICE, game.getState());
 
         gameController.selectSecretMission(0, players.get(0).getID());
         gameController.selectSecretMission(1, players.get(1).getID());
@@ -170,8 +136,10 @@ class GameControllerTest {
         gameController.setSecretMission(players.get(1).getID());
         gameController.setSecretMission(players.get(2).getID());
 
+        assertEquals(GameState.GAME_STARTED, game.getState());
+
         // Check with assertions
-        for (Player player : gameController.getGame().getPlayers()) {
+        for (Player player : game.getPlayers()) {
             assertNotNull(player.getSecretMissionHand());
             assertEquals(1, player.getSecretMissionHand().getCards().size());
             assertNotNull(player.getPersonalBoard().getSecretMission());
@@ -179,26 +147,32 @@ class GameControllerTest {
     }
 
     @Test
-    void getWinners() {
+    void getWinners() { // TODO fix test
         // First of all, each player has their starter card placed
+        game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
         gameController.prepareStarterCards();
+        assertEquals(GameState.WAITING_STARTER_CARD_PLACEMENT, game.getState());
 
-        // Each player select (and eventually turn) the starter card
-        gameController.selectCardFromHand(0, players.get(0).getID());
+        // Each player select (and eventually turn) the starter card side
         gameController.turnSelectedCardSide(players.get(0).getID());
 
-        gameController.selectCardFromHand(0, players.get(1).getID());
-
-        gameController.selectCardFromHand(0, players.get(2).getID());
         gameController.turnSelectedCardSide(players.get(2).getID());
 
         // Each player plays the selected turn
-        for (Player player : gameController.getGame().getPlayers()) {
+        for (Player player : game.getPlayers()) {
             gameController.playCardFromHand(player.getID());
         }
 
+        assertEquals(GameState.WAITING_PAWNS_SELECTION, game.getState());
+
+        gameController.choosePawnColor("BLUE", players.get(0).getID());
+        gameController.choosePawnColor("GREEN", players.get(1).getID());
+        gameController.choosePawnColor("YELLOW", players.get(2).getID());
+
         // Secret mission are automatically prepared
         gameController.prepareCommonMissions();
+
+        assertEquals(GameState.WAITING_SECRET_MISSION_CHOICE, game.getState());
 
         gameController.selectSecretMission(0, players.get(0).getID());
         gameController.selectSecretMission(1, players.get(1).getID());
@@ -208,32 +182,39 @@ class GameControllerTest {
         gameController.setSecretMission(players.get(1).getID());
         gameController.setSecretMission(players.get(2).getID());
 
+        assertEquals(GameState.GAME_STARTED, game.getState());
+
+        // Check with assertions
+        for (Player player : game.getPlayers()) {
+            assertNotNull(player.getSecretMissionHand());
+            assertEquals(1, player.getSecretMissionHand().getCards().size());
+            assertNotNull(player.getPersonalBoard().getSecretMission());
+        }
+
         // Set manually current player's score
-        gameController.getGame().getCurrentPlayer().getPersonalBoard().setScore(19);
+        game.getCurrentPlayer().getPersonalBoard().setScore(19);
 
         // Change current player
         gameController.changeTurn();
 
         // Set manually current player's score
-        gameController.getGame().getCurrentPlayer().getPersonalBoard().setScore(23);
+        game.getCurrentPlayer().getPersonalBoard().setScore(23);
 
         // Change current player
         gameController.changeTurn();
 
         // Set manually current player's score
-        gameController.getGame().getCurrentPlayer().getPersonalBoard().setScore(18);
+        game.getCurrentPlayer().getPersonalBoard().setScore(18);
 
         // Change game state into END_STAGE
-        gameController.getGame().setGameState(GameState.END_STAGE);
+        game.setState(GameState.END_STAGE);
 
         // Set the final round
-        gameController.getGame().setFinalRound(gameController.getGame().getRound());
+        game.setFinalRound(game.getRound());
 
-        // In theory, after this call, i have the winners
         gameController.changeTurn();
 
         // Check with assertions
-        System.out.println(gameController.getGame().getWinners());
-        assertFalse(gameController.getGame().getWinners().isEmpty());
+        assertFalse(game.getWinners().isEmpty());
     }
 }

@@ -6,7 +6,9 @@ import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.game.Game;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -117,7 +119,8 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard();
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(1));
+        game.getCurrentPlayer().getPersonalBoard().showBoard();
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(1)));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
         //get(1) è la missione corretta
 
@@ -152,7 +155,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard();
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(1));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(1)));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
         pb.setPosition(1, -1);
@@ -193,7 +196,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard();
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(0)));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard(); //get(2) per diagonale e get(6) per L
         //usiamo animals e un fungi in alto a destra
 
@@ -226,7 +229,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(); //get(12) mission 2 punti per ogni 3FUNGI
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(12));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(12)));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
         //la carta iniziale ha una risorsa permanente INSECT
@@ -315,7 +318,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(); //get(12) mission 2 punti per ogni 3FUNGI
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(7));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(7)));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
         //missione L pattern tipo 4 con ANIMAL e INSECT e INSECT
 
@@ -398,7 +401,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard();
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(0)));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
@@ -451,7 +454,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard(); //get(12) mission 2 punti per ogni 3FUNGI
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(7));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(7)));
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
         //missione L pattern tipo 4 con ANIMAL e INSECT e INSECT
 
@@ -519,7 +522,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard();
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(0)));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
@@ -610,7 +613,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard();
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(0)));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
@@ -695,7 +698,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard();
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(0)));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
@@ -747,7 +750,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard();
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(0)));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
@@ -770,7 +773,7 @@ class PersonalBoardTest {
         game.addPlayer(p1);
         game.setCurrentPlayer(p1);
         game.getCurrentPlayer().createPersonalBoard();
-        game.getCurrentPlayer().getPersonalBoard().setSecretMission(missionDeck.getCards().get(0));
+        game.getCurrentPlayer().getPersonalBoard().setSecretMission(Optional.of(missionDeck.getCards().get(0)));
 
         PersonalBoard pb = game.getCurrentPlayer().getPersonalBoard();
 
