@@ -124,29 +124,35 @@ public class CommonTable {
      * @return removed card
      */
     public Card removeSelectedCard() {
-        Card toRemove = null;
-        if (selectedY == 0) {
-            if (selectedX == 2) {
-                if (!resourceDeck.getCards().isEmpty())
-                    toRemove = resourceDeck.removeCard();
-                else {
-                    // TODO gestire quando il mazzo è finito
+        if(getSelectedCard() != null){
+            Card toRemove = null;
+            if (selectedY == 0) {
+                if (selectedX == 2) {
+                    if (!resourceDeck.getCards().isEmpty())
+                        toRemove = resourceDeck.removeCard();
+                    else {
+                        // TODO gestire quando il mazzo è finito
+                    }
+                } else {
+                    toRemove = removeFromTable(resourceCards, selectedX, resourceDeck);
                 }
-            } else {
-                toRemove = removeFromTable(resourceCards, selectedX, resourceDeck);
-            }
-        } else if (selectedY == 1) {
-            if (selectedX == 2) {
-                if (!goldDeck.getCards().isEmpty())
-                    toRemove = goldDeck.removeCard();
-                else {
-                    // TODO gestire quando il mazzo è finito
+            } else if (selectedY == 1) {
+                if (selectedX == 2) {
+                    if (!goldDeck.getCards().isEmpty())
+                        toRemove = goldDeck.removeCard();
+                    else {
+                        // TODO gestire quando il mazzo è finito
+                    }
+                } else {
+                    toRemove = removeFromTable(goldCards, selectedX, goldDeck);
                 }
-            } else {
-                toRemove = removeFromTable(goldCards, selectedX, goldDeck);
             }
+            return toRemove;
+        }else{
+            // TODO notify view
+            return null;
         }
-        return toRemove;
+
     }
 
     /**
