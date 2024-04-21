@@ -289,7 +289,6 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Set the player as the first
-            game.getPlayers().getFirst().setNotFirstPlayer();
             player.setFirstPlayer();
             game.setCurrentPlayer(player);
 
