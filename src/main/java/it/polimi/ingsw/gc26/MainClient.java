@@ -3,9 +3,11 @@ package it.polimi.ingsw.gc26;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
+import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.socket.client.SocketClient;
 import it.polimi.ingsw.gc26.network.socket.server.SocketServer;
+import javafx.util.Pair;
 
 import java.io.*;
 import java.net.Socket;
@@ -13,7 +15,10 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.time.LocalTime;
 import java.util.Scanner;
+
+import static java.lang.System.Logger.Level.DEBUG;
 
 public class MainClient {
     /**
@@ -32,6 +37,10 @@ public class MainClient {
     private enum ClientViewType {rmi, socket}
 
     /**
+     * Game controller, it can be instanced as a SocketGameController or a RMIGameController
+     */
+
+    /**
      * Starts RMI Client view
      *
      * @param userInterface selected user interface type
@@ -45,7 +54,10 @@ public class MainClient {
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            new VirtualRMIView(virtualMainController).runTUI();
+            Pair<VirtualGameController, String> controllerPair = new VirtualRMIView(virtualMainController).runTUI();
+            VirtualGameController gameController = controllerPair.getKey();
+            String clientID = controllerPair.getValue();
+            MainClient.runGenericTui(gameController, clientID);
         } else if (userInterface == UserInterface.gui) {
             new VirtualRMIView(virtualMainController).runGUI();
         }
@@ -66,12 +78,76 @@ public class MainClient {
         // Get connection channels
         InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
         OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
-
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runTUI();
+            Pair<VirtualGameController, String> controllerPair = new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runTUI();
+            VirtualGameController gameController = controllerPair.getKey();
+            String clientID = controllerPair.getValue();
+            MainClient.runGenericTui(gameController, clientID);
+
         } else if (userInterface == UserInterface.gui) {
             new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runGUI();
+        }
+    }
+
+    /**
+     * Runs the TUI for socket and RMI connection
+     * @param virtualGameController socket or rmi game controller
+     * @param clientID client's ID
+     * @throws RemoteException
+     */
+    public static void runGenericTui(VirtualGameController virtualGameController, String clientID) throws RemoteException{
+        Scanner scan = new Scanner(System.in);
+        while (true) {
+            //game started
+            boolean chat = false;
+            String line = scan.nextLine();
+            String receiver = "";
+            if (line.startsWith("/chat")) {
+                chat = true;
+                line = line.substring(line.indexOf(" ")+1);
+                if (line.startsWith("/")) {
+                    receiver = line.substring(1, line.indexOf(" "));
+                    line = line.substring(line.indexOf(" ")+1);
+                }
+            }
+
+            switch (line) {
+                case "/1":
+                    virtualGameController.selectCardFromHand(0, clientID);
+                    break;
+                case "/2":
+                    virtualGameController.turnSelectedCardSide(clientID);
+                    break;
+                case "/3":
+                    virtualGameController.playCardFromHand(clientID);
+                    break;
+                case "/4":
+                    virtualGameController.selectPositionOnBoard(0, 0, clientID);
+                    break;
+                case "/5":
+                    virtualGameController.selectCardFromCommonTable(0, 0, clientID);
+                    break;
+                case "/6":
+                    virtualGameController.drawSelectedCard(clientID);
+                    break;
+                case "/7":
+                    virtualGameController.choosePawnColor("red", clientID);
+                    break;
+                case "/8":
+                    virtualGameController.selectSecretMission(0, clientID);
+                    break;
+                case "/9":
+                    virtualGameController.setSecretMission(clientID);
+                    break;
+                case "/10":
+                    virtualGameController.printPersonalBoard("", clientID); // TODO get nickname as parameter
+            }
+
+            if (chat) {
+                virtualGameController.addMessage(line, receiver, clientID, LocalTime.now().toString());
+            }
+
         }
     }
 
@@ -94,7 +170,7 @@ public class MainClient {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            serverHostname = root.get("hostname").asText();
+            serverHostname = root.get("server-hostname").asText();
             serverPort = root.get("port").asInt();
         }
 

@@ -1,161 +1,166 @@
 package it.polimi.ingsw.gc26.network.socket.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.MainClient;
+import it.polimi.ingsw.gc26.controller.GameController;
+import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import javafx.util.Pair;
 
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
-public class SocketClient implements VirtualView {
-    private final BufferedReader inputFromServer;
+/**
+ * This class represents the client's socket. It is used only during the creation of the game, initializing the TUI or GUI.
+ */
+public class SocketClient {
+    /**
+     * Main controller used before the game controller and the game are ready.
+     */
     private final VirtualMainController virtualMainController;
-    private final VirtualGameController virtualGameController;
+    /**
+     * Game controller used during the game.
+     */
+    private VirtualGameController virtualGameController;
+    /**
+     * BufferedWriter to send json to the server.
+     */
+    private final BufferedWriter output;
+    /**
+     * Server handler to decode json from the server.
+     */
+    private final SocketServerHandler handler;
+    /**
+     * Client nickname
+     */
+    protected String nickname;
+    /**
+     * Client identifier
+     */
+    protected String clientID;
 
+
+    /**
+     * Socket Client's constructor. Initializes the MainController.
+     * @param input buffered reader from the server.
+     * @param output buffered writer to the server.
+     */
     public SocketClient(BufferedReader input, BufferedWriter output) {
-        this.inputFromServer = input;
         this.virtualMainController = new VirtualSocketMainController(output);
+        this.handler = new SocketServerHandler(this, input);
+        this.output = output;
+        this.clientID = "";
+        this.virtualGameController = new VirtualSocketGameController(this.output); //TODO should be done in a setter method, it doesn't work :/
 
-        // TODO create virtual game controller only when it's available
-        this.virtualGameController = new VirtualSocketGameController(output);
     }
 
-    private void onServerListening() throws IOException {
-        String line;
-        while((line = inputFromServer.readLine()) != null) {
-            JsonNode root = null;
-            try {
-                ObjectMapper JsonMapper = new ObjectMapper();
-                root = JsonMapper.readTree(line);
-            } catch (JsonMappingException e) {
-                e.printStackTrace();
-            }
-
-            switch (root.get("function").asText()) {
-                case "showMessage":
-                    this.showMessage(root.get("value").asText());
-                    break;
-                case "reportMessage":
-                    this.reportMessage(root.get("value").asText());
-                    break;
-                case "reportError":
-                    this.reportError(root.get("value").asText());
-                    break;
-            }
-        }
-    }
-
-    public void runTUI() throws RemoteException {
+    /**
+     * Create a thread to listen input from the server and handle its commands.
+     */
+    private void runServerListener() {
         // Create a thread for listening server
         new Thread(() -> {
             try {
-                this.onServerListening();
+                this.handler.onServerListening();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
+    }
 
+    /**
+     * TUI VERSION
+     * Asks user to set the parameters needed before the game starts, such as nickname and number of players.
+     * @return gameController, clientID and nickname set by the user
+     * @throws RemoteException
+     */
+    public Pair<VirtualGameController, String> runTUI() throws RemoteException {
+        this.runServerListener();
         // Start CLI
         Scanner scan  = new Scanner(System.in);
-        while (true) {
-            //System.out.println("> ");
-            boolean chat = false;
-            String line = scan.nextLine();
-            if (this.username.equals("")) {
-                this.username = line;
-            }
 
-            String receiver = "";
-            if (line.startsWith("/chat")) {
-                chat = true;
-                receiver = line.substring(1, line.indexOf(" "));
-                line = line.substring(line.indexOf(" ")+1);
-                if (line.startsWith("/")) {
-                    receiver = line.substring(1, line.indexOf(" "));
-                    line = line.substring(line.indexOf(" ")+1);
+        // TODO gestire la Remote Exception
+        // Initial state in CONNECTION
+        System.out.println("Connected to the server successfully!");
+        System.out.println("Insert your nickname: ");
+        this.nickname = scan.nextLine();
+        this.virtualMainController.connect(this.handler, this.nickname);
+
+        // wait for the server to update the client's ID
+        while(true) {
+            synchronized (this.clientID) {
+                if (this.clientID != "") {break;}
+            }
+        };
+
+        // wait for the server to update the client's state
+        while(true) {
+            synchronized (this.handler.clientState) {
+                if (this.handler.changeState == true) {
+                    this.handler.changeState = false;
+                    if (handler.clientState == ClientState.INVALID_NICKNAME || handler.clientState == ClientState.CONNECTION) {
+                        System.out.println("Nickname not available \nInsert new nickname: ");
+                        this.nickname = scan.nextLine();
+                        this.virtualMainController.connect(this.handler, this.nickname);
+                    } else {
+                        break;
+                    }
                 }
             }
+        }
 
-            switch (line) {
-                case "/1":
-                    this.virtualGameController.selectCardFromHand(0, this.username);
-                    break;
-                case "/2":
-                    this.virtualGameController.turnSelectedCardSide(this.username);
-                    break;
-                case "/3":
-                    this.virtualGameController.selectPositionOnBoard(0, 0, this.username);
-                    break;
-                case "/4":
-                    this.virtualGameController.playCardFromHand(this.username);
-                    break;
-                case "/5":
-                    this.virtualGameController.selectCardFromCommonTable(0, 0, this.username);
-                    break;
-                case "/6":
-                    this.virtualGameController.drawSelectedCard(this.username);
-                    break;
-            }
+        // check whether there is a game in WAITING or a new game should be created
+        if (handler.clientState == ClientState.CREATOR) {
+            System.out.println("You must initialize a new game \n Insert number of players: ");
+            Integer numberPlayers = Integer.parseInt(scan.nextLine());
+            this.virtualMainController.createWaitingList(this.handler, this.clientID, this.nickname, numberPlayers);
+        }
+        System.out.println("Waiting for other players ...");
 
-            if (chat) {
-                this.virtualGameController.addMessage(line, receiver, this.username, "");
-            } else {
-                //this.virtualGameController.sendText(line);
-                this.virtualMainController.connect(this, this.username);
+        // wait for the server to update the client's state
+        // (the server notifies when the game has all its player so the game can start)
+        while (true) {
+            synchronized (this.handler.clientState) {
+                if (handler.clientState == ClientState.BEGIN){
+                    break;
+                }
             }
         }
+
+        this.virtualMainController.getVirtualGameController();
+        System.out.println("Game begin");
+        return new Pair<>(this.virtualGameController, this.clientID);
+
     }
 
+    /**
+     * GUI VERSION
+     * Asks user to set the parameters needed before the game starts, such as nickname and number of players.
+     */
     public void runGUI(){
-        // Create a thread for listening server
-        new Thread(() -> {
-            try {
-                this.onServerListening();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        this.runServerListener();
 
         // TODO
     }
 
-    public void showMessage(String line) {
-        JsonNode message = null;
-        try {
-            ObjectMapper JsonMapper = new ObjectMapper();
-            message = JsonMapper.readTree(line);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("[" + message.get("sender").asText() + "]: " + message.get("text").asText());
+    /**
+     * Method used by the server to set the client's ID as an answer to connect()
+     * @param clientID
+     */
+    public void setClientID(String clientID) {
+        this.clientID = clientID;
     }
 
-    @Override
-    public void reportMessage(String message) {
-        System.out.println("[SERVER]: " + message);
+    /**
+     * Method used by the server to set the game controller as an answer to the change of state
+     */
+    public void setVirtualGameController() {
+        this.virtualGameController = new VirtualSocketGameController(this.output);
     }
 
-    public void reportError(String errorMessage) {
-        System.out.println("[ERROR]: " + errorMessage);
-    }
-
-    @Override
-    public void updateState(ClientState clientState) throws RemoteException {
-
-    }
-
-    private static String simpleLogin() {
-        Scanner scan  = new Scanner(System.in);
-        System.out.println("Insert your name: ");
-        return scan.nextLine();
-    }
 
 }
 

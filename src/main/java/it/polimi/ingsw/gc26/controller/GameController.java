@@ -13,15 +13,20 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GameController {
+
     /**
      * This attribute represents the game that the game controller controls
      */
     private final Game game;
-
     /**
      * This attribute represents the list of players that need to do an action, used only in the game preparation phase
      */
     private ArrayList<Player> playersToWait;
+
+    /**
+     * This attribute represents the execution type
+     */
+    private final boolean isDebug;
 
     /**
      * Initializes the game (provided by the main controller)
@@ -33,6 +38,10 @@ public class GameController {
         this.game.setState(GameState.COMMON_TABLE_PREPARATION);
 
         this.playersToWait = new ArrayList<>();
+
+        this.isDebug = java.lang.management.ManagementFactory.
+                getRuntimeMXBean().
+                getInputArguments().toString().indexOf("jdwp") >= 0;
     }
 
     // PHASE 1: Game preparation
@@ -42,6 +51,9 @@ public class GameController {
      */
     public void prepareCommonTable() {
         if (game.getState().equals(GameState.COMMON_TABLE_PREPARATION)) {
+            if (this.isDebug) {
+                System.out.println("Preparing Common Table...");
+            }
             CommonTable commonTable = game.getCommonTable();
 
             // Set and shuffle resource cards deck
@@ -78,7 +90,9 @@ public class GameController {
     public void prepareStarterCards() {
         if (game.getState().equals(GameState.STARTER_CARDS_DISTRIBUTION)) {
             CommonTable commonTable = game.getCommonTable();
-
+            if (isDebug) {
+                System.out.println("Preparing Starter Cards...");
+            }
             // Set and shuffle starter cards deck
             commonTable.getStarterDeck().shuffleDeck();
             for (Player player : game.getPlayers()) {
@@ -119,6 +133,10 @@ public class GameController {
             // Set pawn
             player.setPawn(color, game.getAvailablePawns());
 
+            if (isDebug) {
+                System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
+            }
+
             // Remove from list
             playersToWait.remove(player);
 
@@ -141,7 +159,9 @@ public class GameController {
     public void preparePlayersHand() {
         if (game.getState().equals(GameState.HAND_PREPARATION)) {
             CommonTable commonTable = game.getCommonTable();
-
+            if (isDebug) {
+                System.out.println("Preparing Players Hand...");
+            }
             // Give hand cards to each player
             for (Player player : game.getPlayers()) {
                 // Add 2 Resources Card to the hand
@@ -168,7 +188,9 @@ public class GameController {
     public void prepareCommonMissions() {
         if (game.getState().equals(GameState.COMMON_MISSION_PREPARATION)) {
             CommonTable commonTable = game.getCommonTable();
-
+            if (isDebug) {
+                System.out.println("Preparing Common Missions...");
+            }
             // Set and shuffle mission cards deck
             commonTable.getMissionDeck().shuffleDeck();
             Card firstCommonMission = commonTable.getMissionDeck().removeCard();
@@ -194,6 +216,9 @@ public class GameController {
     public void prepareSecretMissions() {
         if (game.getState().equals(GameState.SECRET_MISSION_DISTRIBUTION)) {
             CommonTable commonTable = game.getCommonTable();
+            if (isDebug) {
+                System.out.println("Preparing Secret Missions...");
+            }
 
             for (Player player : game.getPlayers()) {
                 // Get two mission cards from the table
@@ -235,6 +260,9 @@ public class GameController {
             // Select the chosen card
             if (secretMission != null) {
                 player.getSecretMissionHand().setSelectedCard(secretMission);
+                if (isDebug) {
+                    System.out.println(STR."\{player.getNickname()} selected mission: \{secretMission}");
+                }
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
@@ -257,6 +285,9 @@ public class GameController {
             if (secretMission != null) {
                 // Remove the card from the secondary hand
                 player.getSecretMissionHand().removeCard(secretMission);
+                if (isDebug) {
+                    System.out.println(STR."\{player.getNickname()} set secret mission");
+                }
 
                 // Remove player from list
                 playersToWait.remove(player);
@@ -287,6 +318,9 @@ public class GameController {
         if (game.getState().equals(GameState.FIRST_PLAYER_EXTRACTION)) {
             // Get the player by his ID
             Player player = game.getPlayerByID(playerID);
+            if (isDebug) {
+                System.out.println(STR."\{player.getNickname()} set as the first player");
+            }
 
             // Set the player as the first
             player.setFirstPlayer();
@@ -303,7 +337,7 @@ public class GameController {
         }
     }
 
-// PHASE 2: Game Flow
+    // PHASE 2: Game Flow
 
     /**
      * Selects the chosen card in the hand
@@ -319,7 +353,12 @@ public class GameController {
         Card selectedCard = player.getHand().getCard(0, 3, cardIndex);
 
         // Set the selected card
-        player.getHand().setSelectedCard(selectedCard);
+        if (selectedCard != null) {
+            player.getHand().setSelectedCard(selectedCard);
+            if (isDebug) {
+                System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
+            }
+        }
     }
 
     /**
@@ -330,7 +369,9 @@ public class GameController {
     public void turnSelectedCardSide(String playerID) {
         // Get player who is turning the selected card side
         Player player = game.getPlayerByID(playerID);
-
+        if (isDebug) {
+            System.out.println(STR."\{player.getNickname()} turn selected card side");
+        }
         // Turn selected card side
         player.getHand().turnSide();
     }
@@ -345,6 +386,9 @@ public class GameController {
     public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) {
         // Get the player who is selecting the position on his personal board
         Player player = game.getPlayerByID(playerID);
+        if (isDebug) {
+            System.out.println(STR."\{player.getNickname()} selected position [\{selectedX}, \{selectedY}] board");
+        }
 
         // Get the personal board
         PersonalBoard personalBoard = player.getPersonalBoard();
@@ -377,6 +421,10 @@ public class GameController {
                     // Remove the starter card from the hand
                     player.getHand().removeCard(player.getHand().getSelectedCard().get());
 
+                    if (isDebug) {
+                        System.out.println(STR."\{player.getNickname()} played card from hand");
+                    }
+
                     playersToWait.remove(player);
 
                     // Check if all players played the starter card
@@ -391,6 +439,9 @@ public class GameController {
         } else {
             // Check if it's the player's turn
             if (player.equals(game.getCurrentPlayer())) {
+                if (isDebug) {
+                    System.out.println(STR."\{player.getNickname()} played card from hand");
+                }
                 // Otherwise get the player's personal board and his hand
                 PersonalBoard personalBoard = player.getPersonalBoard();
                 Hand hand = player.getHand();
@@ -405,6 +456,7 @@ public class GameController {
                 } else {
                     // TODO gestire cosa fare quando la carta non è selezionata
                 }
+
             } else {
                 // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
             }
@@ -422,6 +474,9 @@ public class GameController {
         if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
             // Check if it's the current player
             if (game.getPlayerByID(playerID).equals(game.getCurrentPlayer())) {
+                if (isDebug) {
+                    System.out.println(STR."[\{cardX}, \{cardY}] card selected from common table");
+                }
                 // Set the selected card on the common table
                 game.getCommonTable().selectCard(cardX, cardY);
             }
@@ -452,6 +507,9 @@ public class GameController {
                 if (removedCard != null) {
                     // Add card in player's hand
                     hand.addCard(removedCard);
+                    if (isDebug) {
+                        System.out.println(STR."\{player.getNickname()} drew selected card");
+                    }
 
                     // Check if player's score is greater or equal then 20 points OR decks are both empty
                     if (player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
@@ -482,6 +540,10 @@ public class GameController {
     public void addMessage(String message, String receiverNickname, String senderID, String time) {
         Message msg = new Message(message, game.getPlayerByNickname(receiverNickname), game.getPlayerByID(senderID), time);
         game.getChat().addMessage(msg);
+        if (isDebug) {
+            System.out.println(msg);
+        }
+
     }
 
     /**
@@ -494,6 +556,11 @@ public class GameController {
         Player player = game.getPlayerByNickname(nickname);
 
         // TODO need to add a method in PersonalBoard for update view
+        if (isDebug) {
+            System.out.println(player.getNickname() + " printed personal board");
+        }
+
+        // TODO need to add a method in PersonalBoard
     }
 
     /**
@@ -501,5 +568,8 @@ public class GameController {
      */
     public void changeTurn() {
         game.goToNextPlayer();
+        if (isDebug) {
+            System.out.println("changed turn");
+        }
     }
 }

@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import javafx.util.Pair;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -30,6 +31,16 @@ public class VirtualRMIView  implements VirtualView {
     }
 
     @Override
+    public void setClientID(String clientID) throws RemoteException {
+
+    }
+
+    @Override
+    public void setGameController() throws RemoteException {
+
+    }
+
+    @Override
     public void reportMessage(String message) throws RemoteException {
 
     }
@@ -45,7 +56,7 @@ public class VirtualRMIView  implements VirtualView {
 
 
     // Method for running Terminal UI
-    public void runTUI() throws RemoteException {
+    public Pair<VirtualGameController, String> runTUI() throws RemoteException {
         // TODO gestire la Remote Exception
         //Initial state in CONNECTION
         System.out.println("YOU CONNECTED TO THE SERVER");
@@ -66,43 +77,14 @@ public class VirtualRMIView  implements VirtualView {
             String decision = scanner.nextLine();
             this.virtualMainController.createWaitingList(this, this.clientID, this.nickName, Integer.parseInt(decision));
         }
-        //System.out.println("WAITING PLAYERS...");
+        System.out.println("WAITING PLAYERS...");
         while (clientState == ClientState.WAITING){
             System.out.flush();
         }
 
         virtualGameController = this.virtualMainController.getVirtualGameController();
-        //System.out.println("GAME BEGIN");
-
-        // PHASE 1: Game preparation
-        System.out.println("Do you want to turn side of the starter card? (y/n)");
-        String answer = scanner.nextLine();
-        if (answer.equals("y")) {
-            virtualGameController.turnSelectedCardSide(this.clientID);
-            System.out.println("Side turned");
-        }
-
-        System.out.println("Play selected side? (y/n)");
-        answer = scanner.nextLine();
-        if (answer.equals("y")) {
-            virtualGameController.playCardFromHand(this.clientID);
-            System.out.println("Starter card placed");
-        }
-
-        System.out.println("Select pawn color from available colors");
-        answer = scanner.nextLine();
-        this.virtualGameController.choosePawnColor(answer, this.clientID);
-        System.out.println("Pawn color selected");
-
-        System.out.println("Select secret mission: (0/1)");
-        answer = scanner.nextLine();
-        this.virtualGameController.selectSecretMission(0, this.clientID);
-
-        System.out.println("Set selected secret mission? (y/n)");
-        answer = scanner.nextLine();
-        if (answer.equals("y")) {
-            this.virtualGameController.setSecretMission(this.clientID);
-        }
+        System.out.println("GAME BEGIN");
+        return new Pair<>(this.virtualGameController, this.clientID);
     }
 
     // Method for running Graphic UI
