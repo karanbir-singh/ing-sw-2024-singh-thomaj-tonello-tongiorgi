@@ -32,7 +32,7 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void notifyMessage(String message) {
-        HashMap<String, String> data = VirtualSocketView.getBasicMessage();
+        HashMap<String, String> data = VirtualSocketView.getBaseMessage();
         data.replace("function", "showMessage");
         data.replace("value", message);
         try {

@@ -71,7 +71,7 @@ public class SocketServerHandler implements VirtualView {
                     this.updateState(ClientState.valueOf(root.get("value").asText()));
                     break;
                 case "showMessage":
-                    this.showMessage(root.get("value").asText());
+                    this.notifyMessage(root.get("value").asText());
                     break;
                 case "reportMessage":
                     this.reportMessage(root.get("value").asText());
@@ -90,7 +90,7 @@ public class SocketServerHandler implements VirtualView {
      * @param line json encoded message
      */
     @Override
-    public void showMessage(String line) {
+    public void notifyMessage(String line) {
         JsonNode message = null;
         try {
             ObjectMapper JsonMapper = new ObjectMapper();
