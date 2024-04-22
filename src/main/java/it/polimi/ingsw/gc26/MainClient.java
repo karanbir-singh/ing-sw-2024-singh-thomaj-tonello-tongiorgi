@@ -18,8 +18,6 @@ import java.rmi.registry.Registry;
 import java.time.LocalTime;
 import java.util.Scanner;
 
-import static java.lang.System.Logger.Level.DEBUG;
-
 public class MainClient {
     /**
      * RMI bound object name
@@ -57,7 +55,7 @@ public class MainClient {
             Pair<VirtualGameController, String> controllerPair = new VirtualRMIView(virtualMainController).runTUI();
             VirtualGameController gameController = controllerPair.getKey();
             String clientID = controllerPair.getValue();
-            MainClient.runGenericTui(gameController, clientID);
+            MainClient.runCommonTui(gameController, clientID);
         } else if (userInterface == UserInterface.gui) {
             new VirtualRMIView(virtualMainController).runGUI();
         }
@@ -83,7 +81,7 @@ public class MainClient {
             Pair<VirtualGameController, String> controllerPair = new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runTUI();
             VirtualGameController gameController = controllerPair.getKey();
             String clientID = controllerPair.getValue();
-            MainClient.runGenericTui(gameController, clientID);
+            MainClient.runCommonTui(gameController, clientID);
 
         } else if (userInterface == UserInterface.gui) {
             new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runGUI();
@@ -91,24 +89,28 @@ public class MainClient {
     }
 
     /**
-     * Runs the TUI for socket and RMI connection
+     * Runs the TUI for socket and RMI connection, after game controller creation
+     *
      * @param virtualGameController socket or rmi game controller
-     * @param clientID client's ID
+     * @param clientID              client's ID
      * @throws RemoteException
      */
-    public static void runGenericTui(VirtualGameController virtualGameController, String clientID) throws RemoteException{
+    public static void runCommonTui(VirtualGameController virtualGameController, String clientID) throws RemoteException {
+        // Declare scanner
         Scanner scan = new Scanner(System.in);
+
+        // Infinite loop
         while (true) {
-            //game started
             boolean chat = false;
             String line = scan.nextLine();
             String receiver = "";
+
             if (line.startsWith("/chat")) {
                 chat = true;
-                line = line.substring(line.indexOf(" ")+1);
+                line = line.substring(line.indexOf(" ") + 1);
                 if (line.startsWith("/")) {
                     receiver = line.substring(1, line.indexOf(" "));
-                    line = line.substring(line.indexOf(" ")+1);
+                    line = line.substring(line.indexOf(" ") + 1);
                 }
             }
 

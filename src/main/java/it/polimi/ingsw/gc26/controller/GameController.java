@@ -346,18 +346,22 @@ public class GameController {
      * @param playerID  ID of the player who is selected the card to play
      */
     public void selectCardFromHand(int cardIndex, String playerID) {
-        // Get the player who is selected the card to play
-        Player player = game.getPlayerByID(playerID);
+        if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
+            // Get the player who is selected the card to play
+            Player player = game.getPlayerByID(playerID);
 
-        // Get card to select
-        Card selectedCard = player.getHand().getCard(0, 3, cardIndex);
+            // Get card to select
+            Card selectedCard = player.getHand().getCard(0, 3, cardIndex);
 
-        // Set the selected card
-        if (selectedCard != null) {
-            player.getHand().setSelectedCard(selectedCard);
-            if (isDebug) {
-                System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
+            // Set the selected card
+            if (selectedCard != null) {
+                player.getHand().setSelectedCard(selectedCard);
+                if (isDebug) {
+                    System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
+                }
             }
+        } else {
+            // TODO gestire cosa modificare nel model se lo stato è errato
         }
     }
 
@@ -384,17 +388,21 @@ public class GameController {
      * @param playerID  ID of the player who is selecting the position on the personal board
      */
     public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) {
-        // Get the player who is selecting the position on his personal board
-        Player player = game.getPlayerByID(playerID);
-        if (isDebug) {
-            System.out.println(STR."\{player.getNickname()} selected position [\{selectedX}, \{selectedY}] board");
+        if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
+            // Get the player who is selecting the position on his personal board
+            Player player = game.getPlayerByID(playerID);
+            if (isDebug) {
+                System.out.println(STR."\{player.getNickname()} selected position [\{selectedX}, \{selectedY}] board");
+            }
+
+            // Get the personal board
+            PersonalBoard personalBoard = player.getPersonalBoard();
+
+            // Set the selected position
+            personalBoard.setPosition(selectedX, selectedY);
+        } else {
+            // TODO gestisci cosa modificare del model se lo stato è errato
         }
-
-        // Get the personal board
-        PersonalBoard personalBoard = player.getPersonalBoard();
-
-        // Set the selected position
-        personalBoard.setPosition(selectedX, selectedY);
     }
 
     /**
@@ -437,28 +445,31 @@ public class GameController {
                 }
             }
         } else {
-            // Check if it's the player's turn
-            if (player.equals(game.getCurrentPlayer())) {
-                if (isDebug) {
-                    System.out.println(STR."\{player.getNickname()} played card from hand");
-                }
-                // Otherwise get the player's personal board and his hand
-                PersonalBoard personalBoard = player.getPersonalBoard();
-                Hand hand = player.getHand();
+            if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
+                // Check if it's the player's turn
+                if (player.equals(game.getCurrentPlayer())) {
+                    if (isDebug) {
+                        System.out.println(STR."\{player.getNickname()} played card from hand");
+                    }
+                    // Otherwise get the player's personal board and his hand
+                    PersonalBoard personalBoard = player.getPersonalBoard();
+                    Hand hand = player.getHand();
 
-                // Check if there is a selected card on the hand
-                if (hand.getSelectedCard().isPresent()) {
-                    // Place the selected card side on the personal board
-                    personalBoard.playSide(hand.getSelectedSide().get());
+                    // Check if there is a selected card on the hand
+                    if (hand.getSelectedCard().isPresent()) {
+                        // Place the selected card side on the personal board
+                        personalBoard.playSide(hand.getSelectedSide().get());
 
-                    // Remove card from the hand
-                    hand.removeCard(hand.getSelectedCard().get());
+                        // Remove card from the hand
+                        hand.removeCard(hand.getSelectedCard().get());
+                    } else {
+                        // TODO gestire cosa fare quando la carta non è selezionata
+                    }
                 } else {
-                    // TODO gestire cosa fare quando la carta non è selezionata
+                    // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
                 }
-
             } else {
-                // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
+                // TODO gestisci come cambiare il model quando lo stato è errato
             }
         }
     }
@@ -553,14 +564,18 @@ public class GameController {
      * @param playerID ID of the player who is requesting to print personal board
      */
     public void printPersonalBoard(String nickname, String playerID) {
-        Player player = game.getPlayerByNickname(nickname);
+        if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
+            Player player = game.getPlayerByNickname(nickname);
 
-        // TODO need to add a method in PersonalBoard for update view
-        if (isDebug) {
-            System.out.println(player.getNickname() + " printed personal board");
+            // TODO need to add a method in PersonalBoard for update view
+            if (isDebug) {
+                System.out.println(player.getNickname() + " printed personal board");
+            }
+
+            // TODO need to add a method in PersonalBoard
+        } else {
+            //TODO gestisci come cambiare il model quando lo stato è errato
         }
-
-        // TODO need to add a method in PersonalBoard
     }
 
     /**
