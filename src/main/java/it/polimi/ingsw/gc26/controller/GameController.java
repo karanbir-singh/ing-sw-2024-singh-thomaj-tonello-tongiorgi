@@ -413,7 +413,7 @@ public class GameController {
     public void playCardFromHand(String playerID) {
         // Get player who is trying to place the selected side
         Player player = game.getPlayerByID(playerID);
-
+        //PLAYER STATE: BEGIN,PLAYED, FINISHED
         // Check if it's the INITIAL_STAGE: the player is placing the starter card
         if (game.getState().equals(GameState.WAITING_STARTER_CARD_PLACEMENT)) {
             // If the player doesn't have a personal board, it means he's placing a starter card

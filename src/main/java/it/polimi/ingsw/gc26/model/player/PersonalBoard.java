@@ -433,7 +433,7 @@ public class PersonalBoard {
             playingPoint.setSide(side);
         } catch (NullPointerException nullEx) {
             nullEx.printStackTrace();
-            System.err.println("Null Pointer Exception");
+            System.err.println("NOT SELECTED POSITION");
             return;
         }
 
