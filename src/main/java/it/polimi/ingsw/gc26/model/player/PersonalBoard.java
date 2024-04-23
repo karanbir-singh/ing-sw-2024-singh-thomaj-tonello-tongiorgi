@@ -4,6 +4,8 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
+import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
+import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.util.*;
 
@@ -249,18 +251,12 @@ public class PersonalBoard {
         int yOff = yMin*2 -1;
         String[][] board = new String[yDim][xDim];
 
-        String blackSquare = "▪\uFE0F";
-        String whiteSquare = "❕";
-        //String blackSquare = Character.toString(0x2B1B);
-        String playable = Character.toString(0x26AA	);
-        //String playable = Character.toString(0x1F7E4);
-        String blocked =  "✖️";
-        //String blocked =  Character.toString(0x1F512	);
-        //String blocked =  Character.toString(0x274C);
-        //String blocked =  Character.toString(0x2B55);
-        String background = "   ";
-        String playableSeparator = Character.toString(0x1F538);
-        String styleReset = "\u001B[0m";
+        String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
+        String verticalLine = SpecialCharacters.WHITE_VERTICAL_STRING.getCharacter();
+        String blocked =  SpecialCharacters.BLOCKED_POSITION.getCharacter();
+        String background = SpecialCharacters.BACKGROUND_BLANK_WIDE.getCharacter();
+        String playableSeparator = SpecialCharacters.ORANGE_DIAMOND.getCharacter();
+        String styleReset = TextStyle.STYLE_RESET.getStyleCode();
 
         //initialize empty board
         for(int j=0; j<yDim; j++) {
@@ -298,9 +294,9 @@ public class PersonalBoard {
             board[y+1][x] = "‾‾‾" + blackSquare + "‾‾‾";
             board[y-1][x] = "___" + blackSquare + "___";
             board[y-1][x-1] = blackSquare;
-            board[y][x-1] = whiteSquare;
+            board[y][x-1] = verticalLine;
             board[y+1][x-1] = blackSquare;
-            board[y][x+1] = whiteSquare;
+            board[y][x+1] = verticalLine;
             board[y-1][x+1] = blackSquare;
             board[y+1][x+1] = blackSquare;
         }
@@ -324,34 +320,14 @@ public class PersonalBoard {
                 }
                 j++;
             }
-
-        /*(int currY = yMax + 1; currY >= yMin; currY--) {
-            for (int currX = xMin - 1; currX <= xMax; currX++) {
-                if (currY == yMax + 1 && currX != xMin - 1) {
-                    System.out.print("   " + (currX-xMin) + "   ");
-                } else if (currX == xMin - 1 && currY != yMax + 1) {//anche questo
-                    System.out.print((currY-yMin) + "   ");
-                } else if (ifPresent(currX, currY, blockedPositions).isPresent()) {
-                    System.out.print("X   ");
-                } else if (ifPresent(currX, currY, playablePositions).isPresent()) {
-                    System.out.print("o   ");
-                } else if (ifPresent(currX, currY, occupiedPositions).isPresent()) {
-                    ifPresent(currX, currY, occupiedPositions).orElseThrow(NullPointerException::new).getSide().printSide();
-                } else {
-                    System.out.print("    ");
-                }
-            }*/
-
         }
 
-        //print the board with y axis
+        //print the board
         for(int j=yDim-1; j>=0; j--){
-            //System.out.print("\33[47m");
             for(int i=0; i<xDim; i++){
 
                 System.out.print(board[j][i]);
             }
-
             System.out.print(styleReset + "\n");
         }
     }

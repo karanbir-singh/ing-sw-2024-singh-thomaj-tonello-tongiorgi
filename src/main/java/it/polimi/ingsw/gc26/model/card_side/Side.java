@@ -1,6 +1,8 @@
 package it.polimi.ingsw.gc26.model.card_side;
 
 import it.polimi.ingsw.gc26.model.player.Point;
+import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
+import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -239,121 +241,39 @@ abstract public class Side {
         this.DOWNRIGHT = DOWNRIGHT;
     }
 
-    /*public String[][] printableSide(){
-        String[][] s = new String[3][3];
-        String empty = Character.toString(0x2B1C);
-        String evil = Character.toString(0x2B1B);
-        String background = "  ";
-        String fontColor;
-        String styleReset = "\u001B[0m";
-        String filler;
-
-        /*if(sideSymbol!=null){
-            background = sideSymbol.getBackground()+ "  " + styleReset;
-            kingdomColor = sideSymbol.getBackground();
-        }*/
-/*
-        if (sideSymbol != null){
-            filler = sideSymbol.getFiller();
-            fontColor = sideSymbol.getFontColor();
-        } else {
-            filler = Character.toString(0x1F7E1);
-            fontColor = "\33[93m";
-        }
-
-        if(UPLEFT.getSymbol().isPresent()){
-            s[0][0] = UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() ;
-        } else if(UPLEFT.isEvil()) {
-            s[0][0] = evil ;
-        } else {
-            s[0][0] = empty  ;
-        }
-
-        s[0][1] = fontColor + "‾‾‾"  + filler  + "‾‾‾" + styleReset;
-
-
-        if(UPRIGHT.getSymbol().isPresent()){
-            s[0][2] = UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias()  ;
-
-        } else if(UPRIGHT.isEvil()) {
-            s[0][2] = evil;
-        } else {
-            s[0][2] = empty  ;
-        }
-
-        s[1][0] = fontColor + "│" + background + styleReset;
-        if(permanentResources.isEmpty()){
-            s[1][1] = filler + filler + filler;
-        } else {
-            s[1][1] = "";
-            if(permanentResources.size() == 1){
-                s[1][1] = filler + permanentResources.get(0).getAlias() + filler;
-            } else if(permanentResources.size() == 2){
-                s[1][1] = permanentResources.get(0).getAlias() + filler + permanentResources.get(1).getAlias();
-            } else if(permanentResources.size() == 3){
-                for (Symbol permanentResource : permanentResources) {
-                    s[1][1] = s[1][1] + permanentResource.getAlias();
-                }
-            }
-        }
-        s[1][2] = fontColor + background + "│" + styleReset;
-
-        if(DOWNLEFT.getSymbol().isPresent()){
-            s[2][0] = DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() ;
-
-        } else if(DOWNLEFT.isEvil()) {
-            s[2][0] =  evil ;
-        } else {
-            s[2][0] =  empty  ;
-        }
-
-        s[2][1] = fontColor + "___"  + filler  + "___" + styleReset;
-
-        if(DOWNRIGHT.getSymbol().isPresent()){
-            s[2][2] = DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias();
-
-        } else if(DOWNRIGHT.isEvil()) {
-            s[2][2] =  evil  ;
-        } else {
-            s[2][2] =  empty ;
-        }
-
-        /*for(int i=0; i<3; i++){
-            for(int j=0; j<3; j++){
-                s[i][j] = "\33[40m" + s[i][j] + styleReset;
-            }
-        }*/
-/*
-        return s;
-    }*/
-
-    //with background
+    /**
+     * Creates a String matrix with a printable representation of the side
+     * @return String[][] s
+     */
     public String[][] printableSide(){
         String[][] s = new String[3][3];
-        String empty = "▫️";
-        //String evil = Character.toString(0x2B1B);
-        String background = "  ";
-        String fontColor;
-        String styleReset = "\u001B[0m";
-        String filler;
-        String kingdomColor = "\u001B[48;2;255;209;56m";
-        String cornerBackground = "\u001B[48;2;255;255;255m";
 
+        String empty = SpecialCharacters.SQUARE_WHITE.getCharacter();
+        String background = SpecialCharacters.BACKGROUND_BLANK_MEDIUM.getCharacter();
+        String styleReset = TextStyle.STYLE_RESET.getStyleCode();
+        String cornerBackground = TextStyle.BACKGROUND_WHITE.getStyleCode();
+
+        String fontColor;
+        String filler;
+        String kingdomColor;
+
+        //fetch the special characters and font style based on the side's kingdom
         if (sideSymbol != null){
             filler = sideSymbol.getFiller();
             fontColor = sideSymbol.getFontColor();
             kingdomColor = sideSymbol.getBackground();
         } else {
-            filler = Character.toString(0x1F7E1);
-            fontColor = "\33[93m";
+            filler = SpecialCharacters.BACKGROUND_YELLOW.getCharacter();
+            fontColor = TextStyle.YELLOW.getStyleCode();
+            kingdomColor = TextStyle.BACKGROUND_YELLOW.getStyleCode();
         }
 
         if(UPLEFT.getSymbol().isPresent()){
-        s[0][0] = cornerBackground + UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+            s[0][0] = cornerBackground + UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
         } else if(UPLEFT.isEvil()) {
-        s[0][0] = filler ;
+            s[0][0] = filler ;
         } else {
-        s[0][0] = cornerBackground + empty + kingdomColor ;
+            s[0][0] = cornerBackground + empty + kingdomColor ;
         }
 
 
@@ -409,6 +329,7 @@ abstract public class Side {
         s[2][2] = cornerBackground +  empty  + kingdomColor;
         }
 
+        //apply background color
         for(int i=0; i<3; i++){
             for(int j=0; j<3; j++){
                 s[i][j] = kingdomColor + s[i][j] + styleReset;

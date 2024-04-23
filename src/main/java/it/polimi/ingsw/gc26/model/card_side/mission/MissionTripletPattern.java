@@ -4,6 +4,8 @@ import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.MissionCardFront;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.player.Point;
+import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
+import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.util.*;
 
@@ -49,18 +51,23 @@ public class MissionTripletPattern extends MissionCardFront {
         return points;
     }
 
+    /**
+     * Creates a String matrix with a printable representation of the side
+     * @return String[][] s
+     */
     @Override
     public String[][] printableSide(){
         String[][] s = new String[5][3];
-        String styleReset = "\u001B[0m";
-        String decoration = Character.toString(0x1F3C6);
-        String diamond = "\uD83D\uDD38";
+
+        String styleReset = TextStyle.STYLE_RESET.getStyleCode();
+        String decoration = SpecialCharacters.CUP.getCharacter();
+        String diamond = SpecialCharacters.ORANGE_DIAMOND.getCharacter();
         String alias = "";
         String background = "";
-        String fontColor = "\33[93m";
-        String whiteBackground = "\u001B[48;2;255;255;255m";
+        String fontColor = TextStyle.YELLOW.getStyleCode();
+        String whiteBackground = TextStyle.BACKGROUND_WHITE.getStyleCode();
 
-
+        //fill borders
         s[0][0] = fontColor + " ╔";
         s[0][2] = "╗ ";
         s[0][1] = "═════" + decoration + diamond + decoration + "═════";
@@ -72,6 +79,7 @@ public class MissionTripletPattern extends MissionCardFront {
         s[4][1] = "═════" + diamond + diamond + diamond + "═════";
         s[4][2] = "╝ ";
 
+        //fetch special characters and colors based on the card's type
         if(getType() == 1){
             alias = Symbol.FUNGI.getAlias();
             background = Symbol.FUNGI.getBackground();
@@ -86,11 +94,13 @@ public class MissionTripletPattern extends MissionCardFront {
             background = Symbol.INSECT.getBackground();
         }
 
+        //add font and background color
         for(int i=0; i<5; i++){
             s[i][0] = fontColor + background + s[i][0];
             s[i][2] = s[i][2] + styleReset;
         }
 
+        //fill center
         s[1][1] = "      " + whiteBackground + alias + background + "      ";
         s[2][1] = "      " + whiteBackground + alias + background + "      ";
         s[3][1] = "      " + whiteBackground + alias + background + "      ";

@@ -108,11 +108,16 @@ public class Hand {
         return cards;
     }
 
+
+    /**
+     * Creates a String matrix with a printable representation of the hand
+     */
     public void showHand(){
         int xMax = (cards.size()+1) * 3 +2;
         int yMax = 8;
+
         String[][] myHand = new String[yMax][xMax];
-        int y=0, x=0;
+        int y=0, x;
 
         for(int j=0; j<yMax; j++){
             for(int i=0; i<xMax; i++){
