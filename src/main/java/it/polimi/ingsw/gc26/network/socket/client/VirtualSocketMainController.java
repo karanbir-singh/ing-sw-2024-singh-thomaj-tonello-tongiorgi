@@ -22,15 +22,17 @@ public class VirtualSocketMainController implements VirtualMainController {
 
     /**
      * Virtual socket main controller's constructor. Initializes the print writer.
+     *
      * @param output
      */
-    public VirtualSocketMainController(BufferedWriter output) {
+    public VirtualSocketMainController(PrintWriter output) {
         this.outputToServer = new PrintWriter(output);
     }
 
     /**
      * This method creates the json encoding to call in the server's main controller the connect method
-     * @param client virtualView
+     *
+     * @param client   virtualView
      * @param nickName client's nickname
      * @return clientID
      * @throws RemoteException
@@ -47,6 +49,7 @@ public class VirtualSocketMainController implements VirtualMainController {
 
     /**
      * This method creates the json encoding to call in the server's main controller the createWaitingList method
+     *
      * @param client
      * @param clientID
      * @param nickname
@@ -66,6 +69,7 @@ public class VirtualSocketMainController implements VirtualMainController {
 
     /**
      * This method creates the json encoding to call in the server's main controller the getVirtualGameController method
+     *
      * @return game controller
      * @throws RemoteException
      */
@@ -79,6 +83,7 @@ public class VirtualSocketMainController implements VirtualMainController {
 
     /**
      * This method creates the basic structure for this protocol.
+     *
      * @return base structure
      */
     private static HashMap<String, String> getBaseMessage() {
@@ -90,7 +95,8 @@ public class VirtualSocketMainController implements VirtualMainController {
 
     /**
      * This method sends writes the message encoded with the protocol in the print writer to the server.
-     * @param data base message with the correct function name
+     *
+     * @param data     base message with the correct function name
      * @param valueMsg data associated to the value key
      */
     private void writeToServer(HashMap<String, String> data, HashMap<String, String> valueMsg) {

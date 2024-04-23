@@ -1,5 +1,7 @@
 package it.polimi.ingsw.gc26.network.socket.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.controller.GameController;
@@ -8,72 +10,73 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
-import java.time.LocalTime;
-import java.util.UUID;
 
 import it.polimi.ingsw.gc26.controller.MainController;
-import it.polimi.ingsw.gc26.model.game.Message;
-import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
 /**
  * This class represents the handler to decode json from the client.
  */
-public class SocketClientHandler  {
+public class SocketClientHandler implements Runnable {
     /**
      * This attribute represents the main controller
      */
-    final MainController mainController;
+    private final MainController mainController;
     /**
      * This attribute represents the game controller
      */
-    GameController gameController = null;
+    private GameController gameController;
 
     /**
      * This attribute represents the input from the client
      */
-    final BufferedReader inputFromClient;
+    private final BufferedReader inputFromClient;
     /**
      * This attribute represents the virtual client
      */
-    final VirtualView virtualClient;
+    private final VirtualView virtualSocketView;
 
     /**
      * Socket client handler constructor. Initialized the controllers and the virtual view.
-     * @param controller main controller used during the first part of the game (to connect the clients)
-     * @param input      buffered reader to read data from the client
-     * @param output     print writer to write to the client
+     *
+     * @param controller      main controller used during the first part of the game (to connect the clients)
+     * @param inputFromClient buffered reader to read data from the client
+     * @param outputToClient  print writer to write to the client
      */
-    public SocketClientHandler(MainController controller, BufferedReader input, PrintWriter output) {
+    public SocketClientHandler(MainController controller, BufferedReader inputFromClient, PrintWriter outputToClient) {
         this.mainController = controller;
-        this.inputFromClient = input;
-        this.virtualClient = new VirtualSocketView(output);
-        System.out.println("New client from Socket!");
+        this.gameController = null;
+        this.inputFromClient = inputFromClient;
+        this.virtualSocketView = new VirtualSocketView(outputToClient);
     }
 
     /**
      * Starts an infinite loop listening to clients data
-     * @throws IOException
      */
-    public void runClientHandler() throws IOException {
+    @Override
+    public void run() {
         String line;
-        while ((line = inputFromClient.readLine()) != null) {
-            if (true) {
+        try {
+            // Keep listening clients requests
+            while ((line = inputFromClient.readLine()) != null) {
+                // Read Json
                 ObjectMapper jsonMapper = new ObjectMapper();
                 JsonNode msg = jsonMapper.readTree(line);
                 ObjectMapper valueMapper = new ObjectMapper();
                 JsonNode value = valueMapper.readTree(msg.get("value").asText());
+
+                // Execute requested command
                 switch (msg.get("function").textValue()) {
-                    case "connect" :
-                        String clientID = this.mainController.connect(this.virtualClient, value.get("nickname").asText());
-                        this.virtualClient.setClientID(clientID);
+                    case "connect":
+                        String clientID = this.mainController.connect(this.virtualSocketView, value.get("nickname").asText());
+                        this.virtualSocketView.setClientID(clientID);
                         break;
                     case "createWaitingList":
-                        this.mainController.createWaitingList(this.virtualClient, value.get("clientID").asText(), value.get("nickname").asText(), value.get("numPlayers").asInt());
+                        this.mainController.createWaitingList(this.virtualSocketView, value.get("clientID").asText(), value.get("nickname").asText(), value.get("numPlayers").asInt());
                         break;
                     case "getVirtualGameController":
                         this.gameController = this.mainController.getGameController();
-                        this.virtualClient.setGameController();
+                        this.virtualSocketView.setGameController();
                         break;
                     case "addMessage":
                         this.gameController.addMessage(value.get("text").asText(), value.get("receiver").asText(), value.get("sender").asText(), value.get("time").asText());
@@ -109,12 +112,11 @@ public class SocketClientHandler  {
                     case null, default:
                         break;
                 }
-            } else {
 
-                this.virtualClient.reportError("The game is being initialized! Please wait!");
+                // this.virtualClient.reportError("The game is being initialized! Please wait!");
             }
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
 }
