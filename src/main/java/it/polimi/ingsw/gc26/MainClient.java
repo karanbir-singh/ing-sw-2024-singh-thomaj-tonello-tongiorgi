@@ -73,18 +73,19 @@ public class MainClient {
         // Create connection with the server
         Socket serverSocket = new Socket(serverHostname, serverPort);
 
-        // Get connection channels
+        // Get input and out stream from the server
         InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
         OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
+
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            Pair<VirtualGameController, String> controllerPair = new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runTUI();
+            Pair<VirtualGameController, String> controllerPair = new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runTUI();
             VirtualGameController gameController = controllerPair.getKey();
             String clientID = controllerPair.getValue();
             MainClient.runCommonTui(gameController, clientID);
 
         } else if (userInterface == UserInterface.gui) {
-            new SocketClient(new BufferedReader(socketRx), new BufferedWriter(socketTx)).runGUI();
+            new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runGUI();
         }
     }
 
