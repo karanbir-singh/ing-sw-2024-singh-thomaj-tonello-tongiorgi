@@ -1,6 +1,8 @@
 package it.polimi.ingsw.gc26.model.card_side;
 
 import it.polimi.ingsw.gc26.model.player.Point;
+import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
+import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -239,6 +241,102 @@ abstract public class Side {
         this.DOWNRIGHT = DOWNRIGHT;
     }
 
+    /**
+     * Creates a String matrix with a printable representation of the side
+     * @return String[][] s
+     */
+    public String[][] printableSide(){
+        String[][] s = new String[3][3];
 
+        String empty = SpecialCharacters.SQUARE_WHITE.getCharacter();
+        String background = SpecialCharacters.BACKGROUND_BLANK_MEDIUM.getCharacter();
+        String styleReset = TextStyle.STYLE_RESET.getStyleCode();
+        String cornerBackground = TextStyle.BACKGROUND_WHITE.getStyleCode();
+
+        String fontColor;
+        String filler;
+        String kingdomColor;
+
+        //fetch the special characters and font style based on the side's kingdom
+        if (sideSymbol != null){
+            filler = sideSymbol.getFiller();
+            fontColor = sideSymbol.getFontColor();
+            kingdomColor = sideSymbol.getBackground();
+        } else {
+            filler = SpecialCharacters.BACKGROUND_YELLOW.getCharacter();
+            fontColor = TextStyle.YELLOW.getStyleCode();
+            kingdomColor = TextStyle.BACKGROUND_YELLOW.getStyleCode();
+        }
+
+        if(UPLEFT.getSymbol().isPresent()){
+            s[0][0] = cornerBackground + UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+        } else if(UPLEFT.isEvil()) {
+            s[0][0] = filler ;
+        } else {
+            s[0][0] = cornerBackground + empty + kingdomColor ;
+        }
+
+
+        s[0][1] = fontColor + "   " + filler  + "   " + styleReset;
+
+
+        if(UPRIGHT.getSymbol().isPresent()){
+            s[0][2] = cornerBackground + UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+
+        } else if(UPRIGHT.isEvil()) {
+            s[0][2] = filler;
+        } else {
+            s[0][2] = cornerBackground + empty  + kingdomColor ;
+        }
+
+        s[1][0] = fontColor + " " + background + styleReset;
+
+        if(permanentResources.isEmpty()){
+            s[1][1] = filler + filler + filler;
+        } else {
+            s[1][1] = "";
+            if(permanentResources.size() == 1){
+                s[1][1] = filler + cornerBackground + permanentResources.get(0).getAlias() + kingdomColor + filler;
+            } else if(permanentResources.size() == 2){
+                s[1][1] = cornerBackground + permanentResources.get(0).getAlias() + kingdomColor + filler + cornerBackground + permanentResources.get(1).getAlias() + kingdomColor;
+            } else if(permanentResources.size() == 3){
+                s[1][1] = cornerBackground;
+                for (Symbol permanentResource : permanentResources) {
+                    s[1][1] = s[1][1] + permanentResource.getAlias();
+                }
+                s[1][1] = s[1][1] + kingdomColor;
+            }
+        }
+        s[1][2] = fontColor + background + " " + styleReset;
+
+        if(DOWNLEFT.getSymbol().isPresent()){
+        s[2][0] = cornerBackground + DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+
+        } else if(DOWNLEFT.isEvil()) {
+        s[2][0] = filler ;
+        } else {
+        s[2][0] =  cornerBackground + empty + kingdomColor;
+        }
+
+        s[2][1] = fontColor + "   "  + filler  + "   " + styleReset;
+
+        if(DOWNRIGHT.getSymbol().isPresent()){
+        s[2][2] = cornerBackground + DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+
+        } else if(DOWNRIGHT.isEvil()) {
+        s[2][2] = filler;
+        } else {
+        s[2][2] = cornerBackground +  empty  + kingdomColor;
+        }
+
+        //apply background color
+        for(int i=0; i<3; i++){
+            for(int j=0; j<3; j++){
+                s[i][j] = kingdomColor + s[i][j] + styleReset;
+            }
+        }
+
+        return s;
+        }
 
 }
