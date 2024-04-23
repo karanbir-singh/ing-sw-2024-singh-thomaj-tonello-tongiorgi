@@ -1,12 +1,8 @@
 package it.polimi.ingsw.gc26.network.socket.client;
 
 import it.polimi.ingsw.gc26.ClientState;
-import it.polimi.ingsw.gc26.MainClient;
-import it.polimi.ingsw.gc26.controller.GameController;
-import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
-import it.polimi.ingsw.gc26.network.VirtualView;
 import javafx.util.Pair;
 
 import java.io.*;
@@ -28,83 +24,94 @@ public class SocketClient {
     /**
      * BufferedWriter to send json to the server.
      */
-    private final BufferedWriter output;
+    private final PrintWriter outputToServer;
     /**
      * Server handler to decode json from the server.
      */
-    private final SocketServerHandler handler;
+    private final SocketServerHandler serverHandler;
     /**
      * Client nickname
      */
-    protected String nickname;
+    private String nickname;
     /**
      * Client identifier
      */
-    protected String clientID;
+    private String clientID;
+
+    /**
+     * State of the client
+     */
+    private ClientState clientState;
+
+    /**
+     * This attribute is useful to check if state is changed
+     */
+    private boolean stateChanged;
 
 
     /**
      * Socket Client's constructor. Initializes the MainController.
-     * @param input buffered reader from the server.
-     * @param output buffered writer to the server.
+     *
+     * @param inputFromServer buffered reader from the server.
+     * @param outputToServer  writer to the server.
      */
-    public SocketClient(BufferedReader input, BufferedWriter output) {
-        this.virtualMainController = new VirtualSocketMainController(output);
-        this.handler = new SocketServerHandler(this, input);
-        this.output = output;
-        this.clientID = "";
-        this.virtualGameController = new VirtualSocketGameController(this.output); //TODO should be done in a setter method, it doesn't work :/
+    public SocketClient(BufferedReader inputFromServer, PrintWriter outputToServer) {
+        this.virtualMainController = new VirtualSocketMainController(outputToServer);
+        //this.virtualGameController = new VirtualSocketGameController(outputToServer); //TODO should be done in a setter method, it doesn't work :/
+        this.virtualGameController = null;
+        this.outputToServer = outputToServer;
 
+        this.serverHandler = new SocketServerHandler(this, inputFromServer);
+        this.clientID = null;
+        clientState = ClientState.CONNECTION;
+        stateChanged = false;
     }
 
     /**
      * Create a thread to listen input from the server and handle its commands.
      */
     private void runServerListener() {
-        // Create a thread for listening server
-        new Thread(() -> {
-            try {
-                this.handler.onServerListening();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        new Thread(this.serverHandler).start();
     }
 
     /**
      * TUI VERSION
      * Asks user to set the parameters needed before the game starts, such as nickname and number of players.
+     *
      * @return gameController, clientID and nickname set by the user
      * @throws RemoteException
      */
     public Pair<VirtualGameController, String> runTUI() throws RemoteException {
         this.runServerListener();
         // Start CLI
-        Scanner scan  = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in);
 
         // TODO gestire la Remote Exception
         // Initial state in CONNECTION
         System.out.println("Connected to the server successfully!");
         System.out.println("Insert your nickname: ");
         this.nickname = scan.nextLine();
-        this.virtualMainController.connect(this.handler, this.nickname);
+        this.virtualMainController.connect(this.serverHandler, this.nickname);
 
         // wait for the server to update the client's ID
-        while(true) {
+        while (true) {
             synchronized (this.clientID) {
-                if (this.clientID != "") {break;}
+                if (this.clientID != null) {
+                    break;
+                }
             }
-        };
+        }
+        ;
 
         // wait for the server to update the client's state
-        while(true) {
-            synchronized (this.handler.clientState) {
-                if (this.handler.changeState == true) {
-                    this.handler.changeState = false;
-                    if (handler.clientState == ClientState.INVALID_NICKNAME || handler.clientState == ClientState.CONNECTION) {
+        while (true) {
+            synchronized (this.clientState) {
+                if (this.stateChanged == true) {
+                    this.stateChanged = false;
+                    if (clientState == ClientState.INVALID_NICKNAME || clientState == ClientState.CONNECTION) {
                         System.out.println("Nickname not available \nInsert new nickname: ");
                         this.nickname = scan.nextLine();
-                        this.virtualMainController.connect(this.handler, this.nickname);
+                        this.virtualMainController.connect(this.serverHandler, this.nickname);
                     } else {
                         break;
                     }
@@ -113,18 +120,18 @@ public class SocketClient {
         }
 
         // check whether there is a game in WAITING or a new game should be created
-        if (handler.clientState == ClientState.CREATOR) {
+        if (clientState == ClientState.CREATOR) {
             System.out.println("You must initialize a new game \n Insert number of players: ");
             Integer numberPlayers = Integer.parseInt(scan.nextLine());
-            this.virtualMainController.createWaitingList(this.handler, this.clientID, this.nickname, numberPlayers);
+            this.virtualMainController.createWaitingList(this.serverHandler, this.clientID, this.nickname, numberPlayers);
         }
         System.out.println("Waiting for other players ...");
 
         // wait for the server to update the client's state
         // (the server notifies when the game has all its player so the game can start)
         while (true) {
-            synchronized (this.handler.clientState) {
-                if (handler.clientState == ClientState.BEGIN){
+            synchronized (clientState) {
+                if (clientState == ClientState.BEGIN) {
                     break;
                 }
             }
@@ -140,7 +147,7 @@ public class SocketClient {
      * GUI VERSION
      * Asks user to set the parameters needed before the game starts, such as nickname and number of players.
      */
-    public void runGUI(){
+    public void runGUI() {
         this.runServerListener();
 
         // TODO
@@ -148,19 +155,32 @@ public class SocketClient {
 
     /**
      * Method used by the server to set the client's ID as an answer to connect()
+     *
      * @param clientID
      */
     public void setClientID(String clientID) {
-        this.clientID = clientID;
+        synchronized (this.clientID) {
+            this.clientID = clientID;
+        }
     }
 
     /**
      * Method used by the server to set the game controller as an answer to the change of state
      */
     public void setVirtualGameController() {
-        this.virtualGameController = new VirtualSocketGameController(this.output);
+        this.virtualGameController = new VirtualSocketGameController(this.outputToServer);
     }
 
-
+    /**
+     * Sets the state of the client
+     *
+     * @param clientState
+     */
+    public void setState(ClientState clientState) {
+        synchronized (this.clientState) {
+            this.clientState = clientState;
+            this.stateChanged = true;
+        }
+    }
 }
 
