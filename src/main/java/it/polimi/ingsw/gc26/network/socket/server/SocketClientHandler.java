@@ -39,15 +39,15 @@ public class SocketClientHandler implements Runnable {
     /**
      * Socket client handler constructor. Initialized the controllers and the virtual view.
      *
-     * @param controller main controller used during the first part of the game (to connect the clients)
-     * @param input      buffered reader to read data from the client
-     * @param output     print writer to write to the client
+     * @param controller      main controller used during the first part of the game (to connect the clients)
+     * @param inputFromClient buffered reader to read data from the client
+     * @param outputToClient  print writer to write to the client
      */
-    public SocketClientHandler(MainController controller, BufferedReader input, PrintWriter output) {
+    public SocketClientHandler(MainController controller, BufferedReader inputFromClient, PrintWriter outputToClient) {
         this.mainController = controller;
         this.gameController = null;
-        this.inputFromClient = input;
-        this.virtualSocketView = new VirtualSocketView(output);
+        this.inputFromClient = inputFromClient;
+        this.virtualSocketView = new VirtualSocketView(outputToClient);
     }
 
     /**
@@ -115,12 +115,6 @@ public class SocketClientHandler implements Runnable {
 
                 // this.virtualClient.reportError("The game is being initialized! Please wait!");
             }
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
