@@ -21,9 +21,9 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Virtual socket game controller's constructor. Initializes the print writer.
-     * @param output
+     * @param output writer
      */
-    public VirtualSocketGameController(BufferedWriter output) {
+    public VirtualSocketGameController(PrintWriter output) {
         this.outputToServer = new PrintWriter(output);
     }
 
