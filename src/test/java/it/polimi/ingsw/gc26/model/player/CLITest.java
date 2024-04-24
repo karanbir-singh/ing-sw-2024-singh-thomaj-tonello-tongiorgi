@@ -212,7 +212,8 @@ public class CLITest {
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
-        PersonalBoard pb = new PersonalBoard(initialDeck.getCards().get(0).getFront());
+        PersonalBoard pb = new PersonalBoard();
+        pb.playSide(initialDeck.getCards().get(0).getFront());
         pb.setPosition(-1, -1);
         pb.playSide(resourceDeck.getCards().get(10).getBack());
         pb.setPosition(1, -1);
@@ -239,7 +240,8 @@ public class CLITest {
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();
-        PersonalBoard pb = new PersonalBoard(initialDeck.getCards().get(0).getFront());
+        PersonalBoard pb = new PersonalBoard();
+        pb.playSide(initialDeck.getCards().get(0).getFront());
         pb.setPosition(-1, -1);
         pb.playSide(resourceDeck.getCards().get(38).getFront());
         pb.setPosition(1, -1);
