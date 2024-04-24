@@ -1,5 +1,8 @@
 package it.polimi.ingsw.gc26.controller;
 
+//import com.sun.net.httpserver.Request;
+
+import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.CommonTable;
@@ -8,12 +11,15 @@ import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
+import it.polimi.ingsw.gc26.model.player.PlayerState;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class GameController {
-
+    /**
+     * This attribute represents the execution type
+     */
+    private final boolean isDebug;
     /**
      * This attribute represents the game that the game controller controls
      */
@@ -22,11 +28,10 @@ public class GameController {
      * This attribute represents the list of players that need to do an action, used only in the game preparation phase
      */
     private ArrayList<Player> playersToWait;
-
     /**
-     * This attribute represents the execution type
+     * This attribute represents the list of requests sent from clients
      */
-    private final boolean isDebug;
+    //private Queue<Request> requests;
 
     /**
      * Initializes the game (provided by the main controller)
@@ -34,14 +39,50 @@ public class GameController {
      * @param game the object that represents the game
      */
     public GameController(Game game) {
+        this.isDebug = java.lang.management.ManagementFactory.
+                getRuntimeMXBean().
+                getInputArguments().toString().indexOf("jdwp") >= 0;
+
         this.game = game;
         this.game.setState(GameState.COMMON_TABLE_PREPARATION);
 
         this.playersToWait = new ArrayList<>();
 
-        this.isDebug = java.lang.management.ManagementFactory.
-                getRuntimeMXBean().
-                getInputArguments().toString().indexOf("jdwp") >= 0;
+        this.requests = new ArrayDeque<>();
+        this.launchExecutor();
+        ;
+    }
+
+    /**
+     * Launch a thread for managing clients requests
+     */
+    private void launchExecutor() {
+        new Thread(() -> {
+            while (true) {
+                synchronized (requests) {
+                    while (requests.isEmpty()) {
+                        try {
+                            requests.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    requests.remove().execute();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * Add a new request to the queue
+     *
+     * @param request client's request
+     */
+    public void addRequest(Request request) {
+        synchronized (this.requests) {
+            requests.add(request);
+            requests.notifyAll();
+        }
     }
 
     // PHASE 1: Game preparation
@@ -447,7 +488,7 @@ public class GameController {
         } else {
             if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
                 // Check if it's the player's turn
-                if (player.equals(game.getCurrentPlayer())) {
+                if (player.equals(game.getCurrentPlayer()) && player.getState().equals(PlayerState.PLAYING)) {
                     if (isDebug) {
                         System.out.println(STR."\{player.getNickname()} played card from hand");
                     }
@@ -462,6 +503,9 @@ public class GameController {
 
                         // Remove card from the hand
                         hand.removeCard(hand.getSelectedCard().get());
+
+                        // Change player state
+                        player.setState(PlayerState.CARD_PLAYED);
                     } else {
                         // TODO gestire cosa fare quando la carta non è selezionata
                     }
@@ -483,8 +527,10 @@ public class GameController {
      */
     public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
         if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
+            Player player = game.getPlayerByID(playerID);
+
             // Check if it's the current player
-            if (game.getPlayerByID(playerID).equals(game.getCurrentPlayer())) {
+            if (player.equals(game.getCurrentPlayer())) {
                 if (isDebug) {
                     System.out.println(STR."[\{cardX}, \{cardY}] card selected from common table");
                 }
@@ -507,7 +553,7 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Check if it's the turn of the player
-            if (player.equals(game.getCurrentPlayer())) {
+            if (player.equals(game.getCurrentPlayer()) && player.getState().equals(PlayerState.CARD_PLAYED)) {
                 // Get the common table and hand
                 CommonTable commonTable = game.getCommonTable();
                 Hand hand = player.getHand();
@@ -521,6 +567,9 @@ public class GameController {
                     if (isDebug) {
                         System.out.println(STR."\{player.getNickname()} drew selected card");
                     }
+
+                    // Change player's state
+                    player.setState(PlayerState.CARD_DRAWN);
 
                     // Check if player's score is greater or equal then 20 points OR decks are both empty
                     if (player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
