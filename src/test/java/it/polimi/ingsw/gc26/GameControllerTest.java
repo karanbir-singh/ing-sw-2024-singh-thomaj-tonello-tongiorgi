@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.model.card.StarterCard;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.player.Player;
+import it.polimi.ingsw.gc26.model.player.PlayerState;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,6 @@ class GameControllerTest {
 
     private static ArrayList<Player> players;
 
-    @BeforeAll
     static void beforeAll() {
         // Create players
         players = new ArrayList<>();
@@ -34,7 +34,7 @@ class GameControllerTest {
 
     @Test
     void commonTablePreparation() {
-        game.setState(GameState.COMMON_TABLE_PREPARATION);
+        beforeAll();
         gameController.prepareCommonTable();
         assertEquals(GameState.WAITING_STARTER_CARD_PLACEMENT, game.getState());
 
@@ -49,6 +49,7 @@ class GameControllerTest {
 
     @Test
     void starterCardsPreparation() {
+        beforeAll();
         game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
         gameController.prepareStarterCards();
         assertEquals(GameState.WAITING_STARTER_CARD_PLACEMENT, game.getState());
@@ -63,6 +64,7 @@ class GameControllerTest {
 
     @Test
     void starterCardPlacement() {
+        beforeAll();
         game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
         gameController.prepareStarterCards();
         assertEquals(GameState.WAITING_STARTER_CARD_PLACEMENT, game.getState());
@@ -90,6 +92,7 @@ class GameControllerTest {
 
     @Test
     void commonMissionsPreparation() {
+        beforeAll();
         // Call the tested method
         game.setState(GameState.COMMON_MISSION_PREPARATION);
         gameController.prepareCommonMissions();
@@ -102,6 +105,7 @@ class GameControllerTest {
 
     @Test
     void secretMissionsSetting() {
+        beforeAll();
         // First of all, each player has their starter card placed
         game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
         gameController.prepareStarterCards();
@@ -147,7 +151,8 @@ class GameControllerTest {
     }
 
     @Test
-    void getWinners() { // TODO fix test
+    void getWinners() {
+        beforeAll();
         // First of all, each player has their starter card placed
         game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
         gameController.prepareStarterCards();
@@ -216,5 +221,93 @@ class GameControllerTest {
 
         // Check with assertions
         assertFalse(game.getWinners().isEmpty());
+    }
+
+    @Test
+    void tryPlayingTwoCardsInARow() {
+        beforeAll();
+
+        // Prepare initial things
+        gameController.prepareCommonTable();
+        gameController.turnSelectedCardSide(players.get(0).getID());
+        gameController.turnSelectedCardSide(players.get(2).getID());
+        for (Player player : game.getPlayers()) {
+            gameController.playCardFromHand(player.getID());
+        }
+        gameController.choosePawnColor("BLUE", players.get(1).getID());
+        gameController.choosePawnColor("GREEN", players.get(0).getID());
+        gameController.choosePawnColor("YELLOW", players.get(2).getID());
+
+        gameController.selectSecretMission(0, players.get(0).getID());
+
+        gameController.selectSecretMission(1, players.get(2).getID());
+        gameController.setSecretMission(players.get(2).getID());
+
+        gameController.selectSecretMission(0, players.get(1).getID());
+
+        gameController.setSecretMission(players.get(1).getID());
+        gameController.setSecretMission(players.get(0).getID());
+
+        Player currentPlayer = game.getCurrentPlayer();
+
+        gameController.selectCardFromHand(1, currentPlayer.getID());
+        gameController.turnSelectedCardSide(currentPlayer.getID());
+        gameController.selectPositionOnBoard(1, 1, currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+
+        // Now we try to play a second card, even if the current play can't do these
+        gameController.selectCardFromHand(0, currentPlayer.getID());
+        gameController.turnSelectedCardSide(currentPlayer.getID());
+        gameController.selectPositionOnBoard(2, 2, currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+
+        // Check that the second card it's not played
+        assertEquals(2, currentPlayer.getHand().getCards().size());
+        assertEquals(PlayerState.CARD_PLAYED, currentPlayer.getState());
+        assertEquals(2, currentPlayer.getPersonalBoard().getOccupiedPositions().size());
+    }
+
+    @Test
+    void tryDrawingTwoCardsInARow() {
+        beforeAll();
+
+        // Prepare initial things
+        gameController.prepareCommonTable();
+        gameController.turnSelectedCardSide(players.get(0).getID());
+        gameController.turnSelectedCardSide(players.get(2).getID());
+        for (Player player : game.getPlayers()) {
+            gameController.playCardFromHand(player.getID());
+        }
+        gameController.choosePawnColor("BLUE", players.get(1).getID());
+        gameController.choosePawnColor("GREEN", players.get(0).getID());
+        gameController.choosePawnColor("YELLOW", players.get(2).getID());
+
+        gameController.selectSecretMission(0, players.get(0).getID());
+
+        gameController.selectSecretMission(1, players.get(2).getID());
+        gameController.setSecretMission(players.get(2).getID());
+
+        gameController.selectSecretMission(0, players.get(1).getID());
+
+        gameController.setSecretMission(players.get(1).getID());
+        gameController.setSecretMission(players.get(0).getID());
+
+        Player currentPlayer = game.getCurrentPlayer();
+
+        gameController.selectCardFromHand(1, currentPlayer.getID());
+        gameController.turnSelectedCardSide(currentPlayer.getID());
+        gameController.selectPositionOnBoard(1, 1, currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+
+        // Now we try to play a second card, even if the current play can't do these
+        gameController.selectCardFromHand(0, currentPlayer.getID());
+        gameController.turnSelectedCardSide(currentPlayer.getID());
+        gameController.selectPositionOnBoard(2, 2, currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+
+        // Check that the second card it's not played
+        assertEquals(2, currentPlayer.getHand().getCards().size());
+        assertEquals(PlayerState.CARD_PLAYED, currentPlayer.getState());
+        assertEquals(2, currentPlayer.getPersonalBoard().getOccupiedPositions().size());
     }
 }
