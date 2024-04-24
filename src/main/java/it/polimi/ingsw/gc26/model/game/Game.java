@@ -4,9 +4,7 @@ import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.Parser.ParserCore;
-import it.polimi.ingsw.gc26.network.VirtualView;
-
-import java.rmi.RemoteException;
+import it.polimi.ingsw.gc26.model.player.PlayerState;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -158,6 +156,9 @@ public class Game {
 
         // Change current player
         this.currentPlayer = getNextPlayer();
+
+        // Change player's state
+        this.currentPlayer.setState(PlayerState.PLAYING);
 
         // Check if the next current player is the first player
         if (this.currentPlayer.isFirstPlayer()) {

@@ -37,10 +37,11 @@ public class Player {
      * This attribute represents the player's personal board
      */
     private PersonalBoard personalBoard;
+
     /**
-     * This attribute represents how many turns the player has played
+     * This attribute represents the player's state
      */
-    private int turn;
+    private PlayerState state;
 
     /**
      * Initializes the player with an id and a name
@@ -54,7 +55,7 @@ public class Player {
         this.pawnColor = null;
         this.hand = null;
         this.personalBoard = null;
-        this.turn = 0;
+        this.state = PlayerState.PLAYING;
     }
 
     /**
@@ -182,27 +183,29 @@ public class Player {
     }
 
     /**
-     * Returns the current player's turn
-     *
-     * @return turn
-     */
-    public int getTurn() {
-        return turn;
-    }
-
-    /**
-     * Increases the player's number of turn played
-     */
-    public void increaseNumber() {
-        turn++;
-    }
-
-    /**
      * Returns the player's personal board
      *
      * @return personal board
      */
     public PersonalBoard getPersonalBoard() {
         return personalBoard;
+    }
+
+    /**
+     * Returns player's state
+     *
+     * @return state
+     */
+    public PlayerState getState() {
+        return state;
+    }
+
+    /**
+     * Sets player's state
+     *
+     * @param state new state
+     */
+    public void setState(PlayerState state) {
+        this.state = state;
     }
 }
