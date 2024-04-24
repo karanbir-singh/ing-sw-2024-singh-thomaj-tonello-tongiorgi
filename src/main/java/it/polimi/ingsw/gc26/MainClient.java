@@ -117,7 +117,9 @@ public class MainClient {
 
             switch (line) {
                 case "/1":
-                    virtualGameController.selectCardFromHand(0, clientID);
+                    System.out.println("WHAT CARD DO YOU WANT TO SELECTED: 0/1/2");
+                    String xPosition = scan.nextLine();
+                    virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), clientID);
                     break;
                 case "/2":
                     virtualGameController.turnSelectedCardSide(clientID);
@@ -126,10 +128,18 @@ public class MainClient {
                     virtualGameController.playCardFromHand(clientID);
                     break;
                 case "/4":
-                    virtualGameController.selectPositionOnBoard(0, 0, clientID);
+                    System.out.println("WHAT XPOSITION DO YOU WANT TO SELECT ON PERSONAL BOARD:");
+                    String XPosition = scan.nextLine();
+                    System.out.println("WHAT YPOSITION DO YOU WANT TO SELECT ON PERSONAL BOARD:");
+                    String YPosition = scan.nextLine();
+                    virtualGameController.selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
                     break;
                 case "/5":
-                    virtualGameController.selectCardFromCommonTable(0, 0, clientID);
+                    System.out.println("WHAT XPOSITION DO YOU WANT TO SELECT ON COMMON BOARD:");
+                    XPosition = scan.nextLine();
+                    System.out.println("WHAT YPOSITION DO YOU WANT TO SELECT ON COMMON BOARD:");
+                    YPosition = scan.nextLine();
+                    virtualGameController.selectCardFromCommonTable(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
                     break;
                 case "/6":
                     virtualGameController.drawSelectedCard(clientID);
