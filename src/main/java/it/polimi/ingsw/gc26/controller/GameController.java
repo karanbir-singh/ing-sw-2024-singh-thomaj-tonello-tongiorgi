@@ -1,8 +1,5 @@
 package it.polimi.ingsw.gc26.controller;
 
-//import com.sun.net.httpserver.Request;
-
-import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.CommonTable;
@@ -12,6 +9,7 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
+import it.polimi.ingsw.gc26.request.Request;
 
 import java.util.*;
 
@@ -31,7 +29,7 @@ public class GameController {
     /**
      * This attribute represents the list of requests sent from clients
      */
-    //private Queue<Request> requests;
+    private Queue<Request> requests;
 
     /**
      * Initializes the game (provided by the main controller)
@@ -67,7 +65,7 @@ public class GameController {
                             e.printStackTrace();
                         }
                     }
-                    requests.remove().execute();
+                    requests.remove().execute(this);
                 }
             }
         }).start();
