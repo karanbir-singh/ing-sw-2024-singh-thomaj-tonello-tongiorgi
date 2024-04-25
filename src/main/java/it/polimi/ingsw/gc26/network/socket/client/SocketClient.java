@@ -44,9 +44,9 @@ public class SocketClient {
     private ClientState clientState;
 
     /**
-     * This attribute is useful to check if state is changed
+     * lock used to wait while the client state is changed
      */
-    private boolean stateChanged;
+    Object lock;
 
 
     /**
@@ -57,14 +57,12 @@ public class SocketClient {
      */
     public SocketClient(BufferedReader inputFromServer, PrintWriter outputToServer) {
         this.virtualMainController = new VirtualSocketMainController(outputToServer);
-        //this.virtualGameController = new VirtualSocketGameController(outputToServer); //TODO should be done in a setter method, it doesn't work :/
         this.virtualGameController = null;
         this.outputToServer = outputToServer;
-
         this.serverHandler = new SocketServerHandler(this, inputFromServer);
         this.clientID = null;
         clientState = ClientState.CONNECTION;
-        stateChanged = false;
+        this.lock = new Object();
     }
 
     /**
@@ -94,30 +92,29 @@ public class SocketClient {
         this.virtualMainController.connect(this.serverHandler, this.nickname);
 
         // wait for the server to update the client's ID
-        while (true) {
-            synchronized (this.clientID) {
-                if (this.clientID != null) {
-                    break;
-                }
+        synchronized (this) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
-        ;
 
         // wait for the server to update the client's state
-        while (true) {
-            synchronized (this.clientState) {
-                if (this.stateChanged == true) {
-                    this.stateChanged = false;
-                    if (clientState == ClientState.INVALID_NICKNAME || clientState == ClientState.CONNECTION) {
-                        System.out.println("Nickname not available \nInsert new nickname: ");
-                        this.nickname = scan.nextLine();
-                        this.virtualMainController.connect(this.serverHandler, this.nickname);
-                    } else {
-                        break;
-                    }
+
+        synchronized (this.lock) {
+            while(clientState == ClientState.INVALID_NICKNAME || clientState == ClientState.CONNECTION) {
+                System.out.println("Nickname not available \nInsert new nickname: ");
+                this.nickname = scan.nextLine();
+                this.virtualMainController.connect(this.serverHandler, this.nickname);
+                try {
+                    this.lock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
+
 
         // check whether there is a game in WAITING or a new game should be created
         if (clientState == ClientState.CREATOR) {
@@ -129,15 +126,26 @@ public class SocketClient {
 
         // wait for the server to update the client's state
         // (the server notifies when the game has all its player so the game can start)
-        while (true) {
-            synchronized (clientState) {
-                if (clientState == ClientState.BEGIN) {
-                    break;
+        synchronized (this.lock) {
+            while(clientState != ClientState.BEGIN) {
+                try {
+                    this.lock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
 
-        this.virtualMainController.getVirtualGameController();
+        synchronized (this) {
+            this.virtualMainController.getVirtualGameController();
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
         System.out.println("Game begin");
         return new Pair<>(this.virtualGameController, this.clientID);
 
@@ -159,9 +167,7 @@ public class SocketClient {
      * @param clientID
      */
     public void setClientID(String clientID) {
-        synchronized (this.clientID) {
-            this.clientID = clientID;
-        }
+        this.clientID = clientID;
     }
 
     /**
@@ -179,7 +185,6 @@ public class SocketClient {
     public void setState(ClientState clientState) {
         synchronized (this.clientState) {
             this.clientState = clientState;
-            this.stateChanged = true;
         }
     }
 }

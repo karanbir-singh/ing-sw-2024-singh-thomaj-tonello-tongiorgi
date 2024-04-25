@@ -13,6 +13,7 @@ import java.rmi.RemoteException;
 
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import it.polimi.ingsw.gc26.request.*;
 
 /**
  * This class represents the handler to decode json from the client.
@@ -79,36 +80,36 @@ public class SocketClientHandler implements Runnable {
                         this.virtualSocketView.setGameController();
                         break;
                     case "addMessage":
-                        this.gameController.addMessage(value.get("text").asText(), value.get("receiver").asText(), value.get("sender").asText(), value.get("time").asText());
+                        this.gameController.addRequest(new AddMessageRequest(value.get("text").asText(), value.get("receiver").asText(), value.get("sender").asText(), value.get("time").asText()));
                         break;
                     case "selectCardFromHand":
-                        this.gameController.selectCardFromHand(value.get("cardIndex").asInt(), value.get("playerID").asText());
+                        this.gameController.addRequest(new SelectCardFromHandRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
                         break;
                     case "turnSelectedCardSide":
-                        this.gameController.turnSelectedCardSide(value.get("playerID").asText());
+                        this.gameController.addRequest(new TurnSelectedSideRequest(value.get("playerID").asText()));
                         break;
                     case "selectPositionOnBoard":
-                        this.gameController.selectPositionOnBoard(value.get("x").asInt(), value.get("y").asInt(), value.get("playerID").asText());
+                        this.gameController.addRequest(new SelectPositionOnBoardRequest(value.get("x").asInt(), value.get("y").asInt(), value.get("playerID").asText()));
                         break;
                     case "playCardFromHand":
-                        this.gameController.playCardFromHand(value.get("playerID").asText());
+                        this.gameController.addRequest(new PlayCardFromHandRequest(value.get("playerID").asText()));
                         break;
                     case "selectCardFromCommonTable":
-                        this.gameController.selectCardFromCommonTable(value.get("cardX").asInt(), value.get("cardY").asInt(), value.get("playerID").asText());
+                        this.gameController.addRequest(new SelectCardFromCommonTableRequest(value.get("cardX").asInt(), value.get("cardY").asInt(), value.get("playerID").asText()));
                         break;
                     case "drawSelectedCard":
-                        this.gameController.drawSelectedCard(value.get("playerID").asText());
+                        this.gameController.addRequest(new DrawSelectedCardRequest(value.get("playerID").asText()));
                         break;
                     case "choosePawnColor":
-                        this.gameController.choosePawnColor(value.get("color").asText(), value.get("playerID").asText());
+                        this.gameController.addRequest(new ChoosePawnColorRequest(value.get("color").asText(), value.get("playerID").asText()));
                         break;
                     case "selectSecretMission":
-                        this.gameController.selectSecretMission(value.get("cardIndex").asInt(), value.get("playerID").asText());
+                        this.gameController.addRequest(new SelectSecretMissionRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
                         break;
                     case "setSecretMission":
-                        this.gameController.setSecretMission(value.get("playerID").asText());
+                        this.gameController.addRequest(new SetSecretMissionRequest(value.get("playerID").asText()));
                     case "printPersonalBoard":
-                        this.gameController.printPersonalBoard(value.get("nickname").asText(), value.get("playerID").asText());
+                        this.gameController.addRequest(new PrintPersonalBoardRequest(value.get("nickname").asText(), value.get("playerID").asText()));
                     case null, default:
                         break;
                 }

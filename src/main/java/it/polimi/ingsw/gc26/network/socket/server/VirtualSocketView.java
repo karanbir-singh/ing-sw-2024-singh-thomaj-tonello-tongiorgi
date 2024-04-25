@@ -34,7 +34,7 @@ public class VirtualSocketView implements VirtualView {
      * @param value represents a value that is need to the called function
      */
     private void sendToClient(String function, String value) {
-        String msg = STR."{\"function\": \"\{function}\", \"value\" : \"\{value} \"}";
+        String msg = STR."{\"function\": \"\{function}\", \"value\" : \"\{value}\"}";
         this.outputToClient.println(msg);
         this.outputToClient.flush();
     }

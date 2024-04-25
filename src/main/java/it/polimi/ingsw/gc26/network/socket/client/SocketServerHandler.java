@@ -121,7 +121,11 @@ public class SocketServerHandler implements VirtualView, Runnable {
      * @throws RemoteException
      */
     public void updateState(ClientState clientState) throws RemoteException {
-        this.socketClient.setState(clientState);
+        synchronized (this.socketClient.lock) {
+            this.socketClient.setState(clientState);
+            this.socketClient.lock.notifyAll();
+        }
+
     }
 
     /**
@@ -132,7 +136,10 @@ public class SocketServerHandler implements VirtualView, Runnable {
      */
     @Override
     public void setClientID(String clientID) throws RemoteException {
-        this.socketClient.setClientID(clientID);
+        synchronized (this.socketClient) {
+            this.socketClient.setClientID(clientID);
+            this.socketClient.notifyAll();
+        }
     }
 
     /**
@@ -140,6 +147,10 @@ public class SocketServerHandler implements VirtualView, Runnable {
      */
     @Override
     public void setGameController() {
-        this.socketClient.setVirtualGameController();
+        synchronized (this.socketClient) {
+            this.socketClient.setVirtualGameController();
+            this.socketClient.notifyAll();
+        }
+
     }
 }
