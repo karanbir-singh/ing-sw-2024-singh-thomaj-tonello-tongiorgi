@@ -2,10 +2,10 @@ package it.polimi.ingsw.gc26.request;
 
 import it.polimi.ingsw.gc26.controller.GameController;
 
-public class TurnSelectedSideRequest implements Request{
+public class TurnSelectedSideRequest implements Request {
     final private String playerID;
 
-    public TurnSelectedSideRequest(String playerID){
+    public TurnSelectedSideRequest(String playerID) {
         this.playerID = playerID;
     }
 

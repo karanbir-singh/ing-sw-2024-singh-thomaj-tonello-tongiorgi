@@ -66,6 +66,7 @@ public class GameController {
                         }
                     }
                     requests.remove().execute(this);
+                    System.out.println("Request executed");
                 }
             }
         }).start();
