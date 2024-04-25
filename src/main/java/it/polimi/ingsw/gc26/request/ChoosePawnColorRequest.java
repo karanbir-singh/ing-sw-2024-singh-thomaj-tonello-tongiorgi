@@ -13,6 +13,6 @@ public class ChoosePawnColorRequest implements Request{
 
     @Override
     public void execute(GameController gameController) {
-        gameController.printPersonalBoard(this.color,this.playerID);
+        gameController.choosePawnColor(this.color,this.playerID);
     }
 }

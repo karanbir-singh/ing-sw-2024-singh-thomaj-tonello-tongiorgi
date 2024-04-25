@@ -132,7 +132,7 @@ public class MainController {
         // Check number of clients in waiting list
         if (waitingClients.size() >= maxNumWaitingClients) {
             // Then, create a new game controller
-            gameController = new GameController(new Game(waitingPlayers));
+            gameController = new GameController(new Game(waitingPlayers, waitingClients));
             gamesControllers.add(gameController);
 
             // Update of the view

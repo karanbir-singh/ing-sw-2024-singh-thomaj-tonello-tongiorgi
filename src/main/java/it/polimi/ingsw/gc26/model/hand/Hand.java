@@ -1,4 +1,5 @@
 package it.polimi.ingsw.gc26.model.hand;
+import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.card.ResourceCard;
@@ -9,12 +10,13 @@ import it.polimi.ingsw.gc26.model.card_side.ability.InkwellCounter;
 import it.polimi.ingsw.gc26.model.card_side.ability.ManuscriptCounter;
 import it.polimi.ingsw.gc26.model.card_side.ability.QuillCounter;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 /**
  * This class represents the current hand for a player
  */
-public class Hand {
+public class Hand  {
     /**
      * This attribute represent the current cards in the hand
      */
@@ -28,11 +30,14 @@ public class Hand {
      */
     private Side selectedSide;
 
+    private ModelObservable modelObservable;
+
     /**
      * Initializes the hand for the player
      * @param c new cards in hand
      */
     public Hand(ArrayList<Card> c) {
+        this.modelObservable = ModelObservable.getInstance();
         this.cards = c;
         this.selectedCard = null;
         this.selectedSide = null;
@@ -50,11 +55,17 @@ public class Hand {
      * Sets the selected card to the parameter given
      * @param selectedCard new selected card
      */
-    public void setSelectedCard(Card selectedCard) {
+    public void setSelectedCard(Card selectedCard, String clientID) {
         if (selectedCard != null) {
             this.selectedCard = selectedCard;
             this.selectedSide = selectedCard.getFront();
             // TODO notify view
+
+            try {
+                this.modelObservable.notifySelectedCardFromHand(clientID);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             // TODO notify view
         }
@@ -101,6 +112,7 @@ public class Hand {
      */
     public void addCard(Card card) {
         cards.add(card);
+        //TODO notify
     }
 
     /**
@@ -117,10 +129,14 @@ public class Hand {
      * @param cardIndex index of the card
      * @return card in cards at position cardIndex
      */
-    public Card getCard(int leftLimit, int rightLimit, int cardIndex) {
+    public Card getCard(int leftLimit, int rightLimit, int cardIndex, String clientID) {
         // Check if the given index is correct
         if (cardIndex >= leftLimit && cardIndex < rightLimit) {
-            // TODO notify view
+            try {
+                this.modelObservable.notifyMessage("Card selected at index: " + cardIndex, clientID);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
             return cards.get(cardIndex);
         }
         // TODO notify view

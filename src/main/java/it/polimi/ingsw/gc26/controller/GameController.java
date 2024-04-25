@@ -145,7 +145,7 @@ public class GameController {
                 player.getHand().addCard(starterCard);
 
                 // Make it permanently selected
-                player.getHand().setSelectedCard(starterCard);
+                player.getHand().setSelectedCard(starterCard, player.getID());
             }
 
             // Add all players to list
@@ -294,11 +294,11 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Get selected secret mission
-            Card secretMission = player.getSecretMissionHand().getCard(0, 2, cardIndex);
+            Card secretMission = player.getSecretMissionHand().getCard(0, 2, cardIndex, playerID);
 
             // Select the chosen card
             if (secretMission != null) {
-                player.getSecretMissionHand().setSelectedCard(secretMission);
+                player.getSecretMissionHand().setSelectedCard(secretMission, player.getID());
                 if (isDebug) {
                     System.out.println(STR."\{player.getNickname()} selected mission: \{secretMission}");
                 }
@@ -390,15 +390,16 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Get card to select
-            Card selectedCard = player.getHand().getCard(0, 3, cardIndex);
+            Card selectedCard = player.getHand().getCard(0, 3, cardIndex, playerID);
 
             // Set the selected card
             if (selectedCard != null) {
-                player.getHand().setSelectedCard(selectedCard);
+                player.getHand().setSelectedCard(selectedCard, player.getID());
                 if (isDebug) {
                     System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
                 }
             }
+
         } else {
             // TODO gestire cosa modificare nel model se lo stato è errato
         }

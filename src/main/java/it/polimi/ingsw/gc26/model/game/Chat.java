@@ -1,5 +1,7 @@
 package it.polimi.ingsw.gc26.model.game;
 import java.util.*;
+
+import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.player.Player;
 
 /**
@@ -33,6 +35,8 @@ public class Chat {
      */
     public void addMessage(Message message){
         messages.add(message); //TODO chiamata di comunicazione con il client
+        ModelObservable.getInstance().notifyChat(message, );
+
     }
 
     /**

@@ -44,7 +44,7 @@ public class VirtualSocketView implements VirtualView {
      *
      * @param message message to show in the client
      */
-    @Override
+
     public void notifyMessage(String message) {
         sendToClient("notifyMessage", message);
     }
@@ -54,7 +54,7 @@ public class VirtualSocketView implements VirtualView {
      *
      * @param message message to be reported in the client
      */
-    @Override
+
     public void reportMessage(String message) {
         sendToClient("reportMessage", message);
     }
@@ -64,9 +64,19 @@ public class VirtualSocketView implements VirtualView {
      *
      * @param errorMessage error message to be reported in the client
      */
-    @Override
+
     public void reportError(String errorMessage) {
         sendToClient("reportError", errorMessage);
+    }
+
+    @Override
+    public void showMessage(String message, String clientID) throws RemoteException {
+
+    }
+
+    @Override
+    public void showError(String message, String clientID) throws RemoteException {
+
     }
 
     /**
@@ -97,5 +107,65 @@ public class VirtualSocketView implements VirtualView {
     @Override
     public void setGameController() throws RemoteException {
         sendToClient("setGameController", null);
+    }
+
+    @Override
+    public void updateChosenPawn(String pawnColor, String clientID) throws RemoteException {
+
+    }
+
+    @Override
+    public void updateSelectedMission(String cardIndex, String clientID) throws RemoteException {
+
+    }
+
+    @Override
+    public void updateSelectedCardFromHand( String clientID) throws RemoteException {
+
+    }
+
+    @Override
+    public void updateSelectedSide(String cardIndex, String clientID) throws RemoteException {
+
+    }
+
+    @Override
+    public void updateSelectedPositionOnBoard(String selectedX, String selectedY, String playerID, String success) throws RemoteException {
+
+    }
+
+    @Override
+    public void updatePlayedCardFromHand(String clientID, String success) throws RemoteException {
+
+    }
+
+    @Override
+    public void updatePoints(String clientID, String points) throws RemoteException {
+
+    }
+
+    @Override
+    public void updateSelectedCardFromCommonTable(String clientID, String success) throws RemoteException {
+
+    }
+
+    @Override
+    public void showCard(String playerID, String cardSerialization) throws RemoteException {
+
+    }
+
+    @Override
+    public void showChat(String message) throws RemoteException {
+
+    }
+
+    @Override
+    public void showPersonalBoard(String clientID, String ownerNickname, String personalBoardSerialization) throws RemoteException {
+
+    }
+
+    @Override
+    public void updateFirstPlayer(String nickname) throws RemoteException {
+
     }
 }

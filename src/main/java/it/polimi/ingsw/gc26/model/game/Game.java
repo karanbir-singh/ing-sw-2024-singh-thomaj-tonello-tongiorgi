@@ -1,10 +1,13 @@
 package it.polimi.ingsw.gc26.model.game;
 
+import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.Parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
+import it.polimi.ingsw.gc26.network.VirtualView;
+
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -58,13 +61,14 @@ public class Game {
      */
     private final ArrayList<Pawn> availablePawns;
 
+    private ModelObservable observable;
 
     /**
      * Initializes the game, creates the decks and sets the common table
      *
      * @param players list of players of the game
      */
-    public Game(ArrayList<Player> players) {
+    public Game(ArrayList<Player> players, ArrayList<VirtualView> clients) {
         this.numberOfPlayers = players.size();
 
         this.players = new ArrayList<>();
@@ -87,6 +91,10 @@ public class Game {
         availablePawns.add(Pawn.RED);
         availablePawns.add(Pawn.YELLOW);
         availablePawns.add(Pawn.GREEN);
+        this.observable = ModelObservable.getInstance();
+        for (VirtualView c : clients) {
+            this.observable.addObserver(c);
+        }
     }
 
     /**
@@ -122,6 +130,7 @@ public class Game {
         if (this.players.size() == numberOfPlayers) {
             gameState = GameState.COMMON_TABLE_PREPARATION;
         }
+
     }
 
     /**

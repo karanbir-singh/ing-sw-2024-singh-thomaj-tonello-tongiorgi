@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.network.socket.client;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
+import it.polimi.ingsw.gc26.network.VirtualView;
 import javafx.util.Pair;
 
 import java.io.*;
@@ -89,7 +90,7 @@ public class SocketClient {
         System.out.println("Connected to the server successfully!");
         System.out.println("Insert your nickname: ");
         this.nickname = scan.nextLine();
-        this.virtualMainController.connect(this.serverHandler, this.nickname);
+        this.virtualMainController.connect((VirtualView) this.serverHandler, this.nickname);
 
         // wait for the server to update the client's ID
         synchronized (this) {
@@ -106,7 +107,7 @@ public class SocketClient {
             while(clientState == ClientState.INVALID_NICKNAME || clientState == ClientState.CONNECTION) {
                 System.out.println("Nickname not available \nInsert new nickname: ");
                 this.nickname = scan.nextLine();
-                this.virtualMainController.connect(this.serverHandler, this.nickname);
+                this.virtualMainController.connect((VirtualView) this.serverHandler, this.nickname);
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
@@ -120,7 +121,7 @@ public class SocketClient {
         if (clientState == ClientState.CREATOR) {
             System.out.println("You must initialize a new game \n Insert number of players: ");
             Integer numberPlayers = Integer.parseInt(scan.nextLine());
-            this.virtualMainController.createWaitingList(this.serverHandler, this.clientID, this.nickname, numberPlayers);
+            this.virtualMainController.createWaitingList((VirtualView) this.serverHandler, this.clientID, this.nickname, numberPlayers);
         }
         System.out.println("Waiting for other players ...");
 

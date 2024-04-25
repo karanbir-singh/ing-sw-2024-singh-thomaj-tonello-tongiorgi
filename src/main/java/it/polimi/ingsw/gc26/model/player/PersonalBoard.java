@@ -423,6 +423,7 @@ public class PersonalBoard {
         // you need to check if the board has enough resources for the side.
         if (!checkIfEnoughResources(side)) {
             System.err.println("NOT ENOUGH RESOURCES");
+            //TODO update show error
             //update della view
             return;
         }

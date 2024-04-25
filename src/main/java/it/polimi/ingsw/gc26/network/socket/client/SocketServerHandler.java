@@ -15,7 +15,7 @@ import java.rmi.RemoteException;
 /**
  * This class represents the handler to decode json from the server.
  */
-public class SocketServerHandler implements VirtualView, Runnable {
+public class SocketServerHandler implements Runnable {
     /**
      * This attribute represent the socket client where the nickname and clientID are stored
      */
@@ -81,7 +81,7 @@ public class SocketServerHandler implements VirtualView, Runnable {
      *
      * @param line json encoded message
      */
-    @Override
+
     public void notifyMessage(String line) {
         JsonNode message = null;
         try {
@@ -99,7 +99,7 @@ public class SocketServerHandler implements VirtualView, Runnable {
      *
      * @param message
      */
-    @Override
+
     public void reportMessage(String message) {
         System.out.println(STR."[SERVER]: \{message}");
     }
@@ -109,7 +109,6 @@ public class SocketServerHandler implements VirtualView, Runnable {
      *
      * @param errorMessage
      */
-    @Override
     public void reportError(String errorMessage) {
         System.out.println(STR."[ERROR]: \{errorMessage}");
     }
@@ -128,13 +127,7 @@ public class SocketServerHandler implements VirtualView, Runnable {
 
     }
 
-    /**
-     * Sets the client ID returned by the connect method in the controller
-     *
-     * @param clientID
-     * @throws RemoteException
-     */
-    @Override
+
     public void setClientID(String clientID) throws RemoteException {
         synchronized (this.socketClient) {
             this.socketClient.setClientID(clientID);
@@ -142,10 +135,7 @@ public class SocketServerHandler implements VirtualView, Runnable {
         }
     }
 
-    /**
-     * Sets the game controller when the game is ready to start playing.
-     */
-    @Override
+
     public void setGameController() {
         synchronized (this.socketClient) {
             this.socketClient.setVirtualGameController();
