@@ -1,6 +1,10 @@
 package it.polimi.ingsw.gc26.model;
 
+import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.model.game.Game;
+import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
@@ -31,10 +35,10 @@ public class ModelObservable {
         this.clients.remove(view);
     }
 
-    public void notifyChat(Message msg, String clientID) {
+    public void notifyChat(Message msg) {
         for (VirtualView client : this.clients) {
             try {
-                client.showMessage(msg.toString(), clientID);
+                client.showChat(msg.toString());
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -63,7 +67,145 @@ public class ModelObservable {
         }
     }
 
+    public void notifyError(String errorMsg, String clientID) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.showError(errorMsg, clientID);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
+    public void notifyUpdateState(ClientState clientState, String clientID) { //TODO change clientState to string???
+        for (VirtualView client : this.clients) {
+            try {
+                client.updateState(clientState); //TODO add clientID?
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyUpdateGameState(GameState gameState) {
+        for(VirtualView client : this.clients) {
+            try {
+                client.updateGameState(gameState.toString());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyUpdateChosenPawn(Pawn pawn, String clientID) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.updateChosenPawn(pawn.toString(), clientID);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyUpdateSelectedMission(String cardIndex, String clientID) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.updateSelectedMission(cardIndex, clientID);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyUpdateSelectedCardFromHand(String clientID) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.updateSelectedCardFromHand(clientID);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyUpdateSelectedSide(String cardIndex, String clientID) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.updateSelectedSide(cardIndex, clientID);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyUpdateSelectedPositionOnBoard(String selectedX, String selectedY, String playerID, String success) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.updateSelectedPositionOnBoard(selectedX, selectedY, playerID, success);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyUpdatePlayedCardFromHand(String clientID, String success) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.updatePlayedCardFromHand(clientID, success);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyUpdatePoints(String clientID, String points) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.updatePoints(clientID, points);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyUpdateSelectedCardFromCommonTable(String clientID, String success) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.updateSelectedCardFromCommonTable(clientID, success);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyShowCard(String playerID, String cardSerialization) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.showCard(playerID, cardSerialization);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyShowChat(String message) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.showChat(message);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void notifyUpdateFirstPlayer(String nickname) {
+        for (VirtualView client : this.clients) {
+            try {
+                client.updateFirstPlayer(nickname);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
 
 }

@@ -168,4 +168,15 @@ public class VirtualSocketView implements VirtualView {
     public void updateFirstPlayer(String nickname) throws RemoteException {
 
     }
+
+    /**
+     * Notifies the clients the new game's state
+     *
+     * @param gameState
+     * @throws RemoteException
+     */
+    @Override
+    public void updateGameState(String gameState) throws RemoteException {
+        System.out.println(STR."GameState: \{gameState}");
+    }
 }

@@ -35,7 +35,7 @@ public class Chat {
      */
     public void addMessage(Message message){
         messages.add(message); //TODO chiamata di comunicazione con il client
-        ModelObservable.getInstance().notifyChat(message, );
+        ModelObservable.getInstance().notifyChat(message);
 
     }
 

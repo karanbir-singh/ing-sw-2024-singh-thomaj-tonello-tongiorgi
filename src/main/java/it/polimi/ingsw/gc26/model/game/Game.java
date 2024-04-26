@@ -262,6 +262,7 @@ public class Game {
         }
 
         // TODO Update view
+        ModelObservable.getInstance().notifyUpdateGameState(newGameState);
     }
 
     /**

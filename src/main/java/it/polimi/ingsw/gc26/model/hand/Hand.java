@@ -67,7 +67,8 @@ public class Hand  {
                 throw new RuntimeException(e);
             }
         } else {
-            // TODO notify view
+            // TODO notify
+            ModelObservable.getInstance().notifyError("Select a card first!", clientID);
         }
     }
 
@@ -82,7 +83,7 @@ public class Hand  {
     /**
      * Sets selected side to the opposite side if there is a selected card
      */
-    public void turnSide() {
+    public void turnSide(String clientID) {
         Optional<Card> selectedCard = Optional.ofNullable(this.selectedCard);
         if (selectedCard.isPresent()) {
             if (selectedCard.get().getFront().equals(selectedSide)) {
@@ -92,6 +93,7 @@ public class Hand  {
             }
         } else {
             // TODO lancia eccezione di carta non selezionata
+            ModelObservable.getInstance().notifyError("Select a card fisrt!", clientID);
         }
 
     }
@@ -113,6 +115,7 @@ public class Hand  {
     public void addCard(Card card) {
         cards.add(card);
         //TODO notify
+
     }
 
     /**
@@ -140,6 +143,7 @@ public class Hand  {
             return cards.get(cardIndex);
         }
         // TODO notify view
+        ModelObservable.getInstance().notifyError("Invalid position!", clientID);
         return null;
     }
 

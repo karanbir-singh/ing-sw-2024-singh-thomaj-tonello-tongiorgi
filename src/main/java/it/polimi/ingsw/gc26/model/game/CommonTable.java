@@ -1,5 +1,7 @@
 package it.polimi.ingsw.gc26.model.game;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 
@@ -72,7 +74,7 @@ public class CommonTable {
      * @param selectedX coordinate X of the selected card
      * @param selectedY coordinate Y of the selected card
      */
-    public void selectCard(int selectedX, int selectedY) {
+    public void selectCard(int selectedX, int selectedY, String clientID) {
         // Check if the selectedX and selectedY are correct
         if (selectedY >= 0 && selectedY < 2) {
             if (selectedX >= 0 && selectedX < 3) {
@@ -80,8 +82,10 @@ public class CommonTable {
                 this.selectedY = selectedY;
             } else {
                 // TODO gestire quando la posizione X non è corretta
+                ModelObservable.getInstance().notifyError("Position X not valid!", clientID);
             }
         } else {
+            ModelObservable.getInstance().notifyError("Position Y not valid!", clientID);
             // TODO gestire quando la posizione Y non è corretta
         }
     }
@@ -105,7 +109,7 @@ public class CommonTable {
      * @param deck  deck containing the card that replaces the old one
      * @return removed card
      */
-    private Card removeFromTable(ArrayList<Card> list, int index, Deck deck) {
+    private Card removeFromTable(ArrayList<Card> list, int index, Deck deck, String clientID) {
         Card toRemove = null;
         if (list.get(index) != null) {
             if (!deck.getCards().isEmpty())
@@ -114,6 +118,7 @@ public class CommonTable {
                 toRemove = list.set(index, null);
         } else {
             // TODO gestire quando la posizione selezionata non contiene una carta
+            ModelObservable.getInstance().notifyError("Position not valid!", clientID);
         }
         return toRemove;
     }
@@ -123,7 +128,7 @@ public class CommonTable {
      *
      * @return removed card
      */
-    public Card removeSelectedCard() {
+    public Card removeSelectedCard(String clientID) {
         if(getSelectedCard() != null){
             Card toRemove = null;
             if (selectedY == 0) {
@@ -134,7 +139,7 @@ public class CommonTable {
                         // TODO gestire quando il mazzo è finito
                     }
                 } else {
-                    toRemove = removeFromTable(resourceCards, selectedX, resourceDeck);
+                    toRemove = removeFromTable(resourceCards, selectedX, resourceDeck, clientID);
                 }
             } else if (selectedY == 1) {
                 if (selectedX == 2) {
@@ -144,12 +149,13 @@ public class CommonTable {
                         // TODO gestire quando il mazzo è finito
                     }
                 } else {
-                    toRemove = removeFromTable(goldCards, selectedX, goldDeck);
+                    toRemove = removeFromTable(goldCards, selectedX, goldDeck, clientID);
                 }
             }
             return toRemove;
         }else{
             // TODO notify view
+            ModelObservable.getInstance().notifyError("Select a position first!", clientID);
             return null;
         }
 

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.Side;
@@ -60,13 +62,14 @@ public class PersonalBoard {
      * secretMission setter
      * @param secretMission card that you want to set
      */
-    public Card setSecretMission(Optional<Card> secretMission) {
+    public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {
             this.secretMission = secretMission.get();
-            // TODO notify view
+            // TODO notify view;
             return this.secretMission;
         }
         // TODO notify view
+        ModelObservable.getInstance().notifyError("Secret mission not present!", clientID);
         return null;
     }
 
@@ -419,11 +422,12 @@ public class PersonalBoard {
      * permits to play the selected card and update all the resources and points
      * @param side side selected of the card chosen by the player
      */
-    public void playSide(Side side) {
+    public void playSide(Side side, String clientID) {
         // you need to check if the board has enough resources for the side.
         if (!checkIfEnoughResources(side)) {
             System.err.println("NOT ENOUGH RESOURCES");
             //TODO update show error
+            ModelObservable.getInstance().notifyError("Not enogh resources!", clientID);
             //update della view
             return;
         }
@@ -435,6 +439,7 @@ public class PersonalBoard {
         } catch (NullPointerException nullEx) {
             nullEx.printStackTrace();
             System.err.println("NOT SELECTED POSITION");
+            ModelObservable.getInstance().notifyError("Select a position first!", clientID );
             return;
         }
 

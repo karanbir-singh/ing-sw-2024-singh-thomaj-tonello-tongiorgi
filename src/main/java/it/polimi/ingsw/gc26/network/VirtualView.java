@@ -138,4 +138,11 @@ public interface VirtualView extends Remote {
      * @throws RemoteException
      */
     void updateFirstPlayer(String nickname) throws RemoteException;
+
+    /**
+     * Notifies the clients the new game's state
+     * @param gameState
+     * @throws RemoteException
+     */
+    void updateGameState(String gameState) throws RemoteException;
 }

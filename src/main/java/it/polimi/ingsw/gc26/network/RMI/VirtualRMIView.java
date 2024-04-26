@@ -48,7 +48,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateChosenPawn(String pawnColor, String clientID) throws RemoteException {
-
+        System.out.println(STR."\{clientID} chose \{pawnColor}\{pawnColor}");
     }
 
     /**
@@ -60,7 +60,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateSelectedMission(String cardIndex, String clientID) throws RemoteException {
-
+        System.out.println(STR."\{clientID} selected card index: \{cardIndex}");
     }
 
     /**
@@ -71,7 +71,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateSelectedCardFromHand( String clientID) throws RemoteException {
-        System.out.println(STR."Card updated to \{clientID}");
+        System.out.println(STR."Selected card updated to \{clientID}");
     }
 
     /**
@@ -83,7 +83,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateSelectedSide(String cardIndex, String clientID) throws RemoteException {
-
+        System.out.println(STR."\{clientID} selected card index: \{cardIndex}");
     }
 
     /**
@@ -97,7 +97,13 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateSelectedPositionOnBoard(String selectedX, String selectedY, String playerID, String success) throws RemoteException {
+        if (success.equals("true")) {
+            System.out.println(STR."\{playerID} selected x: \{selectedX} y: \{selectedY}");
 
+        } else {
+            System.out.println(STR."\{playerID} failed to selected x: \{selectedX} y: \{selectedY}");
+
+        }
     }
 
     /**
@@ -109,7 +115,13 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updatePlayedCardFromHand(String clientID, String success) throws RemoteException {
+        if (success.equals("true")) {
+            System.out.println(STR."\{clientID} played its selected card");
 
+        } else {
+            System.out.println(STR."\{clientID} failed to play its card");
+
+        }
     }
 
     /**
@@ -121,7 +133,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updatePoints(String clientID, String points) throws RemoteException {
-
+        System.out.println(STR."\{clientID} has \{points}points");
     }
 
     /**
@@ -133,7 +145,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateSelectedCardFromCommonTable(String clientID, String success) throws RemoteException {
-
+        System.out.println(STR."\{clientID} has selected a card from the common table");
     }
 
     /**
@@ -145,7 +157,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void showCard(String playerID, String cardSerialization) throws RemoteException {
-
+        System.out.println(STR."\{playerID} : \{cardSerialization}");
     }
 
     /**
@@ -156,7 +168,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void showChat(String message) throws RemoteException {
-
+        System.out.println(message);
     }
 
     /**
@@ -169,7 +181,9 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void showPersonalBoard(String clientID, String ownerNickname, String personalBoardSerialization) throws RemoteException {
-
+        System.out.println(STR."""
+            nickname's personal board \{nickName} :\s
+            \{personalBoardSerialization}""");
     }
 
     /**
@@ -180,7 +194,18 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateFirstPlayer(String nickname) throws RemoteException {
+        System.out.println(STR."First player is \{nickname}");
+    }
 
+    /**
+     * Notifies the clients the new game's state
+     *
+     * @param gameState
+     * @throws RemoteException
+     */
+    @Override
+    public void updateGameState(String gameState) throws RemoteException {
+        System.out.println(STR."New gameState: \{gameState}");
     }
 
 
@@ -205,7 +230,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void showError(String message, String clientID) throws RemoteException {
-
+        System.out.println(STR."Error: \{message}");
     }
 
     public void updateState(ClientState clientState) {

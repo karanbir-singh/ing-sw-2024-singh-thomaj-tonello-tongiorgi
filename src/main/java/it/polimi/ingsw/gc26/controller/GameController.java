@@ -170,7 +170,7 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Set pawn
-            player.setPawn(color, game.getAvailablePawns());
+            player.setPawn(color, game.getAvailablePawns(), playerID);
 
             if (isDebug) {
                 System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
@@ -319,7 +319,7 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Set the secret mission on the personal board of the players
-            Card secretMission = player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard());
+            Card secretMission = player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard(), playerID);
 
             if (secretMission != null) {
                 // Remove the card from the secondary hand
@@ -417,7 +417,7 @@ public class GameController {
             System.out.println(STR."\{player.getNickname()} turn selected card side");
         }
         // Turn selected card side
-        player.getHand().turnSide();
+        player.getHand().turnSide(playerID);
     }
 
     /**
@@ -464,7 +464,7 @@ public class GameController {
                     player.createPersonalBoard();
 
                     // Place starter card
-                    player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get());
+                    player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get(), playerID);
 
                     // Remove the starter card from the hand
                     player.getHand().removeCard(player.getHand().getSelectedCard().get());
@@ -498,7 +498,7 @@ public class GameController {
                     // Check if there is a selected card on the hand
                     if (hand.getSelectedCard().isPresent()) {
                         // Place the selected card side on the personal board
-                        personalBoard.playSide(hand.getSelectedSide().get());
+                        personalBoard.playSide(hand.getSelectedSide().get(), playerID);
 
                         // Remove card from the hand
                         hand.removeCard(hand.getSelectedCard().get());
@@ -534,7 +534,7 @@ public class GameController {
                     System.out.println(STR."[\{cardX}, \{cardY}] card selected from common table");
                 }
                 // Set the selected card on the common table
-                game.getCommonTable().selectCard(cardX, cardY);
+                game.getCommonTable().selectCard(cardX, cardY, playerID);
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
@@ -558,7 +558,7 @@ public class GameController {
                 Hand hand = player.getHand();
 
                 // Get removed card
-                Card removedCard = commonTable.removeSelectedCard();
+                Card removedCard = commonTable.removeSelectedCard(playerID);
 
                 if (removedCard != null) {
                     // Add card in player's hand
