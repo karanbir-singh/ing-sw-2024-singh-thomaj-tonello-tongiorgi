@@ -9,7 +9,7 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
-import it.polimi.ingsw.gc26.request.Request;
+import it.polimi.ingsw.gc26.request.game_request.GameRequest;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public class GameController {
     /**
      * This attribute represents the list of requests sent from clients
      */
-    private Queue<Request> requests;
+    private Queue<GameRequest> gameRequests;
 
     /**
      * Initializes the game (provided by the main controller)
@@ -40,15 +40,11 @@ public class GameController {
         this.isDebug = java.lang.management.ManagementFactory.
                 getRuntimeMXBean().
                 getInputArguments().toString().indexOf("jdwp") >= 0;
-
         this.game = game;
         this.game.setState(GameState.COMMON_TABLE_PREPARATION);
-
         this.playersToWait = new ArrayList<>();
-
-        this.requests = new ArrayDeque<>();
+        this.gameRequests = new ArrayDeque<>();
         this.launchExecutor();
-        ;
     }
 
     /**
@@ -57,16 +53,15 @@ public class GameController {
     private void launchExecutor() {
         new Thread(() -> {
             while (true) {
-                synchronized (requests) {
-                    while (requests.isEmpty()) {
+                synchronized (gameRequests) {
+                    while (gameRequests.isEmpty()) {
                         try {
-                            requests.wait();
+                            gameRequests.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                    requests.remove().execute(this);
-                    System.out.println("Request executed");
+                    gameRequests.remove().execute(this);
                 }
             }
         }).start();
@@ -75,12 +70,12 @@ public class GameController {
     /**
      * Add a new request to the queue
      *
-     * @param request client's request
+     * @param gameRequest client's request
      */
-    public void addRequest(Request request) {
-        synchronized (this.requests) {
-            requests.add(request);
-            requests.notifyAll();
+    public void addRequest(GameRequest gameRequest) {
+        synchronized (this.gameRequests) {
+            gameRequests.add(gameRequest);
+            gameRequests.notifyAll();
         }
     }
 

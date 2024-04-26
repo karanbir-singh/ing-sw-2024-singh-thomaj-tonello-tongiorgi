@@ -2,11 +2,10 @@ package it.polimi.ingsw.gc26.network.RMI;
 
 import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
-import it.polimi.ingsw.gc26.request.*;
+import it.polimi.ingsw.gc26.request.game_request.*;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Stack;
 
 public class VirtualRMIGameController implements VirtualGameController {
 
