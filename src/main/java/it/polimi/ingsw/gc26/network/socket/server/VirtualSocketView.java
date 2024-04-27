@@ -115,7 +115,7 @@ public class VirtualSocketView implements VirtualView {
     }
 
     @Override
-    public void updateSelectedMission(String cardIndex, String clientID) throws RemoteException {
+    public void updateSelectedMission(String clientID) throws RemoteException {
 
     }
 

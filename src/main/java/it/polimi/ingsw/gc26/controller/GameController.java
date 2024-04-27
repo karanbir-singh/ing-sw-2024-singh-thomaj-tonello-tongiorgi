@@ -142,7 +142,7 @@ public class GameController {
                 player.createHand();
 
                 // Place starter card to the player's hand
-                player.getHand().addCard(starterCard);
+                player.getHand().addCard(starterCard, player.getID());
 
                 // Make it permanently selected
                 player.getHand().setSelectedCard(starterCard, player.getID());
@@ -189,6 +189,7 @@ public class GameController {
             }
         } else {
             // TODO gestire ome cambiare il model quando lo stato e' errato
+            game.errorState(playerID);
         }
     }
 
@@ -204,11 +205,11 @@ public class GameController {
             // Give hand cards to each player
             for (Player player : game.getPlayers()) {
                 // Add 2 Resources Card to the hand
-                player.getHand().addCard(commonTable.getResourceDeck().removeCard());
-                player.getHand().addCard(commonTable.getResourceDeck().removeCard());
+                player.getHand().addCard(commonTable.getResourceDeck().removeCard(), player.getID());
+                player.getHand().addCard(commonTable.getResourceDeck().removeCard(), player.getID());
 
                 // Add 1 Gold Card to the hand
-                player.getHand().addCard(commonTable.getGoldDeck().removeCard());
+                player.getHand().addCard(commonTable.getGoldDeck().removeCard(), player.getID());
             }
 
             // Change game state
@@ -268,8 +269,8 @@ public class GameController {
                 player.createSecretMissionHand();
 
                 // Place starter card to the player's secondary hand
-                player.getSecretMissionHand().addCard(firstSecretMission);
-                player.getSecretMissionHand().addCard(secondSecretMission);
+                player.getSecretMissionHand().addCard(firstSecretMission, player.getID());
+                player.getSecretMissionHand().addCard(secondSecretMission, player.getID());
             }
 
             // Add all players to list
@@ -305,6 +306,7 @@ public class GameController {
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -345,6 +347,7 @@ public class GameController {
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -373,6 +376,7 @@ public class GameController {
             game.setState(GameState.GAME_STARTED);
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -402,6 +406,7 @@ public class GameController {
 
         } else {
             // TODO gestire cosa modificare nel model se lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -439,9 +444,10 @@ public class GameController {
             PersonalBoard personalBoard = player.getPersonalBoard();
 
             // Set the selected position
-            personalBoard.setPosition(selectedX, selectedY);
+            personalBoard.setPosition(selectedX, selectedY, playerID);
         } else {
             // TODO gestisci cosa modificare del model se lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -510,9 +516,11 @@ public class GameController {
                     }
                 } else {
                     // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
+                    game.errorState(playerID);
                 }
             } else {
                 // TODO gestisci come cambiare il model quando lo stato è errato
+                game.errorState(playerID);
             }
         }
     }
@@ -538,6 +546,7 @@ public class GameController {
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -562,7 +571,7 @@ public class GameController {
 
                 if (removedCard != null) {
                     // Add card in player's hand
-                    hand.addCard(removedCard);
+                    hand.addCard(removedCard, playerID);
                     if (isDebug) {
                         System.out.println(STR."\{player.getNickname()} drew selected card");
                     }
@@ -583,8 +592,10 @@ public class GameController {
                     this.changeTurn();
                 }
             }
+            game.errorState(playerID);
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
     }
 

@@ -8,6 +8,7 @@ import it.polimi.ingsw.gc26.Parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -174,6 +175,12 @@ public class Game {
             // Then increase the round
             this.increaseRound();
         }
+
+        try {
+            ModelObservable.getInstance().notifyMessage("It's you turn now",this.currentPlayer.getID());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -304,5 +311,9 @@ public class Game {
     // THIS IS FOR TESTING
     public ArrayList<Player> getWinners() {
         return winners;
+    }
+
+    public void errorState(String clientID){
+        ModelObservable.getInstance().notifyError("YOU CANNOT DO THAT NOW",clientID);
     }
 }

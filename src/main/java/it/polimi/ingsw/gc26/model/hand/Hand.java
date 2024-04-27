@@ -91,9 +91,14 @@ public class Hand  {
             } else {
                 this.selectedSide = selectedCard.get().getFront();
             }
+            try {
+                ModelObservable.getInstance().notifyMessage("You have turned a card", clientID);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             // TODO lancia eccezione di carta non selezionata
-            ModelObservable.getInstance().notifyError("Select a card fisrt!", clientID);
+            ModelObservable.getInstance().notifyError("Select a card first!", clientID);
         }
 
     }
@@ -112,9 +117,13 @@ public class Hand  {
      * Adds the card given as a parameter in the hand
      * @param card new card in hand
      */
-    public void addCard(Card card) {
+    public void addCard(Card card, String clientID) {
         cards.add(card);
-        //TODO notify
+        try {
+            this.modelObservable.notifyMessage("Added a card to the hand", clientID);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

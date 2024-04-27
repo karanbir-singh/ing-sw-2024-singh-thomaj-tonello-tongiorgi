@@ -107,10 +107,10 @@ public class ModelObservable {
         }
     }
 
-    public void notifyUpdateSelectedMission(String cardIndex, String clientID) {
+    public void notifyUpdateSelectedMission(String clientID) {
         for (VirtualView client : this.clients) {
             try {
-                client.updateSelectedMission(cardIndex, clientID);
+                client.updateSelectedMission(clientID);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -127,50 +127,50 @@ public class ModelObservable {
         }
     }
 
-    public void notifyUpdateSelectedSide(String cardIndex, String clientID) {
+    public void notifyUpdateSelectedSide(int cardIndex, String clientID) {
         for (VirtualView client : this.clients) {
             try {
-                client.updateSelectedSide(cardIndex, clientID);
+                client.updateSelectedSide(String.valueOf(cardIndex), clientID);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public void notifyUpdateSelectedPositionOnBoard(String selectedX, String selectedY, String playerID, String success) {
+    public void notifyUpdateSelectedPositionOnBoard(int selectedX, int selectedY, String playerID, int success) {
         for (VirtualView client : this.clients) {
             try {
-                client.updateSelectedPositionOnBoard(selectedX, selectedY, playerID, success);
+                client.updateSelectedPositionOnBoard(String.valueOf(selectedX),String.valueOf(selectedY) , playerID, String.valueOf(success));
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public void notifyUpdatePlayedCardFromHand(String clientID, String success) {
+    public void notifyUpdatePlayedCardFromHand(String clientID, int success) {
         for (VirtualView client : this.clients) {
             try {
-                client.updatePlayedCardFromHand(clientID, success);
+                client.updatePlayedCardFromHand(clientID, String.valueOf(success));
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public void notifyUpdatePoints(String clientID, String points) {
+    public void notifyUpdatePoints(String clientID, int points) {
         for (VirtualView client : this.clients) {
             try {
-                client.updatePoints(clientID, points);
+                client.updatePoints(clientID, String.valueOf(points));
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public void notifyUpdateSelectedCardFromCommonTable(String clientID, String success) {
+    public void notifyUpdateSelectedCardFromCommonTable(String clientID, int success) {
         for (VirtualView client : this.clients) {
             try {
-                client.updateSelectedCardFromCommonTable(clientID, success);
+                client.updateSelectedCardFromCommonTable(clientID, String.valueOf(success));
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
