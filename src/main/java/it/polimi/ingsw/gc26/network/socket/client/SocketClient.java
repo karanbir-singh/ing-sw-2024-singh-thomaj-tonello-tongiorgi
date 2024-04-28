@@ -90,7 +90,7 @@ public class SocketClient {
         System.out.println("Connected to the server successfully!");
         System.out.println("Insert your nickname: ");
         this.nickname = scan.nextLine();
-        this.virtualMainController.connect((VirtualView) this.serverHandler, this.nickname);
+        this.virtualMainController.connect(this.serverHandler, this.nickname);
 
         // wait for the server to update the client's ID
         synchronized (this) {
@@ -107,7 +107,7 @@ public class SocketClient {
             while(clientState == ClientState.INVALID_NICKNAME || clientState == ClientState.CONNECTION) {
                 System.out.println("Nickname not available \nInsert new nickname: ");
                 this.nickname = scan.nextLine();
-                this.virtualMainController.connect((VirtualView) this.serverHandler, this.nickname);
+                this.virtualMainController.connect( this.serverHandler, this.nickname);
                 try {
                     this.lock.wait();
                 } catch (InterruptedException e) {
@@ -139,10 +139,12 @@ public class SocketClient {
 
         synchronized (this) {
             this.virtualMainController.getVirtualGameController();
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            while(this.virtualGameController == null) {
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
@@ -187,6 +189,14 @@ public class SocketClient {
         synchronized (this.clientState) {
             this.clientState = clientState;
         }
+    }
+
+    public String getClientID() {
+        return this.clientID;
+    }
+
+    public String getNickname() {
+        return this.nickname;
     }
 }
 

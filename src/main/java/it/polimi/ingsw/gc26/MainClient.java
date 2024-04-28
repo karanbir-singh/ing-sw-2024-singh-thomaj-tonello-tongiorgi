@@ -154,7 +154,7 @@ public class MainClient {
                     virtualGameController.setSecretMission(clientID);
                     break;
                 case "/10":
-                    virtualGameController.printPersonalBoard("", clientID); // TODO get nickname as parameter
+                    virtualGameController.printPersonalBoard("gabi", clientID); // TODO get nickname as parameter
             }
 
             if (chat) {

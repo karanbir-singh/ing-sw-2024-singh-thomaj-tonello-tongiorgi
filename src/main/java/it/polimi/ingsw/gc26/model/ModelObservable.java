@@ -38,7 +38,7 @@ public class ModelObservable {
     public void notifyChat(Message msg) {
         for (VirtualView client : this.clients) {
             try {
-                client.showChat(msg.toString());
+                client.showChat(msg.toJson());
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }

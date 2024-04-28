@@ -15,7 +15,7 @@ import java.rmi.RemoteException;
 /**
  * This class represents the handler to decode json from the server.
  */
-public class SocketServerHandler implements Runnable {
+public class SocketServerHandler implements VirtualView, Runnable {
     /**
      * This attribute represent the socket client where the nickname and clientID are stored
      */
@@ -47,25 +47,62 @@ public class SocketServerHandler implements Runnable {
             while ((line = inputFromServer.readLine()) != null) {
                 ObjectMapper JsonMapper = new ObjectMapper();
                 JsonNode msg = JsonMapper.readTree(line);
-
+                ObjectMapper valueMapper = new ObjectMapper();
+                JsonNode value = valueMapper.readTree(msg.get("value").asText());
                 switch (msg.get("function").asText()) {
                     case "setClientID":
-                        this.setClientID(msg.get("value").asText());
+                        this.setClientID(value.get("clientID").asText());
                         break;
                     case "setGameController":
                         this.setGameController();
                         break;
                     case "updateState":
-                        this.updateState(ClientState.valueOf(msg.get("value").asText()));
+                        this.updateState(ClientState.valueOf(value.get("clientState").asText()));
                         break;
-                    case "notifyMessage":
-                        this.notifyMessage(msg.get("value").asText());
+                    case "showMessage":
+                        this.showMessage(value.get("message").asText(), value.get("clientID").asText());
                         break;
-                    case "reportMessage":
-                        this.reportMessage(msg.get("value").asText());
+                    case "showError":
+                        this.showError(value.get("errorMessage").asText(), value.get("clientID").asText());
                         break;
-                    case "reportError":
-                        this.reportError(msg.get("value").asText());
+                    case "showChat":
+                        this.showChat(value.get("message").asText());
+                        break;
+                    case "updateChosenPawn":
+                        this.updateChosenPawn(value.get("pawnColor").asText(), value.get("clientID").asText());
+                        break;
+                    case "updateSelectedMission":
+                        this.updateSelectedMission(value.get("cardIndex").asText(), value.get("clientID").asText());
+                        break;
+                    case "updateSelectedCardFromHand":
+                        this.updateSelectedCardFromHand(value.get("clientID").asText());
+                        break;
+                    case "updateSelectedSide":
+                        this.updateSelectedSide(value.get("cardIndex").asText(), value.get("clientID").asText());
+                        break;
+                    case "updateSelectedPositionOnBoard":
+                        this.updateSelectedPositionOnBoard(value.get("selectedX").asText(), value.get("selectedY").asText(), value.get("clientID").asText(), value.get("success").asText());
+                        break;
+                    case "updatePlayedCardFromHand":
+                        this.updatePlayedCardFromHand(value.get("clientID").asText(), value.get("success").asText());
+                        break;
+                    case "updatePoints":
+                        this.updatePoints(value.get("clientID").asText(), value.get("points").asText());
+                        break;
+                    case "updateSelectedCardFromCommonTable":
+                        this.updateSelectedCardFromCommonTable(value.get("clientID").asText(), value.get("success").asText());
+                        break;
+                    case "showCard":
+                        this.showCard(value.get("clientID").asText(), value.get("cardSerialization").asText());
+                        break;
+                    case "showPersonalBoard":
+                        this.showPersonalBoard(value.get("clientID").asText(), value.get("ownerNickname").asText(), value.get("personalBoardSerialization").asText());
+                        break;
+                    case "updateFirstPlayer":
+                        this.updateFirstPlayer(value.get("nickname").asText());
+                        break;
+                    case "updateGameState":
+                        this.updateGameState(value.get("gameState").asText());
                         break;
                     case null, default:
                         break;
@@ -82,7 +119,7 @@ public class SocketServerHandler implements Runnable {
      * @param line json encoded message
      */
 
-    public void notifyMessage(String line) {
+    public void showChat(String line) {
         JsonNode message = null;
         try {
             ObjectMapper JsonMapper = new ObjectMapper();
@@ -90,8 +127,9 @@ public class SocketServerHandler implements Runnable {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
-        System.out.println(STR."[\{message.get("sender").asText()}]: \{message.get("text").asText()}");
+        if(message.get("receiver").asText().equals(this.socketClient.getClientID()) || message.get("receiver").asText().equals("")) {
+            System.out.println(STR."[\{message.get("sender").asText()}]: \{message.get("text").asText()}");
+        }
     }
 
     /**
@@ -100,8 +138,10 @@ public class SocketServerHandler implements Runnable {
      * @param message
      */
 
-    public void reportMessage(String message) {
-        System.out.println(STR."[SERVER]: \{message}");
+    public void showMessage(String message, String clientID) {
+        if (this.socketClient.getClientID().equals(clientID)) {
+            System.out.println(STR."[SERVER]: \{message}");
+        }
     }
 
     /**
@@ -109,8 +149,10 @@ public class SocketServerHandler implements Runnable {
      *
      * @param errorMessage
      */
-    public void reportError(String errorMessage) {
-        System.out.println(STR."[ERROR]: \{errorMessage}");
+    public void showError(String errorMessage, String clientID) {
+        if (this.socketClient.getClientID().equals(clientID)) {
+            System.out.println(STR."[ERROR]: \{errorMessage}");
+        }
     }
 
     /**
@@ -143,4 +185,80 @@ public class SocketServerHandler implements Runnable {
         }
 
     }
+
+    public void updateChosenPawn(String pawnColor, String clientID) {
+        System.out.println(STR."\{clientID} chose  pawn color: \{pawnColor}");
+    }
+
+    public void updateSelectedMission(String cardIndex, String clientID) {
+        if (this.socketClient.getClientID().equals(clientID)) {
+            System.out.println(STR."Selected mission: \{cardIndex}");
+        }
+    }
+
+    public void updateSelectedCardFromHand(String clientID) {
+        if (this.socketClient.getClientID() == null || this.socketClient.getClientID().equals(clientID)) {
+            System.out.println("Card selected from hand!");
+        }
+    }
+
+    public void updateSelectedSide(String cardIndex, String clientID) {
+        if (this.socketClient.getClientID().equals(clientID)) {
+            System.out.println(STR."Updated selected side, card index: \{cardIndex}");
+        }
+    }
+
+    public void updateSelectedPositionOnBoard(String selectedX, String selectedY, String clientID, String success) {
+        if (this.socketClient.getClientID().equals(clientID)) {
+            if (success.equals("true")) {
+                System.out.println(STR."Position [\{selectedX}, \{selectedY}] selected on board");
+            } else {
+                System.out.println("Position not selected on board!");
+            }
+        }
+    }
+
+    public void updatePlayedCardFromHand(String clientID, String success) {
+        if (this.socketClient.getClientID().equals(clientID)) {
+            if (success.equals("true")) {
+                System.out.println("Card played successfully!");
+            } else {
+                System.out.println("Card not played!");
+            }
+        }
+    }
+
+    public void updatePoints(String clientID, String points) {
+        System.out.println(STR."\{clientID} reached \{points} points");
+    }
+
+    public void updateSelectedCardFromCommonTable(String clientID, String success) {
+        if (success.equals("true")) {
+            System.out.println(STR."\{clientID} picked a card from the common table!");
+        } else {
+            System.out.println(STR."\{clientID} failed at picking a card from common table!");
+        }
+    }
+
+    public void showCard(String clientID, String cardSerialization) {
+        if (this.socketClient.getClientID().equals(clientID)) {
+            System.out.println(cardSerialization);
+        }
+    }
+
+    public void showPersonalBoard(String clientID, String ownerNickname, String personalBoardSerialization) {
+        if (this.socketClient.getClientID().equals(clientID)) {
+            System.out.println(STR."\{ownerNickname}'s personal board:");
+            System.out.println(personalBoardSerialization);
+        }
+    }
+
+    public void updateFirstPlayer(String nickname) {
+        System.out.println(STR."First player: \{nickname}");
+    }
+
+    public void updateGameState(String gameState) {
+        System.out.println(STR."Game state: \{gameState}");
+    }
+
 }
