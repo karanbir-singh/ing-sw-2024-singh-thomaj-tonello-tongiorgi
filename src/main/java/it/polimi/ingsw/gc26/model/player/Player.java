@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.model.player;
 
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
+import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.util.ArrayList;
 
@@ -204,5 +205,27 @@ public class Player {
      */
     public PersonalBoard getPersonalBoard() {
         return personalBoard;
+    }
+
+    public String printableScore(){
+        int score = this.personalBoard.getScore();
+        int i;
+        StringBuilder s = new StringBuilder();
+        String background = "▒";
+        String fill = "█";
+
+        s.append(pawnColor.getFontColor());
+
+        for (i=0; i<score; i++){
+            s.append(fill);
+        }
+        while (i<20){
+            s.append(background);
+            i++;
+        }
+
+        s.append(TextStyle.STYLE_RESET.getStyleCode()).append(" ").append(score);
+
+        return s.toString();
     }
 }
