@@ -504,8 +504,10 @@ public class GameController {
                     // Check if there is a selected card on the hand
                     if (hand.getSelectedCard().isPresent()) {
                         // Place the selected card side on the personal board
-                        personalBoard.playSide(hand.getSelectedSide().get(), playerID);
-                        // TODO gestire se playSide non va a buon fine
+                        if (!personalBoard.playSide(hand.getSelectedSide().get(), playerID)) {
+                            game.errorState(playerID); //TODO create another notify
+                            return;
+                        }
 
                         // Remove card from the hand
                         hand.removeCard(hand.getSelectedCard().get());

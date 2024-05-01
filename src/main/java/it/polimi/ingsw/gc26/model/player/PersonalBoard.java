@@ -423,13 +423,13 @@ public class PersonalBoard {
      * permits to play the selected card and update all the resources and points
      * @param side side selected of the card chosen by the player
      */
-    public void playSide(Side side, String clientID) {
+    public boolean playSide(Side side, String clientID) {
         // you need to check if the board has enough resources for the side.
         if (!checkIfEnoughResources(side)) {
             //TODO update show error
             ModelObservable.getInstance().notifyError("Not enough resources!", clientID);
             //update della view
-            return;
+            return false;
         }
 
         Point playingPoint;
@@ -439,7 +439,7 @@ public class PersonalBoard {
         } catch (NullPointerException nullEx) {
             //nullEx.printStackTrace();
             ModelObservable.getInstance().notifyError("Select a position first!", clientID);
-            return;
+            return false;
         }
 
 
@@ -476,6 +476,7 @@ public class PersonalBoard {
         this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
 
         ModelObservable.getInstance().notifyUpdatePlayedCardFromHand(clientID,1);
+        return true;
     }
 
 }
