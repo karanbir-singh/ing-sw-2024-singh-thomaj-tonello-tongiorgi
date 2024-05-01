@@ -29,7 +29,7 @@ public class MainController {
     /**
      * This attribute represents a priority queue of main requests
      */
-    private PriorityQueue<MainRequest> mainRequests;
+    private final PriorityQueue<MainRequest> mainRequests;
 
     /**
      * This attribute represents a game that is being created
@@ -108,29 +108,19 @@ public class MainController {
     }
 
     public void connect(VirtualView client, String nickname) {
-        // Check if a game is already on creation
-        if (gameOnCreation) {
-            // Then the need to resend a new request of connection
+        // Check if there is not a game waiting for players
+        if (!this.existsWaitingGame()) {
+            // Set new game on creation
+            gameOnCreation = true;
+            this.mainRequests.notifyAll();
             try {
-                client.updateState(ClientState.GAME_ON_CREATION);
+                client.updateState(ClientState.CREATOR);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         } else {
-            // Check if there is not a game waiting for players
-            if (!this.existsWaitingGame()) {
-                // Set new game on creation
-                gameOnCreation = true;
-                this.mainRequests.notifyAll();
-                try {
-                    client.updateState(ClientState.CREATOR);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                // Otherwise client joins into a game on creation
-                this.joinWaitingList(client, nickname);
-            }
+            // Otherwise client joins into a game on creation
+            this.joinWaitingList(client, nickname);
         }
     }
 

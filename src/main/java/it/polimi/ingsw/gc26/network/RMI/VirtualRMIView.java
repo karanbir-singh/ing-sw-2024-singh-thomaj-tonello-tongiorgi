@@ -88,21 +88,6 @@ public class VirtualRMIView implements VirtualView {
             }
         }
 
-        // TODO sistema a reconnect
-        while (clientState == ClientState.GAME_ON_CREATION) {
-            this.virtualMainController.connect(this, this.nickname);
-
-            synchronized (this.lock) {
-                while (this.clientState == ClientState.GAME_ON_CREATION) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
         if (this.clientState == ClientState.CREATOR) {
             System.out.print("THERE ARE NO GAME FREE, YOU MUST CREATE A NEW GAME:\nNumber of players (2/3/4): ");
             String decision = scanner.nextLine();
@@ -135,14 +120,13 @@ public class VirtualRMIView implements VirtualView {
             }
         } else if (clientState.equals(ClientState.INVALID_NICKNAME)) {
             while (clientState == ClientState.INVALID_NICKNAME) {
-                System.out.print("NICKNAME GIA' PRESO\nNickname:");
+                System.out.print("NICKNAME GIA' PRESO\nNickname: ");
                 this.nickname = scanner.nextLine();
-                clientState = ClientState.INVALID_NICKNAME;
 
                 this.virtualMainController.connect(this, this.nickname);
 
                 synchronized (this.lock) {
-                    while (this.clientState == ClientState.INVALID_NICKNAME) {
+                    while (this.clientState == ClientState.CONNECTION) {
                         try {
                             lock.wait();
                         } catch (InterruptedException e) {

@@ -22,9 +22,10 @@ public class VirtualRMIMainController implements VirtualMainController {
     @Override
     public void connect(VirtualView client, String nickname) throws RemoteException {
         System.out.println("New client from RMI!");
-        if (client.getState() == ClientState.CONNECTION || client.getState() == ClientState.GAME_ON_CREATION)
+        if (client.getState() == ClientState.CONNECTION)
             this.mainController.addRequest(new ConnectionRequest(client, nickname, 0));
         else if (client.getState().equals(ClientState.INVALID_NICKNAME)) {
+            client.updateState(ClientState.CONNECTION);
             this.mainController.addRequest(new ConnectionRequest(client, nickname, 2));
         }
     }
