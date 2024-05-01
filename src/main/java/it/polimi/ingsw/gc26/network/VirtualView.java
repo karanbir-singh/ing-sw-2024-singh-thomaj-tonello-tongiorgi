@@ -144,4 +144,6 @@ public interface VirtualView extends Remote {
      * @throws RemoteException
      */
     void updateGameState(String gameState) throws RemoteException;
+
+    String getClientID() throws RemoteException;
 }

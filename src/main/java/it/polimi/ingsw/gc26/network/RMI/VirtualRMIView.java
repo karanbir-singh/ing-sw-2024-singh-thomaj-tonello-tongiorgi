@@ -30,7 +30,10 @@ public class VirtualRMIView  implements VirtualView {
 
     @Override
     public void setClientID(String clientID) throws RemoteException {
-        this.clientID = clientID;
+        synchronized (this) {
+            this.clientID = clientID;
+            this.notifyAll();
+        }
     }
 
     @Override
@@ -70,9 +73,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateSelectedCardFromHand(String clientID) throws RemoteException {
-        if(this.clientID.equals(clientID)){
-            System.out.println("You have selected a card from the hand");
-        }
+        System.out.println("You have selected a card from the hand");
 
     }
 
@@ -180,7 +181,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void showChat(String message) throws RemoteException {
-        System.out.println(message);
+        System.out.println("message: " + message);
     }
 
     /**
@@ -220,6 +221,25 @@ public class VirtualRMIView  implements VirtualView {
         System.out.println(STR."New gameState: \{gameState}");
     }
 
+    /**
+     * @return
+     * @throws RemoteException
+     */
+    @Override
+    public String getClientID() throws RemoteException {
+        synchronized (this) {
+            while(this.clientID == null){
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return this.clientID;
+
+        }
+    }
+
 
     /**
      * Print messages from the server to the client.
@@ -230,11 +250,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void showMessage(String message, String clientID) throws RemoteException {
-        System.out.println(clientID);
-        System.out.println(this.clientID);
-        if(this.clientID.equals(clientID)){
-            System.out.println(STR."[SERVER -> \{clientID}] \{message}");
-        }
+        System.out.println(STR."[SERVER] \{message}");
     }
 
     /**
@@ -246,9 +262,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void showError(String message, String clientID) throws RemoteException {
-        if(this.clientID.equals(clientID)){
-            System.out.println(STR."Error: \{message}");
-        }
+        System.out.println(STR."Error: \{message}");
     }
 
     public void updateState(ClientState clientState) {

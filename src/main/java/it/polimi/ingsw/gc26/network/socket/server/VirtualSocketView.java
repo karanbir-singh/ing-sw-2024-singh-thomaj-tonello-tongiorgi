@@ -125,10 +125,15 @@ public class VirtualSocketView implements VirtualView {
         sendToClient("updateChosenPawn", msg);
     }
 
+    /**
+     * To notify the current player the successful selection of its mission
+     *
+     * @param clientID
+     * @throws RemoteException
+     */
     @Override
-    public void updateSelectedMission(String cardIndex, String clientID) throws RemoteException {
+    public void updateSelectedMission(String clientID) throws RemoteException {
         HashMap<String, String> msg = new HashMap<>();
-        msg.put("cardIndex", cardIndex);
         msg.put("clientID", clientID);
         sendToClient("updateSelectedMission", msg);
     }
@@ -224,5 +229,15 @@ public class VirtualSocketView implements VirtualView {
         HashMap<String, String> msg = new HashMap<>();
         msg.put("gameState", gameState);
         sendToClient("updateGameState", msg);
+    }
+
+    /**
+     * @return
+     * @throws RemoteException
+     */
+    @Override
+    public String getClientID() throws RemoteException {
+        sendToClient("getClientID", null);
+        return null;
     }
 }

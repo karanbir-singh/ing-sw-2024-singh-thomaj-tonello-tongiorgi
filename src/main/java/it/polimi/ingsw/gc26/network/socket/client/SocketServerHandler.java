@@ -72,7 +72,7 @@ public class SocketServerHandler implements VirtualView, Runnable {
                         this.updateChosenPawn(value.get("pawnColor").asText(), value.get("clientID").asText());
                         break;
                     case "updateSelectedMission":
-                        this.updateSelectedMission(value.get("cardIndex").asText(), value.get("clientID").asText());
+                        this.updateSelectedMission(value.get("clientID").asText());
                         break;
                     case "updateSelectedCardFromHand":
                         this.updateSelectedCardFromHand(value.get("clientID").asText());
@@ -139,9 +139,7 @@ public class SocketServerHandler implements VirtualView, Runnable {
      */
 
     public void showMessage(String message, String clientID) {
-        if (this.socketClient.getClientID().equals(clientID)) {
-            System.out.println(STR."[SERVER]: \{message}");
-        }
+        System.out.println(STR."[SERVER]: \{message}");
     }
 
     /**
@@ -190,10 +188,8 @@ public class SocketServerHandler implements VirtualView, Runnable {
         System.out.println(STR."\{clientID} chose  pawn color: \{pawnColor}");
     }
 
-    public void updateSelectedMission(String cardIndex, String clientID) {
-        if (this.socketClient.getClientID().equals(clientID)) {
-            System.out.println(STR."Selected mission: \{cardIndex}");
-        }
+    public void updateSelectedMission(String clientID) {
+        System.out.println(STR."Selected mission successfully!");
     }
 
     public void updateSelectedCardFromHand(String clientID) {
@@ -203,28 +199,22 @@ public class SocketServerHandler implements VirtualView, Runnable {
     }
 
     public void updateSelectedSide(String cardIndex, String clientID) {
-        if (this.socketClient.getClientID().equals(clientID)) {
-            System.out.println(STR."Updated selected side, card index: \{cardIndex}");
-        }
+        System.out.println(STR."Updated selected side, card index: \{cardIndex}");
     }
 
     public void updateSelectedPositionOnBoard(String selectedX, String selectedY, String clientID, String success) {
-        if (this.socketClient.getClientID().equals(clientID)) {
-            if (success.equals("true")) {
-                System.out.println(STR."Position [\{selectedX}, \{selectedY}] selected on board");
-            } else {
-                System.out.println("Position not selected on board!");
-            }
+        if (success.equals("1")) {
+            System.out.println(STR."Position [\{selectedX}, \{selectedY}] selected on board");
+        } else {
+            System.out.println("Position not selected on board!");
         }
     }
 
     public void updatePlayedCardFromHand(String clientID, String success) {
-        if (this.socketClient.getClientID().equals(clientID)) {
-            if (success.equals("true")) {
-                System.out.println("Card played successfully!");
-            } else {
-                System.out.println("Card not played!");
-            }
+        if (success.equals("1")) {
+            System.out.println("Card played successfully!");
+        } else {
+            System.out.println("Card not played!");
         }
     }
 
@@ -233,7 +223,7 @@ public class SocketServerHandler implements VirtualView, Runnable {
     }
 
     public void updateSelectedCardFromCommonTable(String clientID, String success) {
-        if (success.equals("true")) {
+        if (success.equals("1")) {
             System.out.println(STR."\{clientID} picked a card from the common table!");
         } else {
             System.out.println(STR."\{clientID} failed at picking a card from common table!");
@@ -241,16 +231,13 @@ public class SocketServerHandler implements VirtualView, Runnable {
     }
 
     public void showCard(String clientID, String cardSerialization) {
-        if (this.socketClient.getClientID().equals(clientID)) {
-            System.out.println(cardSerialization);
-        }
+        System.out.println("Card: " + cardSerialization);
+
     }
 
     public void showPersonalBoard(String clientID, String ownerNickname, String personalBoardSerialization) {
-        if (this.socketClient.getClientID().equals(clientID)) {
-            System.out.println(STR."\{ownerNickname}'s personal board:");
-            System.out.println(personalBoardSerialization);
-        }
+        System.out.println(STR."\{ownerNickname}'s personal board:");
+        System.out.println(personalBoardSerialization);
     }
 
     public void updateFirstPlayer(String nickname) {
@@ -259,6 +246,15 @@ public class SocketServerHandler implements VirtualView, Runnable {
 
     public void updateGameState(String gameState) {
         System.out.println(STR."Game state: \{gameState}");
+    }
+
+    /**
+     * @return
+     * @throws RemoteException
+     */
+    @Override
+    public String getClientID() throws RemoteException {
+        return this.socketClient.getClientID();
     }
 
 }

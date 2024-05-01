@@ -505,6 +505,7 @@ public class GameController {
                     if (hand.getSelectedCard().isPresent()) {
                         // Place the selected card side on the personal board
                         personalBoard.playSide(hand.getSelectedSide().get(), playerID);
+                        // TODO gestire se playSide non va a buon fine
 
                         // Remove card from the hand
                         hand.removeCard(hand.getSelectedCard().get());
@@ -591,8 +592,9 @@ public class GameController {
                     // Change turn to next player
                     this.changeTurn();
                 }
+            } else {
+                game.errorState(playerID);
             }
-            game.errorState(playerID);
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
             game.errorState(playerID);

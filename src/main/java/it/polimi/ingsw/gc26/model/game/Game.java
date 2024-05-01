@@ -93,8 +93,8 @@ public class Game {
         availablePawns.add(Pawn.YELLOW);
         availablePawns.add(Pawn.GREEN);
         this.observable = ModelObservable.getInstance();
-        for (VirtualView c : clients) {
-            this.observable.addObserver(c);
+        for (int i = 0; i < clients.size(); i++) {
+            this.observable.addObserver(clients.get(i), players.get(i).getID());
         }
     }
 
