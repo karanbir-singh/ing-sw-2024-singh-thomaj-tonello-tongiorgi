@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.gc26.network.RMI.VirtualRMIMainController;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
@@ -52,10 +53,16 @@ public class MainClient {
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            Pair<VirtualGameController, String> controllerPair = new VirtualRMIView(virtualMainController).runTUI();
+            VirtualRMIView virtualRMIView = new VirtualRMIView(virtualMainController);
+            Pair<VirtualGameController, String> controllerPair = virtualRMIView.runTUI();
+
             VirtualGameController gameController = controllerPair.getKey();
             String clientID = controllerPair.getValue();
+            System.out.println(clientID);
+            virtualRMIView.setClientID(clientID);
             MainClient.runCommonTui(gameController, clientID);
+
+
         } else if (userInterface == UserInterface.gui) {
             new VirtualRMIView(virtualMainController).runGUI();
         }

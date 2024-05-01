@@ -53,11 +53,10 @@ public interface VirtualView extends Remote {
 
     /**
      * To notify the current player the successful selection of its mission
-     * @param cardIndex
      * @param clientID
      * @throws RemoteException
      */
-    void updateSelectedMission(String cardIndex, String clientID) throws RemoteException;
+    void updateSelectedMission(String clientID) throws RemoteException;
 
     /**
      * Notifies the current player the successful selection of its card in the hand

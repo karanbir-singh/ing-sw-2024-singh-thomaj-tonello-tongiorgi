@@ -28,7 +28,7 @@ class GameControllerTest {
         players.add(new Player("2", "Carlo"));
 
         // Create game controller
-        game = new Game(players);
+        game = new Game(players, null);
         gameController = new GameController(game);
     }
 

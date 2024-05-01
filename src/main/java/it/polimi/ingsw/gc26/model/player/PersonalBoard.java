@@ -65,7 +65,7 @@ public class PersonalBoard {
     public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {
             this.secretMission = secretMission.get();
-            // TODO notify view;
+            ModelObservable.getInstance().notifyUpdateSelectedMission(clientID);
             return this.secretMission;
         }
         // TODO notify view
@@ -117,15 +117,16 @@ public class PersonalBoard {
      * @param selectedY the Y coordinate of the personalBoard that the player wants to choose
      */
 
-    public void setPosition(int selectedX, int selectedY) {
+    public void setPosition(int selectedX, int selectedY, String clientID) {
         //check if the position is valid
         if (!checkIfPlayablePosition(selectedX, selectedY)) {
             //update view
-            System.err.println(STR."[\{selectedX}, \{selectedY}] is not a valid position");
+            ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 0);
             return;
         }
         this.selectedX = selectedX;
         this.selectedY = selectedY;
+        ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 1);
     }
 
     /**
@@ -425,9 +426,8 @@ public class PersonalBoard {
     public void playSide(Side side, String clientID) {
         // you need to check if the board has enough resources for the side.
         if (!checkIfEnoughResources(side)) {
-            System.err.println("NOT ENOUGH RESOURCES");
             //TODO update show error
-            ModelObservable.getInstance().notifyError("Not enogh resources!", clientID);
+            ModelObservable.getInstance().notifyError("Not enough resources!", clientID);
             //update della view
             return;
         }
@@ -437,9 +437,8 @@ public class PersonalBoard {
             playingPoint = ifPresent(selectedX, selectedY, playablePositions).orElseThrow(NullPointerException::new);
             playingPoint.setSide(side);
         } catch (NullPointerException nullEx) {
-            nullEx.printStackTrace();
-            System.err.println("NOT SELECTED POSITION");
-            ModelObservable.getInstance().notifyError("Select a position first!", clientID );
+            //nullEx.printStackTrace();
+            ModelObservable.getInstance().notifyError("Select a position first!", clientID);
             return;
         }
 
@@ -475,6 +474,8 @@ public class PersonalBoard {
 
         // Use card ability to add points if it has it
         this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
+
+        ModelObservable.getInstance().notifyUpdatePlayedCardFromHand(clientID,1);
     }
 
 }

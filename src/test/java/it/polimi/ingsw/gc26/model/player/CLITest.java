@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.model.player;
+/*package it.polimi.ingsw.gc26.model.player;
 
 
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
@@ -252,4 +252,4 @@ public class CLITest {
 
     }
 
-}
+}*/

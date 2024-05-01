@@ -20,18 +20,17 @@ public class VirtualRMIView  implements VirtualView {
     public VirtualRMIView(VirtualMainController virtualMainController) throws RemoteException {
         this.virtualMainController = virtualMainController;
         clientState = ClientState.CONNECTION;
-
         UnicastRemoteObject.exportObject(this, 0);
     }
 
     // These are examples of view updating methods
-    public void notifyMessage(String message) throws RemoteException {
-        System.out.println(message);
-    }
+    //public void notifyMessage(String message) throws RemoteException {
+      //  System.out.println(message);
+    //}
 
     @Override
     public void setClientID(String clientID) throws RemoteException {
-
+        this.clientID = clientID;
     }
 
     @Override
@@ -53,14 +52,14 @@ public class VirtualRMIView  implements VirtualView {
 
     /**
      * To notify the current player the successful selection of its mission
-     *
-     * @param cardIndex
      * @param clientID
      * @throws RemoteException
      */
     @Override
-    public void updateSelectedMission(String cardIndex, String clientID) throws RemoteException {
-        System.out.println(STR."\{clientID} selected card index: \{cardIndex}");
+    public void updateSelectedMission(String clientID) throws RemoteException {
+        if(this.clientID.equals(clientID)){
+            System.out.println("You have selected the mission");
+        }
     }
 
     /**
@@ -70,8 +69,11 @@ public class VirtualRMIView  implements VirtualView {
      * @throws RemoteException
      */
     @Override
-    public void updateSelectedCardFromHand( String clientID) throws RemoteException {
-        System.out.println(STR."Selected card updated to \{clientID}");
+    public void updateSelectedCardFromHand(String clientID) throws RemoteException {
+        if(this.clientID.equals(clientID)){
+            System.out.println("You have selected a card from the hand");
+        }
+
     }
 
     /**
@@ -83,7 +85,10 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateSelectedSide(String cardIndex, String clientID) throws RemoteException {
-        System.out.println(STR."\{clientID} selected card index: \{cardIndex}");
+        if(this.clientID.equals(clientID)){
+            System.out.println("You have selected the side in" + cardIndex);
+        }
+
     }
 
     /**
@@ -97,13 +102,17 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateSelectedPositionOnBoard(String selectedX, String selectedY, String playerID, String success) throws RemoteException {
-        if (success.equals("true")) {
-            System.out.println(STR."\{playerID} selected x: \{selectedX} y: \{selectedY}");
+        if(this.clientID.equals(clientID)){
+            if (Integer.parseInt(success) == 1) {
+                System.out.println(STR."selected x: \{selectedX} y: \{selectedY}");
 
-        } else {
-            System.out.println(STR."\{playerID} failed to selected x: \{selectedX} y: \{selectedY}");
+            } else {
+                System.out.println(STR."failed to selected x: \{selectedX} y: \{selectedY}");
+
+            }
 
         }
+
     }
 
     /**
@@ -115,7 +124,7 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updatePlayedCardFromHand(String clientID, String success) throws RemoteException {
-        if (success.equals("true")) {
+        if (Integer.parseInt(success) == 1) { // 1 success
             System.out.println(STR."\{clientID} played its selected card");
 
         } else {
@@ -145,7 +154,10 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void updateSelectedCardFromCommonTable(String clientID, String success) throws RemoteException {
-        System.out.println(STR."\{clientID} has selected a card from the common table");
+        if(this.clientID.equals(clientID)){
+            System.out.println(STR."you have selected a card from the common table");
+        }
+
     }
 
     /**
@@ -218,7 +230,11 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void showMessage(String message, String clientID) throws RemoteException {
-        System.out.println(STR."[SERVER -> \{clientID}] \{message}");
+        System.out.println(clientID);
+        System.out.println(this.clientID);
+        if(this.clientID.equals(clientID)){
+            System.out.println(STR."[SERVER -> \{clientID}] \{message}");
+        }
     }
 
     /**
@@ -230,7 +246,9 @@ public class VirtualRMIView  implements VirtualView {
      */
     @Override
     public void showError(String message, String clientID) throws RemoteException {
-        System.out.println(STR."Error: \{message}");
+        if(this.clientID.equals(clientID)){
+            System.out.println(STR."Error: \{message}");
+        }
     }
 
     public void updateState(ClientState clientState) {
