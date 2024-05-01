@@ -11,9 +11,10 @@ import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.request.game_request.GameRequest;
 
+import java.io.*;
 import java.util.*;
 
-public class GameController {
+public class GameController implements Serializable {
     /**
      * This attribute represents the execution type
      */
@@ -31,12 +32,13 @@ public class GameController {
      */
     private Queue<GameRequest> gameRequests;
 
+    private String pathToCopy;
     /**
      * Initializes the game (provided by the main controller)
      *
      * @param game the object that represents the game
      */
-    public GameController(Game game) {
+    public GameController(Game game, String pathToCopy) throws IOException {
         this.isDebug = java.lang.management.ManagementFactory.
                 getRuntimeMXBean().
                 getInputArguments().toString().indexOf("jdwp") >= 0;
@@ -45,8 +47,18 @@ public class GameController {
         this.playersToWait = new ArrayList<>();
         this.gameRequests = new ArrayDeque<>();
         this.launchExecutor();
+        this.pathToCopy = pathToCopy;
+        this.copyToDisk();
+
     }
 
+    private void copyToDisk() throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream(this.pathToCopy);
+        ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+        outputStream.writeObject(this);
+        outputStream.close();
+        fileOutputStream.close();
+    }
     /**
      * Launch a thread for managing clients requests
      */
@@ -117,6 +129,13 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -152,6 +171,13 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -186,6 +212,14 @@ public class GameController {
         } else {
             // TODO gestire ome cambiare il model quando lo stato e' errato
         }
+
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -215,6 +249,13 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -242,6 +283,13 @@ public class GameController {
             this.prepareSecretMissions();
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+        }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -276,6 +324,13 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -301,6 +356,13 @@ public class GameController {
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+        }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -342,6 +404,13 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -369,6 +438,13 @@ public class GameController {
             game.setState(GameState.GAME_STARTED);
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+        }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -398,6 +474,13 @@ public class GameController {
         } else {
             // TODO gestire cosa modificare nel model se lo stato è errato
         }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -413,6 +496,13 @@ public class GameController {
         }
         // Turn selected card side
         player.getHand().turnSide();
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -437,6 +527,13 @@ public class GameController {
             personalBoard.setPosition(selectedX, selectedY);
         } else {
             // TODO gestisci cosa modificare del model se lo stato è errato
+        }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -510,6 +607,13 @@ public class GameController {
                 // TODO gestisci come cambiare il model quando lo stato è errato
             }
         }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -533,6 +637,13 @@ public class GameController {
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+        }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -581,6 +692,13 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -596,6 +714,13 @@ public class GameController {
         game.getChat().addMessage(msg);
         if (isDebug) {
             System.out.println(msg);
+        }
+
+        //copy on the disk all game
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -619,6 +744,7 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
     }
 
     /**

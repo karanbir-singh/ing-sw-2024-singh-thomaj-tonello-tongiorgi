@@ -5,6 +5,8 @@ import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.Parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -12,7 +14,7 @@ import java.util.stream.Collectors;
  * This class represents an entire Game play. It has a minimum number of player of two and a maximum number of player of four.
  * To play more than one game, more instances of game have to be created
  */
-public class Game {
+public class Game implements Serializable {
     /**
      * This attribute represents the maximum number of players per game
      */

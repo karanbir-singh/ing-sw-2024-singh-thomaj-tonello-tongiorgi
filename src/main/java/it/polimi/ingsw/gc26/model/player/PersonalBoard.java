@@ -7,9 +7,10 @@ import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class PersonalBoard {
+public class PersonalBoard implements Serializable {
     private int xMin, xMax, yMin, yMax;
     private int score;
     private final ArrayList<Point> occupiedPositions;

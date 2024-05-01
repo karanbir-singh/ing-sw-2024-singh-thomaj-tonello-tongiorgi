@@ -3,10 +3,12 @@ package it.polimi.ingsw.gc26.model.card_side;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
+import java.io.Serializable;
+
 /**
  * This is an enumeration of the possibles values of a symbol
  */
-public enum Symbol {
+public enum Symbol implements Serializable {
     FUNGI(SpecialCharacters.MUSHROOM.getCharacter(),SpecialCharacters.BACKGROUND_RED.getCharacter(),TextStyle.RED.getStyleCode(), TextStyle.BACKGROUND_RED.getStyleCode()),
     ANIMAL(SpecialCharacters.WOLF.getCharacter(), SpecialCharacters.BACKGROUND_BLUE.getCharacter(), TextStyle.BLUE.getStyleCode(), TextStyle.BACKGROUND_BLUE.getStyleCode()),
     PLANT(SpecialCharacters.LEAF.getCharacter(), SpecialCharacters.BACKGROUND_GREEN.getCharacter(), TextStyle.GREEN.getStyleCode(), TextStyle.BACKGROUND_GREEN.getStyleCode()),

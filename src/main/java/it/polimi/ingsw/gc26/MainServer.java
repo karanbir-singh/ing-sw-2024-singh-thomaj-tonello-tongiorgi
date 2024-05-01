@@ -4,6 +4,8 @@ import java.io.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.tools.javac.Main;
+import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIMainController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
@@ -69,7 +71,23 @@ public class MainServer {
 
     public static void main(String[] args) {
         // Create main controller
+
+
         MainController mainController = new MainController();
+        try{
+            FileInputStream fileInputStream = new FileInputStream("mainController");
+            ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
+            mainController = (MainController) inputStream.readObject();
+            inputStream.close();
+            fileInputStream.close();
+            mainController.recreateGames();
+        }catch (Exception i){
+            System.out.println("file not found");
+        }
+        //Deserialization before everything, find if there was something in the disk
+
+
+        System.out.println("Server is UP");
 
         // Start RMI Server
         try {
@@ -90,4 +108,5 @@ public class MainServer {
             e.printStackTrace();
         }
     }
+
 }

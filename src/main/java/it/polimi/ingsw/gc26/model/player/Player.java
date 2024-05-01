@@ -3,12 +3,13 @@ package it.polimi.ingsw.gc26.model.player;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * This class represents the player in the game
  */
-public class Player {
+public class Player implements Serializable {
     /**
      * This attributes represents the player with a unique id
      */

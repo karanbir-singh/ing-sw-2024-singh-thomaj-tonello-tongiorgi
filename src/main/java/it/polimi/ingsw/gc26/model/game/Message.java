@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.model.game;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -11,7 +12,7 @@ import it.polimi.ingsw.gc26.model.player.Player;
 /**
  * This class represents a message sent by players
  */
-public class Message {
+public class Message implements Serializable {
     /**
      * This attribute represents the string sent
      */

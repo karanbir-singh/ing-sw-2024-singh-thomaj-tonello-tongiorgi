@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.model.card_side;
 
 import it.polimi.ingsw.gc26.model.player.Point;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.Optional;
 /**
  * This class represent a Gold Card Front
  */
-public class GoldCardFront extends Side {
+public class GoldCardFront extends Side implements Serializable {
     /**
      * Creates a new instance of a GoldCardFront
      * @param sideSymbol Symbol that represents the card's color.

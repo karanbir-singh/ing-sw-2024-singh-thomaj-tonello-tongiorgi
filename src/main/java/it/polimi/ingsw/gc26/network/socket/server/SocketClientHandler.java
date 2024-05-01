@@ -66,21 +66,21 @@ public class SocketClientHandler implements Runnable {
                 // Execute requested command
                 switch (msg.get("function").textValue()) {
                     case "connect":
-                        String clientID = this.mainController.connect(this.virtualSocketView, value.get("nickname").asText());
-                        this.virtualSocketView.setClientID(clientID);
+                        //String clientID = this.mainController.connect(this.virtualSocketView, value.get("nickname").asText());
+                        //this.virtualSocketView.setClientID(clientID);
                         break;
                     case "createWaitingList":
-                        this.mainController.createWaitingList(this.virtualSocketView, value.get("clientID").asText(), value.get("nickname").asText(), value.get("numPlayers").asInt());
+                        //this.mainController.createWaitingList(this.virtualSocketView, value.get("clientID").asText(), value.get("nickname").asText(), value.get("numPlayers").asInt());
                         break;
                     case "getVirtualGameController":
                         this.gameController = this.mainController.getGameController();
                         this.virtualSocketView.setGameController();
                         break;
                     case "addMessage":
-                        this.gameController.addRequest(new AddMessageRequest(value.get("text").asText(), value.get("receiver").asText(), value.get("sender").asText(), value.get("time").asText()));
+                        //this.gameController.addRequest(new AddMessageRequest(value.get("text").asText(), value.get("receiver").asText(), value.get("sender").asText(), value.get("time").asText()));
                         break;
                     case "selectCardFromHand":
-                        this.gameController.addRequest(new SelectCardFromHandRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
+                        //this.gameController.addRequest(new SelectCardFromHandRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
                         break;
                     case "turnSelectedCardSide":
                         this.gameController.addRequest(new TurnSelectedSideRequest(value.get("playerID").asText()));

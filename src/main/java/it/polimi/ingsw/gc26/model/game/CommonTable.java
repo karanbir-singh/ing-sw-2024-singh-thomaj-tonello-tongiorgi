@@ -3,12 +3,13 @@ package it.polimi.ingsw.gc26.model.game;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * This class represents a table containing decks every player can interact with
  */
-public class CommonTable {
+public class CommonTable implements Serializable {
     /**
      * This attribute represents the resource cards deck
      */

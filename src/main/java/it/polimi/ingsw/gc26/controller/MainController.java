@@ -7,14 +7,15 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.main_request.GameCreationRequest;
 import it.polimi.ingsw.gc26.request.main_request.MainRequest;
 
+import java.io.*;
 import java.rmi.RemoteException;
 import java.util.*;
 
-public class MainController {
+public class MainController implements Serializable {
     /**
      * This attribute represents the list of clients who are waiting for a new game
      */
-    private ArrayList<VirtualView> waitingClients;
+    private transient ArrayList<VirtualView> waitingClients;
 
     /**
      * This attribute represents the list of players who are waiting for a new game
@@ -24,12 +25,12 @@ public class MainController {
     /**
      * This attribute represents the list of game controllers of started games
      */
-    private final ArrayList<GameController> gamesControllers;
+    private transient final ArrayList<GameController> gamesControllers;
 
     /**
      * This attribute represents a priority queue of main requests
      */
-    private final PriorityQueue<MainRequest> mainRequests;
+    private transient final PriorityQueue<MainRequest> mainRequests;
 
     /**
      * This attribute represents a game that is being created
@@ -46,6 +47,8 @@ public class MainController {
      */
     private int maxNumWaitingClients;
 
+    private int numberOfActiveGames;
+
     /**
      * Initializes waiting players' list and games controllers' list
      */
@@ -58,8 +61,17 @@ public class MainController {
         gameOnCreation = false;
         invalidNickname = false;
         this.launchExecutor();
+        numberOfActiveGames = 0;
     }
 
+
+    private void copyToDisk() throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream("mainController");
+        ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+        outputStream.writeObject(this);
+        outputStream.close();
+        fileOutputStream.close();
+    }
     /**
      * Launch a thread for executing clients connection requests
      */
@@ -107,7 +119,7 @@ public class MainController {
         return !waitingPlayers.stream().anyMatch(p -> p.getNickname().equals(nickname));
     }
 
-    public void connect(VirtualView client, String nickname) {
+    public void connect(VirtualView client, String nickname){
         // Check if there is not a game waiting for players
         if (!this.existsWaitingGame()) {
             // Set new game on creation
@@ -121,6 +133,14 @@ public class MainController {
         } else {
             // Otherwise client joins into a game on creation
             this.joinWaitingList(client, nickname);
+        }
+
+        //copy on the disk
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            System.out.println("COLPA DI COPYTODISK CONNECT");
+            e.printStackTrace();
         }
     }
 
@@ -172,6 +192,14 @@ public class MainController {
                 e.printStackTrace();
             }
         }
+
+        //copy on the disk
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            System.out.println("COLPA DI COPYTODISK DI CREATEWAITING LIST");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -179,7 +207,7 @@ public class MainController {
      *
      * @param nickname Nickname of the player who is joining the waiting list
      */
-    private void joinWaitingList(VirtualView client, String nickname) {
+    private void joinWaitingList(VirtualView client, String nickname){
         GameController gameController = null;
 
         // Check if the nickname it's not available
@@ -211,8 +239,14 @@ public class MainController {
             // Check number of clients in waiting list
             if (waitingClients.size() >= maxNumWaitingClients) {
                 // Then, create a new game controller
-                gameController = new GameController(new Game(waitingPlayers));
+                try {
+                    gameController = new GameController(new Game(waitingPlayers),"gameControllerText"+ gamesControllers.size());
+                } catch (IOException e) {
+                    System.out.println("COLPA DELLA CREAZIONE GAME CONTROLLER");
+                    e.printStackTrace();
+                }
                 gamesControllers.add(gameController);
+                numberOfActiveGames++;
 
                 // Update of the view
                 for (VirtualView view : waitingClients) {
@@ -238,6 +272,14 @@ public class MainController {
                 }
             }
         }
+
+        //copy on the disk
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            System.out.println("COLPA COPY TO DISK DI JOINWAITINGLIST");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -247,5 +289,20 @@ public class MainController {
         if (!gamesControllers.isEmpty())
             return gamesControllers.getLast();
         return null;
+    }
+
+    public void recreateGames() throws IOException, ClassNotFoundException {
+        int numberOfGames = numberOfActiveGames;
+        gamesControllers.clear();
+        for(int i = 0; i < numberOfGames; i++){
+           GameController gameController = new GameController(null,null);
+           //deserialization
+           FileInputStream fileInputStream = new FileInputStream("gameControllerText"+ i);
+           ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
+           gameController = (GameController) inputStream.readObject();
+           inputStream.close();
+           fileInputStream.close();
+           gamesControllers.add(i,gameController);
+       }
     }
 }

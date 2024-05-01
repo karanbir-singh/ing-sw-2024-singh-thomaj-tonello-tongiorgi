@@ -1,12 +1,13 @@
 package it.polimi.ingsw.gc26.model.card_side;
 import it.polimi.ingsw.gc26.model.player.Point;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * This abstract class represent a Mission Card Front
  */
-public abstract class MissionCardFront extends Side {
+public abstract class MissionCardFront extends Side implements Serializable {
     /**
      * This method returns the points that a Mission cards gives based on the Player's board
      * @param firstX X coordinate of the first card

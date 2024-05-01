@@ -1,11 +1,12 @@
 package it.polimi.ingsw.gc26.model.card_side;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
  * This class represent a generic corner in the card
  */
-public class Corner {
+public class Corner implements Serializable {
     /**
      * This attribute equals true if there is no corner in the card
      */

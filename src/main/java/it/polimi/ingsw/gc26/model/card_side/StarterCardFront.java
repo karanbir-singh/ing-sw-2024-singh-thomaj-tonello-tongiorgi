@@ -1,12 +1,13 @@
 package it.polimi.ingsw.gc26.model.card_side;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * This class represents a Starter Card
  */
-public class StarterCardFront extends Side {
+public class StarterCardFront extends Side implements Serializable {
     /**
      * Creates a new instance of a ResourceCardFront
      * @param permanentResources Resources that cannot be covered by other cards

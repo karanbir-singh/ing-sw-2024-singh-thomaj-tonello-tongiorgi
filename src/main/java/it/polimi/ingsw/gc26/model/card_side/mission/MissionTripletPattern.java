@@ -7,12 +7,13 @@ import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * This class represents a mission card with a triplet pattern.
  */
-public class MissionTripletPattern extends MissionCardFront {
+public class MissionTripletPattern extends MissionCardFront implements Serializable {
     /**
      * Creates a new instance of MissionTripletPattern
      * @param type represent which Triplet combination is needed to this card give points

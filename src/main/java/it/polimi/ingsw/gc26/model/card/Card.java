@@ -1,10 +1,12 @@
 package it.polimi.ingsw.gc26.model.card;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 
+import java.io.Serializable;
+
 /**
  * This class represents a generic card, containing two sides.
  */
-abstract public class Card {
+abstract public class Card implements Serializable {
     /**
      * This attribute is the Card's front side (generic)
      */

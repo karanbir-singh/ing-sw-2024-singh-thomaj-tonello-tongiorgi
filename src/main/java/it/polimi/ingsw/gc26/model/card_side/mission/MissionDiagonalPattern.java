@@ -7,12 +7,13 @@ import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * This class represents a mission card with a Diagonal pattern.
  */
-public class MissionDiagonalPattern extends MissionCardFront {
+public class MissionDiagonalPattern extends MissionCardFront implements Serializable {
     /**
      * Creates a new instance of MissionDiagonalPattern
      * @param type represent which diagonal combination is needed to this card give points

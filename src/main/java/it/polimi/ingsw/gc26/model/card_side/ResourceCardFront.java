@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.model.card_side;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Optional;
 /**
  * This class represent a Resource Card
  */
-public class ResourceCardFront extends Side {
+public class ResourceCardFront extends Side implements Serializable {
     /**
      * Creates a new instance of a ResourceCardFront
      * @param sideSymbol Symbol that represents the card's color.

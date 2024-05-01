@@ -9,12 +9,13 @@ import it.polimi.ingsw.gc26.model.card_side.ability.InkwellCounter;
 import it.polimi.ingsw.gc26.model.card_side.ability.ManuscriptCounter;
 import it.polimi.ingsw.gc26.model.card_side.ability.QuillCounter;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * This class represents the current hand for a player
  */
-public class Hand {
+public class Hand implements Serializable {
     /**
      * This attribute represent the current cards in the hand
      */

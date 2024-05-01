@@ -1,11 +1,12 @@
 package it.polimi.ingsw.gc26.model.game;
+import java.io.Serializable;
 import java.util.*;
 import it.polimi.ingsw.gc26.model.player.Player;
 
 /**
  * This class represents the chat between players managed by the server
  */
-public class Chat {
+public class Chat implements Serializable {
     /**
      * This attribute represents all the messages sent and received by every player.
      * All messages are saved in this array and then filtered by player.
