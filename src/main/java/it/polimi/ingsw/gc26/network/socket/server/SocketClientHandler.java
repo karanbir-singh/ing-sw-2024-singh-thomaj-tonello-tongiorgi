@@ -1,7 +1,5 @@
 package it.polimi.ingsw.gc26.network.socket.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.controller.GameController;
@@ -9,11 +7,10 @@ import it.polimi.ingsw.gc26.controller.GameController;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.RemoteException;
 
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.request.*;
+import it.polimi.ingsw.gc26.request.game_request.*;
 
 /**
  * This class represents the handler to decode json from the client.

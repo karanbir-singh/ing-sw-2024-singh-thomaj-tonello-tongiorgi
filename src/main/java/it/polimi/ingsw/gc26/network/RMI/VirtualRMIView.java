@@ -10,16 +10,20 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
-public class VirtualRMIView  implements VirtualView {
+public class VirtualRMIView implements VirtualView {
     private final VirtualMainController virtualMainController;
     private VirtualGameController virtualGameController;
     private String clientID;
-    private String nickName;
+    private String nickname;
+    private Object lock;
     ClientState clientState;
 
     public VirtualRMIView(VirtualMainController virtualMainController) throws RemoteException {
         this.virtualMainController = virtualMainController;
         clientState = ClientState.CONNECTION;
+        clientID = "";
+        lock = new Object();
+
         UnicastRemoteObject.exportObject(this, 0);
     }
 
@@ -39,6 +43,11 @@ public class VirtualRMIView  implements VirtualView {
     @Override
     public void setGameController() throws RemoteException {
 
+    }
+
+    @Override
+    public ClientState getState() {
+        return this.clientState;
     }
 
     /**
@@ -265,8 +274,12 @@ public class VirtualRMIView  implements VirtualView {
         System.out.println(STR."Error: \{message}");
     }
 
-    public void updateState(ClientState clientState) {
-        this.clientState = clientState;
+    @Override
+    public void updateState(ClientState clientState) throws RemoteException {
+        synchronized (lock) {
+            this.clientState = clientState;
+            this.lock.notifyAll();
+        }
     }
 
 
@@ -277,23 +290,71 @@ public class VirtualRMIView  implements VirtualView {
         System.out.println("YOU CONNECTED TO THE SERVER");
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("INSERISCI IL NICKNAME");
-        this.nickName = scanner.nextLine();
-        this.clientID = this.virtualMainController.connect(this, this.nickName);
+        System.out.print("INSERISCI IL NICKNAME\nNickname: ");
+        this.nickname = scanner.nextLine();
+        this.virtualMainController.connect(this, this.nickname);
 
-        while (clientState == ClientState.INVALID_NICKNAME || clientState == ClientState.CONNECTION) {
-            System.out.println("NICKNAME GIA' PRESO\nNickname:");
-            this.nickName = scanner.nextLine();
-            this.clientID = this.virtualMainController.connect(this, this.nickName);
+        synchronized (this.lock) {
+            while (this.clientState == ClientState.CONNECTION) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
-        if (clientState == ClientState.CREATOR) {
-            System.out.println("THERE ARE NO GAME FREE, YOU MUST CREATE A NEW GAME, HOW MANY PLAYER?");
+        if (this.clientState == ClientState.CREATOR) {
+            System.out.print("THERE ARE NO GAME FREE, YOU MUST CREATE A NEW GAME:\nNumber of players (2/3/4): ");
             String decision = scanner.nextLine();
-            this.virtualMainController.createWaitingList(this, this.clientID, this.nickName, Integer.parseInt(decision));
+            this.virtualMainController.createWaitingList(this, this.nickname, Integer.parseInt(decision));
+
+            synchronized (this.lock) {
+                while (this.clientState == ClientState.CREATOR) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            while (this.clientState == ClientState.INVALID_NUMBER_OF_PLAYER) {
+                this.clientState = ClientState.CREATOR;
+                System.out.print("INVALID NUMBER OF PLAYERS\nNumber of players (2/3/4): ");
+                decision = scanner.nextLine();
+                this.virtualMainController.createWaitingList(this, this.nickname, Integer.parseInt(decision));
+
+                synchronized (this.lock) {
+                    while (this.clientState == ClientState.CREATOR) {
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        } else if (clientState.equals(ClientState.INVALID_NICKNAME)) {
+            while (clientState == ClientState.INVALID_NICKNAME) {
+                System.out.print("NICKNAME GIA' PRESO\nNickname: ");
+                this.nickname = scanner.nextLine();
+
+                this.virtualMainController.connect(this, this.nickname);
+
+                synchronized (this.lock) {
+                    while (this.clientState == ClientState.CONNECTION) {
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
         }
-        System.out.println("WAITING PLAYERS...");
-        while (clientState == ClientState.WAITING){
+
+        System.out.println("WAITING ...");
+        while (clientState == ClientState.WAITING) {
             System.out.flush();
         }
 

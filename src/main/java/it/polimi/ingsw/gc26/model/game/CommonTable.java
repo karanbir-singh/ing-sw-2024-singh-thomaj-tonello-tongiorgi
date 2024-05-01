@@ -129,7 +129,7 @@ public class CommonTable {
      * @return removed card
      */
     public Card removeSelectedCard(String clientID) {
-        if(getSelectedCard() != null){
+        if(getSelectedCard().isPresent()){
             Card toRemove = null;
             if (selectedY == 0) {
                 if (selectedX == 2) {
@@ -152,6 +152,8 @@ public class CommonTable {
                     toRemove = removeFromTable(goldCards, selectedX, goldDeck, clientID);
                 }
             }
+            selectedX = -1;
+            selectedY = -1;
             return toRemove;
         }else{
             // TODO notify view

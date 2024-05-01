@@ -298,16 +298,16 @@ class GameControllerTest {
         gameController.turnSelectedCardSide(currentPlayer.getID());
         gameController.selectPositionOnBoard(1, 1, currentPlayer.getID());
         gameController.playCardFromHand(currentPlayer.getID());
+        gameController.selectCardFromCommonTable(0, 0, currentPlayer.getID());
+        gameController.drawSelectedCard(currentPlayer.getID());
 
-        // Now we try to play a second card, even if the current play can't do these
-        gameController.selectCardFromHand(0, currentPlayer.getID());
-        gameController.turnSelectedCardSide(currentPlayer.getID());
-        gameController.selectPositionOnBoard(2, 2, currentPlayer.getID());
-        gameController.playCardFromHand(currentPlayer.getID());
+        // Now try to draw again
+        gameController.selectCardFromCommonTable(1, 0, currentPlayer.getID());
+        gameController.drawSelectedCard(currentPlayer.getID());
 
-        // Check that the second card it's not played
-        assertEquals(2, currentPlayer.getHand().getCards().size());
-        assertEquals(PlayerState.CARD_PLAYED, currentPlayer.getState());
-        assertEquals(2, currentPlayer.getPersonalBoard().getOccupiedPositions().size());
+        assertEquals(3, currentPlayer.getHand().getCards().size());
+        assertFalse(game.getCommonTable().getSelectedCard().isPresent());
+        assertEquals(31, game.getCommonTable().getResourceDeck().getCards().size());
+        assertEquals(2, game.getCommonTable().getResourceCards().size());
     }
 }
