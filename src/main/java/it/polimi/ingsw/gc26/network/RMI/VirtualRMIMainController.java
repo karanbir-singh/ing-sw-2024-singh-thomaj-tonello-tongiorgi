@@ -1,9 +1,12 @@
 package it.polimi.ingsw.gc26.network.RMI;
 
+import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import it.polimi.ingsw.gc26.request.main_request.ConnectionRequest;
+import it.polimi.ingsw.gc26.request.main_request.GameCreationRequest;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -17,14 +20,18 @@ public class VirtualRMIMainController implements VirtualMainController {
     }
 
     @Override
-    public String connect(VirtualView client, String nickname) throws RemoteException {
+    public void connect(VirtualView client, String nickname) throws RemoteException {
         System.out.println("New client from RMI!");
-        return this.mainController.connect(client, nickname);
+        if (client.getState() == ClientState.CONNECTION || client.getState() == ClientState.GAME_ON_CREATION)
+            this.mainController.addRequest(new ConnectionRequest(client, nickname, 0));
+        else if (client.getState().equals(ClientState.INVALID_NICKNAME)) {
+            this.mainController.addRequest(new ConnectionRequest(client, nickname, 2));
+        }
     }
 
     @Override
-    public void createWaitingList(VirtualView client, String clientID, String nickname, int numPlayers) throws RemoteException {
-        this.mainController.createWaitingList(client, clientID, nickname, numPlayers);
+    public void createWaitingList(VirtualView client, String nickname, int numPlayers) throws RemoteException {
+        this.mainController.addRequest(new GameCreationRequest(client, nickname, numPlayers, 1));
     }
 
     @Override

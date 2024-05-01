@@ -18,5 +18,7 @@ public interface VirtualView extends Remote {
     void setClientID(String clientID) throws RemoteException;
 
     void setGameController() throws RemoteException;
+
+    ClientState getState() throws RemoteException;
     // Then other method for updating...
 }
