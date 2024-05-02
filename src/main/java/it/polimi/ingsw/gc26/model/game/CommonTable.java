@@ -299,13 +299,13 @@ public class CommonTable {
         return s;
     }
 
-    private void addPrintable(String[][] printable, String[][] ct, int xBase, int yBase, int xCardDim, int yCardDim){
+    private void addPrintable(String[][] printable, String[][] context, int xBase, int yBase){
         int y=0, x;
 
-        for(int yOff=0; yOff<yCardDim; yOff++){
+        for(String[] row: printable){
             x=0;
-            for(int xOff=0; xOff<xCardDim; xOff++){
-                ct[yBase + yOff][xBase + xOff] = printable[y][x];
+            for(String col: row){
+                context[yBase + y][xBase + x] = col;
                 x++;
             }
             y++;
@@ -351,9 +351,9 @@ public class CommonTable {
         //insert resource deck
         ct[yResource-1][0] = "Resource Deck  ";
         if(resourceDeck.getTopCard() == null){
-            addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource, xCardDim, yCardDim);
+            addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
         } else {
-            addPrintable(resourceDeck.printableDeck(), ct, xResource, yResource, xCardDim, yCardDim);
+            addPrintable(resourceDeck.printableDeck(), ct, xResource, yResource);
             decorateDeck(ct, xResource, yResource, xCardDim, yCardDim);
         }
 
@@ -364,9 +364,9 @@ public class CommonTable {
             ct[yResource-1][1 + i] = "  Resource Card " + i;
 
             if(r == null){
-                addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource, xCardDim, yCardDim);
+                addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
             } else {
-                addPrintable(r.getFront().printableSide(), ct, xResource, yResource, xCardDim, yCardDim);
+                addPrintable(r.getFront().printableSide(), ct, xResource, yResource);
             }
 
             xResource += xCardDim + 1;
@@ -376,9 +376,9 @@ public class CommonTable {
         ct[yGold-1][0] = "Gold Deck       " ;
 
         if(goldDeck.getTopCard() == null){
-            addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold, xCardDim, yCardDim);
+            addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
         } else {
-            addPrintable(goldDeck.printableDeck(), ct, xGold, yGold, xCardDim, yCardDim);
+            addPrintable(goldDeck.printableDeck(), ct, xGold, yGold);
             decorateDeck(ct, xGold, yGold, xCardDim, yCardDim);
         }
 
@@ -389,9 +389,9 @@ public class CommonTable {
             ct[yGold-1][1 + i] = "  Gold Card " + i + "    ";
 
             if(g == null){
-                addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold, xCardDim, yCardDim);
+                addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
             } else {
-                addPrintable(g.getFront().printableSide(), ct, xGold, yGold, xCardDim, yCardDim);
+                addPrintable(g.getFront().printableSide(), ct, xGold, yGold);
             }
             xGold += 4;
         }
@@ -399,8 +399,8 @@ public class CommonTable {
         //insert common mission cards
         ct[yMission-1][0] = "\nCommon Mission 0             " ;
         ct[yMission-1][1] = "Common Mission 1" ;
-        addPrintable(commonMissions.get(0).getFront().printableSide(), ct, xMission1, yMission, xMissionDim, yMissionDim);
-        addPrintable(commonMissions.get(1).getFront().printableSide(), ct, xMission2, yMission, xMissionDim, yMissionDim);
+        addPrintable(commonMissions.get(0).getFront().printableSide(), ct, xMission1, yMission);
+        addPrintable(commonMissions.get(1).getFront().printableSide(), ct, xMission2, yMission);
 
 
         return ct;

@@ -20,170 +20,15 @@ import java.util.ArrayList;
 
 public class Printer {
     public static void main(String[] args) throws UnsupportedEncodingException {
-        PrintStream ps = new PrintStream(System.out, true, "UTF-8");
         Game game = new Game(new ArrayList<>());
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        String[][] s = missionDeck.getCards().get(0).getFront().printableSide();
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-        ps.print("\n");
+        String[][] s;
+        Printer printer = new Printer();
 
-        s = missionDeck.getCards().get(2).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(1).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(3).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(4).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(5).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(6).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(7).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(8).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(9).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(10).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(11).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(12).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(13).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(14).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
-        }
-        ps.print("\n");
-
-        s = missionDeck.getCards().get(15).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                ps.print(s[i][j]);
-            }
-            ps.print("\n");
+        for(int i=0; i<16; i++){
+            s = missionDeck.getCards().get(i).getFront().printableSide();
+            printer.showEncodedPrintable(s);
+            System.out.println("\n");
         }
     }
 
@@ -193,6 +38,18 @@ public class Printer {
                 System.out.print(col);
             }
             System.out.print("\n");
+        }
+    }
+
+    public void showEncodedPrintable(String[][] printable) throws UnsupportedEncodingException {
+
+        PrintStream ps = new PrintStream(System.out, true, "UTF-8");
+
+        for (String[] row: printable) {
+            for (String col: row) {
+                ps.print(col);
+            }
+            ps.print("\n");
         }
     }
 
