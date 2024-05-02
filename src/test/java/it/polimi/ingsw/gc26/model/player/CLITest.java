@@ -86,19 +86,6 @@ public class CLITest {
             p.getPersonalBoard().setScore(players.indexOf(p)*3 + 7);
         }
 
-
-        /*CommonTable ct = game.getCommonTable();
-        String[][] s = ct.printableCommonTable();
-
-        System.out.println("\n");
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 12; j++) {
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");*/
-
         game.showCommonTable();
         System.out.print("\n");
     }
