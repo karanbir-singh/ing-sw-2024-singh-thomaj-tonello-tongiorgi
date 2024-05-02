@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.model.utils;
 public enum TextStyle {
     BACKGROUND_BEIGE("\u001B[48;2;242;233;175m"),
     BACKGROUND_BLUE("\u001B[48;2;0;116;186m"),
+    BACKGROUND_BROWN("\u001B[48;2;169;127;109m"),
     BACKGROUND_GREEN("\u001B[48;2;0;210;106m"),
     BACKGROUND_PURPLE("\u001B[48;2;141;101;197m"),
     BACKGROUND_RED("\u001B[48;2;248;49;47m"),

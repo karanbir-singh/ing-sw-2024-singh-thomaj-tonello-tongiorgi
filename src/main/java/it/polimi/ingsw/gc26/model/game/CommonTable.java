@@ -265,8 +265,41 @@ public class CommonTable {
         return selectedY;
     }
 
+    private String[][] emptyPrintable(int xCardDim, int yCardDim){
+        String[][] s = new String[yCardDim][xCardDim];
+
+        String decoration = SpecialCharacters.BACKGROUND_BROWN_DARK.getCharacter();
+        String backgroundSymbol = SpecialCharacters.BACKGROUND_BROWN.getCharacter();
+        String blank = SpecialCharacters.BACKGROUND_BLANK_WIDE.getCharacter();
+        String backgroundColor = TextStyle.BACKGROUND_BROWN.getStyleCode();
+        String reset = TextStyle.STYLE_RESET.getStyleCode();
+
+        //corners
+        s[0][0] = backgroundColor + backgroundSymbol;
+        s[0][xCardDim - 1] = backgroundSymbol;
+        s[yCardDim - 1][0] = backgroundSymbol;
+        s[yCardDim - 1][xCardDim - 1] = backgroundSymbol + reset;
+
+        //decoration
+        s[0][xCardDim/2] = blank + decoration  + blank;
+        s[yCardDim/2][xCardDim/2] = decoration + decoration + decoration;
+        s[yCardDim - 1][xCardDim/2] = blank + decoration  + blank;
+
+        //rest of the card
+        for(int i=0; i<yCardDim; i++){
+            for(int j=0; j<xCardDim; j++){
+                if(s[i][j] == null){
+                    s[i][j] = blank;
+                }
+            }
+        }
+
+        return s;
+    }
+
     private void addPrintable(String[][] printable, String[][] ct, int xBase, int yBase, int xCardDim, int yCardDim){
         int y=0, x;
+
         for(int yOff=0; yOff<yCardDim; yOff++){
             x=0;
             for(int xOff=0; xOff<xCardDim; xOff++){
@@ -282,14 +315,11 @@ public class CommonTable {
         for(int yOff=0; yOff<yCardDim; yOff++){
             ct[yDeck + yOff][xDeck] = "║";
         }
-
         //ct[yResource + yCardDim][0] = "╚═" + whiteSquare + "══" + whiteSquare + "══" + whiteSquare + "═╝";
         ct[yDeck + yCardDim][0] = "▔▔▔▔▔▔▔▔▔▔▔▔▔";
     }
 
     public String[][] printableCommonTable(){
-        int xDim = 12;
-        int yDim = 16;
         int xCardDim = 3;
         int yCardDim = 3;
         int xResource = 0, yResource = 1;
@@ -299,6 +329,9 @@ public class CommonTable {
         int xMission1 = 0;
         int xMission2 = xMission1 + xMissionDim + 2;
         int yMission = yGold + yCardDim + 2;
+
+        int xDim = 2*(yCardDim+1) + yMissionDim+1;
+        int yDim = 16;
 
         String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
         String space = "    ";
@@ -314,37 +347,34 @@ public class CommonTable {
         }
 
         //insert resource deck
-        ct[yResource - 1][0] = "Resource Deck  ";
-
+        ct[yResource-1][0] = "Resource Deck  ";
         addPrintable(resourceDeck.printableDeck(), ct, xResource, yResource, xCardDim, yCardDim);
         decorateDeck(ct, xResource, yResource, xCardDim, yCardDim);
+
 
         //insert uncovered resource cards
         xResource += xCardDim + 2;
         for (Card r: resourceCards) {
-            ct[0][1 + resourceCards.indexOf(r)] = "  Resource Card " + resourceCards.indexOf(r);
-
+            ct[yResource-1][1 + resourceCards.indexOf(r)] = "  Resource Card " + resourceCards.indexOf(r);
             addPrintable(r.getFront().printableSide(), ct, xResource, yResource, xCardDim, yCardDim);
-
             xResource += xCardDim + 1;
         }
 
         //insert gold deck
         ct[yGold-1][0] = "Gold Deck       " ;
-
         addPrintable(goldDeck.printableDeck(), ct, xGold, yGold, xCardDim, yCardDim);
         decorateDeck(ct, xGold, yGold, xCardDim, yCardDim);
 
 
+        //insert uncovered gold cards
         xGold += xCardDim + 2;
         for (Card g: goldCards) {
             ct[yGold-1][1 + goldCards.indexOf(g)] = "  Gold Card " + goldCards.indexOf(g) + "    ";
-
             addPrintable(g.getFront().printableSide(), ct, xGold, yGold, xCardDim, yCardDim);
-
             xGold += 4;
         }
 
+        //insert common mission cards
         ct[yMission-1][0] = "\nCommon Mission 0             " ;
         ct[yMission-1][1] = "Common Mission 1" ;
         addPrintable(commonMissions.get(0).getFront().printableSide(), ct, xMission1, yMission, xMissionDim, yMissionDim);

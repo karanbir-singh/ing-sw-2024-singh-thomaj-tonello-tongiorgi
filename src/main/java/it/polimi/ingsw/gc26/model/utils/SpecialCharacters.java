@@ -7,6 +7,9 @@ public enum SpecialCharacters {
     BACKGROUND_BLUE("\uD83D\uDD35"), //🔵
     BACKGROUND_GREEN("\uD83D\uDFE2"), //🟢
     BACKGROUND_PURPLE("\uD83D\uDFE3"), //🟣
+    BACKGROUND_BROWN("\uD83D\uDFEB"), //🟫
+    BACKGROUND_BROWN_DARK("\uD83D\uDFE4"), //🟤
+    BACKGROUND_BLACK("⚫️"),
     BACKGROUND_RED("❗"),
     BACKGROUND_YELLOW("\uD83D\uDFE1"), //🟡
     BLOCKED_POSITION("✖️"),
