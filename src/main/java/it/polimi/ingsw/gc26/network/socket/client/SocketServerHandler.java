@@ -160,28 +160,17 @@ public class SocketServerHandler implements VirtualView, Runnable {
      * @throws RemoteException
      */
     public void updateState(ClientState clientState) throws RemoteException {
-        synchronized (this.socketClient.lock) {
-            this.socketClient.setState(clientState);
-            this.socketClient.lock.notifyAll();
-        }
-
+        this.socketClient.setState(clientState);
     }
 
 
     public void setClientID(String clientID) throws RemoteException {
-        synchronized (this.socketClient) {
-            this.socketClient.setClientID(clientID);
-            this.socketClient.notifyAll();
-        }
+        this.socketClient.setClientID(clientID);
     }
 
 
     public void setGameController() {
-        synchronized (this.socketClient) {
-            this.socketClient.setVirtualGameController();
-            this.socketClient.notifyAll();
-        }
-
+        this.socketClient.setVirtualGameController();
     }
 
     public void updateChosenPawn(String pawnColor, String clientID) {
@@ -263,7 +252,7 @@ public class SocketServerHandler implements VirtualView, Runnable {
      */
     @Override
     public ClientState getState() throws RemoteException {
-        return null;
+        return this.socketClient.serverHandler.getState();
     }
 
 }
