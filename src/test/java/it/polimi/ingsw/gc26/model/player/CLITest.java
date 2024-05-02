@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
 import it.polimi.ingsw.gc26.controller.GameController;
+import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.card.StarterCard;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
@@ -146,169 +147,15 @@ public class CLITest {
     public void missionCardCLI(){
         Game game = new Game(new ArrayList<>());
         Deck missionDeck = game.getCommonTable().getMissionDeck();
-        String[][] s = missionDeck.getCards().get(0).getFront().printableSide();
+        String[][] s;
+        Printer printer = new Printer();
 
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(2).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(1).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(3).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(4).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(5).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(6).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(7).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
+        for(int i=0; i<16; i++){
+            s = missionDeck.getCards().get(i).getFront().printableSide();
+            printer.showPrintable(s);
+            System.out.println("\n");
         }
 
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(8).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(9).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(10).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(11).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(12).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(13).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(14).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
-
-        s = missionDeck.getCards().get(15).getFront().printableSide();
-
-        for(int i=0; i<5; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
     }
 
     @Test

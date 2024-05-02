@@ -187,4 +187,13 @@ public class Printer {
         }
     }
 
+    public void showPrintable(String[][] printable){
+        for (String[] row: printable) {
+            for (String col: row) {
+                System.out.print(col);
+            }
+            System.out.print("\n");
+        }
+    }
+
 }
