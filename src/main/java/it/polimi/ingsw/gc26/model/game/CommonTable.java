@@ -269,10 +269,10 @@ public class CommonTable {
     public String[][] emptyPrintable(int xCardDim, int yCardDim){
         String[][] s = new String[yCardDim][xCardDim];
 
-        String decoration = SpecialCharacters.BACKGROUND_BROWN_DARK.getCharacter();
-        String backgroundSymbol = SpecialCharacters.BACKGROUND_BROWN.getCharacter();
+        String decoration = SpecialCharacters.SQUARE_BLACK.getCharacter();
+        String backgroundSymbol = SpecialCharacters.SQUARE_BLACK.getCharacter();
         String blank = SpecialCharacters.BACKGROUND_BLANK_WIDE.getCharacter();
-        String backgroundColor = TextStyle.BACKGROUND_BROWN.getStyleCode();
+        String backgroundColor = TextStyle.BACKGROUND_BLACK.getStyleCode();
         String reset = TextStyle.STYLE_RESET.getStyleCode();
 
         //corners
