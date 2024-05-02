@@ -38,30 +38,27 @@ public class VirtualSocketMainController implements VirtualMainController {
      * @throws RemoteException
      */
     @Override
-    public String connect(VirtualView client, String nickName) throws RemoteException {
+    public void connect(VirtualView client, String nickName) throws RemoteException {
         HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
         data.replace("function", "connect");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("nickname", nickName);
         writeToServer(data, msg);
-        return null;
     }
 
     /**
      * This method creates the json encoding to call in the server's main controller the createWaitingList method
      *
      * @param client
-     * @param clientID
      * @param nickname
      * @param numPlayers number of players in a game
      * @throws RemoteException
      */
     @Override
-    public void createWaitingList(VirtualView client, String clientID, String nickname, int numPlayers) throws RemoteException {
+    public void createWaitingList(VirtualView client, String nickname, int numPlayers) throws RemoteException {
         HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
         data.replace("function", "createWaitingList");
         HashMap<String, String> msg = new HashMap<>();
-        msg.put("clientID", clientID);
         msg.put("nickname", nickname);
         msg.put("numPlayers", String.valueOf(numPlayers));
         writeToServer(data, msg);

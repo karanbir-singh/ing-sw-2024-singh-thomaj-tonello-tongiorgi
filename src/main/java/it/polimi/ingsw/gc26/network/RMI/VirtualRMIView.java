@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.network.RMI;
 
 import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
@@ -13,17 +14,11 @@ import java.util.Scanner;
 public class VirtualRMIView implements VirtualView {
     private final VirtualMainController virtualMainController;
     private VirtualGameController virtualGameController;
-    private String clientID;
-    private String nickname;
-    private Object lock;
-    ClientState clientState;
+    private MainClient mainClient;
 
-    public VirtualRMIView(VirtualMainController virtualMainController) throws RemoteException {
+    public VirtualRMIView(VirtualMainController virtualMainController, MainClient mainClient) throws RemoteException {
         this.virtualMainController = virtualMainController;
-        clientState = ClientState.CONNECTION;
-        clientID = "";
-        lock = new Object();
-
+        this.mainClient = mainClient;
         UnicastRemoteObject.exportObject(this, 0);
     }
 
@@ -34,10 +29,7 @@ public class VirtualRMIView implements VirtualView {
 
     @Override
     public void setClientID(String clientID) throws RemoteException {
-        synchronized (this) {
-            this.clientID = clientID;
-            this.notifyAll();
-        }
+        this.mainClient.setClientID(clientID);
     }
 
     @Override
@@ -47,7 +39,7 @@ public class VirtualRMIView implements VirtualView {
 
     @Override
     public ClientState getState() {
-        return this.clientState;
+        return this.mainClient.getClientState();
     }
 
     /**
@@ -69,7 +61,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateSelectedMission(String clientID) throws RemoteException {
-        if(this.clientID.equals(clientID)){
+        if(this.mainClient.getClientID().equals(clientID)){
             System.out.println("You have selected the mission");
         }
     }
@@ -95,7 +87,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateSelectedSide(String cardIndex, String clientID) throws RemoteException {
-        if(this.clientID.equals(clientID)){
+        if(this.mainClient.getClientID().equals(clientID)){
             System.out.println("You have selected the side in" + cardIndex);
         }
 
@@ -112,7 +104,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateSelectedPositionOnBoard(String selectedX, String selectedY, String playerID, String success) throws RemoteException {
-        if(this.clientID.equals(clientID)){
+        if(this.mainClient.getClientID().equals(playerID)){
             if (Integer.parseInt(success) == 1) {
                 System.out.println(STR."selected x: \{selectedX} y: \{selectedY}");
 
@@ -164,7 +156,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateSelectedCardFromCommonTable(String clientID, String success) throws RemoteException {
-        if(this.clientID.equals(clientID)){
+        if(this.mainClient.getClientID().equals(clientID)){
             System.out.println(STR."you have selected a card from the common table");
         }
 
@@ -204,7 +196,7 @@ public class VirtualRMIView implements VirtualView {
     @Override
     public void showPersonalBoard(String clientID, String ownerNickname, String personalBoardSerialization) throws RemoteException {
         System.out.println(STR."""
-            nickname's personal board \{nickName} :\s
+            nickname's personal board \{ownerNickname} :\s
             \{personalBoardSerialization}""");
     }
 
@@ -236,17 +228,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public String getClientID() throws RemoteException {
-        synchronized (this) {
-            while(this.clientID == null){
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            return this.clientID;
-
-        }
+        return this.mainClient.getClientID();
     }
 
 
@@ -276,92 +258,9 @@ public class VirtualRMIView implements VirtualView {
 
     @Override
     public void updateState(ClientState clientState) throws RemoteException {
-        synchronized (lock) {
-            this.clientState = clientState;
-            this.lock.notifyAll();
-        }
+        this.mainClient.setClientState(clientState);
     }
 
-
-    // Method for running Terminal UI
-    public Pair<VirtualGameController, String> runTUI() throws RemoteException {
-        // TODO gestire la Remote Exception
-        //Initial state in CONNECTION
-        System.out.println("YOU CONNECTED TO THE SERVER");
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("INSERISCI IL NICKNAME\nNickname: ");
-        this.nickname = scanner.nextLine();
-        this.virtualMainController.connect(this, this.nickname);
-
-        synchronized (this.lock) {
-            while (this.clientState == ClientState.CONNECTION) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        if (this.clientState == ClientState.CREATOR) {
-            System.out.print("THERE ARE NO GAME FREE, YOU MUST CREATE A NEW GAME:\nNumber of players (2/3/4): ");
-            String decision = scanner.nextLine();
-            this.virtualMainController.createWaitingList(this, this.nickname, Integer.parseInt(decision));
-
-            synchronized (this.lock) {
-                while (this.clientState == ClientState.CREATOR) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            while (this.clientState == ClientState.INVALID_NUMBER_OF_PLAYER) {
-                this.clientState = ClientState.CREATOR;
-                System.out.print("INVALID NUMBER OF PLAYERS\nNumber of players (2/3/4): ");
-                decision = scanner.nextLine();
-                this.virtualMainController.createWaitingList(this, this.nickname, Integer.parseInt(decision));
-
-                synchronized (this.lock) {
-                    while (this.clientState == ClientState.CREATOR) {
-                        try {
-                            lock.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        } else if (clientState.equals(ClientState.INVALID_NICKNAME)) {
-            while (clientState == ClientState.INVALID_NICKNAME) {
-                System.out.print("NICKNAME GIA' PRESO\nNickname: ");
-                this.nickname = scanner.nextLine();
-
-                this.virtualMainController.connect(this, this.nickname);
-
-                synchronized (this.lock) {
-                    while (this.clientState == ClientState.CONNECTION) {
-                        try {
-                            lock.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }
-
-        System.out.println("WAITING ...");
-        while (clientState == ClientState.WAITING) {
-            System.out.flush();
-        }
-
-        virtualGameController = this.virtualMainController.getVirtualGameController();
-        System.out.println("GAME BEGIN");
-        return new Pair<>(this.virtualGameController, this.clientID);
-    }
 
     // Method for running Graphic UI
     public void runGUI() {

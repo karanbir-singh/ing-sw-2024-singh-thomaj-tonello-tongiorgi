@@ -257,4 +257,13 @@ public class SocketServerHandler implements VirtualView, Runnable {
         return this.socketClient.getClientID();
     }
 
+    /**
+     * @return
+     * @throws RemoteException
+     */
+    @Override
+    public ClientState getState() throws RemoteException {
+        return null;
+    }
+
 }

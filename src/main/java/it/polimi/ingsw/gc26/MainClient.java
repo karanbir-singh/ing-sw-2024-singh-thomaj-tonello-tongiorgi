@@ -2,10 +2,13 @@ package it.polimi.ingsw.gc26;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.gc26.controller.GameController;
+import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIMainController;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
+import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.network.socket.client.SocketClient;
 import it.polimi.ingsw.gc26.network.socket.server.SocketServer;
 import javafx.util.Pair;
@@ -35,6 +38,68 @@ public class MainClient {
      */
     private enum ClientViewType {rmi, socket}
 
+    private VirtualMainController virtualMainController;
+
+    private VirtualGameController virtualGameController;
+
+    private VirtualView virtualView;
+
+    public MainClient(VirtualMainController mainController) {
+        this.virtualMainController = mainController;
+        this.lock = new Object();
+        this.clientState = ClientState.CONNECTION;
+    }
+
+    private String clientID;
+    private String nickname;
+    private Object lock;
+    ClientState clientState;
+
+    public void setClientID(String clientID) {
+        synchronized (this) {
+            this.clientID = clientID;
+            notifyAll();
+        }
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setClientState(ClientState clientState) {
+        synchronized (lock) {
+            this.clientState = clientState;
+            this.lock.notifyAll();
+        }
+    }
+
+    public ClientState getClientState() {
+        synchronized (lock) {
+            while(clientState == null) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return clientState;
+
+        }
+    }
+
+    public String getClientID() {
+        synchronized (this) {
+            while(this.clientID == null){
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return clientID;
+        }
+    }
+
     /**
      * Game controller, it can be instanced as a SocketGameController or a RMIGameController
      */
@@ -49,22 +114,22 @@ public class MainClient {
     private static void startRMIClient(UserInterface userInterface) throws RemoteException, NotBoundException {
         // Finding the registry and getting the stub of virtualMainController in the registry
         Registry registry = LocateRegistry.getRegistry(1099);
-        VirtualMainController virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
+        MainClient client = new MainClient((VirtualMainController) registry.lookup(remoteObjectName));
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            VirtualRMIView virtualRMIView = new VirtualRMIView(virtualMainController);
-            Pair<VirtualGameController, String> controllerPair = virtualRMIView.runTUI();
-
-            VirtualGameController gameController = controllerPair.getKey();
-            String clientID = controllerPair.getValue();
-            System.out.println(clientID);
-            virtualRMIView.setClientID(clientID);
-            MainClient.runCommonTui(gameController, clientID);
+            client.virtualView = new VirtualRMIView(client.virtualMainController, client);
+            client.connect();
+            //VirtualRMIView virtualRMIView = new VirtualRMIView(virtualMainController);
+            //Pair<VirtualGameController, String> controllerPair = virtualRMIView.runTUI();
+            //VirtualGameController gameController = controllerPair.getKey();
+            //String clientID = controllerPair.getValue();
+            //virtualRMIView.setClientID(clientID);
+            client.runCommonTui();
 
 
         } else if (userInterface == UserInterface.gui) {
-            new VirtualRMIView(virtualMainController).runGUI();
+            //new VirtualRMIView(virtualMainController).runGUI();
         }
     }
 
@@ -83,13 +148,17 @@ public class MainClient {
         // Get input and out stream from the server
         InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
         OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
+        SocketClient socketClient = new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx));
+        MainClient client = new MainClient(((SocketClient)socketClient).getVirtualMainController());
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            Pair<VirtualGameController, String> controllerPair = new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runTUI();
-            VirtualGameController gameController = controllerPair.getKey();
-            String clientID = controllerPair.getValue();
-            MainClient.runCommonTui(gameController, clientID);
+            client.connect();
+            client.virtualView = socketClient.serverHandler;
+            //Pair<VirtualGameController, String> controllerPair = new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runTUI();
+            //VirtualGameController gameController = controllerPair.getKey();
+            //String clientID = controllerPair.getValue();
+            client.runCommonTui();
 
         } else if (userInterface == UserInterface.gui) {
             new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runGUI();
@@ -99,11 +168,9 @@ public class MainClient {
     /**
      * Runs the TUI for socket and RMI connection, after game controller creation
      *
-     * @param virtualGameController socket or rmi game controller
-     * @param clientID              client's ID
      * @throws RemoteException
      */
-    public static void runCommonTui(VirtualGameController virtualGameController, String clientID) throws RemoteException {
+    public void runCommonTui() throws RemoteException {
         // Declare scanner
         Scanner scan = new Scanner(System.in);
 
@@ -169,6 +236,93 @@ public class MainClient {
             }
 
         }
+    }
+
+    public void connect() throws RemoteException {
+        // TODO gestire la Remote Exception
+        //Initial state in CONNECTION
+        System.out.println("YOU CONNECTED TO THE SERVER");
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("INSERISCI IL NICKNAME\nNickname: ");
+        this.nickname = scanner.nextLine();
+        this.virtualMainController.connect(this.virtualView, this.nickname);
+
+        synchronized (this.lock) {
+            while (this.clientState == ClientState.CONNECTION) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if (this.clientState == ClientState.CREATOR) {
+            System.out.print("THERE ARE NO GAME FREE, YOU MUST CREATE A NEW GAME:\nNumber of players (2/3/4): ");
+            String decision = scanner.nextLine();
+            this.virtualMainController.createWaitingList(this.virtualView, this.nickname, Integer.parseInt(decision));
+
+            synchronized (this.lock) {
+                while (this.clientState == ClientState.CREATOR) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            while (this.clientState == ClientState.INVALID_NUMBER_OF_PLAYER) {
+                this.clientState = ClientState.CREATOR;
+                System.out.print("INVALID NUMBER OF PLAYERS\nNumber of players (2/3/4): ");
+                decision = scanner.nextLine();
+                this.virtualMainController.createWaitingList(this.virtualView, this.nickname, Integer.parseInt(decision));
+
+                synchronized (this.lock) {
+                    while (this.clientState == ClientState.CREATOR) {
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        } else if (clientState.equals(ClientState.INVALID_NICKNAME)) {
+            while (clientState == ClientState.INVALID_NICKNAME) {
+                System.out.print("NICKNAME GIA' PRESO\nNickname: ");
+                this.nickname = scanner.nextLine();
+
+                this.virtualMainController.connect(this.virtualView, this.nickname);
+
+                synchronized (this.lock) {
+                    while (this.clientState == ClientState.CONNECTION) {
+                        try {
+                            lock.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println("WAITING ...");
+        while (clientState == ClientState.WAITING) {
+            System.out.flush();
+        }
+
+        synchronized (this) {
+            this.virtualGameController = this.virtualMainController.getVirtualGameController();
+            while(this.virtualGameController == null) {
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        System.out.println("GAME BEGIN");
     }
 
     public static void main(String args[]) {

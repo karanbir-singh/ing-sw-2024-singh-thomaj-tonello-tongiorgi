@@ -240,4 +240,13 @@ public class VirtualSocketView implements VirtualView {
         sendToClient("getClientID", null);
         return null;
     }
+
+    /**
+     * @return
+     * @throws RemoteException
+     */
+    @Override
+    public ClientState getState() throws RemoteException {
+        return null;
+    }
 }
