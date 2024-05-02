@@ -266,7 +266,7 @@ public class CommonTable {
         return selectedY;
     }
 
-    private String[][] emptyPrintable(int xCardDim, int yCardDim){
+    public String[][] emptyPrintable(int xCardDim, int yCardDim){
         String[][] s = new String[yCardDim][xCardDim];
 
         String decoration = SpecialCharacters.BACKGROUND_BROWN_DARK.getCharacter();
@@ -276,10 +276,10 @@ public class CommonTable {
         String reset = TextStyle.STYLE_RESET.getStyleCode();
 
         //corners
-        s[0][0] = backgroundColor + backgroundSymbol;
+        s[0][0] = backgroundSymbol;
         s[0][xCardDim - 1] = backgroundSymbol;
         s[yCardDim - 1][0] = backgroundSymbol;
-        s[yCardDim - 1][xCardDim - 1] = backgroundSymbol + reset;
+        s[yCardDim - 1][xCardDim - 1] = backgroundSymbol;
 
         //decoration
         s[0][xCardDim/2] = blank + decoration  + blank;
@@ -292,6 +292,7 @@ public class CommonTable {
                 if(s[i][j] == null){
                     s[i][j] = blank;
                 }
+                s[i][j] = backgroundColor + s[i][j] + reset;
             }
         }
 

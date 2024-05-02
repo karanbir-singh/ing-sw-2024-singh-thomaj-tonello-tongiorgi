@@ -103,6 +103,20 @@ public class CLITest {
     }
 
     @Test
+    public void emptySideCLI() {
+        Game game = new Game(new ArrayList<>());
+        CommonTable ct = game.getCommonTable();
+        String[][] empty = ct.emptyPrintable(3,3);
+
+        for (int i=0; i<3; i++){
+            for(int j=0; j<3; j++){
+                System.out.print(empty[i][j]);
+            }
+            System.out.print("\n");
+        }
+    }
+
+    @Test
     public void scoreCLI() {
         Game game = new Game(new ArrayList<>());
         GameController gameController = new GameController(game);
