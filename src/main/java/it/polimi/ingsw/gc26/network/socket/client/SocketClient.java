@@ -120,7 +120,7 @@ public class SocketClient {
         if (clientState == ClientState.CREATOR) {
             System.out.println("You must initialize a new game \n Insert number of players: ");
             Integer numberPlayers = Integer.parseInt(scan.nextLine());
-            this.virtualMainController.createWaitingList(this.serverHandler, this.clientID, this.nickname, numberPlayers);
+            this.virtualMainController.createWaitingList(this.serverHandler, nickname,numberPlayers);
         }
         System.out.println("Waiting for other players ...");
 

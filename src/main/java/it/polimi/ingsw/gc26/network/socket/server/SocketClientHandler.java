@@ -66,11 +66,11 @@ public class SocketClientHandler implements Runnable {
                 // Execute requested command
                 switch (msg.get("function").textValue()) {
                     case "connect":
-                        String clientID = this.mainController.connect(this.virtualSocketView, value.get("nickname").asText());
-                        this.virtualSocketView.setClientID(clientID);
+                        //String clientID = this.mainController.connect(this.virtualSocketView, value.get("nickname").asText());
+                        //this.virtualSocketView.setClientID(clientID);
                         break;
                     case "createWaitingList":
-                        this.mainController.createWaitingList(this.virtualSocketView, value.get("clientID").asText(), value.get("nickname").asText(), value.get("numPlayers").asInt());
+                        //this.mainController.createWaitingList(this.virtualSocketView, value.get("clientID").asText(), value.get("nickname").asText(), value.get("numPlayers").asInt());
                         break;
                     case "getVirtualGameController":
                         this.gameController = this.mainController.getGameController();

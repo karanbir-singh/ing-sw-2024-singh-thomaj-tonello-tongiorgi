@@ -153,4 +153,9 @@ public class SocketServerHandler implements VirtualView, Runnable {
         }
 
     }
+
+    @Override
+    public ClientState getState() throws RemoteException {
+        return null;
+    }
 }

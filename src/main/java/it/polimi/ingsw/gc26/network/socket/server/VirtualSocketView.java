@@ -98,4 +98,9 @@ public class VirtualSocketView implements VirtualView {
     public void setGameController() throws RemoteException {
         sendToClient("setGameController", null);
     }
+
+    @Override
+    public ClientState getState() throws RemoteException {
+        return null;
+    }
 }
