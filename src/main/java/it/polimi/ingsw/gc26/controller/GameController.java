@@ -645,6 +645,8 @@ public class GameController implements Serializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        this.game.getPlayerByID(playerID).getPersonalBoard().showBoard();
     }
 
     /**
@@ -733,11 +735,11 @@ public class GameController implements Serializable {
      */
     public void printPersonalBoard(String nickname, String playerID) {
         if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
-            Player player = game.getPlayerByNickname(nickname);
+           // Player player = game.getPlayerByNickname(nickname);
 
             // TODO need to add a method in PersonalBoard for update view
             if (isDebug) {
-                System.out.println(player.getNickname() + " printed personal board");
+               // System.out.println(player.getNickname() + " printed personal board");
             }
 
             // TODO need to add a method in PersonalBoard

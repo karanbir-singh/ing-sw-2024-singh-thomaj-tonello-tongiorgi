@@ -96,10 +96,9 @@ public class MainClient {
      * @param clientID              client's ID
      * @throws RemoteException
      */
-    public static void runCommonTui(VirtualGameController virtualGameController, String clientID) throws RemoteException {
+    public static void runCommonTui(VirtualGameController virtualGameController, String clientID) {
         // Declare scanner
         Scanner scan = new Scanner(System.in);
-
         // Infinite loop
         while (true) {
             boolean chat = false;
@@ -119,46 +118,105 @@ public class MainClient {
                 case "/1":
                     System.out.println("WHAT CARD DO YOU WANT TO SELECTED: 0/1/2");
                     String xPosition = scan.nextLine();
-                    virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), clientID);
+                    try {
+                        virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), clientID);
+                    } catch (RemoteException e) {
+                        System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+
+                        //prova
+                        Registry registry = null;
+                        try {
+                            registry = LocateRegistry.getRegistry(1099);
+                            VirtualMainController virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
+                            virtualGameController = virtualMainController.getVirtualGameController();
+                        } catch (RemoteException ex) {
+                            System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                        } catch (NotBoundException ex) {
+                            System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                        }
+
+
+                    }
                     break;
                 case "/2":
-                    virtualGameController.turnSelectedCardSide(clientID);
+                    try {
+                        virtualGameController.turnSelectedCardSide(clientID);
+                    } catch (RemoteException e) {
+                        System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                    }
                     break;
                 case "/3":
-                    virtualGameController.playCardFromHand(clientID);
+                    try {
+                        virtualGameController.playCardFromHand(clientID);
+                    } catch (RemoteException e) {
+                        System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                    }
                     break;
                 case "/4":
                     System.out.println("WHAT XPOSITION DO YOU WANT TO SELECT ON PERSONAL BOARD:");
                     String XPosition = scan.nextLine();
                     System.out.println("WHAT YPOSITION DO YOU WANT TO SELECT ON PERSONAL BOARD:");
                     String YPosition = scan.nextLine();
-                    virtualGameController.selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
+                    try {
+                        virtualGameController.selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
+                    } catch (RemoteException e) {
+                        System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                    }
                     break;
                 case "/5":
                     System.out.println("WHAT XPOSITION DO YOU WANT TO SELECT ON COMMON BOARD:");
                     XPosition = scan.nextLine();
                     System.out.println("WHAT YPOSITION DO YOU WANT TO SELECT ON COMMON BOARD:");
                     YPosition = scan.nextLine();
-                    virtualGameController.selectCardFromCommonTable(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
+                    try {
+                        virtualGameController.selectCardFromCommonTable(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
+                    } catch (RemoteException e) {
+                        System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                    }
                     break;
                 case "/6":
-                    virtualGameController.drawSelectedCard(clientID);
+                    try {
+                        virtualGameController.drawSelectedCard(clientID);
+                    } catch (RemoteException e) {
+                        System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                    }
                     break;
                 case "/7":
-                    virtualGameController.choosePawnColor("red", clientID);
+                    try {
+                        virtualGameController.choosePawnColor("red", clientID);
+                    } catch (RemoteException e) {
+                        System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                    }
                     break;
                 case "/8":
-                    virtualGameController.selectSecretMission(0, clientID);
+                    try {
+                        virtualGameController.selectSecretMission(0, clientID);
+                    } catch (RemoteException e) {
+                        System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+
+                    }
                     break;
                 case "/9":
-                    virtualGameController.setSecretMission(clientID);
+                    try {
+                        virtualGameController.setSecretMission(clientID);
+                    } catch (RemoteException e) {
+                        System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                    }
                     break;
                 case "/10":
-                    virtualGameController.printPersonalBoard("", clientID); // TODO get nickname as parameter
+                    try {
+                        virtualGameController.printPersonalBoard("", clientID); // TODO get nickname as parameter
+                    } catch (RemoteException e) {
+                        System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                    }
             }
 
             if (chat) {
-                virtualGameController.addMessage(line, receiver, clientID, LocalTime.now().toString());
+                try {
+                    virtualGameController.addMessage(line, receiver, clientID, LocalTime.now().toString());
+                } catch (RemoteException e) {
+                    System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
+                }
             }
 
         }

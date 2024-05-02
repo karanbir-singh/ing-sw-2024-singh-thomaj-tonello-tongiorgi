@@ -15,6 +15,7 @@ import java.net.ServerSocket;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Scanner;
 
 public class MainServer {
     /**
@@ -71,19 +72,30 @@ public class MainServer {
 
     public static void main(String[] args) {
         // Create main controller
-
-
         MainController mainController = new MainController();
-        try{
-            FileInputStream fileInputStream = new FileInputStream("mainController");
-            ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
-            mainController = (MainController) inputStream.readObject();
-            inputStream.close();
-            fileInputStream.close();
-            mainController.recreateGames();
-        }catch (Exception i){
-            System.out.println("file not found");
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("DO YOU WANT TO RESTORE EVERYTHING?");
+        String decision = scanner.nextLine();
+        if(decision.equals("yes")){
+            System.out.println("INSERT THE FILEPATH");
+            String path = scanner.nextLine();
+            try{
+                FileInputStream fileInputStream = new FileInputStream(path);
+                ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
+                mainController = (MainController) inputStream.readObject();
+                inputStream.close();
+                fileInputStream.close();
+                mainController.recreateGames();
+            }catch (Exception i){
+                System.out.println("file not found");
+            }
+        }else if(decision.equals("no")){
+            System.out.println("everything new");
         }
+
+
+
         //Deserialization before everything, find if there was something in the disk
 
 
