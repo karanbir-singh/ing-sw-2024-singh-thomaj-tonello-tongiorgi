@@ -294,4 +294,22 @@ public class Game {
     public ArrayList<Player> getWinners() {
         return winners;
     }
+
+    public void showCommonTable(){
+        String[][] ct = commonTable.printableCommonTable();
+
+        System.out.println("\t\t\tCOMMON TABLE:\n");
+        for (String[] row: ct) {
+            for (String col: row) {
+                System.out.print(col);
+            }
+            System.out.print("\n");
+        }
+
+        System.out.print("\n\t\t\tCURRENT SCORES:\n\n");
+
+        for (Player p: players) {
+            System.out.println(p.printableScore());
+        }
+    }
 }

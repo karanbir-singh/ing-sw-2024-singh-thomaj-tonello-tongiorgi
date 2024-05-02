@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.model.game;
 
 import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
@@ -348,29 +349,49 @@ public class CommonTable {
 
         //insert resource deck
         ct[yResource-1][0] = "Resource Deck  ";
-        addPrintable(resourceDeck.printableDeck(), ct, xResource, yResource, xCardDim, yCardDim);
-        decorateDeck(ct, xResource, yResource, xCardDim, yCardDim);
-
+        if(resourceDeck.getTopCard() == null){
+            addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource, xCardDim, yCardDim);
+        } else {
+            addPrintable(resourceDeck.printableDeck(), ct, xResource, yResource, xCardDim, yCardDim);
+            decorateDeck(ct, xResource, yResource, xCardDim, yCardDim);
+        }
 
         //insert uncovered resource cards
         xResource += xCardDim + 2;
-        for (Card r: resourceCards) {
-            ct[yResource-1][1 + resourceCards.indexOf(r)] = "  Resource Card " + resourceCards.indexOf(r);
-            addPrintable(r.getFront().printableSide(), ct, xResource, yResource, xCardDim, yCardDim);
+        for (int i=0; i<2; i++) {
+            Card r = resourceCards.get(i);
+            ct[yResource-1][1 + i] = "  Resource Card " + i;
+
+            if(r == null){
+                addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource, xCardDim, yCardDim);
+            } else {
+                addPrintable(r.getFront().printableSide(), ct, xResource, yResource, xCardDim, yCardDim);
+            }
+
             xResource += xCardDim + 1;
         }
 
         //insert gold deck
         ct[yGold-1][0] = "Gold Deck       " ;
-        addPrintable(goldDeck.printableDeck(), ct, xGold, yGold, xCardDim, yCardDim);
-        decorateDeck(ct, xGold, yGold, xCardDim, yCardDim);
 
+        if(goldDeck.getTopCard() == null){
+            addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold, xCardDim, yCardDim);
+        } else {
+            addPrintable(goldDeck.printableDeck(), ct, xGold, yGold, xCardDim, yCardDim);
+            decorateDeck(ct, xGold, yGold, xCardDim, yCardDim);
+        }
 
         //insert uncovered gold cards
         xGold += xCardDim + 2;
-        for (Card g: goldCards) {
-            ct[yGold-1][1 + goldCards.indexOf(g)] = "  Gold Card " + goldCards.indexOf(g) + "    ";
-            addPrintable(g.getFront().printableSide(), ct, xGold, yGold, xCardDim, yCardDim);
+        for (int i=0; i<2; i++) {
+            Card g = goldCards.get(i);
+            ct[yGold-1][1 + i] = "  Gold Card " + i + "    ";
+
+            if(g == null){
+                addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold, xCardDim, yCardDim);
+            } else {
+                addPrintable(g.getFront().printableSide(), ct, xGold, yGold, xCardDim, yCardDim);
+            }
             xGold += 4;
         }
 

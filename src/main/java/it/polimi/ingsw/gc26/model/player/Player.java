@@ -214,7 +214,7 @@ public class Player {
         String background = "▒";
         String fill = "█";
 
-        s.append(pawnColor.getFontColor());
+        s.append(nickname).append(" ").append(pawnColor.getFontColor());
 
         for (i=0; i<score; i++){
             s.append(fill);

@@ -60,13 +60,33 @@ public class CLITest {
 
     @Test
     public void commonTableCLI() {
-        Game game = new Game(new ArrayList<>());
+        ArrayList<Player> players = new ArrayList<>();
+
+        players.add(new Player("0", "Pippo"));
+        players.add(new Player("1", "Baudo"));
+        players.add(new Player("2", "Carlo"));
+        players.add(new Player("4", "Kevin"));
+
+        Game game = new Game(players);
         GameController gc = new GameController(game);
+
         game.setState(GameState.COMMON_TABLE_PREPARATION);
         gc.prepareCommonTable();
         game.setState(GameState.COMMON_MISSION_PREPARATION);
         gc.prepareCommonMissions();
-        CommonTable ct = game.getCommonTable();
+
+        players.get(0).setPawn("BLUE", game.getAvailablePawns());
+        players.get(1).setPawn("YELLOW", game.getAvailablePawns());
+        players.get(2).setPawn("RED", game.getAvailablePawns());
+        players.get(3).setPawn("GREEN", game.getAvailablePawns());
+
+        for (Player p: players) {
+            p.createPersonalBoard();
+            p.getPersonalBoard().setScore(players.indexOf(p)*3 + 7);
+        }
+
+
+        /*CommonTable ct = game.getCommonTable();
         String[][] s = ct.printableCommonTable();
 
         System.out.println("\n");
@@ -76,6 +96,9 @@ public class CLITest {
             }
             System.out.print("\n");
         }
+        System.out.print("\n");*/
+
+        game.showCommonTable();
         System.out.print("\n");
     }
 
