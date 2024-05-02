@@ -66,7 +66,7 @@ public class CLITest {
         players.add(new Player("0", "Pippo"));
         players.add(new Player("1", "Baudo"));
         players.add(new Player("2", "Carlo"));
-        players.add(new Player("4", "Kevin"));
+        players.add(new Player("4", "Giancarlo Peppino"));
 
         Game game = new Game(players);
         GameController gc = new GameController(game);

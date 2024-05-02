@@ -297,6 +297,8 @@ public class Game {
 
     public void showCommonTable(){
         String[][] ct = commonTable.printableCommonTable();
+        int maxLenght = 0;
+        StringBuilder spaces;
 
         System.out.println("\t\t\tCOMMON TABLE:\n");
         for (String[] row: ct) {
@@ -309,7 +311,19 @@ public class Game {
         System.out.print("\n\t\t\tCURRENT SCORES:\n\n");
 
         for (Player p: players) {
-            System.out.println(p.printableScore());
+            maxLenght = Math.max(maxLenght, p.getNickname().length());
+        }
+
+        maxLenght ++;
+
+        for (Player p: players) {
+            int i = 0;
+            spaces = new StringBuilder();
+            while(i + p.getNickname().length() < maxLenght){
+                spaces.append(" ");
+                i++;
+            }
+            System.out.println(p.getNickname() + spaces + p.printableScore());
         }
     }
 }
