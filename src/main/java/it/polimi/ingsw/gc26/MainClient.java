@@ -58,9 +58,9 @@ public class MainClient {
     ClientState clientState;
 
     public void setClientID(String clientID) {
-        synchronized (this.lockController) {
+        synchronized (this) {
             this.clientID = clientID;
-            lockController.notifyAll();
+            this.notifyAll();
         }
     }
 
@@ -76,9 +76,9 @@ public class MainClient {
     }
 
     public void setVirtualGameController(VirtualGameController virtualGameController) {
-        synchronized (this) {
+        synchronized (this.lockController) {
             this.virtualGameController = virtualGameController;
-            this.notifyAll();
+            this.lockController.notifyAll();
         }
     }
 
@@ -292,20 +292,18 @@ public class MainClient {
                 }
             }
         } else if (clientState.equals(ClientState.INVALID_NICKNAME)) {
-            while (clientState == ClientState.INVALID_NICKNAME) {
-                System.err.println("Nickname not available!"); System.err.flush();
-                System.out.println("Insert new nickname: ");
-                this.nickname = scanner.nextLine();
+            synchronized (this.lock) {
+                while (clientState == ClientState.INVALID_NICKNAME || this.clientState == ClientState.CONNECTION) {
+                    System.err.println("Nickname not available!"); System.err.flush();
+                    System.out.println("Insert new nickname: ");
+                    this.nickname = scanner.nextLine();
 
-                this.virtualMainController.connect(this.virtualView, this.nickname, this.clientState);
+                    this.virtualMainController.connect(this.virtualView, this.nickname, this.clientState);
 
-                synchronized (this.lock) {
-                    while (this.clientState == ClientState.CONNECTION) {
-                        try {
-                            lock.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
             }

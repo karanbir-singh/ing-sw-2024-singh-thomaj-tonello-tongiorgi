@@ -85,11 +85,8 @@ public class SocketClient {
      * Method used by the server to set the game controller as an answer to the change of state
      */
     public void setVirtualGameController() {
-        synchronized (this) {
-            this.virtualGameController = new VirtualSocketGameController(this.outputToServer);
-            this.notifyAll();
-        }
-        this.mainClient.setVirtualGameController(new VirtualSocketGameController(this.outputToServer));
+        this.virtualGameController = new VirtualSocketGameController(this.outputToServer);
+        this.mainClient.setVirtualGameController(this.virtualGameController);
     }
 
     /**
@@ -110,16 +107,7 @@ public class SocketClient {
     }
 
     public VirtualMainController getVirtualMainController() {
-        synchronized (this) {
-            while (this.virtualMainController == null) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            return this.virtualMainController;
-        }
+        return this.virtualMainController;
     }
 }
 
