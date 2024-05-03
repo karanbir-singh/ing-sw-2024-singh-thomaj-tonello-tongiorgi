@@ -25,7 +25,7 @@ public class MainController implements Serializable {
     /**
      * This attribute represents the list of game controllers of started games
      */
-    private transient final ArrayList<GameController> gamesControllers;
+    private transient ArrayList<GameController> gamesControllers;
 
     /**
      * This attribute represents a priority queue of main requests
@@ -66,7 +66,7 @@ public class MainController implements Serializable {
 
 
     private void copyToDisk() throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream("mainController");
+        FileOutputStream fileOutputStream = new FileOutputStream("src/main/mainController.bin");
         ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
         outputStream.writeObject(this);
         outputStream.close();
@@ -240,7 +240,7 @@ public class MainController implements Serializable {
             if (waitingClients.size() >= maxNumWaitingClients) {
                 // Then, create a new game controller
                 try {
-                    gameController = new GameController(new Game(waitingPlayers),"gameControllerText"+ gamesControllers.size());
+                    gameController = new GameController(new Game(waitingPlayers),"src/main/resources/gameControllerText" + gamesControllers.size() + ".bin");
                 } catch (IOException e) {
                     System.out.println("COLPA DELLA CREAZIONE GAME CONTROLLER");
                     e.printStackTrace();
@@ -293,16 +293,20 @@ public class MainController implements Serializable {
 
     public void recreateGames() throws IOException, ClassNotFoundException {
         int numberOfGames = numberOfActiveGames;
-        gamesControllers.clear();
+        gamesControllers = new ArrayList<>();
         for(int i = 0; i < numberOfGames; i++){
            GameController gameController = new GameController(null,null);
            //deserialization
-           FileInputStream fileInputStream = new FileInputStream("gameControllerText"+ i);
+           FileInputStream fileInputStream = new FileInputStream("src/main/resources/gameControllerText" + i + ".bin");
            ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
            gameController = (GameController) inputStream.readObject();
            inputStream.close();
            fileInputStream.close();
            gamesControllers.add(i,gameController);
        }
+
+        System.out.println("GAME CREATI");
+        System.out.println(gamesControllers.getFirst().getGame().getPlayers().getFirst().getNickname());
+        System.out.println(gamesControllers.getFirst().getGame().getPlayers().getLast().getNickname());
     }
 }

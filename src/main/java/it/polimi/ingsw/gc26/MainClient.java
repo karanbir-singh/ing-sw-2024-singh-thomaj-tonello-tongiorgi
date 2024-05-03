@@ -127,8 +127,12 @@ public class MainClient {
                         Registry registry = null;
                         try {
                             registry = LocateRegistry.getRegistry(1099);
+
                             VirtualMainController virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
+                            System.out.println("virtualMainController Preso");
                             virtualGameController = virtualMainController.getVirtualGameController();
+                            virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), clientID);
+                            System.out.println("virtualGameController Preso");
                         } catch (RemoteException ex) {
                             System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
                         } catch (NotBoundException ex) {

@@ -12,6 +12,8 @@ import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.request.game_request.GameRequest;
 
 import java.io.*;
+import java.nio.file.FileSystemNotFoundException;
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class GameController implements Serializable {
@@ -22,7 +24,7 @@ public class GameController implements Serializable {
     /**
      * This attribute represents the game that the game controller controls
      */
-    private final Game game;
+    private Game game;
     /**
      * This attribute represents the list of players that need to do an action, used only in the game preparation phase
      */
@@ -39,17 +41,19 @@ public class GameController implements Serializable {
      * @param game the object that represents the game
      */
     public GameController(Game game, String pathToCopy) throws IOException {
+        if(game != null && pathToCopy != null){
+            this.game = game;
+            this.game.setState(GameState.COMMON_TABLE_PREPARATION);
+            this.playersToWait = new ArrayList<>();
+            this.gameRequests = new ArrayDeque<>();
+            this.launchExecutor();
+            this.pathToCopy = pathToCopy;
+            this.copyToDisk();
+        }
+
         this.isDebug = java.lang.management.ManagementFactory.
                 getRuntimeMXBean().
                 getInputArguments().toString().indexOf("jdwp") >= 0;
-        this.game = game;
-        this.game.setState(GameState.COMMON_TABLE_PREPARATION);
-        this.playersToWait = new ArrayList<>();
-        this.gameRequests = new ArrayDeque<>();
-        this.launchExecutor();
-        this.pathToCopy = pathToCopy;
-        this.copyToDisk();
-
     }
 
     private void copyToDisk() throws IOException {
@@ -471,8 +475,11 @@ public class GameController implements Serializable {
                     System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
                 }
             }
+
+            System.out.println("carta selezionata");
         } else {
             // TODO gestire cosa modificare nel model se lo stato è errato
+            System.out.println("stato erroneo");
         }
 
         //copy on the disk all game
@@ -749,6 +756,9 @@ public class GameController implements Serializable {
 
     }
 
+    public Game getGame(){
+        return this.game;
+    }
     /**
      * Changes the current player
      */

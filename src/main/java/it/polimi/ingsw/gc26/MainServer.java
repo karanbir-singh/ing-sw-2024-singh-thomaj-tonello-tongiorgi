@@ -80,16 +80,33 @@ public class MainServer {
         if(decision.equals("yes")){
             System.out.println("INSERT THE FILEPATH");
             String path = scanner.nextLine();
-            try{
-                FileInputStream fileInputStream = new FileInputStream(path);
-                ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
+            FileInputStream fileInputStream = null;
+            try {
+                fileInputStream = new FileInputStream(path);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                System.out.println("FILE NOT FOUND, FAULT OF FileInputStream");
+            }
+            ObjectInputStream inputStream = null;
+            try {
+                inputStream = new ObjectInputStream(fileInputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("IO EXCEPTION, FAULT OF ObjectInputStream");
+            }
+            try {
                 mainController = (MainController) inputStream.readObject();
                 inputStream.close();
                 fileInputStream.close();
                 mainController.recreateGames();
-            }catch (Exception i){
-                System.out.println("file not found");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
+
         }else if(decision.equals("no")){
             System.out.println("everything new");
         }
