@@ -2,16 +2,15 @@ package it.polimi.ingsw.gc26;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.controller.GameController;
-import it.polimi.ingsw.gc26.controller.MainController;
-import it.polimi.ingsw.gc26.network.RMI.VirtualRMIMainController;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.network.socket.client.SocketClient;
+import it.polimi.ingsw.gc26.network.socket.client.ClientController;
+import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
+import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
 import it.polimi.ingsw.gc26.network.socket.server.SocketServer;
-import javafx.util.Pair;
+import it.polimi.ingsw.gc26.network.socket.server.VirtualSocketView;
 
 import java.io.*;
 import java.net.Socket;
@@ -24,9 +23,23 @@ import java.util.Scanner;
 
 public class MainClient {
     /**
+     * ID of the client
+     */
+//    private String clientID;
+
+    /**
+     * Nickname of the client
+     */
+//    private String nickname;
+    /**
      * RMI bound object name
      */
     private static final String remoteObjectName = "RMIMainController";
+
+    /**
+     * Client's state
+     */
+//    private ClientState clientState;
 
     /**
      * User interface types
@@ -44,78 +57,26 @@ public class MainClient {
 
     private VirtualView virtualView;
 
-    public MainClient(VirtualMainController mainController) {
-        this.virtualMainController = mainController;
+    private ClientController clientController;
+
+    private final Object lock;
+
+    public MainClient() {
         this.lock = new Object();
-        this.clientState = ClientState.CONNECTION;
-        this.lockController = new Object();
+        this.clientController = new ClientController(this, null, null, ClientState.CONNECTION, lock);
     }
 
-    private String clientID;
-    private String nickname;
-    private Object lock;
-    private Object lockController;
-    ClientState clientState;
-
-    public void setClientID(String clientID) {
-        synchronized (this.lockController) {
-            this.clientID = clientID;
-            lockController.notifyAll();
-        }
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setClientState(ClientState clientState) {
-        synchronized (lock) {
-            this.clientState = clientState;
-            this.lock.notifyAll();
-        }
+    public void setVirtualMainController(VirtualMainController virtualMainController) {
+        this.virtualMainController = virtualMainController;
     }
 
     public void setVirtualGameController(VirtualGameController virtualGameController) {
-        synchronized (this) {
-            this.virtualGameController = virtualGameController;
-            this.notifyAll();
-        }
+        this.virtualGameController = virtualGameController;
     }
 
-    public ClientState getClientState() {
-        synchronized (lock) {
-            while(clientState == null) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            return clientState;
-
-        }
+    public void setVirtualView(VirtualView virtualView) {
+        this.virtualView = virtualView;
     }
-
-    public String getClientID() {
-        synchronized (this) {
-            while(this.clientID == null){
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            return clientID;
-        }
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    /**
-     * Game controller, it can be instanced as a SocketGameController or a RMIGameController
-     */
 
     /**
      * Starts RMI Client view
@@ -127,13 +88,19 @@ public class MainClient {
     private static void startRMIClient(UserInterface userInterface) throws RemoteException, NotBoundException {
         // Finding the registry and getting the stub of virtualMainController in the registry
         Registry registry = LocateRegistry.getRegistry(1099);
-        MainClient client = new MainClient((VirtualMainController) registry.lookup(remoteObjectName));
+        //new VirtualRMIView(/*client.virtualMainController,*/ client);
+
+        MainClient mainClient = new MainClient();
+        mainClient.setVirtualMainController((VirtualMainController) registry.lookup(remoteObjectName));
+        mainClient.setVirtualView(new VirtualRMIView(mainClient.clientController));
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            client.virtualView = new VirtualRMIView(client.virtualMainController, client);
-            client.connect();
-            client.runCommonTui();
+            mainClient.runConnectionTUI();
+            mainClient.runGameTUI();
+            //client.virtualView = new VirtualRMIView(/*client.virtualMainController,*/ client);
+            // client.connect();
+            // client.runCommonTui();
         } else if (userInterface == UserInterface.gui) {
             //new VirtualRMIView(virtualMainController).runGUI();
         }
@@ -154,104 +121,42 @@ public class MainClient {
         // Get input and out stream from the server
         InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
         OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
-        SocketClient socketClient = new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx));
-        MainClient client = new MainClient(socketClient.getVirtualMainController());
-        socketClient.setMainClient(client);
+
+        // Reader
+        BufferedReader socketIn = new BufferedReader(socketRx);
+
+        // Writer
+        PrintWriter socketOut = new PrintWriter(socketTx);
+
+        MainClient mainClient = new MainClient();
+        mainClient.setVirtualMainController(new VirtualSocketMainController(socketOut));
+        mainClient.setVirtualView(new VirtualSocketView(null));
+        new SocketServerHandler(mainClient.clientController, socketIn, socketOut);
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            client.virtualView = socketClient.serverHandler;
-            client.connect();
-            client.runCommonTui();
+            mainClient.runConnectionTUI();
+            mainClient.runGameTUI();
+//            client.virtualView = socketClient.serverHandler;
+            // client.connect();
+            // client.runCommonTui();
         } else if (userInterface == UserInterface.gui) {
             //new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runGUI();
         }
     }
 
-    /**
-     * Runs the TUI for socket and RMI connection, after game controller creation
-     *
-     * @throws RemoteException
-     */
-    public void runCommonTui() throws RemoteException {
-        // Declare scanner
-        Scanner scan = new Scanner(System.in);
-
-        // Infinite loop
-        while (true) {
-            boolean chat = false;
-            String line = scan.nextLine();
-            String receiver = "";
-
-            if (line.startsWith("/chat")) {
-                chat = true;
-                line = line.substring(line.indexOf(" ") + 1);
-                if (line.startsWith("/")) {
-                    receiver = line.substring(1, line.indexOf(" "));
-                    line = line.substring(line.indexOf(" ") + 1);
-                }
-            }
-
-            switch (line) {
-                case "/1":
-                    System.out.println("WHAT CARD DO YOU WANT TO SELECTED: 0/1/2");
-                    String xPosition = scan.nextLine();
-                    virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), clientID);
-                    break;
-                case "/2":
-                    virtualGameController.turnSelectedCardSide(clientID);
-                    break;
-                case "/3":
-                    virtualGameController.playCardFromHand(clientID);
-                    break;
-                case "/4":
-                    System.out.println("WHAT XPOSITION DO YOU WANT TO SELECT ON PERSONAL BOARD:");
-                    String XPosition = scan.nextLine();
-                    System.out.println("WHAT YPOSITION DO YOU WANT TO SELECT ON PERSONAL BOARD:");
-                    String YPosition = scan.nextLine();
-                    virtualGameController.selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
-                    break;
-                case "/5":
-                    System.out.println("WHAT XPOSITION DO YOU WANT TO SELECT ON COMMON BOARD:");
-                    XPosition = scan.nextLine();
-                    System.out.println("WHAT YPOSITION DO YOU WANT TO SELECT ON COMMON BOARD:");
-                    YPosition = scan.nextLine();
-                    virtualGameController.selectCardFromCommonTable(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
-                    break;
-                case "/6":
-                    virtualGameController.drawSelectedCard(clientID);
-                    break;
-                case "/7":
-                    virtualGameController.choosePawnColor("red", clientID);
-                    break;
-                case "/8":
-                    virtualGameController.selectSecretMission(0, clientID);
-                    break;
-                case "/9":
-                    virtualGameController.setSecretMission(clientID);
-                    break;
-                case "/10":
-                    virtualGameController.printPersonalBoard("gabi", clientID); // TODO get nickname as parameter
-            }
-
-            if (chat) {
-                virtualGameController.addMessage(line, receiver, clientID, LocalTime.now().toString());
-            }
-
-        }
-    }
-
-    public void connect() throws RemoteException {
+    public void runConnectionTUI() throws RemoteException {
         // TODO gestire la Remote Exception
         //Initial state in CONNECTION
         Scanner scanner = new Scanner(System.in);
         System.out.println("Connected to the server successfully!");
         System.out.println("Insert your nickname: ");
-        this.nickname = scanner.nextLine();
-        this.virtualMainController.connect(this.virtualView, this.nickname, this.clientState);
+        String input = scanner.nextLine();
+        clientController.setNickname(input);
+        this.virtualMainController.connect(this.virtualView, clientController.getNickname(), clientController.getClientState());
 
         synchronized (this.lock) {
-            while (this.clientState == ClientState.CONNECTION) {
+            while (clientController.getClientState() == ClientState.CONNECTION) {
                 try {
                     lock.wait();
                 } catch (InterruptedException e) {
@@ -260,13 +165,13 @@ public class MainClient {
             }
         }
 
-        if (this.clientState == ClientState.CREATOR) {
+        if (clientController.getClientState() == ClientState.CREATOR) {
             System.out.println("You must initialize a new game \nInsert number of players: (2/3/4)");
-            String decision = scanner.nextLine();
-            this.virtualMainController.createWaitingList(this.virtualView, this.nickname, Integer.parseInt(decision));
+            input = scanner.nextLine();
+            this.virtualMainController.createWaitingList(this.virtualView, clientController.getNickname(), Integer.parseInt(input));
 
             synchronized (this.lock) {
-                while (this.clientState == ClientState.CREATOR) {
+                while (clientController.getClientState() == ClientState.CREATOR) {
                     try {
                         lock.wait();
                     } catch (InterruptedException e) {
@@ -274,15 +179,16 @@ public class MainClient {
                     }
                 }
             }
-            while (this.clientState == ClientState.INVALID_NUMBER_OF_PLAYER) {
-                this.clientState = ClientState.CREATOR;
-                System.err.println("Invalid number of players!"); System.err.flush();
+            while (clientController.getClientState() == ClientState.INVALID_NUMBER_OF_PLAYER) {
+                clientController.updateClientState(ClientState.CREATOR);
+                System.err.println("Invalid number of players!");
+                System.err.flush();
                 System.out.println("Insert number of players: (2/3/4)");
-                decision = scanner.nextLine();
-                this.virtualMainController.createWaitingList(this.virtualView, this.nickname, Integer.parseInt(decision));
+                input = scanner.nextLine();
+                this.virtualMainController.createWaitingList(this.virtualView, clientController.getNickname(), Integer.parseInt(input));
 
                 synchronized (this.lock) {
-                    while (this.clientState == ClientState.CREATOR) {
+                    while (clientController.getClientState() == ClientState.CREATOR) {
                         try {
                             lock.wait();
                         } catch (InterruptedException e) {
@@ -291,16 +197,18 @@ public class MainClient {
                     }
                 }
             }
-        } else if (clientState.equals(ClientState.INVALID_NICKNAME)) {
-            while (clientState == ClientState.INVALID_NICKNAME) {
-                System.err.println("Nickname not available!"); System.err.flush();
+        } else if (clientController.getClientState() == ClientState.INVALID_NICKNAME) {
+            while (clientController.getClientState() == ClientState.INVALID_NICKNAME) {
+                System.err.println("Nickname not available!");
+                System.err.flush();
                 System.out.println("Insert new nickname: ");
-                this.nickname = scanner.nextLine();
+                input = scanner.nextLine();
+                clientController.setNickname(input);
 
-                this.virtualMainController.connect(this.virtualView, this.nickname, this.clientState);
+                this.virtualMainController.connect(this.virtualView, clientController.getNickname(), clientController.getClientState());
 
                 synchronized (this.lock) {
-                    while (this.clientState == ClientState.CONNECTION) {
+                    while (clientController.getClientState() == ClientState.CONNECTION) {
                         try {
                             lock.wait();
                         } catch (InterruptedException e) {
@@ -312,22 +220,93 @@ public class MainClient {
         }
 
         System.out.println("Waiting for other players ...");
-        while (clientState == ClientState.WAITING) {
+        while (clientController.getClientState() == ClientState.WAITING) {
             System.out.flush();
         }
 
-        synchronized (this.lockController) {
+        synchronized (this.lock) {
             this.virtualGameController = this.virtualMainController.getVirtualGameController();
-            while(this.virtualGameController == null) {
+            while (this.virtualGameController == null) {
                 try {
-                    this.lockController.wait();
+                    this.lock.wait();
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
         }
         System.out.println("Game begin");
     }
+
+    public void runGameTUI() throws RemoteException {
+        // Declare scanner
+        Scanner scan = new Scanner(System.in);
+
+        // Infinite loop
+        while (true) {
+            boolean chat = false;
+            String input = scan.nextLine();
+            String receiver = "";
+
+            if (input.startsWith("/chat")) {
+                chat = true;
+                input = input.substring(input.indexOf(" ") + 1);
+                if (input.startsWith("/")) {
+                    receiver = input.substring(1, input.indexOf(" "));
+                    input = input.substring(input.indexOf(" ") + 1);
+                }
+            }
+
+            switch (input) {
+                case "/1":
+                    System.out.println("WHAT CARD DO YOU WANT TO SELECTED: 0/1/2");
+                    String xPosition = scan.nextLine();
+                    virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), clientController.getClientID());
+                    break;
+                case "/2":
+                    virtualGameController.turnSelectedCardSide(clientController.getClientID());
+                    break;
+                case "/3":
+                    virtualGameController.playCardFromHand(clientController.getClientID());
+                    break;
+                case "/4":
+                    System.out.println("WHAT XPOSITION DO YOU WANT TO SELECT ON PERSONAL BOARD:");
+                    String XPosition = scan.nextLine();
+                    System.out.println("WHAT YPOSITION DO YOU WANT TO SELECT ON PERSONAL BOARD:");
+                    String YPosition = scan.nextLine();
+                    virtualGameController.selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientController.getClientID());
+                    break;
+                case "/5":
+                    System.out.println("WHAT XPOSITION DO YOU WANT TO SELECT ON COMMON BOARD:");
+                    XPosition = scan.nextLine();
+                    System.out.println("WHAT YPOSITION DO YOU WANT TO SELECT ON COMMON BOARD:");
+                    YPosition = scan.nextLine();
+                    virtualGameController.selectCardFromCommonTable(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientController.getClientID());
+                    break;
+                case "/6":
+                    virtualGameController.drawSelectedCard(clientController.getClientID());
+                    break;
+                case "/7":
+                    String color = scan.nextLine();
+                    virtualGameController.choosePawnColor(color, clientController.getClientID());
+                    break;
+                case "/8":
+                    int secretMissionIndex = Integer.parseInt(scan.nextLine());
+                    virtualGameController.selectSecretMission(secretMissionIndex, clientController.getClientID());
+                    break;
+                case "/9":
+                    virtualGameController.setSecretMission(clientController.getClientID());
+                    break;
+                case "/10":
+                    virtualGameController.printPersonalBoard("gabi", clientController.getClientID()); // TODO get nickname as parameter
+            }
+
+            if (chat) {
+                virtualGameController.addMessage(input, receiver, clientController.getClientID(), LocalTime.now().toString());
+            }
+
+        }
+    }
+
 
     public static void main(String args[]) {
         String serverHostname;
@@ -370,7 +349,7 @@ public class MainClient {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NotBoundException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }

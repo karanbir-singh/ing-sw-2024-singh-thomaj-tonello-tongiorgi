@@ -38,10 +38,10 @@ public class ModelObservable {
     }
 
     public void notifyChat(Message msg) {
-        for (Pair client : this.clients)  {
-            if(!msg.getSender().equals(client.getValue()))  {
+        for (Pair client : this.clients) {
+            if (!msg.getSender().equals(client.getValue())) {
                 try {
-                    ((VirtualView)client.getKey()).showChat(msg.toJson());
+                    ((VirtualView) client.getKey()).showChat(msg.toJson());
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -54,7 +54,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(player.getID())) {
                 try {
-                    ((VirtualView)client.getKey()).showPersonalBoard(player.getID(), personalBoardOwner.getNickname(), personalBoard.toString());
+                    ((VirtualView) client.getKey()).showPersonalBoard(player.getID(), personalBoardOwner.getNickname(), personalBoard.toString());
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -62,11 +62,11 @@ public class ModelObservable {
         }
     }
 
-    public void notifySelectedCardFromHand( String clientID) throws RemoteException {
+    public void notifySelectedCardFromHand(String clientID) throws RemoteException {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).updateSelectedCardFromHand(clientID);
+                    ((VirtualView) client.getKey()).updateSelectedCardFromHand(clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -78,7 +78,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).showMessage(msg, clientID);
+                    ((VirtualView) client.getKey()).showMessage(msg, clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -90,7 +90,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).showError(errorMsg, clientID);
+                    ((VirtualView) client.getKey()).showError(errorMsg, clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -102,7 +102,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).updateState(clientState);
+                    ((VirtualView) client.getKey()).updateState(clientState);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -113,7 +113,7 @@ public class ModelObservable {
     public void notifyUpdateGameState(GameState gameState) {
         for (Pair client : this.clients) {
             try {
-                ((VirtualView)client.getKey()).updateGameState(gameState.toString());
+                ((VirtualView) client.getKey()).updateGameState(gameState.toString());
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -124,7 +124,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).updateChosenPawn(pawn.toString(), clientID);
+                    ((VirtualView) client.getKey()).updateChosenPawn(pawn.toString(), clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -136,7 +136,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).updateSelectedMission(clientID);
+                    ((VirtualView) client.getKey()).updateSelectedMission(clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -148,7 +148,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).updateSelectedCardFromHand(clientID);
+                    ((VirtualView) client.getKey()).updateSelectedCardFromHand(clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -160,7 +160,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).updateSelectedSide(String.valueOf(cardIndex), clientID);
+                    ((VirtualView) client.getKey()).updateSelectedSide(String.valueOf(cardIndex), clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -172,7 +172,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(playerID)) {
                 try {
-                    ((VirtualView)client.getKey()).updateSelectedPositionOnBoard(String.valueOf(selectedX),String.valueOf(selectedY) , playerID, String.valueOf(success));
+                    ((VirtualView) client.getKey()).updateSelectedPositionOnBoard(String.valueOf(selectedX), String.valueOf(selectedY), playerID, String.valueOf(success));
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -184,7 +184,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).updatePlayedCardFromHand(clientID, String.valueOf(success));
+                    ((VirtualView) client.getKey()).updatePlayedCardFromHand(clientID, String.valueOf(success));
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -196,7 +196,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).updatePoints(clientID, String.valueOf(points));
+                    ((VirtualView) client.getKey()).updatePoints(clientID, String.valueOf(points));
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -208,7 +208,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView)client.getKey()).updateSelectedCardFromCommonTable(clientID, String.valueOf(success));
+                    ((VirtualView) client.getKey()).updateSelectedCardFromCommonTable(clientID, String.valueOf(success));
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -220,7 +220,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(playerID)) {
                 try {
-                    ((VirtualView)client.getKey()).showCard(playerID, cardSerialization);
+                    ((VirtualView) client.getKey()).showCard(playerID, cardSerialization);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -231,7 +231,7 @@ public class ModelObservable {
     public void notifyShowChat(String message) {
         for (Pair client : this.clients) {
             try {
-                ((VirtualView)client.getKey()).showChat(message);
+                ((VirtualView) client.getKey()).showChat(message);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -241,7 +241,7 @@ public class ModelObservable {
     public void notifyUpdateFirstPlayer(String nickname) {
         for (Pair client : this.clients) {
             try {
-                ((VirtualView)client.getKey()).updateFirstPlayer(nickname);
+                ((VirtualView) client.getKey()).updateFirstPlayer(nickname);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }

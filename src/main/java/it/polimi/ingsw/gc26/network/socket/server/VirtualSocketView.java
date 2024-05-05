@@ -16,7 +16,7 @@ public class VirtualSocketView implements VirtualView {
     /**
      * This represents the print writer to write output to the client
      */
-    final PrintWriter outputToClient;
+    private final PrintWriter outputToClient;
 
     /**
      * Virtual Socket view constructor. It initializes the print writer to the client
@@ -231,15 +231,15 @@ public class VirtualSocketView implements VirtualView {
         sendToClient("updateGameState", msg);
     }
 
-    /**
-     * @return
-     * @throws RemoteException
-     */
-    @Override
-    public String getClientID() throws RemoteException {
-        sendToClient("getClientID", null);
-        return null;
-    }
+//    /**
+//     * @return
+//     * @throws RemoteException
+//     */
+//    @Override
+//    public String getClientID() throws RemoteException {
+//        sendToClient("getClientID", null);
+//        return null;
+//    }
 
     /**
      * @return
