@@ -179,65 +179,63 @@ public class MainClient {
 
         // Infinite loop
         while (true) {
-            boolean chat = false;
-            String line = scan.nextLine();
-            String receiver = "";
-
-            if (line.startsWith("/chat")) {
-                chat = true;
-                line = line.substring(line.indexOf(" ") + 1);
-                if (line.startsWith("/")) {
-                    receiver = line.substring(1, line.indexOf(" "));
-                    line = line.substring(line.indexOf(" ") + 1);
-                }
-            }
-
-            switch (line) {
-                case "/1":
-                    System.out.println("WHAT CARD DO YOU WANT TO SELECTED: 0/1/2");
+            Integer option = printOptions();
+            switch (option) {
+                case 1:
+                    System.out.println("Select the card position: (0/1/2)");
                     String xPosition = scan.nextLine();
                     virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), clientID);
                     break;
-                case "/2":
+                case 2:
                     virtualGameController.turnSelectedCardSide(clientID);
                     break;
-                case "/3":
+                case 3:
                     virtualGameController.playCardFromHand(clientID);
                     break;
-                case "/4":
-                    System.out.println("WHAT XPOSITION DO YOU WANT TO SELECT ON PERSONAL BOARD:");
+                case 4:
+                    System.out.println("Insert the X coordinate: ");
                     String XPosition = scan.nextLine();
-                    System.out.println("WHAT YPOSITION DO YOU WANT TO SELECT ON PERSONAL BOARD:");
+                    System.out.println("Insert the Y coordinate: ");
                     String YPosition = scan.nextLine();
                     virtualGameController.selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
                     break;
-                case "/5":
-                    System.out.println("WHAT XPOSITION DO YOU WANT TO SELECT ON COMMON BOARD:");
+                case 5:
+                    //TODO use only one number
+                    System.out.println("Insert the X coordinate: ");
                     XPosition = scan.nextLine();
-                    System.out.println("WHAT YPOSITION DO YOU WANT TO SELECT ON COMMON BOARD:");
+                    System.out.println("Insert the X coordinate: ");
                     YPosition = scan.nextLine();
                     virtualGameController.selectCardFromCommonTable(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
                     break;
-                case "/6":
+                case 6:
                     virtualGameController.drawSelectedCard(clientID);
                     break;
-                case "/7":
-                    virtualGameController.choosePawnColor("red", clientID);
+                case 7:
+                    System.out.println("Insert the pawn color: ");
+                    String color = scan.nextLine();
+                    virtualGameController.choosePawnColor(color , clientID);
                     break;
-                case "/8":
-                    virtualGameController.selectSecretMission(0, clientID);
+                case 8:
+                    System.out.println("Insert the card index: (0/1) ");
+                    int cardIndex = Integer.parseInt(scan.nextLine());
+                    virtualGameController.selectSecretMission(cardIndex, clientID);
                     break;
-                case "/9":
+                case 9:
                     virtualGameController.setSecretMission(clientID);
                     break;
-                case "/10":
-                    virtualGameController.printPersonalBoard("gabi", clientID); // TODO get nickname as parameter
+                case 10:
+                    System.out.println("Insert the player's nickname owner of the board: ");
+                    String playerNickname = scan.nextLine();
+                    virtualGameController.printPersonalBoard(playerNickname, clientID); // TODO get nickname as parameter
+                    break;
+                case 11:
+                    System.out.println("Insert the receiver's nickname: ");
+                    String receiverNickname = scan.nextLine();
+                    System.out.println("Insert message: ");
+                    String message = scan.nextLine();
+                    virtualGameController.addMessage(message, receiverNickname, clientID, LocalTime.now().toString());
+                    break;
             }
-
-            if (chat) {
-                virtualGameController.addMessage(line, receiver, clientID, LocalTime.now().toString());
-            }
-
         }
     }
 
@@ -325,6 +323,26 @@ public class MainClient {
             }
         }
         System.out.println("Game begin");
+    }
+
+    private int printOptions() {
+        System.out.println("Select your option:");
+        System.out.println("" +
+                "1) Select a card.\n" +
+                "2) Turn selected card side.\n" +
+                "3) Play card from hand.\n" +
+                "4) Select position on board.\n" +
+                "5) Select card from common table.\n" +
+                "6) Draw selected card.\n" +
+                "7) Choose pawn color.\n" +
+                "8) Select secret mission.\n" +
+                "9) Set secret mission.\n" +
+                "10) Print player's personal board.\n" +
+                "11) Open chat.\n");
+
+
+        Scanner scan = new Scanner(System.in);
+        return scan.nextInt();
     }
 
     public static void main(String args[]) {
