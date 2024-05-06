@@ -15,6 +15,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class MainServer {
+    private static final int DEFAULT_RMI_SERVER_PORT = 1099;
+    private static final int DEFAULT_SOCKET_SERVER_PORT = 3060;
+
     /**
      * Starts RMI Server, binding the main controller on the registry
      */
@@ -28,7 +31,7 @@ public class MainServer {
 
         // Create registry
         System.out.println("Creating registry...");
-        Registry registry = LocateRegistry.createRegistry(1099);
+        Registry registry = LocateRegistry.createRegistry(DEFAULT_RMI_SERVER_PORT);
 
         // Bind main controller
         System.out.println("Binding RMI main controller to registry...");
@@ -56,7 +59,7 @@ public class MainServer {
      * @throws IOException
      */
     private static void startSocketServer(MainController mainController) throws IOException {
-        int port;
+        int port = DEFAULT_SOCKET_SERVER_PORT;
 
         // Get hostname and port from file
         ObjectMapper JsonMapper = new ObjectMapper();

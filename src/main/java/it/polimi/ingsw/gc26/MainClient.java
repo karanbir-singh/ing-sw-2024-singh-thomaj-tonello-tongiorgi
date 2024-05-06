@@ -1,7 +1,5 @@
 package it.polimi.ingsw.gc26;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
@@ -9,7 +7,6 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.network.ClientController;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
-import it.polimi.ingsw.gc26.network.socket.server.SocketServer;
 import it.polimi.ingsw.gc26.network.socket.server.VirtualSocketView;
 
 import java.io.*;
@@ -22,8 +19,8 @@ import java.time.LocalTime;
 import java.util.Scanner;
 
 public class MainClient {
-    private static final int DEFAULT_SERVER_PORT = 3060;
-    private static final int DEFAULT_RMI_PORT = 1099;
+    private static final int DEFAULT_SOCKET_SERVER_PORT = 3060;
+    private static final int DEFAULT_RMI_SERVER_PORT = 1099;
     /**
      * RMI bound object name
      */
@@ -324,7 +321,7 @@ public class MainClient {
 
     public static void main(String args[]) {
         String socketServerAddress = "127.0.0.1";
-        int socketServerPort = DEFAULT_SERVER_PORT;
+        int socketServerPort = DEFAULT_SOCKET_SERVER_PORT;
 
         // Default values
         ClientViewType clientViewType;
@@ -346,7 +343,7 @@ public class MainClient {
             if (clientViewType == ClientViewType.rmi) {
                 // Start RMI Client
                 String RMIServerAddress = socketServerAddress;
-                startRMIClient(RMIServerAddress, DEFAULT_SERVER_PORT, userInterface);
+                startRMIClient(RMIServerAddress, DEFAULT_RMI_SERVER_PORT, userInterface);
             } else if (clientViewType == ClientViewType.socket) {
                 // Start Socket Client
                 startSocketClient(socketServerAddress, socketServerPort, userInterface);
