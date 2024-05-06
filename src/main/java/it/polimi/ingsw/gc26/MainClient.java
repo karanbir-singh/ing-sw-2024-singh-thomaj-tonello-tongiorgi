@@ -132,9 +132,12 @@ public class MainClient {
                             VirtualMainController virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
                             System.out.println("virtualMainController Preso");
                             virtualGameController = virtualMainController.getVirtualGameController();
-                            System.out.println(virtualGameController);
-                            //virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), clientID)
                             System.out.println("virtualGameController Preso");
+
+                            System.out.println(virtualGameController);
+                            runCommonTui(virtualGameController,clientID);
+                            //virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), clientID)
+
                         } catch (RemoteException ex) {
                             System.out.println("LA RETET NON FUNZIONA, FORSE SERVER DOWN");
                         } catch (NotBoundException ex) {

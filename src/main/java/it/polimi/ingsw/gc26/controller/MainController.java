@@ -23,9 +23,9 @@ public class MainController implements Serializable {
     private ArrayList<Player> waitingPlayers;
 
     /**
-     * This attribute represents the list of game controllers of started games
+     * This attribute represents the list of game controllers of started games and id of that game controller
      */
-    private transient ArrayList<GameController> gamesControllers;
+    private Map<Integer,GameController> gamesControllers;
 
     /**
      * This attribute represents a priority queue of main requests
@@ -47,7 +47,7 @@ public class MainController implements Serializable {
      */
     private int maxNumWaitingClients;
 
-    private int numberOfActiveGames;
+    private int numberOfTotalGames;
 
     /**
      * Initializes waiting players' list and games controllers' list
@@ -55,13 +55,13 @@ public class MainController implements Serializable {
     public MainController() {
         this.waitingClients = new ArrayList<>();
         this.waitingPlayers = new ArrayList<>();
-        this.gamesControllers = new ArrayList<>();
+        this.gamesControllers = new HashMap<>();
         this.mainRequests = new PriorityQueue<>((a, b) -> a.getPriority() > b.getPriority() ? -1 : 1);
         maxNumWaitingClients = 0;
         gameOnCreation = false;
         invalidNickname = false;
         this.launchExecutor();
-        numberOfActiveGames = 0;
+        numberOfTotalGames = 0;
     }
 
 
@@ -240,13 +240,15 @@ public class MainController implements Serializable {
             if (waitingClients.size() >= maxNumWaitingClients) {
                 // Then, create a new game controller
                 try {
-                    gameController = new GameController(new Game(waitingPlayers),"src/main/resources/gameControllerText" + gamesControllers.size() + ".bin");
+                    numberOfTotalGames = numberOfTotalGames + 1;
+                    gameController = new GameController(new Game(waitingPlayers),"src/main/resources/gameControllerText" +
+                                                                                             numberOfTotalGames + ".bin");
+
                 } catch (IOException e) {
                     System.out.println("COLPA DELLA CREAZIONE GAME CONTROLLER");
                     e.printStackTrace();
                 }
-                gamesControllers.add(gameController);
-                numberOfActiveGames++;
+                gamesControllers.put(numberOfTotalGames,gameController);
 
                 // Update of the view
                 for (VirtualView view : waitingClients) {
@@ -277,7 +279,7 @@ public class MainController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            System.out.println("COLPA COPY TO DISK DI JOINWAITINGLIST");
+            System.out.println("COPIA COPY TO DISK DI JOINWAITINGLIST");
             e.printStackTrace();
         }
     }
@@ -286,30 +288,32 @@ public class MainController implements Serializable {
      * @return Returns the last created game controller
      */
     public GameController getGameController() {
-        if (!gamesControllers.isEmpty())
-            return gamesControllers.getLast();
+        if (!gamesControllers.isEmpty()){
+            return gamesControllers.get(numberOfTotalGames);
+        }
         return null;
     }
 
     public void recreateGames() throws IOException, ClassNotFoundException {
-        int numberOfGames = numberOfActiveGames;
-        gamesControllers = new ArrayList<>();
-        for(int i = 0; i < numberOfGames; i++){
-           GameController gameController = new GameController(null,null);
-           //deserialization
-           FileInputStream fileInputStream = new FileInputStream("src/main/resources/gameControllerText" + i + ".bin");
-           ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
-           gameController = (GameController) inputStream.readObject();
-           for (Player player : gameController.getGame().getPlayers()){
-               System.out.println(player.getID() + " " + player.getNickname());
-           }
-           inputStream.close();
-           fileInputStream.close();
-           gamesControllers.add(i,gameController);
-       }
+        for(Integer id : gamesControllers.keySet()){
+            GameController gameController = new GameController(null,null);
+            FileInputStream fileInputStream = new FileInputStream("src/main/resources/gameControllerText" + id + ".bin");
+            ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
+            gameController = (GameController) inputStream.readObject();
+            //gamesControllers.remove(id);
+            gamesControllers.put(id,gameController);
+            gamesControllers.get(id).launchExecutor();
+            inputStream.close();
+            fileInputStream.close();
+        }
+        //System.out.println(gamesControllers.get(1).getGame().getPlayers().getFirst().getID() + " " + gamesControllers.get(1).getGame().getPlayers().getFirst().getNickname());
+        //System.out.println(gamesControllers.get(1).getGame().getPlayers().getLast().getID() + " " + gamesControllers.get(1).getGame().getPlayers().getLast().getNickname());
+
+        //System.out.println(gamesControllers.get(2).getGame().getPlayers().getFirst().getID() + " " + gamesControllers.get(2).getGame().getPlayers().getFirst().getNickname());
+        //System.out.println(gamesControllers.get(2).getGame().getPlayers().getLast().getID() + " " + gamesControllers.get(2).getGame().getPlayers().getLast().getNickname());
 
         System.out.println("GAME CREATI");
-        System.out.println(gamesControllers.getFirst().getGame().getPlayers().getFirst().getNickname());
-        System.out.println(gamesControllers.getFirst().getGame().getPlayers().getLast().getNickname());
+
+
     }
 }

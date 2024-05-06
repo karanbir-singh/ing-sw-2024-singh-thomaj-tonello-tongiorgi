@@ -78,11 +78,11 @@ public class MainServer {
         System.out.println("DO YOU WANT TO RESTORE EVERYTHING?");
         String decision = scanner.nextLine();
         if(decision.equals("yes")){
-            System.out.println("INSERT THE FILEPATH");
-            String path = scanner.nextLine();
+            //System.out.println("INSERT THE FILEPATH");
+            //String path = scanner.nextLine();
             FileInputStream fileInputStream = null;
             try {
-                fileInputStream = new FileInputStream(path);
+                fileInputStream = new FileInputStream("src/main/mainController.bin");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 System.out.println("FILE NOT FOUND, FAULT OF FileInputStream");
@@ -96,6 +96,7 @@ public class MainServer {
             }
             try {
                 mainController = (MainController) inputStream.readObject();
+                mainController.launchThreadExecutor();
                 inputStream.close();
                 fileInputStream.close();
                 mainController.recreateGames();

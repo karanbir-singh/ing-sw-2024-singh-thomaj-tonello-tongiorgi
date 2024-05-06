@@ -20,7 +20,7 @@ public class GameController implements Serializable {
     /**
      * This attribute represents the execution type
      */
-    private final boolean isDebug;
+    private boolean isDebug;
     /**
      * This attribute represents the game that the game controller controls
      */
@@ -49,11 +49,12 @@ public class GameController implements Serializable {
             this.launchExecutor();
             this.pathToCopy = pathToCopy;
             this.copyToDisk();
+            this.isDebug = java.lang.management.ManagementFactory.
+                    getRuntimeMXBean().
+                    getInputArguments().toString().indexOf("jdwp") >= 0;
         }
 
-        this.isDebug = java.lang.management.ManagementFactory.
-                getRuntimeMXBean().
-                getInputArguments().toString().indexOf("jdwp") >= 0;
+
     }
 
     private void copyToDisk() throws IOException {
@@ -66,7 +67,7 @@ public class GameController implements Serializable {
     /**
      * Launch a thread for managing clients requests
      */
-    private void launchExecutor() {
+    public void launchExecutor() {
         new Thread(() -> {
             while (true) {
                 synchronized (gameRequests) {
