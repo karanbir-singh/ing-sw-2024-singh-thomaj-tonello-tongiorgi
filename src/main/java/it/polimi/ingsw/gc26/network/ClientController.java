@@ -1,11 +1,10 @@
-package it.polimi.ingsw.gc26.network.socket.client;
+package it.polimi.ingsw.gc26.network;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
-import it.polimi.ingsw.gc26.network.VirtualGameController;
 
 public class ClientController {
 

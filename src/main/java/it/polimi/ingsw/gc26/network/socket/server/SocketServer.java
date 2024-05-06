@@ -49,7 +49,7 @@ public class SocketServer {
      */
     public void runServer() throws IOException {
         Socket clientSocket;
-        System.out.println(STR."Starting Socket Server... \nListening in port: \{this.listenSocket.getLocalPort()}");
+        System.out.println(STR."\nStarting Socket Server... \nListening in port: \{this.listenSocket.getLocalPort()}");
 
         // Keep server on listening for connection
         while ((clientSocket = this.listenSocket.accept()) != null) {

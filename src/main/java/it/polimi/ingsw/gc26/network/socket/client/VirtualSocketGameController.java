@@ -1,4 +1,5 @@
 package it.polimi.ingsw.gc26.network.socket.client;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
@@ -21,6 +22,7 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Virtual socket game controller's constructor. Initializes the print writer.
+     *
      * @param output writer
      */
     public VirtualSocketGameController(PrintWriter output) {
@@ -29,7 +31,8 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Encodes the parameters to play this function in the real controller.
-     * @param color color chosen
+     *
+     * @param color    color chosen
      * @param playerID player's ID
      * @throws RemoteException
      */
@@ -41,10 +44,10 @@ public class VirtualSocketGameController implements VirtualGameController {
         msg.put("color", color);
         msg.put("playerID", playerID);
         writeToServer(data, msg);
-
     }
 
     /**
+     * Encodes the parameters to play this function in the real controller.
      *
      * @param cardIndex
      * @param playerID
@@ -62,6 +65,7 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Encodes the parameters to play this function in the real controller.
+     *
      * @param playerID client's ID
      * @throws RemoteException
      */
@@ -76,8 +80,9 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Encodes the parameters to play this function in the real controller.
+     *
      * @param cardIndex card index in the hand
-     * @param playerID client's ID
+     * @param playerID  client's ID
      */
     @Override
     public void selectCardFromHand(int cardIndex, String playerID) {
@@ -92,6 +97,7 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Encodes the parameters to play this function in the real controller.
+     *
      * @param playerID client's ID
      */
     @Override
@@ -105,8 +111,9 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Encodes the parameters to play this function in the real controller.
-     * @param x coordinate X in the board
-     * @param y coordinate Y in the board
+     *
+     * @param x        coordinate X in the board
+     * @param y        coordinate Y in the board
      * @param playerID client's ID
      */
     @Override
@@ -122,6 +129,7 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Encodes the parameters to play this function in the real controller.
+     *
      * @param playerID client's ID
      */
     @Override
@@ -136,8 +144,9 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Encodes the parameters to play this function in the real controller.
-     * @param cardX coordinate X on the common table
-     * @param cardY coordinate Y on the common table
+     *
+     * @param cardX    coordinate X on the common table
+     * @param cardY    coordinate Y on the common table
      * @param playerID client's ID
      */
     @Override
@@ -153,6 +162,7 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Encodes the parameters to play this function in the real controller.
+     *
      * @param playerID client's ID
      */
     @Override
@@ -167,13 +177,14 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Encodes the parameters to play this function in the real controller.
-     * @param line text to be delivered
+     *
+     * @param line             text to be delivered
      * @param nicknameReceiver
-     * @param senderID client's ID
-     * @param time current time
+     * @param senderID         client's ID
+     * @param time             current time
      */
     @Override
-    public void addMessage(String line, String nicknameReceiver,String senderID, String time)  {
+    public void addMessage(String line, String nicknameReceiver, String senderID, String time) {
         HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
         data.replace("function", "addMessage");
         HashMap<String, String> msg = new HashMap<>();
@@ -187,6 +198,7 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * Encodes the parameters to play this function in the real controller.
+     *
      * @param nickname nickname of the player who owns the board
      * @param playerID client's ID
      * @throws RemoteException
@@ -203,6 +215,7 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * This method creates the basic structure for this protocol.
+     *
      * @return base structure
      */
     private static HashMap<String, String> getBaseMessage() {
@@ -214,7 +227,8 @@ public class VirtualSocketGameController implements VirtualGameController {
 
     /**
      * This method sends writes the message encoded with the protocol in the print writer to the server.
-     * @param data base message with the correct function name
+     *
+     * @param data     base message with the correct function name
      * @param valueMsg data associated to the value key
      */
     private void writeToServer(HashMap<String, String> data, HashMap<String, String> valueMsg) {

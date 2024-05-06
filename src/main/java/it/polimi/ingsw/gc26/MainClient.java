@@ -6,7 +6,7 @@ import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.network.socket.client.ClientController;
+import it.polimi.ingsw.gc26.network.ClientController;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
 import it.polimi.ingsw.gc26.network.socket.server.SocketServer;
@@ -23,23 +23,9 @@ import java.util.Scanner;
 
 public class MainClient {
     /**
-     * ID of the client
-     */
-//    private String clientID;
-
-    /**
-     * Nickname of the client
-     */
-//    private String nickname;
-    /**
      * RMI bound object name
      */
     private static final String remoteObjectName = "RMIMainController";
-
-    /**
-     * Client's state
-     */
-//    private ClientState clientState;
 
     /**
      * User interface types
@@ -51,14 +37,29 @@ public class MainClient {
      */
     private enum ClientViewType {rmi, socket}
 
+    /**
+     * Remote interface of the main controller
+     */
     private VirtualMainController virtualMainController;
 
+    /**
+     * Remote interface of the game controller
+     */
     private VirtualGameController virtualGameController;
 
+    /**
+     * Remote interface of the view
+     */
     private VirtualView virtualView;
 
+    /**
+     * Client controller
+     */
     private ClientController clientController;
 
+    /**
+     * Attribute used for synchronize actions between server and client
+     */
     private final Object lock;
 
     public MainClient() {
@@ -66,14 +67,26 @@ public class MainClient {
         this.clientController = new ClientController(this, null, null, ClientState.CONNECTION, lock);
     }
 
+    /**
+     * Sets virtual main controller passed by parameter
+     * @param virtualMainController virtual main controller to set
+     */
     public void setVirtualMainController(VirtualMainController virtualMainController) {
         this.virtualMainController = virtualMainController;
     }
 
+    /**
+     * Sets virtual game controller passed by parameter
+     * @param virtualGameController virtual game controller to set
+     */
     public void setVirtualGameController(VirtualGameController virtualGameController) {
         this.virtualGameController = virtualGameController;
     }
 
+    /**
+     * Sets virtual view passed by parameter
+     * @param virtualView virtual view to set
+     */
     public void setVirtualView(VirtualView virtualView) {
         this.virtualView = virtualView;
     }
@@ -88,8 +101,8 @@ public class MainClient {
     private static void startRMIClient(UserInterface userInterface) throws RemoteException, NotBoundException {
         // Finding the registry and getting the stub of virtualMainController in the registry
         Registry registry = LocateRegistry.getRegistry(1099);
-        //new VirtualRMIView(/*client.virtualMainController,*/ client);
 
+        // Create RMI Client
         MainClient mainClient = new MainClient();
         mainClient.setVirtualMainController((VirtualMainController) registry.lookup(remoteObjectName));
         mainClient.setVirtualView(new VirtualRMIView(mainClient.clientController));
@@ -98,9 +111,6 @@ public class MainClient {
         if (userInterface == UserInterface.tui) {
             mainClient.runConnectionTUI();
             mainClient.runGameTUI();
-            //client.virtualView = new VirtualRMIView(/*client.virtualMainController,*/ client);
-            // client.connect();
-            // client.runCommonTui();
         } else if (userInterface == UserInterface.gui) {
             //new VirtualRMIView(virtualMainController).runGUI();
         }
@@ -128,18 +138,17 @@ public class MainClient {
         // Writer
         PrintWriter socketOut = new PrintWriter(socketTx);
 
+        // Create socket client
         MainClient mainClient = new MainClient();
         mainClient.setVirtualMainController(new VirtualSocketMainController(socketOut));
         mainClient.setVirtualView(new VirtualSocketView(null));
+        // Launch a thread for managing server requests
         new SocketServerHandler(mainClient.clientController, socketIn, socketOut);
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
             mainClient.runConnectionTUI();
             mainClient.runGameTUI();
-//            client.virtualView = socketClient.serverHandler;
-            // client.connect();
-            // client.runCommonTui();
         } else if (userInterface == UserInterface.gui) {
             //new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runGUI();
         }
