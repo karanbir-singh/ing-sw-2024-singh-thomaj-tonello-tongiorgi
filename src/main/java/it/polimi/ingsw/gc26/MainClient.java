@@ -22,6 +22,8 @@ import java.time.LocalTime;
 import java.util.Scanner;
 
 public class MainClient {
+    private static final int DEFAULT_SERVER_PORT = 3060;
+    private static final int DEFAULT_RMI_PORT = 1099;
     /**
      * RMI bound object name
      */
@@ -69,6 +71,7 @@ public class MainClient {
 
     /**
      * Sets virtual main controller passed by parameter
+     *
      * @param virtualMainController virtual main controller to set
      */
     public void setVirtualMainController(VirtualMainController virtualMainController) {
@@ -77,6 +80,7 @@ public class MainClient {
 
     /**
      * Sets virtual game controller passed by parameter
+     *
      * @param virtualGameController virtual game controller to set
      */
     public void setVirtualGameController(VirtualGameController virtualGameController) {
@@ -85,6 +89,7 @@ public class MainClient {
 
     /**
      * Sets virtual view passed by parameter
+     *
      * @param virtualView virtual view to set
      */
     public void setVirtualView(VirtualView virtualView) {
@@ -98,9 +103,9 @@ public class MainClient {
      * @throws RemoteException
      * @throws NotBoundException
      */
-    private static void startRMIClient(UserInterface userInterface) throws RemoteException, NotBoundException {
+    private static void startRMIClient(String RMIServerAddress, int RMIServerPort, UserInterface userInterface) throws RemoteException, NotBoundException {
         // Finding the registry and getting the stub of virtualMainController in the registry
-        Registry registry = LocateRegistry.getRegistry(1099);
+        Registry registry = LocateRegistry.getRegistry(RMIServerAddress, RMIServerPort);
 
         // Create RMI Client
         MainClient mainClient = new MainClient();
@@ -119,14 +124,14 @@ public class MainClient {
     /**
      * Starts socket client
      *
-     * @param serverHostname IP address of the server
-     * @param serverPort     port of the server
-     * @param userInterface  selected user interface type
+     * @param socketServerIPAddress IP address of the server
+     * @param socketServerPort      port of the server
+     * @param userInterface         selected user interface type
      * @throws IOException
      */
-    private static void startSocketClient(String serverHostname, int serverPort, UserInterface userInterface) throws IOException {
+    private static void startSocketClient(String socketServerIPAddress, int socketServerPort, UserInterface userInterface) throws IOException {
         // Create connection with the server
-        Socket serverSocket = new Socket(serverHostname, serverPort);
+        Socket serverSocket = new Socket(socketServerIPAddress, socketServerPort);
 
         // Get input and out stream from the server
         InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
@@ -318,26 +323,16 @@ public class MainClient {
 
 
     public static void main(String args[]) {
-        String serverHostname;
-        int serverPort;
+        String socketServerAddress = "127.0.0.1";
+        int socketServerPort = DEFAULT_SERVER_PORT;
 
         // Default values
         ClientViewType clientViewType;
 
         // Check if the client passes server IP address and his port
         if (args.length == 2) {
-            serverHostname = args[0];
-            serverPort = Integer.parseInt(args[1]);
-        } else {
-            ObjectMapper JsonMapper = new ObjectMapper();
-            JsonNode root = null;
-            try {
-                root = JsonMapper.readTree(new FileReader(SocketServer.filePath));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            serverHostname = root.get("server-hostname").asText();
-            serverPort = root.get("port").asInt();
+            socketServerAddress = args[0];
+            socketServerPort = Integer.parseInt(args[1]);
         }
 
         Scanner scanner = new Scanner(System.in);
@@ -350,10 +345,11 @@ public class MainClient {
         try {
             if (clientViewType == ClientViewType.rmi) {
                 // Start RMI Client
-                startRMIClient(userInterface);
+                String RMIServerAddress = socketServerAddress;
+                startRMIClient(RMIServerAddress, DEFAULT_SERVER_PORT, userInterface);
             } else if (clientViewType == ClientViewType.socket) {
                 // Start Socket Client
-                startSocketClient(serverHostname, serverPort, userInterface);
+                startSocketClient(socketServerAddress, socketServerPort, userInterface);
             }
         } catch (IOException e) {
             e.printStackTrace();
