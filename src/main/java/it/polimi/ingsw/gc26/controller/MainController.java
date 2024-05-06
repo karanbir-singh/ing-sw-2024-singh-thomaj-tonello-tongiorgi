@@ -300,6 +300,9 @@ public class MainController implements Serializable {
            FileInputStream fileInputStream = new FileInputStream("src/main/resources/gameControllerText" + i + ".bin");
            ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
            gameController = (GameController) inputStream.readObject();
+           for (Player player : gameController.getGame().getPlayers()){
+               System.out.println(player.getID() + " " + player.getNickname());
+           }
            inputStream.close();
            fileInputStream.close();
            gamesControllers.add(i,gameController);
