@@ -4,7 +4,6 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.request.main_request.GameCreationRequest;
 import it.polimi.ingsw.gc26.request.main_request.MainRequest;
 
 import java.rmi.RemoteException;
@@ -104,7 +103,7 @@ public class MainController {
      * @return Returns true if waitingPlayer not contains other players with the given nickname, otherwise false
      */
     private boolean isNicknameValid(String nickname) {
-        return !waitingPlayers.stream().anyMatch(p -> p.getNickname().equals(nickname));
+        return !waitingPlayers.stream().anyMatch(player -> player.getNickname().equals(nickname));
     }
 
     public void connect(VirtualView client, String nickname) {
