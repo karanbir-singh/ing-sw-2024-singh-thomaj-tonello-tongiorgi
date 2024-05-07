@@ -19,7 +19,13 @@ import java.time.LocalTime;
 import java.util.Scanner;
 
 public class MainClient {
+    /**
+     * Default port of server socket
+     */
     private static final int DEFAULT_SOCKET_SERVER_PORT = 3060;
+    /**
+     * Default port of RMI server
+     */
     private static final int DEFAULT_RMI_SERVER_PORT = 1099;
     /**
      * RMI bound object name
@@ -34,7 +40,7 @@ public class MainClient {
     /**
      * Client view types
      */
-    private enum ClientViewType {rmi, socket}
+    private enum NetworkType {rmi, socket}
 
     /**
      * Remote interface of the main controller
@@ -121,14 +127,14 @@ public class MainClient {
     /**
      * Starts socket client
      *
-     * @param socketServerIPAddress IP address of the server
+     * @param socketServerAddress IP address of the server
      * @param socketServerPort      port of the server
      * @param userInterface         selected user interface type
      * @throws IOException
      */
-    private static void startSocketClient(String socketServerIPAddress, int socketServerPort, UserInterface userInterface) throws IOException {
+    private static void startSocketClient(String socketServerAddress, int socketServerPort, UserInterface userInterface) throws IOException {
         // Create connection with the server
-        Socket serverSocket = new Socket(socketServerIPAddress, socketServerPort);
+        Socket serverSocket = new Socket(socketServerAddress, socketServerPort);
 
         // Get input and out stream from the server
         InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
@@ -324,7 +330,7 @@ public class MainClient {
         int socketServerPort = DEFAULT_SOCKET_SERVER_PORT;
 
         // Default values
-        ClientViewType clientViewType;
+        NetworkType networkType;
 
         // Check if the client passes server IP address and his port
         if (args.length == 2) {
@@ -334,17 +340,17 @@ public class MainClient {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("What technology do you want to connect with? (rmi/socket)");
-        clientViewType = ClientViewType.valueOf(scanner.nextLine().toLowerCase());
+        networkType = NetworkType.valueOf(scanner.nextLine().toLowerCase());
 
         UserInterface userInterface;
         System.out.println("What type of user interface do you want to use? (tui/gui)");
         userInterface = UserInterface.valueOf(scanner.nextLine());
         try {
-            if (clientViewType == ClientViewType.rmi) {
+            if (networkType == NetworkType.rmi) {
                 // Start RMI Client
                 String RMIServerAddress = socketServerAddress;
                 startRMIClient(RMIServerAddress, DEFAULT_RMI_SERVER_PORT, userInterface);
-            } else if (clientViewType == ClientViewType.socket) {
+            } else if (networkType == NetworkType.socket) {
                 // Start Socket Client
                 startSocketClient(socketServerAddress, socketServerPort, userInterface);
             }

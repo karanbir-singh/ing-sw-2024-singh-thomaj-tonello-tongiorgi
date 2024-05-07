@@ -15,8 +15,14 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class MainServer {
-    private static final int DEFAULT_RMI_SERVER_PORT = 1099;
+    /**
+     * Default port of RMI server
+     */
     private static final int DEFAULT_SOCKET_SERVER_PORT = 3060;
+    /**
+     * Default port of RMI server
+     */
+    private static final int DEFAULT_RMI_SERVER_PORT = 1099;
 
     /**
      * Starts RMI Server, binding the main controller on the registry
@@ -43,19 +49,19 @@ public class MainServer {
     /**
      * Starts server socket, with port given with args on execution time
      *
-     * @param port           server socket port
-     * @param mainController main controller of the game
+     * @param serverSocketPort server socket port
+     * @param mainController   main controller of the game
      * @throws IOException
      */
-    private static void startSocketServer(int port, MainController mainController) throws IOException {
-        ServerSocket listenSocket = new ServerSocket(port);
+    private static void startSocketServer(int serverSocketPort, MainController mainController) throws IOException {
+        ServerSocket listenSocket = new ServerSocket(serverSocketPort);
         new SocketServer(listenSocket, mainController).runServer();
     }
 
     /**
-     * Starts server socket, with hostname and port on execution time
+     * Starts server socket
      *
-     * @param mainController main controller of the game
+     * @param mainController main controller of the system
      * @throws IOException
      */
     private static void startSocketServer(MainController mainController) throws IOException {
