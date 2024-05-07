@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
 
-public class ClientController {
+public class ViewController {
     /**
      * References to the main client of which this object is controller
      */
@@ -29,7 +29,7 @@ public class ClientController {
      */
     private final Object lock;
 
-    public ClientController(MainClient mainClient, String clientID, String nickname, ClientState clientState, Object lock) {
+    public ViewController(MainClient mainClient, String clientID, String nickname, ClientState clientState, Object lock) {
         this.mainClient = mainClient;
         this.clientID = clientID;
         this.nickname = nickname;

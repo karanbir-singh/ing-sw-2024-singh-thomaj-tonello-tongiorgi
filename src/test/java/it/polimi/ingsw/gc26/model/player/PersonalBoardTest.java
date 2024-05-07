@@ -14,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PersonalBoardTest {
 
-    //@Test
-    /*void firstPlaySide() {
+    @Test
+    void firstPlaySide() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
@@ -306,7 +306,6 @@ class PersonalBoardTest {
         assertFalse(pb.getOccupiedPositions().get(7).getSide().getDOWNLEFT().isHidden());
         assertFalse(pb.getOccupiedPositions().get(7).getSide().getDOWNRIGHT().isHidden());
         pb.showBoard();
-
     }
 
     @Test
@@ -443,7 +442,7 @@ class PersonalBoardTest {
         pb.showBoard();
 
     }
-/*
+
     @Test
     void fourCorners() {
         Game game = new Game(new ArrayList<>());
@@ -724,5 +723,5 @@ class PersonalBoardTest {
         assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
 
         pb.showBoard();
-    }*/
+    }
 }

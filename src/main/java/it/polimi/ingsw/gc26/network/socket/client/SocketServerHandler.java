@@ -3,12 +3,11 @@ package it.polimi.ingsw.gc26.network.socket.client;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.ClientState;
-import it.polimi.ingsw.gc26.network.ClientController;
+import it.polimi.ingsw.gc26.network.ViewController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.RemoteException;
 
 
 /**
@@ -28,10 +27,10 @@ public class SocketServerHandler implements Runnable {
     /**
      * This attribute represents the clientController
      */
-    private ClientController clientController;
+    private ViewController viewController;
 
-    public SocketServerHandler(ClientController clientController, BufferedReader inputFromServer, PrintWriter outputToServer) {
-        this.clientController = clientController;
+    public SocketServerHandler(ViewController viewController, BufferedReader inputFromServer, PrintWriter outputToServer) {
+        this.viewController = viewController;
         this.inputFromServer = inputFromServer;
         this.outputToServer = outputToServer;
 
@@ -54,58 +53,58 @@ public class SocketServerHandler implements Runnable {
 
                 switch (msg.get("function").asText()) {
                     case "setClientID":
-                        this.clientController.setClientID(value.get("clientID").asText());
+                        this.viewController.setClientID(value.get("clientID").asText());
                         break;
                     case "setGameController":
-                        this.clientController.setGameController(new VirtualSocketGameController(this.outputToServer));
+                        this.viewController.setGameController(new VirtualSocketGameController(this.outputToServer));
                         break;
                     case "updateState":
-                        this.clientController.updateClientState(ClientState.valueOf(value.get("clientState").asText()));
+                        this.viewController.updateClientState(ClientState.valueOf(value.get("clientState").asText()));
                         break;
                     case "showMessage":
-                        this.clientController.showMessage(value.get("message").asText(), value.get("clientID").asText());
+                        this.viewController.showMessage(value.get("message").asText(), value.get("clientID").asText());
                         break;
                     case "showError":
-                        this.clientController.showError(value.get("errorMessage").asText(), value.get("clientID").asText());
+                        this.viewController.showError(value.get("errorMessage").asText(), value.get("clientID").asText());
                         break;
                     case "showChat":
-                        this.clientController.showChat(value.get("message").asText());
+                        this.viewController.showChat(value.get("message").asText());
                         break;
                     case "updateChosenPawn":
-                        this.clientController.updateChosenPawn(value.get("pawnColor").asText(), value.get("clientID").asText());
+                        this.viewController.updateChosenPawn(value.get("pawnColor").asText(), value.get("clientID").asText());
                         break;
                     case "updateSelectedMission":
-                        this.clientController.updateSelectedMission(value.get("clientID").asText());
+                        this.viewController.updateSelectedMission(value.get("clientID").asText());
                         break;
                     case "updateSelectedCardFromHand":
-                        this.clientController.updateSelectedCardFromHand(value.get("clientID").asText());
+                        this.viewController.updateSelectedCardFromHand(value.get("clientID").asText());
                         break;
                     case "updateSelectedSide":
-                        this.clientController.updateSelectedSide(value.get("cardIndex").asText(), value.get("clientID").asText());
+                        this.viewController.updateSelectedSide(value.get("cardIndex").asText(), value.get("clientID").asText());
                         break;
                     case "updateSelectedPositionOnBoard":
-                        this.clientController.updateSelectedPositionOnBoard(value.get("selectedX").asText(), value.get("selectedY").asText(), value.get("clientID").asText(), value.get("success").asText());
+                        this.viewController.updateSelectedPositionOnBoard(value.get("selectedX").asText(), value.get("selectedY").asText(), value.get("clientID").asText(), value.get("success").asText());
                         break;
                     case "updatePlayedCardFromHand":
-                        this.clientController.updatePlayedCardFromHand(value.get("clientID").asText(), value.get("success").asText());
+                        this.viewController.updatePlayedCardFromHand(value.get("clientID").asText(), value.get("success").asText());
                         break;
                     case "updatePoints":
-                        this.clientController.updatePoints(value.get("clientID").asText(), value.get("points").asText());
+                        this.viewController.updatePoints(value.get("clientID").asText(), value.get("points").asText());
                         break;
                     case "updateSelectedCardFromCommonTable":
-                        this.clientController.updateSelectedCardFromCommonTable(value.get("clientID").asText(), value.get("success").asText());
+                        this.viewController.updateSelectedCardFromCommonTable(value.get("clientID").asText(), value.get("success").asText());
                         break;
                     case "showCard":
-                        this.clientController.showCard(value.get("clientID").asText(), value.get("cardSerialization").asText());
+                        this.viewController.showCard(value.get("clientID").asText(), value.get("cardSerialization").asText());
                         break;
                     case "showPersonalBoard":
-                        this.clientController.showPersonalBoard(value.get("clientID").asText(), value.get("ownerNickname").asText(), value.get("personalBoardSerialization").asText());
+                        this.viewController.showPersonalBoard(value.get("clientID").asText(), value.get("ownerNickname").asText(), value.get("personalBoardSerialization").asText());
                         break;
                     case "updateFirstPlayer":
-                        this.clientController.updateFirstPlayer(value.get("nickname").asText());
+                        this.viewController.updateFirstPlayer(value.get("nickname").asText());
                         break;
                     case "updateGameState":
-                        this.clientController.updateGameState(value.get("gameState").asText());
+                        this.viewController.updateGameState(value.get("gameState").asText());
                         break;
                     case null, default:
                         break;
