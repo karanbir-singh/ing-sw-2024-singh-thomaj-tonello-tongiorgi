@@ -26,6 +26,8 @@ module it.polimi.ingsw.gc26 {
     opens it.polimi.ingsw.gc26.controller to javafx.fxml;
     exports it.polimi.ingsw.gc26.network;
     opens it.polimi.ingsw.gc26.network to javafx.fxml;
-    exports it.polimi.ingsw.gc26.request;
-    opens it.polimi.ingsw.gc26.request to javafx.fxml;
+    exports it.polimi.ingsw.gc26.request.game_request;
+    opens it.polimi.ingsw.gc26.request.game_request to javafx.fxml;
+    exports it.polimi.ingsw.gc26.request.main_request;
+    opens it.polimi.ingsw.gc26.request.main_request to javafx.fxml;
 }

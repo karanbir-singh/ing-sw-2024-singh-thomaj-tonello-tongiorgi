@@ -1,5 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
 
@@ -90,7 +92,7 @@ public class Player {
      *
      * @param color new pawn color
      */
-    public void setPawn(String color, ArrayList<Pawn> availableColors) {
+    public void setPawn(String color, ArrayList<Pawn> availableColors, String clientID) {
         Pawn pawn;
         switch (color) {
             case "BLUE" -> pawn = Pawn.BLUE;
@@ -102,11 +104,14 @@ public class Player {
 
         if (pawn == null) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non corretto
+            ModelObservable.getInstance().notifyError("Color not available!", clientID);
         } else if (!availableColors.contains(pawn)) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non disponibile
+            ModelObservable.getInstance().notifyError("Color not available!", clientID);
         } else {
             availableColors.remove(pawn);
             this.pawnColor = pawn;
+            ModelObservable.getInstance().notifyUpdateChosenPawn(pawn, clientID);
         }
     }
 

@@ -9,7 +9,7 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
-import it.polimi.ingsw.gc26.request.Request;
+import it.polimi.ingsw.gc26.request.game_request.GameRequest;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public class GameController {
     /**
      * This attribute represents the list of requests sent from clients
      */
-    private Queue<Request> requests;
+    private Queue<GameRequest> gameRequests;
 
     /**
      * Initializes the game (provided by the main controller)
@@ -40,15 +40,11 @@ public class GameController {
         this.isDebug = java.lang.management.ManagementFactory.
                 getRuntimeMXBean().
                 getInputArguments().toString().indexOf("jdwp") >= 0;
-
         this.game = game;
         this.game.setState(GameState.COMMON_TABLE_PREPARATION);
-
         this.playersToWait = new ArrayList<>();
-
-        this.requests = new ArrayDeque<>();
+        this.gameRequests = new ArrayDeque<>();
         this.launchExecutor();
-        ;
     }
 
     /**
@@ -57,16 +53,15 @@ public class GameController {
     private void launchExecutor() {
         new Thread(() -> {
             while (true) {
-                synchronized (requests) {
-                    while (requests.isEmpty()) {
+                synchronized (gameRequests) {
+                    while (gameRequests.isEmpty()) {
                         try {
-                            requests.wait();
+                            gameRequests.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                    requests.remove().execute(this);
-                    System.out.println("Request executed");
+                    gameRequests.remove().execute(this);
                 }
             }
         }).start();
@@ -75,12 +70,12 @@ public class GameController {
     /**
      * Add a new request to the queue
      *
-     * @param request client's request
+     * @param gameRequest client's request
      */
-    public void addRequest(Request request) {
-        synchronized (this.requests) {
-            requests.add(request);
-            requests.notifyAll();
+    public void addRequest(GameRequest gameRequest) {
+        synchronized (this.gameRequests) {
+            gameRequests.add(gameRequest);
+            gameRequests.notifyAll();
         }
     }
 
@@ -143,10 +138,10 @@ public class GameController {
                 player.createHand();
 
                 // Place starter card to the player's hand
-                player.getHand().addCard(starterCard);
+                player.getHand().addCard(starterCard, player.getID());
 
                 // Make it permanently selected
-                player.getHand().setSelectedCard(starterCard);
+                player.getHand().setSelectedCard(starterCard, player.getID());
             }
 
             // Add all players to list
@@ -171,7 +166,7 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Set pawn
-            player.setPawn(color, game.getAvailablePawns());
+            player.setPawn(color, game.getAvailablePawns(), playerID);
 
             if (isDebug) {
                 System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
@@ -190,6 +185,7 @@ public class GameController {
             }
         } else {
             // TODO gestire ome cambiare il model quando lo stato e' errato
+            game.errorState(playerID);
         }
     }
 
@@ -205,11 +201,11 @@ public class GameController {
             // Give hand cards to each player
             for (Player player : game.getPlayers()) {
                 // Add 2 Resources Card to the hand
-                player.getHand().addCard(commonTable.getResourceDeck().removeCard());
-                player.getHand().addCard(commonTable.getResourceDeck().removeCard());
+                player.getHand().addCard(commonTable.getResourceDeck().removeCard(), player.getID());
+                player.getHand().addCard(commonTable.getResourceDeck().removeCard(), player.getID());
 
                 // Add 1 Gold Card to the hand
-                player.getHand().addCard(commonTable.getGoldDeck().removeCard());
+                player.getHand().addCard(commonTable.getGoldDeck().removeCard(), player.getID());
             }
 
             // Change game state
@@ -269,8 +265,8 @@ public class GameController {
                 player.createSecretMissionHand();
 
                 // Place starter card to the player's secondary hand
-                player.getSecretMissionHand().addCard(firstSecretMission);
-                player.getSecretMissionHand().addCard(secondSecretMission);
+                player.getSecretMissionHand().addCard(firstSecretMission, player.getID());
+                player.getSecretMissionHand().addCard(secondSecretMission, player.getID());
             }
 
             // Add all players to list
@@ -295,17 +291,18 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Get selected secret mission
-            Card secretMission = player.getSecretMissionHand().getCard(0, 2, cardIndex);
+            Card secretMission = player.getSecretMissionHand().getCard(0, 2, cardIndex, playerID);
 
             // Select the chosen card
             if (secretMission != null) {
-                player.getSecretMissionHand().setSelectedCard(secretMission);
+                player.getSecretMissionHand().setSelectedCard(secretMission, player.getID());
                 if (isDebug) {
                     System.out.println(STR."\{player.getNickname()} selected mission: \{secretMission}");
                 }
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -320,7 +317,7 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Set the secret mission on the personal board of the players
-            Card secretMission = player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard());
+            Card secretMission = player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard(), playerID);
 
             if (secretMission != null) {
                 // Remove the card from the secondary hand
@@ -346,6 +343,7 @@ public class GameController {
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -374,6 +372,7 @@ public class GameController {
             game.setState(GameState.GAME_STARTED);
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -391,17 +390,19 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Get card to select
-            Card selectedCard = player.getHand().getCard(0, 3, cardIndex);
+            Card selectedCard = player.getHand().getCard(0, 3, cardIndex, playerID);
 
             // Set the selected card
             if (selectedCard != null) {
-                player.getHand().setSelectedCard(selectedCard);
+                player.getHand().setSelectedCard(selectedCard, player.getID());
                 if (isDebug) {
                     System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
                 }
             }
+
         } else {
             // TODO gestire cosa modificare nel model se lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -417,7 +418,7 @@ public class GameController {
             System.out.println(STR."\{player.getNickname()} turn selected card side");
         }
         // Turn selected card side
-        player.getHand().turnSide();
+        player.getHand().turnSide(playerID);
     }
 
     /**
@@ -439,9 +440,10 @@ public class GameController {
             PersonalBoard personalBoard = player.getPersonalBoard();
 
             // Set the selected position
-            personalBoard.setPosition(selectedX, selectedY);
+            personalBoard.setPosition(selectedX, selectedY, playerID);
         } else {
             // TODO gestisci cosa modificare del model se lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -464,7 +466,7 @@ public class GameController {
                     player.createPersonalBoard();
 
                     // Place starter card
-                    player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get());
+                    player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get(), playerID);
 
                     // Remove the starter card from the hand
                     player.getHand().removeCard(player.getHand().getSelectedCard().get());
@@ -498,7 +500,10 @@ public class GameController {
                     // Check if there is a selected card on the hand
                     if (hand.getSelectedCard().isPresent()) {
                         // Place the selected card side on the personal board
-                        personalBoard.playSide(hand.getSelectedSide().get());
+                        if (!personalBoard.playSide(hand.getSelectedSide().get(), playerID)) {
+                            game.errorState(playerID); //TODO create another notify
+                            return;
+                        }
 
                         // Remove card from the hand
                         hand.removeCard(hand.getSelectedCard().get());
@@ -510,9 +515,11 @@ public class GameController {
                     }
                 } else {
                     // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
+                    game.errorState(playerID);
                 }
             } else {
                 // TODO gestisci come cambiare il model quando lo stato è errato
+                game.errorState(playerID);
             }
         }
     }
@@ -534,10 +541,11 @@ public class GameController {
                     System.out.println(STR."[\{cardX}, \{cardY}] card selected from common table");
                 }
                 // Set the selected card on the common table
-                game.getCommonTable().selectCard(cardX, cardY);
+                game.getCommonTable().selectCard(cardX, cardY, playerID);
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
     }
 
@@ -558,11 +566,11 @@ public class GameController {
                 Hand hand = player.getHand();
 
                 // Get removed card
-                Card removedCard = commonTable.removeSelectedCard();
+                Card removedCard = commonTable.removeSelectedCard(playerID);
 
                 if (removedCard != null) {
                     // Add card in player's hand
-                    hand.addCard(removedCard);
+                    hand.addCard(removedCard, playerID);
                     if (isDebug) {
                         System.out.println(STR."\{player.getNickname()} drew selected card");
                     }
@@ -582,9 +590,12 @@ public class GameController {
                     // Change turn to next player
                     this.changeTurn();
                 }
+            } else {
+                game.errorState(playerID);
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
     }
 

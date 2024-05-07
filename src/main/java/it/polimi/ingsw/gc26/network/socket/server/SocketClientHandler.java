@@ -1,19 +1,19 @@
 package it.polimi.ingsw.gc26.network.socket.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.controller.GameController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.RemoteException;
 
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.request.*;
+import it.polimi.ingsw.gc26.request.game_request.*;
+import it.polimi.ingsw.gc26.request.main_request.ConnectionRequest;
+import it.polimi.ingsw.gc26.request.main_request.GameCreationRequest;
 
 /**
  * This class represents the handler to decode json from the client.
@@ -69,11 +69,15 @@ public class SocketClientHandler implements Runnable {
                 // Execute requested command
                 switch (msg.get("function").textValue()) {
                     case "connect":
-                        String clientID = this.mainController.connect(this.virtualSocketView, value.get("nickname").asText());
-                        this.virtualSocketView.setClientID(clientID);
+                        ClientState clientState = ClientState.valueOf(value.get("clientState").asText());
+                        if (clientState == ClientState.CONNECTION) {
+                            this.mainController.addRequest(new ConnectionRequest(this.virtualSocketView, value.get("nickname").asText(), 0));
+                        } else if (clientState.equals(ClientState.INVALID_NICKNAME)) {
+                            this.mainController.addRequest(new ConnectionRequest(this.virtualSocketView, value.get("nickname").asText(), 2));
+                        }
                         break;
                     case "createWaitingList":
-                        this.mainController.createWaitingList(this.virtualSocketView, value.get("clientID").asText(), value.get("nickname").asText(), value.get("numPlayers").asInt());
+                        this.mainController.addRequest(new GameCreationRequest(this.virtualSocketView, value.get("nickname").asText(), value.get("numPlayers").asInt(), 1));
                         break;
                     case "getVirtualGameController":
                         this.gameController = this.mainController.getGameController();
@@ -108,8 +112,10 @@ public class SocketClientHandler implements Runnable {
                         break;
                     case "setSecretMission":
                         this.gameController.addRequest(new SetSecretMissionRequest(value.get("playerID").asText()));
+                        break;
                     case "printPersonalBoard":
                         this.gameController.addRequest(new PrintPersonalBoardRequest(value.get("nickname").asText(), value.get("playerID").asText()));
+                        break;
                     case null, default:
                         break;
                 }

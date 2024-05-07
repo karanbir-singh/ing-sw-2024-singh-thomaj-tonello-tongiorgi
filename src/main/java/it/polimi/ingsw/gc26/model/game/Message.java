@@ -102,7 +102,11 @@ public class Message {
    public String toJson() {
        HashMap<String, String>  data = new HashMap<>();
        data.put("text", this.getText());
-       data.put("receiver", this.getReceiver().getNickname());
+       try {
+           data.put("receiver", this.getReceiver().getNickname());
+       } catch (NullPointerException e) {
+           data.put("receiver", "");
+       }
        data.put("sender", this.getSender().getNickname());
        data.put("time", this.getTime().toString());
        ObjectMapper objectMapper = new ObjectMapper();
