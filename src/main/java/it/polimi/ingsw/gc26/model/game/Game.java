@@ -4,7 +4,7 @@ import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
-import it.polimi.ingsw.gc26.Parser.ParserCore;
+import it.polimi.ingsw.gc26.parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.network.VirtualView;
 

@@ -4,7 +4,7 @@ import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.network.ViewController;
+import it.polimi.ingsw.gc26.view_model.ViewController;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
 import it.polimi.ingsw.gc26.network.socket.server.VirtualSocketView;

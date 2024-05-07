@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.Parser;
+package it.polimi.ingsw.gc26.parser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.FileReader;

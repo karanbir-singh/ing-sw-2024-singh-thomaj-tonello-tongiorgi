@@ -2,7 +2,7 @@ package it.polimi.ingsw.gc26.network.RMI;
 
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.network.ViewController;
+import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
