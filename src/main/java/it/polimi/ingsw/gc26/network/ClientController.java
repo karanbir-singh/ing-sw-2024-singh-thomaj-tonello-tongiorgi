@@ -7,7 +7,9 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
 
 public class ClientController {
-
+    /**
+     * References to the main client of which this object is controller
+     */
     private MainClient mainClient;
     /**
      * ID of the client
@@ -22,7 +24,9 @@ public class ClientController {
      * Client's state
      */
     private ClientState clientState;
-
+    /**
+     * Attribute used for synchronize actions between server and client
+     */
     private final Object lock;
 
     public ClientController(MainClient mainClient, String clientID, String nickname, ClientState clientState, Object lock) {
@@ -35,6 +39,10 @@ public class ClientController {
 
     public String getClientID() {
         return clientID;
+    }
+
+    public void setClientID(String clientID) {
+        this.clientID = clientID;
     }
 
     public String getNickname() {
@@ -95,11 +103,6 @@ public class ClientController {
             this.clientState = clientState;
             lock.notifyAll();
         }
-    }
-
-
-    public void setClientID(String clientID) {
-        this.clientID = clientID;
     }
 
     public ClientState getClientState() {
