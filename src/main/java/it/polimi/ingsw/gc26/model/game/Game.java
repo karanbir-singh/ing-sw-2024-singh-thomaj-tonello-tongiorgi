@@ -131,7 +131,6 @@ public class Game {
         if (this.players.size() == numberOfPlayers) {
             gameState = GameState.COMMON_TABLE_PREPARATION;
         }
-
     }
 
     /**
@@ -315,5 +314,37 @@ public class Game {
 
     public void errorState(String clientID){
         ModelObservable.getInstance().notifyError("YOU CANNOT DO THAT NOW",clientID);
+    }
+
+    public void showCommonTable(){
+        String[][] ct = commonTable.printableCommonTable();
+        int maxLenght = 0;
+        StringBuilder spaces;
+
+        System.out.println("\t\t\tCOMMON TABLE:\n");
+        for (String[] row: ct) {
+            for (String col: row) {
+                System.out.print(col);
+            }
+            System.out.print("\n");
+        }
+
+        System.out.print("\n\t\t\tCURRENT SCORES:\n\n");
+
+        for (Player p: players) {
+            maxLenght = Math.max(maxLenght, p.getNickname().length());
+        }
+
+        maxLenght ++;
+
+        for (Player p: players) {
+            int i = 0;
+            spaces = new StringBuilder();
+            while(i + p.getNickname().length() < maxLenght){
+                spaces.append(" ");
+                i++;
+            }
+            System.out.println(p.getNickname() + spaces + p.printableScore());
+        }
     }
 }

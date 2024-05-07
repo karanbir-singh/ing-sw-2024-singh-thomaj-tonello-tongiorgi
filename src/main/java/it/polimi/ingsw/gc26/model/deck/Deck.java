@@ -58,4 +58,9 @@ public class Deck {
     public ArrayList<Card> getCards() {
         return this.cards;
     }
+
+    public String[][] printableDeck(){
+        return this.getTopCard().getBack().printableSide();
+    }
+
 }

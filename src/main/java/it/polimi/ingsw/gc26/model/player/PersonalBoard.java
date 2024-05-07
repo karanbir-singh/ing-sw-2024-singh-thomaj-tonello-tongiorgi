@@ -346,6 +346,11 @@ public class PersonalBoard {
             }
             System.out.print(styleReset + "\n");
         }
+        System.out.print("\nYour resources: " );
+        for (Symbol s: Symbol.values()) {
+            System.out.print(visibleResources.get(s) + " " + s.name() + "   ");
+        }
+        System.out.print("\n");
     }
 
     /**

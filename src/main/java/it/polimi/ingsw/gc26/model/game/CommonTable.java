@@ -3,7 +3,10 @@ package it.polimi.ingsw.gc26.model.game;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.deck.Deck;
+import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
+import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.util.*;
 
@@ -270,4 +273,152 @@ public class CommonTable {
     public int getSelectedY() {
         return selectedY;
     }
+
+    public String[][] emptyPrintable(int xCardDim, int yCardDim){
+        String[][] s = new String[yCardDim][xCardDim];
+
+        String decoration = SpecialCharacters.SQUARE_BLACK.getCharacter();
+        String backgroundSymbol = SpecialCharacters.SQUARE_BLACK.getCharacter();
+        String blank = SpecialCharacters.BACKGROUND_BLANK_WIDE.getCharacter();
+        String backgroundColor = TextStyle.BACKGROUND_BLACK.getStyleCode();
+        String reset = TextStyle.STYLE_RESET.getStyleCode();
+
+        //corners
+        s[0][0] = backgroundSymbol;
+        s[0][xCardDim - 1] = backgroundSymbol;
+        s[yCardDim - 1][0] = backgroundSymbol;
+        s[yCardDim - 1][xCardDim - 1] = backgroundSymbol;
+
+        //decoration
+        s[0][xCardDim/2] = blank + decoration  + blank;
+        s[yCardDim/2][xCardDim/2] = decoration + decoration + decoration;
+        s[yCardDim - 1][xCardDim/2] = blank + decoration  + blank;
+
+        //rest of the card
+        for(int i=0; i<yCardDim; i++){
+            for(int j=0; j<xCardDim; j++){
+                if(s[i][j] == null){
+                    s[i][j] = blank;
+                }
+                s[i][j] = backgroundColor + s[i][j] + reset;
+            }
+        }
+
+        return s;
+    }
+
+    private void addPrintable(String[][] printable, String[][] context, int xBase, int yBase){
+        int y=0, x;
+
+        for(String[] row: printable){
+            x=0;
+            for(String col: row){
+                context[yBase + y][xBase + x] = col;
+                x++;
+            }
+            y++;
+        }
+    }
+
+    private void decorateDeck(String[][] ct, int xDeck, int yDeck, int xCardDim, int yCardDim){
+        //ct[yDeck + yCardDim][xDeck] = "▔▔▔▔▔▔▔▔▔▔▔▔▔";
+        xDeck += xCardDim;
+        for(int yOff=0; yOff<yCardDim; yOff++){
+            ct[yDeck + yOff][xDeck] = "║";
+        }
+        //ct[yResource + yCardDim][0] = "╚═" + whiteSquare + "══" + whiteSquare + "══" + whiteSquare + "═╝";
+    }
+
+    public String[][] printableCommonTable(){
+        int xCardDim = 3;
+        int yCardDim = 3;
+        int xResource = 1, yResource = 1;
+        int xGold = 1, yGold = yResource + yCardDim + 2;
+        int xMissionDim = 3;
+        int yMissionDim = 5;
+        int xMission1 = 0;
+        int xMission2 = xMission1 + xMissionDim + 2;
+        int yMission = yGold + yCardDim + 2;
+
+        int xDim = 2*(xCardDim+2) + yMissionDim+1 +1;
+        int yDim = 16;
+        int index = 0;
+
+        String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
+        String space = "    ";
+                //SpecialCharacters.BACKGROUND_BLANK_MEDIUM.getCharacter();
+
+        String[][] ct = new String[yDim][xDim];
+
+        //initialize empty common table
+        for(int i=0; i<yDim; i++){
+            for(int j=0; j<xDim; j++){
+                ct[i][j] = space;
+            }
+        }
+
+        //insert uncovered resource cards
+        for (int i=0; i<2; i++) {
+            Card r = resourceCards.get(i);
+            ct[yResource-1][i] = "(" + index + ") Resource Card    ";
+
+            if(r == null){
+                addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
+            } else {
+                addPrintable(r.getFront().printableSide(), ct, xResource, yResource);
+            }
+
+            xResource += xCardDim + 2;
+            index++;
+        }
+
+        xResource ++;
+
+        //insert resource deck
+        ct[yResource-1][2] = "   (" + index + ") Resource Deck";
+        if(resourceDeck.getTopCard() == null){
+            addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
+        } else {
+            addPrintable(resourceDeck.printableDeck(), ct, xResource, yResource);
+            decorateDeck(ct, xResource, yResource, xCardDim, yCardDim);
+        }
+
+        index++;
+
+        //insert uncovered gold cards
+        for (int i=0; i<2; i++) {
+            Card g = goldCards.get(i);
+            ct[yGold-1][i] = "(" + index + ") Gold Card        ";
+
+            if(g == null){
+                addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
+            } else {
+                addPrintable(g.getFront().printableSide(), ct, xGold, yGold);
+            }
+            xGold += xCardDim + 2;
+            index++;
+        }
+
+        xGold ++;
+
+        //insert gold deck
+        ct[yGold-1][2] = "   (" + index + ") Gold Deck" ;
+
+        if(goldDeck.getTopCard() == null){
+            addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
+        } else {
+            addPrintable(goldDeck.printableDeck(), ct, xGold, yGold);
+            decorateDeck(ct, xGold, yGold, xCardDim, yCardDim);
+        }
+
+        //insert common mission cards
+        ct[yMission-1][0] = "\nCommon Mission 0             " ;
+        ct[yMission-1][1] = "Common Mission 1" ;
+        addPrintable(commonMissions.get(0).getFront().printableSide(), ct, xMission1, yMission);
+        addPrintable(commonMissions.get(1).getFront().printableSide(), ct, xMission2, yMission);
+
+
+        return ct;
+    }
+
 }
