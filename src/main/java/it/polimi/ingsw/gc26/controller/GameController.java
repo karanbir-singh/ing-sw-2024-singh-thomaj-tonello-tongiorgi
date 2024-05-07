@@ -29,7 +29,7 @@ public class GameController {
     /**
      * This attribute represents the list of requests sent from clients
      */
-    private Queue<GameRequest> gameRequests;
+    private final Queue<GameRequest> gameRequests;
 
     /**
      * Initializes the game (provided by the main controller)

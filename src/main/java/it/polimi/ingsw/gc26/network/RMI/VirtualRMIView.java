@@ -1,45 +1,30 @@
 package it.polimi.ingsw.gc26.network.RMI;
 
 import it.polimi.ingsw.gc26.ClientState;
-import it.polimi.ingsw.gc26.MainClient;
-import it.polimi.ingsw.gc26.network.VirtualGameController;
-import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import javafx.util.Pair;
+import it.polimi.ingsw.gc26.network.ClientController;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Scanner;
 
 public class VirtualRMIView implements VirtualView {
-    private final VirtualMainController virtualMainController;
-    private VirtualGameController virtualGameController;
-    private MainClient mainClient;
+    /**
+     * This attribute represents the client controller on which execute the called actions
+     */
+    private ClientController clientController;
 
-    public VirtualRMIView(VirtualMainController virtualMainController, MainClient mainClient) throws RemoteException {
-        this.virtualMainController = virtualMainController;
-        this.mainClient = mainClient;
+    public VirtualRMIView(ClientController clientController) throws RemoteException {
+        this.clientController = clientController;
         UnicastRemoteObject.exportObject(this, 0);
     }
 
-    // These are examples of view updating methods
-    //public void notifyMessage(String message) throws RemoteException {
-      //  System.out.println(message);
-    //}
-
     @Override
     public void setClientID(String clientID) throws RemoteException {
-        this.mainClient.setClientID(clientID);
+        this.clientController.setClientID(clientID);
     }
 
     @Override
     public void setGameController() throws RemoteException {
-
-    }
-
-    @Override
-    public ClientState getState() {
-        return this.mainClient.getClientState();
     }
 
     /**
@@ -51,19 +36,18 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateChosenPawn(String pawnColor, String clientID) throws RemoteException {
-        System.out.println(STR."\{clientID} chose \{pawnColor}\{pawnColor}");
+        this.clientController.updateChosenPawn(pawnColor, clientID);
     }
 
     /**
      * To notify the current player the successful selection of its mission
+     *
      * @param clientID
      * @throws RemoteException
      */
     @Override
     public void updateSelectedMission(String clientID) throws RemoteException {
-        if(this.mainClient.getClientID().equals(clientID)){
-            System.out.println("You have selected the mission");
-        }
+        this.clientController.updateSelectedMission(clientID);
     }
 
     /**
@@ -74,8 +58,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateSelectedCardFromHand(String clientID) throws RemoteException {
-        System.out.println("You have selected a card from the hand");
-
+        this.clientController.updateSelectedCardFromHand(clientID);
     }
 
     /**
@@ -87,10 +70,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateSelectedSide(String cardIndex, String clientID) throws RemoteException {
-        if(this.mainClient.getClientID().equals(clientID)){
-            System.out.println("You have selected the side in" + cardIndex);
-        }
-
+        this.clientController.updateSelectedSide(cardIndex, clientID);
     }
 
     /**
@@ -104,17 +84,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateSelectedPositionOnBoard(String selectedX, String selectedY, String playerID, String success) throws RemoteException {
-        if(this.mainClient.getClientID().equals(playerID)){
-            if (Integer.parseInt(success) == 1) {
-                System.out.println(STR."selected x: \{selectedX} y: \{selectedY}");
-
-            } else {
-                System.out.println(STR."failed to selected x: \{selectedX} y: \{selectedY}");
-
-            }
-
-        }
-
+        this.clientController.updateSelectedPositionOnBoard(selectedX, selectedY, playerID, success);
     }
 
     /**
@@ -126,13 +96,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updatePlayedCardFromHand(String clientID, String success) throws RemoteException {
-        if (Integer.parseInt(success) == 1) { // 1 success
-            System.out.println(STR."\{clientID} played its selected card");
-
-        } else {
-            System.out.println(STR."\{clientID} failed to play its card");
-
-        }
+        this.clientController.updatePlayedCardFromHand(clientID, success);
     }
 
     /**
@@ -144,7 +108,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updatePoints(String clientID, String points) throws RemoteException {
-        System.out.println(STR."\{clientID} has \{points}points");
+        this.clientController.updatePoints(clientID, points);
     }
 
     /**
@@ -156,10 +120,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateSelectedCardFromCommonTable(String clientID, String success) throws RemoteException {
-        if(this.mainClient.getClientID().equals(clientID)){
-            System.out.println(STR."you have selected a card from the common table");
-        }
-
+        this.clientController.updateSelectedCardFromCommonTable(clientID, success);
     }
 
     /**
@@ -171,7 +132,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void showCard(String playerID, String cardSerialization) throws RemoteException {
-        System.out.println(STR."\{playerID} : \{cardSerialization}");
+        this.clientController.showCard(playerID, cardSerialization);
     }
 
     /**
@@ -182,7 +143,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void showChat(String message) throws RemoteException {
-        System.out.println("message: " + message);
+        this.clientController.showChat(message);
     }
 
     /**
@@ -195,9 +156,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void showPersonalBoard(String clientID, String ownerNickname, String personalBoardSerialization) throws RemoteException {
-        System.out.println(STR."""
-            nickname's personal board \{ownerNickname} :\s
-            \{personalBoardSerialization}""");
+        this.clientController.showPersonalBoard(clientID, ownerNickname, personalBoardSerialization);
     }
 
     /**
@@ -208,7 +167,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateFirstPlayer(String nickname) throws RemoteException {
-        System.out.println(STR."First player is \{nickname}");
+        this.clientController.updateFirstPlayer(nickname);
     }
 
     /**
@@ -219,18 +178,8 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void updateGameState(String gameState) throws RemoteException {
-        System.out.println(STR."New gameState: \{gameState}");
+        this.clientController.updateGameState(gameState);
     }
-
-    /**
-     * @return
-     * @throws RemoteException
-     */
-    @Override
-    public String getClientID() throws RemoteException {
-        return this.mainClient.getClientID();
-    }
-
 
     /**
      * Print messages from the server to the client.
@@ -241,7 +190,7 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void showMessage(String message, String clientID) throws RemoteException {
-        System.out.println(STR."[SERVER] \{message}");
+        this.clientController.showMessage(message, clientID);
     }
 
     /**
@@ -253,17 +202,11 @@ public class VirtualRMIView implements VirtualView {
      */
     @Override
     public void showError(String message, String clientID) throws RemoteException {
-        System.out.println(STR."Error: \{message}");
+        this.clientController.showError(message, clientID);
     }
 
     @Override
     public void updateState(ClientState clientState) throws RemoteException {
-        this.mainClient.setClientState(clientState);
-    }
-
-
-    // Method for running Graphic UI
-    public void runGUI() {
-
+        this.clientController.updateClientState(clientState);
     }
 }

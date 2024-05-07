@@ -16,7 +16,7 @@ public class VirtualSocketView implements VirtualView {
     /**
      * This represents the print writer to write output to the client
      */
-    final PrintWriter outputToClient;
+    private final PrintWriter outputToClient;
 
     /**
      * Virtual Socket view constructor. It initializes the print writer to the client
@@ -29,6 +29,7 @@ public class VirtualSocketView implements VirtualView {
 
     /**
      * This method creates the basic structure for this protocol.
+     *
      * @return base structure
      */
     private static HashMap<String, String> getBaseMessage() {
@@ -42,7 +43,7 @@ public class VirtualSocketView implements VirtualView {
      * Sends message in JSON format to client
      *
      * @param functionName represents the function to call client side
-     * @param valueMsg represents a value that is need to the called function
+     * @param valueMsg     represents a value that is need to the called function
      */
     private void sendToClient(String functionName, HashMap<String, String> valueMsg) {
         HashMap<String, String> data = getBaseMessage();
@@ -61,7 +62,7 @@ public class VirtualSocketView implements VirtualView {
 
 
     @Override
-    public void showMessage(String message,  String clientID) throws RemoteException {
+    public void showMessage(String message, String clientID) throws RemoteException {
         HashMap<String, String> msg = new HashMap<>();
         msg.put("message", message);
         msg.put("clientID", clientID);
@@ -139,7 +140,7 @@ public class VirtualSocketView implements VirtualView {
     }
 
     @Override
-    public void updateSelectedCardFromHand( String clientID) throws RemoteException {
+    public void updateSelectedCardFromHand(String clientID) throws RemoteException {
         HashMap<String, String> msg = new HashMap<>();
         msg.put("clientID", clientID);
         sendToClient("updateSelectedCardFromHand", msg);
@@ -229,25 +230,5 @@ public class VirtualSocketView implements VirtualView {
         HashMap<String, String> msg = new HashMap<>();
         msg.put("gameState", gameState);
         sendToClient("updateGameState", msg);
-    }
-
-    /**
-     * @return
-     * @throws RemoteException
-     */
-    @Override
-    public String getClientID() throws RemoteException {
-        sendToClient("getClientID", null);
-        return null;
-    }
-
-    /**
-     * @return
-     * @throws RemoteException
-     */
-    @Override
-    public ClientState getState() throws RemoteException {
-        sendToClient("getState", null);
-        return null;
     }
 }
