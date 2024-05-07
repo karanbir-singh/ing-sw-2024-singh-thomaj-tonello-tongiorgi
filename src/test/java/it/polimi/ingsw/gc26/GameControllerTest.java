@@ -310,4 +310,103 @@ class GameControllerTest {
         assertEquals(31, game.getCommonTable().getResourceDeck().getCards().size());
         assertEquals(2, game.getCommonTable().getResourceCards().size());
     }
+
+    @Test
+    void drawCardBeforePlayingCard(){
+        players = new ArrayList<>();
+        players.add(new Player("0", "Pippo"));
+        players.add(new Player("1", "Baudo"));
+        //players.add(new Player("2", "Carlo"));
+
+        // Create game controller
+        game = new Game(players);
+        gameController = new GameController(game);
+        // Prepare initial things
+        gameController.prepareCommonTable();
+        gameController.turnSelectedCardSide(players.get(0).getID());
+        gameController.turnSelectedCardSide(players.get(1).getID());
+        for (Player player : game.getPlayers()) {
+            gameController.playCardFromHand(player.getID());
+        }
+        gameController.choosePawnColor("BLUE", players.get(1).getID());
+        gameController.choosePawnColor("GREEN", players.get(0).getID());
+
+        gameController.selectSecretMission(0, players.get(0).getID());
+        gameController.setSecretMission(players.get(0).getID());
+
+        gameController.selectSecretMission(1, players.get(1).getID());
+        gameController.setSecretMission(players.get(1).getID());
+
+        Player currentPlayer = game.getCurrentPlayer();
+
+        gameController.selectCardFromCommonTable(1,1, currentPlayer.getID());
+        gameController.drawSelectedCard(currentPlayer.getID());
+        assertEquals(PlayerState.PLAYING, currentPlayer.getState());
+        assertEquals(3,currentPlayer.getHand().getCards().size());
+
+        gameController.selectCardFromHand(1, currentPlayer.getID());
+        gameController.selectPositionOnBoard(1,1,currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+        assertEquals(PlayerState.CARD_PLAYED, currentPlayer.getState());
+        assertEquals(2,currentPlayer.getHand().getCards().size());
+
+
+        gameController.selectCardFromHand(0, currentPlayer.getID());
+        gameController.selectPositionOnBoard(-1,1,currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+        assertEquals(PlayerState.CARD_PLAYED, currentPlayer.getState());
+        assertEquals(2,currentPlayer.getHand().getCards().size());
+
+
+        gameController.selectCardFromCommonTable(1,1, currentPlayer.getID());
+        gameController.drawSelectedCard(currentPlayer.getID());
+        assertEquals(PlayerState.CARD_DRAWN, currentPlayer.getState());
+        assertEquals(3,currentPlayer.getHand().getCards().size());
+    }
+
+    @Test
+    void drawingAndPlayingCardsBeforeSelectingThePosition(){
+        players = new ArrayList<>();
+        players.add(new Player("0", "Pippo"));
+        players.add(new Player("1", "Baudo"));
+        //players.add(new Player("2", "Carlo"));
+
+        // Create game controller
+        game = new Game(players);
+        gameController = new GameController(game);
+        // Prepare initial things
+        gameController.prepareCommonTable();
+        gameController.turnSelectedCardSide(players.get(0).getID());
+        gameController.turnSelectedCardSide(players.get(1).getID());
+        for (Player player : game.getPlayers()) {
+            gameController.playCardFromHand(player.getID());
+        }
+        gameController.choosePawnColor("BLUE", players.get(1).getID());
+        gameController.choosePawnColor("GREEN", players.get(0).getID());
+
+        gameController.selectSecretMission(0, players.get(0).getID());
+        gameController.setSecretMission(players.get(0).getID());
+
+        gameController.selectSecretMission(1, players.get(1).getID());
+        gameController.setSecretMission(players.get(1).getID());
+
+        Player currentPlayer = game.getCurrentPlayer();
+        gameController.selectCardFromHand(1,currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+        assertEquals(3,currentPlayer.getHand().getCards().size());
+        assertEquals(1,currentPlayer.getPersonalBoard().getOccupiedPositions().size());
+        //da errore qua ma è un errore che ha sistemato gabi, perchè comunque elimina la carta dalla mano
+
+        gameController.drawSelectedCard(currentPlayer.getID());
+        assertEquals(3,currentPlayer.getHand().getCards().size());
+
+
+        gameController.selectCardFromHand(1,currentPlayer.getID());
+        gameController.selectPositionOnBoard(1,1,currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+        assertEquals(2,currentPlayer.getHand().getCards().size());
+        assertEquals(2,currentPlayer.getPersonalBoard().getOccupiedPositions().size());
+
+    }
 }
+
