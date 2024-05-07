@@ -319,7 +319,7 @@ class GameControllerTest {
         //players.add(new Player("2", "Carlo"));
 
         // Create game controller
-        game = new Game(players);
+        game = new Game(players, new ArrayList<>());
         gameController = new GameController(game);
         // Prepare initial things
         gameController.prepareCommonTable();
@@ -372,7 +372,7 @@ class GameControllerTest {
         //players.add(new Player("2", "Carlo"));
 
         // Create game controller
-        game = new Game(players);
+        game = new Game(players, new ArrayList<>());
         gameController = new GameController(game);
         // Prepare initial things
         gameController.prepareCommonTable();
