@@ -28,17 +28,17 @@ public class SocketServer {
     /**
      * This attribute represents the main controller to be given in to the handlers
      */
-    private final MainController controller;
+    private final MainController mainController;
 
     /**
      * Socket server constructor. It initializes the listener socket and the controller
      *
      * @param listenSocket
-     * @param controller
+     * @param mainController
      */
-    public SocketServer(ServerSocket listenSocket, MainController controller) {
+    public SocketServer(ServerSocket listenSocket, MainController mainController) {
         this.listenSocket = listenSocket;
-        this.controller = controller;
+        this.mainController = mainController;
         this.clients = new ArrayList<>();
     }
 
@@ -60,7 +60,7 @@ public class SocketServer {
             OutputStreamWriter socketTx = new OutputStreamWriter(clientSocket.getOutputStream());
 
             // Create client handler
-            SocketClientHandler handler = new SocketClientHandler(this.controller, new BufferedReader(socketRx), new PrintWriter(socketTx));
+            SocketClientHandler handler = new SocketClientHandler(this.mainController, new BufferedReader(socketRx), new PrintWriter(socketTx));
 
             // Add to clients list
             synchronized (this.clients) {
