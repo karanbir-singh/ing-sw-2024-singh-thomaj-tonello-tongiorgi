@@ -231,14 +231,4 @@ public class VirtualSocketView implements VirtualView {
         msg.put("gameState", gameState);
         sendToClient("updateGameState", msg);
     }
-
-    /**
-     * @return
-     * @throws RemoteException
-     */
-    @Override
-    public ClientState getState() throws RemoteException {
-        sendToClient("getState", null);
-        return null;
-    }
 }
