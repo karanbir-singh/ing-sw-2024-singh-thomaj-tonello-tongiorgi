@@ -27,11 +27,6 @@ public class VirtualRMIView implements VirtualView {
     public void setGameController() throws RemoteException {
     }
 
-    @Override
-    public ClientState getState() throws RemoteException {
-        return this.clientController.getClientState();
-    }
-
     /**
      * To notify not the current player but the other that a pawn color has been selected
      *
