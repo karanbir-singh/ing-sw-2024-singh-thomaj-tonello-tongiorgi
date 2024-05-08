@@ -250,24 +250,23 @@ abstract public class Side implements Serializable {
         String[][] s = new String[3][3];
 
         String empty = SpecialCharacters.SQUARE_WHITE.getCharacter();
-        String background = SpecialCharacters.BACKGROUND_BLANK_MEDIUM.getCharacter();
+        String blank = SpecialCharacters.BACKGROUND_BLANK_WIDE.getCharacter();
         String styleReset = TextStyle.STYLE_RESET.getStyleCode();
         String cornerBackground = TextStyle.BACKGROUND_WHITE.getStyleCode();
 
-        String fontColor;
+        //String fontColor;
         String filler;
         String kingdomColor;
 
-        //fetch the special characters and font style based on the side's kingdom
+        //fetch the special characters and color based on the side's kingdom
         if (sideSymbol != null){
             filler = sideSymbol.getFiller();
-            fontColor = sideSymbol.getFontColor();
             kingdomColor = sideSymbol.getBackground();
         } else {
             filler = SpecialCharacters.BACKGROUND_YELLOW.getCharacter();
-            fontColor = TextStyle.YELLOW.getStyleCode();
             kingdomColor = TextStyle.BACKGROUND_YELLOW.getStyleCode();
         }
+
 
         if(UPLEFT.getSymbol().isPresent()){
             s[0][0] = cornerBackground + UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
@@ -277,9 +276,7 @@ abstract public class Side implements Serializable {
             s[0][0] = cornerBackground + empty + kingdomColor ;
         }
 
-
-        s[0][1] = fontColor + "   " + filler  + "   " + styleReset;
-
+        s[0][1] = blank + filler  + blank;
 
         if(UPRIGHT.getSymbol().isPresent()){
             s[0][2] = cornerBackground + UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
@@ -290,7 +287,7 @@ abstract public class Side implements Serializable {
             s[0][2] = cornerBackground + empty  + kingdomColor ;
         }
 
-        s[1][0] = fontColor + " " + background + styleReset;
+        s[1][0] = blank;
 
         if(permanentResources.isEmpty()){
             s[1][1] = filler + filler + filler;
@@ -308,7 +305,8 @@ abstract public class Side implements Serializable {
                 s[1][1] = s[1][1] + kingdomColor;
             }
         }
-        s[1][2] = fontColor + background + " " + styleReset;
+
+        s[1][2] = blank;
 
         if(DOWNLEFT.getSymbol().isPresent()){
         s[2][0] = cornerBackground + DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
@@ -319,7 +317,7 @@ abstract public class Side implements Serializable {
         s[2][0] =  cornerBackground + empty + kingdomColor;
         }
 
-        s[2][1] = fontColor + "   "  + filler  + "   " + styleReset;
+        s[2][1] = blank  + filler  + blank;
 
         if(DOWNRIGHT.getSymbol().isPresent()){
         s[2][2] = cornerBackground + DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;

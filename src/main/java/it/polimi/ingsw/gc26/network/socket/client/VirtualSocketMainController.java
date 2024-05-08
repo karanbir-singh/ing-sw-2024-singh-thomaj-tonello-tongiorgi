@@ -1,13 +1,12 @@
-
 package it.polimi.ingsw.gc26.network.socket.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
-import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -39,11 +38,12 @@ public class VirtualSocketMainController implements VirtualMainController {
      * @throws RemoteException
      */
     @Override
-    public void connect(VirtualView client, String nickName) throws RemoteException {
+    public void connect(VirtualView client, String nickName, ClientState clientState) throws RemoteException {
         HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
         data.replace("function", "connect");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("nickname", nickName);
+        msg.put("clientState", clientState.toString());
         writeToServer(data, msg);
     }
 
@@ -51,7 +51,6 @@ public class VirtualSocketMainController implements VirtualMainController {
      * This method creates the json encoding to call in the server's main controller the createWaitingList method
      *
      * @param client
-   //  * @param clientID
      * @param nickname
      * @param numPlayers number of players in a game
      * @throws RemoteException
@@ -61,7 +60,6 @@ public class VirtualSocketMainController implements VirtualMainController {
         HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
         data.replace("function", "createWaitingList");
         HashMap<String, String> msg = new HashMap<>();
-    //    msg.put("clientID", clientID);
         msg.put("nickname", nickname);
         msg.put("numPlayers", String.valueOf(numPlayers));
         writeToServer(data, msg);

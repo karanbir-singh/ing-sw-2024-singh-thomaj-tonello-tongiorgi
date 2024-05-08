@@ -59,4 +59,9 @@ public class Deck implements Serializable {
     public ArrayList<Card> getCards() {
         return this.cards;
     }
+
+    public String[][] printableDeck(){
+        return this.getTopCard().getBack().printableSide();
+    }
+
 }

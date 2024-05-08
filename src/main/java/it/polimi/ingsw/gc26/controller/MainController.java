@@ -4,7 +4,6 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.request.main_request.GameCreationRequest;
 import it.polimi.ingsw.gc26.request.main_request.MainRequest;
 
 import java.io.*;
@@ -116,7 +115,7 @@ public class MainController implements Serializable {
      * @return Returns true if waitingPlayer not contains other players with the given nickname, otherwise false
      */
     private boolean isNicknameValid(String nickname) {
-        return !waitingPlayers.stream().anyMatch(p -> p.getNickname().equals(nickname));
+        return !waitingPlayers.stream().anyMatch(player -> player.getNickname().equals(nickname));
     }
 
     public void connect(VirtualView client, String nickname){
@@ -241,7 +240,7 @@ public class MainController implements Serializable {
                 // Then, create a new game controller
                 try {
                     numberOfTotalGames = numberOfTotalGames + 1;
-                    gameController = new GameController(new Game(waitingPlayers),"src/main/resources/gameControllerText" +
+                    gameController = new GameController(new Game(waitingPlayers, waitingClients),"src/main/resources/gameControllerText" +
                                                                                              numberOfTotalGames + ".bin");
 
                 } catch (IOException e) {

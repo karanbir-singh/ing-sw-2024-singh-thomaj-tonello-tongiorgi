@@ -162,10 +162,10 @@ public class GameController implements Serializable {
                 player.createHand();
 
                 // Place starter card to the player's hand
-                player.getHand().addCard(starterCard);
+                player.getHand().addCard(starterCard, player.getID());
 
                 // Make it permanently selected
-                player.getHand().setSelectedCard(starterCard);
+                player.getHand().setSelectedCard(starterCard, player.getID());
             }
 
             // Add all players to list
@@ -197,7 +197,7 @@ public class GameController implements Serializable {
             Player player = game.getPlayerByID(playerID);
 
             // Set pawn
-            player.setPawn(color, game.getAvailablePawns());
+            player.setPawn(color, game.getAvailablePawns(), playerID);
 
             if (isDebug) {
                 System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
@@ -216,6 +216,7 @@ public class GameController implements Serializable {
             }
         } else {
             // TODO gestire ome cambiare il model quando lo stato e' errato
+            game.errorState(playerID);
         }
 
 
@@ -239,11 +240,11 @@ public class GameController implements Serializable {
             // Give hand cards to each player
             for (Player player : game.getPlayers()) {
                 // Add 2 Resources Card to the hand
-                player.getHand().addCard(commonTable.getResourceDeck().removeCard());
-                player.getHand().addCard(commonTable.getResourceDeck().removeCard());
+                player.getHand().addCard(commonTable.getResourceDeck().removeCard(), player.getID());
+                player.getHand().addCard(commonTable.getResourceDeck().removeCard(), player.getID());
 
                 // Add 1 Gold Card to the hand
-                player.getHand().addCard(commonTable.getGoldDeck().removeCard());
+                player.getHand().addCard(commonTable.getGoldDeck().removeCard(), player.getID());
             }
 
             // Change game state
@@ -317,8 +318,8 @@ public class GameController implements Serializable {
                 player.createSecretMissionHand();
 
                 // Place starter card to the player's secondary hand
-                player.getSecretMissionHand().addCard(firstSecretMission);
-                player.getSecretMissionHand().addCard(secondSecretMission);
+                player.getSecretMissionHand().addCard(firstSecretMission, player.getID());
+                player.getSecretMissionHand().addCard(secondSecretMission, player.getID());
             }
 
             // Add all players to list
@@ -350,17 +351,18 @@ public class GameController implements Serializable {
             Player player = game.getPlayerByID(playerID);
 
             // Get selected secret mission
-            Card secretMission = player.getSecretMissionHand().getCard(0, 2, cardIndex);
+            Card secretMission = player.getSecretMissionHand().getCard(0, 2, cardIndex, playerID);
 
             // Select the chosen card
             if (secretMission != null) {
-                player.getSecretMissionHand().setSelectedCard(secretMission);
+                player.getSecretMissionHand().setSelectedCard(secretMission, player.getID());
                 if (isDebug) {
                     System.out.println(STR."\{player.getNickname()} selected mission: \{secretMission}");
                 }
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
 
         //copy on the disk all game
@@ -382,7 +384,7 @@ public class GameController implements Serializable {
             Player player = game.getPlayerByID(playerID);
 
             // Set the secret mission on the personal board of the players
-            Card secretMission = player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard());
+            Card secretMission = player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard(), playerID);
 
             if (secretMission != null) {
                 // Remove the card from the secondary hand
@@ -408,6 +410,7 @@ public class GameController implements Serializable {
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
 
         //copy on the disk all game
@@ -443,6 +446,7 @@ public class GameController implements Serializable {
             game.setState(GameState.GAME_STARTED);
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
 
         //copy on the disk all game
@@ -467,19 +471,19 @@ public class GameController implements Serializable {
             Player player = game.getPlayerByID(playerID);
 
             // Get card to select
-            Card selectedCard = player.getHand().getCard(0, 3, cardIndex);
+            Card selectedCard = player.getHand().getCard(0, 3, cardIndex, playerID);
 
             // Set the selected card
             if (selectedCard != null) {
-                player.getHand().setSelectedCard(selectedCard);
+                player.getHand().setSelectedCard(selectedCard, player.getID());
                 if (isDebug) {
                     System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
                 }
             }
 
-            System.out.println("carta selezionata");
         } else {
             // TODO gestire cosa modificare nel model se lo stato è errato
+            game.errorState(playerID);
             System.out.println("stato erroneo");
         }
 
@@ -503,7 +507,7 @@ public class GameController implements Serializable {
             System.out.println(STR."\{player.getNickname()} turn selected card side");
         }
         // Turn selected card side
-        player.getHand().turnSide();
+        player.getHand().turnSide(playerID);
 
         //copy on the disk all game
         try {
@@ -532,9 +536,10 @@ public class GameController implements Serializable {
             PersonalBoard personalBoard = player.getPersonalBoard();
 
             // Set the selected position
-            personalBoard.setPosition(selectedX, selectedY);
+            personalBoard.setPosition(selectedX, selectedY, playerID);
         } else {
             // TODO gestisci cosa modificare del model se lo stato è errato
+            game.errorState(playerID);
         }
 
         //copy on the disk all game
@@ -564,7 +569,7 @@ public class GameController implements Serializable {
                     player.createPersonalBoard();
 
                     // Place starter card
-                    player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get());
+                    player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get(), playerID);
 
                     // Remove the starter card from the hand
                     player.getHand().removeCard(player.getHand().getSelectedCard().get());
@@ -598,7 +603,10 @@ public class GameController implements Serializable {
                     // Check if there is a selected card on the hand
                     if (hand.getSelectedCard().isPresent()) {
                         // Place the selected card side on the personal board
-                        personalBoard.playSide(hand.getSelectedSide().get());
+                        if (!personalBoard.playSide(hand.getSelectedSide().get(), playerID)) {
+                            game.errorState(playerID); //TODO create another notify
+                            return;
+                        }
 
                         // Remove card from the hand
                         hand.removeCard(hand.getSelectedCard().get());
@@ -610,9 +618,11 @@ public class GameController implements Serializable {
                     }
                 } else {
                     // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
+                    game.errorState(playerID);
                 }
             } else {
                 // TODO gestisci come cambiare il model quando lo stato è errato
+                game.errorState(playerID);
             }
         }
 
@@ -641,10 +651,11 @@ public class GameController implements Serializable {
                     System.out.println(STR."[\{cardX}, \{cardY}] card selected from common table");
                 }
                 // Set the selected card on the common table
-                game.getCommonTable().selectCard(cardX, cardY);
+                game.getCommonTable().selectCard(cardX, cardY, playerID);
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
 
         //copy on the disk all game
@@ -674,11 +685,11 @@ public class GameController implements Serializable {
                 Hand hand = player.getHand();
 
                 // Get removed card
-                Card removedCard = commonTable.removeSelectedCard();
+                Card removedCard = commonTable.removeSelectedCard(playerID);
 
                 if (removedCard != null) {
                     // Add card in player's hand
-                    hand.addCard(removedCard);
+                    hand.addCard(removedCard, playerID);
                     if (isDebug) {
                         System.out.println(STR."\{player.getNickname()} drew selected card");
                     }
@@ -698,9 +709,12 @@ public class GameController implements Serializable {
                     // Change turn to next player
                     this.changeTurn();
                 }
+            } else {
+                game.errorState(playerID);
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
+            game.errorState(playerID);
         }
 
         //copy on the disk all game

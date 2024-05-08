@@ -19,6 +19,15 @@ import java.util.Scanner;
 
 public class MainServer {
     /**
+     * Default port of RMI server
+     */
+    private static final int DEFAULT_SOCKET_SERVER_PORT = 3060;
+    /**
+     * Default port of RMI server
+     */
+    private static final int DEFAULT_RMI_SERVER_PORT = 1099;
+
+    /**
      * Starts RMI Server, binding the main controller on the registry
      */
     private static void startRMIServer(MainController mainController) throws RemoteException {
@@ -31,7 +40,7 @@ public class MainServer {
 
         // Create registry
         System.out.println("Creating registry...");
-        Registry registry = LocateRegistry.createRegistry(1099);
+        Registry registry = LocateRegistry.createRegistry(DEFAULT_RMI_SERVER_PORT);
 
         // Bind main controller
         System.out.println("Binding RMI main controller to registry...");
@@ -43,23 +52,23 @@ public class MainServer {
     /**
      * Starts server socket, with port given with args on execution time
      *
-     * @param port           server socket port
-     * @param mainController main controller of the game
+     * @param serverSocketPort server socket port
+     * @param mainController   main controller of the game
      * @throws IOException
      */
-    private static void startSocketServer(int port, MainController mainController) throws IOException {
-        ServerSocket listenSocket = new ServerSocket(port);
+    private static void startSocketServer(int serverSocketPort, MainController mainController) throws IOException {
+        ServerSocket listenSocket = new ServerSocket(serverSocketPort);
         new SocketServer(listenSocket, mainController).runServer();
     }
 
     /**
-     * Starts server socket, with hostname and port on execution time
+     * Starts server socket
      *
-     * @param mainController main controller of the game
+     * @param mainController main controller of the system
      * @throws IOException
      */
     private static void startSocketServer(MainController mainController) throws IOException {
-        int port;
+        int port = DEFAULT_SOCKET_SERVER_PORT;
 
         // Get hostname and port from file
         ObjectMapper JsonMapper = new ObjectMapper();

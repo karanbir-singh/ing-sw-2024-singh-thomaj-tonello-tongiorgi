@@ -1,7 +1,10 @@
 package it.polimi.ingsw.gc26.model.player;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
+import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -91,7 +94,7 @@ public class Player implements Serializable {
      *
      * @param color new pawn color
      */
-    public void setPawn(String color, ArrayList<Pawn> availableColors) {
+    public void setPawn(String color, ArrayList<Pawn> availableColors, String clientID) {
         Pawn pawn;
         switch (color) {
             case "BLUE" -> pawn = Pawn.BLUE;
@@ -103,11 +106,14 @@ public class Player implements Serializable {
 
         if (pawn == null) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non corretto
+            ModelObservable.getInstance().notifyError("Color not available!", clientID);
         } else if (!availableColors.contains(pawn)) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non disponibile
+            ModelObservable.getInstance().notifyError("Color not available!", clientID);
         } else {
             availableColors.remove(pawn);
             this.pawnColor = pawn;
+            ModelObservable.getInstance().notifyUpdateChosenPawn(pawn, clientID);
         }
     }
 
@@ -209,4 +215,27 @@ public class Player implements Serializable {
     public void setState(PlayerState state) {
         this.state = state;
     }
+
+    public String printableScore(){
+        int score = this.personalBoard.getScore();
+        int i;
+        StringBuilder s = new StringBuilder();
+        String background = "▒";
+        String fill = "█";
+
+        s.append(pawnColor.getFontColor());
+
+        for (i=0; i<score; i++){
+            s.append(fill);
+        }
+        while (i<20){
+            s.append(background);
+            i++;
+        }
+
+        s.append(TextStyle.STYLE_RESET.getStyleCode()).append(" ").append(score);
+
+        return s.toString();
+    }
 }
+

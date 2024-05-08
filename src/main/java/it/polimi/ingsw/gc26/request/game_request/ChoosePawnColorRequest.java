@@ -6,13 +6,13 @@ public class ChoosePawnColorRequest implements GameRequest {
     final private String color;
     final private String playerID;
 
-    public ChoosePawnColorRequest(String color, String playerID) {
+    public ChoosePawnColorRequest(String color, String playerID){
         this.color = color;
         this.playerID = playerID;
     }
 
     @Override
     public void execute(GameController gameController) {
-        gameController.choosePawnColor(this.color, this.playerID);
+        gameController.choosePawnColor(this.color,this.playerID);
     }
 }

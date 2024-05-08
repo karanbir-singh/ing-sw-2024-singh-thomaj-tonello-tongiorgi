@@ -1,5 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.Side;
@@ -61,13 +63,14 @@ public class PersonalBoard implements Serializable {
      * secretMission setter
      * @param secretMission card that you want to set
      */
-    public Card setSecretMission(Optional<Card> secretMission) {
+    public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {
             this.secretMission = secretMission.get();
-            // TODO notify view
+            ModelObservable.getInstance().notifyUpdateSelectedMission(clientID);
             return this.secretMission;
         }
         // TODO notify view
+        ModelObservable.getInstance().notifyError("Secret mission not present!", clientID);
         return null;
     }
 
@@ -115,15 +118,16 @@ public class PersonalBoard implements Serializable {
      * @param selectedY the Y coordinate of the personalBoard that the player wants to choose
      */
 
-    public void setPosition(int selectedX, int selectedY) {
+    public void setPosition(int selectedX, int selectedY, String clientID) {
         //check if the position is valid
         if (!checkIfPlayablePosition(selectedX, selectedY)) {
             //update view
-            System.err.println(STR."[\{selectedX}, \{selectedY}] is not a valid position");
+            ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 0);
             return;
         }
         this.selectedX = selectedX;
         this.selectedY = selectedY;
+        ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 1);
     }
 
     /**
@@ -343,6 +347,11 @@ public class PersonalBoard implements Serializable {
             }
             System.out.print(styleReset + "\n");
         }
+        System.out.print("\nYour resources: " );
+        for (Symbol s: Symbol.values()) {
+            System.out.print(visibleResources.get(s) + " " + s.name() + "   ");
+        }
+        System.out.print("\n");
     }
 
     /**
@@ -420,12 +429,13 @@ public class PersonalBoard implements Serializable {
      * permits to play the selected card and update all the resources and points
      * @param side side selected of the card chosen by the player
      */
-    public void playSide(Side side) {
+    public boolean playSide(Side side, String clientID) {
         // you need to check if the board has enough resources for the side.
         if (!checkIfEnoughResources(side)) {
-            System.err.println("NOT ENOUGH RESOURCES");
+            //TODO update show error
+            ModelObservable.getInstance().notifyError("Not enough resources!", clientID);
             //update della view
-            return;
+            return false;
         }
 
         Point playingPoint;
@@ -433,9 +443,9 @@ public class PersonalBoard implements Serializable {
             playingPoint = ifPresent(selectedX, selectedY, playablePositions).orElseThrow(NullPointerException::new);
             playingPoint.setSide(side);
         } catch (NullPointerException nullEx) {
-            nullEx.printStackTrace();
-            System.err.println("NOT SELECTED POSITION");
-            return;
+            //nullEx.printStackTrace();
+            ModelObservable.getInstance().notifyError("Select a position first!", clientID);
+            return false;
         }
 
 
@@ -470,6 +480,9 @@ public class PersonalBoard implements Serializable {
 
         // Use card ability to add points if it has it
         this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
+
+        ModelObservable.getInstance().notifyUpdatePlayedCardFromHand(clientID,1);
+        return true;
     }
 
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.model.game;
 
+import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
@@ -7,6 +8,9 @@ import it.polimi.ingsw.gc26.Parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
 
 import java.io.Serializable;
+import it.polimi.ingsw.gc26.network.VirtualView;
+
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -60,13 +64,14 @@ public class Game implements Serializable {
      */
     private final ArrayList<Pawn> availablePawns;
 
+    private ModelObservable observable;
 
     /**
      * Initializes the game, creates the decks and sets the common table
      *
      * @param players list of players of the game
      */
-    public Game(ArrayList<Player> players) {
+    public Game(ArrayList<Player> players, ArrayList<VirtualView> clients) {
         this.numberOfPlayers = players.size();
 
         this.players = new ArrayList<>();
@@ -89,6 +94,10 @@ public class Game implements Serializable {
         availablePawns.add(Pawn.RED);
         availablePawns.add(Pawn.YELLOW);
         availablePawns.add(Pawn.GREEN);
+        this.observable = ModelObservable.getInstance();
+        for (int i = 0; i < clients.size(); i++) {
+            this.observable.addObserver(clients.get(i), players.get(i).getID());
+        }
     }
 
     /**
@@ -166,6 +175,12 @@ public class Game implements Serializable {
         if (this.currentPlayer.isFirstPlayer()) {
             // Then increase the round
             this.increaseRound();
+        }
+
+        try {
+            ModelObservable.getInstance().notifyMessage("It's you turn now",this.currentPlayer.getID());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -255,6 +270,7 @@ public class Game implements Serializable {
         }
 
         // TODO Update view
+        ModelObservable.getInstance().notifyUpdateGameState(newGameState);
     }
 
     /**
@@ -296,5 +312,41 @@ public class Game implements Serializable {
     // THIS IS FOR TESTING
     public ArrayList<Player> getWinners() {
         return winners;
+    }
+
+    public void errorState(String clientID){
+        ModelObservable.getInstance().notifyError("YOU CANNOT DO THAT NOW",clientID);
+    }
+
+    public void showCommonTable(){
+        String[][] ct = commonTable.printableCommonTable();
+        int maxLenght = 0;
+        StringBuilder spaces;
+
+        System.out.println("\t\t\tCOMMON TABLE:\n");
+        for (String[] row: ct) {
+            for (String col: row) {
+                System.out.print(col);
+            }
+            System.out.print("\n");
+        }
+
+        System.out.print("\n\t\t\tCURRENT SCORES:\n\n");
+
+        for (Player p: players) {
+            maxLenght = Math.max(maxLenght, p.getNickname().length());
+        }
+
+        maxLenght ++;
+
+        for (Player p: players) {
+            int i = 0;
+            spaces = new StringBuilder();
+            while(i + p.getNickname().length() < maxLenght){
+                spaces.append(" ");
+                i++;
+            }
+            System.out.println(p.getNickname() + spaces + p.printableScore());
+        }
     }
 }
