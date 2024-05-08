@@ -105,7 +105,7 @@ public class MainServer {
             }
             try {
                 mainController = (MainController) inputStream.readObject();
-                mainController.launchThreadExecutor();
+                //mainController.launchThreadExecutor();
                 inputStream.close();
                 fileInputStream.close();
                 mainController.recreateGames();

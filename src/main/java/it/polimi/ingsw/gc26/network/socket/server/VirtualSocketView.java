@@ -18,10 +18,10 @@ public class VirtualSocketView implements VirtualView {
      */
     private final PrintWriter outputToClient;
 
-    @Override
-    public ClientState getState() throws RemoteException {
+    //@Override
+    /*public ClientState getState() throws RemoteException {
         return null;
-    }
+    }*/
 
     /**
      * Virtual Socket view constructor. It initializes the print writer to the client

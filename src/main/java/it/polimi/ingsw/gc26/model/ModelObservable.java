@@ -76,25 +76,19 @@ public class ModelObservable {
 
     public void notifyMessage(String msg, String clientID) throws RemoteException {
         for (Pair client : this.clients) {
-            if (client.getValue().equals(clientID)) {
-                try {
-                    ((VirtualView) client.getKey()).showMessage(msg, clientID);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            ((VirtualView) client.getKey()).showMessage(msg, clientID);
+
         }
     }
 
     public void notifyError(String errorMsg, String clientID) {
         for (Pair client : this.clients) {
-            if (client.getValue().equals(clientID)) {
-                try {
-                    ((VirtualView) client.getKey()).showError(errorMsg, clientID);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
+            try {
+                ((VirtualView) client.getKey()).showMessage(errorMsg, clientID);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
             }
+
         }
     }
 

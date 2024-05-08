@@ -64,7 +64,7 @@ public class Game implements Serializable {
      */
     private final ArrayList<Pawn> availablePawns;
 
-    private ModelObservable observable;
+    private transient ModelObservable observable; //TODO PER ORA POI VA CAMBIATO, non più transient
 
     /**
      * Initializes the game, creates the decks and sets the common table

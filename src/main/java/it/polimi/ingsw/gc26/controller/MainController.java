@@ -48,6 +48,11 @@ public class MainController implements Serializable {
 
     private int numberOfTotalGames;
 
+
+    //here we put an arrayList of virtualViewIP
+    //private ArrayList<String> allClientsIP; //capire come gestire le VirtualView, in quanto
+                                            //va gestito anche l observable
+
     /**
      * Initializes waiting players' list and games controllers' list
      */
@@ -61,6 +66,7 @@ public class MainController implements Serializable {
         invalidNickname = false;
         this.launchExecutor();
         numberOfTotalGames = 0;
+        //allClients = new ArrayList<>();
     }
 
 

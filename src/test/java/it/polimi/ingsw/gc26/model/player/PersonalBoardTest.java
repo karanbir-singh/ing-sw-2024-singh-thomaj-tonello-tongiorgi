@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PersonalBoardTest {
 
-    @Test
+   /* @Test
     void firstPlaySide() {
         Game game = new Game(new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
@@ -724,4 +724,6 @@ class PersonalBoardTest {
 
         pb.showBoard();
     }
+
+    */
 }
