@@ -64,7 +64,7 @@ public class Game implements Serializable {
      */
     private final ArrayList<Pawn> availablePawns;
 
-    private transient ModelObservable observable; //TODO PER ORA POI VA CAMBIATO, non più transient
+    private ModelObservable observable;
 
     /**
      * Initializes the game, creates the decks and sets the common table
@@ -176,12 +176,7 @@ public class Game implements Serializable {
             // Then increase the round
             this.increaseRound();
         }
-
-        try {
-            ModelObservable.getInstance().notifyMessage("It's you turn now",this.currentPlayer.getID());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        ModelObservable.getInstance().notifyMessage("It's you turn now",this.currentPlayer.getID());
     }
 
     /**

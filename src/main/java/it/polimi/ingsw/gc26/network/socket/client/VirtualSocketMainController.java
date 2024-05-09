@@ -109,6 +109,11 @@ public class VirtualSocketMainController implements VirtualMainController {
         }
     }
 
+    @Override
+    public String amAlive(){
+        return "bho";
+    }
+
 
 }
 

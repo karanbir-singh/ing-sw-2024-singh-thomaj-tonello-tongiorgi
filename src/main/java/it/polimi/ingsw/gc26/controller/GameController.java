@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.controller;
 
+import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.CommonTable;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
+import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.game_request.GameRequest;
 
 import java.io.*;
@@ -139,7 +141,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -181,7 +184,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -224,7 +228,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -260,7 +265,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -295,7 +301,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -335,7 +342,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -369,7 +377,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -417,7 +426,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -453,7 +463,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -491,7 +502,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -513,7 +525,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -546,7 +559,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -630,7 +644,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
     }
 
@@ -662,7 +677,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
 
         this.game.getPlayerByID(playerID).getPersonalBoard().showBoard();
@@ -744,7 +760,8 @@ public class GameController implements Serializable {
         try {
             this.copyToDisk();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            System.out.println("ERRORE QUI");
         }
 
     }
@@ -782,5 +799,10 @@ public class GameController implements Serializable {
         if (isDebug) {
             System.out.println("changed turn");
         }
+    }
+
+
+    public void reAddView(VirtualView view, String clientID){
+        ModelObservable.getInstance().addObserver(view, clientID);
     }
 }

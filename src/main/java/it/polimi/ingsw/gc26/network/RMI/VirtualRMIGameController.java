@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.network.RMI;
 
 import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
+import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.game_request.*;
 
 import java.rmi.RemoteException;
@@ -58,6 +59,11 @@ public class VirtualRMIGameController implements VirtualGameController {
     @Override
     public void selectCardFromCommonTable(int cardX, int cardY, String playerID) throws RemoteException  {
         this.gameController.addRequest(new SelectCardFromCommonTableRequest(cardX, cardY,playerID));
+    }
+
+    @Override
+    public void reAddView(VirtualView view, String clientID) throws RemoteException{
+        this.gameController.reAddView(view,clientID);
     }
 
     @Override

@@ -10,12 +10,14 @@ import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import javafx.util.Pair;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-public class ModelObservable {
-    private ArrayList<Pair<VirtualView, String>> clients;
+public class ModelObservable implements Serializable {
+    private transient  ArrayList<Pair<VirtualView, String>> clients;
     private static ModelObservable instance;
 
     private ModelObservable() {
@@ -30,8 +32,9 @@ public class ModelObservable {
     }
 
     public void addObserver(VirtualView view, String clientID) {
-        this.clients.add(new Pair(view, clientID));
+        this.clients.add(new Pair<>(view,clientID));
     }
+
 
     public void removeObserver(VirtualView view) {
         this.clients.remove(view);
@@ -51,15 +54,15 @@ public class ModelObservable {
     }
 
     public void notifyPersonalBoard(Player player, Player personalBoardOwner, PersonalBoard personalBoard) {
-        for (Pair client : this.clients) {
+        /*for (Pair client : this.clients) {
             if (client.getValue().equals(player.getID())) {
                 try {
-                    ((VirtualView) client.getKey()).showPersonalBoard(player.getID(), personalBoardOwner.getNickname(), personalBoard.toString());
+                    //((VirtualView) client.getKey()).upda;
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
             }
-        }
+        }*/
     }
 
     public void notifySelectedCardFromHand(String clientID) throws RemoteException {
@@ -74,21 +77,27 @@ public class ModelObservable {
         }
     }
 
-    public void notifyMessage(String msg, String clientID) throws RemoteException {
+    public void notifyMessage(String msg, String clientID) {
         for (Pair client : this.clients) {
-            ((VirtualView) client.getKey()).showMessage(msg, clientID);
-
+            if (client.getValue().equals(clientID)) {
+                try {
+                    ((VirtualView) client.getKey()).showMessage(msg,clientID);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 
     public void notifyError(String errorMsg, String clientID) {
         for (Pair client : this.clients) {
-            try {
-                ((VirtualView) client.getKey()).showMessage(errorMsg, clientID);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
+            if (client.getValue().equals(clientID)) {
+                try {
+                    ((VirtualView) client.getKey()).showMessage(errorMsg,clientID);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
-
         }
     }
 
@@ -118,7 +127,7 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView) client.getKey()).updateChosenPawn(pawn.toString(), clientID);
+                    ((VirtualView) client.getKey()).updateChosenPawn(pawn.getFontColor(),clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -172,6 +181,7 @@ public class ModelObservable {
                 }
             }
         }
+
     }
 
     public void notifyUpdatePlayedCardFromHand(String clientID, int success) {

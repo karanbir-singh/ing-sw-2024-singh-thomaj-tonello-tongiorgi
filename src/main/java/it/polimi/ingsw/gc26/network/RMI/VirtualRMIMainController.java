@@ -40,4 +40,9 @@ public class VirtualRMIMainController implements VirtualMainController {
         return new VirtualRMIGameController(this.mainController.getGameController());
     }
 
+    @Override
+    public String amAlive() throws RemoteException{
+        return this.mainController.amAlive();
+    }
+
 }

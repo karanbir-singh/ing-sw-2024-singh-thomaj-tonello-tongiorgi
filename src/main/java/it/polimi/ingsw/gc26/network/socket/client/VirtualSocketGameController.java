@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.network.socket.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
+import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
@@ -241,6 +242,11 @@ public class VirtualSocketGameController implements VirtualGameController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void reAddView(VirtualView view, String clientID) throws RemoteException {
+        //this.gameController.reAddView(view, clientID);
     }
 
 

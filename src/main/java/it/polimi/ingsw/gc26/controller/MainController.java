@@ -318,7 +318,10 @@ public class MainController implements Serializable {
         //System.out.println(gamesControllers.get(2).getGame().getPlayers().getLast().getID() + " " + gamesControllers.get(2).getGame().getPlayers().getLast().getNickname());
 
         System.out.println("GAME CREATI");
+    }
 
 
+    public String amAlive(){
+        return "alive";
     }
 }

@@ -12,4 +12,6 @@ public interface VirtualMainController extends Remote {
 
     VirtualGameController getVirtualGameController() throws RemoteException;
 
+    String amAlive() throws RemoteException;
+
 }
