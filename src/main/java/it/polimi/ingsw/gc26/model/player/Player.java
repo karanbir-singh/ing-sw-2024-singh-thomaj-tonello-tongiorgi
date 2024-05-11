@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
@@ -215,7 +216,7 @@ public class Player {
         this.state = state;
     }
 
-    public String printableScore(){
+    public String printableScore() {
         int score = this.personalBoard.getScore();
         int i;
         StringBuilder s = new StringBuilder();
@@ -235,6 +236,19 @@ public class Player {
         s.append(TextStyle.STYLE_RESET.getStyleCode()).append(" ").append(score);
 
         return s.toString();
+    }
+
+    public String[][] printableHandAndMission() {
+        String[][] hand = this.hand.printableHand();
+        String[][] secretMission = this.personalBoard.getSecretMission().getFront().printableSide();
+        Printer printer = new Printer();
+
+        String[][] handAndMission = new String[hand.length + secretMission.length][hand[0].length + secretMission[0].length];
+
+        printer.addPrintable(hand, handAndMission, 0,0);
+        printer.addPrintable(secretMission, handAndMission, 0, hand[0].length);
+
+        return handAndMission;
     }
 }
 

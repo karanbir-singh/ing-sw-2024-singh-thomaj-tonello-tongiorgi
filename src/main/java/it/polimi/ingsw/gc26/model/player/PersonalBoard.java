@@ -266,6 +266,7 @@ public class PersonalBoard {
         int xOff = xMin*2 -1;
         int yOff = yMin*2 -1;
         String[][] board = new String[yDim][xDim];
+        String[][] reverseBoard = new String[yDim+1][xDim];
 
         String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
         String verticalLine = SpecialCharacters.WHITE_VERTICAL_STRING.getCharacter();
@@ -338,20 +339,25 @@ public class PersonalBoard {
             }
         }
 
-        //print the board
-        /*for(int j=yDim-1; j>=0; j--){
-            for(int i=0; i<xDim; i++){
-
-                System.out.print(board[j][i]);
+        int y=0;
+        //reverse the board
+        for(int j=yDim-1; j>=0; j--){
+            for(int i=0; i<xDim; i++) {
+                reverseBoard[y][i] = board[j][i] + styleReset;
             }
-            System.out.print(styleReset + "\n");
+            y++;
         }
-        System.out.print("\nYour resources: " );
+        int x = 1;
+        while(x<xDim){
+            reverseBoard[yDim][x] = " ";
+            x++;
+        }
+
+        reverseBoard[yDim][0] = "\nYour resources: ";
         for (Symbol s: Symbol.values()) {
-            System.out.print(visibleResources.get(s) + " " + s.name() + "   ");
+            reverseBoard[yDim][1] = reverseBoard[yDim][1] + visibleResources.get(s) + " " + s.name() + "   ";
         }
-        System.out.print("\n");*/
-        return board;
+        return reverseBoard;
     }
 
     /**

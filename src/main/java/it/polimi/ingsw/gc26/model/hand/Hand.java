@@ -3,6 +3,7 @@ import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.card.ResourceCard;
+import it.polimi.ingsw.gc26.model.card.StarterCard;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
@@ -226,6 +227,8 @@ public class Hand  {
                 myHand[y][x] = " Gold         ";
             } else if(c instanceof ResourceCard){
                 myHand[y][x] = " Resource     ";
+            } else if (c instanceof StarterCard) {
+                myHand[y][x] = " Starter";
             }
             if(c != cards.getLast()){
                 myHand[y][x] = myHand[y][x] + "▪\uFE0F"+"▪\uFE0F"+"▪\uFE0F";
@@ -233,7 +236,7 @@ public class Hand  {
             x++;
         }
 
-        myHand[y][x] = "\n";
+        //myHand[y][x] = "\n";
         y++;
         x = 1;
 
