@@ -30,14 +30,17 @@ public class Hand  {
      */
     private Side selectedSide;
 
-    private ModelObservable modelObservable;
+    /**
+     * Observable to notify client
+     */
+    private ModelObservable observable;
 
     /**
      * Initializes the hand for the player
      * @param c new cards in hand
      */
-    public Hand(ArrayList<Card> c) {
-        this.modelObservable = ModelObservable.getInstance();
+    public Hand(ArrayList<Card> c, ModelObservable observable) {
+        this.observable = observable;
         this.cards = c;
         this.selectedCard = null;
         this.selectedSide = null;
@@ -62,13 +65,13 @@ public class Hand  {
             // TODO notify view
 
             try {
-                this.modelObservable.notifySelectedCardFromHand(clientID);
+                this.observable.notifySelectedCardFromHand(clientID);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
         } else {
             // TODO notify
-            ModelObservable.getInstance().notifyError("Select a card first!", clientID);
+            this.observable.notifyError("Select a card first!", clientID);
         }
     }
 
@@ -92,13 +95,13 @@ public class Hand  {
                 this.selectedSide = selectedCard.get().getFront();
             }
             try {
-                ModelObservable.getInstance().notifyMessage("You have turned a card", clientID);
+                this.observable.notifyMessage("You have turned a card", clientID);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
         } else {
             // TODO lancia eccezione di carta non selezionata
-            ModelObservable.getInstance().notifyError("Select a card first!", clientID);
+            this.observable.notifyError("Select a card first!", clientID);
         }
 
     }
@@ -120,7 +123,7 @@ public class Hand  {
     public void addCard(Card card, String clientID) {
         cards.add(card);
         try {
-            this.modelObservable.notifyMessage("Added a card to the hand", clientID);
+            this.observable.notifyMessage("Added a card to the hand", clientID);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -145,14 +148,14 @@ public class Hand  {
         // Check if the given index is correct
         if (cardIndex >= leftLimit && cardIndex < rightLimit) {
             try {
-                this.modelObservable.notifyMessage("Card selected at index: " + cardIndex, clientID);
+                this.observable.notifyMessage("Card selected at index: " + cardIndex, clientID);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
             return cards.get(cardIndex);
         }
         // TODO notify view
-        ModelObservable.getInstance().notifyError("Invalid position!", clientID);
+        this.observable.notifyError("Invalid position!", clientID);
         return null;
     }
 

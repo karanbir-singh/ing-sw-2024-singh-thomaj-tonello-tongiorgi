@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class CLITest {
     @Test
     public void showHand(){
-        Game game = new Game(new ArrayList<>());
+        Game game = new Game(new ArrayList<>(), null);
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         ArrayList<Card> cards = new ArrayList<>();

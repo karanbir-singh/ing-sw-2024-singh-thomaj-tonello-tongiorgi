@@ -21,12 +21,13 @@ public class PersonalBoard {
     private final Map<Symbol, Integer> visibleResources;
     private int selectedX = 0;
     private int selectedY = 0;
+    private ModelObservable observable;
 
     /**
      * The constructor initializes everything: the score, the resource, missions occupiedPositions , playablePositions, blockedPositions.
      * Here, the first move is made playing the initial card.
      */
-    public PersonalBoard() {
+    public PersonalBoard(ModelObservable observable) {
         score = 0;
         xMin = 0;
         xMax = 0;
@@ -48,6 +49,7 @@ public class PersonalBoard {
         blockedPositions = new ArrayList<>();
 
         addPoint(0, 0, playablePositions);
+        this.observable = observable;
     }
 
     /**
@@ -65,11 +67,11 @@ public class PersonalBoard {
     public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {
             this.secretMission = secretMission.get();
-            ModelObservable.getInstance().notifyUpdateSelectedMission(clientID);
+            this.observable.notifyUpdateSelectedMission(clientID);
             return this.secretMission;
         }
         // TODO notify view
-        ModelObservable.getInstance().notifyError("Secret mission not present!", clientID);
+        this.observable.notifyError("Secret mission not present!", clientID);
         return null;
     }
 
@@ -121,12 +123,12 @@ public class PersonalBoard {
         //check if the position is valid
         if (!checkIfPlayablePosition(selectedX, selectedY)) {
             //update view
-            ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 0);
+            this.observable.notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 0);
             return;
         }
         this.selectedX = selectedX;
         this.selectedY = selectedY;
-        ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 1);
+        this.observable.notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 1);
     }
 
     /**
@@ -432,7 +434,7 @@ public class PersonalBoard {
         // you need to check if the board has enough resources for the side.
         if (!checkIfEnoughResources(side)) {
             //TODO update show error
-            ModelObservable.getInstance().notifyError("Not enough resources!", clientID);
+            this.observable.notifyError("Not enough resources!", clientID);
             //update della view
             return false;
         }
@@ -443,7 +445,7 @@ public class PersonalBoard {
             playingPoint.setSide(side);
         } catch (NullPointerException nullEx) {
             //nullEx.printStackTrace();
-            ModelObservable.getInstance().notifyError("Select a position first!", clientID);
+            this.observable.notifyError("Select a position first!", clientID);
             return false;
         }
 
@@ -480,7 +482,7 @@ public class PersonalBoard {
         // Use card ability to add points if it has it
         this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
 
-        ModelObservable.getInstance().notifyUpdatePlayedCardFromHand(clientID,1);
+        this.observable.notifyUpdatePlayedCardFromHand(clientID,1);
         return true;
     }
 

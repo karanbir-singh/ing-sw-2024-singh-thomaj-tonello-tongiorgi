@@ -15,9 +15,15 @@ public class Chat {
     private final ArrayList<Message> messages;
 
     /**
+     * Observable to notify client
+     */
+    private ModelObservable observable;
+
+    /**
      * Initializes the chat with an empty ArrayList
      */
-    public Chat(){
+    public Chat(ModelObservable observable){
+        this.observable = observable;
         messages = new ArrayList<Message>();
     }
 
@@ -35,7 +41,7 @@ public class Chat {
      */
     public void addMessage(Message message){
         messages.add(message); //TODO chiamata di comunicazione con il client
-        ModelObservable.getInstance().notifyChat(message);
+        this.observable.notifyChat(message);
 
     }
 

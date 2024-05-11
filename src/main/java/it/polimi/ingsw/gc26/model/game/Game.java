@@ -76,26 +76,32 @@ public class Game {
         this.players.addAll(players);
         this.winners = null;
 
+        this.observable = new ModelObservable();
+        for (int i = 0; i < clients.size(); i++) {
+            this.observable.addObserver(clients.get(i), players.get(i).getID());
+        }
+        for(Player player: players) {
+            player.setObservable(this.observable);
+        }
+
         ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
         Deck resourceCardDeck = p.getResourceCards();
         Deck missionDeck = p.getMissionCards();
         Deck starterDeck = p.getStarterCards();
 
-        this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck);
+        this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck, this.observable);
         this.round = 0;
         this.finalRound = -1;
-        this.chat = new Chat();
+        this.chat = new Chat(this.observable);
 
         availablePawns = new ArrayList<>();
         availablePawns.add(Pawn.BLUE);
         availablePawns.add(Pawn.RED);
         availablePawns.add(Pawn.YELLOW);
         availablePawns.add(Pawn.GREEN);
-        this.observable = ModelObservable.getInstance();
-        for (int i = 0; i < clients.size(); i++) {
-            this.observable.addObserver(clients.get(i), players.get(i).getID());
-        }
+
+
     }
 
     /**
@@ -176,7 +182,7 @@ public class Game {
         }
 
         try {
-            ModelObservable.getInstance().notifyMessage("It's you turn now",this.currentPlayer.getID());
+            this.observable.notifyMessage("It's you turn now",this.currentPlayer.getID());
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -268,7 +274,7 @@ public class Game {
         }
 
         // TODO Update view
-        ModelObservable.getInstance().notifyUpdateGameState(newGameState);
+        this.observable.notifyUpdateGameState(newGameState);
     }
 
     /**
@@ -313,7 +319,7 @@ public class Game {
     }
 
     public void errorState(String clientID){
-        ModelObservable.getInstance().notifyError("YOU CANNOT DO THAT NOW",clientID);
+        this.observable.notifyError("YOU CANNOT DO THAT NOW",clientID);
     }
 
     public void showCommonTable(){

@@ -52,6 +52,11 @@ public class CommonTable {
     private int selectedY;
 
     /**
+     * Observable to notify client
+     */
+    private ModelObservable observable;
+
+    /**
      * Initializes the common table with the decks
      *
      * @param resourceDeck resources cards deck
@@ -59,7 +64,7 @@ public class CommonTable {
      * @param starterDeck  initial cards deck
      * @param missionDeck  mission cards deck
      */
-    public CommonTable(Deck resourceDeck, Deck goldDeck, Deck starterDeck, Deck missionDeck) {
+    public CommonTable(Deck resourceDeck, Deck goldDeck, Deck starterDeck, Deck missionDeck, ModelObservable observable) {
         commonMissions = new ArrayList<>();
         resourceCards = new ArrayList<>();
         goldCards = new ArrayList<>();
@@ -69,6 +74,7 @@ public class CommonTable {
         this.missionDeck = missionDeck;
         selectedX = -1;
         selectedY = -1;
+        this.observable = observable;
     }
 
     /**
@@ -85,10 +91,10 @@ public class CommonTable {
                 this.selectedY = selectedY;
             } else {
                 // TODO gestire quando la posizione X non è corretta
-                ModelObservable.getInstance().notifyError("Position X not valid!", clientID);
+                this.observable.notifyError("Position X not valid!", clientID);
             }
         } else {
-            ModelObservable.getInstance().notifyError("Position Y not valid!", clientID);
+            this.observable.notifyError("Position Y not valid!", clientID);
             // TODO gestire quando la posizione Y non è corretta
         }
     }
@@ -121,7 +127,7 @@ public class CommonTable {
                 toRemove = list.set(index, null);
         } else {
             // TODO gestire quando la posizione selezionata non contiene una carta
-            ModelObservable.getInstance().notifyError("Position not valid!", clientID);
+            this.observable.notifyError("Position not valid!", clientID);
         }
         return toRemove;
     }
@@ -160,7 +166,7 @@ public class CommonTable {
             return toRemove;
         }else{
             // TODO notify view
-            ModelObservable.getInstance().notifyError("Select a position first!", clientID);
+            this.observable.notifyError("Select a position first!", clientID);
             return null;
         }
 
