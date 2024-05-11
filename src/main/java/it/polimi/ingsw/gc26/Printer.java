@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class Printer {
     public static void main(String[] args) throws UnsupportedEncodingException {
-        Game game = new Game(new ArrayList<>());
+        Game game = new Game(new ArrayList<>(), new ArrayList<>());
         Deck missionDeck = game.getCommonTable().getMissionDeck();
         String[][] s;
         Printer printer = new Printer();
@@ -29,6 +29,19 @@ public class Printer {
             s = missionDeck.getCards().get(i).getFront().printableSide();
             printer.showEncodedPrintable(s);
             System.out.println("\n");
+        }
+    }
+
+    public void addPrintable(String[][] printable, String[][] context, int xBase, int yBase){
+        int y=0, x;
+
+        for(String[] row: printable){
+            x=0;
+            for(String col: row){
+                context[yBase + y][xBase + x] = col;
+                x++;
+            }
+            y++;
         }
     }
 

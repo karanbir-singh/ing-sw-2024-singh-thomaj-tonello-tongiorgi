@@ -7,6 +7,7 @@ import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
+import it.polimi.ingsw.gc26.Printer;
 
 import java.util.*;
 
@@ -307,19 +308,6 @@ public class CommonTable {
         return s;
     }
 
-    private void addPrintable(String[][] printable, String[][] context, int xBase, int yBase){
-        int y=0, x;
-
-        for(String[] row: printable){
-            x=0;
-            for(String col: row){
-                context[yBase + y][xBase + x] = col;
-                x++;
-            }
-            y++;
-        }
-    }
-
     private void decorateDeck(String[][] ct, int xDeck, int yDeck, int xCardDim, int yCardDim){
         //ct[yDeck + yCardDim][xDeck] = "▔▔▔▔▔▔▔▔▔▔▔▔▔";
         xDeck += xCardDim;
@@ -344,6 +332,8 @@ public class CommonTable {
         int yDim = 16;
         int index = 0;
 
+        Printer printer = new Printer();
+
         String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
         String space = "    ";
                 //SpecialCharacters.BACKGROUND_BLANK_MEDIUM.getCharacter();
@@ -363,9 +353,9 @@ public class CommonTable {
             ct[yResource-1][i] = "(" + index + ") Resource Card    ";
 
             if(r == null){
-                addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
+                printer.addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
             } else {
-                addPrintable(r.getFront().printableSide(), ct, xResource, yResource);
+                printer.addPrintable(r.getFront().printableSide(), ct, xResource, yResource);
             }
 
             xResource += xCardDim + 2;
@@ -377,9 +367,9 @@ public class CommonTable {
         //insert resource deck
         ct[yResource-1][2] = "   (" + index + ") Resource Deck";
         if(resourceDeck.getTopCard() == null){
-            addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
+            printer.addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
         } else {
-            addPrintable(resourceDeck.printableDeck(), ct, xResource, yResource);
+            printer.addPrintable(resourceDeck.printableDeck(), ct, xResource, yResource);
             decorateDeck(ct, xResource, yResource, xCardDim, yCardDim);
         }
 
@@ -391,9 +381,9 @@ public class CommonTable {
             ct[yGold-1][i] = "(" + index + ") Gold Card        ";
 
             if(g == null){
-                addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
+                printer.addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
             } else {
-                addPrintable(g.getFront().printableSide(), ct, xGold, yGold);
+                printer.addPrintable(g.getFront().printableSide(), ct, xGold, yGold);
             }
             xGold += xCardDim + 2;
             index++;
@@ -405,17 +395,17 @@ public class CommonTable {
         ct[yGold-1][2] = "   (" + index + ") Gold Deck" ;
 
         if(goldDeck.getTopCard() == null){
-            addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
+            printer.addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
         } else {
-            addPrintable(goldDeck.printableDeck(), ct, xGold, yGold);
+            printer.addPrintable(goldDeck.printableDeck(), ct, xGold, yGold);
             decorateDeck(ct, xGold, yGold, xCardDim, yCardDim);
         }
 
         //insert common mission cards
         ct[yMission-1][0] = "\nCommon Mission 0             " ;
         ct[yMission-1][1] = "Common Mission 1" ;
-        addPrintable(commonMissions.get(0).getFront().printableSide(), ct, xMission1, yMission);
-        addPrintable(commonMissions.get(1).getFront().printableSide(), ct, xMission2, yMission);
+        printer.addPrintable(commonMissions.get(0).getFront().printableSide(), ct, xMission1, yMission);
+        printer.addPrintable(commonMissions.get(1).getFront().printableSide(), ct, xMission2, yMission);
 
 
         return ct;

@@ -13,55 +13,83 @@ import it.polimi.ingsw.gc26.model.game.CommonTable;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.hand.Hand;
+import it.polimi.ingsw.gc26.network.ClientController;
+import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
+import it.polimi.ingsw.gc26.network.VirtualView;
 import org.junit.jupiter.api.Test;
+import it.polimi.ingsw.gc26.Printer;
 
+import java.nio.channels.Pipe;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class CLITest {
+    private static GameController gameController;
+
+    private static Game game;
+
+    private static ArrayList<Player> players;
+
+    private static final Printer printer = new Printer();
+
+    static void gameSetUp() throws RemoteException {
+        // Create players
+        players = new ArrayList<>();
+        players.add(new Player("0", "Pippo"));
+        players.add(new Player("1", "Baudo"));
+        players.add(new Player("2", "Carlo"));
+
+        // Create game controller
+        game = new Game(players, null);
+        gameController = new GameController(game);
+        gameController.prepareCommonTable();
+
+    }
+
+    @Test
+    public void starterCardDistribution() throws RemoteException {
+        gameSetUp();
+        game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
+        gameController.prepareStarterCards();
+
+        for (Player p: players) {
+            printer.showPrintable(p.getHand().printableHand());
+            System.out.println("\n");
+        }
+    }
+
+
     @Test
     public void showHand(){
-        Game game = new Game(new ArrayList<>());
+        Game game = new Game(new ArrayList<>(), new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         ArrayList<Card> cards = new ArrayList<>();
-        Hand myHand;
+        Hand myHand = new Hand(cards);
 
         cards.add(resourceDeck.getCards().get(7));
         cards.add(goldDeck.getCards().get(4));
         cards.add(goldDeck.getCards().get(10));
 
-        myHand = new Hand(cards);
+        printer.showPrintable(myHand.printableHand());
 
-        myHand.setSelectedCard(goldDeck.getCards().get(4));
-        myHand.turnSide();
-        myHand.turnSide();
-        myHand.turnSide();
-        myHand.setSelectedCard(goldDeck.getCards().get(10));
-        myHand.turnSide();
-
-        myHand.showHand();
-
-    }
-
-    @Test
-    public void deckCLI() {
-        Game game = new Game(new ArrayList<>());
-        Deck goldDeck = game.getCommonTable().getGoldDeck();
-        String[][] s = goldDeck.printableDeck();
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.print(s[i][j]);
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n");
     }
 
     @Test
     public void commonTableCLI() {
-        ArrayList<Player> players = new ArrayList<>();
+        Game game = new Game(new ArrayList<>(), new ArrayList<>());
+        GameController gc = new GameController(game);
+
+        game.setState(GameState.COMMON_TABLE_PREPARATION);
+        gc.prepareCommonTable();
+        game.setState(GameState.COMMON_MISSION_PREPARATION);
+        gc.prepareCommonMissions();
+
+
+        /*ArrayList<Player> players = new ArrayList<>();
 
         players.add(new Player("0", "Pippo"));
         players.add(new Player("1", "Baudo"));
@@ -87,9 +115,9 @@ public class CLITest {
         }
 
         game.showCommonTable();
-        System.out.print("\n");
+        System.out.print("\n");*/
     }
-
+/*
     @Test
     public void emptySideCLI() {
         Game game = new Game(new ArrayList<>());
@@ -191,6 +219,6 @@ public class CLITest {
         pb.showBoard();
         System.out.print("\n");
 
-    }
+    }*/
 
 }

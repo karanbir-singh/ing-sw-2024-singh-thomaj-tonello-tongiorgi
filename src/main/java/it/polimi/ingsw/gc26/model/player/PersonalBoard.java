@@ -260,7 +260,7 @@ public class PersonalBoard {
         return new HashMap<>(this.visibleResources);
     }
 
-    public void showBoard() {
+    public String[][] printablePersonalBoard() {
         int xDim = (xMax - xMin)*2 + 3;
         int yDim = (yMax - yMin)*2 + 3;
         int xOff = xMin*2 -1;
@@ -339,7 +339,7 @@ public class PersonalBoard {
         }
 
         //print the board
-        for(int j=yDim-1; j>=0; j--){
+        /*for(int j=yDim-1; j>=0; j--){
             for(int i=0; i<xDim; i++){
 
                 System.out.print(board[j][i]);
@@ -350,7 +350,8 @@ public class PersonalBoard {
         for (Symbol s: Symbol.values()) {
             System.out.print(visibleResources.get(s) + " " + s.name() + "   ");
         }
-        System.out.print("\n");
+        System.out.print("\n");*/
+        return board;
     }
 
     /**

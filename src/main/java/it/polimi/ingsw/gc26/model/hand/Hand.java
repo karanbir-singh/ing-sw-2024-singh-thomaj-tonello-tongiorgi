@@ -160,7 +160,7 @@ public class Hand  {
     /**
      * Creates a String matrix with a printable representation of the hand
      */
-    public void showHand(){
+    public String[][] printableHand(){
         int xMax = (cards.size()+1) * 3 +2;
         int yMax = 8;
 
@@ -177,7 +177,7 @@ public class Hand  {
         for(int i=1; i<4; i++){
             myHand[i][0] = "          ";
         }
-        myHand[4][0] = "Type:     ";
+        myHand[4][0] = "\nType:     ";
         myHand[5][0] = "Points:   ";
         myHand[6][0] = "Requires: ";
 
@@ -216,10 +216,10 @@ public class Hand  {
                 myHand[y][x] = "        ";
                 x++;
             }
-            myHand[y][x] = "\n";
             y++;
             x = 1;
         }
+        myHand[y][x] = "\n";
 
         for(Card c: cards) {
             if(c instanceof GoldCard){
@@ -295,12 +295,6 @@ public class Hand  {
             x++;
         }
 
-        for(y=0; y<yMax; y++){
-            for(x=0; x<xMax; x++){
-                System.out.print(myHand[y][x]);
-            }
-        }
-
-        System.out.print("\n");
+        return myHand;
     }
 }
