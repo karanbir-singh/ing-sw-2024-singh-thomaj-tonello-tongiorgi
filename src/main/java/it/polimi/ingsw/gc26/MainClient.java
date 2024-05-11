@@ -446,6 +446,7 @@ public class MainClient {
             try {
                 virtualMainController.amAlive(); //va fatto in modo asincrono
             } catch (IOException e) {
+                check = 1;
                 while(check == 1){
                     try {
                         Thread.sleep(1000);
@@ -483,10 +484,7 @@ public class MainClient {
                     }
                 }
                 System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
-                this.SocketPingServer();
-
             }
         }
-
     }
 }

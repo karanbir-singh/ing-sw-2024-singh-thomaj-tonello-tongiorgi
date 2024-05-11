@@ -120,7 +120,7 @@ public class SocketClientHandler implements Runnable {
                         this.gameController.addRequest(new PrintPersonalBoardRequest(value.get("nickname").asText(), value.get("playerID").asText()));
                         break;
                     case "reAddView":
-                        this.gameController.reAddView(this.virtualSocketView, value.get("clientID").asText());
+                        this.gameController.addRequest(new ReAddViewRequest(this.virtualSocketView, value.get("clientID").asText()));
                         break;
                     case null, default:
                         break;
