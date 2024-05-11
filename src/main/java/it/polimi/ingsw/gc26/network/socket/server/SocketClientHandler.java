@@ -80,8 +80,11 @@ public class SocketClientHandler implements Runnable {
                         this.mainController.addRequest(new GameCreationRequest(this.virtualSocketView, value.get("nickname").asText(), value.get("numPlayers").asInt(), 1));
                         break;
                     case "getVirtualGameController":
-                        this.gameController = this.mainController.getGameController(10); //TODO DA CAMBIARE
+                        this.gameController = this.mainController.getGameController(value.get("id").asInt());
                         this.virtualSocketView.setGameController();
+                        break;
+                    case "amAlive":
+                        this.mainController.amAlive();
                         break;
                     case "addMessage":
                         this.gameController.addRequest(new AddMessageRequest(value.get("text").asText(), value.get("receiver").asText(), value.get("sender").asText(), value.get("time").asText()));
@@ -115,6 +118,9 @@ public class SocketClientHandler implements Runnable {
                         break;
                     case "printPersonalBoard":
                         this.gameController.addRequest(new PrintPersonalBoardRequest(value.get("nickname").asText(), value.get("playerID").asText()));
+                        break;
+                    case "reAddView":
+                        this.gameController.reAddView(this.virtualSocketView, value.get("clientID").asText());
                         break;
                     case null, default:
                         break;

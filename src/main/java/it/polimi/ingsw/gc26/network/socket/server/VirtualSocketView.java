@@ -237,7 +237,10 @@ public class VirtualSocketView implements VirtualView {
         sendToClient("updateGameState", msg);
     }
 
+    @Override
     public void updateIDGame(int idGame){
-        ///
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("idGame", String.valueOf(idGame));
+        sendToClient("updateIDGame", msg);
     }
 }

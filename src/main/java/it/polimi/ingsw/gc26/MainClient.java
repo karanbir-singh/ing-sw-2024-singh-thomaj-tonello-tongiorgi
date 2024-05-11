@@ -1,19 +1,17 @@
 package it.polimi.ingsw.gc26;
 
-import it.polimi.ingsw.gc26.network.RMI.VirtualRMIMainController;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.network.ViewController;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
+import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketGameController;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
 import it.polimi.ingsw.gc26.network.socket.server.VirtualSocketView;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.URLPermission;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -122,11 +120,12 @@ public class MainClient {
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
             mainClient.runConnectionTUI();
+            new Thread(() -> mainClient.RMIPingServer()).start();
             mainClient.runGameTUI();
         } else if (userInterface == UserInterface.gui) {
             //new VirtualRMIView(virtualMainController).runGUI();
         }
-
+        mainClient.RMIPingServer();
     }
 
     /**
@@ -149,7 +148,7 @@ public class MainClient {
         BufferedReader socketIn = new BufferedReader(socketRx);
 
         // Writer
-        PrintWriter socketOut = new PrintWriter(socketTx);
+        BufferedWriter socketOut = new BufferedWriter(socketTx);
 
         // Create socket client
         MainClient mainClient = new MainClient();
@@ -161,6 +160,7 @@ public class MainClient {
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
             mainClient.runConnectionTUI();
+            new Thread(() -> mainClient.SocketPingServer()).start();
             mainClient.runGameTUI();
         } else if (userInterface == UserInterface.gui) {
             //new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runGUI();
@@ -256,7 +256,6 @@ public class MainClient {
             }
         }
         System.out.println("Game begin");
-        this.launchRMIPingThread();
     }
 
     public void runGameTUI() throws RemoteException {
@@ -397,47 +396,97 @@ public class MainClient {
     }
 
 
-    private void launchRMIPingThread(){
-        System.out.println("THREAD CREATO");
-        new Thread(() ->{
-            while(true){
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    System.out.println("LA SLEEP non è andata a buon fine");
+    private void RMIPingServer(){
+        while(true){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                System.out.println("LA SLEEP non è andata a buon fine");
+            }
+            try {
+                virtualMainController.amAlive(); //va fatto in modo asincrono
+            } catch (RemoteException e) {
+                System.out.println("SERVER DOWN");
+                check = 1;
+                while(check == 1){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    check = 0;
+                    Registry registry = null;
+                    try {
+                        registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
+                        virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
+                        virtualGameController = virtualMainController.getVirtualGameController(viewController.getGameID());
+                        virtualGameController.reAddView(virtualView,viewController.getClientID());
+                    } catch (RemoteException ex) {
+                        System.out.println("SERVER AGAIN DOWN");
+                        check = 1;
+                    } catch(NotBoundException ep) {
+                        ep.printStackTrace();
+                    }
+
+
                 }
-                try {
-                    virtualMainController.amAlive(); //va fatto in modo asincrono
-                } catch (RemoteException e) {
-                    System.out.println("SERVER DOWN");
-                    check = 1;
-                    while(check == 1){
+                System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
+            }
+        }
+
+    }
+
+    private void SocketPingServer(){
+        while(true){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                System.out.println("LA SLEEP non è andata a buon fine");
+            }
+            try {
+                virtualMainController.amAlive(); //va fatto in modo asincrono
+            } catch (IOException e) {
+                while(check == 1){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    check = 0;
+
+                    try {
+                        Socket serverSocket = new Socket("127.0.0.1", DEFAULT_SOCKET_SERVER_PORT);
+                        InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
+                        OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
+
+                        // Reader
+                        BufferedReader socketIn = new BufferedReader(socketRx);
+
+                        // Writer
+                        BufferedWriter socketOut = new BufferedWriter(socketTx);
+
+                        // Create socket client
+
+                        this.setVirtualMainController(new VirtualSocketMainController(socketOut));
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(2000);
                         } catch (InterruptedException ex) {
                             throw new RuntimeException(ex);
                         }
-                        check = 0;
-                        Registry registry = null;
-                        try {
-                            registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
-                            virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
-                            virtualGameController = virtualMainController.getVirtualGameController(viewController.getGameID());
-                            virtualGameController.reAddView(virtualView,viewController.getClientID());
-                        } catch (RemoteException ex) {
-                            System.out.println("SERVER AGAIN DOWN");
-                            check = 1;
-                        } catch(NotBoundException ep) {
-                            ep.printStackTrace();
-                        }
-
-
+                        this.virtualGameController = this.virtualMainController.getVirtualGameController(viewController.getGameID());
+                        this.setVirtualGameController(new VirtualSocketGameController(socketOut));
+                        new SocketServerHandler(this.viewController, socketIn, socketOut);
+                        virtualGameController.reAddView(virtualView,viewController.getClientID());
+                    } catch (IOException ex) {
+                        System.out.println("SERVER AGAIN DOWN");
+                        check = 1;
                     }
-                    System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
                 }
-            }
-        }).start();
+                System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
+                this.SocketPingServer();
 
+            }
+        }
 
     }
 }

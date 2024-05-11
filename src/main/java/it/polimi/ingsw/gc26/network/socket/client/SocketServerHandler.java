@@ -3,11 +3,14 @@ package it.polimi.ingsw.gc26.network.socket.client;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.network.ViewController;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.Socket;
 
 
 /**
@@ -22,14 +25,15 @@ public class SocketServerHandler implements Runnable {
     /**
      * This attributes represents the output to the server.
      */
-    private PrintWriter outputToServer;
+    private BufferedWriter outputToServer;
 
     /**
      * This attribute represents the clientController
      */
     private ViewController viewController;
 
-    public SocketServerHandler(ViewController viewController, BufferedReader inputFromServer, PrintWriter outputToServer) {
+
+    public SocketServerHandler(ViewController viewController, BufferedReader inputFromServer, BufferedWriter outputToServer) {
         this.viewController = viewController;
         this.inputFromServer = inputFromServer;
         this.outputToServer = outputToServer;
@@ -106,12 +110,15 @@ public class SocketServerHandler implements Runnable {
                     case "updateGameState":
                         this.viewController.updateGameState(value.get("gameState").asText());
                         break;
+                    case "updateIDGame":
+                        this.viewController.setGameID(value.get("idGame").asInt());
+                        break;
                     case null, default:
                         break;
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Server down");
         }
     }
 //
