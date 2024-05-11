@@ -182,12 +182,7 @@ public class Game implements Serializable {
             // Then increase the round
             this.increaseRound();
         }
-
-        try {
             this.observable.notifyMessage("It's you turn now",this.currentPlayer.getID());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**
@@ -354,5 +349,9 @@ public class Game implements Serializable {
             }
             System.out.println(p.getNickname() + spaces + p.printableScore());
         }
+    }
+
+    public ModelObservable getObservable(){
+        return this.observable;
     }
 }

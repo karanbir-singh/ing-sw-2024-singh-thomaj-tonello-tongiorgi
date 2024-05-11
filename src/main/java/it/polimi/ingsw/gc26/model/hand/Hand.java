@@ -95,11 +95,7 @@ public class Hand implements Serializable {
             } else {
                 this.selectedSide = selectedCard.get().getFront();
             }
-            try {
-                this.observable.notifyMessage("You have turned a card", clientID);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+            this.observable.notifyMessage("You have turned a card", clientID);
         } else {
             // TODO lancia eccezione di carta non selezionata
             this.observable.notifyError("Select a card first!", clientID);
@@ -123,12 +119,7 @@ public class Hand implements Serializable {
      */
     public void addCard(Card card, String clientID) {
         cards.add(card);
-        try {
             this.observable.notifyMessage("Added a card to the hand", clientID);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     /**
@@ -148,11 +139,7 @@ public class Hand implements Serializable {
     public Card getCard(int leftLimit, int rightLimit, int cardIndex, String clientID) {
         // Check if the given index is correct
         if (cardIndex >= leftLimit && cardIndex < rightLimit) {
-            try {
-                this.observable.notifyMessage("Card selected at index: " + cardIndex, clientID);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+            this.observable.notifyMessage("Card selected at index: " + cardIndex, clientID);
             return cards.get(cardIndex);
         }
         // TODO notify view

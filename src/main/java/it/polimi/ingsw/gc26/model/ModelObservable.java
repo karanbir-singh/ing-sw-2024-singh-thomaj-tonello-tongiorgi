@@ -18,14 +18,17 @@ import java.util.Map;
 
 public class ModelObservable implements Serializable{
     private transient ArrayList<Pair<VirtualView, String>> clients;
-    private static ModelObservable instance;
+    //private static ModelObservable instance;
 
     public ModelObservable() {
         this.clients = new ArrayList<>();
     }
 
     public void addObserver(VirtualView view, String clientID) {
-            this.clients.add(new Pair<>(view,clientID));
+        if(this.clients == null){
+            this.clients = new ArrayList<>();
+        }
+        this.clients.add(new Pair<>(view,clientID));
     }
 
 

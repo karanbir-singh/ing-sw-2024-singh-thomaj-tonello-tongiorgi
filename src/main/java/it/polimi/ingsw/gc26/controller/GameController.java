@@ -813,6 +813,6 @@ public class GameController implements Serializable {
 
 
     public void reAddView(VirtualView view, String clientID){
-        ModelObservable.getInstance().addObserver(view, clientID);
+        this.game.getObservable().addObserver(view, clientID);
     }
 }
