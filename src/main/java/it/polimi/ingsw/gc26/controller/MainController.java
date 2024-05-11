@@ -85,6 +85,7 @@ public class MainController implements Serializable {
     public void launchExecutor() {
         this.mainRequests = new PriorityQueue<>((a, b) -> a.getPriority() > b.getPriority() ? -1 : 1);
         this.waitingClients = new ArrayList<>();
+        //le due righe di prima servono solo perchè quando il server da down va in up esse diventano null
         new Thread(() -> {
             while (true) {
                 synchronized (mainRequests) {
