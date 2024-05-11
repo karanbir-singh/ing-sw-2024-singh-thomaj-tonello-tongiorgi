@@ -23,9 +23,18 @@ public class ModelObservable implements Serializable{
     public ModelObservable() {
         this.clients = new ArrayList<>();
     }
+    public ArrayList<Pair<VirtualView,String>> getClients(){
+        if(this.clients == null){ //SERVE PERCHé QUANDO IL SERVER TORNA SU DOPO ESSERE
+                                    //ANDATO IN DOWN, CLIENTS è NULL
+            return new ArrayList<>();
+        }
+        return this.clients;
+    }
+
 
     public void addObserver(VirtualView view, String clientID) {
-        if(this.clients == null){
+        if(this.clients == null){//SERVE PERCHé QUANDO IL SERVER TORNA SU DOPO ESSERE
+                                    //ANDATO IN DOWN, CLIENTS è NULL
             this.clients = new ArrayList<>();
         }
         this.clients.add(new Pair<>(view,clientID));

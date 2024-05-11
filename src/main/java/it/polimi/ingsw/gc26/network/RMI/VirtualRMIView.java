@@ -215,4 +215,9 @@ public class VirtualRMIView implements VirtualView {
     public void updateIDGame(int gameID){
         this.viewController.setGameID(gameID);
     }
+
+    @Override
+    public void isClientAlive(){
+        //TODO FORSE INSERIRE QUALCOSA
+    }
 }

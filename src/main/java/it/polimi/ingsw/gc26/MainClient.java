@@ -119,6 +119,7 @@ public class MainClient {
         MainClient mainClient = new MainClient();
         mainClient.setVirtualMainController((VirtualMainController) registry.lookup(remoteObjectName));
         mainClient.setVirtualView(new VirtualRMIView(mainClient.viewController));
+
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
             mainClient.runConnectionTUI();
@@ -126,6 +127,8 @@ public class MainClient {
         } else if (userInterface == UserInterface.gui) {
             //new VirtualRMIView(virtualMainController).runGUI();
         }
+        //Launched here
+
 
     }
 
@@ -256,11 +259,12 @@ public class MainClient {
             }
         }
         System.out.println("Game begin");
-        this.launchRMIPingThread();
+
     }
 
     public void runGameTUI() throws RemoteException {
         // Declare scanner
+        this.launchRMIPingThread();
         Scanner scan = new Scanner(System.in);
 
         // Infinite loop
@@ -273,18 +277,7 @@ public class MainClient {
                     try{
                         virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), viewController.getClientID());
                     }catch (RemoteException e){
-                        /*System.out.println("RETE CADUTA");
-
-                        Registry registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
-                        try {
-                            virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
-                            virtualGameController = virtualMainController.getVirtualGameController();
-                        } catch (RemoteException ex) {
-                            System.out.println("RETE ANCORA GIU");
-                        } catch(NotBoundException ep){
-                            ep.printStackTrace();
-                        }*/
-
+                        //TODO DA METTERE IN TUTTI I METODI IL CATCH
                     }
                     break;
                 case 2:
@@ -385,6 +378,7 @@ public class MainClient {
                 // Start RMI Client
                 String RMIServerAddress = socketServerAddress;
                 startRMIClient(RMIServerAddress, DEFAULT_RMI_SERVER_PORT, userInterface);
+
             } else if (networkType == NetworkType.socket) {
                 // Start Socket Client
                 startSocketClient(socketServerAddress, socketServerPort, userInterface);
@@ -396,45 +390,50 @@ public class MainClient {
         }
     }
 
-
+    /**
+     * useful for pinging the server and getting again the stub of the right GameController
+     */
     private void launchRMIPingThread(){
         System.out.println("THREAD CREATO");
         new Thread(() ->{
             while(true){
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    System.out.println("LA SLEEP non è andata a buon fine");
-                }
-                try {
-                    virtualMainController.amAlive(); //va fatto in modo asincrono
-                } catch (RemoteException e) {
-                    System.out.println("SERVER DOWN");
-                    check = 1;
-                    while(check == 1){
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                        check = 0;
-                        Registry registry = null;
-                        try {
-                            registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
-                            virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
-                            virtualGameController = virtualMainController.getVirtualGameController(viewController.getGameID());
-                            virtualGameController.reAddView(virtualView,viewController.getClientID());
-                        } catch (RemoteException ex) {
-                            System.out.println("SERVER AGAIN DOWN");
-                            check = 1;
-                        } catch(NotBoundException ep) {
-                            ep.printStackTrace();
-                        }
-
-
+                if(this.viewController.getClientID() != null){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        System.out.println("LA SLEEP non è andata a buon fine");
                     }
-                    System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
+                    try {
+                        this.virtualMainController.amAlive();
+                    } catch (RemoteException e) {
+                        System.out.println("SERVER DOWN");
+                        check = 1;
+                        while(check == 1){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                            check = 0;
+                            Registry registry = null;
+                            try {
+                                registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
+                                this.virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
+                                this.virtualGameController = this.virtualMainController.getVirtualGameController(viewController.getGameID());
+                                this.virtualGameController.reAddView(virtualView,viewController.getClientID());
+                            } catch (RemoteException ex) {
+                                System.out.println("SERVER AGAIN DOWN");
+                                check = 1;
+                            } catch(NotBoundException ep) {
+                                ep.printStackTrace();
+                            }
+
+
+                        }
+                        System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
+                    }
                 }
+
             }
         }).start();
 

@@ -17,6 +17,9 @@ public class ViewController {
     private String clientID;
 
 
+    /**
+     * id of the game where the client participates
+     */
     private int gameID;
 
     /**

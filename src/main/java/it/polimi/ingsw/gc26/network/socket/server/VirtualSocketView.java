@@ -238,6 +238,10 @@ public class VirtualSocketView implements VirtualView {
     }
 
     public void updateIDGame(int idGame){
-        ///
+        //TODO DA FARE
+    }
+
+    public void isClientAlive(){
+        //TODO da fare
     }
 }
