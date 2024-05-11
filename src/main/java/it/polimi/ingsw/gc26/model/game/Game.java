@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.model.game;
 
+import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.player.Pawn;
@@ -316,7 +317,47 @@ public class Game {
         ModelObservable.getInstance().notifyError("YOU CANNOT DO THAT NOW",clientID);
     }
 
-    public void showCommonTable(){
+    public String[][] printableGame(Player player) {
+        String[][] commonTablePrint = commonTable.printableCommonTable();
+        String[][] personalBoardPrint = player.getPersonalBoard().printablePersonalBoard();
+        String[][] handPrint = player.printableHandAndMission();
+
+        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + 3;
+        int xDim = Math.max(Math.max(commonTablePrint[0].length, personalBoardPrint[0].length), handPrint[0].length) ;
+
+        String[][] printableGame = new String[yDim][xDim];
+        Printer printer = new Printer();
+
+        int y=0, x=0;
+
+        for(int i=0; i<yDim; i++){
+            for(int j=0; j<xDim; j++){
+                printableGame[i][j] = "";
+            }
+        }
+
+        //show common table with drawable cards and common missions
+        printableGame[y][x] = "\t\t\tCOMMON TABLE:\n";
+        y++;
+        printer.addPrintable(commonTablePrint, printableGame, x, y);
+        y += commonTablePrint.length;
+
+        //show personal board
+        printableGame[y][x] = "\n\t\t\tYOUR PERSONAL BOARD:\n";
+        y++;
+        printer.addPrintable(personalBoardPrint, printableGame, x, y);
+        y += personalBoardPrint.length;
+
+        //show player's hand
+        printableGame[y][x] = "\n\t\t\tYOUR HAND:\n";
+        y++;
+        printer.addPrintable(handPrint, printableGame, x, y);
+        y += handPrint.length;
+
+        return printableGame;
+    }
+
+    public void showCommonTable() {
         String[][] ct = commonTable.printableCommonTable();
         int maxLenght = 0;
         StringBuilder spaces;

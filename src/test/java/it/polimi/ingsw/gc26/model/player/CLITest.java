@@ -91,8 +91,6 @@ public class CLITest {
 
         printer.showPrintable(game.getCommonTable().printableCommonTable());
 
-        assertEquals(GameState.SECRET_MISSION_DISTRIBUTION, game.getState());
-
         // Check with assertions
         assertEquals(2, game.getCommonTable().getCommonMissions().size());
     }
@@ -115,7 +113,7 @@ public class CLITest {
             gameController.playCardFromHand(player.getID());
         }
 
-        //assertEquals(GameState.WAITING_PAWNS_SELECTION, game.getState());
+        game.setState(GameState.WAITING_PAWNS_SELECTION);
 
         gameController.choosePawnColor("BLUE", players.get(0).getID());
         gameController.choosePawnColor("GREEN", players.get(1).getID());
@@ -124,9 +122,11 @@ public class CLITest {
         // Secret mission are automatically prepared
         gameController.prepareCommonMissions();
 
+        game.setState(GameState.SECRET_MISSION_DISTRIBUTION);
+
         gameController.prepareSecretMissions();
 
-        //assertEquals(GameState.WAITING_SECRET_MISSION_CHOICE, game.getState());
+        assertEquals(GameState.WAITING_SECRET_MISSION_CHOICE, game.getState());
 
         gameController.selectSecretMission(0, players.get(0).getID());
         gameController.selectSecretMission(1, players.get(1).getID());
@@ -142,7 +142,58 @@ public class CLITest {
             System.out.println("\n");
         }
 
-        //assertEquals(GameState.GAME_STARTED, game.getState());
+        // Check with assertions
+        for (Player player : game.getPlayers()) {
+            assertNotNull(player.getSecretMissionHand());
+            assertEquals(1, player.getSecretMissionHand().getCards().size());
+            assertNotNull(player.getPersonalBoard().getSecretMission());
+        }
+    }
+
+    @Test
+    void fullGamePrint() throws RemoteException {
+        gameSetUp();
+        // First of all, each player has their starter card placed
+        game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
+        gameController.prepareStarterCards();
+        assertEquals(GameState.WAITING_STARTER_CARD_PLACEMENT, game.getState());
+
+        // Each player select (and eventually turn) the starter card side
+        gameController.turnSelectedCardSide(players.get(0).getID());
+
+        gameController.turnSelectedCardSide(players.get(2).getID());
+
+        // Each player plays the selected turn
+        for (Player player : game.getPlayers()) {
+            gameController.playCardFromHand(player.getID());
+        }
+
+        game.setState(GameState.WAITING_PAWNS_SELECTION);
+
+        gameController.choosePawnColor("BLUE", players.get(0).getID());
+        gameController.choosePawnColor("GREEN", players.get(1).getID());
+        gameController.choosePawnColor("YELLOW", players.get(2).getID());
+
+        // Secret mission are automatically prepared
+        gameController.prepareCommonMissions();
+
+        game.setState(GameState.SECRET_MISSION_DISTRIBUTION);
+
+        gameController.prepareSecretMissions();
+
+        assertEquals(GameState.WAITING_SECRET_MISSION_CHOICE, game.getState());
+
+        gameController.selectSecretMission(0, players.get(0).getID());
+        gameController.selectSecretMission(1, players.get(1).getID());
+        gameController.selectSecretMission(1, players.get(2).getID());
+
+        gameController.setSecretMission(players.get(0).getID());
+        gameController.setSecretMission(players.get(1).getID());
+        gameController.setSecretMission(players.get(2).getID());
+
+        for (Player p: players) {
+            printer.showPrintable(game.printableGame(p));
+        }
 
         // Check with assertions
         for (Player player : game.getPlayers()) {

@@ -11,6 +11,7 @@ public enum TextStyle {
     BACKGROUND_RED("\u001B[48;2;248;49;47m"),
     BACKGROUND_YELLOW("\u001B[48;2;255;209;56m"),
     BACKGROUND_WHITE("\u001B[48;2;255;255;255m"),
+    BLACK("\u001B[30m"),
     BLUE("\u001B[34m"),
     GREEN("\u001B[32m"),
     PURPLE("\u001B[35m"),

@@ -243,10 +243,18 @@ public class Player {
         String[][] secretMission = this.personalBoard.getSecretMission().getFront().printableSide();
         Printer printer = new Printer();
 
-        String[][] handAndMission = new String[hand.length + secretMission.length][hand[0].length + secretMission[0].length];
+        String[][] handAndMission = new String[hand.length][hand[0].length + secretMission[0].length];
+
+
+        for(int i=0; i<handAndMission.length; i++){
+            for(int j=0; j<handAndMission[0].length; j++){
+                handAndMission[i][j] = " ";
+            }
+        }
 
         printer.addPrintable(hand, handAndMission, 0,0);
-        printer.addPrintable(secretMission, handAndMission, 0, hand[0].length);
+        handAndMission[0][hand[0].length] = "Your Secret Mission: ";
+        printer.addPrintable(secretMission, handAndMission, hand[0].length, 1);
 
         return handAndMission;
     }
