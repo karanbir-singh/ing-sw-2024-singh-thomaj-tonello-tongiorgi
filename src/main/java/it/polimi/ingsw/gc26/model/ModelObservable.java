@@ -20,15 +20,8 @@ public class ModelObservable implements Serializable{
     private transient ArrayList<Pair<VirtualView, String>> clients;
     private static ModelObservable instance;
 
-    private ModelObservable() {
+    public ModelObservable() {
         this.clients = new ArrayList<>();
-    }
-
-    public static ModelObservable getInstance() {
-        if (instance == null) {
-            instance = new ModelObservable();
-        }
-        return instance;
     }
 
     public void addObserver(VirtualView view, String clientID) {

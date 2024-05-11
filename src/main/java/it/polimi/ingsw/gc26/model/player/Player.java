@@ -48,6 +48,11 @@ public class Player implements Serializable {
     private PlayerState state;
 
     /**
+     * Observable to notify client
+     */
+    private ModelObservable observable;
+
+    /**
      * Initializes the player with an id and a name
      *
      * @param id   unique number that represent the player
@@ -69,6 +74,14 @@ public class Player implements Serializable {
      */
     public String getID() {
         return this.ID;
+    }
+
+    /**
+     * This method set the observable
+     * @param observable
+     */
+    public void setObservable(ModelObservable observable) {
+        this.observable = observable;
     }
 
     /**
@@ -106,14 +119,14 @@ public class Player implements Serializable {
 
         if (pawn == null) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non corretto
-            ModelObservable.getInstance().notifyError("Color not available!", clientID);
+            this.observable.notifyError("Color not available!", clientID);
         } else if (!availableColors.contains(pawn)) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non disponibile
-            ModelObservable.getInstance().notifyError("Color not available!", clientID);
+            this.observable.notifyError("Color not available!", clientID);
         } else {
             availableColors.remove(pawn);
             this.pawnColor = pawn;
-            ModelObservable.getInstance().notifyUpdateChosenPawn(pawn, clientID);
+            this.observable.notifyUpdateChosenPawn(pawn, clientID);
         }
     }
 
@@ -153,14 +166,14 @@ public class Player implements Serializable {
      * Creates an empty hand
      */
     public void createHand() {
-        this.hand = new Hand(new ArrayList<>());
+        this.hand = new Hand(new ArrayList<>(), this.observable);
     }
 
     /**
      * Creates an empty secret mission hand
      */
     public void createSecretMissionHand() {
-        this.secretMissionHand = new Hand(new ArrayList<>());
+        this.secretMissionHand = new Hand(new ArrayList<>(), this.observable);
         ;
     }
 
@@ -186,7 +199,7 @@ public class Player implements Serializable {
      * Creates the player's personal board
      */
     public void createPersonalBoard() {
-        this.personalBoard = new PersonalBoard();
+        this.personalBoard = new PersonalBoard(this.observable);
     }
 
     /**
