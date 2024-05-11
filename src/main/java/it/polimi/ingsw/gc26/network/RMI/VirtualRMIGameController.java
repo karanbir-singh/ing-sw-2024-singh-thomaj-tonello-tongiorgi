@@ -63,7 +63,7 @@ public class VirtualRMIGameController implements VirtualGameController {
 
     @Override
     public void reAddView(VirtualView view, String clientID) throws RemoteException{
-        this.gameController.reAddView(view,clientID);
+        this.gameController.addRequest(new ReAddViewRequest(view,clientID));
     }
 
     @Override

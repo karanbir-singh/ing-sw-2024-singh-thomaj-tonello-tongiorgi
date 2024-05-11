@@ -176,7 +176,6 @@ public class MainClient {
         String input = scanner.nextLine();
         viewController.setNickname(input);
         this.virtualMainController.connect(this.virtualView, viewController.getNickname(), viewController.getClientState());
-        this.launchRMIPingThread(this.virtualView, viewController.getClientID());
         synchronized (this.lock) {
             while (viewController.getClientState() == ClientState.CONNECTION) {
                 try {
@@ -241,14 +240,13 @@ public class MainClient {
             }
         }
 
-        this.launchRMIPingThread(virtualView,viewController.getClientID());
         System.out.println("Waiting for other players ...");
         while (viewController.getClientState() == ClientState.WAITING) {
             System.out.flush();
         }
 
         synchronized (this.lock) {
-            this.virtualGameController = this.virtualMainController.getVirtualGameController();
+            this.virtualGameController = this.virtualMainController.getVirtualGameController(viewController.getGameID());
             while (this.virtualGameController == null) {
                 try {
                     this.lock.wait();
@@ -258,6 +256,7 @@ public class MainClient {
             }
         }
         System.out.println("Game begin");
+        this.launchRMIPingThread();
     }
 
     public void runGameTUI() throws RemoteException {
@@ -398,7 +397,7 @@ public class MainClient {
     }
 
 
-    private void launchRMIPingThread(VirtualView view, String clientID){
+    private void launchRMIPingThread(){
         System.out.println("THREAD CREATO");
         new Thread(() ->{
             while(true){
@@ -408,24 +407,31 @@ public class MainClient {
                     System.out.println("LA SLEEP non è andata a buon fine");
                 }
                 try {
-                    String Alive = virtualMainController.amAlive();
+                    virtualMainController.amAlive(); //va fatto in modo asincrono
                 } catch (RemoteException e) {
                     System.out.println("SERVER DOWN");
                     check = 1;
                     while(check == 1){
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ex) {
+                            throw new RuntimeException(ex);
+                        }
                         check = 0;
                         Registry registry = null;
                         try {
                             registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
                             virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
-                            virtualGameController = virtualMainController.getVirtualGameController();
-                            virtualGameController.reAddView(view,clientID);
+                            virtualGameController = virtualMainController.getVirtualGameController(viewController.getGameID());
+                            virtualGameController.reAddView(virtualView,viewController.getClientID());
                         } catch (RemoteException ex) {
                             System.out.println("SERVER AGAIN DOWN");
                             check = 1;
                         } catch(NotBoundException ep) {
                             ep.printStackTrace();
                         }
+
+
                     }
                     System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
                 }

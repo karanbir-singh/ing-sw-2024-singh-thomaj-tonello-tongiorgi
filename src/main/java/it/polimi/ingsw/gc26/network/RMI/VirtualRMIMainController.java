@@ -36,13 +36,12 @@ public class VirtualRMIMainController implements VirtualMainController {
     }
 
     @Override
-    public VirtualGameController getVirtualGameController() throws RemoteException {
-        return new VirtualRMIGameController(this.mainController.getGameController());
+    public VirtualGameController getVirtualGameController(int id) throws RemoteException {
+        return new VirtualRMIGameController(this.mainController.getGameController(id));
     }
 
     @Override
-    public String amAlive() throws RemoteException{
-        return this.mainController.amAlive();
+    public void amAlive() throws RemoteException{
     }
 
 }

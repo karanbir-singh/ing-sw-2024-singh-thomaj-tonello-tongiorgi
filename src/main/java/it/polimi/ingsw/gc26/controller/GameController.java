@@ -34,7 +34,7 @@ public class GameController implements Serializable {
     /**
      * This attribute represents the list of requests sent from clients
      */
-    private Queue<GameRequest> gameRequests;
+    private transient Queue<GameRequest> gameRequests;
 
     private String pathToCopy;
     /**
@@ -70,6 +70,7 @@ public class GameController implements Serializable {
      * Launch a thread for managing clients requests
      */
     public void launchExecutor() {
+        gameRequests = new ArrayDeque<>(); //so that when the server goes up the array is empty
         new Thread(() -> {
             while (true) {
                 synchronized (gameRequests) {
@@ -477,13 +478,22 @@ public class GameController implements Serializable {
      * @param playerID  ID of the player who is selected the card to play
      */
     public void selectCardFromHand(int cardIndex, String playerID) {
+        System.out.println("CARTA SELEZIONATA");
         if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
             // Get the player who is selected the card to play
-            Player player = game.getPlayerByID(playerID);
+            Player player = null;
+            try{
+                player = game.getPlayerByID(playerID);
+            }catch(NoSuchElementException e){
+                e.printStackTrace();
+                System.out.println(this.game.getPlayers().get(0).getID());
+                System.out.println(this.game.getPlayers().get(1).getID());
+            }
+
 
             // Get card to select
             Card selectedCard = player.getHand().getCard(0, 3, cardIndex, playerID);
-
+            System.out.println("CARTA SELEZIONATA");
             // Set the selected card
             if (selectedCard != null) {
                 player.getHand().setSelectedCard(selectedCard, player.getID());

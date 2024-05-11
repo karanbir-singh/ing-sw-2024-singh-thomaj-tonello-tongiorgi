@@ -16,6 +16,9 @@ public class ViewController {
      */
     private String clientID;
 
+
+    private int gameID;
+
     /**
      * Nickname of the client
      */
@@ -179,5 +182,13 @@ public class ViewController {
 
     public void updateGameState(String gameState) {
         System.out.println(STR."Game state: \{gameState}");
+    }
+
+    public void setGameID(int gameID){
+        this.gameID = gameID;
+    }
+
+    public int getGameID(){
+        return this.gameID;
     }
 }

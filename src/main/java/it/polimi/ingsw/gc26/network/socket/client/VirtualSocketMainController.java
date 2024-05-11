@@ -72,7 +72,7 @@ public class VirtualSocketMainController implements VirtualMainController {
      * @throws RemoteException
      */
     @Override
-    public VirtualGameController getVirtualGameController() throws RemoteException {
+    public VirtualGameController getVirtualGameController(int id) throws RemoteException {
         HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
         data.replace("function", "getVirtualGameController");
         writeToServer(data, new HashMap<>());
@@ -110,8 +110,7 @@ public class VirtualSocketMainController implements VirtualMainController {
     }
 
     @Override
-    public String amAlive(){
-        return "bho";
+    public void amAlive(){
     }
 
 

@@ -236,4 +236,8 @@ public class VirtualSocketView implements VirtualView {
         msg.put("gameState", gameState);
         sendToClient("updateGameState", msg);
     }
+
+    public void updateIDGame(int idGame){
+        ///
+    }
 }

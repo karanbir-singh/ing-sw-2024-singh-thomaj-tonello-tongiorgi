@@ -80,7 +80,7 @@ public class SocketClientHandler implements Runnable {
                         this.mainController.addRequest(new GameCreationRequest(this.virtualSocketView, value.get("nickname").asText(), value.get("numPlayers").asInt(), 1));
                         break;
                     case "getVirtualGameController":
-                        this.gameController = this.mainController.getGameController();
+                        this.gameController = this.mainController.getGameController(10); //TODO DA CAMBIARE
                         this.virtualSocketView.setGameController();
                         break;
                     case "addMessage":

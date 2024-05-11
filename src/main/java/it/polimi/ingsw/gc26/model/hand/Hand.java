@@ -31,14 +31,12 @@ public class Hand implements Serializable {
      */
     private Side selectedSide;
 
-    private ModelObservable modelObservable;
 
     /**
      * Initializes the hand for the player
      * @param c new cards in hand
      */
     public Hand(ArrayList<Card> c) {
-        this.modelObservable = ModelObservable.getInstance();
         this.cards = c;
         this.selectedCard = null;
         this.selectedSide = null;
@@ -63,7 +61,7 @@ public class Hand implements Serializable {
             // TODO notify view
 
             try {
-                this.modelObservable.notifySelectedCardFromHand(clientID);
+                ModelObservable.getInstance().notifySelectedCardFromHand(clientID);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -116,7 +114,7 @@ public class Hand implements Serializable {
      */
     public void addCard(Card card, String clientID) {
         cards.add(card);
-        this.modelObservable.notifyMessage("Added a card to the hand", clientID);
+        ModelObservable.getInstance().notifyMessage("Added a card to the hand", clientID);
 
     }
 
@@ -138,7 +136,7 @@ public class Hand implements Serializable {
         // Check if the given index is correct
         if (cardIndex >= leftLimit && cardIndex < rightLimit) {
             System.out.println("carta selezionata");
-            this.modelObservable.notifyMessage("Card selected at index: " + cardIndex, clientID);
+            ModelObservable.getInstance().notifyMessage("Card selected at index: " + cardIndex, clientID);
             return cards.get(cardIndex);
         }
         // TODO notify view

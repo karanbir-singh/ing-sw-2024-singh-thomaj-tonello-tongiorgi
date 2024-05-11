@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ModelObservable implements Serializable {
-    private transient  ArrayList<Pair<VirtualView, String>> clients;
+public class ModelObservable implements Serializable{
+    private transient ArrayList<Pair<VirtualView, String>> clients;
     private static ModelObservable instance;
 
     private ModelObservable() {
@@ -32,7 +32,7 @@ public class ModelObservable implements Serializable {
     }
 
     public void addObserver(VirtualView view, String clientID) {
-        this.clients.add(new Pair<>(view,clientID));
+            this.clients.add(new Pair<>(view,clientID));
     }
 
 

@@ -38,11 +38,11 @@ public class Game implements Serializable {
     /**
      * THis attribute represents all the players in the game
      */
-    private final ArrayList<Player> players;
+    private ArrayList<Player> players;
     /**
      * This attribute represents the common table to all the players
      */
-    private final CommonTable commonTable;
+    private CommonTable commonTable;
     /**
      * This attribute represents how many rounds have been played
      */
@@ -64,7 +64,7 @@ public class Game implements Serializable {
      */
     private final ArrayList<Pawn> availablePawns;
 
-    private ModelObservable observable;
+    private  ModelObservable observable; //unico per il game
 
     /**
      * Initializes the game, creates the decks and sets the common table

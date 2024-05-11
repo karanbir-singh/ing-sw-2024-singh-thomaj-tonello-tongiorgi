@@ -29,7 +29,7 @@ public class MainController implements Serializable {
     /**
      * This attribute represents a priority queue of main requests
      */
-    private transient final PriorityQueue<MainRequest> mainRequests;
+    private transient PriorityQueue<MainRequest> mainRequests;
 
     /**
      * This attribute represents a game that is being created
@@ -80,7 +80,9 @@ public class MainController implements Serializable {
     /**
      * Launch a thread for executing clients connection requests
      */
-    private void launchExecutor() {
+    public void launchExecutor() {
+        this.mainRequests = new PriorityQueue<>((a, b) -> a.getPriority() > b.getPriority() ? -1 : 1);
+        this.waitingClients = new ArrayList<>();
         new Thread(() -> {
             while (true) {
                 synchronized (mainRequests) {
@@ -258,6 +260,7 @@ public class MainController implements Serializable {
                 // Update of the view
                 for (VirtualView view : waitingClients) {
                     try {
+                        view.updateIDGame(numberOfTotalGames);
                         view.updateState(ClientState.BEGIN);
                     } catch (RemoteException e) {
                         e.printStackTrace();
@@ -292,9 +295,9 @@ public class MainController implements Serializable {
     /**
      * @return Returns the last created game controller
      */
-    public GameController getGameController() {
+    public GameController getGameController(int id) {
         if (!gamesControllers.isEmpty()){
-            return gamesControllers.get(numberOfTotalGames);
+            return gamesControllers.get(id);
         }
         return null;
     }
@@ -321,7 +324,6 @@ public class MainController implements Serializable {
     }
 
 
-    public String amAlive(){
-        return "alive";
+    public void amAlive() {
     }
 }

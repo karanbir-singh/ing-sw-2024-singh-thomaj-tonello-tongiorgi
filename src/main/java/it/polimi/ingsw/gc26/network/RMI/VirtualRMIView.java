@@ -209,4 +209,10 @@ public class VirtualRMIView implements VirtualView {
     public void updateState(ClientState clientState) throws RemoteException {
         this.viewController.updateClientState(clientState);
     }
+
+
+    @Override
+    public void updateIDGame(int gameID){
+        this.viewController.setGameID(gameID);
+    }
 }

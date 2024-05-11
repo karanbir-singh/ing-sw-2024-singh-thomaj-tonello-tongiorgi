@@ -10,8 +10,8 @@ public interface VirtualMainController extends Remote {
 
     void createWaitingList(VirtualView client, String nickname, int numPlayers) throws RemoteException;
 
-    VirtualGameController getVirtualGameController() throws RemoteException;
+    VirtualGameController getVirtualGameController(int id) throws RemoteException;
 
-    String amAlive() throws RemoteException;
+    void amAlive() throws RemoteException;
 
 }
