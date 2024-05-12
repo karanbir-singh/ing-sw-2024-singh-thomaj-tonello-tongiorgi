@@ -13,9 +13,11 @@ import it.polimi.ingsw.gc26.network.socket.server.VirtualSocketView;
 import java.io.*;
 import java.net.Socket;
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalTime;
 import java.util.Scanner;
 
@@ -68,23 +70,11 @@ public class MainClient {
      */
     private final Object lock;
 
-    /**
-     * Flag used to kill all threads when server wants to kill the client
-     */
-    private volatile boolean areAllPlayersConnected;
-
-    /**
-     * Lock to synchronizes isserverUp flag
-     */
-    private Object lockPlayersConnected;
-
     int check = 1;
 
     public MainClient() {
         this.lock = new Object();
         this.viewController = new ViewController(this, null, null, ClientState.CONNECTION, lock);
-        this.areAllPlayersConnected = true;
-        this.lockPlayersConnected = new Object();
     }
 
     /**
@@ -100,9 +90,8 @@ public class MainClient {
      * Set's the client's flag to true to kill all threads
      */
     public void killProcesses() {
-        synchronized (lockPlayersConnected) {
-            areAllPlayersConnected = false;
-        }
+        System.out.println("Game ended because another player disconnected itself!");
+        System.exit(0);
     }
 
     /**
@@ -136,7 +125,8 @@ public class MainClient {
 
         // Create RMI Client
         MainClient mainClient = new MainClient();
-        mainClient.setVirtualMainController((VirtualMainController) registry.lookup(remoteObjectName));
+        Remote remoteObject = (Remote)registry.lookup(remoteObjectName);
+        mainClient.setVirtualMainController((VirtualMainController) remoteObject);
         mainClient.setVirtualView(new VirtualRMIView(mainClient.viewController));
 
 
@@ -148,7 +138,7 @@ public class MainClient {
         } else if (userInterface == UserInterface.gui) {
             //new VirtualRMIView(virtualMainController).runGUI();
         }
-        String a = "";
+        registry.unbind(remoteObjectName);
     }
 
     /**
@@ -188,6 +178,7 @@ public class MainClient {
         } else if (userInterface == UserInterface.gui) {
             //new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runGUI();
         }
+        serverSocket.close();
     }
 
     public void runConnectionTUI() throws RemoteException {
@@ -284,16 +275,9 @@ public class MainClient {
     public void runGameTUI() throws RemoteException {
         // Declare scanner
         Scanner scan = new Scanner(System.in);
-
         // Infinite loop
         while (true) {
-            synchronized (lockPlayersConnected) {
-                if (areAllPlayersConnected == false) {System.out.println("Game ended because another player disconnected itself!"); break;}
-            }
             Integer option = printOptions();
-            synchronized (lockPlayersConnected) {
-                if (areAllPlayersConnected == false) {System.out.println("Game ended because another player disconnected itself!"); break;}
-            }
             switch (option) {
                 case 1:
                     System.out.println("Select the card position: (0/1/2)");
@@ -353,6 +337,9 @@ public class MainClient {
                     String message = scan.nextLine();
                     virtualGameController.addMessage(message, receiverNickname, viewController.getClientID(), LocalTime.now().toString());
                     break;
+                case 12:
+                    System.exit(0);
+                    break;
             }
         }
     }
@@ -370,12 +357,12 @@ public class MainClient {
                 "8) Select secret mission.\n" +
                 "9) Set secret mission.\n" +
                 "10) Print player's personal board.\n" +
-                "11) Open chat.\n");
+                "11) Open chat.\n" +
+                "12) Exit game\n");
 
 
         Scanner scan = new Scanner(System.in);
         int response =  scan.nextInt();
-        scan.close();
         return response;
     }
 
@@ -384,7 +371,7 @@ public class MainClient {
         int socketServerPort = DEFAULT_SOCKET_SERVER_PORT;
 
         // Default values
-        NetworkType networkType;
+        NetworkType networkType = null;
 
         // Check if the client passes server IP address and his port
         if (args.length == 2) {
@@ -393,12 +380,25 @@ public class MainClient {
         }
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("What technology do you want to connect with? (rmi/socket)");
-        networkType = NetworkType.valueOf(scanner.nextLine().toLowerCase());
+        do {
+            System.out.println("What technology do you want to connect with? (rmi/socket)");
+            try {
+                networkType = NetworkType.valueOf(scanner.nextLine().toLowerCase());
 
-        UserInterface userInterface;
-        System.out.println("What type of user interface do you want to use? (tui/gui)");
-        userInterface = UserInterface.valueOf(scanner.nextLine());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid technology!");
+            }
+        } while (networkType == null);
+
+        UserInterface userInterface = null;
+        do {
+            System.err.println("What type of user interface do you want to use? (tui/gui)");
+            try {
+                userInterface = UserInterface.valueOf(scanner.nextLine());
+            } catch (IllegalArgumentException e) {
+                System.err.println("Invalid user interface!");
+            }
+        } while (userInterface == null);
         try {
             if (networkType == NetworkType.rmi) {
                 // Start RMI Client
@@ -419,9 +419,6 @@ public class MainClient {
 
     private void RMIPingServer(){
         while(true){
-            synchronized (lockPlayersConnected) {
-                if (!areAllPlayersConnected) {break;}
-            }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -462,9 +459,6 @@ public class MainClient {
 
     private void SocketPingServer(){
         while(true){
-            synchronized (lockPlayersConnected) {
-                if (!areAllPlayersConnected) {break;}
-            }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
