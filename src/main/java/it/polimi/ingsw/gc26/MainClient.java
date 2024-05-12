@@ -420,7 +420,7 @@ public class MainClient {
     private void RMIPingServer(){
         while(true){
             synchronized (lockPlayersConnected) {
-                if (!areAllPlayersConnectedS) {break;}
+                if (!areAllPlayersConnected) {break;}
             }
             try {
                 Thread.sleep(1000);
