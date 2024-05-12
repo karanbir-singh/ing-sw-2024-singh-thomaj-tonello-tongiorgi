@@ -8,6 +8,9 @@ import it.polimi.ingsw.gc26.request.main_request.MainRequest;
 import javafx.util.Pair;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -385,10 +388,16 @@ public class MainController implements Serializable {
      *
      * @param idGame id of the GameController that you want to destroy
      */
-    private void destroyGame(int idGame){
+    private void destroyGame(int idGame) {
         System.out.println("Game " + idGame +" distrutto");
         gamesControllers.get(idGame).getGame().getObservable().notifyGameClosed();
         gamesControllers.remove(idGame);
+        Path fileToDeletePath = Paths.get("src/main/resources/gameControllerText" + idGame + ".bin");
+        try {
+            Files.delete(fileToDeletePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         //TODO RIMUOVERE ANCHE IL FILE NEL DISCO RELATIVO
     }
 }
