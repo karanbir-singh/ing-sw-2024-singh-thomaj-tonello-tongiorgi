@@ -320,7 +320,6 @@ public class MainController implements Serializable {
             FileInputStream fileInputStream = new FileInputStream("src/main/resources/gameControllerText" + id + ".bin");
             ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
             gameController = (GameController) inputStream.readObject();
-            //gamesControllers.remove(id);
             gamesControllers.put(id,gameController);
             gamesControllers.get(id).launchExecutor();
             inputStream.close();
@@ -348,6 +347,7 @@ public class MainController implements Serializable {
                     //wait here so that everything is reloading, because not necessarly the virtualviews are already there
                 }
                 this.createSingleGamePingThread(gamesControllers.get(id).getGame().getObservable().getClients(),id);
+
             }
         }).start();
     }
@@ -392,12 +392,18 @@ public class MainController implements Serializable {
         System.out.println("Game " + idGame +" distrutto");
         gamesControllers.get(idGame).getGame().getObservable().notifyGameClosed();
         gamesControllers.remove(idGame);
+        try {
+            copyToDisk();
+        } catch (IOException e) {
+            System.out.println("COLPA DEL COPY TO DISK in DESTROY GAME");
+        }
+
+
         Path fileToDeletePath = Paths.get("src/main/resources/gameControllerText" + idGame + ".bin");
         try {
             Files.delete(fileToDeletePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //TODO RIMUOVERE ANCHE IL FILE NEL DISCO RELATIVO
     }
 }
