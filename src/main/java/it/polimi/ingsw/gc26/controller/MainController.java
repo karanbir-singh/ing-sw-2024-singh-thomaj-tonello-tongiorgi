@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.main_request.MainRequest;
+import javafx.util.Pair;
 
 import java.io.*;
 import java.rmi.RemoteException;
@@ -46,12 +47,11 @@ public class MainController implements Serializable {
      */
     private int maxNumWaitingClients;
 
+    /**
+     * This attribute represents the "id" for every gameController
+     */
     private int numberOfTotalGames;
 
-
-    //here we put an arrayList of virtualViewIP
-    //private ArrayList<String> allClientsIP; //capire come gestire le VirtualView, in quanto
-                                            //va gestito anche l observable
 
     /**
      * Initializes waiting players' list and games controllers' list
@@ -66,10 +66,12 @@ public class MainController implements Serializable {
         invalidNickname = false;
         this.launchExecutor();
         numberOfTotalGames = 0;
-        //allClients = new ArrayList<>();
     }
 
-
+    /**
+     * copy everything on the disk
+     * @throws IOException
+     */
     private void copyToDisk() throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream("src/main/mainController.bin");
         ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
@@ -83,6 +85,7 @@ public class MainController implements Serializable {
     public void launchExecutor() {
         this.mainRequests = new PriorityQueue<>((a, b) -> a.getPriority() > b.getPriority() ? -1 : 1);
         this.waitingClients = new ArrayList<>();
+        //le due righe di prima servono solo perchè quando il server da down va in up esse diventano null
         new Thread(() -> {
             while (true) {
                 synchronized (mainRequests) {
@@ -246,15 +249,16 @@ public class MainController implements Serializable {
             // Check number of clients in waiting list
             if (waitingClients.size() >= maxNumWaitingClients) {
                 // Then, create a new game controller
+                this.numberOfTotalGames = this.numberOfTotalGames + 1;
                 try {
-                    numberOfTotalGames = numberOfTotalGames + 1;
                     gameController = new GameController(new Game(waitingPlayers, waitingClients),"src/main/resources/gameControllerText" +
                                                                                              numberOfTotalGames + ".bin");
-
                 } catch (IOException e) {
                     System.out.println("COLPA DELLA CREAZIONE GAME CONTROLLER");
                     e.printStackTrace();
                 }
+                this.createSingleGamePingThread(gameController.getGame().getObservable().getClients(), this.numberOfTotalGames);
+
                 gamesControllers.put(numberOfTotalGames,gameController);
 
                 // Update of the view
@@ -293,7 +297,7 @@ public class MainController implements Serializable {
     }
 
     /**
-     * @return Returns the last created game controller
+     * @return Returns the right GameController base on the id
      */
     public GameController getGameController(int id) {
         if (!gamesControllers.isEmpty()){
@@ -302,6 +306,11 @@ public class MainController implements Serializable {
         return null;
     }
 
+    /**
+     * reconstruct every GameController from the disk
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public void recreateGames() throws IOException, ClassNotFoundException {
         for(Integer id : gamesControllers.keySet()){
             GameController gameController = new GameController(null,null);
@@ -314,16 +323,65 @@ public class MainController implements Serializable {
             inputStream.close();
             fileInputStream.close();
         }
-        //System.out.println(gamesControllers.get(1).getGame().getPlayers().getFirst().getID() + " " + gamesControllers.get(1).getGame().getPlayers().getFirst().getNickname());
-        //System.out.println(gamesControllers.get(1).getGame().getPlayers().getLast().getID() + " " + gamesControllers.get(1).getGame().getPlayers().getLast().getNickname());
-
-        //System.out.println(gamesControllers.get(2).getGame().getPlayers().getFirst().getID() + " " + gamesControllers.get(2).getGame().getPlayers().getFirst().getNickname());
-        //System.out.println(gamesControllers.get(2).getGame().getPlayers().getLast().getID() + " " + gamesControllers.get(2).getGame().getPlayers().getLast().getNickname());
-
+        createGeneratorPingThread(); //CREO QUA TUTTI I THREAD IN MODO SMART
         System.out.println("GAME CREATI");
     }
 
-
+    /**
+     * usuful only for ping from the client to the server
+     */
     public void amAlive() {
+        //TODO MAYBE FOR SOCKET IS BETTER IF THIS RETURN A STRING
+    }
+
+
+    /**
+     * thread useful after a server goes up from a crash, infact it is called in recreateGame()
+     */
+    private void createGeneratorPingThread(){ //viene chiamato solo quando il server da down va in up
+        new Thread(() -> {
+            for(Integer id : gamesControllers.keySet()){
+                while(gamesControllers.get(id).getGame().getNumberOfPlayers() != gamesControllers.get(id).getGame().getObservable().getClients().size()){
+                    //wait here so that everything is reloading, because not necessarly the virtualviews are already there
+                }
+                this.createSingleGamePingThread(gamesControllers.get(id).getGame().getObservable().getClients(),id);
+            }
+        }).start();
+    }
+
+    /**
+     * useful to verify if the client is online or not
+     * @param clients Array of VirtualView and id of that particulare Game
+     * @param idGame id of the game
+     */
+    private void createSingleGamePingThread(ArrayList<Pair<VirtualView, String>> clients,int idGame){ //viene chiamato anche quando viene creato un nuovo game
+        new Thread(() -> {
+            boolean threadAlive = true;
+            while(threadAlive){
+                for(Pair client : clients){
+                    try{
+                        ((VirtualView) client.getKey()).isClientAlive();
+                    }catch(RemoteException e){
+                        System.out.println("Disconnected client" + client.getValue());
+                        //TODO notificare gli altri client dello stesso game che un altro si è disconesso
+                        threadAlive = false;
+                        destroyGame(idGame);
+                        break;
+
+                    }
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     *
+     * @param idGame id of the GameController that you want to destroy
+     */
+    private void destroyGame(int idGame){
+        System.out.println("Game potenzialmente distrutto"); //TODO DA COMPLETARE
+        gamesControllers.remove(idGame);
+        //TODO RIMUOVERE ANCHE IL FILE NEL DISCO RELATIVO
     }
 }

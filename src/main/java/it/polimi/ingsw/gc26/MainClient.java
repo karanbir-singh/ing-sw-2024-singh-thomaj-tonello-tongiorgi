@@ -117,6 +117,7 @@ public class MainClient {
         MainClient mainClient = new MainClient();
         mainClient.setVirtualMainController((VirtualMainController) registry.lookup(remoteObjectName));
         mainClient.setVirtualView(new VirtualRMIView(mainClient.viewController));
+
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
             mainClient.runConnectionTUI();
@@ -125,7 +126,7 @@ public class MainClient {
         } else if (userInterface == UserInterface.gui) {
             //new VirtualRMIView(virtualMainController).runGUI();
         }
-        mainClient.RMIPingServer();
+
     }
 
     /**
@@ -272,18 +273,7 @@ public class MainClient {
                     try{
                         virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), viewController.getClientID());
                     }catch (RemoteException e){
-                        /*System.out.println("RETE CADUTA");
-
-                        Registry registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
-                        try {
-                            virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
-                            virtualGameController = virtualMainController.getVirtualGameController();
-                        } catch (RemoteException ex) {
-                            System.out.println("RETE ANCORA GIU");
-                        } catch(NotBoundException ep){
-                            ep.printStackTrace();
-                        }*/
-
+                        //TODO DA METTERE IN TUTTI I METODI IL CATCH
                     }
                     break;
                 case 2:
