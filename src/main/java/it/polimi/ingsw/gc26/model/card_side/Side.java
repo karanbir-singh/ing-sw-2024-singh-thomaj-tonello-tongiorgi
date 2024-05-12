@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Optional;
 /**
  * This abstract class represents a Side, two Sides form a Card
  */
-abstract public class Side {
+abstract public class Side implements Serializable {
     /**
      * This attribute represents the points given by this side
      */

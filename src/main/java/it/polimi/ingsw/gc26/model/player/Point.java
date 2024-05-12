@@ -2,12 +2,13 @@ package it.polimi.ingsw.gc26.model.player;
 
 import it.polimi.ingsw.gc26.model.card_side.Side;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * This class represents a point of the PersonalBoard
  */
-public class Point {
+public class Point implements Serializable {
     /**
      * These attributes represent the coordinates x and y of the Cartesian Plane
      */

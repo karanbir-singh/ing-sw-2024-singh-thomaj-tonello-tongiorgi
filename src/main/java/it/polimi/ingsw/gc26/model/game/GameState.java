@@ -1,9 +1,11 @@
 package it.polimi.ingsw.gc26.model.game;
 
+import java.io.Serializable;
+
 /**
  * This is an enumeration of the possible game's states
  */
-public enum GameState {
+public enum GameState implements Serializable {
     COMMON_TABLE_PREPARATION,
     STARTER_CARDS_DISTRIBUTION,
     WAITING_STARTER_CARD_PLACEMENT,

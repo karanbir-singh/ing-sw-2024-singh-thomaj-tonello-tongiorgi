@@ -88,15 +88,15 @@ public class MainServer {
         }
 
         // Start Server Socket
-        try {
-            // Check if the server use a specific port passed on execution start
-            if (args.length == 1) {
-                startSocketServer(Integer.parseInt(args[0]), mainController);
-            } else {
-                startSocketServer(mainController);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            // Check if the server use a specific port passed on execution start
+//            if (args.length == 1) {
+//                startSocketServer(Integer.parseInt(args[0]), mainController);
+//            } else {
+//                startSocketServer(mainController);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }

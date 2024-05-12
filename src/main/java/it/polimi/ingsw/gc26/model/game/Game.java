@@ -8,6 +8,7 @@ import it.polimi.ingsw.gc26.parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
  * This class represents an entire Game play. It has a minimum number of player of two and a maximum number of player of four.
  * To play more than one game, more instances of game have to be created
  */
-public class Game {
+public class Game implements Serializable {
     /**
      * This attribute represents the maximum number of players per game
      */
@@ -167,7 +168,7 @@ public class Game {
         this.currentPlayer = getNextPlayer();
 
         // Change player's state
-        this.currentPlayer.setState(PlayerState.PLAYING);
+        this.currentPlayer.setState(PlayerState.PLAYING, currentPlayer.getID());
 
         // Check if the next current player is the first player
         if (this.currentPlayer.isFirstPlayer()) {
@@ -175,11 +176,11 @@ public class Game {
             this.increaseRound();
         }
 
-        try {
+//        try {
             ModelObservable.getInstance().notifyMessage("It's you turn now",this.currentPlayer.getID());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+//        } catch (RemoteException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     /**
@@ -268,7 +269,8 @@ public class Game {
         }
 
         // TODO Update view
-        ModelObservable.getInstance().notifyUpdateGameState(newGameState);
+//        ModelObservable.getInstance().notifyUpdateGameState(newGameState);
+        ModelObservable.getInstance().notifyMessage(message);
     }
 
     /**

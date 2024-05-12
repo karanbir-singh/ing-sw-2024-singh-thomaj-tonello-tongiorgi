@@ -9,9 +9,10 @@ import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class PersonalBoard {
+public class PersonalBoard implements Serializable {
     private int xMin, xMax, yMin, yMax;
     private int score;
     private final ArrayList<Point> occupiedPositions;
@@ -65,7 +66,8 @@ public class PersonalBoard {
     public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {
             this.secretMission = secretMission.get();
-            ModelObservable.getInstance().notifyUpdateSelectedMission(clientID);
+//            ModelObservable.getInstance().notifyUpdateSelectedMission(clientID);
+            ModelObservable.getInstance().notifyUpdatePersonalBoard(this, "Secret mission set", clientID);
             return this.secretMission;
         }
         // TODO notify view
@@ -121,12 +123,15 @@ public class PersonalBoard {
         //check if the position is valid
         if (!checkIfPlayablePosition(selectedX, selectedY)) {
             //update view
-            ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 0);
+//            ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 0);
+            ModelObservable.getInstance().notifyError("Playable position not present!", clientID);
             return;
         }
         this.selectedX = selectedX;
         this.selectedY = selectedY;
-        ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 1);
+//        ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 1);
+        ModelObservable.getInstance().notifyUpdatePersonalBoard(this, "Position selected!", clientID);
+
     }
 
     /**
@@ -480,7 +485,8 @@ public class PersonalBoard {
         // Use card ability to add points if it has it
         this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
 
-        ModelObservable.getInstance().notifyUpdatePlayedCardFromHand(clientID,1);
+        //ModelObservable.getInstance().notifyUpdatePlayedCardFromHand(clientID,1);
+        ModelObservable.getInstance().notifyUpdatePersonalBoard(this, "Card placed!", clientID);
         return true;
     }
 

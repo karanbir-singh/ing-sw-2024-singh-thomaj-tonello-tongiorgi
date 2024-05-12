@@ -25,7 +25,7 @@ public class VirtualRMIMainController implements VirtualMainController {
         if (clientState == ClientState.CONNECTION)
             this.mainController.addRequest(new ConnectionRequest(client, nickname, 0));
         else if (clientState.equals(ClientState.INVALID_NICKNAME)) {
-            client.updateState(ClientState.CONNECTION);
+            client.updateClientState(ClientState.CONNECTION);
             this.mainController.addRequest(new ConnectionRequest(client, nickname, 2));
         }
     }

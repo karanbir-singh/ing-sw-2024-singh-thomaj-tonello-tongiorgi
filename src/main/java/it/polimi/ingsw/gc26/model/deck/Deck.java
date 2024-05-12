@@ -2,12 +2,13 @@ package it.polimi.ingsw.gc26.model.deck;
 
 import it.polimi.ingsw.gc26.model.card.Card;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * This class represents a deck of cards
  */
-public class Deck {
+public class Deck implements Serializable {
     /**
      * This attribute represents the deck implemented as an array list
      */

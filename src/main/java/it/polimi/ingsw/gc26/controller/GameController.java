@@ -321,7 +321,7 @@ public class GameController {
 
             if (secretMission != null) {
                 // Remove the card from the secondary hand
-                player.getSecretMissionHand().removeCard(secretMission);
+                player.getSecretMissionHand().removeCard(secretMission, player.getID());
                 if (isDebug) {
                     System.out.println(STR."\{player.getNickname()} set secret mission");
                 }
@@ -361,7 +361,7 @@ public class GameController {
             }
 
             // Set the player as the first
-            player.setFirstPlayer();
+            player.setFirstPlayer(player.getID());
             game.setCurrentPlayer(player);
 
             // Position the first player as the first element of the players' list
@@ -469,7 +469,7 @@ public class GameController {
                     player.getPersonalBoard().playSide(player.getHand().getSelectedSide().get(), playerID);
 
                     // Remove the starter card from the hand
-                    player.getHand().removeCard(player.getHand().getSelectedCard().get());
+                    player.getHand().removeCard(player.getHand().getSelectedCard().get(), player.getID());
 
                     if (isDebug) {
                         System.out.println(STR."\{player.getNickname()} played card from hand");
@@ -506,10 +506,10 @@ public class GameController {
                         }
 
                         // Remove card from the hand
-                        hand.removeCard(hand.getSelectedCard().get());
+                        hand.removeCard(hand.getSelectedCard().get(), player.getID());
 
                         // Change player state
-                        player.setState(PlayerState.CARD_PLAYED);
+                        player.setState(PlayerState.CARD_PLAYED, player.getID());
                     } else {
                         // TODO gestire cosa fare quando la carta non è selezionata
                     }
@@ -576,7 +576,7 @@ public class GameController {
                     }
 
                     // Change player's state
-                    player.setState(PlayerState.CARD_DRAWN);
+                    player.setState(PlayerState.CARD_DRAWN, player.getID());
 
                     // Check if player's score is greater or equal then 20 points OR decks are both empty
                     if (player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {

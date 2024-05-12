@@ -7,12 +7,13 @@ import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * This class represents a mission card with an L pattern.
  */
-public class MissionLPattern extends MissionCardFront {
+public class MissionLPattern extends MissionCardFront implements Serializable {
     /**
      * Creates a new instance of MissionLPattern
      * @param type represent which L combination is needed to this card give points

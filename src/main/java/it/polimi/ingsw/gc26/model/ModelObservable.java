@@ -8,6 +8,7 @@ import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import it.polimi.ingsw.gc26.view_model.*;
 import javafx.util.Pair;
 
 import java.rmi.RemoteException;
@@ -37,52 +38,156 @@ public class ModelObservable {
         this.clients.remove(view);
     }
 
-    public void notifyChat(Message msg) {
+    public void notifyUpdateCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message) {
         for (Pair client : this.clients) {
-            if (!msg.getSender().equals(client.getValue())) {
-                try {
-                    ((VirtualView) client.getKey()).showChat(msg.toJson());
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
+            try {
+                ((VirtualView) client.getKey()).updateCommonTable(simplifiedCommonTable, message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
 
         }
     }
 
-    public void notifyPersonalBoard(Player player, Player personalBoardOwner, PersonalBoard personalBoard) {
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(player.getID())) {
-                try {
-                    ((VirtualView) client.getKey()).showPersonalBoard(player.getID(), personalBoardOwner.getNickname(), personalBoard.toString());
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifySelectedCardFromHand(String clientID) throws RemoteException {
+    public void notifyUpdateHand(SimplifiedHand simplifiedHand, String message, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView) client.getKey()).updateSelectedCardFromHand(clientID);
+                    ((VirtualView) client.getKey()).updateHand(simplifiedHand, message);
                 } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
         }
     }
 
-    public void notifyMessage(String msg, String clientID) throws RemoteException {
+    public void notifyUpdateSecretHand(SimplifiedHand simplifiedSecretHand, String message, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView) client.getKey()).showMessage(msg, clientID);
+                    ((VirtualView) client.getKey()).updateSecretHand(simplifiedSecretHand, message);
                 } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public void notifyUpdatePersonalBoard(PersonalBoard personalBoard, String message, String clientID) {
+        for (Pair client : this.clients) {
+            if (client.getValue().equals(clientID)) {
+                try {
+                    ((VirtualView) client.getKey()).updatePersonalBoard(personalBoard, message);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void notifyUpdateOtherPersonalBoard(PersonalBoard otherPersonalBoard, String message, String clientID) {
+        for (Pair client : this.clients) {
+            if (client.getValue().equals(clientID)) {
+                try {
+                    ((VirtualView) client.getKey()).updateOtherPersonalBoard(otherPersonalBoard, message);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void notifyUpdatePlayer(SimplifiedPlayer simplifiedPlayer, String message, String clientID) {
+        for (Pair client : this.clients) {
+            if (client.getValue().equals(clientID)) {
+                try {
+                    ((VirtualView) client.getKey()).updatePlayer(simplifiedPlayer, message);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+//    public void notifyUpdateChat(SimplifiedChat simplifiedChat, String message) {
+//        for (Pair client : this.clients) {
+//            try {
+//                ((VirtualView) client.getKey()).updatePlayer(simplifiedPlayer, message);
+//            } catch (RemoteException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
+//    public void notifyUpdateOptionsMenu(OptionsMenu optionsMenu, String message) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(clientID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updatePlayer(simplifiedPlayer, message);
+//                } catch (RemoteException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+
+    //    public void notifyChat(Message msg) {
+//        for (Pair client : this.clients) {
+//            if (!msg.getSender().equals(client.getValue())) {
+//                try {
+//                    ((VirtualView) client.getKey()).showChat(msg.toJson());
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//
+//        }
+//    }
+//
+//    public void notifyPersonalBoard(Player player, Player personalBoardOwner, PersonalBoard personalBoard) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(player.getID())) {
+//                try {
+//                    ((VirtualView) client.getKey()).showPersonalBoard(player.getID(), personalBoardOwner.getNickname(), personalBoard.toString());
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifySelectedCardFromHand(String clientID) throws RemoteException {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(clientID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updateSelectedCardFromHand(clientID);
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+    public void notifyMessage(String msg, String clientID) {
+        for (Pair client : this.clients) {
+            if (client.getValue().equals(clientID)) {
+                try {
+                    ((VirtualView) client.getKey()).showMessage(msg);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void notifyMessage(String msg) {
+        for (Pair client : this.clients) {
+            try {
+                ((VirtualView) client.getKey()).showMessage(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -90,163 +195,171 @@ public class ModelObservable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView) client.getKey()).showError(errorMsg, clientID);
+                    ((VirtualView) client.getKey()).showError(errorMsg);
                 } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
         }
     }
 
-    public void notifyUpdateState(ClientState clientState, String clientID) { //TODO change clientState to string???
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(clientID)) {
-                try {
-                    ((VirtualView) client.getKey()).updateState(clientState);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifyUpdateGameState(GameState gameState) {
+    public void notifyError(String errorMsg) {
         for (Pair client : this.clients) {
             try {
-                ((VirtualView) client.getKey()).updateGameState(gameState.toString());
+                ((VirtualView) client.getKey()).showError(errorMsg);
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
     }
-
-    public void notifyUpdateChosenPawn(Pawn pawn, String clientID) {
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(clientID)) {
-                try {
-                    ((VirtualView) client.getKey()).updateChosenPawn(pawn.toString(), clientID);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifyUpdateSelectedMission(String clientID) {
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(clientID)) {
-                try {
-                    ((VirtualView) client.getKey()).updateSelectedMission(clientID);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifyUpdateSelectedCardFromHand(String clientID) {
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(clientID)) {
-                try {
-                    ((VirtualView) client.getKey()).updateSelectedCardFromHand(clientID);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifyUpdateSelectedSide(int cardIndex, String clientID) {
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(clientID)) {
-                try {
-                    ((VirtualView) client.getKey()).updateSelectedSide(String.valueOf(cardIndex), clientID);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifyUpdateSelectedPositionOnBoard(int selectedX, int selectedY, String playerID, int success) {
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(playerID)) {
-                try {
-                    ((VirtualView) client.getKey()).updateSelectedPositionOnBoard(String.valueOf(selectedX), String.valueOf(selectedY), playerID, String.valueOf(success));
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifyUpdatePlayedCardFromHand(String clientID, int success) {
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(clientID)) {
-                try {
-                    ((VirtualView) client.getKey()).updatePlayedCardFromHand(clientID, String.valueOf(success));
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifyUpdatePoints(String clientID, int points) {
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(clientID)) {
-                try {
-                    ((VirtualView) client.getKey()).updatePoints(clientID, String.valueOf(points));
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifyUpdateSelectedCardFromCommonTable(String clientID, int success) {
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(clientID)) {
-                try {
-                    ((VirtualView) client.getKey()).updateSelectedCardFromCommonTable(clientID, String.valueOf(success));
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifyShowCard(String playerID, String cardSerialization) {
-        for (Pair client : this.clients) {
-            if (client.getValue().equals(playerID)) {
-                try {
-                    ((VirtualView) client.getKey()).showCard(playerID, cardSerialization);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    public void notifyShowChat(String message) {
-        for (Pair client : this.clients) {
-            try {
-                ((VirtualView) client.getKey()).showChat(message);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    public void notifyUpdateFirstPlayer(String nickname) {
-        for (Pair client : this.clients) {
-            try {
-                ((VirtualView) client.getKey()).updateFirstPlayer(nickname);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-
+//
+//    public void notifyUpdateState(ClientState clientState, String clientID) { //TODO change clientState to string???
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(clientID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updateState(clientState);
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifyUpdateGameState(GameState gameState) {
+//        for (Pair client : this.clients) {
+//            try {
+//                ((VirtualView) client.getKey()).updateGameState(gameState.toString());
+//            } catch (RemoteException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+//
+//    public void notifyUpdateChosenPawn(Pawn pawn, String clientID) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(clientID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updateChosenPawn(pawn.toString(), clientID);
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifyUpdateSelectedMission(String clientID) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(clientID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updateSelectedMission(clientID);
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifyUpdateSelectedCardFromHand(String clientID) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(clientID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updateSelectedCardFromHand(clientID);
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifyUpdateSelectedSide(int cardIndex, String clientID) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(clientID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updateSelectedSide(String.valueOf(cardIndex), clientID);
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifyUpdateSelectedPositionOnBoard(int selectedX, int selectedY, String playerID, int success) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(playerID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updateSelectedPositionOnBoard(String.valueOf(selectedX), String.valueOf(selectedY), playerID, String.valueOf(success));
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifyUpdatePlayedCardFromHand(String clientID, int success) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(clientID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updatePlayedCardFromHand(clientID, String.valueOf(success));
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifyUpdatePoints(String clientID, int points) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(clientID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updatePoints(clientID, String.valueOf(points));
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifyUpdateSelectedCardFromCommonTable(String clientID, int success) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(clientID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).updateSelectedCardFromCommonTable(clientID, String.valueOf(success));
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifyShowCard(String playerID, String cardSerialization) {
+//        for (Pair client : this.clients) {
+//            if (client.getValue().equals(playerID)) {
+//                try {
+//                    ((VirtualView) client.getKey()).showCard(playerID, cardSerialization);
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }
+//    }
+//
+//    public void notifyShowChat(String message) {
+//        for (Pair client : this.clients) {
+//            try {
+//                ((VirtualView) client.getKey()).showChat(message);
+//            } catch (RemoteException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+//
+//    public void notifyUpdateFirstPlayer(String nickname) {
+//        for (Pair client : this.clients) {
+//            try {
+//                ((VirtualView) client.getKey()).updateFirstPlayer(nickname);
+//            } catch (RemoteException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
 }

@@ -4,13 +4,15 @@ import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.GoldCardFront;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.player.Point;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * This class represents a card with the ability to give extra points for each corner that it covers once placed.
  */
-public class CornerCounter extends GoldCardFront {
+public class CornerCounter extends GoldCardFront implements Serializable {
     /**
      * Creates a new instance of a CornerCounter
      * @param sideSymbol Symbol that represents the card's color.

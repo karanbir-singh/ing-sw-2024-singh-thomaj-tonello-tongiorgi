@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.model.card_side;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.Optional;
 /**
  * This class represent a card's back side.
  */
-public class CardBack extends Side {
+public class CardBack extends Side implements Serializable {
 
     /**
      * Initializes a card's back empty for Mission Cards

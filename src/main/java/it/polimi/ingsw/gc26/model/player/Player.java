@@ -5,13 +5,15 @@ import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
+import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * This class represents the player in the game
  */
-public class Player {
+public class Player implements Serializable {
     /**
      * This attributes represents the player with a unique id
      */
@@ -112,7 +114,11 @@ public class Player {
         } else {
             availableColors.remove(pawn);
             this.pawnColor = pawn;
-            ModelObservable.getInstance().notifyUpdateChosenPawn(pawn, clientID);
+//            ModelObservable.getInstance().notifyUpdateChosenPawn(pawn, clientID);
+            ModelObservable.getInstance().notifyUpdatePlayer(
+                    new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
+                    "Colore preso!",
+                    clientID);
         }
     }
 
@@ -128,8 +134,13 @@ public class Player {
     /**
      * Sets boolean that indicates the player is the first one to true
      */
-    public void setFirstPlayer() {
+    public void setFirstPlayer(String clientID) {
         this.amIFirstPlayer = true;
+
+        ModelObservable.getInstance().notifyUpdatePlayer(
+                new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
+                "You are the first player!",
+                clientID);
     }
 
     /**
@@ -211,11 +222,16 @@ public class Player {
      *
      * @param state new state
      */
-    public void setState(PlayerState state) {
+    public void setState(PlayerState state, String clientID) {
         this.state = state;
+
+        ModelObservable.getInstance().notifyUpdatePlayer(
+                new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
+                "Stato cambiato",
+                clientID);
     }
 
-    public String printableScore(){
+    public String printableScore() {
         int score = this.personalBoard.getScore();
         int i;
         StringBuilder s = new StringBuilder();
@@ -224,10 +240,10 @@ public class Player {
 
         s.append(pawnColor.getFontColor());
 
-        for (i=0; i<score; i++){
+        for (i = 0; i < score; i++) {
             s.append(fill);
         }
-        while (i<20){
+        while (i < 20) {
             s.append(background);
             i++;
         }

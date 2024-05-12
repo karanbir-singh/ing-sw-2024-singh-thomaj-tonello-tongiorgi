@@ -7,13 +7,15 @@ import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
+import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * This class represents a table containing decks every player can interact with
  */
-public class CommonTable {
+public class CommonTable implements Serializable {
     /**
      * This attribute represents the resource cards deck
      */
@@ -102,6 +104,17 @@ public class CommonTable {
      */
     public void addCard(Card card, ArrayList<Card> list, int index) {
         list.add(index, card);
+
+        ModelObservable.getInstance().notifyUpdateCommonTable(
+                new SimplifiedCommonTable(
+                        resourceDeck.getTopCard(),
+                        goldDeck.getTopCard(),
+                        commonMissions,
+                        resourceCards,
+                        goldCards),
+                "Card added from common table"
+        );
+
     }
 
     /**
@@ -157,6 +170,17 @@ public class CommonTable {
             }
             selectedX = -1;
             selectedY = -1;
+
+            ModelObservable.getInstance().notifyUpdateCommonTable(
+                    new SimplifiedCommonTable(
+                            resourceDeck.getTopCard(),
+                            goldDeck.getTopCard(),
+                            commonMissions,
+                            resourceCards,
+                            goldCards),
+                    "Card removed from common table"
+            );
+
             return toRemove;
         }else{
             // TODO notify view

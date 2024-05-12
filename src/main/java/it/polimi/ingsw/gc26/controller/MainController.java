@@ -113,7 +113,7 @@ public class MainController {
             gameOnCreation = true;
             this.mainRequests.notifyAll();
             try {
-                client.updateState(ClientState.CREATOR);
+                client.updateClientState(ClientState.CREATOR);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -157,7 +157,7 @@ public class MainController {
 
             try {
                 client.setClientID(clientID);
-                client.updateState(ClientState.WAITING);
+                client.updateClientState(ClientState.WAITING);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -166,7 +166,7 @@ public class MainController {
             this.gameOnCreation = true;
             this.mainRequests.notifyAll();
             try {
-                client.updateState(ClientState.INVALID_NUMBER_OF_PLAYER);
+                client.updateClientState(ClientState.INVALID_NUMBER_OF_PLAYER);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -186,7 +186,7 @@ public class MainController {
             try {
                 invalidNickname = true;
                 this.mainRequests.notifyAll();
-                client.updateState(ClientState.INVALID_NICKNAME);
+                client.updateClientState(ClientState.INVALID_NICKNAME);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -216,7 +216,7 @@ public class MainController {
                 // Update of the view
                 for (VirtualView view : waitingClients) {
                     try {
-                        view.updateState(ClientState.BEGIN);
+                        view.updateClientState(ClientState.BEGIN);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -231,7 +231,7 @@ public class MainController {
             } else {
                 // Otherwise client state is on WAITING_GAME
                 try {
-                    client.updateState(ClientState.WAITING);
+                    client.updateClientState(ClientState.WAITING);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
