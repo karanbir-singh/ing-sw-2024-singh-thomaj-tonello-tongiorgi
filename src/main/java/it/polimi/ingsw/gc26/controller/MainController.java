@@ -380,7 +380,8 @@ public class MainController implements Serializable {
      * @param idGame id of the GameController that you want to destroy
      */
     private void destroyGame(int idGame){
-        System.out.println("Game potenzialmente distrutto"); //TODO DA COMPLETARE
+        System.out.println("Game " + idGame +" distrutto"); //TODO DA COMPLETARE
+        gamesControllers.get(idGame).getGame().getObservable().notifyGameClosed();
         gamesControllers.remove(idGame);
         //TODO RIMUOVERE ANCHE IL FILE NEL DISCO RELATIVO
     }

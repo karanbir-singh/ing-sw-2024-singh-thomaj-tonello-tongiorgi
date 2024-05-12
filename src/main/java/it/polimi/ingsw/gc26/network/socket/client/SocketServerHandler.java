@@ -113,6 +113,11 @@ public class SocketServerHandler implements Runnable {
                     case "updateIDGame":
                         this.viewController.setGameID(value.get("idGame").asInt());
                         break;
+                    case "isClientAlive":
+                        break;
+                    case "killProcess":
+                        this.viewController.killProcess();
+                        break;
                     case null, default:
                         break;
                 }

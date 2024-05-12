@@ -6,6 +6,7 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.controller.GameController;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -44,7 +45,7 @@ public class SocketClientHandler implements Runnable {
      * @param inputFromClient buffered reader to read data from the client
      * @param outputToClient  print writer to write to the client
      */
-    public SocketClientHandler(MainController controller, BufferedReader inputFromClient, PrintWriter outputToClient) {
+    public SocketClientHandler(MainController controller, BufferedReader inputFromClient, BufferedWriter outputToClient) {
         this.mainController = controller;
         this.gameController = null;
         this.inputFromClient = inputFromClient;
@@ -129,7 +130,7 @@ public class SocketClientHandler implements Runnable {
                 // this.virtualClient.reportError("The game is being initialized! Please wait!");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Socket client disconnected!");
         }
     }
 }

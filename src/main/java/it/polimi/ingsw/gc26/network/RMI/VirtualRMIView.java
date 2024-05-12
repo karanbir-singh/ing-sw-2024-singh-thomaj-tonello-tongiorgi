@@ -220,4 +220,12 @@ public class VirtualRMIView implements VirtualView {
     public void isClientAlive(){
         //TODO FORSE INSERIRE QUALCOSA
     }
+
+    /**
+     * @throws RemoteException
+     */
+    @Override
+    public void killProcess() throws RemoteException {
+        this.viewController.killProcess();
+    }
 }

@@ -60,7 +60,7 @@ public class SocketServer {
             OutputStreamWriter socketTx = new OutputStreamWriter(clientSocket.getOutputStream());
 
             // Create client handler
-            SocketClientHandler handler = new SocketClientHandler(this.mainController, new BufferedReader(socketRx), new PrintWriter(socketTx));
+            SocketClientHandler handler = new SocketClientHandler(this.mainController, new BufferedReader(socketRx), new BufferedWriter(socketTx));
 
             // Add to clients list
             synchronized (this.clients) {

@@ -68,11 +68,23 @@ public class MainClient {
      */
     private final Object lock;
 
+    /**
+     * Flag used to kill all threads when server wants to kill the client
+     */
+    private volatile boolean areAllPlayersConnected;
+
+    /**
+     * Lock to synchronizes isserverUp flag
+     */
+    private Object lockPlayersConnected;
+
     int check = 1;
 
     public MainClient() {
         this.lock = new Object();
         this.viewController = new ViewController(this, null, null, ClientState.CONNECTION, lock);
+        this.areAllPlayersConnected = true;
+        this.lockPlayersConnected = new Object();
     }
 
     /**
@@ -82,6 +94,15 @@ public class MainClient {
      */
     public void setVirtualMainController(VirtualMainController virtualMainController) {
         this.virtualMainController = virtualMainController;
+    }
+
+    /**
+     * Set's the client's flag to true to kill all threads
+     */
+    public void killProcesses() {
+        synchronized (lockPlayersConnected) {
+            areAllPlayersConnected = false;
+        }
     }
 
     /**
@@ -118,6 +139,7 @@ public class MainClient {
         mainClient.setVirtualMainController((VirtualMainController) registry.lookup(remoteObjectName));
         mainClient.setVirtualView(new VirtualRMIView(mainClient.viewController));
 
+
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
             mainClient.runConnectionTUI();
@@ -126,7 +148,7 @@ public class MainClient {
         } else if (userInterface == UserInterface.gui) {
             //new VirtualRMIView(virtualMainController).runGUI();
         }
-
+        String a = "";
     }
 
     /**
@@ -265,7 +287,13 @@ public class MainClient {
 
         // Infinite loop
         while (true) {
+            synchronized (lockPlayersConnected) {
+                if (areAllPlayersConnected == false) {System.out.println("Game ended because another player disconnected itself!"); break;}
+            }
             Integer option = printOptions();
+            synchronized (lockPlayersConnected) {
+                if (areAllPlayersConnected == false) {System.out.println("Game ended because another player disconnected itself!"); break;}
+            }
             switch (option) {
                 case 1:
                     System.out.println("Select the card position: (0/1/2)");
@@ -346,7 +374,9 @@ public class MainClient {
 
 
         Scanner scan = new Scanner(System.in);
-        return scan.nextInt();
+        int response =  scan.nextInt();
+        scan.close();
+        return response;
     }
 
     public static void main(String args[]) {
@@ -383,11 +413,15 @@ public class MainClient {
         } catch (NotBoundException e) {
             e.printStackTrace();
         }
+
     }
 
 
     private void RMIPingServer(){
         while(true){
+            synchronized (lockPlayersConnected) {
+                if (!areAllPlayersConnectedS) {break;}
+            }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -428,6 +462,9 @@ public class MainClient {
 
     private void SocketPingServer(){
         while(true){
+            synchronized (lockPlayersConnected) {
+                if (!areAllPlayersConnected) {break;}
+            }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

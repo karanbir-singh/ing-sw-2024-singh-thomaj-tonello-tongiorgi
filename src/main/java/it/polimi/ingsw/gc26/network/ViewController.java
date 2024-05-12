@@ -194,4 +194,8 @@ public class ViewController {
     public int getGameID(){
         return this.gameID;
     }
+
+    public void killProcess() {
+        this.mainClient.killProcesses();
+    }
 }
