@@ -17,8 +17,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class MainClient {
@@ -70,11 +70,12 @@ public class MainClient {
      */
     private final Object lock;
 
-    int check = 1;
+    boolean isServerUp;
 
     public MainClient() {
         this.lock = new Object();
         this.viewController = new ViewController(this, null, null, ClientState.CONNECTION, lock);
+        this.isServerUp = true;
     }
 
     /**
@@ -331,11 +332,15 @@ public class MainClient {
                     virtualGameController.printPersonalBoard(playerNickname, viewController.getClientID());
                     break;
                 case 11:
-                    System.out.println("Insert the receiver's nickname: ");
+                    System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
                     String receiverNickname = scan.nextLine();
-                    System.out.println("Insert message: ");
-                    String message = scan.nextLine();
-                    virtualGameController.addMessage(message, receiverNickname, viewController.getClientID(), LocalTime.now().toString());
+                    String message;
+                    do {
+                        System.out.println("Insert message: ");
+                        message = scan.nextLine();
+                    } while(message == "");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                    virtualGameController.addMessage(message, receiverNickname, viewController.getClientID(), LocalTime.now().toString().formatted(formatter));
                     break;
                 case 12:
                     System.exit(0);
@@ -392,7 +397,7 @@ public class MainClient {
 
         UserInterface userInterface = null;
         do {
-            System.err.println("What type of user interface do you want to use? (tui/gui)");
+            System.out.println("What type of user interface do you want to use? (tui/gui)");
             try {
                 userInterface = UserInterface.valueOf(scanner.nextLine());
             } catch (IllegalArgumentException e) {
@@ -428,23 +433,22 @@ public class MainClient {
                 virtualMainController.amAlive(); //va fatto in modo asincrono
             } catch (RemoteException e) {
                 System.out.println("SERVER DOWN");
-                check = 1;
-                while(check == 1){
+                isServerUp = false;
+                while(!isServerUp){
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);
                     }
-                    check = 0;
                     Registry registry = null;
                     try {
                         registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
                         virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
                         virtualGameController = virtualMainController.getVirtualGameController(viewController.getGameID());
                         virtualGameController.reAddView(virtualView,viewController.getClientID());
+                        isServerUp = true;
                     } catch (RemoteException ex) {
                         System.out.println("SERVER AGAIN DOWN");
-                        check = 1;
                     } catch(NotBoundException ep) {
                         ep.printStackTrace();
                     }
@@ -467,14 +471,13 @@ public class MainClient {
             try {
                 virtualMainController.amAlive(); //va fatto in modo asincrono
             } catch (IOException e) {
-                check = 1;
-                while(check == 1){
+                isServerUp = false;
+                while(!isServerUp ){
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);
                     }
-                    check = 0;
 
                     try {
                         Socket serverSocket = new Socket("127.0.0.1", DEFAULT_SOCKET_SERVER_PORT);
@@ -499,9 +502,9 @@ public class MainClient {
                         this.setVirtualGameController(new VirtualSocketGameController(socketOut));
                         new SocketServerHandler(this.viewController, socketIn, socketOut);
                         virtualGameController.reAddView(virtualView,viewController.getClientID());
+                        isServerUp = true;
                     } catch (IOException ex) {
                         System.out.println("SERVER AGAIN DOWN");
-                        check = 1;
                     }
                 }
                 System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");

@@ -358,10 +358,16 @@ public class MainController implements Serializable {
         new Thread(() -> {
             boolean threadAlive = true;
             while(threadAlive){
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 for(Pair client : clients){
-                    try{
+                    try {
                         ((VirtualView) client.getKey()).isClientAlive();
-                    }catch(RemoteException e){
+                    }
+                    catch(RemoteException e){
                         System.out.println("Disconnected client" + client.getValue());
                         //TODO notificare gli altri client dello stesso game che un altro si è disconesso
                         threadAlive = false;
@@ -380,7 +386,7 @@ public class MainController implements Serializable {
      * @param idGame id of the GameController that you want to destroy
      */
     private void destroyGame(int idGame){
-        System.out.println("Game " + idGame +" distrutto"); //TODO DA COMPLETARE
+        System.out.println("Game " + idGame +" distrutto");
         gamesControllers.get(idGame).getGame().getObservable().notifyGameClosed();
         gamesControllers.remove(idGame);
         //TODO RIMUOVERE ANCHE IL FILE NEL DISCO RELATIVO

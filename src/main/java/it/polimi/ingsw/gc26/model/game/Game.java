@@ -124,7 +124,11 @@ public class Game implements Serializable {
         if (playerNickname.equals("")) {
             return null;
         }
-        return players.stream().filter((Player p) -> p.getNickname().equals(playerNickname)).findAny().get();
+        try {
+            return players.stream().filter((Player p) -> p.getNickname().equals(playerNickname)).findAny().get();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**

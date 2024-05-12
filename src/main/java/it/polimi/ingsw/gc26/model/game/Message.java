@@ -58,9 +58,10 @@ public class Message implements Serializable {
         ObjectMapper JsonMapper = new ObjectMapper();
         JsonNode root = JsonMapper.readTree(json_text);
         this.text = root.get("text").asText();
-        this.receiver = new Player("0", root.get("receiver").asText());
-        this.sender = new Player("0", root.get("sender").asText());
+        this.receiver = new Player(null, root.get("receiver").asText());
+        this.sender = new Player(null, root.get("sender").asText());
         this.time = LocalTime.parse(root.get("time").asText());
+        //LocalTime.parse(msg.getTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")))
     }
 
     /**
