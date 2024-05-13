@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.model.utils;
 
 public enum SpecialCharacters {
+    CLEAR_TERMINAL("\033[H\033[2J"),
     AMPHORA("\uD83C\uDFFA"), //🏺
     BACKGROUND_BLANK_MEDIUM("  "),
     BACKGROUND_BLANK_WIDE("   "),

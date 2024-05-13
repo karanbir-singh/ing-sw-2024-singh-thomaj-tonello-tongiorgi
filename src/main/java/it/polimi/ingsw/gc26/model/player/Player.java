@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
@@ -238,12 +239,14 @@ public class Player implements Serializable {
         String background = "▒";
         String fill = "█";
 
-        s.append(pawnColor.getFontColor());
+        if(pawnColor != null){
+            s.append(pawnColor.getFontColor());
+        }
 
-        for (i = 0; i < score; i++) {
+        for (i=0; i<score; i++){
             s.append(fill);
         }
-        while (i < 20) {
+        while (i<29){
             s.append(background);
             i++;
         }
@@ -251,6 +254,37 @@ public class Player implements Serializable {
         s.append(TextStyle.STYLE_RESET.getStyleCode()).append(" ").append(score);
 
         return s.toString();
+    }
+
+    public String[][] printableHandAndMission() {
+        if(personalBoard.getSecretMission() == null){
+            return new String[0][0];
+        }
+        String[][] hand = this.hand.printableHand();
+        String[][] secretMission = this.personalBoard.getSecretMission().getFront().printableSide();
+        Printer printer = new Printer();
+
+        int xDim = hand[0].length + secretMission[0].length + 1;
+        int yDim = hand.length;
+        int xSeparator = hand[0].length;
+
+        String[][] handAndMission = new String[yDim][xDim];
+
+
+        for(int i=0; i<handAndMission.length; i++){
+            for(int j=0; j<handAndMission[0].length; j++){
+                handAndMission[i][j] = " ";
+            }
+        }
+
+        printer.addPrintable(hand, handAndMission, 0,0);
+        for(int i=0; i<yDim-1; i++){
+            handAndMission[i][xSeparator] = "||      ";
+        }
+        handAndMission[0][hand[0].length] = "        Your Secret Mission: ";
+        printer.addPrintable(secretMission, handAndMission, hand[0].length + 1, 1);
+
+        return handAndMission;
     }
 }
 

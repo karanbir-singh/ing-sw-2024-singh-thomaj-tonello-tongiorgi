@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.model.game;
 
+import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.player.Pawn;
@@ -318,27 +319,82 @@ public class Game implements Serializable {
         ModelObservable.getInstance().notifyError("YOU CANNOT DO THAT NOW",clientID);
     }
 
-    public void showCommonTable(){
-        String[][] ct = commonTable.printableCommonTable();
-        int maxLenght = 0;
-        StringBuilder spaces;
-
-        System.out.println("\t\t\tCOMMON TABLE:\n");
-        for (String[] row: ct) {
-            for (String col: row) {
-                System.out.print(col);
+    public String[][] printableGame(Player player) {
+        //COMMON TABLE: check if missions are already present
+        String[][] commonTablePrint;
+            if(getCommonTable().getCommonMissions().isEmpty()){
+                commonTablePrint = commonTable.printableCommonTable();
+            } else {
+                commonTablePrint = commonTable.printableCommonTableAndMissions();
             }
-            System.out.print("\n");
+        //SCORES
+        String[][] scores = printableScores();
+        //PERSONAL BOARD
+        String[][] personalBoardPrint = player.getPersonalBoard().printablePersonalBoard();
+        //HAND: check if secret mission is already present
+        String[][] handPrint;
+            if(player.getPersonalBoard().getSecretMission() == null){
+                handPrint = player.getHand().printableHand();
+            } else {
+                handPrint = player.printableHandAndMission();
+            }
+        //calculate dimensions
+        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + 4;
+        int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), handPrint[0].length);
+        //utils
+        Printer printer = new Printer();
+        int y=0;
+
+        //initialize empty matrix
+        String[][] printableGame = new String[yDim][xDim];
+        for(int i=0; i<yDim; i++){
+            for(int j=0; j<xDim; j++){
+                printableGame[i][j] = "\t";
+            }
         }
 
-        System.out.print("\n\t\t\tCURRENT SCORES:\n\n");
+        //DESIGN THE MATRIX
+        //show common table
+        printableGame[y][0] = "COMMON TABLE:";
+        y++;
+        printer.addPrintable(commonTablePrint, printableGame, 0, y);
 
+        //show scores
+
+        printer.addPrintable(scores, printableGame, commonTablePrint[0].length + 1, y + 1);
+        y += commonTablePrint.length;
+
+        //show personal board
+        printableGame[y][0] = "\nYOUR PERSONAL BOARD:\n";
+        y++;
+        printer.addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
+        y += personalBoardPrint.length;
+
+        //show player's hand
+        printableGame[y][0] = "\nYOUR HAND:\n";
+        y++;
+        printer.addPrintable(handPrint, printableGame, 0, y);
+
+        return printableGame;
+    }
+
+    public String[][] printableScores() {
+        //dimensions
+        int xDim = 2;
+        int yDim = players.size() + 1;
+        String[][] scores = new String[yDim][xDim];
+
+        //calculate the spaces needed to align the names
+        int maxLenght = 0;
+        StringBuilder spaces;
         for (Player p: players) {
             maxLenght = Math.max(maxLenght, p.getNickname().length());
         }
-
         maxLenght ++;
 
+        //design the matrix
+        scores[0][0] = "CURRENT SCORES:";
+        scores[0][1] = "";
         for (Player p: players) {
             int i = 0;
             spaces = new StringBuilder();
@@ -346,7 +402,10 @@ public class Game implements Serializable {
                 spaces.append(" ");
                 i++;
             }
-            System.out.println(p.getNickname() + spaces + p.printableScore());
+            scores[players.indexOf(p)+1][0] = p.getNickname() + spaces;
+            scores[players.indexOf(p)+1][1] = p.printableScore();
         }
+
+        return scores;
     }
 }

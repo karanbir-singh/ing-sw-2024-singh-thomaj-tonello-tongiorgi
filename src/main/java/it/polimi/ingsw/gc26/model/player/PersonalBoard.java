@@ -265,19 +265,22 @@ public class PersonalBoard implements Serializable {
         return new HashMap<>(this.visibleResources);
     }
 
-    public void showBoard() {
+    public String[][] printablePersonalBoard() {
         int xDim = (xMax - xMin)*2 + 3;
         int yDim = (yMax - yMin)*2 + 3;
         int xOff = xMin*2 -1;
         int yOff = yMin*2 -1;
         String[][] board = new String[yDim][xDim];
+        String[][] reverseBoard = new String[yDim+1][xDim];
 
+        //utils
         String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
         String verticalLine = SpecialCharacters.WHITE_VERTICAL_STRING.getCharacter();
         String blocked =  SpecialCharacters.BLOCKED_POSITION.getCharacter();
         String background = SpecialCharacters.BACKGROUND_BLANK_WIDE.getCharacter();
         String playableSeparator = SpecialCharacters.ORANGE_DIAMOND.getCharacter();
         String styleReset = TextStyle.STYLE_RESET.getStyleCode();
+        String selectedStyle = TextStyle.BACKGROUND_BEIGE.getStyleCode() + TextStyle.BLACK.getStyleCode();
 
         //initialize empty board
         for(int j=0; j<yDim; j++) {
@@ -294,29 +297,35 @@ public class PersonalBoard implements Serializable {
             int x = p.getX()*2 - xOff;
             int y = p.getY()*2 - yOff;
 
-            //align x
+            String selected = "";
+
+            if(selectedX == p.getX() && selectedY == p.getY()){
+                selected = selectedStyle;
+            }
+
+            //x dimension with alignment handling
             if(p.getX() <= -10){
-                board[y][x] = p.getX() + playableSeparator;
+                board[y][x] = p.getX() + playableSeparator ;
             } else if (p.getX() < 0 || p.getX() >= 10){
-                board[y][x] = " " + p.getX() + playableSeparator;
+                board[y][x] = " " + p.getX() + playableSeparator ;
             } else {
-                board[y][x] = "  " + p.getX() + playableSeparator;
+                board[y][x] = "  " + p.getX() + playableSeparator ;
             }
 
-            //align y
+            //y dimension with alignment handling
             if(p.getY() <= -10){
-                board[y][x] = board[y][x] + p.getY();
+                board[y][x] = selected + board[y][x] + p.getY() ;
             } else if (p.getY() < 0 || p.getY() >= 10){
-                board[y][x] = board[y][x] + p.getY() + " ";
+                board[y][x] = selected + board[y][x] + p.getY() + " " ;
             } else {
-                board[y][x] = board[y][x] + p.getY() + "  ";
+                board[y][x] = selected + board[y][x] + p.getY() + "  " ;
             }
 
-            board[y+1][x] = "‾‾‾" + blackSquare + "‾‾‾";
-            board[y-1][x] = "___" + blackSquare + "___";
-            board[y-1][x-1] = blackSquare;
+            board[y+1][x] =  "‾‾‾" + blackSquare + "‾‾‾";
+            board[y-1][x] =  "___" + blackSquare + "___";
+            board[y-1][x-1] =  blackSquare;
             board[y][x-1] = verticalLine;
-            board[y+1][x-1] = blackSquare;
+            board[y+1][x-1] =  blackSquare;
             board[y][x+1] = verticalLine;
             board[y-1][x+1] = blackSquare;
             board[y+1][x+1] = blackSquare;
@@ -343,19 +352,25 @@ public class PersonalBoard implements Serializable {
             }
         }
 
-        //print the board
+        int y=0;
+        //reverse the board
         for(int j=yDim-1; j>=0; j--){
-            for(int i=0; i<xDim; i++){
-
-                System.out.print(board[j][i]);
+            for(int i=0; i<xDim; i++) {
+                reverseBoard[y][i] = board[j][i] + styleReset;
             }
-            System.out.print(styleReset + "\n");
+            y++;
         }
-        System.out.print("\nYour resources: " );
+        int x = 1;
+        while(x<xDim){
+            reverseBoard[yDim][x] = " ";
+            x++;
+        }
+
+        reverseBoard[yDim][0] = "\nYour resources: ";
         for (Symbol s: Symbol.values()) {
-            System.out.print(visibleResources.get(s) + " " + s.name() + "   ");
+            reverseBoard[yDim][1] = reverseBoard[yDim][1] + visibleResources.get(s) + " " + s.name() + "   ";
         }
-        System.out.print("\n");
+        return reverseBoard;
     }
 
     /**
