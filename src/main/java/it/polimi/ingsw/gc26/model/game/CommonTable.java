@@ -299,6 +299,7 @@ public class CommonTable {
         //utils
         int index = 0; //index to select the drawable element
         Printer printer = new Printer();
+        String selectedStyle = TextStyle.BACKGROUND_BEIGE.getStyleCode() + TextStyle.BLACK.getStyleCode();
         String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
         String leftPadding = "    ";
         String rightPadding = "       ";

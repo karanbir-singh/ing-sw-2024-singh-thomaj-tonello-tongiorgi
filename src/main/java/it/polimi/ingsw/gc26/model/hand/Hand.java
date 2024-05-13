@@ -322,7 +322,7 @@ public class Hand  {
                         }
                         myHand[y][x] = myHand[y][x] + "      "+ blackSquare ;
 
-                    } else {
+                    } else if(!(!cards.isEmpty() && cards.get(0) instanceof StarterCard)) {
                         //EMPTY CARDS
                         myHand[y][x] = "            ";
                         y++;
