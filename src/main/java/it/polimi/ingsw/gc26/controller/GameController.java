@@ -531,17 +531,17 @@ public class GameController {
      * @param cardY    coordinate on the Y axis of the card on the common table
      * @param playerID ID of the player who is trying to select the card on the common table
      */
-    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
+    public void selectCardFromCommonTable(int cardIndex, String playerID) {
         if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
             Player player = game.getPlayerByID(playerID);
 
             // Check if it's the current player
             if (player.equals(game.getCurrentPlayer())) {
                 if (isDebug) {
-                    System.out.println(STR."[\{cardX}, \{cardY}] card selected from common table");
+                    System.out.println(STR."[\{cardIndex}] card selected from common table");
                 }
                 // Set the selected card on the common table
-                game.getCommonTable().selectCard(cardX, cardY, playerID);
+                game.getCommonTable().selectCard(cardIndex, playerID);
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
