@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-/*public class Printer {
+public class Printer {
     public static void main(String[] args) throws UnsupportedEncodingException {
         Game game = new Game(new ArrayList<>());
         Deck missionDeck = game.getCommonTable().getMissionDeck();
@@ -53,4 +53,4 @@ import java.util.ArrayList;
         }
     }
 
-}*/
+}
