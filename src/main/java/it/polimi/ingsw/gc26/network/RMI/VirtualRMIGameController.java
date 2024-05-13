@@ -26,52 +26,52 @@ public class VirtualRMIGameController implements VirtualGameController {
     }
 
     @Override
-    public void selectSecretMission(int cardIndex, String playerID) throws RemoteException  {
+    public void selectSecretMission(int cardIndex, String playerID) throws RemoteException {
         this.gameController.addRequest(new SelectSecretMissionRequest(cardIndex, playerID));
     }
 
     @Override
-    public void setSecretMission(String playerID) throws RemoteException  {
+    public void setSecretMission(String playerID) throws RemoteException {
         this.gameController.addRequest(new SetSecretMissionRequest(playerID));
     }
 
     @Override
-    public void selectCardFromHand(int cardIndex, String playerID) throws RemoteException  {
+    public void selectCardFromHand(int cardIndex, String playerID) throws RemoteException {
         this.gameController.addRequest(new SelectCardFromHandRequest(cardIndex, playerID));
     }
 
     @Override
-    public void turnSelectedCardSide(String playerID) throws RemoteException  {
+    public void turnSelectedCardSide(String playerID) throws RemoteException {
         this.gameController.addRequest(new TurnSelectedSideRequest(playerID));
     }
 
     @Override
-    public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) throws RemoteException  {
+    public void selectPositionOnBoard(int selectedX, int selectedY, String playerID) throws RemoteException {
         this.gameController.addRequest(new SelectPositionOnBoardRequest(selectedX, selectedY, playerID));
     }
 
     @Override
-    public void playCardFromHand(String playerID) throws RemoteException{
+    public void playCardFromHand(String playerID) throws RemoteException {
         this.gameController.addRequest(new PlayCardFromHandRequest(playerID));
     }
 
     @Override
-    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) throws RemoteException  {
-        this.gameController.addRequest(new SelectCardFromCommonTableRequest(cardX, cardY,playerID));
+    public void selectCardFromCommonTable(int cardIndex, String playerID) throws RemoteException {
+        this.gameController.addRequest(new SelectCardFromCommonTableRequest(cardIndex, playerID));
     }
 
     @Override
-    public void drawSelectedCard(String playerID) throws RemoteException  {
+    public void drawSelectedCard(String playerID) throws RemoteException {
         this.gameController.addRequest(new DrawSelectedCardRequest(playerID));
     }
 
     @Override
     public void printPersonalBoard(String nickname, String playerID) throws RemoteException {
-        this.gameController.addRequest(new PrintPersonalBoardRequest(nickname,playerID));
+        this.gameController.addRequest(new PrintPersonalBoardRequest(nickname, playerID));
     }
 
     @Override
     public void addMessage(String line, String nicknameReceiver, String senderID, String time) throws RemoteException {
-        this.gameController.addRequest(new AddMessageRequest(line,nicknameReceiver,senderID,time));
+        this.gameController.addRequest(new AddMessageRequest(line, nicknameReceiver, senderID, time));
     }
 }

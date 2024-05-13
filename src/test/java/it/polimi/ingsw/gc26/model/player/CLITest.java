@@ -2,25 +2,13 @@ package it.polimi.ingsw.gc26.model.player;
 
 import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.Printer;
-import it.polimi.ingsw.gc26.model.card.StarterCard;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
-import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.deck.Deck;
-import it.polimi.ingsw.gc26.model.card_side.Side;
-import it.polimi.ingsw.gc26.model.game.CommonTable;
-import it.polimi.ingsw.gc26.model.game.Game;
-import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.hand.Hand;
-import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
-import it.polimi.ingsw.gc26.network.ClientController;
-import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
-import it.polimi.ingsw.gc26.network.VirtualView;
 import org.junit.jupiter.api.Test;
-import it.polimi.ingsw.gc26.Printer;
 
-import java.nio.channels.Pipe;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -57,7 +45,7 @@ public class CLITest {
         game.setState(GameState.STARTER_CARDS_DISTRIBUTION);
         gameController.prepareStarterCards();
 
-        for (Player p: players) {
+        for (Player p : players) {
             System.out.println("     " + p.getNickname() + "'S HAND:\n");
             printer.showPrintable(p.getHand().printableHand());
             System.out.println("\n");
@@ -137,7 +125,7 @@ public class CLITest {
         gameController.setSecretMission(players.get(1).getID());
         gameController.setSecretMission(players.get(2).getID());
 
-        for (Player p: players) {
+        for (Player p : players) {
             System.out.println("     " + p.getNickname() + "'S HAND:\n");
             printer.showPrintable(p.printableHandAndMission());
             System.out.println("\n");
@@ -170,7 +158,7 @@ public class CLITest {
         }
 
 
-        for (Player p: players) {
+        for (Player p : players) {
             printer.showPrintable(game.printableGame(p));
         }
 
@@ -198,7 +186,7 @@ public class CLITest {
         gameController.setSecretMission(players.get(2).getID());
 
 
-        for (Player p: players) {
+        for (Player p : players) {
             printer.showPrintable(game.printableGame(p));
         }
 
@@ -248,7 +236,7 @@ public class CLITest {
         gameController.selectPositionOnBoard(2, 2, currentPlayer.getID());
         gameController.playCardFromHand(currentPlayer.getID());
 
-        for (Player p: players) {
+        for (Player p : players) {
             printer.showPrintable(game.printableGame(p));
         }
 
@@ -260,7 +248,7 @@ public class CLITest {
 
 
     @Test
-    public void showHand(){
+    public void showHand() {
         Game game = new Game(new ArrayList<>(), new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();

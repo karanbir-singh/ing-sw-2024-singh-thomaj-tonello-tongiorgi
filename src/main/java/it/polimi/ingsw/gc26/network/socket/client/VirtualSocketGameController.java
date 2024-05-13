@@ -150,12 +150,11 @@ public class VirtualSocketGameController implements VirtualGameController {
      * @param playerID client's ID
      */
     @Override
-    public void selectCardFromCommonTable(int cardX, int cardY, String playerID) {
+    public void selectCardFromCommonTable(int cardIndex, String playerID) {
         HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
         data.replace("function", "selectCardFromCommonTable");
         HashMap<String, String> value = new HashMap<>();
-        value.put("cardX", String.valueOf(cardX));
-        value.put("cardY", String.valueOf(cardY));
+        value.put("cardIndex", String.valueOf(cardIndex));
         value.put("playerID", playerID);
         writeToServer(data, value);
     }

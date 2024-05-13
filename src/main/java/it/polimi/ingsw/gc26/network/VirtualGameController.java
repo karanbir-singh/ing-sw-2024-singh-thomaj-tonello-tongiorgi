@@ -18,7 +18,7 @@ public interface VirtualGameController extends Remote {
 
     void playCardFromHand(String playerID) throws RemoteException;
 
-    void selectCardFromCommonTable(int cardX, int cardY, String playerID) throws RemoteException;
+    void selectCardFromCommonTable(int cardIndex, String playerID) throws RemoteException;
 
     void drawSelectedCard(String playerID) throws RemoteException;
 
