@@ -471,7 +471,7 @@ public class CommonTable {
 
         //titles;
         missions[0][0] = "Common Mission 0             " ;
-        missions[0][1] = "Common Mission 1" ;
+        missions[0][1] = "Common Mission 1             " ;
 
         //insert printable cards horizontally
         int x = 0;
@@ -505,8 +505,8 @@ public class CommonTable {
         }
 
         //titles
-        missions[0][0] = "Common Mission 0" ;
-        missions[yDim/2 + 1][0] = "Common Mission 1" ;
+        missions[0][0] = "Common Mission 0           " ;
+        missions[yDim/2 + 1][0] = "Common Mission 1           " ;
 
         //add printable cards vertically
         y = 1;

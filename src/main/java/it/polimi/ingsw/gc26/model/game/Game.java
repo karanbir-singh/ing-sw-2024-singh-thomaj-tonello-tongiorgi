@@ -337,8 +337,8 @@ public class Game {
                 handPrint = player.printableHandAndMission();
             }
         //calculate dimensions
-        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + scores.length + 4;
-        int xDim = Math.max(Math.max(commonTablePrint[0].length, personalBoardPrint[0].length), handPrint[0].length);
+        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + 4;
+        int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), handPrint[0].length);
         //utils
         Printer printer = new Printer();
         int y=0;
@@ -356,13 +356,11 @@ public class Game {
         printableGame[y][0] = "COMMON TABLE:";
         y++;
         printer.addPrintable(commonTablePrint, printableGame, 0, y);
-        y += commonTablePrint.length;
 
         //show scores
-        printableGame[y][0] = "\nCURRENT SCORES:";
-        y++;
-        printer.addPrintable(scores, printableGame, 0, y);
-        y += scores.length;
+
+        printer.addPrintable(scores, printableGame, commonTablePrint[0].length + 1, y + 1);
+        y += commonTablePrint.length;
 
         //show personal board
         printableGame[y][0] = "\nYOUR PERSONAL BOARD:\n";
@@ -381,7 +379,7 @@ public class Game {
     public String[][] printableScores() {
         //dimensions
         int xDim = 2;
-        int yDim = players.size();
+        int yDim = players.size() + 1;
         String[][] scores = new String[yDim][xDim];
 
         //calculate the spaces needed to align the names
@@ -393,6 +391,8 @@ public class Game {
         maxLenght ++;
 
         //design the matrix
+        scores[0][0] = "CURRENT SCORES:";
+        scores[0][1] = "";
         for (Player p: players) {
             int i = 0;
             spaces = new StringBuilder();
@@ -400,8 +400,8 @@ public class Game {
                 spaces.append(" ");
                 i++;
             }
-            scores[players.indexOf(p)][0] = "\t\t\t\t\t" + p.getNickname() + spaces;
-            scores[players.indexOf(p)][1] = p.printableScore();
+            scores[players.indexOf(p)+1][0] = p.getNickname() + spaces;
+            scores[players.indexOf(p)+1][1] = p.printableScore();
         }
 
         return scores;

@@ -230,7 +230,7 @@ public class Player {
         for (i=0; i<score; i++){
             s.append(fill);
         }
-        while (i<20){
+        while (i<29){
             s.append(background);
             i++;
         }

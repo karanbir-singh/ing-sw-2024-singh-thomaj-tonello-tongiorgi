@@ -220,6 +220,9 @@ public class Hand  {
                 int xMax = (xCardDim + 1) * 3 + 1;
                 int yMax = yCardDim + 4;
 
+                //index to select the card
+                int index = 0;
+
                 //initialize empty matrix
                 String[][] myHand = new String[yMax][xMax];
                 for(int j=0; j<yMax; j++){
@@ -246,12 +249,12 @@ public class Hand  {
                         //titles
                         if (c == this.selectedCard) {
                             if (this.selectedSide == c.getBack()) {
-                                myHand[y][x] = "  " + selectedStyle + "Back   " + i + " \u001B[0m  ";
+                                myHand[y][x] = "(" + index + ")" + selectedStyle + "Back  " + i + " \u001B[0m  ";
                             } else {
-                                myHand[y][x] = "  " + selectedStyle + "Front  " + i + " \u001B[0m  ";
+                                myHand[y][x] = "(" + index + ")" + selectedStyle + "Front " + i + " \u001B[0m  ";
                             }
                         } else {
-                            myHand[y][x] = "  Front  " + i + "   ";
+                            myHand[y][x] = "(" + index + ")" + "Front " + i + "   ";
                         }
                         myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
                         y++;
@@ -342,6 +345,7 @@ public class Hand  {
                         //requirements
                         myHand[y][x] = blackSquare + blackSquare + blackSquare + blackSquare + blackSquare + "    "+ blackSquare;
                     }
+                    index++;
                 }
 
                 //align right border
