@@ -223,7 +223,9 @@ public class Player {
         String background = "▒";
         String fill = "█";
 
-        s.append(pawnColor.getFontColor());
+        if(pawnColor != null){
+            s.append(pawnColor.getFontColor());
+        }
 
         for (i=0; i<score; i++){
             s.append(fill);
@@ -239,11 +241,18 @@ public class Player {
     }
 
     public String[][] printableHandAndMission() {
+        if(personalBoard.getSecretMission() == null){
+            return new String[0][0];
+        }
         String[][] hand = this.hand.printableHand();
         String[][] secretMission = this.personalBoard.getSecretMission().getFront().printableSide();
         Printer printer = new Printer();
 
-        String[][] handAndMission = new String[hand.length][hand[0].length + secretMission[0].length];
+        int xDim = hand[0].length + secretMission[0].length + 1;
+        int yDim = hand.length;
+        int xSeparator = hand[0].length;
+
+        String[][] handAndMission = new String[yDim][xDim];
 
 
         for(int i=0; i<handAndMission.length; i++){
@@ -253,8 +262,11 @@ public class Player {
         }
 
         printer.addPrintable(hand, handAndMission, 0,0);
-        handAndMission[0][hand[0].length] = "Your Secret Mission: ";
-        printer.addPrintable(secretMission, handAndMission, hand[0].length, 1);
+        for(int i=0; i<yDim-1; i++){
+            handAndMission[i][xSeparator] = "||      ";
+        }
+        handAndMission[0][hand[0].length] = "        Your Secret Mission: ";
+        printer.addPrintable(secretMission, handAndMission, hand[0].length + 1, 1);
 
         return handAndMission;
     }

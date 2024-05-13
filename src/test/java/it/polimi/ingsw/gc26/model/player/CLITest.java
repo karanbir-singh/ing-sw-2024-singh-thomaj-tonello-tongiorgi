@@ -13,6 +13,7 @@ import it.polimi.ingsw.gc26.model.game.CommonTable;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.hand.Hand;
+import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.network.ClientController;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualView;
@@ -168,6 +169,11 @@ public class CLITest {
             gameController.playCardFromHand(player.getID());
         }
 
+
+        for (Player p: players) {
+            printer.showPrintable(game.printableGame(p));
+        }
+
         game.setState(GameState.WAITING_PAWNS_SELECTION);
 
         gameController.choosePawnColor("BLUE", players.get(0).getID());
@@ -191,6 +197,7 @@ public class CLITest {
         gameController.setSecretMission(players.get(1).getID());
         gameController.setSecretMission(players.get(2).getID());
 
+
         for (Player p: players) {
             printer.showPrintable(game.printableGame(p));
         }
@@ -201,6 +208,54 @@ public class CLITest {
             assertEquals(1, player.getSecretMissionHand().getCards().size());
             assertNotNull(player.getPersonalBoard().getSecretMission());
         }
+    }
+
+    @Test
+    void tryPlayingTwoCardsInARow() throws RemoteException {
+        gameSetUp();
+
+        // Prepare initial things
+        gameController.prepareCommonTable();
+        gameController.turnSelectedCardSide(players.get(0).getID());
+        gameController.turnSelectedCardSide(players.get(2).getID());
+        for (Player player : game.getPlayers()) {
+            gameController.playCardFromHand(player.getID());
+        }
+        gameController.choosePawnColor("BLUE", players.get(1).getID());
+        gameController.choosePawnColor("GREEN", players.get(0).getID());
+        gameController.choosePawnColor("YELLOW", players.get(2).getID());
+
+        gameController.selectSecretMission(0, players.get(0).getID());
+
+        gameController.selectSecretMission(1, players.get(2).getID());
+        gameController.setSecretMission(players.get(2).getID());
+
+        gameController.selectSecretMission(0, players.get(1).getID());
+
+        gameController.setSecretMission(players.get(1).getID());
+        gameController.setSecretMission(players.get(0).getID());
+
+        Player currentPlayer = game.getCurrentPlayer();
+
+        gameController.selectCardFromHand(1, currentPlayer.getID());
+        gameController.turnSelectedCardSide(currentPlayer.getID());
+        gameController.selectPositionOnBoard(1, 1, currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+
+        // Now we try to play a second card, even if the current play can't do these
+        gameController.selectCardFromHand(0, currentPlayer.getID());
+        gameController.turnSelectedCardSide(currentPlayer.getID());
+        gameController.selectPositionOnBoard(2, 2, currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+
+        for (Player p: players) {
+            printer.showPrintable(game.printableGame(p));
+        }
+
+        // Check that the second card it's not played
+        assertEquals(2, currentPlayer.getHand().getCards().size());
+        assertEquals(PlayerState.CARD_PLAYED, currentPlayer.getState());
+        assertEquals(2, currentPlayer.getPersonalBoard().getOccupiedPositions().size());
     }
 
 
@@ -220,104 +275,9 @@ public class CLITest {
 
     }
 
-    @Test
-    public void commonTableCLI() {
-        Game game = new Game(new ArrayList<>(), new ArrayList<>());
-        GameController gc = new GameController(game);
-
-        game.setState(GameState.COMMON_TABLE_PREPARATION);
-        gc.prepareCommonTable();
-        game.setState(GameState.COMMON_MISSION_PREPARATION);
-        gc.prepareCommonMissions();
-
-
-        /*ArrayList<Player> players = new ArrayList<>();
-
-        players.add(new Player("0", "Pippo"));
-        players.add(new Player("1", "Baudo"));
-        players.add(new Player("2", "Carlo"));
-        players.add(new Player("4", "Giancarlo Peppino"));
-
-        Game game = new Game(players);
-        GameController gc = new GameController(game);
-
-        game.setState(GameState.COMMON_TABLE_PREPARATION);
-        gc.prepareCommonTable();
-        game.setState(GameState.COMMON_MISSION_PREPARATION);
-        gc.prepareCommonMissions();
-
-        players.get(0).setPawn("BLUE", game.getAvailablePawns());
-        players.get(1).setPawn("YELLOW", game.getAvailablePawns());
-        players.get(2).setPawn("RED", game.getAvailablePawns());
-        players.get(3).setPawn("GREEN", game.getAvailablePawns());
-
-        for (Player p: players) {
-            p.createPersonalBoard();
-            p.getPersonalBoard().setScore(players.indexOf(p)*3 + 7);
-        }
-
-        game.showCommonTable();
-        System.out.print("\n");*/
-    }
-/*
-    @Test
-    public void emptySideCLI() {
-        Game game = new Game(new ArrayList<>());
-        CommonTable ct = game.getCommonTable();
-        String[][] empty = ct.emptyPrintable(3,3);
-
-        for (int i=0; i<3; i++){
-            for(int j=0; j<3; j++){
-                System.out.print(empty[i][j]);
-            }
-            System.out.print("\n");
-        }
-    }
-
-    @Test
-    public void scoreCLI() {
-        Game game = new Game(new ArrayList<>());
-        GameController gameController = new GameController(game);
-        ArrayList<Player> players;
-        String score;
-
-        players = new ArrayList<>();
-        players.add(new Player("0", "Pippo"));
-        players.add(new Player("1", "Baudo"));
-        players.add(new Player("2", "Carlo"));
-        players.add(new Player("4", "Kevin"));
-
-        players.get(0).setPawn("BLUE", game.getAvailablePawns());
-        players.get(1).setPawn("YELLOW", game.getAvailablePawns());
-        players.get(2).setPawn("RED", game.getAvailablePawns());
-        players.get(3).setPawn("GREEN", game.getAvailablePawns());
-
-        for (Player p: players) {
-            p.createPersonalBoard();
-            p.getPersonalBoard().setScore(players.indexOf(p)*3 + 7);
-            score = p.printableScore();
-            System.out.println(p.getNickname() + " " + score);
-        }
-    }
-
-    @Test
-    public void missionCardCLI(){
-        Game game = new Game(new ArrayList<>());
-        Deck missionDeck = game.getCommonTable().getMissionDeck();
-        String[][] s;
-        Printer printer = new Printer();
-
-        for(int i=0; i<16; i++){
-            s = missionDeck.getCards().get(i).getFront().printableSide();
-            printer.showPrintable(s);
-            System.out.println("\n");
-        }
-
-    }
-
-    @Test
+    /*@Test
     void personalBoardCLI1() {
-        Game game = new Game(new ArrayList<>());
+        Game game = new Game(new ArrayList<>(), new ArrayList<>());
         Deck goldDeck = game.getCommonTable().getGoldDeck();
         Deck resourceDeck = game.getCommonTable().getResourceDeck();
         Deck initialDeck = game.getCommonTable().getStarterDeck();

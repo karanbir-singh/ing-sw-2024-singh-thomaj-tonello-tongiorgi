@@ -318,66 +318,81 @@ public class Game {
     }
 
     public String[][] printableGame(Player player) {
-        String[][] commonTablePrint = commonTable.printableCommonTable();
+        //COMMON TABLE: check if missions are already present
+        String[][] commonTablePrint;
+            if(getCommonTable().getCommonMissions().isEmpty()){
+                commonTablePrint = commonTable.printableCommonTable();
+            } else {
+                commonTablePrint = commonTable.printableCommonTableAndMissions();
+            }
+        //SCORES
+        String[][] scores = printableScores();
+        //PERSONAL BOARD
         String[][] personalBoardPrint = player.getPersonalBoard().printablePersonalBoard();
-        String[][] handPrint = player.printableHandAndMission();
-
-        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + 3;
-        int xDim = Math.max(Math.max(commonTablePrint[0].length, personalBoardPrint[0].length), handPrint[0].length) ;
-
-        String[][] printableGame = new String[yDim][xDim];
+        //HAND: check if secret mission is already present
+        String[][] handPrint;
+            if(player.getPersonalBoard().getSecretMission() == null){
+                handPrint = player.getHand().printableHand();
+            } else {
+                handPrint = player.printableHandAndMission();
+            }
+        //calculate dimensions
+        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + scores.length + 4;
+        int xDim = Math.max(Math.max(commonTablePrint[0].length, personalBoardPrint[0].length), handPrint[0].length);
+        //utils
         Printer printer = new Printer();
+        int y=0;
 
-        int y=0, x=0;
-
+        //initialize empty matrix
+        String[][] printableGame = new String[yDim][xDim];
         for(int i=0; i<yDim; i++){
             for(int j=0; j<xDim; j++){
-                printableGame[i][j] = "";
+                printableGame[i][j] = "\t";
             }
         }
 
-        //show common table with drawable cards and common missions
-        printableGame[y][x] = "\t\t\tCOMMON TABLE:\n";
+        //DESIGN THE MATRIX
+        //show common table
+        printableGame[y][0] = "COMMON TABLE:";
         y++;
-        printer.addPrintable(commonTablePrint, printableGame, x, y);
+        printer.addPrintable(commonTablePrint, printableGame, 0, y);
         y += commonTablePrint.length;
 
-        //show personal board
-        printableGame[y][x] = "\n\t\t\tYOUR PERSONAL BOARD:\n";
+        //show scores
+        printableGame[y][0] = "\nCURRENT SCORES:";
         y++;
-        printer.addPrintable(personalBoardPrint, printableGame, x, y);
+        printer.addPrintable(scores, printableGame, 0, y);
+        y += scores.length;
+
+        //show personal board
+        printableGame[y][0] = "\nYOUR PERSONAL BOARD:\n";
+        y++;
+        printer.addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
         y += personalBoardPrint.length;
 
         //show player's hand
-        printableGame[y][x] = "\n\t\t\tYOUR HAND:\n";
+        printableGame[y][0] = "\nYOUR HAND:\n";
         y++;
-        printer.addPrintable(handPrint, printableGame, x, y);
-        y += handPrint.length;
+        printer.addPrintable(handPrint, printableGame, 0, y);
 
         return printableGame;
     }
 
-    public void showCommonTable() {
-        String[][] ct = commonTable.printableCommonTable();
+    public String[][] printableScores() {
+        //dimensions
+        int xDim = 2;
+        int yDim = players.size();
+        String[][] scores = new String[yDim][xDim];
+
+        //calculate the spaces needed to align the names
         int maxLenght = 0;
         StringBuilder spaces;
-
-        System.out.println("\t\t\tCOMMON TABLE:\n");
-        for (String[] row: ct) {
-            for (String col: row) {
-                System.out.print(col);
-            }
-            System.out.print("\n");
-        }
-
-        System.out.print("\n\t\t\tCURRENT SCORES:\n\n");
-
         for (Player p: players) {
             maxLenght = Math.max(maxLenght, p.getNickname().length());
         }
-
         maxLenght ++;
 
+        //design the matrix
         for (Player p: players) {
             int i = 0;
             spaces = new StringBuilder();
@@ -385,7 +400,10 @@ public class Game {
                 spaces.append(" ");
                 i++;
             }
-            System.out.println(p.getNickname() + spaces + p.printableScore());
+            scores[players.indexOf(p)][0] = "\t\t\t\t\t" + p.getNickname() + spaces;
+            scores[players.indexOf(p)][1] = p.printableScore();
         }
+
+        return scores;
     }
 }
