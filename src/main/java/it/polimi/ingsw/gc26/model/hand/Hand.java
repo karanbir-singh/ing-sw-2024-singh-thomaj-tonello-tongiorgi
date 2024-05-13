@@ -249,12 +249,12 @@ public class Hand  {
                         //titles
                         if (c == this.selectedCard) {
                             if (this.selectedSide == c.getBack()) {
-                                myHand[y][x] = "(" + index + ")" + selectedStyle + "Back  " + i + " \u001B[0m  ";
+                                myHand[y][x] =  index + ") " + selectedStyle + " Back  \u001B[0m   ";
                             } else {
-                                myHand[y][x] = "(" + index + ")" + selectedStyle + "Front " + i + " \u001B[0m  ";
+                                myHand[y][x] = index + ") " + selectedStyle + " Front \u001B[0m   ";
                             }
                         } else {
-                            myHand[y][x] = "(" + index + ")" + "Front " + i + "   ";
+                            myHand[y][x] = index + ")" + "  Front    ";
                         }
                         myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
                         y++;

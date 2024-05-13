@@ -268,12 +268,14 @@ public class PersonalBoard {
         String[][] board = new String[yDim][xDim];
         String[][] reverseBoard = new String[yDim+1][xDim];
 
+        //utils
         String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
         String verticalLine = SpecialCharacters.WHITE_VERTICAL_STRING.getCharacter();
         String blocked =  SpecialCharacters.BLOCKED_POSITION.getCharacter();
         String background = SpecialCharacters.BACKGROUND_BLANK_WIDE.getCharacter();
         String playableSeparator = SpecialCharacters.ORANGE_DIAMOND.getCharacter();
         String styleReset = TextStyle.STYLE_RESET.getStyleCode();
+        String selectedStyle = TextStyle.BACKGROUND_BEIGE.getStyleCode() + TextStyle.BLACK.getStyleCode();
 
         //initialize empty board
         for(int j=0; j<yDim; j++) {
@@ -290,29 +292,35 @@ public class PersonalBoard {
             int x = p.getX()*2 - xOff;
             int y = p.getY()*2 - yOff;
 
-            //align x
+            String selected = "";
+
+            if(selectedX == p.getX() && selectedY == p.getY()){
+                selected = selectedStyle;
+            }
+
+            //x dimension with alignment handling
             if(p.getX() <= -10){
-                board[y][x] = p.getX() + playableSeparator;
+                board[y][x] = p.getX() + playableSeparator ;
             } else if (p.getX() < 0 || p.getX() >= 10){
-                board[y][x] = " " + p.getX() + playableSeparator;
+                board[y][x] = " " + p.getX() + playableSeparator ;
             } else {
-                board[y][x] = "  " + p.getX() + playableSeparator;
+                board[y][x] = "  " + p.getX() + playableSeparator ;
             }
 
-            //align y
+            //y dimension with alignment handling
             if(p.getY() <= -10){
-                board[y][x] = board[y][x] + p.getY();
+                board[y][x] = selected + board[y][x] + p.getY() ;
             } else if (p.getY() < 0 || p.getY() >= 10){
-                board[y][x] = board[y][x] + p.getY() + " ";
+                board[y][x] = selected + board[y][x] + p.getY() + " " ;
             } else {
-                board[y][x] = board[y][x] + p.getY() + "  ";
+                board[y][x] = selected + board[y][x] + p.getY() + "  " ;
             }
 
-            board[y+1][x] = "‾‾‾" + blackSquare + "‾‾‾";
-            board[y-1][x] = "___" + blackSquare + "___";
-            board[y-1][x-1] = blackSquare;
+            board[y+1][x] =  "‾‾‾" + blackSquare + "‾‾‾";
+            board[y-1][x] =  "___" + blackSquare + "___";
+            board[y-1][x-1] =  blackSquare;
             board[y][x-1] = verticalLine;
-            board[y+1][x-1] = blackSquare;
+            board[y+1][x-1] =  blackSquare;
             board[y][x+1] = verticalLine;
             board[y-1][x+1] = blackSquare;
             board[y+1][x+1] = blackSquare;
