@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.network.socket.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.ClientState;
@@ -13,7 +14,11 @@ import it.polimi.ingsw.gc26.model.card_side.mission.MissionDiagonalPattern;
 import it.polimi.ingsw.gc26.model.card_side.mission.MissionItemPattern;
 import it.polimi.ingsw.gc26.model.card_side.mission.MissionLPattern;
 import it.polimi.ingsw.gc26.model.card_side.mission.MissionTripletPattern;
+import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
+import it.polimi.ingsw.gc26.model.player.PlayerState;
+import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.request.view_request.*;
 import it.polimi.ingsw.gc26.view_model.*;
 
@@ -95,11 +100,11 @@ public class SocketServerHandler implements Runnable {
                         this.viewController.addRequest(new SecretHandUpdateRequest(secretHand, value.get("message").asText()));
                         break;
                     case "updatePersonalBoard":
-                        PersonalBoard personalBoard = buildPersonalBoard(value);
+                        SimplifiedPersonalBoard personalBoard = buildPersonalBoard(value);
                         this.viewController.addRequest(new PersonalBoardUpdateRequest(personalBoard, value.get("message").asText()));
                         break;
                     case "updateOtherPersonalBoard":
-                        PersonalBoard otherPersonalBoard = buildPersonalBoard(value);
+                        SimplifiedPersonalBoard otherPersonalBoard = buildPersonalBoard(value);
                         this.viewController.addRequest(new OtherPersonalBoardUpdateRequest(otherPersonalBoard, value.get("message").asText()));
                         break;
                     case "updatePlayer":
@@ -406,20 +411,60 @@ public class SocketServerHandler implements Runnable {
         return new SimplifiedHand(cards, selectedCard, selectedSide);
     }
 
-    private SimplifiedHand buildSimplifiedSecretHand(JsonNode encodedTable) {
-        return null;
+    private SimplifiedHand buildSimplifiedSecretHand(JsonNode encodedHand) {
+        ArrayList<Card> cards = new ArrayList<>();
+        for (int i = 0; i < encodedHand.get("cards").size(); i++) {
+            cards.add(getMissionCard(encodedHand.get("cards").get(i)));
+        }
+        Card selectedCard = cards.get(encodedHand.get("selectedCard").asInt());
+        Side selectedSide = encodedHand.get("selectedSide").asBoolean() ? selectedCard.getFront(): selectedCard.getBack();
+        return new SimplifiedHand(cards, selectedCard, selectedSide);
     }
 
-    private PersonalBoard buildPersonalBoard(JsonNode encodedTable) {
-        return null;
+    private SimplifiedPersonalBoard buildPersonalBoard(JsonNode encodedBoard) {
+        ArrayList<Point> occupiedPositions = new ArrayList<>();
+        ArrayList<Point> playablePositions = new ArrayList<>();
+        ArrayList<Point> blockedPositions = new ArrayList<>();
+        Card secretMission = getMissionCard(encodedBoard.get("secretMission"));
+        Map<Symbol, Integer> resources = new HashMap<>();
+
+        for( JsonNode occupiedPosition : encodedBoard.get("occupiedPositions")){
+            occupiedPositions.add(new Point(occupiedPosition.get("x").asInt(), occupiedPosition.get("Y").asInt()));
+        }
+
+        for( JsonNode playablePosition : encodedBoard.get("occupiedPositions")){
+            playablePositions.add(new Point(playablePosition.get("x").asInt(), playablePosition.get("Y").asInt()));
+        }
+
+        for( JsonNode blockedPosition : encodedBoard.get("occupiedPositions")){
+            blockedPositions.add(new Point(blockedPosition.get("x").asInt(), blockedPosition.get("Y").asInt()));
+        }
+
+        for (JsonNode resource : encodedBoard.get("resources")){
+            resources.put(null, null); // TODO
+        }
+
+        return new SimplifiedPersonalBoard(encodedBoard.get("xMin").asInt(),
+                encodedBoard.get("xMax").asInt(), encodedBoard.get("yMax").asInt(), encodedBoard.get("yMin").asInt(),
+                encodedBoard.get("score").asInt(), occupiedPositions, playablePositions, blockedPositions, secretMission,
+                resources, encodedBoard.get("selectedX").asInt(), encodedBoard.get("selectedY").asInt());
     }
 
-    private SimplifiedPlayer buildSimplifiedPlayer(JsonNode encodedTable) {
-        return null;
+    private SimplifiedPlayer buildSimplifiedPlayer(JsonNode encodedPlayer) {
+
+        return new SimplifiedPlayer(encodedPlayer.get("ID").asText(),
+                encodedPlayer.get("nickname").asText(),
+                Pawn.valueOf(encodedPlayer.get("pawnColor").asText()),
+                encodedPlayer.get("amIFirstPlayer").asBoolean(),
+                PlayerState.valueOf(encodedPlayer.get("state").asText()));
     }
 
-    private SimplifiedChat buildSimplifiedChat(JsonNode encodedTable) {
-        return null;
+    private SimplifiedChat buildSimplifiedChat(JsonNode encodedTable) throws JsonProcessingException {
+        ArrayList<Message> messages = new ArrayList<>();
+        for (int i = 0; i < encodedTable.get("messages").size(); i++) {
+            messages.add(new Message(encodedTable.get(i).asText()));
+        }
+        return new SimplifiedChat(messages);
     }
 }
 

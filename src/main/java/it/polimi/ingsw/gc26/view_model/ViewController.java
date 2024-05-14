@@ -99,12 +99,12 @@ public class ViewController {
 //        System.out.println(message);
     }
 
-    public void updatePersonalBoard(PersonalBoard personalBoard, String message) {
+    public void updatePersonalBoard(SimplifiedPersonalBoard personalBoard, String message) {
         this.simplifiedModel.setPersonalBoard(personalBoard);
 //        System.out.println(message);
     }
 
-    public void updateOtherPersonalBoard(PersonalBoard otherPersonalBoard, String message) {
+    public void updateOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) {
         this.simplifiedModel.setOtherPersonalBoard(otherPersonalBoard);
 //        System.out.println(message);
     }

@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
-import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
+import it.polimi.ingsw.gc26.view_model.*;
 
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
@@ -157,7 +154,7 @@ public class VirtualSocketView implements VirtualView {
      * @throws RemoteException
      */
     @Override
-    public void updatePersonalBoard(PersonalBoard personalBoard, String message) throws RemoteException {
+    public void updatePersonalBoard(SimplifiedPersonalBoard personalBoard, String message) throws RemoteException {
 
     }
 
@@ -167,7 +164,7 @@ public class VirtualSocketView implements VirtualView {
      * @throws RemoteException
      */
     @Override
-    public void updateOtherPersonalBoard(PersonalBoard otherPersonalBoard, String message) throws RemoteException {
+    public void updateOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) throws RemoteException {
 
     }
 

@@ -55,9 +55,9 @@ public interface VirtualView extends Remote {
 
     void updateSecretHand(SimplifiedHand simplifiedSecretHand, String message) throws RemoteException;
 
-    void updatePersonalBoard(PersonalBoard personalBoard, String message) throws RemoteException;
+    void updatePersonalBoard(SimplifiedPersonalBoard personalBoard, String message) throws RemoteException;
 
-    void updateOtherPersonalBoard(PersonalBoard otherPersonalBoard, String message) throws RemoteException;
+    void updateOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) throws RemoteException;
 
     void updatePlayer(SimplifiedPlayer simplifiedPlayer, String message) throws RemoteException;
 

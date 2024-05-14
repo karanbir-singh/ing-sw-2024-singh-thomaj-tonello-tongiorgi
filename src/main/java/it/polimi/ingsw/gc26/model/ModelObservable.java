@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
+import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
 import javafx.util.Pair;
 
@@ -68,7 +69,7 @@ public class ModelObservable {
         }
     }
 
-    public void notifyUpdatePersonalBoard(PersonalBoard personalBoard, String message, String clientID) {
+    public void notifyUpdatePersonalBoard(SimplifiedPersonalBoard personalBoard, String message, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
@@ -80,7 +81,7 @@ public class ModelObservable {
         }
     }
 
-    public void notifyUpdateOtherPersonalBoard(PersonalBoard otherPersonalBoard, String message, String clientID) {
+    public void notifyUpdateOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {

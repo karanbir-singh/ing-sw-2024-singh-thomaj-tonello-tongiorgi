@@ -61,12 +61,12 @@ public class VirtualRMIView implements VirtualView {
     }
 
     @Override
-    public void updatePersonalBoard(PersonalBoard personalBoard, String message) throws RemoteException {
+    public void updatePersonalBoard(SimplifiedPersonalBoard personalBoard, String message) throws RemoteException {
         this.viewController.addRequest(new PersonalBoardUpdateRequest(personalBoard, message));
     }
 
     @Override
-    public void updateOtherPersonalBoard(PersonalBoard otherPersonalBoard, String message) throws RemoteException {
+    public void updateOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) throws RemoteException {
         this.viewController.addRequest(new OtherPersonalBoardUpdateRequest(otherPersonalBoard, message));
     }
 
