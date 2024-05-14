@@ -4,9 +4,7 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
-import it.polimi.ingsw.gc26.request.game_request.GameRequest;
 import it.polimi.ingsw.gc26.request.view_request.ViewRequest;
-
 import java.util.ArrayDeque;
 import java.util.Queue;
 

@@ -3,11 +3,26 @@ package it.polimi.ingsw.gc26.network.socket.client;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.ClientState;
-import it.polimi.ingsw.gc26.view_model.ViewController;
+import it.polimi.ingsw.gc26.model.card.*;
+import it.polimi.ingsw.gc26.model.card_side.*;
+import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
+import it.polimi.ingsw.gc26.model.card_side.ability.InkwellCounter;
+import it.polimi.ingsw.gc26.model.card_side.ability.ManuscriptCounter;
+import it.polimi.ingsw.gc26.model.card_side.ability.QuillCounter;
+import it.polimi.ingsw.gc26.model.card_side.mission.MissionDiagonalPattern;
+import it.polimi.ingsw.gc26.model.card_side.mission.MissionItemPattern;
+import it.polimi.ingsw.gc26.model.card_side.mission.MissionLPattern;
+import it.polimi.ingsw.gc26.model.card_side.mission.MissionTripletPattern;
+import it.polimi.ingsw.gc26.model.player.PersonalBoard;
+import it.polimi.ingsw.gc26.request.view_request.*;
+import it.polimi.ingsw.gc26.view_model.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -17,17 +32,17 @@ public class SocketServerHandler implements Runnable {
     /**
      * This attributes represents the input from the server.
      */
-    private BufferedReader inputFromServer;
+    private final BufferedReader inputFromServer;
 
     /**
      * This attributes represents the output to the server.
      */
-    private PrintWriter outputToServer;
+    private final PrintWriter outputToServer;
 
     /**
      * This attribute represents the clientController
      */
-    private ViewController viewController;
+    private final ViewController viewController;
 
     public SocketServerHandler(ViewController viewController, BufferedReader inputFromServer, PrintWriter outputToServer) {
         this.viewController = viewController;
@@ -62,49 +77,38 @@ public class SocketServerHandler implements Runnable {
                         this.viewController.updateClientState(ClientState.valueOf(value.get("clientState").asText()));
                         break;
                     case "showMessage":
-                        this.viewController.showMessage(value.get("message").asText(), value.get("clientID").asText());
+                        this.viewController.showMessage(value.get("message").asText());
                         break;
                     case "showError":
-                        this.viewController.showError(value.get("errorMessage").asText(), value.get("clientID").asText());
+                        this.viewController.showError(value.get("errorMessage").asText());
                         break;
-                    case "showChat":
-                        this.viewController.showChat(value.get("message").asText());
+                    case "updateCommonTable":
+                        SimplifiedCommonTable request = buildSimplifiedCommonTable(value);
+                        this.viewController.addRequest(new CommonTableUpdateRequest(request, value.get("message").asText()));
                         break;
-                    case "updateChosenPawn":
-                        this.viewController.updateChosenPawn(value.get("pawnColor").asText(), value.get("clientID").asText());
+                    case "updateHand":
+                        SimplifiedHand hand = buildSimplifiedHand(value);
+                        viewController.addRequest(new HandUpdateRequest(hand, value.get("message").asText()));
                         break;
-                    case "updateSelectedMission":
-                        this.viewController.updateSelectedMission(value.get("clientID").asText());
+                    case "updateSecretHand":
+                        SimplifiedHand secretHand = buildSimplifiedSecretHand(value);
+                        this.viewController.addRequest(new SecretHandUpdateRequest(secretHand, value.get("message").asText()));
                         break;
-                    case "updateSelectedCardFromHand":
-                        this.viewController.updateSelectedCardFromHand(value.get("clientID").asText());
+                    case "updatePersonalBoard":
+                        PersonalBoard personalBoard = buildPersonalBoard(value);
+                        this.viewController.addRequest(new PersonalBoardUpdateRequest(personalBoard, value.get("message").asText()));
                         break;
-                    case "updateSelectedSide":
-                        this.viewController.updateSelectedSide(value.get("cardIndex").asText(), value.get("clientID").asText());
+                    case "updateOtherPersonalBoard":
+                        PersonalBoard otherPersonalBoard = buildPersonalBoard(value);
+                        this.viewController.addRequest(new OtherPersonalBoardUpdateRequest(otherPersonalBoard, value.get("message").asText()));
                         break;
-                    case "updateSelectedPositionOnBoard":
-                        this.viewController.updateSelectedPositionOnBoard(value.get("selectedX").asText(), value.get("selectedY").asText(), value.get("clientID").asText(), value.get("success").asText());
+                    case "updatePlayer":
+                        SimplifiedPlayer simplifiedPlayer = buildSimplifiedPlayer(value);
+                        this.viewController.addRequest(new PlayerUpdateRequest(simplifiedPlayer, value.get("message").asText()));
                         break;
-                    case "updatePlayedCardFromHand":
-                        this.viewController.updatePlayedCardFromHand(value.get("clientID").asText(), value.get("success").asText());
-                        break;
-                    case "updatePoints":
-                        this.viewController.updatePoints(value.get("clientID").asText(), value.get("points").asText());
-                        break;
-                    case "updateSelectedCardFromCommonTable":
-                        this.viewController.updateSelectedCardFromCommonTable(value.get("clientID").asText(), value.get("success").asText());
-                        break;
-                    case "showCard":
-                        this.viewController.showCard(value.get("clientID").asText(), value.get("cardSerialization").asText());
-                        break;
-                    case "showPersonalBoard":
-                        this.viewController.showPersonalBoard(value.get("clientID").asText(), value.get("ownerNickname").asText(), value.get("personalBoardSerialization").asText());
-                        break;
-                    case "updateFirstPlayer":
-                        this.viewController.updateFirstPlayer(value.get("nickname").asText());
-                        break;
-                    case "updateGameState":
-                        this.viewController.updateGameState(value.get("gameState").asText());
+                    case "updateChat":
+                        SimplifiedChat simplifiedChat = buildSimplifiedChat(value);
+                        this.viewController.addRequest(new ChatUpdateRequest(simplifiedChat, value.get("message").asText()));
                         break;
                     case null, default:
                         break;
@@ -114,99 +118,308 @@ public class SocketServerHandler implements Runnable {
             e.printStackTrace();
         }
     }
-//
-//    /**
-//     * Shows a message in the chat
-//     *
-//     * @param line json encoded message
-//     */
-//    public void showChat(String line) {
-//        this.clientController.showChat(line);
-//    }
-//
-//    /**
-//     * Reports a message from the server (for example error reports)
-//     *
-//     * @param message
-//     */
-//    public void showMessage(String message, String clientID) {
-//        this.clientController.showMessage(message, clientID);
-//    }
-//
-//    /**
-//     * Reports an error message from the server
-//     *
-//     * @param errorMessage
-//     */
-//    public void showError(String errorMessage, String clientID) {
-//        this.clientController.showError(errorMessage, clientID);
-//    }
-//
-//    /**
-//     * Updates client's state
-//     *
-//     * @param clientState
-//     * @throws RemoteException
-//     */
-//    public void updateState(ClientState clientState) {
-//        this.clientController.updateClientState(clientState);
-//    }
-//
-//
-//    public void setClientID(String clientID) {
-//        this.clientController.setClientID(clientID);
-//    }
-//
-//    public void setGameController() {
-//        this.clientController.setGameController();
-//    }
-//
-//    public void updateChosenPawn(String pawnColor, String clientID) {
-//        this.clientController.updateChosenPawn(pawnColor, clientID);
-//    }
-//
-//    public void updateSelectedMission(String clientID) {
-//        this.clientController.updateSelectedMission(clientID);
-//    }
-//
-//    public void updateSelectedCardFromHand(String clientID) {
-//        this.clientController.updateSelectedCardFromHand(clientID);
-//    }
-//
-//    public void updateSelectedSide(String cardIndex, String clientID) {
-//        this.clientController.updateSelectedSide(cardIndex, clientID);
-//    }
-//
-//    public void updateSelectedPositionOnBoard(String selectedX, String selectedY, String clientID, String success) {
-//        this.clientController.updateSelectedPositionOnBoard(selectedX, selectedY, clientID, success);
-//    }
-//
-//    public void updatePlayedCardFromHand(String clientID, String success) {
-//        this.clientController.updatePlayedCardFromHand(clientID, success);
-//    }
-//
-//    public void updatePoints(String clientID, String points) {
-//        this.clientController.updatePoints(clientID, points);
-//    }
-//
-//    public void updateSelectedCardFromCommonTable(String clientID, String success) {
-//        this.clientController.updateSelectedCardFromCommonTable(clientID, success);
-//    }
-//
-//    public void showCard(String clientID, String cardSerialization) {
-//        this.clientController.showCard(clientID, cardSerialization);
-//
-//    }
-//
-//    public void showPersonalBoard(String clientID, String ownerNickname, String personalBoardSerialization) {
-//        this.clientController.showPersonalBoard(clientID, ownerNickname, personalBoardSerialization);
-//    }
-//
-//    public void updateFirstPlayer(String nickname) {
-//        this.clientController.updateFirstPlayer(nickname);
-//    }
-//
-//    public void updateGameState(String gameState) {
-//        this.clientController.updateGameState(gameState);
-//    }
+
+    public SimplifiedCommonTable buildSimplifiedCommonTable(JsonNode encodedTable) {
+//        {
+//            "resourceCard": {
+//                    "sideSymbol" : "",
+//                    "points" : "0",
+//                    "UPLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "UPRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    }
+//              },
+//            "goldCard" : {
+//                    "cardType" : "",
+//                    "sideSymbol" : "",
+//                    "requestedResources" : {},
+//                    "UPLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "UPRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    }
+//            },
+//            "commonMissions": {
+//               "0" : {
+//                  "cardType" : "",
+//                  "type" : ""
+//               },
+//               "1" : {
+//                  "cardType" : "",
+//                  "type" : ""
+//               }
+//            },
+//            "resourceCards": {
+//                "0" : {
+//                    "sideSymbol" : "",
+//                    "points" : "0",
+//                    "UPLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                   },
+//                    "UPRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                "1" : {
+//                    "sideSymbol" : "",
+//                    "points" : "0",
+//                    "UPLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "UPRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    }
+//            },
+//            "missionCard": {
+//                "0" : {
+//                  "cardType" : "",
+//                  "type" : ""
+//                },
+//                "1" : {
+//                  "cardType" : "",
+//                  "type" : ""
+//                }
+//            },
+//            "goldCards": {
+//                "0" : {
+//                    "cardType" : "",
+//                    "sideSymbol" : "",
+//                    "requestedResources" : {},
+//                    "UPLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "UPRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                "1" : {
+//                    "cardType" : "",
+//                    "sideSymbol" : "",
+//                    "requestedResources" : {},
+//                    "UPLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNLEFT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "UPRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    },
+//                    "DOWNRIGHT" : {
+//                          "isEvil" : "",
+//                          "symbol" : "
+//                    }
+//            }
+//        }
+
+        // resource card
+        Card resourceCard = getResourceCard(encodedTable.get("resourceCard"));
+
+        // gold card
+        Card goldCard = getGoldCard(encodedTable.get("goldCard"));
+
+        // mission cards
+        MissionCard missionCard1 = getMissionCard(encodedTable.get("commonMission").get("0"));
+        MissionCard missionCard2 = getMissionCard(encodedTable.get("commonMission").get("0"));
+        ArrayList<Card> commonMission = new ArrayList<>();
+        commonMission.add(missionCard1);
+        commonMission.add(missionCard2);
+
+        // resources Cards
+        ResourceCard resourceCard1 = getResourceCard(encodedTable.get("resourcesCards").get("0"));
+        ResourceCard resourceCard2 = getResourceCard(encodedTable.get("resourcesCards").get("1"));
+        ArrayList<Card> resourceCards = new ArrayList<>();
+        resourceCards.add(resourceCard1);
+        resourceCards.add(resourceCard2);
+
+        //gold cards
+        GoldCard goldCard1 = getGoldCard(encodedTable.get("goldCards").get("0"));
+        GoldCard goldCard2 = getGoldCard(encodedTable.get("goldCards").get("1"));
+        ArrayList<Card> goldCards = new ArrayList<>();
+        goldCards.add(goldCard1);
+        goldCards.add(goldCard2);
+
+        return new SimplifiedCommonTable(resourceCard, goldCard, commonMission, resourceCards, goldCards);
+    }
+
+    private GoldCard getGoldCard(JsonNode encodedCard) {
+        Map<Symbol, Integer> resources = new HashMap<>();
+        for ( JsonNode resource : encodedCard.get("requestedResources")) {
+            resources.put(null, null); //TODO
+        }
+        Side frontGold = switch (encodedCard.get("cardType").asText()) {
+            case "CornerCounter" ->
+                    new CornerCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
+                            resources,
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+            case "InkwellCounter" ->
+                    new InkwellCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
+                            resources,
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+            case "ManuscriptCounter" ->
+                    new ManuscriptCounter(Symbol.valueOf(encodedCard.get("goldCard").get("sideSymbol").asText()),
+                            resources,
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+            case "QuillCounter" ->
+                    new QuillCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
+                            resources,
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+            default -> null;
+        };
+        Side backGold= new CardBack(Symbol.valueOf(encodedCard.get("sideSymbol").asText()));
+        return  new GoldCard(frontGold, backGold);
+    }
+
+    private ResourceCard getResourceCard(JsonNode encodedCard) {
+        Side frontResource = new ResourceCardFront(Symbol.valueOf(encodedCard.get("resourceCard").get("sideSymbol").asText()),
+                encodedCard.get("resourceCard").get("points").asInt(),
+                new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
+                new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+
+        Side backResource = new CardBack(Symbol.valueOf(encodedCard.get("resourceCard").get("sideSymbol").asText()));
+        return new ResourceCard(frontResource, backResource);
+    }
+
+    private StarterCard getStarterCard(JsonNode encodedCard) {
+        ArrayList<Symbol> resources = new ArrayList<>();
+        for ( JsonNode resource : encodedCard.get("permanentResources")) {
+            resources.add(Symbol.valueOf(resource.asText()));
+        }
+        Side front = new StarterCardFront(resources,
+                new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
+                new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+
+        Side back = new CardBack(new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
+                new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+        return new StarterCard(front, back);
+    }
+
+    private MissionCard getMissionCard(JsonNode encodedCard) {
+        MissionCardFront missionCardFront = switch (encodedCard.get("cardType").asText()) {
+            case "missionLPatter" ->
+                    new MissionLPattern(encodedCard.get("type").asInt());
+            case "missionDiagonalPatter" ->
+                    new MissionDiagonalPattern(encodedCard.get("type").asInt());
+            case "missionTriplet" ->
+                    new MissionTripletPattern(encodedCard.get("type").asInt());
+            case "missionItem" ->
+                    new MissionItemPattern(encodedCard.get("type").asInt());
+            default -> null;
+        };
+        return new MissionCard(missionCardFront, new CardBack());
+    }
+
+    private SimplifiedHand buildSimplifiedHand(JsonNode encodedHand) {
+        ArrayList<Card> cards = new ArrayList<>();
+        for (int i = 0; i < encodedHand.get("cards").size(); i++) {
+            Card newCard = null;
+            switch (encodedHand.get("cards").get(i).get("type").asText()) {
+                case "goldCard":
+                    newCard = getGoldCard(encodedHand.get("cards").get(i));
+                    break;
+                case "resourceCard":
+                    newCard = getResourceCard(encodedHand.get("cards").get(i));
+                    break;
+                case "starterCard":
+                    newCard = getStarterCard(encodedHand.get("cards").get(i));
+                    break;
+                case null, default:
+                    break;
+            }
+            cards.add(newCard);
+        }
+
+        Card selectedCard = cards.get(encodedHand.get("selectedCard").asInt());
+        Side selectedSide = encodedHand.get("selectedSide").asBoolean() ? selectedCard.getFront(): selectedCard.getBack();
+        return new SimplifiedHand(cards, selectedCard, selectedSide);
+    }
+
+    private SimplifiedHand buildSimplifiedSecretHand(JsonNode encodedTable) {
+        return null;
+    }
+
+    private PersonalBoard buildPersonalBoard(JsonNode encodedTable) {
+        return null;
+    }
+
+    private SimplifiedPlayer buildSimplifiedPlayer(JsonNode encodedTable) {
+        return null;
+    }
+
+    private SimplifiedChat buildSimplifiedChat(JsonNode encodedTable) {
+        return null;
+    }
 }
+

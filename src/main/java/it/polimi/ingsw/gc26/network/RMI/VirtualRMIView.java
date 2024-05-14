@@ -6,6 +6,7 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.view_request.*;
 import it.polimi.ingsw.gc26.view_model.*;
 
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -13,7 +14,7 @@ public class VirtualRMIView implements VirtualView {
     /**
      * This attribute represents the client controller on which execute the called actions
      */
-    private ViewController viewController;
+    private final ViewController viewController;
 
     public VirtualRMIView(ViewController viewController) throws RemoteException {
         this.viewController = viewController;
@@ -45,22 +46,22 @@ public class VirtualRMIView implements VirtualView {
     }
 
     @Override
-    public void updateCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message) {
+    public void updateCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message) throws RemoteException {
         this.viewController.addRequest(new CommonTableUpdateRequest(simplifiedCommonTable, message));
     }
 
     @Override
-    public void updateHand(SimplifiedHand simplifiedHand, String message) {
+    public void updateHand(SimplifiedHand simplifiedHand, String message) throws RemoteException {
         this.viewController.addRequest(new HandUpdateRequest(simplifiedHand, message));
     }
 
     @Override
-    public void updateSecretHand(SimplifiedHand simplifiedSecretHand, String message) {
+    public void updateSecretHand(SimplifiedHand simplifiedSecretHand, String message) throws RemoteException {
         this.viewController.addRequest(new SecretHandUpdateRequest(simplifiedSecretHand, message));
     }
 
     @Override
-    public void updatePersonalBoard(PersonalBoard personalBoard, String message) {
+    public void updatePersonalBoard(PersonalBoard personalBoard, String message) throws RemoteException {
         this.viewController.addRequest(new PersonalBoardUpdateRequest(personalBoard, message));
     }
 
@@ -70,7 +71,7 @@ public class VirtualRMIView implements VirtualView {
     }
 
     @Override
-    public void updatePlayer(SimplifiedPlayer simplifiedPlayer, String message) {
+    public void updatePlayer(SimplifiedPlayer simplifiedPlayer, String message) throws RemoteException {
         this.viewController.addRequest(new PlayerUpdateRequest(simplifiedPlayer, message));
     }
 
