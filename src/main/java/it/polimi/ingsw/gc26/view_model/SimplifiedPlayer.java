@@ -1,7 +1,10 @@
 package it.polimi.ingsw.gc26.view_model;
 
+import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.player.Pawn;
+import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
+import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.Serializable;
 
@@ -53,5 +56,60 @@ public class SimplifiedPlayer implements Serializable {
 
     public PlayerState getState() {
         return state;
+    }
+
+    public String printableScore(PersonalBoard personalBoard) {
+        int score = personalBoard.getScore();
+        int i;
+        StringBuilder s = new StringBuilder();
+        String background = "▒";
+        String fill = "█";
+
+        if(pawnColor != null){
+            s.append(pawnColor.getFontColor());
+        }
+
+        for (i=0; i<score; i++){
+            s.append(fill);
+        }
+        while (i<29){
+            s.append(background);
+            i++;
+        }
+
+        s.append(TextStyle.STYLE_RESET.getStyleCode()).append(" ").append(score);
+
+        return s.toString();
+    }
+
+    public String[][] printableHandAndMission(PersonalBoard personalBoard, SimplifiedHand hand) {
+        if(personalBoard.getSecretMission() == null){
+            return new String[0][0];
+        }
+        String[][] printableHand = hand.printableHand();
+        String[][] secretMission = personalBoard.getSecretMission().getFront().printableSide();
+        Printer printer = new Printer();
+
+        int xDim = printableHand[0].length + secretMission[0].length + 1;
+        int yDim = printableHand.length;
+        int xSeparator = printableHand[0].length;
+
+        String[][] handAndMission = new String[yDim][xDim];
+
+
+        for(int i=0; i<handAndMission.length; i++){
+            for(int j=0; j<handAndMission[0].length; j++){
+                handAndMission[i][j] = " ";
+            }
+        }
+
+        printer.addPrintable(printableHand, handAndMission, 0,0);
+        for(int i=0; i<yDim-1; i++){
+            handAndMission[i][xSeparator] = "||      ";
+        }
+        handAndMission[0][printableHand[0].length] = "        Your Secret Mission: ";
+        printer.addPrintable(secretMission, handAndMission, printableHand[0].length + 1, 1);
+
+        return handAndMission;
     }
 }
