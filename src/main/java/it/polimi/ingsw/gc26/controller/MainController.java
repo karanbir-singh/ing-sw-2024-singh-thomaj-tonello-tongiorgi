@@ -372,7 +372,6 @@ public class MainController implements Serializable {
                     }
                     catch(RemoteException e){
                         System.out.println("Disconnected client" + client.getValue());
-                        //TODO notificare gli altri client dello stesso game che un altro si è disconesso
                         threadAlive = false;
                         destroyGame(idGame);
                         break;
