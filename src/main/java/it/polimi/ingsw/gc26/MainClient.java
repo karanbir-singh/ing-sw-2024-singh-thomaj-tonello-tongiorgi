@@ -429,38 +429,49 @@ public class MainClient {
             } catch (InterruptedException e) {
                 System.out.println("LA SLEEP non è andata a buon fine");
             }
-            try {
-                virtualMainController.amAlive(); //va fatto in modo asincrono
-            } catch (RemoteException e) {
-                System.out.println("SERVER DOWN");
-                isServerUp = false;
-                while(!isServerUp){
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    Registry registry = null;
-                    try {
-                        registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
-                        virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
-                        virtualGameController = virtualMainController.getVirtualGameController(viewController.getGameID());
-                        virtualGameController.reAddView(virtualView,viewController.getClientID());
-                        isServerUp = true;
-                    } catch (RemoteException ex) {
-                        System.out.println("SERVER AGAIN DOWN");
-                    } catch(NotBoundException ep) {
-                        ep.printStackTrace();
+            int numWait = 3;
+            while(numWait >0){
+                try {
+                    virtualMainController.amAlive(); //va fatto in modo asincrono
+                    numWait = 0;
+                } catch (RemoteException e) {
+                    System.out.println("SOMETHING WRONG, TRY " + numWait );
+                    numWait--;
+                    if(numWait == 0){
+                        System.out.println("SERVER DOWN, WAIT a BIT");
+                        isServerUp = false;
+                        while(!isServerUp){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                            Registry registry = null;
+                            try {
+                                registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
+                                virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
+                                virtualGameController = virtualMainController.getVirtualGameController(viewController.getGameID());
+                                virtualGameController.reAddView(virtualView,viewController.getClientID());
+                                isServerUp = true;
+                            } catch (RemoteException ex) {
+                                //TODO FORSE METTERE QUALCOSA QUA
+                            } catch(NotBoundException ep) {
+                                ep.printStackTrace();
+                            }
+                        }
+                        System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
                     }
 
 
                 }
-                System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
             }
+
         }
 
     }
 
+
+    //TODO FARLO ANCHE QUA
     private void SocketPingServer(){
         while(true){
             try {
@@ -468,47 +479,58 @@ public class MainClient {
             } catch (InterruptedException e) {
                 System.out.println("LA SLEEP non è andata a buon fine");
             }
-            try {
-                virtualMainController.amAlive(); //va fatto in modo asincrono
-            } catch (IOException e) {
-                isServerUp = false;
-                while(!isServerUp ){
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
-                    }
+            int numWait = 3;
+            while(numWait > 0){
+                try {
+                    virtualMainController.amAlive();
+                    numWait = 0;
+                } catch (IOException e) {
+                    System.out.println("SOMETHING WRONG, TRY " + numWait );
+                    numWait--;
+                    if(numWait == 0){
+                        System.out.println("SERVER DOWN, WAIT a BIT");
+                        isServerUp = false;
+                        while(!isServerUp ){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException ex) {
+                                throw new RuntimeException(ex);
+                            }
 
-                    try {
-                        Socket serverSocket = new Socket("127.0.0.1", DEFAULT_SOCKET_SERVER_PORT);
-                        InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
-                        OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
+                            try {
+                                Socket serverSocket = new Socket("127.0.0.1", DEFAULT_SOCKET_SERVER_PORT);
+                                InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
+                                OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
 
-                        // Reader
-                        BufferedReader socketIn = new BufferedReader(socketRx);
+                                // Reader
+                                BufferedReader socketIn = new BufferedReader(socketRx);
 
-                        // Writer
-                        BufferedWriter socketOut = new BufferedWriter(socketTx);
+                                // Writer
+                                BufferedWriter socketOut = new BufferedWriter(socketTx);
 
-                        // Create socket client
+                                // Create socket client
 
-                        this.setVirtualMainController(new VirtualSocketMainController(socketOut));
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException ex) {
-                            throw new RuntimeException(ex);
+                                this.setVirtualMainController(new VirtualSocketMainController(socketOut));
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                                this.virtualGameController = this.virtualMainController.getVirtualGameController(viewController.getGameID());
+                                this.setVirtualGameController(new VirtualSocketGameController(socketOut));
+                                new SocketServerHandler(this.viewController, socketIn, socketOut);
+                                virtualGameController.reAddView(virtualView,viewController.getClientID());
+                                isServerUp = true;
+                            } catch (IOException ex) {
+                                System.out.println("SERVER AGAIN DOWN");
+                            }
                         }
-                        this.virtualGameController = this.virtualMainController.getVirtualGameController(viewController.getGameID());
-                        this.setVirtualGameController(new VirtualSocketGameController(socketOut));
-                        new SocketServerHandler(this.viewController, socketIn, socketOut);
-                        virtualGameController.reAddView(virtualView,viewController.getClientID());
-                        isServerUp = true;
-                    } catch (IOException ex) {
-                        System.out.println("SERVER AGAIN DOWN");
+                        System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
                     }
-                }
-                System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
+                    }
+
             }
+
         }
     }
 }

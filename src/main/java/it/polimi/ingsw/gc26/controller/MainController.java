@@ -367,16 +367,23 @@ public class MainController implements Serializable {
                     throw new RuntimeException(e);
                 }
                 for(Pair client : clients){
-                    try {
-                        ((VirtualView) client.getKey()).isClientAlive();
+                    int numWait = 3;
+                    while(numWait > 0){
+                        try {
+                            ((VirtualView) client.getKey()).isClientAlive();
+                            numWait = 0;
+                        }catch(RemoteException e){
+                            System.out.println("TRY RECONNECTING TO CLIENT " + numWait);
+                            numWait--;
+                            if(numWait == 0){ //ho provato tre volte
+                                System.out.println("Disconnected client" + client.getValue());
+                                threadAlive = false;
+                                destroyGame(idGame);
+                                break;
+                            }
+                        }
                     }
-                    catch(RemoteException e){
-                        System.out.println("Disconnected client" + client.getValue());
-                        threadAlive = false;
-                        destroyGame(idGame);
-                        break;
-
-                    }
+                    if(!threadAlive) break; //serve perchè per evitare che il for continui quando il game viene chiuso
                 }
             }
         }).start();
