@@ -129,17 +129,6 @@ public class CommonTable implements Serializable {
      */
     public void addCard(Card card, ArrayList<Card> list, int index) {
         list.add(index, card);
-
-        ModelObservable.getInstance().notifyUpdateCommonTable(
-                new SimplifiedCommonTable(
-                        resourceDeck.getTopCard(),
-                        goldDeck.getTopCard(),
-                        commonMissions,
-                        resourceCards,
-                        goldCards),
-                "Card added from common table"
-        );
-
     }
 
     /**

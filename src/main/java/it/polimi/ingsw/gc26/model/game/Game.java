@@ -8,6 +8,7 @@ import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -178,7 +179,7 @@ public class Game implements Serializable {
         }
 
 //        try {
-            ModelObservable.getInstance().notifyMessage("It's you turn now",this.currentPlayer.getID());
+        ModelObservable.getInstance().notifyMessage("It's you turn now", this.currentPlayer.getID());
 //        } catch (RemoteException e) {
 //            throw new RuntimeException(e);
 //        }
@@ -257,16 +258,45 @@ public class Game implements Serializable {
         String message = null;
 
         switch (newGameState) {
-            case COMMON_TABLE_PREPARATION -> message = "Common Table Preparation...";
-            case STARTER_CARDS_DISTRIBUTION -> message = "Starter Cards Distribution...";
-            case WAITING_STARTER_CARD_PLACEMENT -> message = "Waiting players for placing starter card...";
-            case WAITING_PAWNS_SELECTION -> message = "Waiting players for selecting pawns...\n" + getAvailablePawns();
-            case HAND_PREPARATION -> message = "Prepare players hand...";
-            case COMMON_MISSION_PREPARATION -> message = "Common Mission Preparation...";
-            case SECRET_MISSION_DISTRIBUTION -> message = "Secret Mission Distribution...";
-            case WAITING_SECRET_MISSION_CHOICE -> message = "Waiting players for choosing secret mission...";
-            case FIRST_PLAYER_EXTRACTION -> message = "First player extraction...";
-            case GAME_STARTED -> message = "GAME STARTED!";
+            case COMMON_TABLE_PREPARATION:
+                message = "Common Table Preparation...";
+                break;
+            case STARTER_CARDS_DISTRIBUTION:
+                message = "Starter Cards Distribution...";
+                ModelObservable.getInstance().notifyUpdateCommonTable(
+                        new SimplifiedCommonTable(
+                                commonTable.getResourceDeck().getTopCard(),
+                                commonTable.getGoldDeck().getTopCard(),
+                                commonTable.getCommonMissions(),
+                                commonTable.getResourceCards(),
+                                commonTable.getGoldCards()),
+                        "Card added from common table"
+                );
+                break;
+            case WAITING_STARTER_CARD_PLACEMENT:
+                message = "Waiting players for placing starter card...";
+                break;
+            case WAITING_PAWNS_SELECTION:
+                message = "Waiting players for selecting pawns...\n" + getAvailablePawns();
+                break;
+            case HAND_PREPARATION:
+                message = "Prepare players hand...";
+                break;
+            case COMMON_MISSION_PREPARATION:
+                message = "Common Mission Preparation...";
+                break;
+            case SECRET_MISSION_DISTRIBUTION:
+                message = "Secret Mission Distribution...";
+                break;
+            case WAITING_SECRET_MISSION_CHOICE:
+                message = "Waiting players for choosing secret mission...";
+                break;
+            case FIRST_PLAYER_EXTRACTION:
+                message = "First player extraction...";
+                break;
+            case GAME_STARTED:
+                message = "GAME STARTED!";
+                break;
         }
 
         // TODO Update view
@@ -315,40 +345,40 @@ public class Game implements Serializable {
         return winners;
     }
 
-    public void errorState(String clientID){
-        ModelObservable.getInstance().notifyError("YOU CANNOT DO THAT NOW",clientID);
+    public void errorState(String clientID) {
+        ModelObservable.getInstance().notifyError("YOU CANNOT DO THAT NOW", clientID);
     }
 
     public String[][] printableGame(Player player) {
         //COMMON TABLE: check if missions are already present
         String[][] commonTablePrint;
-            if(getCommonTable().getCommonMissions().isEmpty()){
-                commonTablePrint = commonTable.printableCommonTable();
-            } else {
-                commonTablePrint = commonTable.printableCommonTableAndMissions();
-            }
+        if (getCommonTable().getCommonMissions().isEmpty()) {
+            commonTablePrint = commonTable.printableCommonTable();
+        } else {
+            commonTablePrint = commonTable.printableCommonTableAndMissions();
+        }
         //SCORES
         String[][] scores = printableScores();
         //PERSONAL BOARD
         String[][] personalBoardPrint = player.getPersonalBoard().printablePersonalBoard();
         //HAND: check if secret mission is already present
         String[][] handPrint;
-            if(player.getPersonalBoard().getSecretMission() == null){
-                handPrint = player.getHand().printableHand();
-            } else {
-                handPrint = player.printableHandAndMission();
-            }
+        if (player.getPersonalBoard().getSecretMission() == null) {
+            handPrint = player.getHand().printableHand();
+        } else {
+            handPrint = player.printableHandAndMission();
+        }
         //calculate dimensions
         int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + 4;
         int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), handPrint[0].length);
         //utils
         Printer printer = new Printer();
-        int y=0;
+        int y = 0;
 
         //initialize empty matrix
         String[][] printableGame = new String[yDim][xDim];
-        for(int i=0; i<yDim; i++){
-            for(int j=0; j<xDim; j++){
+        for (int i = 0; i < yDim; i++) {
+            for (int j = 0; j < xDim; j++) {
                 printableGame[i][j] = "\t";
             }
         }
@@ -367,7 +397,7 @@ public class Game implements Serializable {
         //show personal board
         printableGame[y][0] = "\nYOUR PERSONAL BOARD:\n";
         y++;
-        printer.addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
+        printer.addPrintable(personalBoardPrint, printableGame, (xDim - personalBoardPrint[0].length) / 2, y);
         y += personalBoardPrint.length;
 
         //show player's hand
@@ -387,23 +417,23 @@ public class Game implements Serializable {
         //calculate the spaces needed to align the names
         int maxLenght = 0;
         StringBuilder spaces;
-        for (Player p: players) {
+        for (Player p : players) {
             maxLenght = Math.max(maxLenght, p.getNickname().length());
         }
-        maxLenght ++;
+        maxLenght++;
 
         //design the matrix
         scores[0][0] = "CURRENT SCORES:";
         scores[0][1] = "";
-        for (Player p: players) {
+        for (Player p : players) {
             int i = 0;
             spaces = new StringBuilder();
-            while(i + p.getNickname().length() < maxLenght){
+            while (i + p.getNickname().length() < maxLenght) {
                 spaces.append(" ");
                 i++;
             }
-            scores[players.indexOf(p)+1][0] = p.getNickname() + spaces;
-            scores[players.indexOf(p)+1][1] = p.printableScore();
+            scores[players.indexOf(p) + 1][0] = p.getNickname() + spaces;
+            scores[players.indexOf(p) + 1][1] = p.printableScore();
         }
 
         return scores;
