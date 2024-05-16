@@ -23,17 +23,23 @@ import java.util.Scanner;
 
 public class MainClient {
     /**
-     * Default port of server socket
+     * Server IP
      */
-    private static final int DEFAULT_SOCKET_SERVER_PORT = 3060;
+    public static String SERVER_IP = "127.0.0.1";
     /**
-     * Default port of RMI server
+     * Port of Socket server
      */
-    private static final int DEFAULT_RMI_SERVER_PORT = 1099;
+    public static int SERVER_SOCKET_PORT = MainServer.DEFAULT_SOCKET_SERVER_PORT;
+
+    /**
+     * Port of RMI server
+     */
+    public static int RMI_SERVER_PORT = MainServer.DEFAULT_RMI_SERVER_PORT;
+
     /**
      * RMI bound object name
      */
-    private static final String remoteObjectName = "RMIMainController";
+    public static final String remoteObjectName = "RMIMainController";
 
     /**
      * User interface types
@@ -49,27 +55,26 @@ public class MainClient {
      * Remote interface of the main controller
      */
     private VirtualMainController virtualMainController;
-
     /**
      * Remote interface of the game controller
      */
     private VirtualGameController virtualGameController;
-
     /**
      * Remote interface of the view
      */
     private VirtualView virtualView;
-
     /**
      * Client controller
      */
     private ViewController viewController;
-
     /**
      * Attribute used for synchronize actions between server and client
      */
     private final Object lock;
 
+    /**
+     * Attribute used for saving if server is on
+     */
     boolean isServerUp;
 
     public MainClient() {
@@ -85,14 +90,6 @@ public class MainClient {
      */
     public void setVirtualMainController(VirtualMainController virtualMainController) {
         this.virtualMainController = virtualMainController;
-    }
-
-    /**
-     * Set's the client's flag to true to kill all threads
-     */
-    public void killProcesses() {
-        System.out.println("Game ended because another player disconnected itself!");
-        System.exit(0);
     }
 
     /**
@@ -114,6 +111,14 @@ public class MainClient {
     }
 
     /**
+     * Set's the client's flag to true to kill all threads
+     */
+    public void killProcesses() {
+        System.out.println("Game ended because another player disconnected itself!");
+        System.exit(0);
+    }
+
+    /**
      * Starts RMI Client view
      *
      * @param userInterface selected user interface type
@@ -126,10 +131,9 @@ public class MainClient {
 
         // Create RMI Client
         MainClient mainClient = new MainClient();
-        Remote remoteObject = (Remote)registry.lookup(remoteObjectName);
+        Remote remoteObject = (Remote) registry.lookup(remoteObjectName);
         mainClient.setVirtualMainController((VirtualMainController) remoteObject);
         mainClient.setVirtualView(new VirtualRMIView(mainClient.viewController));
-
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
@@ -146,8 +150,8 @@ public class MainClient {
      * Starts socket client
      *
      * @param socketServerAddress IP address of the server
-     * @param socketServerPort      port of the server
-     * @param userInterface         selected user interface type
+     * @param socketServerPort    port of the server
+     * @param userInterface       selected user interface type
      * @throws IOException
      */
     private static void startSocketClient(String socketServerAddress, int socketServerPort, UserInterface userInterface) throws IOException {
@@ -168,13 +172,14 @@ public class MainClient {
         MainClient mainClient = new MainClient();
         mainClient.setVirtualMainController(new VirtualSocketMainController(socketOut));
         mainClient.setVirtualView(new VirtualSocketView(null));
+
         // Launch a thread for managing server requests
         new SocketServerHandler(mainClient.viewController, socketIn, socketOut);
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            mainClient.runConnectionTUI();
             new Thread(() -> mainClient.SocketPingServer()).start();
+            mainClient.runConnectionTUI();
             mainClient.runGameTUI();
         } else if (userInterface == UserInterface.gui) {
             //new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runGUI();
@@ -183,13 +188,13 @@ public class MainClient {
     }
 
     public void runConnectionTUI() throws RemoteException {
-        // TODO gestire la Remote Exception
         //Initial state in CONNECTION
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Connected to the server successfully!");
+
         System.out.println("Insert your nickname: ");
         String input = scanner.nextLine();
-        viewController.setNickname(input);
+        this.viewController.setNickname(input);
+
         this.virtualMainController.connect(this.virtualView, viewController.getNickname(), viewController.getClientState());
         synchronized (this.lock) {
             while (viewController.getClientState() == ClientState.CONNECTION) {
@@ -283,9 +288,9 @@ public class MainClient {
                 case 1:
                     System.out.println("Select the card position: (0/1/2)");
                     String xPosition = scan.nextLine();
-                    try{
+                    try {
                         virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), viewController.getClientID());
-                    }catch (RemoteException e){
+                    } catch (RemoteException e) {
                         //TODO DA METTERE IN TUTTI I METODI IL CATCH
                     }
                     break;
@@ -316,7 +321,7 @@ public class MainClient {
                 case 7:
                     System.out.println("Insert the pawn color: ");
                     String color = scan.nextLine();
-                    virtualGameController.choosePawnColor(color , viewController.getClientID());
+                    virtualGameController.choosePawnColor(color, viewController.getClientID());
                     break;
                 case 8:
                     System.out.println("Insert the card index: (0/1) ");
@@ -338,7 +343,7 @@ public class MainClient {
                     do {
                         System.out.println("Insert message: ");
                         message = scan.nextLine();
-                    } while(message == "");
+                    } while (message == "");
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
                     virtualGameController.addMessage(message, receiverNickname, viewController.getClientID(), LocalTime.now().toString().formatted(formatter));
                     break;
@@ -367,95 +372,109 @@ public class MainClient {
 
 
         Scanner scan = new Scanner(System.in);
-        int response =  scan.nextInt();
+        int response = scan.nextInt();
         return response;
     }
 
     public static void main(String args[]) {
-        String socketServerAddress = "127.0.0.1";
-        int socketServerPort = DEFAULT_SOCKET_SERVER_PORT;
+        // Get server IP and port
+        Scanner scanner = new Scanner(System.in);
 
-        // Default values
-        NetworkType networkType = null;
-
-        // Check if the client passes server IP address and his port
-        if (args.length == 2) {
-            socketServerAddress = args[0];
-            socketServerPort = Integer.parseInt(args[1]);
+        System.out.print("Enter server IP address (default: 127.0.0.1): ");
+        String serverIP = scanner.nextLine();
+        if (!serverIP.isEmpty()) {
+            SERVER_IP = serverIP;
         }
 
-        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter server RMI port (default 1099): ");
+        String rmiServerPort = scanner.nextLine();
+        if (!rmiServerPort.isEmpty()) {
+            RMI_SERVER_PORT = Integer.parseInt(rmiServerPort);
+        }
+
+        System.out.print("Enter server socket port (default 3060): ");
+        String socketServerPort = scanner.nextLine();
+        if (!socketServerPort.isEmpty()) {
+            SERVER_SOCKET_PORT = Integer.parseInt(socketServerPort);
+        }
+
+        // Get type of communication from user
+        NetworkType networkType = null;
         do {
-            System.out.println("What technology do you want to connect with? (rmi/socket)");
+            System.out.println("What type of communication do you want to use? (rmi/socket)");
             try {
                 networkType = NetworkType.valueOf(scanner.nextLine().toLowerCase());
 
             } catch (IllegalArgumentException e) {
-                System.out.println("Invalid technology!");
+                System.err.println("[ERROR]: Invalid input");
             }
         } while (networkType == null);
 
+        // Get user interface from user
         UserInterface userInterface = null;
         do {
             System.out.println("What type of user interface do you want to use? (tui/gui)");
             try {
-                userInterface = UserInterface.valueOf(scanner.nextLine());
+                userInterface = UserInterface.valueOf(scanner.nextLine().toLowerCase());
             } catch (IllegalArgumentException e) {
-                System.err.println("Invalid user interface!");
+                System.err.println("[ERROR]: Invalid input");
             }
         } while (userInterface == null);
+
         try {
             if (networkType == NetworkType.rmi) {
                 // Start RMI Client
-                String RMIServerAddress = socketServerAddress;
-                startRMIClient(RMIServerAddress, DEFAULT_RMI_SERVER_PORT, userInterface);
+                startRMIClient(SERVER_IP, RMI_SERVER_PORT, userInterface);
             } else if (networkType == NetworkType.socket) {
                 // Start Socket Client
-                startSocketClient(socketServerAddress, socketServerPort, userInterface);
+                startSocketClient(SERVER_IP, SERVER_SOCKET_PORT, userInterface);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NotBoundException e) {
-            e.printStackTrace();
+        } catch (IOException | NotBoundException e) {
+            System.err.println("[ERROR]: Something went wrong with client creation");
         }
 
     }
 
 
-    private void RMIPingServer(){
-        while(true){
+    private void RMIPingServer() {
+        while (true) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
-                System.out.println("LA SLEEP non è andata a buon fine");
+                System.out.println("Thread didn't sleep");
             }
+
             int numWait = 3;
-            while(numWait >0){
+            while (numWait > 0) {
                 try {
-                    virtualMainController.amAlive(); //va fatto in modo asincrono
+                    // Ping server
+                    virtualMainController.amAlive();
                     numWait = 0;
                 } catch (RemoteException e) {
-                    System.out.println("SOMETHING WRONG, TRY " + numWait );
+                    System.out.println("SOMETHING WRONG, TRY " + numWait);
                     numWait--;
-                    if(numWait == 0){
+                    if (numWait == 0) {
                         System.out.println("SERVER DOWN, WAIT a BIT");
                         isServerUp = false;
-                        while(!isServerUp){
+                        while (!isServerUp) {
                             try {
-                                Thread.sleep(1000);
+                                Thread.sleep(100);
                             } catch (InterruptedException ex) {
                                 throw new RuntimeException(ex);
                             }
                             Registry registry = null;
                             try {
-                                registry = LocateRegistry.getRegistry("127.0.0.1", DEFAULT_RMI_SERVER_PORT);
-                                virtualMainController = (VirtualMainController) registry.lookup(remoteObjectName);
-                                virtualGameController = virtualMainController.getVirtualGameController(viewController.getGameID());
-                                virtualGameController.reAddView(virtualView,viewController.getClientID());
+                                registry = LocateRegistry.getRegistry("172.20.10.11", MainServer.DEFAULT_RMI_SERVER_PORT);
+
+                                this.setVirtualMainController((VirtualMainController) registry.lookup(MainClient.remoteObjectName));
+                                this.setVirtualGameController(virtualMainController.getVirtualGameController(viewController.getGameID()));
+
+                                virtualGameController.reAddView(virtualView, viewController.getClientID());
+
                                 isServerUp = true;
                             } catch (RemoteException ex) {
                                 //TODO FORSE METTERE QUALCOSA QUA
-                            } catch(NotBoundException ep) {
+                            } catch (NotBoundException ep) {
                                 ep.printStackTrace();
                             }
                         }
@@ -467,30 +486,29 @@ public class MainClient {
             }
 
         }
-
     }
 
 
     //TODO FARLO ANCHE QUA
-    private void SocketPingServer(){
-        while(true){
+    private void SocketPingServer() {
+        while (true) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 System.out.println("LA SLEEP non è andata a buon fine");
             }
             int numWait = 3;
-            while(numWait > 0){
+            while (numWait > 0) {
                 try {
                     virtualMainController.amAlive();
                     numWait = 0;
                 } catch (IOException e) {
-                    System.out.println("SOMETHING WRONG, TRY " + numWait );
+                    System.out.println("SOMETHING WRONG, TRY " + numWait);
                     numWait--;
-                    if(numWait == 0){
+                    if (numWait == 0) {
                         System.out.println("SERVER DOWN, WAIT a BIT");
                         isServerUp = false;
-                        while(!isServerUp ){
+                        while (!isServerUp) {
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException ex) {
@@ -498,7 +516,7 @@ public class MainClient {
                             }
 
                             try {
-                                Socket serverSocket = new Socket("127.0.0.1", DEFAULT_SOCKET_SERVER_PORT);
+                                Socket serverSocket = new Socket("172.20.10.11", MainServer.DEFAULT_SOCKET_SERVER_PORT);
                                 InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
                                 OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
 
@@ -519,7 +537,8 @@ public class MainClient {
                                 this.virtualGameController = this.virtualMainController.getVirtualGameController(viewController.getGameID());
                                 this.setVirtualGameController(new VirtualSocketGameController(socketOut));
                                 new SocketServerHandler(this.viewController, socketIn, socketOut);
-                                virtualGameController.reAddView(virtualView,viewController.getClientID());
+
+                                virtualGameController.reAddView(virtualView, viewController.getClientID());
                                 isServerUp = true;
                             } catch (IOException ex) {
                                 System.out.println("SERVER AGAIN DOWN");
@@ -527,7 +546,7 @@ public class MainClient {
                         }
                         System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
                     }
-                    }
+                }
 
             }
 
