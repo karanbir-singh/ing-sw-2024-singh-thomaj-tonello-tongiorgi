@@ -4,8 +4,9 @@ import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
 public class ReAddViewRequest implements GameRequest{
-    VirtualView view;
-    String clientID;
+    final private VirtualView view;
+    final private String clientID;
+
     public ReAddViewRequest(VirtualView view, String clientID){
         this.clientID = clientID;
         this.view = view;
