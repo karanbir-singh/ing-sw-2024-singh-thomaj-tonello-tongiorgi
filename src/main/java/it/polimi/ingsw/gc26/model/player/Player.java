@@ -107,8 +107,9 @@ public class Player implements Serializable {
      *
      * @param color new pawn color
      */
-    public void setPawn(String color, ArrayList<Pawn> availableColors, String clientID) {
+    public boolean setPawn(String color, ArrayList<Pawn> availableColors, String clientID) {
         Pawn pawn;
+        boolean result = false;
         switch (color) {
             case "BLUE" -> pawn = Pawn.BLUE;
             case "RED" -> pawn = Pawn.RED;
@@ -126,8 +127,10 @@ public class Player implements Serializable {
         } else {
             availableColors.remove(pawn);
             this.pawnColor = pawn;
+            result = true;
             this.observable.notifyUpdateChosenPawn(pawn, clientID);
         }
+        return result;
     }
 
     /**
