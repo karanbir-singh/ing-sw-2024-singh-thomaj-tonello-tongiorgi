@@ -62,11 +62,6 @@ public class VirtualRMIGameController implements VirtualGameController {
     }
 
     @Override
-    public void reAddView(VirtualView view, String clientID) throws RemoteException{
-        this.gameController.addRequest(new ReAddViewRequest(view,clientID));
-    }
-
-    @Override
     public void drawSelectedCard(String playerID) throws RemoteException  {
         this.gameController.addRequest(new DrawSelectedCardRequest(playerID));
     }
@@ -79,5 +74,10 @@ public class VirtualRMIGameController implements VirtualGameController {
     @Override
     public void addMessage(String line, String nicknameReceiver, String senderID, String time) throws RemoteException {
         this.gameController.addRequest(new AddMessageRequest(line,nicknameReceiver,senderID,time));
+    }
+
+    @Override
+    public void reAddView(VirtualView view, String clientID) throws RemoteException{
+        this.gameController.addRequest(new ReAddViewRequest(view,clientID));
     }
 }
