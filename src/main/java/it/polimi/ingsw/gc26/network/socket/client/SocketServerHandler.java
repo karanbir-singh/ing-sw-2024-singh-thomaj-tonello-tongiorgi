@@ -16,7 +16,6 @@ import it.polimi.ingsw.gc26.model.card_side.mission.MissionLPattern;
 import it.polimi.ingsw.gc26.model.card_side.mission.MissionTripletPattern;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.player.Pawn;
-import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.request.view_request.*;
@@ -78,7 +77,7 @@ public class SocketServerHandler implements Runnable {
                     case "setGameController":
                         this.viewController.setGameController(new VirtualSocketGameController(this.outputToServer));
                         break;
-                    case "updateState":
+                    case "updateClientState":
                         this.viewController.updateClientState(ClientState.valueOf(value.get("clientState").asText()));
                         break;
                     case "showMessage":
@@ -131,7 +130,7 @@ public class SocketServerHandler implements Runnable {
 //                    "points" : "0",
 //                    "UPLEFT" : {
 //                          "isEvil" : "",
-//                          "symbol" : "
+//                          "symbol" : ""
 //                    },
 //                    "DOWNLEFT" : {
 //                          "isEvil" : "",
@@ -146,7 +145,7 @@ public class SocketServerHandler implements Runnable {
 //                          "symbol" : "
 //                    }
 //              },
-//            "goldCard" : {
+//            "goldDeck" : {
 //                    "cardType" : "",
 //                    "sideSymbol" : "",
 //                    "requestedResources" : {},
@@ -272,10 +271,10 @@ public class SocketServerHandler implements Runnable {
 //        }
 
         // resource card
-        Card resourceCard = getResourceCard(encodedTable.get("resourceCard"));
+        Card resourceCard = getResourceCard(encodedTable.get("resourceDeck"));
 
         // gold card
-        Card goldCard = getGoldCard(encodedTable.get("goldCard"));
+        Card goldCard = getGoldCard(encodedTable.get("goldDeck"));
 
         // mission cards
         MissionCard missionCard1 = getMissionCard(encodedTable.get("commonMission").get("0"));
@@ -342,8 +341,8 @@ public class SocketServerHandler implements Runnable {
     }
 
     private ResourceCard getResourceCard(JsonNode encodedCard) {
-        Side frontResource = new ResourceCardFront(Symbol.valueOf(encodedCard.get("resourceCard").get("sideSymbol").asText()),
-                encodedCard.get("resourceCard").get("points").asInt(),
+        Side frontResource = new ResourceCardFront(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
+                encodedCard.get("points").asInt(),
                 new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
                 new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
                 new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),

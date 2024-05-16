@@ -1,15 +1,26 @@
 package it.polimi.ingsw.gc26.network.socket.server;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.*;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * This class represents the client for the server
@@ -62,6 +73,19 @@ public class VirtualSocketView implements VirtualView {
 
     }
 
+    private void sendToClient(String functionName, String valueMsg) {
+        HashMap<String, String> data = getBaseMessage();
+        data.replace("function", functionName);
+        try {
+            data.replace("value", valueMsg);
+            ObjectMapper mappedData = new ObjectMapper();
+            this.outputToClient.println(mappedData.writeValueAsString(data));
+            this.outputToClient.flush();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Print messages from the server to the client.
      *
@@ -92,7 +116,9 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void updateClientState(ClientState clientState) throws RemoteException {
-
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("clientState", clientState.toString());
+        sendToClient("updateClientState", msg);
     }
 
     /**
@@ -115,7 +141,7 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void setGameController() throws RemoteException {
-        sendToClient("setGameController", null);
+        sendToClient("setGameController", (String) null);
     }
 
     /**
@@ -125,6 +151,41 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void updateCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message) throws RemoteException {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode root = om.createObjectNode();
+
+        // resourceDeck
+        root.set("resourceDeck", createResourceCardNode(simplifiedCommonTable.getResourceDeck()));
+
+        // goldDeck
+        root.set("goldDeck", createGoldCardNode(simplifiedCommonTable.getGoldDeck()));
+
+        // commonMissions
+        ObjectNode commonMissions = om.createObjectNode();
+        root.set("commonMissions", commonMissions);
+        for (int i = 0; i < simplifiedCommonTable.getCommonMissions().size(); i++) {
+            commonMissions.set(String.valueOf(i), createMissionCardNode(simplifiedCommonTable.getCommonMissions().get(i)));
+        }
+
+        // resourceCards
+        ObjectNode resourceCards = om.createObjectNode();
+        root.set("resourceCards", resourceCards);
+        for (int i = 0; i < simplifiedCommonTable.getResourceCards().size(); i++) {
+            resourceCards.set(String.valueOf(i), createResourceCardNode(simplifiedCommonTable.getResourceCards().get(i)));
+        }
+
+        // resourceCards
+        ObjectNode goldCards = om.createObjectNode();
+        root.set("goldCards", goldCards);
+        for (int i = 0; i < simplifiedCommonTable.getGoldCards().size(); i++) {
+            goldCards.set(String.valueOf(i), createMissionCardNode(simplifiedCommonTable.getGoldCards().get(i)));
+        }
+
+        try {
+            sendToClient("updateCommonTable", om.writeValueAsString(root));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -135,7 +196,13 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void updateHand(SimplifiedHand simplifiedHand, String message) throws RemoteException {
-
+        ObjectMapper mappedmsg = new ObjectMapper();
+        try {
+            String a = mappedmsg.writeValueAsString(simplifiedHand);
+            a = null;
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -188,4 +255,72 @@ public class VirtualSocketView implements VirtualView {
 
     }
 
+    private ObjectNode createResourceCardNode(Card resourceCard) {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode cardNode = om.createObjectNode();
+        cardNode.put("sideSymbol", resourceCard.getFront().getSideSymbol().toString());
+        cardNode.put("points", String.valueOf(resourceCard.getFront().getPoints()));
+        // corners
+        ObjectNode UPLEFT = om.createObjectNode();
+        cardNode.set("UPLEFT", UPLEFT);
+        UPLEFT.put("isEvil", resourceCard.getFront().getUPLEFT().isEvil());
+        UPLEFT.put("symbol", resourceCard.getFront().getUPLEFT().getSymbol().toString());
+        ObjectNode DOWNLEFT = om.createObjectNode();
+        cardNode.set("DOWNLEFT", DOWNLEFT);
+        DOWNLEFT.put("isEvil", resourceCard.getFront().getDOWNLEFT().isEvil());
+        DOWNLEFT.put("symbol", resourceCard.getFront().getDOWNLEFT().getSymbol().toString());
+        ObjectNode UPRIGHT = om.createObjectNode();
+        cardNode.set("UPRIGHT", UPRIGHT);
+        UPRIGHT.put("isEvil", resourceCard.getFront().getUPRIGHT().isEvil());
+        UPRIGHT.put("symbol", resourceCard.getFront().getUPRIGHT().getSymbol().toString());
+        ObjectNode DOWNRIGHT = om.createObjectNode();
+        cardNode.set("DOWNRIGHT", DOWNRIGHT);
+        DOWNRIGHT.put("isEvil", resourceCard.getFront().getDOWNRIGHT().isEvil());
+        DOWNRIGHT.put("symbol", resourceCard.getFront().getDOWNRIGHT().getSymbol().toString());
+
+        return cardNode;
+    }
+
+    private ObjectNode createGoldCardNode(Card goldCard) {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode cardNode = om.createObjectNode();
+        cardNode.put("cardType", goldCard.getClass().getSimpleName());
+        cardNode.put("sideSymbol", goldCard.getFront().getSideSymbol().toString());
+
+        // resources
+        ObjectNode resourcesNode = om.createObjectNode();
+        for (Map.Entry<Symbol, Integer> resource : goldCard.getFront().getRequestedResources().entrySet()) {
+            resourcesNode.put(resource.getKey().toString(), resource.getValue().toString());
+        }
+        cardNode.set("requestedResources", resourcesNode);
+
+        // corners
+        ObjectNode UPLEFT = om.createObjectNode();
+        cardNode.set("UPLEFT", UPLEFT);
+        UPLEFT.put("isEvil", goldCard.getFront().getUPLEFT().isEvil());
+        UPLEFT.put("symbol", goldCard.getFront().getUPLEFT().getSymbol().toString());
+        ObjectNode DOWNLEFT = om.createObjectNode();
+        cardNode.set("DOWNLEFT", DOWNLEFT);
+        DOWNLEFT.put("isEvil", goldCard.getFront().getDOWNLEFT().isEvil());
+        DOWNLEFT.put("symbol", goldCard.getFront().getDOWNLEFT().getSymbol().toString());
+        ObjectNode UPRIGHT = om.createObjectNode();
+        cardNode.set("UPRIGHT", UPRIGHT);
+        UPRIGHT.put("isEvil", goldCard.getFront().getUPRIGHT().isEvil());
+        UPRIGHT.put("symbol", goldCard.getFront().getUPRIGHT().getSymbol().toString());
+        ObjectNode DOWNRIGHT = om.createObjectNode();
+        cardNode.set("DOWNRIGHT", DOWNRIGHT);
+        DOWNRIGHT.put("isEvil", goldCard.getFront().getDOWNRIGHT().isEvil());
+        DOWNRIGHT.put("symbol", goldCard.getFront().getDOWNRIGHT().getSymbol().toString());
+
+        return cardNode;
+    }
+
+    private ObjectNode createMissionCardNode(Card missionCard) {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode cardNode = om.createObjectNode();
+        cardNode.put("cardType", missionCard.getClass().getSimpleName());
+        cardNode.put("type", missionCard.getFront().getType());
+        return cardNode;
+    }
 }
+

@@ -21,11 +21,13 @@ public class ViewController {
      */
     private final Queue<ViewRequest> viewRequests;
 
+    public final Object lock;
+
     public ViewController(MainClient mainClient) {
         this.mainClient = mainClient;
         this.simplifiedModel = new SimplifiedModel();
         this.viewRequests = new ArrayDeque<>();
-
+        this.lock = new Object();
         this.launchExecutor();
     }
 

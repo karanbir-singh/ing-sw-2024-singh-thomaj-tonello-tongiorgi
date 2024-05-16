@@ -56,5 +56,4 @@ public class SimplifiedCommonTable implements Serializable {
         return goldCards;
     }
 
-
 }

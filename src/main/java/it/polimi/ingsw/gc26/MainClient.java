@@ -69,7 +69,7 @@ public class MainClient {
     /**
      * Attribute used for synchronize actions between server and client
      */
-    private final Object lock;
+    public final Object lock;
 
     public MainClient() {
         this.clientID = null;
@@ -87,7 +87,10 @@ public class MainClient {
     }
 
     public void setClientID(String clientID) {
-        this.clientID = clientID;
+        synchronized (this.lock) {
+            this.clientID = clientID;
+            this.lock.notifyAll();
+        }
     }
 
     /**
