@@ -16,16 +16,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ModelObservable implements Serializable{
+public class ModelObservable implements Serializable {
     private transient ArrayList<Pair<VirtualView, String>> clients;
-    //private static ModelObservable instance;
 
     public ModelObservable() {
         this.clients = new ArrayList<>();
     }
-    public ArrayList<Pair<VirtualView,String>> getClients(){
-        if(this.clients == null){ //SERVE PERCHé QUANDO IL SERVER TORNA SU DOPO ESSERE
-                                    //ANDATO IN DOWN, CLIENTS è NULL
+
+    public ArrayList<Pair<VirtualView, String>> getClients() {
+        // Check if clients list exists
+        if (this.clients == null) {
             return new ArrayList<>();
         }
         return this.clients;
@@ -33,11 +33,11 @@ public class ModelObservable implements Serializable{
 
 
     public void addObserver(VirtualView view, String clientID) {
-        if(this.clients == null){//SERVE PERCHé QUANDO IL SERVER TORNA SU DOPO ESSERE
-                                    //ANDATO IN DOWN, CLIENTS è NULL
+        // Check if clients list exists
+        if (this.clients == null) {
             this.clients = new ArrayList<>();
         }
-        this.clients.add(new Pair<>(view,clientID));
+        this.clients.add(new Pair<>(view, clientID));
     }
 
 
@@ -86,7 +86,7 @@ public class ModelObservable implements Serializable{
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView) client.getKey()).showMessage(msg,clientID);
+                    ((VirtualView) client.getKey()).showMessage(msg, clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -98,7 +98,7 @@ public class ModelObservable implements Serializable{
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView) client.getKey()).showMessage(errorMsg,clientID);
+                    ((VirtualView) client.getKey()).showMessage(errorMsg, clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -132,7 +132,7 @@ public class ModelObservable implements Serializable{
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
                 try {
-                    ((VirtualView) client.getKey()).updateChosenPawn(pawn.getFontColor(),clientID);
+                    ((VirtualView) client.getKey()).updateChosenPawn(pawn.getFontColor(), clientID);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
