@@ -1,6 +1,5 @@
 package it.polimi.ingsw.gc26.controller;
 
-import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.CommonTable;
@@ -14,69 +13,82 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.game_request.GameRequest;
 
 import java.io.*;
-import java.nio.file.FileSystemNotFoundException;
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class GameController implements Serializable {
     /**
+     * This attribute represents the first part of the file path for saving the game controller
+     */
+    public static final String GAME_CONTROLLER_FILE_PATH = "src/main/resources/gameController";
+    /**
+     * This attribute represents the ID of the game controller
+     */
+    private final int ID;
+    /**
      * This attribute represents the execution type
      */
-    private boolean isDebug;
+    private final boolean isDebug;
     /**
      * This attribute represents the game that the game controller controls
      */
-    private Game game;
+    private final Game game;
     /**
      * This attribute represents the list of players that need to do an action, used only in the game preparation phase
      */
-    private ArrayList<Player> playersToWait;
+    private final ArrayList<Player> playersToWait;
     /**
      * This attribute represents the list of requests sent from clients
      */
     private transient Queue<GameRequest> gameRequests;
 
-    private String pathToCopy;
     /**
      * Initializes the game (provided by the main controller)
      *
      * @param game the object that represents the game
      */
-    public GameController(Game game, String pathToCopy) throws IOException {
-        if(game != null && pathToCopy != null){
-            this.game = game;
-            this.game.setState(GameState.COMMON_TABLE_PREPARATION);
-            this.playersToWait = new ArrayList<>();
-            this.gameRequests = new ArrayDeque<>();
-            this.launchExecutor();
-            this.pathToCopy = pathToCopy;
-            this.copyToDisk();
-            this.isDebug = java.lang.management.ManagementFactory.
-                    getRuntimeMXBean().
-                    getInputArguments().toString().indexOf("jdwp") >= 0;
+    public GameController(Game game, int ID) throws IOException {
+        this.game = game;
+        this.game.setState(GameState.COMMON_TABLE_PREPARATION);
+        this.playersToWait = new ArrayList<>();
+        this.gameRequests = new ArrayDeque<>();
+        this.ID = ID;
+
+        this.launchExecutor();
+        this.backup();
+
+        this.isDebug = java.lang.management.ManagementFactory.
+                getRuntimeMXBean().
+                getInputArguments().toString().contains("jdwp");
+    }
+
+    /**
+     * Copy everything on the disk
+     *
+     * @throws IOException
+     */
+    private void backup() {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(STR."\{GAME_CONTROLLER_FILE_PATH}\{ID}.bin");
+            ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+            outputStream.writeObject(this);
+            outputStream.close();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            System.err.println("[ERROR]: error while saving game on file");
         }
-
-
     }
 
-    private void copyToDisk() throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(this.pathToCopy);
-        ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
-        outputStream.writeObject(this);
-        outputStream.close();
-        fileOutputStream.close();
-    }
     /**
      * Launch a thread for managing clients requests
      */
     public void launchExecutor() {
-        gameRequests = new ArrayDeque<>(); //so that when the server goes up the array is empty
+        this.gameRequests = new ArrayDeque<>();
         new Thread(() -> {
             while (true) {
-                synchronized (gameRequests) {
-                    while (gameRequests.isEmpty()) {
+                synchronized (this.gameRequests) {
+                    while (this.gameRequests.isEmpty()) {
                         try {
-                            gameRequests.wait();
+                            this.gameRequests.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -138,13 +150,8 @@ public class GameController implements Serializable {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -181,13 +188,8 @@ public class GameController implements Serializable {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -202,14 +204,16 @@ public class GameController implements Serializable {
             Player player = game.getPlayerByID(playerID);
 
             // Set pawn
-            player.setPawn(color, game.getAvailablePawns(), playerID);
+            boolean isPawnSet = player.setPawn(color, game.getAvailablePawns(), playerID);
 
             if (isDebug) {
                 System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
             }
 
             // Remove from list
-            playersToWait.remove(player);
+            if (isPawnSet) {
+                playersToWait.remove(player);
+            }
 
             // Check if all players have chosen the pawn
             if (playersToWait.isEmpty()) {
@@ -224,14 +228,8 @@ public class GameController implements Serializable {
             game.errorState(playerID);
         }
 
-
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -262,13 +260,8 @@ public class GameController implements Serializable {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -298,13 +291,8 @@ public class GameController implements Serializable {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -339,13 +327,8 @@ public class GameController implements Serializable {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -374,13 +357,8 @@ public class GameController implements Serializable {
             game.errorState(playerID);
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -423,13 +401,8 @@ public class GameController implements Serializable {
             game.errorState(playerID);
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -460,13 +433,8 @@ public class GameController implements Serializable {
             game.errorState(playerID);
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     // PHASE 2: Game Flow
@@ -478,22 +446,13 @@ public class GameController implements Serializable {
      * @param playerID  ID of the player who is selected the card to play
      */
     public void selectCardFromHand(int cardIndex, String playerID) {
-        System.out.println("CARTA SELEZIONATA");
         if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
             // Get the player who is selected the card to play
-            Player player = null;
-            try{
-                player = game.getPlayerByID(playerID);
-            }catch(NoSuchElementException e){
-                e.printStackTrace();
-                System.out.println(this.game.getPlayers().get(0).getID());
-                System.out.println(this.game.getPlayers().get(1).getID());
-            }
-
+            Player player = game.getPlayerByID(playerID);
 
             // Get card to select
             Card selectedCard = player.getHand().getCard(0, 3, cardIndex, playerID);
-            System.out.println("CARTA SELEZIONATA");
+
             // Set the selected card
             if (selectedCard != null) {
                 player.getHand().setSelectedCard(selectedCard, player.getID());
@@ -501,20 +460,14 @@ public class GameController implements Serializable {
                     System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
                 }
             }
-
         } else {
             // TODO gestire cosa modificare nel model se lo stato è errato
             game.errorState(playerID);
             System.out.println("stato erroneo");
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -531,13 +484,8 @@ public class GameController implements Serializable {
         // Turn selected card side
         player.getHand().turnSide(playerID);
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -565,13 +513,8 @@ public class GameController implements Serializable {
             game.errorState(playerID);
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -650,13 +593,8 @@ public class GameController implements Serializable {
             }
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -683,15 +621,8 @@ public class GameController implements Serializable {
             game.errorState(playerID);
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
-
-        this.game.getPlayerByID(playerID).getPersonalBoard().showBoard();
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -743,12 +674,8 @@ public class GameController implements Serializable {
             game.errorState(playerID);
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -766,14 +693,8 @@ public class GameController implements Serializable {
             System.out.println(msg);
         }
 
-        //copy on the disk all game
-        try {
-            this.copyToDisk();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("ERRORE QUI");
-        }
-
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -784,11 +705,11 @@ public class GameController implements Serializable {
      */
     public void printPersonalBoard(String nickname, String playerID) {
         if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
-           // Player player = game.getPlayerByNickname(nickname);
+            // Player player = game.getPlayerByNickname(nickname);
 
             // TODO need to add a method in PersonalBoard for update view
             if (isDebug) {
-               // System.out.println(player.getNickname() + " printed personal board");
+                // System.out.println(player.getNickname() + " printed personal board");
             }
 
             // TODO need to add a method in PersonalBoard
@@ -798,21 +719,28 @@ public class GameController implements Serializable {
 
     }
 
-    public Game getGame(){
+    /**
+     * @return game controlled by this game controller
+     */
+    public Game getGame() {
         return this.game;
     }
+
     /**
      * Changes the current player
      */
     public void changeTurn() {
         game.goToNextPlayer();
+
         if (isDebug) {
             System.out.println("changed turn");
         }
+
+        // Backup game controller
+        this.backup();
     }
 
-
-    public void reAddView(VirtualView view, String clientID){
+    public void reAddView(VirtualView view, String clientID) {
         this.game.getObservable().addObserver(view, clientID);
     }
 }
