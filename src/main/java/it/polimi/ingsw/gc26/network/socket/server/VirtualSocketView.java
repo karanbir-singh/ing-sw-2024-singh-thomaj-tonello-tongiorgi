@@ -12,6 +12,7 @@ import it.polimi.ingsw.gc26.model.card_side.StarterCardFront;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import it.polimi.ingsw.gc26.request.view_request.OtherPersonalBoardUpdateRequest;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.beans.property.adapter.ReadOnlyJavaBeanBooleanProperty;
 
@@ -360,7 +361,66 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void updateOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) throws RemoteException {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode root = om.createObjectNode();
 
+        // message
+        root.put("message", message);
+
+        // int fields
+        root.put("xMin", otherPersonalBoard.getxMin());
+        root.put("xMax", otherPersonalBoard.getxMax());
+        root.put("yMax", otherPersonalBoard.getyMax());
+        root.put("yMin", otherPersonalBoard.getyMin());
+        root.put("score", otherPersonalBoard.getScore());
+        root.put("selectedX", otherPersonalBoard.getSelectedX());
+        root.put("selectedY", otherPersonalBoard.getSelectedY());
+
+        // occupied positions
+        ArrayNode occupiedPositions = om.createArrayNode();
+        root.set("occupiedPositions", occupiedPositions);
+        for (Point point : otherPersonalBoard.getOccupiedPositions()) {
+            ObjectNode genericPoint = om.createObjectNode();
+            genericPoint.put("X", point.getX());
+            genericPoint.put("Y", point.getY());
+            occupiedPositions.add(genericPoint);
+        }
+
+        // playable positions
+        ArrayNode playablePositions = om.createArrayNode();
+        root.set("playablePositions", playablePositions);
+        for (Point point : otherPersonalBoard.getPlayablePositions()) {
+            ObjectNode genericPoint = om.createObjectNode();
+            genericPoint.put("X", point.getX());
+            genericPoint.put("Y", point.getY());
+            playablePositions.add(genericPoint);
+        }
+
+        // blocked positions
+        ArrayNode blockedPositions = om.createArrayNode();
+        root.set("blockedPositions", blockedPositions);
+        for (Point point : otherPersonalBoard.getBlockedPositions()) {
+            ObjectNode genericPoint = om.createObjectNode();
+            genericPoint.put("X", point.getX());
+            genericPoint.put("Y", point.getY());
+            blockedPositions.add(genericPoint);
+        }
+
+        // secret mission
+        root.set("secretMission", createMissionCardNode(otherPersonalBoard.getSecretMission()));
+
+        // visibleResources
+        ObjectNode visibleResources = om.createObjectNode();
+        root.set("visibleResources", visibleResources);
+        for (Map.Entry<Symbol, Integer> resource : otherPersonalBoard.getVisibleResources().entrySet()) {
+            visibleResources.put(resource.getKey().toString(), resource.getValue().toString());
+        }
+
+        try {
+            sendToClient("updateOtherPersonalBoard", om.writeValueAsString(root));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
