@@ -38,6 +38,24 @@ public class Point implements Serializable {
     }
 
     /**
+     * Initializes the point with the coordinates, its flags and the side present in that point
+     * @param x x coordinate
+     * @param y y coordinate
+     * @param flags flags for this point
+     * @param side card's side present in the current point
+     */
+    public Point(int x, int y, Map<Integer, Boolean> flags, Side side) {
+        this.x = x;
+        this.y = y;
+        this.flags = flags;
+        this.side = side;
+    }
+
+    public Map<Integer, Boolean> getFlags() {
+        return flags;
+    }
+
+    /**
      * Returns X coordinate
      * @return x
      */
