@@ -24,10 +24,7 @@ import it.polimi.ingsw.gc26.view_model.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -125,151 +122,6 @@ public class SocketServerHandler implements Runnable {
     }
 
     public SimplifiedCommonTable buildSimplifiedCommonTable(JsonNode encodedTable) {
-//        {
-//            "resourceCard": {
-//                    "sideSymbol" : "",
-//                    "points" : "0",
-//                    "UPLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : ""
-//                    },
-//                    "DOWNLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "UPRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    }
-//              },
-//            "goldDeck" : {
-//                    "cardType" : "",
-//                    "sideSymbol" : "",
-//                    "requestedResources" : {},
-//                    "UPLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "UPRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    }
-//            },
-//            "commonMissions": {
-//               "0" : {
-//                  "cardType" : "",
-//                  "type" : ""
-//               },
-//               "1" : {
-//                  "cardType" : "",
-//                  "type" : ""
-//               }
-//            },
-//            "resourceCards": {
-//                "0" : {
-//                    "sideSymbol" : "",
-//                    "points" : "0",
-//                    "UPLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                   },
-//                    "UPRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                "1" : {
-//                    "sideSymbol" : "",
-//                    "points" : "0",
-//                    "UPLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "UPRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    }
-//            },
-//            "missionCard": {
-//                "0" : {
-//                  "cardType" : "",
-//                  "type" : ""
-//                },
-//                "1" : {
-//                  "cardType" : "",
-//                  "type" : ""
-//                }
-//            },
-//            "goldCards": {
-//                "0" : {
-//                    "cardType" : "",
-//                    "sideSymbol" : "",
-//                    "requestedResources" : {},
-//                    "UPLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "UPRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                "1" : {
-//                    "cardType" : "",
-//                    "sideSymbol" : "",
-//                    "requestedResources" : {},
-//                    "UPLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNLEFT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "UPRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    },
-//                    "DOWNRIGHT" : {
-//                          "isEvil" : "",
-//                          "symbol" : "
-//                    }
-//            }
-//        }
 
         // resource card
         Card resourceCard = getResourceCard(encodedTable.get("resourceDeck"));
@@ -280,7 +132,7 @@ public class SocketServerHandler implements Runnable {
         // mission cards
         ArrayList<Card> commonMission = new ArrayList<>();
         for (JsonNode mission : encodedTable.get("commonMissions")) {
-            commonMission.add(getMissionCard(encodedTable.get("commonMissions")));
+            commonMission.add(getMissionCard(mission));
         }
 
 
@@ -301,9 +153,14 @@ public class SocketServerHandler implements Runnable {
     }
 
     private GoldCard getGoldCard(JsonNode encodedCard) {
+        if (encodedCard.findValue("card") != null) {
+            encodedCard = encodedCard.get("card");
+        }
         Map<Symbol, Integer> resources = new HashMap<>();
-        for ( JsonNode resource : encodedCard.get("requestedResources")) {
-            resources.put(null, null); //TODO
+        Iterator<Map.Entry<String, JsonNode>> resourceIterator = encodedCard.get("requestedResources").fields();
+        while (resourceIterator.hasNext()) {
+            Map.Entry<String, JsonNode> entry = resourceIterator.next();
+            resources.put(Symbol.valueOf(entry.getKey()), entry.getValue().asInt());
         }
         Side frontGold = switch (encodedCard.get("cardType").asText()) {
             case "CornerCounter" ->
@@ -357,6 +214,9 @@ public class SocketServerHandler implements Runnable {
     }
 
     private ResourceCard getResourceCard(JsonNode encodedCard) {
+        if (encodedCard.findValue("card") != null) {
+            encodedCard = encodedCard.get("card");
+        }
         Side frontResource = new ResourceCardFront(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
                 encodedCard.get("points").asInt(),
                 new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()),

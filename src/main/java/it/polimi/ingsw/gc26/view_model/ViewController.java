@@ -128,7 +128,7 @@ public class ViewController {
      */
 
     public void showMessage(String message) {
-//        System.out.println(STR."[SERVER]: \{message}");
+        System.out.println(STR."[SERVER]: \{message}");
     }
 
     /**

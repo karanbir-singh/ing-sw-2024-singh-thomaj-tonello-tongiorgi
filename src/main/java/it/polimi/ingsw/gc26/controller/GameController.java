@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.controller;
 
+import it.polimi.ingsw.gc26.model.card.MissionCard;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.CommonTable;
@@ -258,8 +259,8 @@ public class GameController {
 
             for (Player player : game.getPlayers()) {
                 // Get two mission cards from the table
-                Card firstSecretMission = commonTable.getMissionDeck().removeCard();
-                Card secondSecretMission = commonTable.getMissionDeck().removeCard();
+                MissionCard firstSecretMission = (MissionCard) commonTable.getMissionDeck().removeCard();
+                MissionCard secondSecretMission = (MissionCard) commonTable.getMissionDeck().removeCard();
 
                 // Create the secondary hand
                 player.createSecretMissionHand();
@@ -291,7 +292,7 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Get selected secret mission
-            Card secretMission = player.getSecretMissionHand().getCard(0, 2, cardIndex, playerID);
+            MissionCard secretMission = (MissionCard) player.getSecretMissionHand().getCard(0, 2, cardIndex, playerID);
 
             // Select the chosen card
             if (secretMission != null) {
@@ -317,7 +318,7 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Set the secret mission on the personal board of the players
-            Card secretMission = player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard(), playerID);
+            MissionCard secretMission = (MissionCard) player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard(), playerID);
 
             if (secretMission != null) {
                 // Remove the card from the secondary hand

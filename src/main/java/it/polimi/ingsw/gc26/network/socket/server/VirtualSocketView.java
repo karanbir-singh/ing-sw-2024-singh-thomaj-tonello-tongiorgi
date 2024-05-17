@@ -89,7 +89,9 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void showMessage(String message) throws RemoteException {
-
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("message", message);
+        sendToClient("showMessage", msg);
     }
 
     /**
@@ -100,7 +102,9 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void showError(String message) throws RemoteException {
-
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("errorMessage", message);
+        sendToClient("showError", msg);
     }
 
     /**
@@ -219,14 +223,14 @@ public class VirtualSocketView implements VirtualView {
                     genericCard.set("card", createStarterCardNode(card));
                     break;
                 case null, default:
+                    String a = "";
                     break;
             }
             cards.add(genericCard);
         }
         root.put("selectedCard", simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard()));
         if (simplifiedHand.getSelectedCard() != null) {
-            root.put("selectedSide", simplifiedHand.getSelectedCard().equals(simplifiedHand.getCards().get(simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard().getFront()))) ? "0" : "1" ); // TODO
-
+            root.put("selectedSide", simplifiedHand.getSelectedSide().equals(simplifiedHand.getCards().get(simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard())).getFront()) ? "0" : "1" ); // TODO
         } else {
             root.put("selectedSide", -1);
         }
@@ -244,7 +248,39 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void updateSecretHand(SimplifiedHand simplifiedSecretHand, String message) throws RemoteException {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode root = om.createObjectNode();
 
+        //message
+        root.put("message", message);
+
+        //cards
+        ArrayNode cards = om.createArrayNode();
+        root.set("cards", cards);
+        for (Card card : simplifiedSecretHand.getCards()) {
+            ObjectNode genericCard = om.createObjectNode();
+            switch(card.getClass().getSimpleName()){
+                case "MissionCard":
+                    genericCard.put("type", "MissionCard");
+                    genericCard.set("card", createMissionCardNode(card));
+                    break;
+                case null, default:
+                    String a = "";
+                    break;
+            }
+            cards.add(genericCard);
+        }
+        root.put("selectedCard", simplifiedSecretHand.getCards().indexOf(simplifiedSecretHand.getSelectedCard()));
+        if (simplifiedSecretHand.getSelectedCard() != null) {
+            root.put("selectedSide", simplifiedSecretHand.getSelectedSide().equals(simplifiedSecretHand.getCards().get(simplifiedSecretHand.getCards().indexOf(simplifiedSecretHand.getSelectedCard())).getFront()) ? "0" : "1" ); // TODO
+        } else {
+            root.put("selectedSide", -1);
+        }
+        try {
+            sendToClient("updateHand", om.writeValueAsString(root));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
