@@ -430,7 +430,28 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void updatePlayer(SimplifiedPlayer simplifiedPlayer, String message) throws RemoteException {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode root = om.createObjectNode();
 
+        // message
+        root.put("message", message);
+
+        // ID
+        root.put("ID", simplifiedPlayer.getID());
+        // nickname
+        root.put("nickname", simplifiedPlayer.getNickname());
+        // pawn color
+        root.put("pawnColor", simplifiedPlayer.getPawnColor().toString());
+        // amIFirstPlayer
+        root.put("amIFirstPlayer", simplifiedPlayer.isAmIFirstPlayer());
+        // player's state
+        root.put("state", simplifiedPlayer.getState().toString());
+
+        try {
+            sendToClient("updatePlayer", om.writeValueAsString(root));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

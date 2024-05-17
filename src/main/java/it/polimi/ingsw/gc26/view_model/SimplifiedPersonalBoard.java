@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SimplifiedPersonalBoard {
-    private int xMin, xMax, yMin, yMax;
-    private int score;
-    private ArrayList<Point> occupiedPositions;
-    private ArrayList<Point> playablePositions;
-    private ArrayList<Point> blockedPositions;
-    private Card secretMission;
-    private Map<Symbol, Integer> visibleResources;
+    private final int xMin, xMax, yMin, yMax;
+    private final int score;
+    private final ArrayList<Point> occupiedPositions;
+    private final ArrayList<Point> playablePositions;
+    private final ArrayList<Point> blockedPositions;
+    private final Card secretMission;
+    private final Map<Symbol, Integer> visibleResources;
     private int selectedX = 0;
     private int selectedY = 0;
 
