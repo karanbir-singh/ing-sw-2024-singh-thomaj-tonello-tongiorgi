@@ -7,10 +7,13 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.card.MissionCard;
 import it.polimi.ingsw.gc26.model.card_side.StarterCardFront;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
+import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.*;
+import javafx.beans.property.adapter.ReadOnlyJavaBeanBooleanProperty;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -223,8 +226,7 @@ public class VirtualSocketView implements VirtualView {
                     genericCard.set("card", createStarterCardNode(card));
                     break;
                 case null, default:
-                    String a = "";
-                    break;
+                    throw new RemoteException();
             }
             cards.add(genericCard);
         }
@@ -265,8 +267,7 @@ public class VirtualSocketView implements VirtualView {
                     genericCard.set("card", createMissionCardNode(card));
                     break;
                 case null, default:
-                    String a = "";
-                    break;
+                    throw new RemoteException();
             }
             cards.add(genericCard);
         }
@@ -290,7 +291,66 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void updatePersonalBoard(SimplifiedPersonalBoard personalBoard, String message) throws RemoteException {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode root = om.createObjectNode();
 
+        // message
+        root.put("message", message);
+
+        // int fields
+        root.put("xMin", personalBoard.getxMin());
+        root.put("xMax", personalBoard.getxMax());
+        root.put("yMax", personalBoard.getyMax());
+        root.put("yMin", personalBoard.getyMin());
+        root.put("score", personalBoard.getScore());
+        root.put("selectedX", personalBoard.getSelectedX());
+        root.put("selectedY", personalBoard.getSelectedY());
+
+        // occupied positions
+        ArrayNode occupiedPositions = om.createArrayNode();
+        root.set("occupiedPositions", occupiedPositions);
+        for (Point point : personalBoard.getOccupiedPositions()) {
+            ObjectNode genericPoint = om.createObjectNode();
+            genericPoint.put("X", point.getX());
+            genericPoint.put("Y", point.getY());
+            occupiedPositions.add(genericPoint);
+        }
+
+        // playable positions
+        ArrayNode playablePositions = om.createArrayNode();
+        root.set("playablePositions", playablePositions);
+        for (Point point : personalBoard.getPlayablePositions()) {
+            ObjectNode genericPoint = om.createObjectNode();
+            genericPoint.put("X", point.getX());
+            genericPoint.put("Y", point.getY());
+            playablePositions.add(genericPoint);
+        }
+
+        // blocked positions
+        ArrayNode blockedPositions = om.createArrayNode();
+        root.set("blockedPositions", blockedPositions);
+        for (Point point : personalBoard.getBlockedPositions()) {
+            ObjectNode genericPoint = om.createObjectNode();
+            genericPoint.put("X", point.getX());
+            genericPoint.put("Y", point.getY());
+            blockedPositions.add(genericPoint);
+        }
+
+        // secret mission
+        root.set("secretMission", createMissionCardNode(personalBoard.getSecretMission()));
+
+        // visibleResources
+        ObjectNode visibleResources = om.createObjectNode();
+        root.set("visibleResources", visibleResources);
+        for (Map.Entry<Symbol, Integer> resource : personalBoard.getVisibleResources().entrySet()) {
+            visibleResources.put(resource.getKey().toString(), resource.getValue().toString());
+        }
+
+        try {
+            sendToClient("updatePersonalBoard", om.writeValueAsString(root));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -350,6 +410,9 @@ public class VirtualSocketView implements VirtualView {
     }
 
     private ObjectNode createMissionCardNode(Card missionCard) {
+        if (missionCard == null) {
+            return new ObjectMapper().createObjectNode();
+        }
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
         cardNode.put("cardType", missionCard.getClass().getSimpleName());

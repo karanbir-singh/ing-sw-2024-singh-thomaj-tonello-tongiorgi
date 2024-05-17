@@ -262,6 +262,7 @@ public class SocketServerHandler implements Runnable {
     }
 
     private MissionCard getMissionCard(JsonNode encodedCard) {
+        if (encodedCard.isEmpty()) { return null;}
         MissionCardFront missionCardFront = switch (encodedCard.get("cardType").asText()) {
             case "missionLPatter" ->
                     new MissionLPattern(encodedCard.get("type").asInt());
@@ -317,28 +318,31 @@ public class SocketServerHandler implements Runnable {
         ArrayList<Point> playablePositions = new ArrayList<>();
         ArrayList<Point> blockedPositions = new ArrayList<>();
         Card secretMission = getMissionCard(encodedBoard.get("secretMission"));
-        Map<Symbol, Integer> resources = new HashMap<>();
 
         for( JsonNode occupiedPosition : encodedBoard.get("occupiedPositions")){
-            occupiedPositions.add(new Point(occupiedPosition.get("x").asInt(), occupiedPosition.get("Y").asInt()));
+            occupiedPositions.add(new Point(occupiedPosition.get("X").asInt(), occupiedPosition.get("Y").asInt()));
         }
 
-        for( JsonNode playablePosition : encodedBoard.get("occupiedPositions")){
-            playablePositions.add(new Point(playablePosition.get("x").asInt(), playablePosition.get("Y").asInt()));
+        for( JsonNode playablePosition : encodedBoard.get("playablePositions")){
+            playablePositions.add(new Point(playablePosition.get("X").asInt(), playablePosition.get("Y").asInt()));
         }
 
-        for( JsonNode blockedPosition : encodedBoard.get("occupiedPositions")){
-            blockedPositions.add(new Point(blockedPosition.get("x").asInt(), blockedPosition.get("Y").asInt()));
+        for( JsonNode blockedPosition : encodedBoard.get("blockedPositions")){
+            blockedPositions.add(new Point(blockedPosition.get("X").asInt(), blockedPosition.get("Y").asInt()));
         }
 
-        for (JsonNode resource : encodedBoard.get("resources")){
-            resources.put(null, null); // TODO
+        // visible resources
+        Map<Symbol, Integer> visibleResources = new HashMap<>();
+        Iterator<Map.Entry<String, JsonNode>> resourceIterator = encodedBoard.get("visibleResources").fields();
+        while (resourceIterator.hasNext()) {
+            Map.Entry<String, JsonNode> entry = resourceIterator.next();
+            visibleResources.put(Symbol.valueOf(entry.getKey()), entry.getValue().asInt());
         }
 
         return new SimplifiedPersonalBoard(encodedBoard.get("xMin").asInt(),
                 encodedBoard.get("xMax").asInt(), encodedBoard.get("yMax").asInt(), encodedBoard.get("yMin").asInt(),
                 encodedBoard.get("score").asInt(), occupiedPositions, playablePositions, blockedPositions, secretMission,
-                resources, encodedBoard.get("selectedX").asInt(), encodedBoard.get("selectedY").asInt());
+                visibleResources, encodedBoard.get("selectedX").asInt(), encodedBoard.get("selectedY").asInt());
     }
 
     private SimplifiedPlayer buildSimplifiedPlayer(JsonNode encodedPlayer) {
