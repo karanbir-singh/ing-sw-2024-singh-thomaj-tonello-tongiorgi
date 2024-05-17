@@ -20,6 +20,15 @@ import java.util.Scanner;
 
 public class MainClient {
     /**
+     * ID of the client
+     */
+    private String clientID;
+
+    /**
+     * State of the client
+     */
+    private ClientState clientState;
+    /**
      * Default port of server socket
      */
     private static final int DEFAULT_SOCKET_SERVER_PORT = 3060;
@@ -31,11 +40,6 @@ public class MainClient {
      * RMI bound object name
      */
     private static final String remoteObjectName = "RMIMainController";
-
-    private String clientID;
-
-    private ClientState clientState;
-
     /**
      * User interface types
      */
@@ -286,6 +290,7 @@ public class MainClient {
 
         // Infinite loop
         while (true) {
+            int cardIndex;
             Integer option = printOptions();
             switch (option) {
                 case 1:
@@ -308,11 +313,9 @@ public class MainClient {
                     break;
                 case 5:
                     //TODO use only one number
-                    System.out.println("Insert the X coordinate: ");
-                    XPosition = scan.nextLine();
-                    System.out.println("Insert the X coordinate: ");
-                    YPosition = scan.nextLine();
-                    virtualGameController.selectCardFromCommonTable(Integer.parseInt(XPosition), Integer.parseInt(YPosition), clientID);
+                    System.out.println("Insert the card index (0/1/2/3/4/5): ");
+                    cardIndex = Integer.parseInt(scan.nextLine());
+                    virtualGameController.selectCardFromCommonTable(cardIndex, clientID);
                     break;
                 case 6:
                     virtualGameController.drawSelectedCard(clientID);
@@ -324,7 +327,7 @@ public class MainClient {
                     break;
                 case 8:
                     System.out.println("Insert the card index: (0/1) ");
-                    int cardIndex = Integer.parseInt(scan.nextLine());
+                    cardIndex = Integer.parseInt(scan.nextLine());
                     virtualGameController.selectSecretMission(cardIndex, clientID);
                     break;
                 case 9:

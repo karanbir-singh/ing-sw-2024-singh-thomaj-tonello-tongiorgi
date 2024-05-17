@@ -527,8 +527,7 @@ public class GameController {
     /**
      * Selects the card on the common table that the currentPlayer wants to draw
      *
-     * @param cardX    coordinate on the X axis of the card on the common table
-     * @param cardY    coordinate on the Y axis of the card on the common table
+     * @param cardIndex index of the card on the common table
      * @param playerID ID of the player who is trying to select the card on the common table
      */
     public void selectCardFromCommonTable(int cardIndex, String playerID) {
