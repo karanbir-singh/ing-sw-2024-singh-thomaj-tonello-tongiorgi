@@ -354,10 +354,10 @@ public class SocketServerHandler implements Runnable {
                 PlayerState.valueOf(encodedPlayer.get("state").asText()));
     }
 
-    private SimplifiedChat buildSimplifiedChat(JsonNode encodedTable) throws JsonProcessingException {
+    private SimplifiedChat buildSimplifiedChat(JsonNode encodedChat) throws JsonProcessingException {
         ArrayList<Message> messages = new ArrayList<>();
-        for (int i = 0; i < encodedTable.get("messages").size(); i++) {
-            messages.add(new Message(encodedTable.get(i).asText()));
+        for (JsonNode encodedMessage :  encodedChat.get("messages")) {
+            messages.add(new Message(encodedMessage.asText()));
         }
         return new SimplifiedChat(messages);
     }
