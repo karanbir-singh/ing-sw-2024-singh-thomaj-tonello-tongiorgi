@@ -1,21 +1,16 @@
 package it.polimi.ingsw.gc26.network.socket.server;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.StarterCardFront;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
-import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -181,7 +176,7 @@ public class VirtualSocketView implements VirtualView {
         ObjectNode goldCards = om.createObjectNode();
         root.set("goldCards", goldCards);
         for (int i = 0; i < simplifiedCommonTable.getGoldCards().size(); i++) {
-            goldCards.set(String.valueOf(i), createMissionCardNode(simplifiedCommonTable.getGoldCards().get(i)));
+            goldCards.set(String.valueOf(i), createGoldCardNode(simplifiedCommonTable.getGoldCards().get(i)));
         }
 
         try {
@@ -211,17 +206,17 @@ public class VirtualSocketView implements VirtualView {
         for (Card card : simplifiedHand.getCards()) {
             ObjectNode genericCard = om.createObjectNode();
             switch(card.getClass().getSimpleName()){
-                case "goldCard":
+                case "GoldCard":
                     genericCard.put("type", "goldCard");
-                    genericCard.put("card", createGoldCardNode(card));
+                    genericCard.set("card", createGoldCardNode(card));
                     break;
-                case "resourceCard":
+                case "ResourceCard":
                     genericCard.put("type", "resourceCard");
-                    genericCard.put("card", createResourceCardNode(card));
+                    genericCard.set("card", createResourceCardNode(card));
                     break;
-                case "starterCard":
+                case "StarterCard":
                     genericCard.put("type", "starterCard");
-                    genericCard.put("card", createStarterCardNode(card));
+                    genericCard.set("card", createStarterCardNode(card));
                     break;
                 case null, default:
                     break;
@@ -229,7 +224,12 @@ public class VirtualSocketView implements VirtualView {
             cards.add(genericCard);
         }
         root.put("selectedCard", simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard()));
-        root.put("selectedSide", simplifiedHand.getSelectedCard().equals(simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard().getFront())) ? "0" : "1" );
+        if (simplifiedHand.getSelectedCard() != null) {
+            root.put("selectedSide", simplifiedHand.getSelectedCard().equals(simplifiedHand.getCards().get(simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard().getFront()))) ? "0" : "1" ); // TODO
+
+        } else {
+            root.put("selectedSide", -1);
+        }
         try {
             sendToClient("updateHand", om.writeValueAsString(root));
         } catch (JsonProcessingException e) {
@@ -290,7 +290,7 @@ public class VirtualSocketView implements VirtualView {
     private ObjectNode createResourceCardNode(Card resourceCard) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
-        cardNode.put("sideSymbol", resourceCard.getFront().getSideSymbol().toString());
+        cardNode.put("sideSymbol", resourceCard.getFront().getSideSymbol().isPresent() ? resourceCard.getFront().getSideSymbol().get().toString() : "" );
         cardNode.put("points", String.valueOf(resourceCard.getFront().getPoints()));
         // corners
         return createCornerNodes(resourceCard, om, cardNode);
@@ -300,7 +300,7 @@ public class VirtualSocketView implements VirtualView {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
         cardNode.put("cardType", goldCard.getClass().getSimpleName());
-        cardNode.put("sideSymbol", goldCard.getFront().getSideSymbol().toString());
+        cardNode.put("sideSymbol", goldCard.getFront().getSideSymbol().isPresent() ? goldCard.getFront().getSideSymbol().get().toString() : "");
 
         // resources
         ObjectNode resourcesNode = om.createObjectNode();
@@ -341,19 +341,19 @@ public class VirtualSocketView implements VirtualView {
         ObjectNode UPLEFT = om.createObjectNode();
         cardNode.set("UPLEFT", UPLEFT);
         UPLEFT.put("isEvil", starterCard.getFront().getUPLEFT().isEvil());
-        UPLEFT.put("symbol", starterCard.getFront().getUPLEFT().getSymbol().toString());
+        UPLEFT.put("symbol", starterCard.getFront().getUPLEFT().getSymbol().isPresent() ? starterCard.getFront().getUPLEFT().getSymbol().get().toString() : "" );
         ObjectNode DOWNLEFT = om.createObjectNode();
         cardNode.set("DOWNLEFT", DOWNLEFT);
         DOWNLEFT.put("isEvil", starterCard.getFront().getDOWNLEFT().isEvil());
-        DOWNLEFT.put("symbol", starterCard.getFront().getDOWNLEFT().getSymbol().toString());
+        DOWNLEFT.put("symbol", starterCard.getFront().getDOWNLEFT().getSymbol().isPresent() ? starterCard.getFront().getDOWNLEFT().getSymbol().get().toString() : "" ) ;
         ObjectNode UPRIGHT = om.createObjectNode();
         cardNode.set("UPRIGHT", UPRIGHT);
         UPRIGHT.put("isEvil", starterCard.getFront().getUPRIGHT().isEvil());
-        UPRIGHT.put("symbol", starterCard.getFront().getUPRIGHT().getSymbol().toString());
+        UPRIGHT.put("symbol", starterCard.getFront().getUPRIGHT().getSymbol().isPresent() ? starterCard.getFront().getUPRIGHT().getSymbol().get().toString() : "" ) ;
         ObjectNode DOWNRIGHT = om.createObjectNode();
         cardNode.set("DOWNRIGHT", DOWNRIGHT);
         DOWNRIGHT.put("isEvil", starterCard.getFront().getDOWNRIGHT().isEvil());
-        DOWNRIGHT.put("symbol", starterCard.getFront().getDOWNRIGHT().getSymbol().toString());
+        DOWNRIGHT.put("symbol", starterCard.getFront().getDOWNRIGHT().getSymbol().isPresent() ? starterCard.getFront().getDOWNRIGHT().getSymbol().get().toString() : "" ) ;
         return cardNode;
     }
 }

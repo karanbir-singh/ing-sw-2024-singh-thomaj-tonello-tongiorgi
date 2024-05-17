@@ -27,6 +27,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -277,25 +278,24 @@ public class SocketServerHandler implements Runnable {
         Card goldCard = getGoldCard(encodedTable.get("goldDeck"));
 
         // mission cards
-        MissionCard missionCard1 = getMissionCard(encodedTable.get("commonMission").get("0"));
-        MissionCard missionCard2 = getMissionCard(encodedTable.get("commonMission").get("0"));
         ArrayList<Card> commonMission = new ArrayList<>();
-        commonMission.add(missionCard1);
-        commonMission.add(missionCard2);
+        for (JsonNode mission : encodedTable.get("commonMissions")) {
+            commonMission.add(getMissionCard(encodedTable.get("commonMissions")));
+        }
+
 
         // resources Cards
-        ResourceCard resourceCard1 = getResourceCard(encodedTable.get("resourcesCards").get("0"));
-        ResourceCard resourceCard2 = getResourceCard(encodedTable.get("resourcesCards").get("1"));
         ArrayList<Card> resourceCards = new ArrayList<>();
-        resourceCards.add(resourceCard1);
-        resourceCards.add(resourceCard2);
+        for (JsonNode resource : encodedTable.get("resourceCards")) {
+            resourceCards.add(getResourceCard(resource));
+        }
 
         //gold cards
-        GoldCard goldCard1 = getGoldCard(encodedTable.get("goldCards").get("0"));
-        GoldCard goldCard2 = getGoldCard(encodedTable.get("goldCards").get("1"));
         ArrayList<Card> goldCards = new ArrayList<>();
-        goldCards.add(goldCard1);
-        goldCards.add(goldCard2);
+        for (JsonNode gold : encodedTable.get("goldCards")) {
+            goldCards.add(getGoldCard(gold));
+        }
+
 
         return new SimplifiedCommonTable(resourceCard, goldCard, commonMission, resourceCards, goldCards);
     }
@@ -309,31 +309,47 @@ public class SocketServerHandler implements Runnable {
             case "CornerCounter" ->
                     new CornerCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
                             resources,
-                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("UPLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("DOWNLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("UPRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText()) : null));
             case "InkwellCounter" ->
                     new InkwellCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
                             resources,
-                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("UPLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("DOWNLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("UPRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText()) : null));
             case "ManuscriptCounter" ->
                     new ManuscriptCounter(Symbol.valueOf(encodedCard.get("goldCard").get("sideSymbol").asText()),
                             resources,
-                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("UPLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("DOWNLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("UPRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText()) : null));
             case "QuillCounter" ->
                     new QuillCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
                             resources,
-                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
-                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("UPLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("DOWNLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("UPRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText()) : null),
+                            new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()),
+                                    !Objects.equals(encodedCard.get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText()) : null));
             default -> null;
         };
         Side backGold= new CardBack(Symbol.valueOf(encodedCard.get("sideSymbol").asText()));
@@ -343,30 +359,45 @@ public class SocketServerHandler implements Runnable {
     private ResourceCard getResourceCard(JsonNode encodedCard) {
         Side frontResource = new ResourceCardFront(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
                 encodedCard.get("points").asInt(),
-                new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
-                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
-                new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
-                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+                new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("UPLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText()) : null),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("DOWNLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText()) : null),
+                new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("UPRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText()) : null),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText()) : null));
 
-        Side backResource = new CardBack(Symbol.valueOf(encodedCard.get("resourceCard").get("sideSymbol").asText()));
+        Side backResource = new CardBack(!Objects.equals(encodedCard.get("sideSymbol").asText(), "") ? Symbol.valueOf(encodedCard.get("sideSymbol").asText()) : null);
         return new ResourceCard(frontResource, backResource);
     }
 
     private StarterCard getStarterCard(JsonNode encodedCard) {
         ArrayList<Symbol> resources = new ArrayList<>();
+        if (encodedCard.findValue("card") != null) {
+            encodedCard = encodedCard.get("card");
+        }
         for ( JsonNode resource : encodedCard.get("permanentResources")) {
             resources.add(Symbol.valueOf(resource.asText()));
         }
         Side front = new StarterCardFront(resources,
-                new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
-                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
-                new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
-                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+                new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("UPLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText()) : null),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("DOWNLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText()) : null),
+                new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("UPRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText()) : null),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText()) : null));
 
-        Side back = new CardBack(new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText())),
-                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText())),
-                new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText())),
-                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()), Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText())));
+        Side back = new CardBack(new Corner(Boolean.parseBoolean(encodedCard.get("UPLEFT").get("isEvil").asText()),
+                !Objects.equals(encodedCard.get("UPLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPLEFT").get("symbol").asText()) : null),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNLEFT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("DOWNLEFT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("DOWNLEFT").get("symbol").asText()) : null),
+                new Corner(Boolean.parseBoolean(encodedCard.get("UPRIGHT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("UPRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(encodedCard.get("UPRIGHT").get("symbol").asText()) : null),
+                new Corner(Boolean.parseBoolean(encodedCard.get("DOWNRIGHT").get("isEvil").asText()),
+                        !Objects.equals(encodedCard.get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(encodedCard.get("DOWNRIGHT").get("symbol").asText()) : null));
         return new StarterCard(front, back);
     }
 
@@ -405,8 +436,9 @@ public class SocketServerHandler implements Runnable {
             cards.add(newCard);
         }
 
-        Card selectedCard = cards.get(encodedHand.get("selectedCard").asInt());
-        Side selectedSide = encodedHand.get("selectedSide").asBoolean() ? selectedCard.getFront(): selectedCard.getBack();
+        Card selectedCard = encodedHand.get("selectedCard").asInt() != -1 ? cards.get(encodedHand.get("selectedCard").asInt()) : null;
+        Side selectedSide = null;
+        //Side selectedSide = encodedHand.get("selectedSide").asInt() == 0 || selectedCard == null ? selectedCard.getFront(): selectedCard.getBack() ; // TODO
         return new SimplifiedHand(cards, selectedCard, selectedSide);
     }
 
