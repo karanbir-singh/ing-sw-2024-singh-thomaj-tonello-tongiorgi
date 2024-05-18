@@ -222,7 +222,7 @@ public class VirtualSocketView implements VirtualView {
                     break;
                 case "StarterCard":
                     genericCard.put("type", "starterCard");
-                    genericCard.set("card", createStarterCardNode(card.getFront()));
+                    genericCard.set("card", createStarterCardNode(card));
                     break;
                 case null, default:
                     throw new RemoteException();
@@ -477,6 +477,38 @@ public class VirtualSocketView implements VirtualView {
         return cardNode;
     }
 
+    private ObjectNode createStarterCardNode(Card starterCard) {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode cardNode = om.createObjectNode();
+
+        // front
+        ObjectNode front = om.createObjectNode();
+        cardNode.set("front", front);
+        // permanent resources
+        ArrayNode permanentResources = om.createArrayNode();
+        for (Symbol symbol : starterCard.getFront().getPermanentResources()) {
+            permanentResources.add(symbol.toString());
+        }
+        front.set("permanentResources", permanentResources);
+
+        // front corners
+        createCornerNodes(starterCard.getFront(), om, front);
+
+        // back
+        ObjectNode back = om.createObjectNode();
+        cardNode.set("back", back);
+        // permanent resources
+        ArrayNode permanentResourcesBack = om.createArrayNode();
+        for (Symbol symbol : starterCard.getFront().getPermanentResources()) {
+            permanentResources.add(symbol.toString());
+        }
+        back.set("permanentResources", permanentResources);
+
+        // back corners
+        createCornerNodes(starterCard.getBack(), om, back);
+        return cardNode;
+    }
+
     private ObjectNode createStarterCardNode(Side starterCard) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
@@ -488,8 +520,6 @@ public class VirtualSocketView implements VirtualView {
         }
         cardNode.set("permanentResources", permanentResources);
 
-        // corners
-        // TODO other corners
         return createCornerNodes(starterCard, om, cardNode);
     }
 

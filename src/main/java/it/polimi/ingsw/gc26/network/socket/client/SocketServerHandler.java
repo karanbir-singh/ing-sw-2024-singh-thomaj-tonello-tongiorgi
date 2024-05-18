@@ -198,13 +198,12 @@ public class SocketServerHandler implements Runnable {
         if (encodedCard.findValue("card") != null) {
             encodedCard = encodedCard.get("card");
         }
-        for ( JsonNode resource : encodedCard.get("permanentResources")) {
+        for ( JsonNode resource : encodedCard.get("front").get("permanentResources")) {
             resources.add(Symbol.valueOf(resource.asText()));
         }
-        ArrayList<Corner> corners = getCorners(encodedCard);
+        ArrayList<Corner> corners = getCorners(encodedCard.get("front"));
         Side front = new StarterCardFront(resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
-        ArrayList<Corner> cornersBack = getCorners(encodedCard);
-        // TODO
+        ArrayList<Corner> cornersBack = getCorners(encodedCard.get("back"));
         Side back = new CardBack(cornersBack.get(0), cornersBack.get(1), cornersBack.get(2), cornersBack.get(3));
         return new StarterCard(front, back);
     }
