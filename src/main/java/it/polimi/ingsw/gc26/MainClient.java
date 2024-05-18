@@ -1,10 +1,12 @@
 package it.polimi.ingsw.gc26;
 
+import it.polimi.ingsw.gc26.network.RMI.RMIServerPing;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.network.ViewController;
+import it.polimi.ingsw.gc26.network.socket.SocketServerPing;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketGameController;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
@@ -102,12 +104,41 @@ public class MainClient {
     }
 
     /**
+     * @return virtual main controller
+     */
+    public VirtualMainController getVirtualMainController() {
+        return virtualMainController;
+    }
+
+    /**
+     * @return virtual game controller
+     */
+    public VirtualGameController getVirtualGameController() {
+        return virtualGameController;
+    }
+
+
+    /**
      * Sets virtual view passed by parameter
      *
      * @param virtualView virtual view to set
      */
     public void setVirtualView(VirtualView virtualView) {
         this.virtualView = virtualView;
+    }
+
+    /**
+     * @return virtual view
+     */
+    public VirtualView getVirtualView() {
+        return virtualView;
+    }
+
+    /**
+     * @return view controller
+     */
+    public ViewController getViewController() {
+        return viewController;
     }
 
     /**
@@ -138,7 +169,7 @@ public class MainClient {
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
             mainClient.runConnectionTUI();
-            new Thread(() -> mainClient.RMIPingServer()).start();
+            new Thread(new RMIServerPing(mainClient)).start();
             mainClient.runGameTUI();
         } else if (userInterface == UserInterface.gui) {
             //new VirtualRMIView(virtualMainController).runGUI();
@@ -178,7 +209,7 @@ public class MainClient {
 
         // Check chosen user interface
         if (userInterface == UserInterface.tui) {
-            new Thread(() -> mainClient.SocketPingServer()).start();
+            new Thread(new SocketServerPing(mainClient)).start();
             mainClient.runConnectionTUI();
             mainClient.runGameTUI();
         } else if (userInterface == UserInterface.gui) {
@@ -436,66 +467,13 @@ public class MainClient {
     }
 
 
-    private void RMIPingServer() {
-        while (true) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                System.out.println("Thread didn't sleep");
-            }
-
-            int numWait = 3;
-            while (numWait > 0) {
-                try {
-                    // Ping server
-                    virtualMainController.amAlive();
-                    numWait = 0;
-                } catch (RemoteException e) {
-                    System.out.println("SOMETHING WRONG, TRY " + numWait);
-                    numWait--;
-                    if (numWait == 0) {
-                        System.out.println("SERVER DOWN, WAIT a BIT");
-                        isServerUp = false;
-                        while (!isServerUp) {
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                            Registry registry = null;
-                            try {
-                                registry = LocateRegistry.getRegistry("172.20.10.11", MainServer.DEFAULT_RMI_SERVER_PORT);
-
-                                this.setVirtualMainController((VirtualMainController) registry.lookup(MainClient.remoteObjectName));
-                                this.setVirtualGameController(virtualMainController.getVirtualGameController(viewController.getGameID()));
-
-                                virtualGameController.reAddView(virtualView, viewController.getClientID());
-
-                                isServerUp = true;
-                            } catch (RemoteException ex) {
-                                //TODO FORSE METTERE QUALCOSA QUA
-                            } catch (NotBoundException ep) {
-                                ep.printStackTrace();
-                            }
-                        }
-                        System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
-                    }
-
-
-                }
-            }
-
-        }
-    }
-
-
     //TODO FARLO ANCHE QUA
     private void SocketPingServer() {
         while (true) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                System.out.println("LA SLEEP non è andata a buon fine");
+                System.out.println("Thread didn't sleep");
             }
             int numWait = 3;
             while (numWait > 0) {
@@ -503,20 +481,20 @@ public class MainClient {
                     virtualMainController.amAlive();
                     numWait = 0;
                 } catch (IOException e) {
-                    System.out.println("SOMETHING WRONG, TRY " + numWait);
+                    System.out.println("Something went wrong, trying to reconnect...");
                     numWait--;
                     if (numWait == 0) {
-                        System.out.println("SERVER DOWN, WAIT a BIT");
+                        System.out.println("Server is down, wait for reconnection...");
                         isServerUp = false;
                         while (!isServerUp) {
                             try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException ex) {
-                                throw new RuntimeException(ex);
+                                System.out.println("Thread didn't sleep");
                             }
 
                             try {
-                                Socket serverSocket = new Socket("172.20.10.11", MainServer.DEFAULT_SOCKET_SERVER_PORT);
+                                Socket serverSocket = new Socket(SERVER_IP, SERVER_SOCKET_PORT);
                                 InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
                                 OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
 
@@ -535,16 +513,17 @@ public class MainClient {
                                     throw new RuntimeException(ex);
                                 }
                                 this.virtualGameController = this.virtualMainController.getVirtualGameController(viewController.getGameID());
+
                                 this.setVirtualGameController(new VirtualSocketGameController(socketOut));
                                 new SocketServerHandler(this.viewController, socketIn, socketOut);
 
                                 virtualGameController.reAddView(virtualView, viewController.getClientID());
                                 isServerUp = true;
                             } catch (IOException ex) {
-                                System.out.println("SERVER AGAIN DOWN");
+                                System.out.println("Trying to reconnect...");
                             }
                         }
-                        System.out.println("NOW SERVER UP, NOW YOU CAN PLAY");
+                        System.out.println("Server is up, you can restart to play");
                     }
                 }
 
