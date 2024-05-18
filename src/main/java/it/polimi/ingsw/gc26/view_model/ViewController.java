@@ -4,9 +4,7 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
-import it.polimi.ingsw.gc26.request.game_request.GameRequest;
 import it.polimi.ingsw.gc26.request.view_request.ViewRequest;
-
 import java.util.ArrayDeque;
 import java.util.Queue;
 
@@ -23,11 +21,13 @@ public class ViewController {
      */
     private final Queue<ViewRequest> viewRequests;
 
+    public final Object lock;
+
     public ViewController(MainClient mainClient) {
         this.mainClient = mainClient;
         this.simplifiedModel = new SimplifiedModel();
         this.viewRequests = new ArrayDeque<>();
-
+        this.lock = new Object();
         this.launchExecutor();
     }
 
@@ -101,12 +101,12 @@ public class ViewController {
 //        System.out.println(message);
     }
 
-    public void updatePersonalBoard(PersonalBoard personalBoard, String message) {
+    public void updatePersonalBoard(SimplifiedPersonalBoard personalBoard, String message) {
         this.simplifiedModel.setPersonalBoard(personalBoard);
 //        System.out.println(message);
     }
 
-    public void updateOtherPersonalBoard(PersonalBoard otherPersonalBoard, String message) {
+    public void updateOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) {
         this.simplifiedModel.setOtherPersonalBoard(otherPersonalBoard);
 //        System.out.println(message);
     }
@@ -128,7 +128,7 @@ public class ViewController {
      */
 
     public void showMessage(String message) {
-//        System.out.println(STR."[SERVER]: \{message}");
+        System.out.println(STR."[SERVER]: \{message}");
     }
 
     /**

@@ -32,6 +32,18 @@ public class Corner implements Serializable {
     }
 
     /**
+     * Constructor to build corners in personal board
+     * @param isEvil
+     * @param symbol
+     * @param isHidden
+     */
+    public Corner(boolean isEvil, Symbol symbol, boolean isHidden) {
+        this.isEvil = isEvil;
+        this.isHidden = isHidden;
+        this.symbol = symbol;
+    }
+
+    /**
      * Returns a boolean indicating if the card has no playable corner
      * @return boolean isEvil
      */

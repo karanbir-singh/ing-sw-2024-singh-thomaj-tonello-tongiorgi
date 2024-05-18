@@ -65,4 +65,16 @@ public class CardBack extends Side implements Serializable {
         setPermanentResources(new ArrayList<>());
         setRequestedResources(new HashMap<>());
     }
+
+    public CardBack(Symbol side, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, ArrayList<Symbol> permanentResources, Map<Symbol, Integer> requestedResources){
+        setSideSymbol(side);
+        setDOWNLEFT(DOWNLEFT);
+        setDOWNRIGHT(DOWNRIGHT);
+        setUPLEFT(UPLEFT);
+        setUPRIGHT(UPRIGHT);
+        setType(0);
+        setPoints(0);
+        setPermanentResources(permanentResources);
+        setRequestedResources(requestedResources);
+    }
 }

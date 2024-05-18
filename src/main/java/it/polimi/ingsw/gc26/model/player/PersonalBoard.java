@@ -8,6 +8,7 @@ import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
+import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
 
 import java.io.Serializable;
 import java.util.*;
@@ -67,7 +68,7 @@ public class PersonalBoard implements Serializable {
         if (secretMission.isPresent()) {
             this.secretMission = secretMission.get();
 //            ModelObservable.getInstance().notifyUpdateSelectedMission(clientID);
-            ModelObservable.getInstance().notifyUpdatePersonalBoard(this, "Secret mission set", clientID);
+            ModelObservable.getInstance().notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Secret mission set", clientID);
             return this.secretMission;
         }
         // TODO notify view
@@ -130,7 +131,7 @@ public class PersonalBoard implements Serializable {
         this.selectedX = selectedX;
         this.selectedY = selectedY;
 //        ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 1);
-        ModelObservable.getInstance().notifyUpdatePersonalBoard(this, "Position selected!", clientID);
+        ModelObservable.getInstance().notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Position selected!", clientID);
 
     }
 
@@ -140,6 +141,30 @@ public class PersonalBoard implements Serializable {
      */
     public int getScore() {
         return score;
+    }
+
+    public int getxMin() {
+        return xMin;
+    }
+
+    public int getxMax() {
+        return xMax;
+    }
+
+    public int getyMin() {
+        return yMin;
+    }
+
+    public int getyMax() {
+        return yMax;
+    }
+
+    public ArrayList<Point> getPlayablePositions() {
+        return playablePositions;
+    }
+
+    public ArrayList<Point> getBlockedPositions() {
+        return blockedPositions;
     }
 
     /**
@@ -501,7 +526,7 @@ public class PersonalBoard implements Serializable {
         this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
 
         //ModelObservable.getInstance().notifyUpdatePlayedCardFromHand(clientID,1);
-        ModelObservable.getInstance().notifyUpdatePersonalBoard(this, "Card placed!", clientID);
+        ModelObservable.getInstance().notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Card placed!", clientID);
         return true;
     }
 

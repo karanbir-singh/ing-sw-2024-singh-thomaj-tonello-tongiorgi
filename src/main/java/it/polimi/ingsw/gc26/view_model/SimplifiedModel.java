@@ -11,8 +11,8 @@ public class SimplifiedModel {
     private SimplifiedPlayer simplifiedPlayer;
     private SimplifiedHand simplifiedHand;
     private SimplifiedHand simplifiedSecretHand;
-    private PersonalBoard personalBoard;
-    private PersonalBoard otherPersonalBoard;
+    private SimplifiedPersonalBoard personalBoard;
+    private SimplifiedPersonalBoard otherPersonalBoard;
     private SimplifiedChat simplifiedChat;
 //    private OptionsMenu optionsMenu;
 
@@ -36,12 +36,12 @@ public class SimplifiedModel {
         updateView();
     }
 
-    public void setPersonalBoard(PersonalBoard personalBoard) {
+    public void setPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         this.personalBoard = personalBoard;
         //updateView();
     }
 
-    public void setOtherPersonalBoard(PersonalBoard otherPersonalBoard) {
+    public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
         this.otherPersonalBoard = otherPersonalBoard;
         updateView();
     }

@@ -1,8 +1,11 @@
 package it.polimi.ingsw.gc26.model.hand;
 
-import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.*;
+import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.card.GoldCard;
+import it.polimi.ingsw.gc26.model.card.MissionCard;
+import it.polimi.ingsw.gc26.model.card.ResourceCard;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
@@ -85,6 +88,22 @@ public class Hand implements Serializable {
         }
     }
 
+    public void setSelectedCard(MissionCard selectedCard, String clientID) {
+        if (selectedCard != null) {
+            this.selectedCard = selectedCard;
+            this.selectedSide = selectedCard.getFront();
+            // TODO notify view
+            this.modelObservable.notifyUpdateSecretHand(
+                    new SimplifiedHand(cards, selectedCard, selectedSide),
+                    "Card selected on hand",
+                    clientID
+            );
+        } else {
+            // TODO notify
+            ModelObservable.getInstance().notifyError("Select a card first!", clientID);
+        }
+    }
+
     /**
      * Returns the selected side of the selected card
      *
@@ -138,6 +157,18 @@ public class Hand implements Serializable {
         );
     }
 
+    public void removeCard(MissionCard card, String clientID) {
+        cards.remove(card);
+        selectedSide = null;
+        selectedCard = null;
+
+        this.modelObservable.notifyUpdateSecretHand(
+                new SimplifiedHand(cards, selectedCard, selectedSide),
+                "Card removed from hand",
+                clientID
+        );
+    }
+
     /**
      * Adds the card given as a parameter in the hand
      *
@@ -156,6 +187,19 @@ public class Hand implements Serializable {
 //        } catch (RemoteException e) {
 //            throw new RuntimeException(e);
 //        }
+    }
+
+    /**
+     *
+     * @param card new card in hand
+     */
+    public void addCard(MissionCard card, String clientID) {
+        cards.add(card);
+        this.modelObservable.notifyUpdateSecretHand(
+                new SimplifiedHand(cards, selectedCard, selectedSide),
+                "Card added to hand",
+                clientID
+        );
     }
 
     /**
