@@ -85,10 +85,6 @@ public class CommonTable implements Serializable {
             ModelObservable.getInstance().notifyError("Position not valid!", clientID);
             return;
         }
-        if (selectedX == -1 || selectedY == -1) {
-            ModelObservable.getInstance().notifyError("Select a position!", clientID);
-            return;
-        }
 
         switch (cardIndex) {
             case 0:
@@ -115,6 +111,9 @@ public class CommonTable implements Serializable {
                 selectedX = 2;
                 selectedY = 1;
                 break;
+            default:
+                ModelObservable.getInstance().notifyError("Select a position!", clientID);
+                return;
         }
 
         ModelObservable.getInstance().notifyMessage("Card selected on common table", clientID);

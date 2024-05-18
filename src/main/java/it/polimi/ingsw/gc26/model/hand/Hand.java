@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.model.hand;
 
+import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.*;
 import it.polimi.ingsw.gc26.model.card.Card;

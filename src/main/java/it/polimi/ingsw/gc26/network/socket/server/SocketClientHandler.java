@@ -99,7 +99,7 @@ public class SocketClientHandler implements Runnable {
                         this.gameController.addRequest(new PlayCardFromHandRequest(value.get("playerID").asText()));
                         break;
                     case "selectCardFromCommonTable":
-                        this.gameController.addRequest(new SelectCardFromCommonTableRequest(value.get("cardX").asInt(), value.get("cardY").asInt(), value.get("playerID").asText()));
+                        this.gameController.addRequest(new SelectCardFromCommonTableRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
                         break;
                     case "drawSelectedCard":
                         this.gameController.addRequest(new DrawSelectedCardRequest(value.get("playerID").asText()));

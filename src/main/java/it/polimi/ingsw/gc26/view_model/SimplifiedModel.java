@@ -149,6 +149,6 @@ public class SimplifiedModel {
 
     private void updateView() {
         // TODO: qua ci sono tutti i reload della TUI e aggiornamenti della GUI
-        Printer.showPrintable(simplifiedCommonTable.printableCommonTable());
+        //Printer.showPrintable(simplifiedCommonTable.printableCommonTable());
     }
 }

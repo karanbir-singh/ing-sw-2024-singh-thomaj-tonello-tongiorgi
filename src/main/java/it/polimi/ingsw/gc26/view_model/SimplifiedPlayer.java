@@ -82,7 +82,7 @@ public class SimplifiedPlayer implements Serializable {
         return s.toString();
     }
 
-    public String[][] printableHandAndMission(PersonalBoard personalBoard, SimplifiedHand hand) {
+    public String[][] printableHandAndMission(SimplifiedPersonalBoard personalBoard, SimplifiedHand hand) {
         if(personalBoard.getSecretMission() == null){
             return new String[0][0];
         }
