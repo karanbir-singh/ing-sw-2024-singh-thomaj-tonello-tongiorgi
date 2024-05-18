@@ -231,7 +231,7 @@ public class VirtualSocketView implements VirtualView {
         }
         root.put("selectedCard", simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard()));
         if (simplifiedHand.getSelectedCard() != null) {
-            root.put("selectedSide", simplifiedHand.getSelectedSide().equals(simplifiedHand.getCards().get(simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard())).getFront()) ? "0" : "1" ); // TODO
+            root.put("selectedSide", simplifiedHand.getSelectedSide().equals(simplifiedHand.getCards().get(simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard())).getFront()) ? "0" : "1" ); // T
         } else {
             root.put("selectedSide", -1);
         }
@@ -272,12 +272,12 @@ public class VirtualSocketView implements VirtualView {
         }
         root.put("selectedCard", simplifiedSecretHand.getCards().indexOf(simplifiedSecretHand.getSelectedCard()));
         if (simplifiedSecretHand.getSelectedCard() != null) {
-            root.put("selectedSide", simplifiedSecretHand.getSelectedSide().equals(simplifiedSecretHand.getCards().get(simplifiedSecretHand.getCards().indexOf(simplifiedSecretHand.getSelectedCard())).getFront()) ? "0" : "1" ); // TODO
+            root.put("selectedSide", simplifiedSecretHand.getSelectedSide().equals(simplifiedSecretHand.getCards().get(simplifiedSecretHand.getCards().indexOf(simplifiedSecretHand.getSelectedCard())).getFront()) ? "0" : "1" );
         } else {
             root.put("selectedSide", -1);
         }
         try {
-            sendToClient("updateHand", om.writeValueAsString(root));
+            sendToClient("updateSecretHand", om.writeValueAsString(root));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -489,6 +489,7 @@ public class VirtualSocketView implements VirtualView {
         cardNode.set("permanentResources", permanentResources);
 
         // corners
+        // TODO other corners
         return createCornerNodes(starterCard, om, cardNode);
     }
 
@@ -523,7 +524,12 @@ public class VirtualSocketView implements VirtualView {
         // side symbol
         sideNode.put("sideSymbol", side.getSideSymbol().isPresent() ? side.getSideSymbol().get().toString() : "" );
         // permanent resource
-        sideNode.put("permanentResources", side.getPermanentResources().getFirst().toString());
+        if (!side.getPermanentResources().isEmpty()) {
+            sideNode.put("permanentResources", side.getPermanentResources().getFirst().toString());
+        } else {
+            sideNode.set("permanentResources", null);
+
+        }
         // corners
         return createCornerNodes(side, om, sideNode);
     }
@@ -542,23 +548,27 @@ public class VirtualSocketView implements VirtualView {
             }
             genericPoint.set("flags", flags);
             // side
-            genericPoint.put("type", point.getSide().getClass().getSimpleName());
-            switch (point.getSide().getClass().getSimpleName()) {
-                case "CardBack":
-                    genericPoint.set("side", createCardBack(point.getSide()));
-                    break;
-                case "StarterCardFront":
-                    genericPoint.set("side", createStarterCardNode(point.getSide()));
-                    break;
-                case "ResourceCardFront":
-                    genericPoint.set("side", createResourceCardNode(point.getSide()));
-                    break;
-                case "CornerCounter","QuillCounter", "InkwellCounter", "ManuscriptCounter":
-                    genericPoint.set("side", createGoldCardNode(point.getSide()));
-                    break;
-                case null, default:
-                    genericPoint.set("side", null);
-                    break;
+            if (point.getSide() != null) {
+                genericPoint.put("type", point.getSide().getClass().getSimpleName());
+                switch (point.getSide().getClass().getSimpleName()) {
+                    case "CardBack":
+                        genericPoint.set("side", createCardBack(point.getSide()));
+                        break;
+                    case "StarterCardFront":
+                        genericPoint.set("side", createStarterCardNode(point.getSide()));
+                        break;
+                    case "ResourceCardFront":
+                        genericPoint.set("side", createResourceCardNode(point.getSide()));
+                        break;
+                    case "CornerCounter","QuillCounter", "InkwellCounter", "ManuscriptCounter":
+                        genericPoint.set("side", createGoldCardNode(point.getSide()));
+                        break;
+                    case null, default:
+                        genericPoint.set("side", null);
+                        break;
+                }
+            } else {
+                genericPoint.set("side", null);
             }
             arrayPositions.add(genericPoint);
         }
