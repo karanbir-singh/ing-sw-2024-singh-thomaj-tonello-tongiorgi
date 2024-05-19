@@ -2,7 +2,9 @@ package it.polimi.ingsw.gc26.request.game_request;
 
 import it.polimi.ingsw.gc26.controller.GameController;
 
-public class DrawSelectedCardRequest implements GameRequest {
+import java.io.Serializable;
+
+public class DrawSelectedCardRequest implements GameRequest, Serializable {
     final private String playerID;
 
     public DrawSelectedCardRequest(String playerID) {

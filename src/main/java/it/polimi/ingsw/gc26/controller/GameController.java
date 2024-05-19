@@ -10,11 +10,21 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
+import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.game_request.GameRequest;
 
+import java.io.*;
 import java.util.*;
 
-public class GameController {
+public class GameController implements Serializable {
+    /**
+     * This attribute represents the first part of the file path for saving the game controller
+     */
+    public static final String GAME_CONTROLLER_FILE_PATH = "src/main/resources/gameController";
+    /**
+     * This attribute represents the ID of the game controller
+     */
+    private final int ID;
     /**
      * This attribute represents the execution type
      */
@@ -26,38 +36,60 @@ public class GameController {
     /**
      * This attribute represents the list of players that need to do an action, used only in the game preparation phase
      */
-    private ArrayList<Player> playersToWait;
+    private final ArrayList<Player> playersToWait;
     /**
      * This attribute represents the list of requests sent from clients
      */
-    private final Queue<GameRequest> gameRequests;
+    private transient Queue<GameRequest> gameRequests;
 
     /**
      * Initializes the game (provided by the main controller)
      *
      * @param game the object that represents the game
      */
-    public GameController(Game game) {
-        this.isDebug = java.lang.management.ManagementFactory.
-                getRuntimeMXBean().
-                getInputArguments().toString().indexOf("jdwp") >= 0;
+    public GameController(Game game, int ID) throws IOException {
         this.game = game;
         this.game.setState(GameState.COMMON_TABLE_PREPARATION);
         this.playersToWait = new ArrayList<>();
         this.gameRequests = new ArrayDeque<>();
+        this.ID = ID;
+
         this.launchExecutor();
+        this.backup();
+
+        this.isDebug = java.lang.management.ManagementFactory.
+                getRuntimeMXBean().
+                getInputArguments().toString().contains("jdwp");
+    }
+
+    /**
+     * Copy everything on the disk
+     *
+     * @throws IOException
+     */
+    private void backup() {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(STR."\{GAME_CONTROLLER_FILE_PATH}\{ID}.bin");
+            ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+            outputStream.writeObject(this);
+            outputStream.close();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            System.err.println("[ERROR]: error while saving game on file");
+        }
     }
 
     /**
      * Launch a thread for managing clients requests
      */
-    private void launchExecutor() {
+    public void launchExecutor() {
+        this.gameRequests = new ArrayDeque<>();
         new Thread(() -> {
             while (true) {
-                synchronized (gameRequests) {
-                    while (gameRequests.isEmpty()) {
+                synchronized (this.gameRequests) {
+                    while (this.gameRequests.isEmpty()) {
                         try {
-                            gameRequests.wait();
+                            this.gameRequests.wait();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -118,6 +150,9 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -153,6 +188,9 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -167,14 +205,16 @@ public class GameController {
             Player player = game.getPlayerByID(playerID);
 
             // Set pawn
-            player.setPawn(color, game.getAvailablePawns(), playerID);
+            boolean isPawnSet = player.setPawn(color, game.getAvailablePawns(), playerID);
 
             if (isDebug) {
                 System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
             }
 
             // Remove from list
-            playersToWait.remove(player);
+            if (isPawnSet) {
+                playersToWait.remove(player);
+            }
 
             // Check if all players have chosen the pawn
             if (playersToWait.isEmpty()) {
@@ -188,6 +228,9 @@ public class GameController {
             // TODO gestire ome cambiare il model quando lo stato e' errato
             game.errorState(playerID);
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -217,6 +260,9 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -245,6 +291,9 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -278,6 +327,9 @@ public class GameController {
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -305,6 +357,9 @@ public class GameController {
             //TODO gestisci come cambiare il model quando lo stato è errato
             game.errorState(playerID);
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -346,6 +401,9 @@ public class GameController {
             //TODO gestisci come cambiare il model quando lo stato è errato
             game.errorState(playerID);
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -375,6 +433,9 @@ public class GameController {
             //TODO gestisci come cambiare il model quando lo stato è errato
             game.errorState(playerID);
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     // PHASE 2: Game Flow
@@ -400,11 +461,14 @@ public class GameController {
                     System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
                 }
             }
-
         } else {
             // TODO gestire cosa modificare nel model se lo stato è errato
             game.errorState(playerID);
+            System.out.println("stato erroneo");
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -420,6 +484,9 @@ public class GameController {
         }
         // Turn selected card side
         player.getHand().turnSide(playerID);
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -446,6 +513,9 @@ public class GameController {
             // TODO gestisci cosa modificare del model se lo stato è errato
             game.errorState(playerID);
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -523,6 +593,9 @@ public class GameController {
                 game.errorState(playerID);
             }
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -547,6 +620,9 @@ public class GameController {
             //TODO gestisci come cambiare il model quando lo stato è errato
             game.errorState(playerID);
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -597,6 +673,9 @@ public class GameController {
             //TODO gestisci come cambiare il model quando lo stato è errato
             game.errorState(playerID);
         }
+
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -614,6 +693,8 @@ public class GameController {
             System.out.println(msg);
         }
 
+        // Backup game controller
+        this.backup();
     }
 
     /**
@@ -624,17 +705,25 @@ public class GameController {
      */
     public void printPersonalBoard(String nickname, String playerID) {
         if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
-            Player player = game.getPlayerByNickname(nickname);
+            // Player player = game.getPlayerByNickname(nickname);
 
             // TODO need to add a method in PersonalBoard for update view
             if (isDebug) {
-                System.out.println(player.getNickname() + " printed personal board");
+                // System.out.println(player.getNickname() + " printed personal board");
             }
 
             // TODO need to add a method in PersonalBoard
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
         }
+
+    }
+
+    /**
+     * @return game controlled by this game controller
+     */
+    public Game getGame() {
+        return this.game;
     }
 
     /**
@@ -642,8 +731,16 @@ public class GameController {
      */
     public void changeTurn() {
         game.goToNextPlayer();
+
         if (isDebug) {
             System.out.println("changed turn");
         }
+
+        // Backup game controller
+        this.backup();
+    }
+
+    public void reAddView(VirtualView view, String clientID) {
+        this.game.getObservable().addObserver(view, clientID);
     }
 }

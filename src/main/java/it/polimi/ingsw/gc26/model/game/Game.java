@@ -7,10 +7,9 @@ import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
+import java.io.Serializable;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -39,11 +38,11 @@ public class Game implements Serializable {
     /**
      * THis attribute represents all the players in the game
      */
-    private final ArrayList<Player> players;
+    private ArrayList<Player> players;
     /**
      * This attribute represents the common table to all the players
      */
-    private final CommonTable commonTable;
+    private CommonTable commonTable;
     /**
      * This attribute represents how many rounds have been played
      */
@@ -65,7 +64,7 @@ public class Game implements Serializable {
      */
     private final ArrayList<Pawn> availablePawns;
 
-    private ModelObservable observable;
+    private  ModelObservable observable; //unico per il game
 
     /**
      * Initializes the game, creates the decks and sets the common table
@@ -79,26 +78,32 @@ public class Game implements Serializable {
         this.players.addAll(players);
         this.winners = null;
 
+        this.observable = new ModelObservable();
+        for (int i = 0; i < clients.size(); i++) {
+            this.observable.addObserver(clients.get(i), players.get(i).getID());
+        }
+        for(Player player: players) {
+            player.setObservable(this.observable);
+        }
+
         ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
         Deck resourceCardDeck = p.getResourceCards();
         Deck missionDeck = p.getMissionCards();
         Deck starterDeck = p.getStarterCards();
 
-        this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck);
+        this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck, this.observable);
         this.round = 0;
         this.finalRound = -1;
-        this.chat = new Chat();
+        this.chat = new Chat(this.observable);
 
         availablePawns = new ArrayList<>();
         availablePawns.add(Pawn.BLUE);
         availablePawns.add(Pawn.RED);
         availablePawns.add(Pawn.YELLOW);
         availablePawns.add(Pawn.GREEN);
-        this.observable = ModelObservable.getInstance();
-        for (int i = 0; i < clients.size(); i++) {
-            this.observable.addObserver(clients.get(i), players.get(i).getID());
-        }
+
+
     }
 
     /**
@@ -181,12 +186,8 @@ public class Game implements Serializable {
             // Then increase the round
             this.increaseRound();
         }
-
-//        try {
-        ModelObservable.getInstance().notifyMessage("It's you turn now", this.currentPlayer.getID());
-//        } catch (RemoteException e) {
-//            throw new RuntimeException(e);
-//        }
+            this.observable.notifyMessage("It's you turn now",this.currentPlayer.getID());
+            // TODO update simplified Game & player
     }
 
     /**
@@ -304,8 +305,7 @@ public class Game implements Serializable {
         }
 
         // TODO Update view
-//        ModelObservable.getInstance().notifyUpdateGameState(newGameState);
-        ModelObservable.getInstance().notifyMessage(message);
+        this.observable.notifyUpdateGameState(newGameState);
     }
 
     /**
@@ -349,8 +349,8 @@ public class Game implements Serializable {
         return winners;
     }
 
-    public void errorState(String clientID) {
-        ModelObservable.getInstance().notifyError("YOU CANNOT DO THAT NOW", clientID);
+    public void errorState(String clientID){
+        this.observable.notifyError("YOU CANNOT DO THAT NOW",clientID);
     }
 
     public String[][] printableGame(Player player) {
@@ -441,5 +441,9 @@ public class Game implements Serializable {
         }
 
         return scores;
+    }
+
+    public ModelObservable getObservable(){
+        return this.observable;
     }
 }

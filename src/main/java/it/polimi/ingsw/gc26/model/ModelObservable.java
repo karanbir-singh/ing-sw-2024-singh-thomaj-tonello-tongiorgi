@@ -8,27 +8,36 @@ import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
 import javafx.util.Pair;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ModelObservable {
-    private ArrayList<Pair<VirtualView, String>> clients;
-    private static ModelObservable instance;
+public class ModelObservable implements Serializable {
+    private transient ArrayList<Pair<VirtualView, String>> clients;
 
-    private ModelObservable() {
+    public ModelObservable() {
         this.clients = new ArrayList<>();
     }
 
-    public static ModelObservable getInstance() {
-        if (instance == null) {
-            instance = new ModelObservable();
+    public ArrayList<Pair<VirtualView, String>> getClients() {
+        // Check if clients list exists
+        if (this.clients == null) {
+            return new ArrayList<>();
         }
-        return instance;
+        return this.clients;
     }
 
+
     public void addObserver(VirtualView view, String clientID) {
-        this.clients.add(new Pair(view, clientID));
+        // Check if clients list exists
+        if (this.clients == null) {
+            this.clients = new ArrayList<>();
+        }
+        this.clients.add(new Pair<>(view, clientID));
     }
+
 
     public void removeObserver(VirtualView view) {
         this.clients.remove(view);
@@ -41,7 +50,6 @@ public class ModelObservable {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -183,7 +191,6 @@ public class ModelObservable {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -205,6 +212,16 @@ public class ModelObservable {
                 ((VirtualView) client.getKey()).showError(errorMsg);
             } catch (RemoteException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public void notifyGameClosed() {
+        for (Pair client : this.clients) {
+            try {
+                ((VirtualView) client.getKey()).killProcess();
+            } catch (RemoteException e) {
+                //client is down, no need to notify
             }
         }
     }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.model.player;
 
+import java.io.Serializable;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.Serializable;

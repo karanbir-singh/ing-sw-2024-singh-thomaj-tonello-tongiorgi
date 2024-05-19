@@ -65,4 +65,9 @@ public interface VirtualView extends Remote {
 
     void updateChat(SimplifiedChat simplifiedChat, String message) throws RemoteException;
 
+    void updateIDGame(int id) throws RemoteException;
+
+    void isClientAlive() throws RemoteException;
+
+    void killProcess() throws RemoteException;
 }

@@ -5,15 +5,29 @@ import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.main_request.MainRequest;
+import javafx.util.Pair;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.*;
 
-public class MainController {
+public class MainController implements Serializable {
+    /**
+     * This constant represents the max numbers of reconnection attempts
+     */
+    private static final int NUM_RECONNECTION_ATTEMPTS = 3;
+    /**
+     * This attribute represents the file path for saving the main controller
+     */
+    public static final String MAIN_CONTROLLER_FILE_PATH = "src/main/mainController.bin";
+
     /**
      * This attribute represents the list of clients who are waiting for a new game
      */
-    private ArrayList<VirtualView> waitingClients;
+    private transient ArrayList<VirtualView> waitingClients;
 
     /**
      * This attribute represents the list of players who are waiting for a new game
@@ -21,14 +35,14 @@ public class MainController {
     private ArrayList<Player> waitingPlayers;
 
     /**
-     * This attribute represents the list of game controllers of started games
+     * This attribute represents the list of game controllers of started games and id of that game controller
      */
-    private final ArrayList<GameController> gamesControllers;
+    private Map<Integer, GameController> gamesControllers;
 
     /**
      * This attribute represents a priority queue of main requests
      */
-    private final PriorityQueue<MainRequest> mainRequests;
+    private transient PriorityQueue<MainRequest> mainRequests;
 
     /**
      * This attribute represents a game that is being created
@@ -46,23 +60,47 @@ public class MainController {
     private int maxNumWaitingClients;
 
     /**
+     * This attribute represents the number of games
+     */
+    private int numberOfTotalGames;
+
+
+    /**
      * Initializes waiting players' list and games controllers' list
      */
     public MainController() {
         this.waitingClients = new ArrayList<>();
         this.waitingPlayers = new ArrayList<>();
-        this.gamesControllers = new ArrayList<>();
+        this.gamesControllers = new HashMap<>();
         this.mainRequests = new PriorityQueue<>((a, b) -> a.getPriority() > b.getPriority() ? -1 : 1);
         maxNumWaitingClients = 0;
         gameOnCreation = false;
         invalidNickname = false;
+        numberOfTotalGames = 0;
+
         this.launchExecutor();
+    }
+
+    /**
+     * Copy everything on the disk
+     *
+     * @throws IOException
+     */
+    private void copyToDisk() throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream(MAIN_CONTROLLER_FILE_PATH);
+        ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+        outputStream.writeObject(this);
+        outputStream.close();
+        fileOutputStream.close();
     }
 
     /**
      * Launch a thread for executing clients connection requests
      */
-    private void launchExecutor() {
+    public void launchExecutor() {
+        this.mainRequests = new PriorityQueue<>((a, b) -> a.getPriority() > b.getPriority() ? -1 : 1);
+        this.waitingClients = new ArrayList<>();
+        //le due righe di prima servono solo perchè quando il server da down va in up esse diventano null
         new Thread(() -> {
             while (true) {
                 synchronized (mainRequests) {
@@ -121,6 +159,14 @@ public class MainController {
             // Otherwise client joins into a game on creation
             this.joinWaitingList(client, nickname);
         }
+
+        // Copy on disk
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            System.out.println("COLPA DI COPYTODISK CONNECT");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -171,6 +217,14 @@ public class MainController {
                 e.printStackTrace();
             }
         }
+
+        //copy on the disk
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            System.out.println("COLPA DI COPYTODISK DI CREATEWAITING LIST");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -180,6 +234,7 @@ public class MainController {
      */
     private void joinWaitingList(VirtualView client, String nickname) {
         GameController gameController = null;
+        Game game;
 
         // Check if the nickname it's not available
         if (!this.isNicknameValid(nickname)) {
@@ -209,14 +264,29 @@ public class MainController {
 
             // Check number of clients in waiting list
             if (waitingClients.size() >= maxNumWaitingClients) {
+                // Update number of games
+                this.numberOfTotalGames = this.numberOfTotalGames + 1;
+
                 // Then, create a new game controller
-                gameController = new GameController(new Game(waitingPlayers, waitingClients));
-                gamesControllers.add(gameController);
+                try {
+                    game = new Game(waitingPlayers, waitingClients);
+                    gameController = new GameController(game, this.numberOfTotalGames);
+                } catch (IOException e) {
+                    System.out.println("COLPA DELLA CREAZIONE GAME CONTROLLER");
+                    e.printStackTrace();
+                }
+
+                // Launch thread for pinging clients
+                this.createSingleGamePingThread(gameController.getGame().getObservable().getClients(), this.numberOfTotalGames);
+
+                // Add game controller to the map
+                gamesControllers.put(numberOfTotalGames, gameController);
 
                 // Update of the view
                 for (VirtualView view : waitingClients) {
                     try {
                         view.updateClientState(ClientState.BEGIN);
+                        view.updateIDGame(numberOfTotalGames);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -237,14 +307,161 @@ public class MainController {
                 }
             }
         }
+
+        //copy on the disk
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            System.out.println("COLPA COPY TO DISK DI JOINWAITINGLIST");
+            e.printStackTrace();
+        }
     }
 
     /**
-     * @return Returns the last created game controller
+     * @return Returns the right game controller based on the id
      */
-    public GameController getGameController() {
-        if (!gamesControllers.isEmpty())
-            return gamesControllers.getLast();
+    public GameController getGameController(int gameControllerID) {
+        if (!gamesControllers.isEmpty()) {
+            return gamesControllers.get(gameControllerID);
+        }
         return null;
+    }
+
+    /**
+     * Reconstruct every game controller from the disk
+     *
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public void recreateGames() throws IOException, ClassNotFoundException {
+        for (Integer gameControllerID : gamesControllers.keySet()) {
+            FileInputStream fileInputStream = new FileInputStream(STR."\{GameController.GAME_CONTROLLER_FILE_PATH}\{gameControllerID}.bin");
+            ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
+
+            // Retrieve game controller
+            GameController gameController = (GameController) inputStream.readObject();
+            gamesControllers.put(gameControllerID, gameController);
+
+            // Restart game controller request executor thread
+            gamesControllers.get(gameControllerID).launchExecutor();
+
+            // Close streams
+            inputStream.close();
+            fileInputStream.close();
+        }
+
+        // Launch a thread for recreating al games
+        this.createGeneratorPingThread();
+        System.out.println("Games recreated");
+    }
+
+    /**
+     * Useful for pinging from the client to the server
+     */
+    public void amAlive() {
+        //TODO MAYBE FOR SOCKET IS BETTER IF THIS RETURN A STRING
+    }
+
+    /**
+     * Thread useful after a server goes up from a crash: called in recreateGame()
+     */
+    private void createGeneratorPingThread() {
+        new Thread(() -> {
+            for (Integer gameControllerID : gamesControllers.keySet()) {
+                Game game = gamesControllers.get(gameControllerID).getGame();
+                while (game.getNumberOfPlayers() != game.getObservable().getClients().size()) {
+                    // wait here so that everything is reloading, because not necessary the virtual views are already there
+                }
+
+                // Launch thread for pinging clients
+                this.createSingleGamePingThread(game.getObservable().getClients(), gameControllerID);
+            }
+        }).start();
+    }
+
+    /**
+     * Useful to verify if the client is online or not
+     *
+     * @param clients          Array of VirtualView and id of that particular Game
+     * @param gameControllerID id of the game
+     */
+    private void createSingleGamePingThread(ArrayList<Pair<VirtualView, String>> clients, int gameControllerID) {
+        new Thread(() -> {
+            // Each client is alive
+            boolean allClientAlive = true;
+
+            // While
+            while (allClientAlive) {
+
+                // Ping each client of the game
+                for (Pair client : clients) {
+
+                    // Use a counter for managing
+                    int numAttempt = 0;
+                    while (numAttempt < NUM_RECONNECTION_ATTEMPTS) {
+                        try {
+                            // Ping client
+                            ((VirtualView) client.getKey()).isClientAlive();
+
+                            // Reset num of attempt for this client
+                            numAttempt = NUM_RECONNECTION_ATTEMPTS;
+                        } catch (RemoteException e) {
+                            System.out.println(STR."Trying to reconnecting with a client \{numAttempt}");
+
+                            // Increase attempt num
+                            numAttempt++;
+
+                            // Check if attempt num reached max after error
+                            if (numAttempt == NUM_RECONNECTION_ATTEMPTS) {
+                                System.out.println(STR."A client is disconnected \{client.getValue()}");
+
+                                // Client is not alive
+                                allClientAlive = false;
+
+                                // Destry game
+                                this.destroyGame(gameControllerID);
+                            }
+                        }
+                    }
+                    // Check if client is alive
+                    if (!allClientAlive) break;
+                }
+
+                // Sleep thread
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    System.out.println("Thread interrupted");
+                }
+            }
+        }).start();
+    }
+
+
+    /**
+     * @param gameControllerID ID of the game controller that you want to destroy
+     */
+    private void destroyGame(int gameControllerID) {
+        // Notify game destruction
+        gamesControllers.get(gameControllerID).getGame().getObservable().notifyGameClosed();
+
+        // Remove game from the map
+        gamesControllers.remove(gameControllerID);
+
+        // Copy to disk again
+        try {
+            this.copyToDisk();
+        } catch (IOException e) {
+            System.out.println("COLPA DEL COPY TO DISK in DESTROY GAME");
+        }
+
+        // Delete game controller file
+        Path fileToDeletePath = Paths.get(STR."\{GameController.GAME_CONTROLLER_FILE_PATH}\{gameControllerID}.bin");
+        try {
+            Files.delete(fileToDeletePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(STR."Game \{gameControllerID} destroyed");
     }
 }

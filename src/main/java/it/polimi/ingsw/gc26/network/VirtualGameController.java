@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.network;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Map;
 
 public interface VirtualGameController extends Remote {
     void choosePawnColor(String color, String playerID) throws RemoteException;
@@ -25,4 +26,6 @@ public interface VirtualGameController extends Remote {
     void addMessage(String message, String receiverNickname, String senderID, String time) throws RemoteException;
 
     void printPersonalBoard(String nickname, String playerID) throws RemoteException;
+    void reAddView(VirtualView view, String clientID) throws RemoteException;
 }
+

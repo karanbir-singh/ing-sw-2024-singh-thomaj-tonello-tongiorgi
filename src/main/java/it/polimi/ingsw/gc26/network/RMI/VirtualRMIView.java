@@ -84,4 +84,23 @@ public class VirtualRMIView implements VirtualView {
     public void updateChat(SimplifiedChat simplifiedChat, String message) throws RemoteException {
         this.viewController.addRequest(new ChatUpdateRequest(simplifiedChat, message));
     }
+
+
+    @Override
+    public void updateIDGame(int gameID){
+        this.viewController.setGameID(gameID);
+    }
+
+    @Override
+    public void isClientAlive(){
+        //TODO FORSE INSERIRE QUALCOSA
+    }
+
+    /**
+     * @throws RemoteException
+     */
+    @Override
+    public void killProcess() throws RemoteException {
+        this.viewController.killProcess();
+    }
 }

@@ -20,10 +20,14 @@ import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.request.view_request.*;
 import it.polimi.ingsw.gc26.view_model.*;
+import it.polimi.ingsw.gc26.MainClient;
+import it.polimi.ingsw.gc26.network.ViewController;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.*;
 
 
@@ -39,14 +43,20 @@ public class SocketServerHandler implements Runnable {
     /**
      * This attributes represents the output to the server.
      */
-    private final PrintWriter outputToServer;
+    private BufferedWriter outputToServer;
 
     /**
      * This attribute represents the clientController
      */
     private final ViewController viewController;
 
-    public SocketServerHandler(ViewController viewController, BufferedReader inputFromServer, PrintWriter outputToServer) {
+    /**
+     *
+     * @param viewController
+     * @param inputFromServer
+     * @param outputToServer
+     */
+    public SocketServerHandler(ViewController viewController, BufferedReader inputFromServer, BufferedWriter outputToServer) {
         this.viewController = viewController;
         this.inputFromServer = inputFromServer;
         this.outputToServer = outputToServer;
@@ -112,12 +122,20 @@ public class SocketServerHandler implements Runnable {
                         SimplifiedChat simplifiedChat = buildSimplifiedChat(value);
                         this.viewController.addRequest(new ChatUpdateRequest(simplifiedChat, value.get("message").asText()));
                         break;
+                    case "updateIDGame":
+                        this.viewController.setGameID(value.get("idGame").asInt());
+                        break;
+                    case "isClientAlive":
+                        break;
+                    case "killProcess":
+                        this.viewController.killProcess();
+                        break;
                     case null, default:
                         break;
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Server down");
         }
     }
 
@@ -394,4 +412,3 @@ public class SocketServerHandler implements Runnable {
         return corners;
     }
 }
-

@@ -39,15 +39,18 @@ public class Hand implements Serializable {
      */
     private Side selectedSide;
 
-    private ModelObservable modelObservable;
+    /**
+     * Observable to notify client
+     */
+    private ModelObservable observable;
 
     /**
      * Initializes the hand for the player
      *
      * @param cards new cards in hand
      */
-    public Hand(ArrayList<Card> cards) {
-        this.modelObservable = ModelObservable.getInstance();
+    public Hand(ArrayList<Card> cards, ModelObservable observable) {
+        this.observable = observable;
         this.cards = cards;
         this.selectedCard = null;
         this.selectedSide = null;
@@ -75,7 +78,7 @@ public class Hand implements Serializable {
 
 //            try {
 //                this.modelObservable.notifySelectedCardFromHand(clientID);
-                this.modelObservable.notifyUpdateHand(
+                this.observable.notifyUpdateHand(
                         new SimplifiedHand(cards, selectedCard, selectedSide),
                         "Card selected on hand",
                         clientID
@@ -85,7 +88,7 @@ public class Hand implements Serializable {
 //            }
         } else {
             // TODO notify
-            ModelObservable.getInstance().notifyError("Select a card first!", clientID);
+            this.observable.notifyError("Select a card first!", clientID);
         }
     }
 
@@ -101,7 +104,7 @@ public class Hand implements Serializable {
             );
         } else {
             // TODO notify
-            ModelObservable.getInstance().notifyError("Select a card first!", clientID);
+            this.observable.notifyError("Select a card first!", clientID);
         }
     }
 
@@ -130,14 +133,14 @@ public class Hand implements Serializable {
 //            } catch (RemoteException e) {
 //                throw new RuntimeException(e);
 //            }
-            this.modelObservable.notifyUpdateHand(
+            this.observable.notifyUpdateHand(
                     new SimplifiedHand(cards, this.selectedCard, selectedSide),
                     "Turned side of selected card",
                     clientID
             );
         } else {
             // TODO lancia eccezione di carta non selezionata
-            ModelObservable.getInstance().notifyError("Select a card first!", clientID);
+            this.observable.notifyError("Select a card first!", clientID);
         }
     }
 
@@ -151,7 +154,7 @@ public class Hand implements Serializable {
         selectedSide = null;
         selectedCard = null;
 
-        this.modelObservable.notifyUpdateHand(
+        this.observable.notifyUpdateHand(
                 new SimplifiedHand(cards, selectedCard, selectedSide),
                 "Card removed from hand",
                 clientID
@@ -163,7 +166,7 @@ public class Hand implements Serializable {
         selectedSide = null;
         selectedCard = null;
 
-        this.modelObservable.notifyUpdateSecretHand(
+        this.observable.notifyUpdateSecretHand(
                 new SimplifiedHand(cards, selectedCard, selectedSide),
                 "Card removed from hand",
                 clientID
@@ -180,7 +183,7 @@ public class Hand implements Serializable {
 //        try {
 //            this.modelObservable.notifyMessage("Added a card to the hand", clientID);
 
-            this.modelObservable.notifyUpdateHand(
+            this.observable.notifyUpdateHand(
                     new SimplifiedHand(cards, selectedCard, selectedSide),
                     "Card added to hand",
                     clientID
@@ -196,7 +199,7 @@ public class Hand implements Serializable {
      */
     public void addCard(MissionCard card, String clientID) {
         cards.add(card);
-        this.modelObservable.notifyUpdateSecretHand(
+        this.observable.notifyUpdateSecretHand(
                 new SimplifiedHand(cards, selectedCard, selectedSide),
                 "Card added to hand",
                 clientID
@@ -222,14 +225,14 @@ public class Hand implements Serializable {
         // Check if the given index is correct
         if (cardIndex >= leftLimit && cardIndex < rightLimit) {
 //            try {
-                this.modelObservable.notifyMessage("Card selected at index: " + cardIndex, clientID);
+                this.observable.notifyMessage("Card selected at index: " + cardIndex, clientID);
 //            } catch (RemoteException e) {
 //                throw new RuntimeException(e);
 //            }
             return cards.get(cardIndex);
         }
         // TODO notify view
-        ModelObservable.getInstance().notifyError("Invalid position!", clientID);
+        this.observable.notifyError("Invalid position!", clientID);
         return null;
     }
 

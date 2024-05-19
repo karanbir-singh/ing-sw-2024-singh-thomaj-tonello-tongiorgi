@@ -36,8 +36,12 @@ public class VirtualRMIMainController implements VirtualMainController {
     }
 
     @Override
-    public VirtualGameController getVirtualGameController() throws RemoteException {
-        return new VirtualRMIGameController(this.mainController.getGameController());
+    public VirtualGameController getVirtualGameController(int id) throws RemoteException {
+        return new VirtualRMIGameController(this.mainController.getGameController(id));
+    }
+
+    @Override
+    public void amAlive() throws RemoteException{
     }
 
 }

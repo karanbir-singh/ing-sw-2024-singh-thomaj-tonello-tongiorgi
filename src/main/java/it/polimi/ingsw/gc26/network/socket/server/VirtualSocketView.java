@@ -15,7 +15,10 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.*;
 
 import javax.swing.text.Position;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.SocketException;
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -26,14 +29,19 @@ public class VirtualSocketView implements VirtualView {
     /**
      * This represents the print writer to write output to the client
      */
-    private final PrintWriter outputToClient;
+    private final BufferedWriter outputToClient;
+
+    //@Override
+    /*public ClientState getState() throws RemoteException {
+        return null;
+    }*/
 
     /**
      * Virtual Socket view constructor. It initializes the print writer to the client
      *
      * @param output print writer to client
      */
-    public VirtualSocketView(PrintWriter output) {
+    public VirtualSocketView(BufferedWriter output) {
         this.outputToClient = output;
     }
 
@@ -55,19 +63,21 @@ public class VirtualSocketView implements VirtualView {
      * @param functionName represents the function to call client side
      * @param valueMsg     represents a value that is need to the called function
      */
-    private void sendToClient(String functionName, HashMap<String, String> valueMsg) {
+    private void sendToClient(String functionName, HashMap<String, String> valueMsg) throws RemoteException {
         HashMap<String, String> data = getBaseMessage();
         data.replace("function", functionName);
         ObjectMapper mappedmsg = new ObjectMapper();
         try {
             data.replace("value", mappedmsg.writeValueAsString(valueMsg));
             ObjectMapper mappedData = new ObjectMapper();
-            this.outputToClient.println(mappedData.writeValueAsString(data));
+            this.outputToClient.write(mappedData.writeValueAsString(data));
+            this.outputToClient.newLine();
             this.outputToClient.flush();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new RemoteException();
+        } catch (IOException ex) {
+            throw new RemoteException();
         }
-
     }
 
     private void sendToClient(String functionName, String valueMsg) {
@@ -603,6 +613,29 @@ public class VirtualSocketView implements VirtualView {
             arrayPositions.add(genericPoint);
         }
         return arrayPositions;
+    }
+
+    @Override
+    public void updateIDGame(int idGame) throws RemoteException {
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("idGame", String.valueOf(idGame));
+        sendToClient("updateIDGame", msg);
+    }
+
+    /**
+     * @throws RemoteException
+     */
+    @Override
+    public void isClientAlive() throws RemoteException {
+        sendToClient("isClientAlive", null);
+    }
+
+    /**
+     * @throws RemoteException
+     */
+    @Override
+    public void killProcess() throws RemoteException {
+        sendToClient("killProcess", null);
     }
 }
 

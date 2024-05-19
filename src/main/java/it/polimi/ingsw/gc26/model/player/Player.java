@@ -50,6 +50,11 @@ public class Player implements Serializable {
     private PlayerState state;
 
     /**
+     * Observable to notify client
+     */
+    private ModelObservable observable;
+
+    /**
      * Initializes the player with an id and a name
      *
      * @param id   unique number that represent the player
@@ -71,6 +76,14 @@ public class Player implements Serializable {
      */
     public String getID() {
         return this.ID;
+    }
+
+    /**
+     * This method set the observable
+     * @param observable
+     */
+    public void setObservable(ModelObservable observable) {
+        this.observable = observable;
     }
 
     /**
@@ -96,8 +109,9 @@ public class Player implements Serializable {
      *
      * @param color new pawn color
      */
-    public void setPawn(String color, ArrayList<Pawn> availableColors, String clientID) {
+    public boolean setPawn(String color, ArrayList<Pawn> availableColors, String clientID) {
         Pawn pawn;
+        boolean result = false;
         switch (color) {
             case "BLUE" -> pawn = Pawn.BLUE;
             case "RED" -> pawn = Pawn.RED;
@@ -108,19 +122,20 @@ public class Player implements Serializable {
 
         if (pawn == null) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non corretto
-            ModelObservable.getInstance().notifyError("Color not available!", clientID);
+            this.observable.notifyError("Color not available!", clientID);
         } else if (!availableColors.contains(pawn)) {
             // TODO gestire cosa fare nella view quando l'utente passa un colore non disponibile
-            ModelObservable.getInstance().notifyError("Color not available!", clientID);
+            this.observable.notifyError("Color not available!", clientID);
         } else {
             availableColors.remove(pawn);
             this.pawnColor = pawn;
-//            ModelObservable.getInstance().notifyUpdateChosenPawn(pawn, clientID);
-            ModelObservable.getInstance().notifyUpdatePlayer(
+            result = true;
+            this.observable.notifyUpdatePlayer(
                     new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
                     "Colore preso!",
                     clientID);
         }
+        return result;
     }
 
     /**
@@ -138,7 +153,7 @@ public class Player implements Serializable {
     public void setFirstPlayer(String clientID) {
         this.amIFirstPlayer = true;
 
-        ModelObservable.getInstance().notifyUpdatePlayer(
+        this.observable.notifyUpdatePlayer(
                 new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
                 "You are the first player!",
                 clientID);
@@ -164,14 +179,14 @@ public class Player implements Serializable {
      * Creates an empty hand
      */
     public void createHand() {
-        this.hand = new Hand(new ArrayList<>());
+        this.hand = new Hand(new ArrayList<>(), this.observable);
     }
 
     /**
      * Creates an empty secret mission hand
      */
     public void createSecretMissionHand() {
-        this.secretMissionHand = new Hand(new ArrayList<>());
+        this.secretMissionHand = new Hand(new ArrayList<>(), this.observable);
         ;
     }
 
@@ -197,7 +212,7 @@ public class Player implements Serializable {
      * Creates the player's personal board
      */
     public void createPersonalBoard() {
-        this.personalBoard = new PersonalBoard();
+        this.personalBoard = new PersonalBoard(this.observable);
     }
 
     /**
@@ -226,7 +241,7 @@ public class Player implements Serializable {
     public void setState(PlayerState state, String clientID) {
         this.state = state;
 
-        ModelObservable.getInstance().notifyUpdatePlayer(
+        this.observable.notifyUpdatePlayer(
                 new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
                 "Stato cambiato",
                 clientID);

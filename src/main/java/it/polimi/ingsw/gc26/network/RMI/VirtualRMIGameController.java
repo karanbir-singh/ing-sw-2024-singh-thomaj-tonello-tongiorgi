@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.network.RMI;
 
 import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
+import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.game_request.*;
 
 import java.rmi.RemoteException;
@@ -73,5 +74,10 @@ public class VirtualRMIGameController implements VirtualGameController {
     @Override
     public void addMessage(String line, String nicknameReceiver, String senderID, String time) throws RemoteException {
         this.gameController.addRequest(new AddMessageRequest(line, nicknameReceiver, senderID, time));
+    }
+
+    @Override
+    public void reAddView(VirtualView view, String clientID) throws RemoteException{
+        this.gameController.addRequest(new ReAddViewRequest(view,clientID));
     }
 }

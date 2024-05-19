@@ -2,7 +2,9 @@ package it.polimi.ingsw.gc26.request.game_request;
 
 import it.polimi.ingsw.gc26.controller.GameController;
 
-public class AddMessageRequest implements GameRequest {
+import java.io.Serializable;
+
+public class AddMessageRequest implements GameRequest, Serializable {
     final private String message;
     final private String receiverNickname;
     final private String senderID;

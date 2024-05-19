@@ -3,8 +3,10 @@ package it.polimi.ingsw.gc26.network.socket.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
+import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -18,15 +20,15 @@ public class VirtualSocketGameController implements VirtualGameController {
     /**
      * This attribute represent the print writer to send json to the server
      */
-    private final PrintWriter outputToServer;
+    private final BufferedWriter outputToServer;
 
     /**
      * Virtual socket game controller's constructor. Initializes the print writer.
      *
      * @param output writer
      */
-    public VirtualSocketGameController(PrintWriter output) {
-        this.outputToServer = new PrintWriter(output);
+    public VirtualSocketGameController(BufferedWriter output) {
+        this.outputToServer = new BufferedWriter(output);
     }
 
     /**
@@ -85,7 +87,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      * @param playerID  client's ID
      */
     @Override
-    public void selectCardFromHand(int cardIndex, String playerID) {
+    public void selectCardFromHand(int cardIndex, String playerID) throws RemoteException {
         HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
         data.replace("function", "selectCardFromHand");
         HashMap<String, String> msg = new HashMap<>();
@@ -101,7 +103,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      * @param playerID client's ID
      */
     @Override
-    public void turnSelectedCardSide(String playerID) {
+    public void turnSelectedCardSide(String playerID) throws RemoteException {
         HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
         data.replace("function", "turnSelectedCardSide");
         HashMap<String, String> value = new HashMap<>();
@@ -117,7 +119,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      * @param playerID client's ID
      */
     @Override
-    public void selectPositionOnBoard(int x, int y, String playerID) {
+    public void selectPositionOnBoard(int x, int y, String playerID) throws RemoteException {
         HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
         data.replace("function", "selectPositionOnBoard");
         HashMap<String, String> value = new HashMap<>();
@@ -133,7 +135,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      * @param playerID client's ID
      */
     @Override
-    public void playCardFromHand(String playerID) {
+    public void playCardFromHand(String playerID) throws RemoteException {
         HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
         data.replace("function", "playCardFromHand");
         HashMap<String, String> value = new HashMap<>();
@@ -150,7 +152,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      * @param playerID client's ID
      */
     @Override
-    public void selectCardFromCommonTable(int cardIndex, String playerID) {
+    public void selectCardFromCommonTable(int cardIndex, String playerID) throws RemoteException {
         HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
         data.replace("function", "selectCardFromCommonTable");
         HashMap<String, String> value = new HashMap<>();
@@ -163,9 +165,10 @@ public class VirtualSocketGameController implements VirtualGameController {
      * Encodes the parameters to play this function in the real controller.
      *
      * @param playerID client's ID
+     * @throws RemoteException
      */
     @Override
-    public void drawSelectedCard(String playerID) {
+    public void drawSelectedCard(String playerID) throws RemoteException {
         HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
         data.replace("function", "drawSelectedCard");
         HashMap<String, String> value = new HashMap<>();
@@ -183,7 +186,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      * @param time             current time
      */
     @Override
-    public void addMessage(String line, String nicknameReceiver, String senderID, String time) {
+    public void addMessage(String line, String nicknameReceiver, String senderID, String time) throws RemoteException {
         HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
         data.replace("function", "addMessage");
         HashMap<String, String> msg = new HashMap<>();
@@ -230,16 +233,28 @@ public class VirtualSocketGameController implements VirtualGameController {
      * @param data     base message with the correct function name
      * @param valueMsg data associated to the value key
      */
-    private void writeToServer(HashMap<String, String> data, HashMap<String, String> valueMsg) {
+    private void writeToServer(HashMap<String, String> data, HashMap<String, String> valueMsg) throws RemoteException{
         ObjectMapper mappedmsg = new ObjectMapper();
         try {
             data.replace("value", mappedmsg.writeValueAsString(valueMsg));
             ObjectMapper mappedData = new ObjectMapper();
-            this.outputToServer.println(mappedData.writeValueAsString(data));
+            this.outputToServer.write(mappedData.writeValueAsString(data));
+            this.outputToServer.newLine();
             this.outputToServer.flush();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            throw  new RemoteException();
         }
+    }
+
+    @Override
+    public void reAddView(VirtualView view, String clientID) throws RemoteException {
+        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        data.replace("function", "reAddView");
+        HashMap<String, String> value = new HashMap<>();
+        value.put("clientID", clientID);
+        writeToServer(data, value);
     }
 
 

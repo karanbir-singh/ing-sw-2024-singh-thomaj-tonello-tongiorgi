@@ -23,12 +23,13 @@ public class PersonalBoard implements Serializable {
     private final Map<Symbol, Integer> visibleResources;
     private int selectedX = 0;
     private int selectedY = 0;
+    private ModelObservable observable;
 
     /**
      * The constructor initializes everything: the score, the resource, missions occupiedPositions , playablePositions, blockedPositions.
      * Here, the first move is made playing the initial card.
      */
-    public PersonalBoard() {
+    public PersonalBoard(ModelObservable observable) {
         score = 0;
         xMin = 0;
         xMax = 0;
@@ -50,6 +51,7 @@ public class PersonalBoard implements Serializable {
         blockedPositions = new ArrayList<>();
 
         addPoint(0, 0, playablePositions);
+        this.observable = observable;
     }
 
     /**
@@ -67,12 +69,11 @@ public class PersonalBoard implements Serializable {
     public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {
             this.secretMission = secretMission.get();
-//            ModelObservable.getInstance().notifyUpdateSelectedMission(clientID);
-            ModelObservable.getInstance().notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Secret mission set", clientID);
+            this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Secret mission set", clientID);
             return this.secretMission;
         }
         // TODO notify view
-        ModelObservable.getInstance().notifyError("Secret mission not present!", clientID);
+        this.observable.notifyError("Secret mission not present!", clientID);
         return null;
     }
 
@@ -125,13 +126,12 @@ public class PersonalBoard implements Serializable {
         if (!checkIfPlayablePosition(selectedX, selectedY)) {
             //update view
 //            ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 0);
-            ModelObservable.getInstance().notifyError("Playable position not present!", clientID);
+            this.observable.notifyError("Playable position not present!", clientID);
             return;
         }
         this.selectedX = selectedX;
         this.selectedY = selectedY;
-//        ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 1);
-        ModelObservable.getInstance().notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Position selected!", clientID);
+        this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Position selected!", clientID);
 
     }
 
@@ -477,7 +477,7 @@ public class PersonalBoard implements Serializable {
         // you need to check if the board has enough resources for the side.
         if (!checkIfEnoughResources(side)) {
             //TODO update show error
-            ModelObservable.getInstance().notifyError("Not enough resources!", clientID);
+            this.observable.notifyError("Not enough resources!", clientID);
             //update della view
             return false;
         }
@@ -488,7 +488,7 @@ public class PersonalBoard implements Serializable {
             playingPoint.setSide(side);
         } catch (NullPointerException nullEx) {
             //nullEx.printStackTrace();
-            ModelObservable.getInstance().notifyError("Select a position first!", clientID);
+            this.observable.notifyError("Select a position first!", clientID);
             return false;
         }
 
@@ -524,9 +524,7 @@ public class PersonalBoard implements Serializable {
 
         // Use card ability to add points if it has it
         this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
-
-        //ModelObservable.getInstance().notifyUpdatePlayedCardFromHand(clientID,1);
-        ModelObservable.getInstance().notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Card placed!", clientID);
+        this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Card placed!", clientID);
         return true;
     }
 
