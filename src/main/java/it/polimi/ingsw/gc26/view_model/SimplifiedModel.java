@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.view_model;
 
-import it.polimi.ingsw.gc26.client.Printer;
+import it.polimi.ingsw.gc26.client.*;
 
 public class SimplifiedModel {
     private SimplifiedCommonTable simplifiedCommonTable;
@@ -12,24 +12,36 @@ public class SimplifiedModel {
     private SimplifiedChat simplifiedChat;
 //    private OptionsMenu optionsMenu;
 
+    UserInterface userInterface;
+
+    public SimplifiedModel(MainClient.GraphicType graphicType){
+        if(graphicType == MainClient.GraphicType.gui){
+            this.userInterface = new UserGUInterface();
+        }else{
+            this.userInterface = new UserTUInterface();
+        }
+
+    }
+
+
     public void setSimplifiedCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         this.simplifiedCommonTable = simplifiedCommonTable;
-        updateView();
+        //updateView();
     }
 
     public void setSimplifiedPlayer(SimplifiedPlayer simplifiedPlayer) {
         this.simplifiedPlayer = simplifiedPlayer;
-        updateView();
+        //updateView();
     }
 
     public void setSimplifiedHand(SimplifiedHand simplifiedHand) {
         this.simplifiedHand = simplifiedHand;
-        updateView();
+        //updateView();
     }
 
     public void setSimplifiedSecretHand(SimplifiedHand simplifiedSecretHand) {
         this.simplifiedSecretHand = simplifiedSecretHand;
-        updateView();
+        //updateView();
     }
 
     public void setPersonalBoard(SimplifiedPersonalBoard personalBoard) {
@@ -39,12 +51,12 @@ public class SimplifiedModel {
 
     public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
         this.otherPersonalBoard = otherPersonalBoard;
-        updateView();
+        //updateView();
     }
 
     public void setSimplifiedChat(SimplifiedChat simplifiedChat) {
         this.simplifiedChat = simplifiedChat;
-        updateView();
+        //updateView();
     }
 
     public String[][] printableGame() {
@@ -143,8 +155,4 @@ public class SimplifiedModel {
 //        this.optionsMenu = optionsMenu;
 //    }
 
-    private void updateView() {
-        // TODO: qua ci sono tutti i reload della TUI e aggiornamenti della GUI
-        //Printer.showPrintable(simplifiedCommonTable.printableCommonTable());
-    }
 }

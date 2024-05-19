@@ -2,6 +2,8 @@ package it.polimi.ingsw.gc26.view_model;
 
 import it.polimi.ingsw.gc26.client.ClientState;
 import it.polimi.ingsw.gc26.client.MainClient;
+import it.polimi.ingsw.gc26.client.UserInterface;
+import it.polimi.ingsw.gc26.client.UserTUInterface;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.request.view_request.ViewRequest;
 import java.util.ArrayDeque;
@@ -30,9 +32,9 @@ public class ViewController {
      */
     private int gameID;
 
-    public ViewController(MainClient mainClient) {
+    public ViewController(MainClient mainClient, MainClient.GraphicType graphicType) {
         this.mainClient = mainClient;
-        this.simplifiedModel = new SimplifiedModel();
+        this.simplifiedModel = new SimplifiedModel(graphicType);
         this.viewRequests = new ArrayDeque<>();
         this.lock = new Object();
         this.launchExecutor();
