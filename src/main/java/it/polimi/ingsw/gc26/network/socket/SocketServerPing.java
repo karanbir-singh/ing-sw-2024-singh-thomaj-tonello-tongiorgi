@@ -29,7 +29,7 @@ public class SocketServerPing implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        //while (true) {
             // Set attempt num
             int numAttempt = 0;
             while (numAttempt < NUM_RECONNECTION_ATTEMPTS) {
@@ -93,14 +93,16 @@ public class SocketServerPing implements Runnable {
 
                                 // Server is up again
                                 isServerUp = true;
+
+                                // Reset num attempt
+                                numAttempt = 0;
                             } catch (IOException ex) {
-                                // Sleep thread for reconnection
+                                // Sleep thread
                                 try {
                                     Thread.sleep(2000);
                                 } catch (InterruptedException ex1) {
-                                    System.out.println("Thread didn't sleep");
+                                    System.out.println("Thread interrupted");
                                 }
-
                                 System.out.println("Trying to reconnect...");
                             }
                         }
@@ -112,9 +114,9 @@ public class SocketServerPing implements Runnable {
                 try {
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
-                    System.out.println("Thread didn't sleep");
+                    System.out.println("Thread interrupted");
                 }
             }
-        }
+        //}
     }
 }

@@ -16,6 +16,10 @@ import java.util.*;
 
 public class MainController implements Serializable {
     /**
+     * This constant represents the max numbers of reconnection attempts
+     */
+    private static final int NUM_RECONNECTION_ATTEMPTS = 3;
+    /**
      * This attribute represents the file path for saving the main controller
      */
     public static final String MAIN_CONTROLLER_FILE_PATH = "src/main/mainController.bin";
@@ -378,48 +382,56 @@ public class MainController implements Serializable {
     /**
      * Useful to verify if the client is online or not
      *
-     * @param clients          Array of VirtualView and id of that particulare Game
+     * @param clients          Array of VirtualView and id of that particular Game
      * @param gameControllerID id of the game
      */
     private void createSingleGamePingThread(ArrayList<Pair<VirtualView, String>> clients, int gameControllerID) {
         new Thread(() -> {
-            boolean clientAlive = true;
+            // Each client is alive
+            boolean allClientAlive = true;
 
-            while (clientAlive) {
-                // Sleep thread for 0.5 seconds
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+            // While
+            while (allClientAlive) {
 
                 // Ping each client of the game
                 for (Pair client : clients) {
 
                     // Use a counter for managing
-                    int numWait = 3;
-                    while (numWait > 0) {
+                    int numAttempt = 0;
+                    while (numAttempt < NUM_RECONNECTION_ATTEMPTS) {
                         try {
+                            // Ping client
                             ((VirtualView) client.getKey()).isClientAlive();
-                            numWait = 0;
-                        } catch (RemoteException e) {
-                            System.out.println(STR."Trying to reconnecting with a client \{numWait}");
 
-                            numWait--;
-                            if (numWait == 0) {
+                            // Reset num of attempt for this client
+                            numAttempt = NUM_RECONNECTION_ATTEMPTS;
+                        } catch (RemoteException e) {
+                            System.out.println(STR."Trying to reconnecting with a client \{numAttempt}");
+
+                            // Increase attempt num
+                            numAttempt++;
+
+                            // Check if attempt num reached max after error
+                            if (numAttempt == NUM_RECONNECTION_ATTEMPTS) {
                                 System.out.println(STR."A client is disconnected \{client.getValue()}");
 
-                                // client is not alive
-                                clientAlive = false;
+                                // Client is not alive
+                                allClientAlive = false;
 
                                 // Destry game
                                 this.destroyGame(gameControllerID);
-                                break;
                             }
                         }
                     }
                     // Check if client is alive
-                    if (!clientAlive) break;
+                    if (!allClientAlive) break;
+                }
+
+                // Sleep thread
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    System.out.println("Thread interrupted");
                 }
             }
         }).start();
