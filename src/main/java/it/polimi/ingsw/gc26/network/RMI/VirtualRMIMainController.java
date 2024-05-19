@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.network.RMI;
 
-import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.client.ClientState;
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;

@@ -2,16 +2,14 @@ package it.polimi.ingsw.gc26.network.socket.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.client.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.rmi.RemoteException;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**

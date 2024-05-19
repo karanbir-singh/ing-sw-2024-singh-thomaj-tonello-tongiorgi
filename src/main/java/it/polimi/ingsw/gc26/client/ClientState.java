@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26.client;
 
 public enum ClientState {
     CONNECTION,

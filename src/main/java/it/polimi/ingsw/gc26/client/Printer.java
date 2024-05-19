@@ -1,23 +1,12 @@
-package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26.client;
 
-import it.polimi.ingsw.gc26.controller.GameController;
-import it.polimi.ingsw.gc26.model.card.StarterCard;
 import it.polimi.ingsw.gc26.model.game.Game;
-import it.polimi.ingsw.gc26.model.game.GameState;
-import it.polimi.ingsw.gc26.model.card_side.Symbol;
-import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.deck.Deck;
-import it.polimi.ingsw.gc26.model.card_side.Side;
-import it.polimi.ingsw.gc26.model.game.CommonTable;
-import it.polimi.ingsw.gc26.model.game.Game;
-import it.polimi.ingsw.gc26.model.game.GameState;
-import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class Printer {

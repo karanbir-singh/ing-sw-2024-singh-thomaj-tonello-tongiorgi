@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.model.hand;
 
-import it.polimi.ingsw.gc26.Printer;
+import it.polimi.ingsw.gc26.client.Printer;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.*;
 import it.polimi.ingsw.gc26.model.card.Card;
@@ -13,13 +13,11 @@ import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
 import it.polimi.ingsw.gc26.model.card_side.ability.InkwellCounter;
 import it.polimi.ingsw.gc26.model.card_side.ability.ManuscriptCounter;
 import it.polimi.ingsw.gc26.model.card_side.ability.QuillCounter;
-import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.util.*;
 
 /**

@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.client.ClientState;
 import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.card_side.CardBack;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.game.Message;
@@ -14,11 +13,8 @@ import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.*;
 
-import javax.swing.text.Position;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.SocketException;
 import java.rmi.RemoteException;
 import java.util.*;
 

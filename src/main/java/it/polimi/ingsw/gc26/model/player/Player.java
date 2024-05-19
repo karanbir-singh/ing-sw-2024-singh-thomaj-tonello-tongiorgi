@@ -1,9 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import it.polimi.ingsw.gc26.Printer;
+import it.polimi.ingsw.gc26.client.Printer;
 import it.polimi.ingsw.gc26.model.ModelObservable;
-import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;

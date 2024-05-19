@@ -1,14 +1,12 @@
 package it.polimi.ingsw.gc26.model.game;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import it.polimi.ingsw.gc26.Printer;
+import it.polimi.ingsw.gc26.client.Printer;
 
 import java.io.Serializable;
 import java.util.*;

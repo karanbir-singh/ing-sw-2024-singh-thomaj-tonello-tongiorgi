@@ -1,5 +1,6 @@
-package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26.client;
 
+import it.polimi.ingsw.gc26.MainServer;
 import it.polimi.ingsw.gc26.network.RMI.RMIServerPing;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;

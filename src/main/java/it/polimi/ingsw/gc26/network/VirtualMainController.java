@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.network;
 
-import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.client.ClientState;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

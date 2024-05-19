@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.view_model;
 
-import it.polimi.ingsw.gc26.Printer;
+import it.polimi.ingsw.gc26.client.Printer;
 import it.polimi.ingsw.gc26.model.card.*;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;

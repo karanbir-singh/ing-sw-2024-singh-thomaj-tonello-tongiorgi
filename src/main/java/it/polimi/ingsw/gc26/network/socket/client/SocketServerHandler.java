@@ -3,7 +3,7 @@ package it.polimi.ingsw.gc26.network.socket.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.client.ClientState;
 import it.polimi.ingsw.gc26.model.card.*;
 import it.polimi.ingsw.gc26.model.card_side.*;
 import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
@@ -20,14 +20,11 @@ import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.request.view_request.*;
 import it.polimi.ingsw.gc26.view_model.*;
-import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.*;
 
 

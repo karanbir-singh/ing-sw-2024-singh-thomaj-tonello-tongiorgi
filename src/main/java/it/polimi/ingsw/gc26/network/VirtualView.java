@@ -1,9 +1,6 @@
 package it.polimi.ingsw.gc26.network;
 
-import it.polimi.ingsw.gc26.ClientState;
-import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.player.Pawn;
-import it.polimi.ingsw.gc26.model.player.PersonalBoard;
+import it.polimi.ingsw.gc26.client.ClientState;
 import it.polimi.ingsw.gc26.view_model.*;
 
 import java.rmi.Remote;
