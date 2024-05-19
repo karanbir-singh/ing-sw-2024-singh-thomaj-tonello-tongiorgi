@@ -21,7 +21,7 @@ import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.request.view_request.*;
 import it.polimi.ingsw.gc26.view_model.*;
 import it.polimi.ingsw.gc26.MainClient;
-import it.polimi.ingsw.gc26.network.ViewController;
+import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

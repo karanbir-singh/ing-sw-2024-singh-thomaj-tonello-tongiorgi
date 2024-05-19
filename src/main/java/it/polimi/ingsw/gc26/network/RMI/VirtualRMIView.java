@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.view_request.*;
 import it.polimi.ingsw.gc26.view_model.*;
+import it.polimi.ingsw.gc26.view_model.ViewController;
 
 
 import java.rmi.RemoteException;

@@ -268,7 +268,7 @@ public class Game implements Serializable {
                 break;
             case STARTER_CARDS_DISTRIBUTION:
                 message = "Starter Cards Distribution...";
-                ModelObservable.getInstance().notifyUpdateCommonTable(
+                this.observable.notifyUpdateCommonTable(
                         new SimplifiedCommonTable(
                                 commonTable.getResourceDeck().getTopCard(),
                                 commonTable.getGoldDeck().getTopCard(),
@@ -305,7 +305,6 @@ public class Game implements Serializable {
         }
 
         // TODO Update view
-        this.observable.notifyUpdateGameState(newGameState);
     }
 
     /**

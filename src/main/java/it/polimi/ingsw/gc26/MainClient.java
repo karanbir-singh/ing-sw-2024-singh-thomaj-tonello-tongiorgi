@@ -6,7 +6,6 @@ import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.ViewController;
-import it.polimi.ingsw.gc26.network.ViewController;
 import it.polimi.ingsw.gc26.network.socket.SocketServerPing;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketGameController;
@@ -53,6 +52,10 @@ public class MainClient {
      * RMI bound object name
      */
     public static final String remoteObjectName = "RMIMainController";
+
+    public String getClientID() {
+        return clientID;
+    }
 
     /**
      * User interface types
@@ -411,7 +414,7 @@ public class MainClient {
                         message = scan.nextLine();
                     } while (message == "");
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                    virtualGameController.addMessage(message, receiverNickname, viewController.getClientID(), LocalTime.now().toString().formatted(formatter));
+                    virtualGameController.addMessage(message, receiverNickname, clientID, LocalTime.now().toString().formatted(formatter));
                     break;
                 case 12:
                     System.exit(0);
@@ -551,7 +554,7 @@ public class MainClient {
                                 this.setVirtualGameController(new VirtualSocketGameController(socketOut));
                                 new SocketServerHandler(this.viewController, socketIn, socketOut);
 
-                                virtualGameController.reAddView(virtualView, viewController.getClientID());
+                                virtualGameController.reAddView(virtualView, clientID);
                                 isServerUp = true;
                             } catch (IOException ex) {
                                 System.out.println("Trying to reconnect...");

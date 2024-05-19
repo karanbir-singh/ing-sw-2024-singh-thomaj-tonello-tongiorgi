@@ -65,7 +65,7 @@ public class RMIServerPing implements Runnable {
                             mainClient.setVirtualGameController(mainClient.getVirtualMainController().getVirtualGameController(mainClient.getViewController().getGameID()));
 
                             // Re-add view to the game controller
-                            mainClient.getVirtualGameController().reAddView(mainClient.getVirtualView(), mainClient.getViewController().getClientID());
+                            mainClient.getVirtualGameController().reAddView(mainClient.getVirtualView(), mainClient.getClientID());
 
                             // Server is up again
                             isServerUp = true;

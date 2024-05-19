@@ -42,7 +42,7 @@ public class Chat implements Serializable {
      */
     public void addMessage(Message message){
         messages.add(message); //TODO chiamata di comunicazione con il client
-        this.observable.notifyChat(message);
+        //this.observable.notifyChat(message);
 
     }
 

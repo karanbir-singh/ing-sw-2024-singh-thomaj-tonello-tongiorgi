@@ -86,9 +86,12 @@ public class VirtualSocketView implements VirtualView {
         try {
             data.replace("value", valueMsg);
             ObjectMapper mappedData = new ObjectMapper();
-            this.outputToClient.println(mappedData.writeValueAsString(data));
+            this.outputToClient.write(mappedData.writeValueAsString(data));
+            this.outputToClient.newLine();
             this.outputToClient.flush();
         } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -627,7 +630,7 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void isClientAlive() throws RemoteException {
-        sendToClient("isClientAlive", null);
+        sendToClient("isClientAlive", new HashMap<>());
     }
 
     /**
@@ -635,7 +638,7 @@ public class VirtualSocketView implements VirtualView {
      */
     @Override
     public void killProcess() throws RemoteException {
-        sendToClient("killProcess", null);
+        sendToClient("killProcess", new HashMap<>());
     }
 }
 

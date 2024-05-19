@@ -21,7 +21,15 @@ public class ViewController {
      */
     private final Queue<ViewRequest> viewRequests;
 
+    /**
+     * Attribute used for synchronize actions between server and client
+     */
     public final Object lock;
+
+    /**
+     * ID of the game where the client participates
+     */
+    private int gameID;
 
     public ViewController(MainClient mainClient) {
         this.mainClient = mainClient;
@@ -138,5 +146,17 @@ public class ViewController {
      */
     public void showError(String errorMessage) {
         System.err.println(STR."[ERROR]: \{errorMessage}");
+    }
+
+    public void setGameID(int gameID){
+        this.gameID = gameID;
+    }
+
+    public int getGameID(){
+        return this.gameID;
+    }
+
+    public void killProcess() {
+        this.mainClient.killProcesses();
     }
 }

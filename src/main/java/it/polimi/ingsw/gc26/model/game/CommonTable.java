@@ -88,7 +88,7 @@ public class CommonTable implements Serializable {
     public void selectCard(int cardIndex, String clientID) {
         // Check if the card index are correct
         if (cardIndex < 0 || cardIndex > 6) {
-            ModelObservable.getInstance().notifyError("Position not valid!", clientID);
+            this.observable.notifyError("Position not valid!", clientID);
             return;
         }
 
@@ -118,7 +118,7 @@ public class CommonTable implements Serializable {
                 selectedY = 1;
                 break;
             default:
-                ModelObservable.getInstance().notifyError("Select a position!", clientID);
+                this.observable.notifyError("Select a position!", clientID);
                 return;
         }
         this.observable.notifyMessage("Card selected on common table", clientID);

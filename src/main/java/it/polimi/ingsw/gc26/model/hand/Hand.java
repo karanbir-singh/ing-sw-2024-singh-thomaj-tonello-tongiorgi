@@ -97,7 +97,7 @@ public class Hand implements Serializable {
             this.selectedCard = selectedCard;
             this.selectedSide = selectedCard.getFront();
             // TODO notify view
-            this.modelObservable.notifyUpdateSecretHand(
+            this.observable.notifyUpdateSecretHand(
                     new SimplifiedHand(cards, selectedCard, selectedSide),
                     "Card selected on hand",
                     clientID

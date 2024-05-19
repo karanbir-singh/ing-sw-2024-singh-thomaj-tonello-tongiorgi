@@ -285,8 +285,8 @@ public class MainController implements Serializable {
                 // Update of the view
                 for (VirtualView view : waitingClients) {
                     try {
-                        view.updateClientState(ClientState.BEGIN);
                         view.updateIDGame(numberOfTotalGames);
+                        view.updateClientState(ClientState.BEGIN);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }

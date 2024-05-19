@@ -89,7 +89,7 @@ public class SocketServerPing implements Runnable {
                                 new SocketServerHandler(mainClient.getViewController(), socketIn, socketOut);
 
                                 // Re-add view to the game controller
-                                mainClient.getVirtualGameController().reAddView(mainClient.getVirtualView(), mainClient.getViewController().getClientID());
+                                mainClient.getVirtualGameController().reAddView(mainClient.getVirtualView(), mainClient.getClientID());
 
                                 // Server is up again
                                 isServerUp = true;

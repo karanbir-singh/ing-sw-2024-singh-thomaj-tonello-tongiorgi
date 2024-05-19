@@ -184,16 +184,6 @@ public class ModelObservable implements Serializable {
         }
     }
 
-    public void notifyMessage(String msg) {
-        for (Pair client : this.clients) {
-            try {
-                ((VirtualView) client.getKey()).showMessage(msg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public void notifyError(String errorMsg, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
@@ -206,15 +196,6 @@ public class ModelObservable implements Serializable {
         }
     }
 
-    public void notifyError(String errorMsg) {
-        for (Pair client : this.clients) {
-            try {
-                ((VirtualView) client.getKey()).showError(errorMsg);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public void notifyGameClosed() {
         for (Pair client : this.clients) {
