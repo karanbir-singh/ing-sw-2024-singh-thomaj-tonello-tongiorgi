@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.controller;
 
-import it.polimi.ingsw.gc26.client.ClientState;
+import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
@@ -22,7 +22,7 @@ public class MainController implements Serializable {
     /**
      * This attribute represents the file path for saving the main controller
      */
-    public static final String MAIN_CONTROLLER_FILE_PATH = "src/main/mainController.bin";
+    public static final String MAIN_CONTROLLER_FILE_PATH = "src/main/resources/mainController.bin";
 
     /**
      * This attribute represents the list of clients who are waiting for a new game
@@ -86,7 +86,7 @@ public class MainController implements Serializable {
      *
      * @throws IOException
      */
-    private void copyToDisk() throws IOException {
+    private void backup() throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(MAIN_CONTROLLER_FILE_PATH);
         ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
         outputStream.writeObject(this);
@@ -162,7 +162,7 @@ public class MainController implements Serializable {
 
         // Copy on disk
         try {
-            this.copyToDisk();
+            this.backup();
         } catch (IOException e) {
             System.out.println("COLPA DI COPYTODISK CONNECT");
             e.printStackTrace();
@@ -220,7 +220,7 @@ public class MainController implements Serializable {
 
         //copy on the disk
         try {
-            this.copyToDisk();
+            this.backup();
         } catch (IOException e) {
             System.out.println("COLPA DI COPYTODISK DI CREATEWAITING LIST");
             e.printStackTrace();
@@ -310,7 +310,7 @@ public class MainController implements Serializable {
 
         //copy on the disk
         try {
-            this.copyToDisk();
+            this.backup();
         } catch (IOException e) {
             System.out.println("COLPA COPY TO DISK DI JOINWAITINGLIST");
             e.printStackTrace();
@@ -450,7 +450,7 @@ public class MainController implements Serializable {
 
         // Copy to disk again
         try {
-            this.copyToDisk();
+            this.backup();
         } catch (IOException e) {
             System.out.println("COLPA DEL COPY TO DISK in DESTROY GAME");
         }

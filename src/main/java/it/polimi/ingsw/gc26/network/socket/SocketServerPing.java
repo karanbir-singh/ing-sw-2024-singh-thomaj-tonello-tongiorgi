@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.network.socket;
 
-import it.polimi.ingsw.gc26.client.MainClient;
+import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketGameController;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;

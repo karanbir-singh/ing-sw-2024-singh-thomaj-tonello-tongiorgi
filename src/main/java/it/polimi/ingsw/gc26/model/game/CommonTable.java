@@ -6,7 +6,7 @@ import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import it.polimi.ingsw.gc26.client.Printer;
+import it.polimi.ingsw.gc26.Printer;
 
 import java.io.Serializable;
 import java.util.*;

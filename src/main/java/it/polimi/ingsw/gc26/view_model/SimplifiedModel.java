@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.view_model;
 
-import it.polimi.ingsw.gc26.client.*;
+import it.polimi.ingsw.gc26.Printer;
+import it.polimi.ingsw.gc26.ui.UpdateInterface;
 
 public class SimplifiedModel {
     private SimplifiedCommonTable simplifiedCommonTable;
@@ -12,15 +13,10 @@ public class SimplifiedModel {
     private SimplifiedChat simplifiedChat;
 //    private OptionsMenu optionsMenu;
 
-    UserInterface userInterface;
+    UpdateInterface view;
 
-    public SimplifiedModel(MainClient.GraphicType graphicType){
-        if(graphicType == MainClient.GraphicType.gui){
-            this.userInterface = new UserGUInterface();
-        }else{
-            this.userInterface = new UserTUInterface();
-        }
-
+    public SimplifiedModel(UpdateInterface view){
+        this.view = view;
     }
 
 

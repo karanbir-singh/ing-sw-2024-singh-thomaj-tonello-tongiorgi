@@ -5,7 +5,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.sceneControllers.CreatorController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.CreatorController">
    <children>
       <Label fx:id="status" layoutX="215.0" layoutY="52.0" text="How many players in the game?" />
       <RadioButton fx:id="secondRadioButton" layoutX="107.0" layoutY="175.0" mnemonicParsing="false" onAction="#onSecondRadioButtonClick" text="2" />

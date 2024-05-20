@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.model.game;
 
-import it.polimi.ingsw.gc26.client.Printer;
+import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.player.Pawn;

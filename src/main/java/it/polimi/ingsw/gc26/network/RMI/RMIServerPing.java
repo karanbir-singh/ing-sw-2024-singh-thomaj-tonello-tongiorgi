@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26.network.RMI;
 
-import it.polimi.ingsw.gc26.client.MainClient;
+import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 
 import java.rmi.NotBoundException;

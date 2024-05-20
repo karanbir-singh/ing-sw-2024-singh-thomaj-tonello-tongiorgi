@@ -3,7 +3,7 @@ package it.polimi.ingsw.gc26.network.socket.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.gc26.client.ClientState;
+import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.card.*;
 import it.polimi.ingsw.gc26.model.card_side.*;
 import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;

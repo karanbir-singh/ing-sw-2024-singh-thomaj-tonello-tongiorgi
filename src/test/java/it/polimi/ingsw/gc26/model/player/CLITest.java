@@ -1,7 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
 import it.polimi.ingsw.gc26.controller.GameController;
-import it.polimi.ingsw.gc26.client.Printer;
+import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.card.Card;

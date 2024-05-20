@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.client;
+package it.polimi.ingsw.gc26;
 
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.deck.Deck;
