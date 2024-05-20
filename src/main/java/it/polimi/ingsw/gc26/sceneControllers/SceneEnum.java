@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.sceneControllers;
 public enum SceneEnum {
     LOGIN("/it/polimi/ingsw/gc26/login.fxml"),
     CREATOR("/it/polimi/ingsw/gc26/creator.fxml"),
+    WAITING("/it/polimi/ingsw/gc26/waiting.fxml"),
     STARTERCARDCHOICE("/it/polimi/ingsw/gc26/starterCardChoice.fxml"); //ricorda di togliere
                                                                             //il punto virgola
     //altre
