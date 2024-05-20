@@ -263,4 +263,6 @@ public class TUIApplication {
         this.mainClient.setVirtualMainController((VirtualMainController) remoteObject);
         this.mainClient.setVirtualView(new VirtualRMIView(mainClient.getViewController()));
     }
+
+
 }

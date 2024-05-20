@@ -36,4 +36,6 @@ module it.polimi.ingsw.gc26 {
     opens it.polimi.ingsw.gc26.view_model to javafx.fxml;
     exports it.polimi.ingsw.gc26.client;
     opens it.polimi.ingsw.gc26.client to javafx.fxml;
+    exports it.polimi.ingsw.gc26.sceneControllers;
+    opens it.polimi.ingsw.gc26.sceneControllers to javafx.fxml;
 }
