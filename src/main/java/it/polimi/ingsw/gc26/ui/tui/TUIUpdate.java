@@ -16,9 +16,11 @@ public class TUIUpdate implements UpdateInterface {
         this.miniModel = miniModel;
     }
 
+    private CLI cli;
     @Override
     public void updateViewCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         clearConsole();
+        cli = new CLI(miniModel);
 
         printOptions();
     }
@@ -26,6 +28,7 @@ public class TUIUpdate implements UpdateInterface {
     @Override
     public void updateViewPlayer(SimplifiedPlayer simplifiedPlayer) {
         clearConsole();
+        cli = new CLI(miniModel);
 
         printOptions();
     }
@@ -33,6 +36,7 @@ public class TUIUpdate implements UpdateInterface {
     @Override
     public void updateViewHand(SimplifiedHand simplifiedHand) {
         clearConsole();
+        cli = new CLI(miniModel);
 
         printOptions();
     }
@@ -40,6 +44,7 @@ public class TUIUpdate implements UpdateInterface {
     @Override
     public void updateViewSecretHand(SimplifiedHand simplifiedSecretHand) {
         clearConsole();
+        cli = new CLI(miniModel);
 
         printOptions();
     }
@@ -49,6 +54,7 @@ public class TUIUpdate implements UpdateInterface {
         clearConsole();
 
         printOptions();
+        cli = new CLI(miniModel);
     }
 
     @Override
@@ -56,6 +62,7 @@ public class TUIUpdate implements UpdateInterface {
         clearConsole();
 
         printOptions();
+        cli = new CLI(miniModel);
     }
 
     @Override

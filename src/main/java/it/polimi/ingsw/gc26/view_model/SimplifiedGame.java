@@ -16,12 +16,12 @@ public class SimplifiedGame {
     /**
      * This attribute represents the current player's nickname
      */
-    private String currentPlayer; //TODO capire se basta il nickname o se serve il player
+    private String currentPlayer;
 
     /**
      * This attribute represents the players' score
      */
-    private final HashMap<String, Integer> scores;
+    private final HashMap<String, Integer> scores; //TODO aggiungere pawn colors
     /**
      * This attribute represents the winners of the game
      */
