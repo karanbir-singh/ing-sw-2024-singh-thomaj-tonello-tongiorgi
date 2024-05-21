@@ -28,6 +28,13 @@ public class TUIApplication implements UIInterface {
             this.mainClient = MainClient.startSocketClient(MainClient.GraphicType.tui);
         }
 
+        this.mainClient
+                .getViewController()
+                .getSimplifiedModel()
+                .setViewUpdater(
+                        new TUIUpdate()
+                );
+
         new Thread(() -> {
             try {
                 this.runConnection();

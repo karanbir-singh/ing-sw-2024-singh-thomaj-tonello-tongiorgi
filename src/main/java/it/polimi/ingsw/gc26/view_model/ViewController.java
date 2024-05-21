@@ -31,9 +31,9 @@ public class ViewController {
      */
     private int gameID;
 
-    public ViewController(MainClient mainClient, UpdateInterface view) {
+    public ViewController(MainClient mainClient) {
         this.mainClient = mainClient;
-        this.simplifiedModel = new SimplifiedModel(view);
+        this.simplifiedModel = new SimplifiedModel();
         this.viewRequests = new ArrayDeque<>();
         this.lock = new Object();
         this.launchExecutor();
@@ -70,6 +70,10 @@ public class ViewController {
             viewRequests.add(viewRequest);
             viewRequests.notifyAll();
         }
+    }
+
+    public SimplifiedModel getSimplifiedModel() {
+        return simplifiedModel;
     }
 
     /**

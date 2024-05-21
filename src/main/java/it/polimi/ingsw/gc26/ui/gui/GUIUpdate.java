@@ -5,6 +5,12 @@ import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.view_model.*;
 
 public class GUIUpdate implements UpdateInterface {
+    GUIApplication guiApplication;
+
+    public GUIUpdate(GUIApplication guiApplication) {
+        this.guiApplication = guiApplication;
+    }
+
     @Override
     public void updateViewCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
 

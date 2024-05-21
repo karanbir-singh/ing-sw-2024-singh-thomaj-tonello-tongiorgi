@@ -14,17 +14,16 @@ public class SimplifiedModel {
     private SimplifiedChat simplifiedChat;
 //    private OptionsMenu optionsMenu;
 
-    UpdateInterface view;
+    private UpdateInterface view;
+
+    public void setViewUpdater(UpdateInterface view) {
+        this.view = view;
+    }
 
     public void setSimplifiedGame(SimplifiedGame simplifiedGame) {
         this.simplifiedGame = simplifiedGame;
         view.updateGame(simplifiedGame);
     }
-
-    public SimplifiedModel(UpdateInterface view){
-        this.view = view;
-    }
-
 
     public void setSimplifiedCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         this.simplifiedCommonTable = simplifiedCommonTable;

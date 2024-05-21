@@ -89,11 +89,11 @@ public class MainClient {
     public final Object lock;
 
 
-    public MainClient(UpdateInterface view) {
+    public MainClient() {
         this.clientID = null;
         this.clientState = ClientState.CONNECTION;
         this.lock = new Object();
-        this.viewController = new ViewController(this, view);
+        this.viewController = new ViewController(this);
 
     }
 
@@ -249,14 +249,7 @@ public class MainClient {
         Registry registry = LocateRegistry.getRegistry(SERVER_IP, RMI_SERVER_PORT);
 
         // Create RMI Client
-        MainClient mainClient = null;
-
-        // Set view
-        if (graphicType.equals(GraphicType.tui)) {
-            mainClient = new MainClient(new TUIUpdate());
-        } else if (graphicType.equals(GraphicType.gui)) {
-            mainClient = new MainClient(new GUIUpdate());
-        }
+        MainClient mainClient = new MainClient();
 
         // Get remote object
         Remote remoteObject = registry.lookup(remoteObjectName);
@@ -281,14 +274,7 @@ public class MainClient {
         BufferedWriter socketOut = new BufferedWriter(socketTx);
 
         // Create socket client
-        MainClient mainClient = null;
-
-        // Set view
-        if (graphicType.equals(GraphicType.tui)) {
-            mainClient = new MainClient(new TUIUpdate());
-        } else if (graphicType.equals(GraphicType.gui)) {
-            mainClient = new MainClient(new GUIUpdate());
-        }
+        MainClient mainClient = new MainClient();
 
         mainClient.setVirtualMainController(new VirtualSocketMainController(socketOut));
         mainClient.setVirtualView(new VirtualSocketView(null));

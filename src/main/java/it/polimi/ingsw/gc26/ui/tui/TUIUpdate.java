@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.ui.tui;
 
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
+import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
 import it.polimi.ingsw.gc26.view_model.*;
 
 import java.io.IOException;

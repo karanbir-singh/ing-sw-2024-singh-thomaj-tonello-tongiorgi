@@ -36,6 +36,8 @@ public class GUIApplication extends Application implements UIInterface {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Get value from args
+
+
         String networkType = getParameters().getUnnamed().get(0);
 
         //lanchaure prima startSocketClient e startRMiCLient
@@ -44,6 +46,12 @@ public class GUIApplication extends Application implements UIInterface {
         } else {
             this.mainClient = MainClient.startSocketClient(MainClient.GraphicType.gui);
         }
+
+        mainClient.getViewController()
+                .getSimplifiedModel()
+                .setViewUpdater(
+                        new GUIUpdate(this)
+                );
 
         this.loadScenes();
         this.setMainClientToSceneControllers();
