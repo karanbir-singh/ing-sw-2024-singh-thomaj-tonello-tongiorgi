@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.ui.tui;
 
+import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.view_model.*;
@@ -7,19 +8,24 @@ import it.polimi.ingsw.gc26.view_model.*;
 import java.io.IOException;
 
 public class TUIUpdate implements UpdateInterface {
+    Printer printer = new Printer();
+
     @Override
     public void updateViewCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         clearConsole();
+        printer.showPrintable(simplifiedCommonTable.printableCommonTableAndMissions());
     }
 
     @Override
     public void updateViewPlayer(SimplifiedPlayer simplifiedPlayer) {
         clearConsole();
+        printer.showPrintable(simplifiedPlayer.printableHandAndMission());
     }
 
     @Override
     public void updateViewHand(SimplifiedHand simplifiedHand) {
         clearConsole();
+        printer.showPrintable(simplifiedHand.printableHand());
     }
 
     @Override
@@ -68,6 +74,7 @@ public class TUIUpdate implements UpdateInterface {
             throw new RuntimeException(e);
         } catch (IOException e) {
             System.out.print("\033[H\033[2J");
+            // System.out.print("\033\143");
         }
     }
 }

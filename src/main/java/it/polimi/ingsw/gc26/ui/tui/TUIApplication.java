@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.ui.tui;
 
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.ui.UIInterface;
 
 import java.io.IOException;
@@ -28,13 +29,8 @@ public class TUIApplication implements UIInterface {
             this.mainClient = MainClient.startSocketClient(MainClient.GraphicType.tui);
         }
 
-        new Thread(() -> {
-            try {
-                this.runConnection();
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
+        this.runConnection();
+        this.runGame();
     }
 
     @Override
@@ -207,6 +203,11 @@ public class TUIApplication implements UIInterface {
     }
 
     private int printOptions() {
+        GameState gameState = this.mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getGameState();
+
+        switch (gameState) {
+
+        }
         System.out.println("Select your option:");
         System.out.println("" +
                 "1) Select a card.\n" +

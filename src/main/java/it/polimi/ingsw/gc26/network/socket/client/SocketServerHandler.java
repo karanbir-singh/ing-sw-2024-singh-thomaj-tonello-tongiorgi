@@ -93,8 +93,8 @@ public class SocketServerHandler implements Runnable {
                         this.viewController.showError(value.get("errorMessage").asText());
                         break;
                     case "updateCommonTable":
-                        SimplifiedCommonTable request = buildSimplifiedCommonTable(value);
-                        this.viewController.addRequest(new CommonTableUpdateRequest(request, value.get("message").asText()));
+                        SimplifiedCommonTable commonTable = buildSimplifiedCommonTable(value);
+                        this.viewController.addRequest(new CommonTableUpdateRequest(commonTable, value.get("message").asText()));
                         break;
                     case "updateHand":
                         SimplifiedHand hand = buildSimplifiedHand(value);

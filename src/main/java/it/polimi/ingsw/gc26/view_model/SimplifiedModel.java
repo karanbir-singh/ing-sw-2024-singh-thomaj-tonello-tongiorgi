@@ -16,49 +16,56 @@ public class SimplifiedModel {
 
     UpdateInterface view;
 
-    public void setSimplifiedGame(SimplifiedGame simplifiedGame) {
-        this.simplifiedGame = simplifiedGame;
-        view.updateGame(simplifiedGame);
-    }
-
     public SimplifiedModel(UpdateInterface view){
         this.view = view;
     }
 
+    public void setSimplifiedGame(SimplifiedGame simplifiedGame, String message) {
+        this.simplifiedGame = simplifiedGame;
+        view.updateGame(simplifiedGame);
+        view.showMessage(message);
+    }
 
-    public void setSimplifiedCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
+    public void setSimplifiedCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message) {
         this.simplifiedCommonTable = simplifiedCommonTable;
         this.view.updateViewCommonTable(simplifiedCommonTable);
+        this.view.showMessage(message);
     }
 
-    public void setSimplifiedPlayer(SimplifiedPlayer simplifiedPlayer) {
+    public void setSimplifiedPlayer(SimplifiedPlayer simplifiedPlayer, String message) {
         this.simplifiedPlayer = simplifiedPlayer;
         this.view.updateViewPlayer(simplifiedPlayer);
+        this.view.showMessage(message);
     }
 
-    public void setSimplifiedHand(SimplifiedHand simplifiedHand) {
+    public void setSimplifiedHand(SimplifiedHand simplifiedHand, String message) {
         this.simplifiedHand = simplifiedHand;
         this.view.updateViewHand(simplifiedHand);
+        this.view.showMessage(message);
     }
 
-    public void setSimplifiedSecretHand(SimplifiedHand simplifiedSecretHand) {
+    public void setSimplifiedSecretHand(SimplifiedHand simplifiedSecretHand, String message) {
         this.simplifiedSecretHand = simplifiedSecretHand;
         this.view.updateViewSecretHand(simplifiedSecretHand);
+        this.view.showMessage(message);
     }
 
-    public void setPersonalBoard(SimplifiedPersonalBoard personalBoard) {
+    public void setPersonalBoard(SimplifiedPersonalBoard personalBoard, String message) {
         this.personalBoard = personalBoard;
         this.view.updateViewPersonalBoard(personalBoard);
+        this.view.showMessage(message);
     }
 
-    public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
+    public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) {
         this.otherPersonalBoard = otherPersonalBoard;
         this.view.updateViewOtherPersonalBoard(otherPersonalBoard);
+        this.view.showMessage(message);
     }
 
-    public void setSimplifiedChat(SimplifiedChat simplifiedChat) {
+    public void setSimplifiedChat(SimplifiedChat simplifiedChat, String message) {
         this.simplifiedChat = simplifiedChat;
         this.view.updateViewSimplifiedChat(simplifiedChat);
+        this.view.showMessage(message);
     }
 
     public String[][] printableGame() {
@@ -157,4 +164,36 @@ public class SimplifiedModel {
 //        this.optionsMenu = optionsMenu;
 //    }
 
+
+    public SimplifiedCommonTable getSimplifiedCommonTable() {
+        return simplifiedCommonTable;
+    }
+
+    public SimplifiedGame getSimplifiedGame() {
+        return simplifiedGame;
+    }
+
+    public SimplifiedPlayer getSimplifiedPlayer() {
+        return simplifiedPlayer;
+    }
+
+    public SimplifiedHand getSimplifiedHand() {
+        return simplifiedHand;
+    }
+
+    public SimplifiedHand getSimplifiedSecretHand() {
+        return simplifiedSecretHand;
+    }
+
+    public SimplifiedPersonalBoard getPersonalBoard() {
+        return personalBoard;
+    }
+
+    public SimplifiedPersonalBoard getOtherPersonalBoard() {
+        return otherPersonalBoard;
+    }
+
+    public SimplifiedChat getSimplifiedChat() {
+        return simplifiedChat;
+    }
 }
