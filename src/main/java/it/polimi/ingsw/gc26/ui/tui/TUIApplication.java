@@ -137,94 +137,144 @@ public class TUIApplication implements UIInterface {
         // Infinite loop
         while (true) {
             int cardIndex;
-            Integer option = this.printOptions();
-            switch (option) {
-                case 1:
-                    System.out.println("Select the card position: (0/1/2)");
-                    String xPosition = scan.nextLine();
-                    mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(xPosition), this.mainClient.getClientID());
+            int option = scan.nextInt();
+            GameState gameState;
+            try {
+                gameState = this.mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getGameState();
+            } catch (NullPointerException e) {
+                gameState = GameState.WAITING_PAWNS_SELECTION;
+            }
+            switch (gameState) {
+                case WAITING_PAWNS_SELECTION:
+                    switch (option) {
+                        case 1:
+                            System.out.println("Insert the pawn color: ");
+                            String color = scan.nextLine();
+                            mainClient.getVirtualGameController().choosePawnColor(color, this.mainClient.getClientID());
+                            break;
+                        case 2:
+                            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
+                            String receiverNickname = scan.nextLine();
+                            String message;
+                            do {
+                                System.out.println("Insert message: ");
+                                message = scan.nextLine();
+                            } while (message.isEmpty());
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                            break;
+                        case 3:
+                            System.exit(0);
+                            break;
+                    }
                     break;
-                case 2:
-                    mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
+                case WAITING_SECRET_MISSION_CHOICE:
+                    switch (option) {
+                        case 1:
+                            mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
+                            break;
+                        case 2:
+                            do {
+                                System.out.println("Insert the card index: (0/1) ");
+                                cardIndex = Integer.parseInt(scan.nextLine());
+                            } while (cardIndex != 0 && cardIndex != 1);
+                            mainClient.getVirtualGameController().selectSecretMission(cardIndex, this.mainClient.getClientID());
+                            break;
+                        case 3:
+                            mainClient.getVirtualGameController().setSecretMission(this.mainClient.getClientID());
+                            break;
+                        case 4:
+                            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
+                            String receiverNickname = scan.nextLine();
+                            String message;
+                            do {
+                                System.out.println("Insert message: ");
+                                message = scan.nextLine();
+                            } while (message.isEmpty());
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                            break;
+                        case 5:
+                            System.exit(0);
+                            break;
+                    }
                     break;
-                case 3:
-                    mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
+                case GAME_STARTED:
+                    switch (option) {
+                        case 1:
+                            String xPosition;
+                            do {
+                                System.out.println("Select the card position: (0/1/2)");
+                                xPosition = scan.nextLine();
+                            } while (Integer.parseInt(xPosition) < 0 || Integer.parseInt(xPosition) > 2);
+                            mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(xPosition), this.mainClient.getClientID());
+                            break;
+                        case 2:
+                            mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
+                            break;
+                        case 3:
+                            mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
+                            break;
+                        case 4:
+                            System.out.println("Insert the X coordinate: ");
+                            String XPosition = scan.nextLine();
+                            System.out.println("Insert the Y coordinate: ");
+                            String YPosition = scan.nextLine();
+                            mainClient.getVirtualGameController().selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), this.mainClient.getClientID());
+                            break;
+                        case 5:
+                            do {
+                                System.out.println("Insert the card index (0/1/2/3/4/5): ");
+                                cardIndex = Integer.parseInt(scan.nextLine());
+                            } while (cardIndex < 0 || cardIndex > 5);
+                            mainClient.getVirtualGameController().selectCardFromCommonTable(cardIndex, this.mainClient.getClientID());
+                            break;
+                        case 6:
+                            mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
+                            break;
+                        case 7:
+                            System.out.println("Insert the player's nickname owner of the board: ");
+                            String playerNickname = scan.nextLine();
+                            mainClient.getVirtualGameController().printPersonalBoard(playerNickname, this.mainClient.getClientID());
+                            break;
+                        case 8:
+                            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
+                            String receiverNickname = scan.nextLine();
+                            String message;
+                            do {
+                                System.out.println("Insert message: ");
+                                message = scan.nextLine();
+                            } while (message.isEmpty());
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                            break;
+                        case 9:
+                            System.exit(0);
+                            break;
+                    }
                     break;
-                case 4:
-                    System.out.println("Insert the X coordinate: ");
-                    String XPosition = scan.nextLine();
-                    System.out.println("Insert the Y coordinate: ");
-                    String YPosition = scan.nextLine();
-                    mainClient.getVirtualGameController().selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), this.mainClient.getClientID());
+                case END_STAGE:
+                    switch (option) {
+                        case 1:
+                            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
+                            String receiverNickname = scan.nextLine();
+                            String message;
+                            do {
+                                System.out.println("Insert message: ");
+                                message = scan.nextLine();
+                            } while (message.isEmpty());
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                            break;
+                        case 2:
+                            System.exit(0);
+                            break;
+                    }
                     break;
-                case 5:
-                    //TODO use only one number
-                    System.out.println("Insert the card index (0/1/2/3/4/5): ");
-                    cardIndex = Integer.parseInt(scan.nextLine());
-                    mainClient.getVirtualGameController().selectCardFromCommonTable(cardIndex, this.mainClient.getClientID());
-                    break;
-                case 6:
-                    mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
-                    break;
-                case 7:
-                    System.out.println("Insert the pawn color: ");
-                    String color = scan.nextLine();
-                    mainClient.getVirtualGameController().choosePawnColor(color, this.mainClient.getClientID());
-                    break;
-                case 8:
-                    System.out.println("Insert the card index: (0/1) ");
-                    cardIndex = Integer.parseInt(scan.nextLine());
-                    mainClient.getVirtualGameController().selectSecretMission(cardIndex, this.mainClient.getClientID());
-                    break;
-                case 9:
-                    mainClient.getVirtualGameController().setSecretMission(this.mainClient.getClientID());
-                    break;
-                case 10:
-                    System.out.println("Insert the player's nickname owner of the board: ");
-                    String playerNickname = scan.nextLine();
-                    mainClient.getVirtualGameController().printPersonalBoard(playerNickname, this.mainClient.getClientID());
-                    break;
-                case 11:
-                    System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
-                    String receiverNickname = scan.nextLine();
-                    String message;
-                    do {
-                        System.out.println("Insert message: ");
-                        message = scan.nextLine();
-                    } while (message == "");
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                    mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
-                    break;
-                case 12:
-                    System.exit(0);
+                case null, default:
+                    System.out.println("Invalid option");
                     break;
             }
         }
-    }
-
-    private int printOptions() {
-        GameState gameState = this.mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getGameState();
-
-        switch (gameState) {
-
-        }
-        System.out.println("Select your option:");
-        System.out.println("" +
-                "1) Select a card.\n" +
-                "2) Turn selected card side.\n" +
-                "3) Play card from hand.\n" +
-                "4) Select position on board.\n" +
-                "5) Select card from common table.\n" +
-                "6) Draw selected card.\n" +
-                "7) Choose pawn color.\n" +
-                "8) Select secret mission.\n" +
-                "9) Set secret mission.\n" +
-                "10) Print player's personal board.\n" +
-                "11) Open chat.\n" +
-                "12) Exit game\n");
-
-        Scanner scan = new Scanner(System.in);
-        int response = scan.nextInt();
-        return response;
     }
 }

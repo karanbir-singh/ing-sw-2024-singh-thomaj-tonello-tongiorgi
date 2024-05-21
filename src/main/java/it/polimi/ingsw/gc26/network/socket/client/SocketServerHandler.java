@@ -380,7 +380,7 @@ public class SocketServerHandler implements Runnable {
                 ArrayList<Corner> corners = getCorners(position.get("side"));
                 switch (position.get("type").asText()) {
                     case "CardBack":
-                        if (!position.get("side").get("permanentResources").isNull()) {
+                        if (!position.get("side").get("permanentResources").isNull()) { //TODO check Symbol.valueof("plant")
                             permanentResources.add(Symbol.valueOf(position.get("side").get("permanentResources").toString()));
                         }
                         side = new CardBack(position.get("side").get("sideSymbol").asText().equals("") ? null : Symbol.valueOf(position.get("side").get("sideSymbol").asText()),
