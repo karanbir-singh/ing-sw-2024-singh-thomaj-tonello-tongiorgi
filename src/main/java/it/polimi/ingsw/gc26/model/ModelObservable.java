@@ -2,10 +2,7 @@ package it.polimi.ingsw.gc26.model;
 
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
-import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
+import it.polimi.ingsw.gc26.view_model.*;
 import javafx.util.Pair;
 
 import java.io.Serializable;
@@ -41,6 +38,16 @@ public class ModelObservable implements Serializable {
 
     public void removeObserver(VirtualView view) {
         this.clients.remove(view);
+    }
+
+    public void notifyUpdateGame(SimplifiedGame simplifiedGame, String message) {
+        for (Pair client : this.clients) {
+            try {
+                ((VirtualView) client.getKey()).updateGame(simplifiedGame, message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void notifyUpdateCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message) {

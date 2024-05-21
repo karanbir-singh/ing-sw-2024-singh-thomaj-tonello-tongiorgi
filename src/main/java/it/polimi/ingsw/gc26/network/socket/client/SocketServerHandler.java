@@ -14,6 +14,7 @@ import it.polimi.ingsw.gc26.model.card_side.mission.MissionDiagonalPattern;
 import it.polimi.ingsw.gc26.model.card_side.mission.MissionItemPattern;
 import it.polimi.ingsw.gc26.model.card_side.mission.MissionLPattern;
 import it.polimi.ingsw.gc26.model.card_side.mission.MissionTripletPattern;
+import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
@@ -119,6 +120,10 @@ public class SocketServerHandler implements Runnable {
                         SimplifiedChat simplifiedChat = buildSimplifiedChat(value);
                         this.viewController.addRequest(new ChatUpdateRequest(simplifiedChat, value.get("message").asText()));
                         break;
+                    case "updateGame":
+                        SimplifiedGame simplifiedGame = buildSimplifiedGame(value); //TODO check
+                        this.viewController.addRequest(new GameUpdateRequest(simplifiedGame, value.get("message").asText()));
+                        break;
                     case "updateIDGame":
                         this.viewController.setGameID(value.get("idGame").asInt());
                         break;
@@ -134,6 +139,33 @@ public class SocketServerHandler implements Runnable {
         } catch (IOException e) {
             System.out.println("Server down");
         }
+    }
+
+    private SimplifiedGame buildSimplifiedGame(JsonNode encodedGame) {
+        // game state
+        GameState gameState = GameState.valueOf(encodedGame.get("gameState").asText());
+
+        // current player
+        String currentPlayer = encodedGame.get("currentPlayer").asText();
+
+        // scores
+        HashMap<String, Integer> scores = new HashMap<>();
+        for (JsonNode score : encodedGame.get("scores")) {
+            scores.put(score.asText(), score.asInt());
+        }
+
+        // winners
+        ArrayList<String> winners = new ArrayList<>();
+        for (JsonNode winner : encodedGame.get("winners")) {
+            winners.add(winner.asText());
+        }
+
+        // available pawns
+        ArrayList<Pawn> availablePawns = new ArrayList<>();
+        for (JsonNode pawn : encodedGame.get("availablePawns")) {
+            availablePawns.add(Pawn.valueOf(pawn.asText()));
+        }
+        return new SimplifiedGame(gameState, currentPlayer, scores, winners, availablePawns);
     }
 
     public SimplifiedCommonTable buildSimplifiedCommonTable(JsonNode encodedTable) {

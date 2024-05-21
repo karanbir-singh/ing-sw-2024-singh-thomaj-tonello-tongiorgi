@@ -9,6 +9,7 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.*;
@@ -417,6 +418,53 @@ public class VirtualSocketView implements VirtualView {
 
         try {
             sendToClient("updatePlayer", om.writeValueAsString(root));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @param simplifiedGame
+     * @param message
+     * @throws RemoteException
+     */
+    @Override
+    public void updateGame(SimplifiedGame simplifiedGame, String message) throws RemoteException {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode root = om.createObjectNode();
+
+        // message
+        root.put("message", message);
+
+        // game state
+        root.put("gameState", simplifiedGame.getGameState().toString());
+
+        // current player
+        root.put("currentPlayer", simplifiedGame.getCurrentPlayer());
+
+        // scores
+        ObjectNode scores = om.createObjectNode();
+        root.set("scores", scores);
+        for (Map.Entry<String, Integer> score : simplifiedGame.getScores().entrySet()) {
+            scores.put(score.getKey(), score.getValue().toString());
+        }
+
+        // winners
+        ArrayNode winners = om.createArrayNode();
+        for ( String winner : simplifiedGame.getWinners() ) {
+            winners.add(winner);
+        }
+        root.set("winners", winners);
+
+        // available pawns
+        ArrayNode availablePawn = om.createArrayNode();
+        for (Pawn pawn : simplifiedGame.getAvailablePawns()) {
+            availablePawn.add(pawn.toString());
+        }
+        root.set("availablePawn", availablePawn);
+
+        try {
+            sendToClient("updateGame", om.writeValueAsString(root));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

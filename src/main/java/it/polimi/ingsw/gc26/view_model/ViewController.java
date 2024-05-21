@@ -129,6 +129,11 @@ public class ViewController {
 //        System.out.println(message);
     }
 
+    public void updateGame(SimplifiedGame simplifiedGame, String message) {
+        this.simplifiedModel.setSimplifiedGame(simplifiedGame);
+//        System.out.println(message);
+    }
+
     /**
      * Reports a message from the server (for example error reports)
      *

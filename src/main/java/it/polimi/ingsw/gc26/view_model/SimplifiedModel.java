@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 
 public class SimplifiedModel {
+    private SimplifiedGame simplifiedGame;
     private SimplifiedCommonTable simplifiedCommonTable;
     private SimplifiedPlayer simplifiedPlayer;
     private SimplifiedHand simplifiedHand;
@@ -14,6 +15,11 @@ public class SimplifiedModel {
 //    private OptionsMenu optionsMenu;
 
     UpdateInterface view;
+
+    public void setSimplifiedGame(SimplifiedGame simplifiedGame) {
+        this.simplifiedGame = simplifiedGame;
+        //updateView();
+    }
 
     public SimplifiedModel(UpdateInterface view){
         this.view = view;
