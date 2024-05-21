@@ -52,7 +52,7 @@ public class SimplifiedModel {
 
     public void setPersonalBoard(SimplifiedPersonalBoard personalBoard, String message) {
         this.personalBoard = personalBoard;
-        this.view.updateViewPersonalBoard(personalBoard);
+        this.view.updateViewPersonalBoard(this);
         this.view.showMessage(message);
     }
 
@@ -66,98 +66,6 @@ public class SimplifiedModel {
         this.simplifiedChat = simplifiedChat;
         this.view.updateViewSimplifiedChat(simplifiedChat);
         this.view.showMessage(message);
-    }
-
-    public String[][] printableGame() {
-        //COMMON TABLE: check if missions are already present
-        String[][] commonTablePrint;
-        if(simplifiedCommonTable.getCommonMissions().isEmpty()){
-            commonTablePrint = simplifiedCommonTable.printableCommonTable();
-        } else {
-            commonTablePrint = simplifiedCommonTable.printableCommonTableAndMissions();
-        }
-        //SCORES
-        String[][] scores = printableScores();
-        //PERSONAL BOARD
-        String[][] personalBoardPrint = personalBoard.printablePersonalBoard();
-        //HAND: check if secret mission is already present
-        String[][] handPrint;
-        if(personalBoard.getSecretMission() == null){
-            handPrint = simplifiedHand.printableHand();
-        } else {
-            handPrint = simplifiedPlayer.printableHandAndMission(personalBoard, simplifiedHand);
-        }
-        //calculate dimensions
-        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + 4;
-        int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), handPrint[0].length);
-        //utils
-        Printer printer = new Printer();
-        int y=0;
-
-        //initialize empty matrix
-        String[][] printableGame = new String[yDim][xDim];
-        for(int i=0; i<yDim; i++){
-            for(int j=0; j<xDim; j++){
-                printableGame[i][j] = "\t";
-            }
-        }
-
-        //DESIGN THE MATRIX
-        //show common table
-        printableGame[y][0] = "COMMON TABLE:";
-        y++;
-        printer.addPrintable(commonTablePrint, printableGame, 0, y);
-
-        //show scores
-
-        printer.addPrintable(scores, printableGame, commonTablePrint[0].length + 1, y + 1);
-        y += commonTablePrint.length;
-
-        //show personal board
-        printableGame[y][0] = "\nYOUR PERSONAL BOARD:\n";
-        y++;
-        printer.addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
-        y += personalBoardPrint.length;
-
-        //show player's hand
-        printableGame[y][0] = "\nYOUR HAND:\n";
-        y++;
-        printer.addPrintable(handPrint, printableGame, 0, y);
-
-        return printableGame;
-    }
-
-    public String[][] printableScores() {
-        //dimensions
-        int xDim = 2;
-        int yDim = 1 + 1;
-//        int yDim = players.size() + 1;
-
-        String[][] scores = new String[yDim][xDim];
-//
-//        //calculate the spaces needed to align the names
-//        int maxLenght = 0;
-//        StringBuilder spaces;
-//        for (Player p: players) {
-//            maxLenght = Math.max(maxLenght, p.getNickname().length());
-//        }
-//        maxLenght ++;
-//
-//        //design the matrix
-//        scores[0][0] = "CURRENT SCORES:";
-//        scores[0][1] = "";
-//        for (Player p: players) {
-//            int i = 0;
-//            spaces = new StringBuilder();
-//            while(i + p.getNickname().length() < maxLenght){
-//                spaces.append(" ");
-//                i++;
-//            }
-//            scores[players.indexOf(p)+1][0] = p.getNickname() + spaces;
-//            scores[players.indexOf(p)+1][1] = p.printableScore();
-//        }
-
-        return scores;
     }
 
 //    public void setOptionsMenu(OptionsMenu optionsMenu) {
