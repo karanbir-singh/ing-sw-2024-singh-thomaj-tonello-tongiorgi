@@ -14,7 +14,7 @@ public class CardBack extends Side implements Serializable {
     /**
      * Initializes a card's back empty for Mission Cards
      */
-    public CardBack(){
+    public CardBack(String imagePath){
         setSideSymbol(null);
         setDOWNLEFT(new Corner(true, null));
         setDOWNRIGHT(new Corner(true, null));
@@ -24,13 +24,15 @@ public class CardBack extends Side implements Serializable {
         setPoints(0);
         setPermanentResources(new ArrayList<>());
         setRequestedResources(new HashMap<>());
+        setImagePath(imagePath);
+
     }
 
     /**
      * Initializes a card's back for Resources cards and Gold Cards
      * @param side Symbol that represent the card's color
      */
-    public CardBack(Symbol side){
+    public CardBack(Symbol side, String imagePath){
         setSideSymbol(side);
         setDOWNLEFT(new Corner(false, null));
         setDOWNRIGHT(new Corner(false, null));
@@ -42,6 +44,7 @@ public class CardBack extends Side implements Serializable {
         resources.add(side);
         setPermanentResources(resources);
         setRequestedResources(new HashMap<>());
+        setImagePath(imagePath);
     }
 
     // Starter Card back constructor
@@ -53,7 +56,7 @@ public class CardBack extends Side implements Serializable {
      * @param UPRIGHT up right corner
      * @param DOWNRIGHT down right corner
      */
-    public CardBack(Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT){
+    public CardBack(Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, String imagePath){
         setPermanentResources(new ArrayList<>());
         setSideSymbol(null);
         setDOWNLEFT(DOWNLEFT);
@@ -64,9 +67,10 @@ public class CardBack extends Side implements Serializable {
         setPoints(0);
         setPermanentResources(new ArrayList<>());
         setRequestedResources(new HashMap<>());
+        setImagePath(imagePath);
     }
 
-    public CardBack(Symbol side, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, ArrayList<Symbol> permanentResources, Map<Symbol, Integer> requestedResources){
+    public CardBack(Symbol side, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, ArrayList<Symbol> permanentResources, Map<Symbol, Integer> requestedResources, String imagePath){
         setSideSymbol(side);
         setDOWNLEFT(DOWNLEFT);
         setDOWNRIGHT(DOWNRIGHT);
@@ -76,5 +80,6 @@ public class CardBack extends Side implements Serializable {
         setPoints(0);
         setPermanentResources(permanentResources);
         setRequestedResources(requestedResources);
+        setImagePath(imagePath);
     }
 }

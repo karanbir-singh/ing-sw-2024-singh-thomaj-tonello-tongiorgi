@@ -21,12 +21,12 @@
       </Button>
       <ImageView fx:id="back1" fitHeight="150.0" fitWidth="200.0" layoutX="328.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
-            <Image url="@images/backSides/img_1.jpeg" />
+            <Image url="@../../../../images/backSides/img_1.jpeg" />
          </image>
       </ImageView>
       <ImageView fx:id="front1" fitHeight="134.0" fitWidth="200.0" layoutX="328.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@images/frontSides/img_1.jpeg" />
+            <Image url="@../../../../images/frontSides/img_1.jpeg" />
          </image>
       </ImageView>
    </children>
