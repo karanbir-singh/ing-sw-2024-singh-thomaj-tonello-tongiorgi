@@ -5,10 +5,11 @@ import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class SimplifiedGame {
+public class SimplifiedGame implements Serializable {
     /**
      * This attribute represents the current game's state
      */

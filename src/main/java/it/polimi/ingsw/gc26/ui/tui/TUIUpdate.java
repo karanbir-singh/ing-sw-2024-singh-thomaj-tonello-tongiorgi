@@ -29,7 +29,11 @@ public class TUIUpdate implements UpdateInterface {
     public void updateViewPlayer(SimplifiedPlayer simplifiedPlayer) {
         clearConsole();
         cli = new CLI(miniModel);
-        cli.printableHandAndMission();
+        try {
+            cli.printableHandAndMission();
+        } catch (Exception e) {
+            printOptions();
+        }
         printOptions();
     }
 
@@ -45,7 +49,11 @@ public class TUIUpdate implements UpdateInterface {
     public void updateViewSecretHand(SimplifiedHand simplifiedSecretHand) {
         clearConsole();
         cli = new CLI(miniModel);
-        cli.printableHandAndMission();
+        try {
+            cli.printableHandAndMission();
+        } catch (Exception e) {
+            printOptions();
+        }
         printOptions();
     }
 
@@ -80,7 +88,12 @@ public class TUIUpdate implements UpdateInterface {
     public void updateGame(SimplifiedGame simplifiedGame) {
         clearConsole();
         cli = new CLI(miniModel);
-        cli.printGame();
+        try {
+            cli.printGame();
+        } catch (Exception e) {
+            System.out.println("No game");
+            printOptions();
+        }
         printOptions();
     }
 
@@ -115,12 +128,12 @@ public class TUIUpdate implements UpdateInterface {
         try {
             gameState = this.miniModel.getSimplifiedGame().getGameState();
         } catch (NullPointerException e) {
-            gameState = GameState.STARTER_CARDS_DISTRIBUTION;
+            gameState = GameState.WAITING_STARTER_CARD_PLACEMENT;
         }
         System.out.println("\nSelect your option:");
 
         switch (gameState) {
-            case STARTER_CARDS_DISTRIBUTION:
+            case WAITING_STARTER_CARD_PLACEMENT:
                 System.out.println("" +
                         "1) Play card from hand.\n" +
                         "2) Open chat.\n" +
@@ -158,7 +171,7 @@ public class TUIUpdate implements UpdateInterface {
                         "2) Exit game.\n");
                 break;
             case null, default:
-                System.out.println("Invalid game state!");
+                System.out.println("Invalid game state! -> " + gameState);
                 break;
         }
     }

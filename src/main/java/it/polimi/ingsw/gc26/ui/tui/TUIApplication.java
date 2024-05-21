@@ -147,21 +147,22 @@ public class TUIApplication implements UIInterface {
             try {
                 gameState = this.mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getGameState();
             } catch (NullPointerException e) {
-                gameState = GameState.STARTER_CARDS_DISTRIBUTION;
+                gameState = GameState.WAITING_STARTER_CARD_PLACEMENT;
             }
             switch (gameState) {
-                case STARTER_CARDS_DISTRIBUTION:
+                case WAITING_STARTER_CARD_PLACEMENT:
+                    //TODO turn card
                     switch (option) {
                         case 1:
                             mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
                             break;
                         case 2:
                             System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
-                            String receiverNickname = scan.nextLine();
+                            String receiverNickname = new Scanner(System.in).nextLine();
                             String message;
                             do {
                                 System.out.println("Insert message: ");
-                                message = scan.nextLine();
+                                message = new Scanner(System.in).nextLine();
                             } while (message.isEmpty());
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
                             mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
@@ -175,16 +176,16 @@ public class TUIApplication implements UIInterface {
                     switch (option) {
                         case 1:
                             System.out.println("Insert the pawn color: ");
-                            String color = scan.nextLine();
+                            String color = new Scanner(System.in).nextLine();
                             mainClient.getVirtualGameController().choosePawnColor(color, this.mainClient.getClientID());
                             break;
                         case 2:
                             System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
-                            String receiverNickname = scan.nextLine();
+                            String receiverNickname = new Scanner(System.in).nextLine();
                             String message;
                             do {
                                 System.out.println("Insert message: ");
-                                message = scan.nextLine();
+                                message = new Scanner(System.in).nextLine();
                             } while (message.isEmpty());
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
                             mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
@@ -202,7 +203,7 @@ public class TUIApplication implements UIInterface {
                         case 2:
                             do {
                                 System.out.println("Insert the card index: (0/1) ");
-                                cardIndex = Integer.parseInt(scan.nextLine());
+                                cardIndex = Integer.parseInt(new Scanner(System.in).nextLine());
                             } while (cardIndex != 0 && cardIndex != 1);
                             mainClient.getVirtualGameController().selectSecretMission(cardIndex, this.mainClient.getClientID());
                             break;
@@ -211,11 +212,11 @@ public class TUIApplication implements UIInterface {
                             break;
                         case 4:
                             System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
-                            String receiverNickname = scan.nextLine();
+                            String receiverNickname = new Scanner(System.in).nextLine();
                             String message;
                             do {
                                 System.out.println("Insert message: ");
-                                message = scan.nextLine();
+                                message = new Scanner(System.in).nextLine();
                             } while (message.isEmpty());
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
                             mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
@@ -231,7 +232,7 @@ public class TUIApplication implements UIInterface {
                             String xPosition;
                             do {
                                 System.out.println("Select the card position: (0/1/2)");
-                                xPosition = scan.nextLine();
+                                xPosition = new Scanner(System.in).nextLine();
                             } while (Integer.parseInt(xPosition) < 0 || Integer.parseInt(xPosition) > 2);
                             mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(xPosition), this.mainClient.getClientID());
                             break;
@@ -243,15 +244,15 @@ public class TUIApplication implements UIInterface {
                             break;
                         case 4:
                             System.out.println("Insert the X coordinate: ");
-                            String XPosition = scan.nextLine();
+                            String XPosition = new Scanner(System.in).nextLine();
                             System.out.println("Insert the Y coordinate: ");
-                            String YPosition = scan.nextLine();
+                            String YPosition = new Scanner(System.in).nextLine();
                             mainClient.getVirtualGameController().selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), this.mainClient.getClientID());
                             break;
                         case 5:
                             do {
                                 System.out.println("Insert the card index (0/1/2/3/4/5): ");
-                                cardIndex = Integer.parseInt(scan.nextLine());
+                                cardIndex = Integer.parseInt(new Scanner(System.in).nextLine());
                             } while (cardIndex < 0 || cardIndex > 5);
                             mainClient.getVirtualGameController().selectCardFromCommonTable(cardIndex, this.mainClient.getClientID());
                             break;
@@ -260,7 +261,7 @@ public class TUIApplication implements UIInterface {
                             break;
                         case 7:
                             System.out.println("Insert the player's nickname owner of the board: ");
-                            String playerNickname = scan.nextLine();
+                            String playerNickname = new Scanner(System.in).nextLine();
                             mainClient.getVirtualGameController().printPersonalBoard(playerNickname, this.mainClient.getClientID());
                             break;
                         case 8:
@@ -269,7 +270,7 @@ public class TUIApplication implements UIInterface {
                             String message;
                             do {
                                 System.out.println("Insert message: ");
-                                message = scan.nextLine();
+                                message = new Scanner(System.in).nextLine();
                             } while (message.isEmpty());
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
                             mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
@@ -283,11 +284,11 @@ public class TUIApplication implements UIInterface {
                     switch (option) {
                         case 1:
                             System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
-                            String receiverNickname = scan.nextLine();
+                            String receiverNickname = new Scanner(System.in).nextLine();
                             String message;
                             do {
                                 System.out.println("Insert message: ");
-                                message = scan.nextLine();
+                                message = new Scanner(System.in).nextLine();
                             } while (message.isEmpty());
                             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
                             mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
