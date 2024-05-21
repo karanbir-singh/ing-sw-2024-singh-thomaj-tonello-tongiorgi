@@ -26,14 +26,20 @@ public class CreatorController extends GenericController{
     @FXML
     public void onSecondRadioButtonClick(ActionEvent actionEvent){
         this.numMaxPlayer = Integer.parseInt(secondRadioButton.getText());
+        this.thirdRadioButton.setSelected(false);
+        this.fourthRadioButton.setSelected(false);
     }
     @FXML
     public void onThirdRadioButtonClick(ActionEvent actionEvent){
         this.numMaxPlayer = Integer.parseInt(thirdRadioButton.getText());
+        this.secondRadioButton.setSelected(false);
+        this.fourthRadioButton.setSelected(false);
     }
     @FXML
     public void onFourthRadioButtonClick(ActionEvent actionEvent){
-        this.numMaxPlayer = Integer.parseInt(thirdRadioButton.getText());
+        this.numMaxPlayer = Integer.parseInt(fourthRadioButton.getText());
+        this.thirdRadioButton.setSelected(false);
+        this.secondRadioButton.setSelected(false);
     }
 
     @FXML

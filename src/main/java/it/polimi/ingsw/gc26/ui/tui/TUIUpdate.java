@@ -8,6 +8,10 @@ import it.polimi.ingsw.gc26.view_model.*;
 import java.io.IOException;
 
 public class TUIUpdate implements UpdateInterface {
+    SimplifiedModel simplifiedModel;
+    public TUIUpdate(SimplifiedModel simplifiedModel){
+        this.simplifiedModel = simplifiedModel;
+    }
     @Override
     public void updateViewCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         clearConsole();

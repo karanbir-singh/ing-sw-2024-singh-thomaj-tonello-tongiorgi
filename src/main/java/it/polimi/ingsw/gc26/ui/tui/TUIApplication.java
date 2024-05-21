@@ -32,7 +32,7 @@ public class TUIApplication implements UIInterface {
                 .getViewController()
                 .getSimplifiedModel()
                 .setViewUpdater(
-                        new TUIUpdate()
+                        new TUIUpdate(this.mainClient.getViewController().getSimplifiedModel())
                 );
 
         new Thread(() -> {
