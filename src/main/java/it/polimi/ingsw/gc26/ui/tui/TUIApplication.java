@@ -35,13 +35,8 @@ public class TUIApplication implements UIInterface {
                         new TUIUpdate()
                 );
 
-        new Thread(() -> {
-            try {
-                this.runConnection();
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
+        this.runConnection();
+        this.runGame();
     }
 
     @Override
