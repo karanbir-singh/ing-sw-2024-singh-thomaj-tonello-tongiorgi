@@ -2,10 +2,7 @@ package it.polimi.ingsw.gc26.ui.gui;
 
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
-import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
-import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
+import it.polimi.ingsw.gc26.view_model.*;
 
 public class GUIUpdate implements UpdateInterface {
     @Override
@@ -29,17 +26,25 @@ public class GUIUpdate implements UpdateInterface {
     }
 
     @Override
-    public void updateViewPersonalBoard(PersonalBoard personalBoard) {
+    public void updateViewPersonalBoard(SimplifiedPersonalBoard personalBoard) {
 
     }
 
     @Override
-    public void updateViewOtherPersonalBoard(PersonalBoard otherPersonalBoard) {
+    public void updateViewOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
 
     }
 
     @Override
     public void updateViewSimplifiedChat(SimplifiedChat simplifiedChat) {
+
+    }
+
+    /**
+     * @param simplifiedGame
+     */
+    @Override
+    public void updateGame(SimplifiedGame simplifiedGame) {
 
     }
 

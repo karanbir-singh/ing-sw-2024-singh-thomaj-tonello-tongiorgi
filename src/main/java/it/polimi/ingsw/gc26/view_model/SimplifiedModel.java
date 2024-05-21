@@ -18,7 +18,7 @@ public class SimplifiedModel {
 
     public void setSimplifiedGame(SimplifiedGame simplifiedGame) {
         this.simplifiedGame = simplifiedGame;
-        //updateView();
+        view.updateGame(simplifiedGame);
     }
 
     public SimplifiedModel(UpdateInterface view){
@@ -28,37 +28,37 @@ public class SimplifiedModel {
 
     public void setSimplifiedCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         this.simplifiedCommonTable = simplifiedCommonTable;
-        //updateView();
+        this.view.updateViewCommonTable(simplifiedCommonTable);
     }
 
     public void setSimplifiedPlayer(SimplifiedPlayer simplifiedPlayer) {
         this.simplifiedPlayer = simplifiedPlayer;
-        //updateView();
+        this.view.updateViewPlayer(simplifiedPlayer);
     }
 
     public void setSimplifiedHand(SimplifiedHand simplifiedHand) {
         this.simplifiedHand = simplifiedHand;
-        //updateView();
+        this.view.updateViewHand(simplifiedHand);
     }
 
     public void setSimplifiedSecretHand(SimplifiedHand simplifiedSecretHand) {
         this.simplifiedSecretHand = simplifiedSecretHand;
-        //updateView();
+        this.view.updateViewSecretHand(simplifiedSecretHand);
     }
 
     public void setPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         this.personalBoard = personalBoard;
-        //updateView();
+        this.view.updateViewPersonalBoard(personalBoard);
     }
 
     public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
         this.otherPersonalBoard = otherPersonalBoard;
-        //updateView();
+        this.view.updateViewOtherPersonalBoard(otherPersonalBoard);
     }
 
     public void setSimplifiedChat(SimplifiedChat simplifiedChat) {
         this.simplifiedChat = simplifiedChat;
-        //updateView();
+        this.view.updateViewSimplifiedChat(simplifiedChat);
     }
 
     public String[][] printableGame() {
