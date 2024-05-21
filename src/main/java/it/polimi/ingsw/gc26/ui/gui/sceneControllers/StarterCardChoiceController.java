@@ -20,4 +20,5 @@ public class StarterCardChoiceController extends GenericController{
             this.back1.setVisible(false);
         }
     }
+
 }

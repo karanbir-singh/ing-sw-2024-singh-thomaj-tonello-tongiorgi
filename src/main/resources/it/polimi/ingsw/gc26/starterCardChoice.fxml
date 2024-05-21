@@ -14,20 +14,20 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <ImageView fx:id="back1" fitHeight="150.0" fitWidth="200.0" layoutX="300.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true" visible="false">
-         <image>
-            <Image url="@images/Back%20(2).jpg" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="front1" fitHeight="150.0" fitWidth="200.0" layoutX="300.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@images/Front.jpg" />
-         </image>
-      </ImageView>
       <Button layoutX="128.0" layoutY="262.0" mnemonicParsing="false" onAction="#onClickButton" text="TurnImage">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
+      <ImageView fx:id="back1" fitHeight="150.0" fitWidth="200.0" layoutX="328.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@images/backSides/img_1.jpeg" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="front1" fitHeight="134.0" fitWidth="200.0" layoutX="328.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/frontSides/img_1.jpeg" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
