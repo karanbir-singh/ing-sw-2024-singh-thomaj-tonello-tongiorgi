@@ -29,6 +29,11 @@ public class TUIApplication implements UIInterface {
             this.mainClient = MainClient.startSocketClient(MainClient.GraphicType.tui);
         }
 
+        this.mainClient
+                .getViewController()
+                .getSimplifiedModel()
+                .setViewUpdater(
+                        new TUIUpdate(this.mainClient.getViewController().getSimplifiedModel()));
         this.runConnection();
         this.runGame();
     }
@@ -142,9 +147,30 @@ public class TUIApplication implements UIInterface {
             try {
                 gameState = this.mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getGameState();
             } catch (NullPointerException e) {
-                gameState = GameState.WAITING_PAWNS_SELECTION;
+                gameState = GameState.STARTER_CARDS_DISTRIBUTION;
             }
             switch (gameState) {
+                case STARTER_CARDS_DISTRIBUTION:
+                    switch (option) {
+                        case 1:
+                            mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
+                            break;
+                        case 2:
+                            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
+                            String receiverNickname = scan.nextLine();
+                            String message;
+                            do {
+                                System.out.println("Insert message: ");
+                                message = scan.nextLine();
+                            } while (message.isEmpty());
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                            break;
+                        case 3:
+                            System.exit(0);
+                            break;
+                    }
+                    break;
                 case WAITING_PAWNS_SELECTION:
                     switch (option) {
                         case 1:

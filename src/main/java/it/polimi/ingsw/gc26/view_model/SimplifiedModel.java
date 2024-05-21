@@ -13,12 +13,8 @@ public class SimplifiedModel {
     private SimplifiedPersonalBoard otherPersonalBoard;
     private SimplifiedChat simplifiedChat;
 //    private OptionsMenu optionsMenu;
-
     UpdateInterface view;
-
-    public SimplifiedModel(UpdateInterface view){
-        this.view = view;
-    }
+    
 
     public void setSimplifiedGame(SimplifiedGame simplifiedGame, String message) {
         this.simplifiedGame = simplifiedGame;
@@ -52,7 +48,7 @@ public class SimplifiedModel {
 
     public void setPersonalBoard(SimplifiedPersonalBoard personalBoard, String message) {
         this.personalBoard = personalBoard;
-        this.view.updateViewPersonalBoard(this);
+        this.view.updateViewPersonalBoard(personalBoard);
         this.view.showMessage(message);
     }
 
@@ -71,6 +67,10 @@ public class SimplifiedModel {
 //    public void setOptionsMenu(OptionsMenu optionsMenu) {
 //        this.optionsMenu = optionsMenu;
 //    }
+
+    public void setViewUpdater(UpdateInterface view) {
+        this.view = view;
+    }
 
 
     public SimplifiedCommonTable getSimplifiedCommonTable() {

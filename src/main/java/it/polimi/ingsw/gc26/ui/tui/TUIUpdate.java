@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class TUIUpdate implements UpdateInterface {
 
-    SimplifiedModel miniModel;
+    private SimplifiedModel miniModel;
 
     public TUIUpdate(SimplifiedModel miniModel) {
         this.miniModel = miniModel;
@@ -21,7 +21,7 @@ public class TUIUpdate implements UpdateInterface {
     public void updateViewCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         clearConsole();
         cli = new CLI(miniModel);
-
+        cli.printableCommonTable();
         printOptions();
     }
 
@@ -29,7 +29,7 @@ public class TUIUpdate implements UpdateInterface {
     public void updateViewPlayer(SimplifiedPlayer simplifiedPlayer) {
         clearConsole();
         cli = new CLI(miniModel);
-
+        cli.printableHandAndMission();
         printOptions();
     }
 
@@ -37,7 +37,7 @@ public class TUIUpdate implements UpdateInterface {
     public void updateViewHand(SimplifiedHand simplifiedHand) {
         clearConsole();
         cli = new CLI(miniModel);
-
+        cli.printableHand();
         printOptions();
     }
 
@@ -45,30 +45,31 @@ public class TUIUpdate implements UpdateInterface {
     public void updateViewSecretHand(SimplifiedHand simplifiedSecretHand) {
         clearConsole();
         cli = new CLI(miniModel);
-
+        cli.printableHandAndMission();
         printOptions();
     }
 
     @Override
     public void updateViewPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         clearConsole();
-
-        printOptions();
         cli = new CLI(miniModel);
+        cli.printablePersonalBoard(personalBoard);
+        printOptions();
     }
 
     @Override
     public void updateViewOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
         clearConsole();
-
-        printOptions();
         cli = new CLI(miniModel);
+        cli.printablePersonalBoard(otherPersonalBoard);
+        printOptions();
+
     }
 
     @Override
     public void updateViewSimplifiedChat(SimplifiedChat simplifiedChat) {
         clearConsole();
-
+        System.out.println(simplifiedChat.getMessages());
         printOptions();
     }
 
@@ -78,21 +79,22 @@ public class TUIUpdate implements UpdateInterface {
     @Override
     public void updateGame(SimplifiedGame simplifiedGame) {
         clearConsole();
-
+        cli = new CLI(miniModel);
+        cli.printGame();
         printOptions();
     }
 
     @Override
     public void showMessage(String message) {
         clearConsole();
-
+        System.out.println(message);
         printOptions();
     }
 
     @Override
     public void showError(String message) {
         clearConsole();
-
+        System.err.println(message);
         printOptions();
     }
 
@@ -113,11 +115,17 @@ public class TUIUpdate implements UpdateInterface {
         try {
             gameState = this.miniModel.getSimplifiedGame().getGameState();
         } catch (NullPointerException e) {
-            gameState = GameState.WAITING_PAWNS_SELECTION;
+            gameState = GameState.STARTER_CARDS_DISTRIBUTION;
         }
         System.out.println("\nSelect your option:");
 
         switch (gameState) {
+            case STARTER_CARDS_DISTRIBUTION:
+                System.out.println("" +
+                        "1) Play card from hand.\n" +
+                        "2) Open chat.\n" +
+                        "3) Exit game.\n");
+                break;
             case WAITING_PAWNS_SELECTION:
                 System.out.println("" +
                         "1) Choose pawn color.\n" +
