@@ -92,6 +92,12 @@ public class ModelObservable implements Serializable {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
+            } else {
+                try {
+                    ((VirtualView) client.getKey()).updateOtherPersonalBoard(personalBoard, message);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -120,15 +126,15 @@ public class ModelObservable implements Serializable {
         }
     }
 
-//    public void notifyUpdateChat(SimplifiedChat simplifiedChat, String message) {
-//        for (Pair client : this.clients) {
-//            try {
-//                ((VirtualView) client.getKey()).updatePlayer(simplifiedPlayer, message);
-//            } catch (RemoteException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    public void notifyUpdateChat(SimplifiedChat simplifiedChat, String message) {
+        for (Pair client : this.clients) {
+            try {
+                ((VirtualView) client.getKey()).updateChat(simplifiedChat, message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 //    public void notifyUpdateOptionsMenu(OptionsMenu optionsMenu, String message) {
 //        for (Pair client : this.clients) {

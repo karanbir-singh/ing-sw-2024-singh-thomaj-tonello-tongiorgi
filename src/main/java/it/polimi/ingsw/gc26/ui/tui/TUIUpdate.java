@@ -21,7 +21,11 @@ public class TUIUpdate implements UpdateInterface {
     public void updateViewCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         clearConsole();
         cli = new CLI(miniModel);
-        cli.printableCommonTable();
+        try {
+            cli.printGame();
+        } catch (Exception e) {
+            printOptions();
+        }
         printOptions();
     }
 
@@ -30,7 +34,7 @@ public class TUIUpdate implements UpdateInterface {
         clearConsole();
         cli = new CLI(miniModel);
         try {
-            cli.printableHandAndMission();
+            cli.printGame();
         } catch (Exception e) {
             printOptions();
         }
@@ -41,7 +45,11 @@ public class TUIUpdate implements UpdateInterface {
     public void updateViewHand(SimplifiedHand simplifiedHand) {
         clearConsole();
         cli = new CLI(miniModel);
-        cli.printableHand();
+        try {
+            cli.printGame();
+        } catch (Exception e) {
+            printOptions();
+        }
         printOptions();
     }
 
@@ -50,7 +58,7 @@ public class TUIUpdate implements UpdateInterface {
         clearConsole();
         cli = new CLI(miniModel);
         try {
-            cli.printableHandAndMission();
+            cli.printGame();
         } catch (Exception e) {
             printOptions();
         }
@@ -61,7 +69,11 @@ public class TUIUpdate implements UpdateInterface {
     public void updateViewPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         clearConsole();
         cli = new CLI(miniModel);
-        cli.printablePersonalBoard(personalBoard);
+        try {
+            cli.printGame();
+        } catch (Exception e) {
+            printOptions();
+        }
         printOptions();
     }
 
@@ -69,7 +81,11 @@ public class TUIUpdate implements UpdateInterface {
     public void updateViewOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
         clearConsole();
         cli = new CLI(miniModel);
-        cli.printablePersonalBoard(otherPersonalBoard);
+        try {
+            cli.printGame();
+        } catch (Exception e) {
+            printOptions();
+        }
         printOptions();
 
     }
@@ -77,7 +93,11 @@ public class TUIUpdate implements UpdateInterface {
     @Override
     public void updateViewSimplifiedChat(SimplifiedChat simplifiedChat) {
         clearConsole();
-        System.out.println(simplifiedChat.getMessages());
+        try {
+            cli.printGame();
+        } catch (Exception e) {
+            printOptions();
+        }
         printOptions();
     }
 
@@ -91,7 +111,6 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            System.out.println("No game");
             printOptions();
         }
         printOptions();
@@ -99,28 +118,27 @@ public class TUIUpdate implements UpdateInterface {
 
     @Override
     public void showMessage(String message) {
-        clearConsole();
+        //clearConsole();
         System.out.println(message);
         printOptions();
     }
 
     @Override
     public void showError(String message) {
-        clearConsole();
         System.err.println(message);
         printOptions();
     }
 
     private void clearConsole() {
-        System.out.println("Cleaning up...");
-        try {
-            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+//        try {
+//            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
             //System.out.print("\033[H\033[2J");
             // System.out.print("\033\143");
-        }
+        //}
     }
 
     private void printOptions() {
@@ -135,9 +153,10 @@ public class TUIUpdate implements UpdateInterface {
         switch (gameState) {
             case WAITING_STARTER_CARD_PLACEMENT:
                 System.out.println("" +
-                        "1) Play card from hand.\n" +
-                        "2) Open chat.\n" +
-                        "3) Exit game.\n");
+                        "1) Turn selected card side.\n" +
+                        "2) Play card from hand.\n" +
+                        "3) Open chat.\n" +
+                        "4) Exit game.\n");
                 break;
             case WAITING_PAWNS_SELECTION:
                 System.out.println("" +
@@ -147,11 +166,10 @@ public class TUIUpdate implements UpdateInterface {
                 break;
             case WAITING_SECRET_MISSION_CHOICE:
                 System.out.println("" +
-                        "1) Turn selected card side.\n" +
-                        "2) Select secret mission.\n" +
-                        "3) Set secret mission.\n" +
-                        "4) Open chat.\n" +
-                        "5) Exit game.\n");
+                        "1) Select secret mission.\n" +
+                        "2) Set secret mission.\n" +
+                        "3) Open chat.\n" +
+                        "4) Exit game.\n");
                 break;
             case GAME_STARTED:
                 System.out.println("" +

@@ -4,6 +4,7 @@ import java.util.*;
 
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.player.Player;
+import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
 
 /**
  * This class represents the chat between players managed by the server
@@ -41,9 +42,8 @@ public class Chat implements Serializable {
      * @param message new message
      */
     public void addMessage(Message message){
-        messages.add(message); //TODO chiamata di comunicazione con il client
-        //this.observable.notifyChat(message);
-
+        messages.add(message);
+        this.observable.notifyUpdateChat(new SimplifiedChat(filterMessages(message.getReceiver())), "New message in chat!");
     }
 
     /**
@@ -54,10 +54,14 @@ public class Chat implements Serializable {
     public ArrayList<Message> filterMessages(Player receiverPlayer){
         ArrayList<Message> copy = new ArrayList<>();
         for(Message m : this.messages){
-            if(m.getReceiver().equals(receiverPlayer)){
-                copy.add(m);
-            }
-            if(m.getSender().equals(receiverPlayer)){
+            if (receiverPlayer != null) {
+                if (m.getReceiver().equals(receiverPlayer)) {
+                    copy.add(m);
+                }
+                if (m.getSender().equals(receiverPlayer)) {
+                    copy.add(m);
+                }
+            } else {
                 copy.add(m);
             }
         }
