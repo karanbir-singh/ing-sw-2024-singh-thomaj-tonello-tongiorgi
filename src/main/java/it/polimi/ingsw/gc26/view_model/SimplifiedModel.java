@@ -3,6 +3,8 @@ package it.polimi.ingsw.gc26.view_model;
 import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 
+import java.sql.SQLOutput;
+
 public class SimplifiedModel {
     private SimplifiedGame simplifiedGame;
     private SimplifiedCommonTable simplifiedCommonTable;
@@ -22,6 +24,7 @@ public class SimplifiedModel {
 
     public void setSimplifiedGame(SimplifiedGame simplifiedGame) {
         this.simplifiedGame = simplifiedGame;
+        System.out.println("QUA SONO ARRIVATO");
         view.updateGame(simplifiedGame);
     }
 
@@ -155,5 +158,14 @@ public class SimplifiedModel {
 //    public void setOptionsMenu(OptionsMenu optionsMenu) {
 //        this.optionsMenu = optionsMenu;
 //    }
+
+
+    public void showMessage(String message){
+        view.showMessage(message);
+    }
+
+    public void showError(String message){
+        view.showError(message);
+    }
 
 }

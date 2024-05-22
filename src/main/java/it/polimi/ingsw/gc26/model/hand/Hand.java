@@ -223,7 +223,7 @@ public class Hand implements Serializable {
         // Check if the given index is correct
         if (cardIndex >= leftLimit && cardIndex < rightLimit) {
 //            try {
-                this.observable.notifyMessage("Card selected at index: " + cardIndex, clientID);
+                //this.observable.notifyMessage("Card selected at index: " + cardIndex, clientID);
 //            } catch (RemoteException e) {
 //                throw new RuntimeException(e);
 //            }

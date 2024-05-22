@@ -10,8 +10,10 @@ import it.polimi.ingsw.gc26.model.player.PlayerState;
 import java.io.Serializable;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
+import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -76,7 +78,7 @@ public class Game implements Serializable {
 
         this.players = new ArrayList<>();
         this.players.addAll(players);
-        this.winners = null;
+        this.winners = new ArrayList<>();
 
         this.observable = new ModelObservable();
         for (int i = 0; i < clients.size(); i++) {
@@ -303,6 +305,27 @@ public class Game implements Serializable {
                 message = "GAME STARTED!";
                 break;
         }
+
+
+        HashMap<String,Integer> points = new HashMap<>();
+        for(Player player : this.players){
+            if(player.getPersonalBoard() != null){
+                points.put(player.getNickname(),player.getPersonalBoard().getScore());
+            }else{
+                points.put(player.getNickname(),0);
+            }
+
+        }
+        ArrayList<String> nicknameWinners = new ArrayList<>();
+        for(Player winner : this.winners){
+            nicknameWinners.add(winner.getNickname());
+        }
+        String currentPlayerNickname = null;
+        if(this.currentPlayer != null){
+            currentPlayerNickname = this.currentPlayer.getNickname();
+        }
+        this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState,currentPlayerNickname,points,nicknameWinners,this.availablePawns), message);
+
 
         // TODO Update view
     }

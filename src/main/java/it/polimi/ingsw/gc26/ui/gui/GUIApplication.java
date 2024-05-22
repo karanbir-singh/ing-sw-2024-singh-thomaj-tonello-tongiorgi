@@ -2,10 +2,7 @@ package it.polimi.ingsw.gc26.ui.gui;
 
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
-import it.polimi.ingsw.gc26.ui.gui.sceneControllers.GenericController;
-import it.polimi.ingsw.gc26.ui.gui.sceneControllers.LoginController;
-import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneEnum;
-import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneInfo;
+import it.polimi.ingsw.gc26.ui.gui.sceneControllers.*;
 import it.polimi.ingsw.gc26.ui.UIInterface;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -26,6 +23,8 @@ public class GUIApplication extends Application implements UIInterface {
     private ArrayList<SceneInfo> scenes; //scene in order
 
     private Stage primaryStage;
+    private SceneInfo currentSceneInfo;
+    private Stage popupStage;
 
 
     @Override
@@ -57,7 +56,7 @@ public class GUIApplication extends Application implements UIInterface {
         this.setMainClientToSceneControllers();
         //settare i mainClient nei generalController
         this.primaryStage = primaryStage;
-
+        //Platform.runLater(()->openInfoPopup("VAMOS"));
         new Thread(() -> {
             try {
                 this.runConnection();
@@ -111,6 +110,17 @@ public class GUIApplication extends Application implements UIInterface {
         return null; //se non l ho trovato
     }
 
+    public void setCurrentSceneAndShow(SceneEnum sceneEnum){
+        this.currentSceneInfo = getSceneInfo(sceneEnum);
+        this.primaryStage.setScene(this.getSceneInfo(sceneEnum).getScene());
+        this.primaryStage.show();
+
+    }
+
+    public SceneInfo getCurrentScene(){
+        return this.currentSceneInfo;
+    }
+
 
     @Override
     public void runConnection() throws RemoteException {
@@ -118,6 +128,7 @@ public class GUIApplication extends Application implements UIInterface {
 
         Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.LOGIN).getScene()));
         Platform.runLater(() -> this.primaryStage.show());
+        this.currentSceneInfo = this.getSceneInfo(SceneEnum.LOGIN);
 
         synchronized (this.mainClient.getLock()) {
             while (this.mainClient.getClientState() == ClientState.CONNECTION) {
@@ -135,6 +146,7 @@ public class GUIApplication extends Application implements UIInterface {
             });
             Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.CREATOR).getScene()));
             Platform.runLater(() -> this.primaryStage.show());
+            this.currentSceneInfo = this.getSceneInfo(SceneEnum.CREATOR);
             synchronized (this.mainClient.getLock()) {
                 while (this.mainClient.getClientState() == ClientState.CREATOR) {
                     try {
@@ -162,6 +174,7 @@ public class GUIApplication extends Application implements UIInterface {
                 this.primaryStage.setScene(this.getSceneInfo(SceneEnum.LOGIN).getScene());
                 ((LoginController) this.getSceneController(SceneEnum.LOGIN)).setStatus("NICKNAME INVALIDO, REINSERISCI");
             });
+            this.currentSceneInfo = this.getSceneInfo(SceneEnum.LOGIN);
             Platform.runLater(() -> this.primaryStage.show());
             while (this.mainClient.getClientState() == ClientState.INVALID_NICKNAME) {
                 synchronized (this.mainClient.getLock()) {
@@ -180,6 +193,7 @@ public class GUIApplication extends Application implements UIInterface {
             this.primaryStage.setScene(this.getSceneInfo(SceneEnum.WAITING).getScene());
         });
         Platform.runLater(() -> this.primaryStage.show());
+        this.currentSceneInfo = this.getSceneInfo(SceneEnum.WAITING);
         synchronized (this.mainClient.getLock()) {
             while (this.mainClient.getClientState() == ClientState.WAITING) {
                 try {
@@ -192,8 +206,10 @@ public class GUIApplication extends Application implements UIInterface {
 
 
         synchronized (this.mainClient.getLock()) {
-            Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getScene()));
-            Platform.runLater(() -> this.primaryStage.show());
+            /*Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getScene()));
+            Platform.runLater(() -> this.primaryStage.show());*/
+            //questo viene fatto tramite update
+
             this.mainClient.setVirtualGameController(this.mainClient.getVirtualMainController().getVirtualGameController(this.mainClient.getViewController().getGameID()));
             while (this.mainClient.getVirtualGameController() == null) {
                 try {
@@ -210,4 +226,31 @@ public class GUIApplication extends Application implements UIInterface {
     public void runGame() throws RemoteException {
 
     }
+
+    public void openInfoPopup(String message) {
+        this.popupStage = new Stage();
+        //this.popupStage.setResizable(false);
+        SceneInfo sceneInfo =this.getSceneInfo(SceneEnum.INFO);
+        this.popupStage.setScene(sceneInfo.getScene());
+        ((InfoController)sceneInfo.getSceneController()).setMessage(message);
+
+        //this.popupStage.setOnCloseRequest(we -> System.exit(0));
+        this.popupStage.show();
+
+        this.popupStage.setX(primaryStage.getX() + (primaryStage.getWidth() - sceneInfo.getScene().getWidth()) * 0.5);
+        this.popupStage.setY(primaryStage.getY() + (primaryStage.getHeight() - sceneInfo.getScene().getHeight()) * 0.5);
+    }
+
+
+    public void openErrorPopup(String message){
+        this.popupStage = new Stage();
+        SceneInfo sceneInfo =this.getSceneInfo(SceneEnum.ERROR);
+        this.popupStage.setScene(sceneInfo.getScene());
+        ((ErrorController)sceneInfo.getSceneController()).setMessage(message);
+
+        //this.popupStage.setOnCloseRequest(we -> System.exit(0));
+        this.popupStage.alwaysOnTopProperty();
+        this.popupStage.show();
+    }
+
 }
