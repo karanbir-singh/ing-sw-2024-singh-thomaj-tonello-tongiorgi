@@ -43,8 +43,8 @@ public class MainServer {
         VirtualMainController virtualMainController = new VirtualRMIMainController(mainController);
 
         // Create registry
-        System.out.println("Creating registry...");
-        Registry registry = LocateRegistry.createRegistry(RMI_SERVER_PORT);
+        System.out.println("Getting registry...");
+        Registry registry = LocateRegistry.getRegistry(RMI_SERVER_PORT);
 
         // Bind main controller
         System.out.println("Binding RMI main controller to registry...");
