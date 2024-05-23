@@ -25,26 +25,6 @@ public class CLI {
 
     //GAME
     public void printGame() {
-        /*switch (miniModel.getSimplifiedGame().getGameState()){
-            case WAITING_STARTER_CARD_PLACEMENT:
-                showPrintable(printableCommonTable());
-                break;
-            case WAITING_PAWNS_SELECTION:
-                System.out.println("pawn selection");
-                break;
-            case WAITING_SECRET_MISSION_CHOICE:
-                System.out.println("secret mission");
-                break;
-            case GAME_STARTED:
-                System.out.println("game");
-                break;
-            case END_STAGE:
-                System.out.println("end");
-                break;
-            case null, default:
-                System.out.println("Invalid game state! -> " + miniModel.getSimplifiedGame().getGameState());
-                break;
-        }*/
         SimplifiedCommonTable simplifiedCommonTable = miniModel.getSimplifiedCommonTable();
         SimplifiedPersonalBoard personalBoard = miniModel.getPersonalBoard();
 
@@ -57,6 +37,7 @@ public class CLI {
         }
 
         //SCORES
+        //TODO aggiungere gli score
         String[][] scores;
         //if(miniModel.getSimplifiedGame().getGameState() == GameState.GAME_STARTED ||
           //      miniModel.getSimplifiedGame().getGameState() == GameState.END_STAGE){
@@ -78,17 +59,29 @@ public class CLI {
         //HAND: check if secret mission is already present
         String[][] handPrint;
         if(miniModel.getSimplifiedHand() != null) {
-            handPrint = printableHand();
-        } else if(miniModel.getSimplifiedSecretHand() != null) {
-            handPrint = printableHand();
+            if(miniModel.getPersonalBoard() != null && miniModel.getPersonalBoard().getSecretMission() != null) {
+                handPrint = printableHandAndMission();
+            } else {
+                handPrint = printableHand();
+            }
         } else {
             handPrint = new String[1][1];
             handPrint[0][0] = "\t";
         }
 
+        //SECRET HAND
+        String[][] secretHand;
+        if(miniModel.getSimplifiedGame().getGameState() == GameState.WAITING_SECRET_MISSION_CHOICE && miniModel.getSimplifiedSecretHand().getCards().size() == 2) {
+            secretHand = printableSecretHand();
+        } else {
+            secretHand = new String[1][1];
+            secretHand[0][0] = "\t";
+        }
+
         //calculate dimensions
-        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + 3;
-        int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), handPrint[0].length);
+        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + secretHand.length + 2;
+        int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), Math.max(handPrint[0].length, secretHand[0].length));
+
         //utils
         int y=0;
 
@@ -116,9 +109,11 @@ public class CLI {
         y += personalBoardPrint.length;
 
         //show player's hand
-        printableGame[y][0] = "\nYOUR HAND:\n";
-        y++;
         addPrintable(handPrint, printableGame, 0, y);
+        y += handPrint.length;
+
+        //show secret hand
+        addPrintable(secretHand, printableGame, 0, y);
 
         showPrintable(printableGame);
     }
@@ -182,6 +177,7 @@ public class CLI {
         //utils
         int index = 0; //index to select the drawable element
         String selectedStyle = TextStyle.BACKGROUND_BEIGE.getStyleCode() + TextStyle.BLACK.getStyleCode();
+        String styleReset = TextStyle.STYLE_RESET.getStyleCode();
         String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
         String leftPadding = "    ";
         String rightPadding = "       ";
@@ -205,6 +201,9 @@ public class CLI {
             //titles and separators for alignment
             ct[yResource-1][offSet] = "(" + index + ")";
             ct[yResource-1][offSet+1] = " Resource Card";
+            if(index == miniCT.getSelectedIndex()){
+                ct[yResource-1][offSet+1] = selectedStyle + ct[yResource-1][offSet+1] + styleReset;
+            }
             ct[yResource-1][offSet+2] = blackSquare;
             ct[yResource-1][offSet+3] = blackSquare;
             ct[yResource-1][offSet+4] = blackSquare;
@@ -223,6 +222,9 @@ public class CLI {
 
         //insert resource deck
         ct[yResource-1][index*5] = "(" + index + ") Resource Deck"; //title
+        if(index == miniCT.getSelectedIndex()){
+            ct[yResource-1][index*5] = selectedStyle + ct[yResource-1][index*5] + styleReset;
+        }
         ct[yResource-1][index*5 + 4] = blackSquare + blackSquare + blackSquare; //decoration for alignment
         xResource ++;
 
@@ -248,6 +250,9 @@ public class CLI {
             int offSet = (index-3)*5;
             ct[yGold-1][offSet] = "(" + index + ")";
             ct[yGold-1][offSet+1] = " Gold Card    ";
+            if(index == miniCT.getSelectedIndex()){
+                ct[yGold-1][offSet+1] = selectedStyle + ct[yGold-1][offSet+1] + styleReset;
+            }
             ct[yGold-1][offSet+2] = blackSquare;
             ct[yGold-1][offSet+3] = blackSquare;
             ct[yGold-1][offSet+4] = blackSquare;
@@ -267,6 +272,9 @@ public class CLI {
 
         //insert gold deck
         ct[yGold-1][(index-3)*5] = "(" + index + ") Gold Deck    " ;
+        if(index == miniCT.getSelectedIndex()){
+            ct[yGold-1][(index-3)*5] = selectedStyle + ct[yGold-1][(index-3)*5] + styleReset;
+        }
         ct[yGold-1][(index-3)*5 + 4] = blackSquare + blackSquare + blackSquare;
 
         xGold ++;
@@ -505,7 +513,9 @@ public class CLI {
         SimplifiedPersonalBoard miniPB = miniModel.getOtherPersonalBoard();
 
         if(miniPB.getSecretMission() == null){
-            return new String[0][0];
+            String[][] empty = new String[1][1];
+            empty[0][0] = "\t";
+            return empty;
         }
         String[][] printableHand = printableHand();
         String[][] secretMission = miniPB.getSecretMission().getFront().printableSide();
@@ -524,11 +534,11 @@ public class CLI {
         }
 
         addPrintable(printableHand, handAndMission, 0,0);
-        for(int i=0; i<yDim-1; i++){
+        for(int i=1; i<yDim-1; i++){
             handAndMission[i][xSeparator] = "||      ";
         }
-        handAndMission[0][printableHand[0].length] = "        Your Secret Mission: ";
-        addPrintable(secretMission, handAndMission, printableHand[0].length + 1, 1);
+        handAndMission[1][printableHand[0].length] = "         Your Secret Mission: ";
+        addPrintable(secretMission, handAndMission, printableHand[0].length + 1, 2);
 
         return handAndMission;
     }
@@ -549,189 +559,209 @@ public class CLI {
             String selectedStyle = TextStyle.BACKGROUND_BEIGE.getStyleCode() + TextStyle.BLACK.getStyleCode();
             String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
 
-            if(miniHand.getCards().get(0) instanceof MissionCard){
-                //MISSION HAND
+            //calculate dimensions
+            int xCardDim = miniHand.getCards().get(0).getFront().printableSide()[0].length;
+            int yCardDim = miniHand.getCards().get(0).getFront().printableSide().length;
+            int xMax = (xCardDim + 1) * 3 + 1;
+            int yMax = yCardDim + 5;
 
-                //calculate dimensions
-                int xCardDim = miniHand.getCards().get(0).getFront().printableSide()[0].length;
-                int yCardDim = miniHand.getCards().get(0).getFront().printableSide().length;
-                int xMax = (xCardDim + 1) * 2;
-                int yMax = yCardDim + 1;
-                //cursors
-                int y=0, x=0;
-                //initialize matrix
-                String[][] myHand = new String[yMax][xMax];
-                for(int j=0; j<yMax; j++){
-                    for(int i=0; i<xMax; i++){
-                        myHand[j][i] = " ";
-                    }
+            //index to select the card
+            int index = 0;
+
+            //initialize empty matrix
+            String[][] myHand = new String[yMax][xMax];
+            for(int j=0; j<yMax; j++){
+                for(int i=0; i<xMax; i++){
+                    myHand[j][i] = " ";
                 }
-                //titles
-                for(int i=0; i<2; i++) {
-                    if(miniHand.getSelectedCard() == miniHand.getCards().get(i)){
-                        myHand[y][x] = " " + selectedStyle + " Mission  " + i + " \u001B[0m  ";
-                    } else {
-                        myHand[y][x] = "  Mission " + i + "   ";
-                    }
-                    x++;
-                }
-                x = 0;
-                y++;
-                //printable cards
-                for(Card c: miniHand.getCards()){
-                    addPrintable(c.getFront().printableSide(), myHand, x, y);
-                    x += xCardDim;
-                    for(int j=0; j<yCardDim; j++){
-                        myHand[y+j][x] = "        ";
-                    }
-                }
-
-                return myHand;
-
-            } else {
-                //NORMAL HAND
-
-                //calculate dimensions
-                int xCardDim = miniHand.getCards().get(0).getFront().printableSide()[0].length;
-                int yCardDim = miniHand.getCards().get(0).getFront().printableSide().length;
-                int xMax = (xCardDim + 1) * 3 + 1;
-                int yMax = yCardDim + 4;
-
-                //index to select the card
-                int index = 0;
-
-                //initialize empty matrix
-                String[][] myHand = new String[yMax][xMax];
-                for(int j=0; j<yMax; j++){
-                    for(int i=0; i<xMax; i++){
-                        myHand[j][i] = " ";
-                    }
-                }
-
-                //titles
-                myHand[0][0] = "Card:      ";
-                for(int i=1; i<4; i++){
-                    myHand[i][0] = "            ";
-                }
-                myHand[4][0] = "Type:     ";
-                myHand[5][0] = "Points:   ";
-                myHand[6][0] = "Requires: ";
-
-                for(int i=0; i<3; i++) {
-                    int x = 1 + i*(xCardDim+1);
-                    int y = 0;
-                    if (i < miniHand.getCards().size()) {
-                        Card c = miniHand.getCards().get(i);
-
-                        //titles
-                        if (c == miniHand.getSelectedCard()) {
-                            if (miniHand.getSelectedSide() == c.getBack()) {
-                                myHand[y][x] =  index + ") " + selectedStyle + " Back  \u001B[0m   ";
-                            } else {
-                                myHand[y][x] = index + ") " + selectedStyle + " Front \u001B[0m   ";
-                            }
-                        } else {
-                            myHand[y][x] = index + ")" + "  Front    ";
-                        }
-                        myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
-                        y++;
-
-                        //printable side
-                        if (c == miniHand.getSelectedCard() && miniHand.getSelectedSide().equals(c.getBack())) {
-                            addPrintable(c.getBack().printableSide(), myHand, x, y);
-                        } else {
-                            addPrintable(c.getFront().printableSide(), myHand, x, y);
-                        }
-                        x += xCardDim;
-                        for (int j = 0; j < yCardDim; j++) {
-                            myHand[y + j][x] = "          ";
-                        }
-                        y += yCardDim;
-
-                        //card type
-                        if (c instanceof GoldCard) {
-                            myHand[y][x] = "Gold         ";
-                        } else if (c instanceof ResourceCard) {
-                            myHand[y][x] = "Resource     ";
-                        } else if (c instanceof StarterCard) {
-                            myHand[y][x] = "Starter      ";
-                        }
-                        myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
-                        y++;
-
-                        //points
-                        if (!(c == miniHand.getSelectedCard() && miniHand.getSelectedSide().equals(c.getBack()))) {
-                            switch (c.getFront()) {
-                                case CornerCounter cornerCounter -> myHand[y][x] = "2 pt " + "x" + Character.toString(0x2B1C);
-                                case InkwellCounter inkwellCounter -> myHand[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
-                                case ManuscriptCounter manuscriptCounter -> myHand[y][x] = "1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
-                                case QuillCounter quillCounter -> myHand[y][x] = "1 pt " + "x" + Symbol.QUILL.getAlias();
-                                case null, default -> myHand[y][x] = c.getFront().getPoints() + " pt " + "        ";
-                            }
-                            if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
-                                myHand[y][x] = myHand[y][x] + "       " + blackSquare + blackSquare;
-                            } else {
-                                myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
-                            }
-
-                        } else {
-                            myHand[y][x] = "0 pt         " + blackSquare + blackSquare + blackSquare;
-                        }
-                        y++;
-
-                        //requirements
-                        myHand[y][x] = "";
-                        int n;
-                        int spaces = 5;
-
-                        if(!(c == miniHand.getSelectedCard() && miniHand.getSelectedSide().equals(c.getBack()))){
-                            for(Symbol s: c.getFront().getRequestedResources().keySet()){
-                                n = c.getFront().getRequestedResources().get(s);
-                                for(int j=0; j<n; j++){
-                                    myHand[y][x] = myHand[y][x] + s.getAlias();
-                                }
-                                spaces = spaces - n;
-                            }
-                        }
-                        while (spaces>0){
-                            myHand[y][x] = myHand[y][x] +  blackSquare;
-                            spaces--;
-                        }
-                        myHand[y][x] = myHand[y][x] + "      "+ blackSquare ;
-
-                    } else if(!(!miniHand.getCards().isEmpty() && miniHand.getCards().get(0) instanceof StarterCard)) {
-                        //EMPTY CARDS
-                        myHand[y][x] = "            ";
-                        y++;
-                        //add empty printable
-                        addPrintable(emptyPrintable(xCardDim, yCardDim), myHand, x, y);
-                        x += xCardDim;
-                        for (int j = 0; j < yCardDim; j++) {
-                            myHand[y + j][x] = "        ";
-                        }
-                        y += yCardDim;
-
-                        //type
-                        myHand[y][x] = "           " + blackSquare + blackSquare + blackSquare;
-                        y++;
-
-                        //points
-                        myHand[y][x] = "           " + blackSquare + blackSquare + blackSquare;
-                        y++;
-
-                        //requirements
-                        myHand[y][x] = blackSquare + blackSquare + blackSquare + blackSquare + blackSquare + "    "+ blackSquare;
-                    }
-                    index++;
-                }
-
-                //align right border
-                for(int i=yCardDim+1; i<yMax; i++){
-                    myHand[i][xMax-1] = myHand[i][xMax-1] + "  ";
-                }
-
-                return myHand;
             }
+
+            //titles
+
+            myHand[0][0] = "\nYOUR HAND:\n";
+            myHand[1][0] = "Card:      ";
+            for(int i=2; i<xCardDim + 2; i++){
+                myHand[i][0] = "            ";
+            }
+            myHand[5][0] = "Type:     ";
+            myHand[6][0] = "Points:   ";
+            myHand[7][0] = "Requires: ";
+
+            for(int i=0; i<3; i++) {
+                int x = 1 + i*(xCardDim+1);
+                int y = 1;
+                if (i < miniHand.getCards().size()) {
+                    Card c = miniHand.getCards().get(i);
+
+                    //titles
+                    if (c == miniHand.getSelectedCard()) {
+                        if (miniHand.getSelectedSide() == c.getBack()) {
+                            myHand[y][x] =  index + ") " + selectedStyle + " Back  \u001B[0m   ";
+                        } else {
+                            myHand[y][x] = index + ") " + selectedStyle + " Front \u001B[0m   ";
+                        }
+                    } else {
+                        myHand[y][x] = index + ")" + "  Front    ";
+                    }
+                    myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
+                    y++;
+
+                    //printable side
+                    if (c == miniHand.getSelectedCard() && miniHand.getSelectedSide().equals(c.getBack())) {
+                        addPrintable(c.getBack().printableSide(), myHand, x, y);
+                    } else {
+                        addPrintable(c.getFront().printableSide(), myHand, x, y);
+                    }
+                    x += xCardDim;
+                    for (int j = 0; j < yCardDim; j++) {
+                        myHand[y + j][x] = "          ";
+                    }
+                    y += yCardDim;
+
+                    //card type
+                    if (c instanceof GoldCard) {
+                        myHand[y][x] = "Gold         ";
+                    } else if (c instanceof ResourceCard) {
+                        myHand[y][x] = "Resource     ";
+                    } else if (c instanceof StarterCard) {
+                        myHand[y][x] = "Starter      ";
+                    }
+                    myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
+                    y++;
+
+                    //points
+                    if (!(c == miniHand.getSelectedCard() && miniHand.getSelectedSide().equals(c.getBack()))) {
+                        switch (c.getFront()) {
+                            case CornerCounter cornerCounter -> myHand[y][x] = "2 pt " + "x" + Character.toString(0x2B1C);
+                            case InkwellCounter inkwellCounter -> myHand[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
+                            case ManuscriptCounter manuscriptCounter -> myHand[y][x] = "1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
+                            case QuillCounter quillCounter -> myHand[y][x] = "1 pt " + "x" + Symbol.QUILL.getAlias();
+                            case null, default -> myHand[y][x] = c.getFront().getPoints() + " pt " + "        ";
+                        }
+                        if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
+                            myHand[y][x] = myHand[y][x] + "       " + blackSquare + blackSquare;
+                        } else {
+                            myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
+                        }
+
+                    } else {
+                        myHand[y][x] = "0 pt         " + blackSquare + blackSquare + blackSquare;
+                    }
+                    y++;
+
+                    //requirements
+                    myHand[y][x] = "";
+                    int n;
+                    int spaces = 5;
+
+                    if(!(c == miniHand.getSelectedCard() && miniHand.getSelectedSide().equals(c.getBack()))){
+                        for(Symbol s: c.getFront().getRequestedResources().keySet()){
+                            n = c.getFront().getRequestedResources().get(s);
+                            for(int j=0; j<n; j++){
+                                myHand[y][x] = myHand[y][x] + s.getAlias();
+                            }
+                            spaces = spaces - n;
+                        }
+                    }
+                    while (spaces>0){
+                        myHand[y][x] = myHand[y][x] +  blackSquare;
+                        spaces--;
+                    }
+                    myHand[y][x] = myHand[y][x] + "      "+ blackSquare ;
+
+                } else if(!(!miniHand.getCards().isEmpty() && miniHand.getCards().get(0) instanceof StarterCard)) {
+                    //EMPTY CARDS
+                    myHand[y][x] = "            ";
+                    y++;
+                    //add empty printable
+                    addPrintable(emptyPrintable(xCardDim, yCardDim), myHand, x, y);
+                    x += xCardDim;
+                    for (int j = 0; j < yCardDim; j++) {
+                        myHand[y + j][x] = "        ";
+                    }
+                    y += yCardDim;
+
+                    //type
+                    myHand[y][x] = "           " + blackSquare + blackSquare + blackSquare;
+                    y++;
+
+                    //points
+                    myHand[y][x] = "           " + blackSquare + blackSquare + blackSquare;
+                    y++;
+
+                    //requirements
+                    myHand[y][x] = blackSquare + blackSquare + blackSquare + blackSquare + blackSquare + "    "+ blackSquare;
+                }
+                index++;
+            }
+
+            //align right border
+            for(int i=yCardDim+2; i<yMax-1; i++){
+                myHand[i][xMax-1] = myHand[i][xMax-1] + "  ";
+            }
+
+            return myHand;
+
+        }
+    }
+
+    //SECRET MISSION HAND
+    public String[][] printableSecretHand() {
+        SimplifiedHand miniHand = miniModel.getSimplifiedSecretHand();
+
+        if(miniHand.getCards().isEmpty()){
+            String[][] hand = new String[1][1];
+            hand[0][0] = "\t\n";
+            return hand;
+        } else {
+            //utils
+            String selectedStyle = TextStyle.BACKGROUND_BEIGE.getStyleCode() + TextStyle.BLACK.getStyleCode();
+            String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
+
+            //calculate dimensions
+            int xCardDim = miniHand.getCards().get(0).getFront().printableSide()[0].length;
+            int yCardDim = miniHand.getCards().get(0).getFront().printableSide().length;
+            int xMax = (xCardDim + 2) * 2;
+            int yMax = yCardDim + 2;
+            //cursors
+            int y=0, x=0;
+            //initialize matrix
+            String[][] myHand = new String[yMax][xMax];
+
+            for(int j=0; j<yMax; j++){
+                for(int i=0; i<xMax; i++){
+                    myHand[j][i] = " ";
+                }
+            }
+            //titles
+
+            myHand[0][0] = "\nCHOOSE YOUR SECRET MISSION:\nIf you complete the mission you will receive extra points " + SpecialCharacters.CUP.getCharacter() + " at the end of the game\n";
+            y++;
+            for(int i=0; i<2; i++) {
+                if(miniHand.getSelectedCard() == miniHand.getCards().get(i)){
+                    myHand[y][x] = "    " + selectedStyle + " Mission  " + i + " \u001B[0m             ";
+                } else {
+                    myHand[y][x] = "     Mission " + i + "               ";
+                }
+                x++;
+            }
+            x = 0;
+            y++;
+            //printable cards
+            for(Card c: miniHand.getCards()){
+                for(int j=0; j<yCardDim; j++){
+                    myHand[y+j][x] = "   ";
+                }
+                x++;
+                addPrintable(c.getFront().printableSide(), myHand, x, y);
+                x += xCardDim;
+                for(int j=0; j<yCardDim; j++){
+                    myHand[y+j][x] = "     ";
+                }
+                x++;
+            }
+
+            return myHand;
         }
     }
 

@@ -29,13 +29,15 @@ public class SimplifiedCommonTable implements Serializable {
      * This attribute represents the two gold cards that are visible on the table
      */
     private ArrayList<Card> goldCards;
+    private int selectedIndex;
 
-    public SimplifiedCommonTable(Card resourceDeck, Card goldDeck, ArrayList<Card> commonMissions, ArrayList<Card> resourceCards, ArrayList<Card> goldCards) {
+    public SimplifiedCommonTable(Card resourceDeck, Card goldDeck, ArrayList<Card> commonMissions, ArrayList<Card> resourceCards, ArrayList<Card> goldCards, int selectedIndex) {
         this.resourceDeck = resourceDeck;
         this.goldDeck = goldDeck;
         this.commonMissions = commonMissions;
         this.resourceCards = resourceCards;
         this.goldCards = goldCards;
+        this.selectedIndex = selectedIndex;
     }
 
     public Card getResourceDeck() {
@@ -57,5 +59,7 @@ public class SimplifiedCommonTable implements Serializable {
     public ArrayList<Card> getGoldCards() {
         return goldCards;
     }
+
+    public int getSelectedIndex() { return selectedIndex;}
 
 }

@@ -196,7 +196,7 @@ public class SocketServerHandler implements Runnable {
         }
 
 
-        return new SimplifiedCommonTable(resourceCard, goldCard, commonMission, resourceCards, goldCards);
+        return new SimplifiedCommonTable(resourceCard, goldCard, commonMission, resourceCards, goldCards,6);
     }
 
     private GoldCard getGoldCard(JsonNode encodedCard) {

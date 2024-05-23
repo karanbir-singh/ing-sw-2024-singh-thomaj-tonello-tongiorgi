@@ -24,7 +24,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            printOptions();
+            System.out.println("err");
         }
         printOptions();
     }
@@ -36,7 +36,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            printOptions();
+            System.out.println("err");
         }
         printOptions();
     }
@@ -48,7 +48,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            printOptions();
+            System.out.println("err");
         }
         printOptions();
     }
@@ -60,7 +60,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            printOptions();
+            System.out.println("err");
         }
         printOptions();
     }
@@ -72,7 +72,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            printOptions();
+            System.out.println("err");
         }
         printOptions();
     }
@@ -84,7 +84,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            printOptions();
+            System.out.println("err");
         }
         printOptions();
 
@@ -96,7 +96,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            printOptions();
+            System.out.println("err");
         }
         printOptions();
     }
@@ -111,7 +111,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            printOptions();
+            System.out.println("err");
         }
         printOptions();
     }
@@ -120,7 +120,7 @@ public class TUIUpdate implements UpdateInterface {
     public void showMessage(String message) {
         //clearConsole();
         System.out.println(message);
-        printOptions();
+        //printOptions();
     }
 
     @Override

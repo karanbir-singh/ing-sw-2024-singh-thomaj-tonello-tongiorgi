@@ -194,7 +194,8 @@ public class CommonTable implements Serializable {
                             goldDeck.getTopCard(),
                             commonMissions,
                             resourceCards,
-                            goldCards),
+                            goldCards,
+                            selectedX+selectedY),
                     "Card removed from common table"
             );
 
