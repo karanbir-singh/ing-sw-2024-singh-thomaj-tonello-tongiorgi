@@ -1,6 +1,5 @@
-package it.polimi.ingsw.gc26;
+package it.polimi.ingsw.gc26.controller;
 
-import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.player.Player;
