@@ -1,9 +1,11 @@
 package it.polimi.ingsw.gc26;
 
+import it.polimi.ingsw.gc26.network.RMI.RMIServerPing;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import it.polimi.ingsw.gc26.network.socket.SocketServerPing;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
 import it.polimi.ingsw.gc26.network.socket.server.VirtualSocketView;
@@ -88,6 +90,7 @@ public class MainClient {
      */
     public final Object lock;
 
+    private Registry registry;
 
     public MainClient(UpdateInterface view) {
         this.clientID = null;
@@ -182,6 +185,10 @@ public class MainClient {
         return viewController;
     }
 
+    public Registry getRegistry() {
+        return registry;
+    }
+
     /**
      * Set's the client's flag to true to kill all threads
      */
@@ -246,7 +253,6 @@ public class MainClient {
 
     public static MainClient startRMIClient(GraphicType graphicType) throws RemoteException, NotBoundException {
         // Finding the registry and getting the stub of virtualMainController in the registry
-        Registry registry = LocateRegistry.getRegistry(SERVER_IP, RMI_SERVER_PORT);
 
         // Create RMI Client
         MainClient mainClient = null;
@@ -258,10 +264,15 @@ public class MainClient {
             mainClient = new MainClient(new GUIUpdate());
         }
 
+        mainClient.registry = LocateRegistry.getRegistry(SERVER_IP, RMI_SERVER_PORT);
+
         // Get remote object
-        Remote remoteObject = registry.lookup(remoteObjectName);
+        Remote remoteObject = mainClient.registry.lookup(remoteObjectName);
         mainClient.setVirtualMainController((VirtualMainController) remoteObject);
         mainClient.setVirtualView(new VirtualRMIView(mainClient.getViewController()));
+
+        // Launch thread for pinging RMI server
+        new Thread(new RMIServerPing(mainClient)).start();
 
         return mainClient;
     }
@@ -295,6 +306,9 @@ public class MainClient {
 
         // Launch a thread for managing server requests
         new SocketServerHandler(mainClient.getViewController(), socketIn, socketOut);
+
+        // Launch thread for pinging RMI server
+        new Thread(new SocketServerPing(mainClient)).start();
 
         return mainClient;
     }
