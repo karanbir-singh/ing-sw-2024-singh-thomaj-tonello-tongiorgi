@@ -349,7 +349,7 @@ public class SocketServerHandler implements Runnable {
                 switch (position.get("type").asText()) {
                     case "CardBack":
                         if (!position.get("side").get("permanentResources").isNull()) {
-                            permanentResources.add(Symbol.valueOf(position.get("side").get("permanentResources").toString()));
+                            permanentResources.add(Symbol.valueOf(position.get("side").get("permanentResources").asText()));
                         }
                         side = new CardBack(position.get("side").get("sideSymbol").asText().equals("") ? null : Symbol.valueOf(position.get("side").get("sideSymbol").asText()),
                                 corners.get(0), corners.get(1), corners.get(2), corners.get(3),
