@@ -21,17 +21,21 @@ public class SecretMissionChoiceController extends GenericController{
     @FXML
     HBox cardHBox;
     @FXML
-    HBox secretMissionHBox;
-    @FXML
     ImageView handCard0;
     @FXML
     ImageView handCard1;
     @FXML
     ImageView handCard2;
+
+    @FXML
+    HBox secretMissionHBox;
+
     @FXML
     ImageView secretMission0;
     @FXML
     ImageView secretMission1;
+
+
 
 
     public void onClickSecretMission0(){
@@ -68,21 +72,24 @@ public class SecretMissionChoiceController extends GenericController{
             this.handCard0.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(0).getFront().getImagePath()))));
             this.handCard1.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(1).getFront().getImagePath()))));
             this.handCard2.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(2).getFront().getImagePath()))));
-            this.handCard0.setVisible(true);
-            this.handCard1.setVisible(true);
-            this.handCard2.setVisible(true);
+
+            /*this.cardHBox.getChildren().setAll(
+                    this.handCard0,this.handCard1,this.handCard2
+            );*/
+
+            /*this.handCard0.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(0).getFront().getImagePath()))));
+            this.handCard1.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(1).getFront().getImagePath()))));
+            this.handCard2.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(2).getFront().getImagePath()))));*/
         }
     }
 
 
     @Override
     public void changeGUISecretHand(SimplifiedHand simplifiedSecretHand) {
-        if(simplifiedSecretHand.getCards().size() >= 2){
-            this.secretMission0.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedSecretHand.getCards().get(0).getFront().getImagePath()))));
-            this.secretMission1.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedSecretHand.getCards().get(1).getFront().getImagePath()))));
-            this.secretMission0.setVisible(true);
-            this.secretMission1.setVisible(true);
+        if(simplifiedSecretHand.getCards().size() >= 2) {
+            this.secretMission0.setImage(new Image(String.valueOf(getClass().getResource("/images/" + simplifiedSecretHand.getCards().get(0).getFront().getImagePath()))));
+            this.secretMission1.setImage(new Image(String.valueOf(getClass().getResource("/images/" + simplifiedSecretHand.getCards().get(1).getFront().getImagePath()))));
+            //this.secretMissionHBox.getChildren().setAll(this.secretMission0, this.secretMission1);
         }
-
     }
 }
