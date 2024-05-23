@@ -7,7 +7,9 @@ import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
+
 import java.io.Serializable;
+
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 
@@ -64,7 +66,7 @@ public class Game implements Serializable {
      */
     private final ArrayList<Pawn> availablePawns;
 
-    private  ModelObservable observable; //unico per il game
+    private ModelObservable observable; //unico per il game
 
     /**
      * Initializes the game, creates the decks and sets the common table
@@ -82,7 +84,7 @@ public class Game implements Serializable {
         for (int i = 0; i < clients.size(); i++) {
             this.observable.addObserver(clients.get(i), players.get(i).getID());
         }
-        for(Player player: players) {
+        for (Player player : players) {
             player.setObservable(this.observable);
         }
 
@@ -102,8 +104,6 @@ public class Game implements Serializable {
         availablePawns.add(Pawn.RED);
         availablePawns.add(Pawn.YELLOW);
         availablePawns.add(Pawn.GREEN);
-
-
     }
 
     /**
@@ -186,8 +186,8 @@ public class Game implements Serializable {
             // Then increase the round
             this.increaseRound();
         }
-            this.observable.notifyMessage("It's you turn now",this.currentPlayer.getID());
-            // TODO update simplified Game & player
+        this.observable.notifyMessage("It's you turn now", this.currentPlayer.getID());
+        // TODO update simplified Game & player
     }
 
     /**
@@ -326,6 +326,31 @@ public class Game implements Serializable {
     }
 
     /**
+     * Checks if the passed pawn is available
+     *
+     * @param pawn pawn to check
+     * @return true if availablePawn contains pawn
+     */
+    public boolean checkPawnAvailability(Pawn pawn) {
+        boolean result = availablePawns.contains(pawn);
+        if (!result){
+            // TODO notifica che il pawn non è disponibile
+        }
+        return result;
+    }
+
+    /**
+     * Removes passed pawn from availablePawns
+     *
+     * @param pawn pawn to remove
+     */
+    public void removePawn(Pawn pawn) {
+        availablePawns.remove(pawn);
+
+        // TODO notifica a tutti i client che è stato preso un color
+    }
+
+    /**
      * Sets final round
      *
      * @param finalRound
@@ -348,8 +373,8 @@ public class Game implements Serializable {
         return winners;
     }
 
-    public void errorState(String clientID){
-        this.observable.notifyError("YOU CANNOT DO THAT NOW",clientID);
+    public void errorState(String clientID) {
+        this.observable.notifyError("YOU CANNOT DO THAT NOW", clientID);
     }
 
     public String[][] printableGame(Player player) {
@@ -442,7 +467,7 @@ public class Game implements Serializable {
         return scores;
     }
 
-    public ModelObservable getObservable(){
+    public ModelObservable getObservable() {
         return this.observable;
     }
 }
