@@ -7,6 +7,7 @@ import it.polimi.ingsw.gc26.model.game.CommonTable;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.hand.Hand;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
@@ -204,25 +205,39 @@ public class GameController implements Serializable {
             // Get the player who is choosing the color by his ID
             Player player = game.getPlayerByID(playerID);
 
-            // Set pawn
-            boolean isPawnSet = player.setPawn(color, game.getAvailablePawns(), playerID);
+            // Check if the player has already chosen the pawn or not
+            if (playersToWait.contains(player)) {
+                try {
+                    // Get pawn
+                    Pawn pawn = Pawn.valueOf(color);
 
-            if (isDebug) {
-                System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
-            }
+                    // Check if pawn is available
+                    if (game.checkPawnAvailability(pawn)) {
+                        // Set pawn
+                        player.setPawn(pawn, playerID);
+                        game.removePawn(pawn);
 
-            // Remove from list
-            if (isPawnSet) {
-                playersToWait.remove(player);
-            }
+                        if (isDebug) {
+                            System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
+                        }
 
-            // Check if all players have chosen the pawn
-            if (playersToWait.isEmpty()) {
-                // Change game state
-                game.setState(GameState.HAND_PREPARATION);
+                        // Remove player from waiting list
+                        playersToWait.remove(player);
 
-                // Prepare hand for each player
-                this.preparePlayersHand();
+                        // Check if all players have chosen the pawn
+                        if (playersToWait.isEmpty()) {
+                            // Change game state
+                            game.setState(GameState.HAND_PREPARATION);
+
+                            // Prepare hand for each player
+                            this.preparePlayersHand();
+                        }
+                    }
+                } catch (IllegalArgumentException e) {
+                    // TODO notifica che l'input è invalido e di riprovare
+                }
+            } else {
+                // TODO manda una notifica al client che il colore è già stato scelto dal client stesso
             }
         } else {
             // TODO gestire ome cambiare il model quando lo stato e' errato
@@ -343,15 +358,20 @@ public class GameController implements Serializable {
             // Get the player who is selecting the card by his ID
             Player player = game.getPlayerByID(playerID);
 
-            // Get selected secret mission
-            MissionCard secretMission = (MissionCard) player.getSecretMissionHand().getCard(0, 2, cardIndex, playerID);
+            // Check if the player has already chosen the secret mission or not
+            if (playersToWait.contains(player)) {
+                // Get selected secret mission
+                MissionCard secretMission = (MissionCard) player.getSecretMissionHand().getCard(0, 2, cardIndex, playerID);
 
-            // Select the chosen card
-            if (secretMission != null) {
-                player.getSecretMissionHand().setSelectedCard(secretMission, player.getID());
-                if (isDebug) {
-                    System.out.println(STR."\{player.getNickname()} selected mission: \{secretMission}");
+                // Select the chosen card
+                if (secretMission != null) {
+                    player.getSecretMissionHand().setSelectedCard(secretMission, player.getID());
+                    if (isDebug) {
+                        System.out.println(STR."\{player.getNickname()} selected mission: \{secretMission}");
+                    }
                 }
+            } else {
+                // TODO notifica al client che ha già settato la sua secret mission
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
@@ -372,30 +392,37 @@ public class GameController implements Serializable {
             // Get the player who is setting the card by his ID
             Player player = game.getPlayerByID(playerID);
 
-            // Set the secret mission on the personal board of the players
-            MissionCard secretMission = (MissionCard) player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard(), playerID);
+            // Check if the player has already chosen the secret mission or not
+            if (playersToWait.contains(player)) {
+                // Set the secret mission on the personal board of the players
+                MissionCard secretMission = (MissionCard) player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard(), playerID);
 
-            if (secretMission != null) {
-                // Remove the card from the secondary hand
-                player.getSecretMissionHand().removeCard(secretMission, player.getID());
-                if (isDebug) {
-                    System.out.println(STR."\{player.getNickname()} set secret mission");
+                // Check if a secret mission is selected
+                if (secretMission != null) {
+                    // Remove the card from the secondary hand
+                    player.getSecretMissionHand().removeCard(secretMission, player.getID());
+
+                    if (isDebug) {
+                        System.out.println(STR."\{player.getNickname()} set secret mission");
+                    }
+
+                    // Remove player from list
+                    playersToWait.remove(player);
+
+                    // Check if all players have chosen the secret
+                    if (playersToWait.isEmpty()) {
+                        // Get first player ID randomly and start game
+                        String firstPlayerID = game.getPlayers().get(new Random().nextInt(game.getPlayers().size())).getID();
+
+                        // Change game state
+                        game.setState(GameState.FIRST_PLAYER_EXTRACTION);
+
+                        // Then extract first player
+                        this.setFirstPlayer(firstPlayerID);
+                    }
                 }
-
-                // Remove player from list
-                playersToWait.remove(player);
-
-                // Check if all players have chosen the secret
-                if (playersToWait.isEmpty()) {
-                    // Get first player ID randomly and start game
-                    String firstPlayerID = game.getPlayers().get(new Random().nextInt(game.getPlayers().size())).getID();
-
-                    // Change game state
-                    game.setState(GameState.FIRST_PLAYER_EXTRACTION);
-
-                    // Then extract first player
-                    this.setFirstPlayer(firstPlayerID);
-                }
+            } else {
+                // TODO notifica al client che già seleziona la carta iniziale
             }
         } else {
             //TODO gestisci come cambiare il model quando lo stato è errato
@@ -602,7 +629,7 @@ public class GameController implements Serializable {
      * Selects the card on the common table that the currentPlayer wants to draw
      *
      * @param cardIndex index of the card on the common table
-     * @param playerID ID of the player who is trying to select the card on the common table
+     * @param playerID  ID of the player who is trying to select the card on the common table
      */
     public void selectCardFromCommonTable(int cardIndex, String playerID) {
         if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
