@@ -1,6 +1,5 @@
 package it.polimi.ingsw.gc26.ui.tui;
 
-import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.card.*;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
@@ -26,6 +25,26 @@ public class CLI {
 
     //GAME
     public void printGame() {
+        /*switch (miniModel.getSimplifiedGame().getGameState()){
+            case WAITING_STARTER_CARD_PLACEMENT:
+                showPrintable(printableCommonTable());
+                break;
+            case WAITING_PAWNS_SELECTION:
+                System.out.println("pawn selection");
+                break;
+            case WAITING_SECRET_MISSION_CHOICE:
+                System.out.println("secret mission");
+                break;
+            case GAME_STARTED:
+                System.out.println("game");
+                break;
+            case END_STAGE:
+                System.out.println("end");
+                break;
+            case null, default:
+                System.out.println("Invalid game state! -> " + miniModel.getSimplifiedGame().getGameState());
+                break;
+        }*/
         SimplifiedCommonTable simplifiedCommonTable = miniModel.getSimplifiedCommonTable();
         SimplifiedPersonalBoard personalBoard = miniModel.getPersonalBoard();
 
@@ -43,7 +62,8 @@ public class CLI {
           //      miniModel.getSimplifiedGame().getGameState() == GameState.END_STAGE){
             //scores = printableScores();
         //} else {
-            scores = new String[0][0];
+            scores = new String[1][1];
+            scores[0][0] = "\t";
         //}
 
         //PERSONAL BOARD
@@ -51,24 +71,25 @@ public class CLI {
         if(miniModel.getPersonalBoard() != null){
             personalBoardPrint = printablePersonalBoard(miniModel.getPersonalBoard());
         } else {
-            personalBoardPrint = new String[0][0];
+            personalBoardPrint = new String[1][1];
+            personalBoardPrint[0][0] = "\t";
         }
 
         //HAND: check if secret mission is already present
         String[][] handPrint;
-        if(personalBoard.getSecretMission() == null){
+        if(miniModel.getSimplifiedHand() != null) {
             handPrint = printableHand();
-        } else if(miniModel.getSimplifiedHand() != null){
-            handPrint = printableHandAndMission();
+        } else if(miniModel.getSimplifiedSecretHand() != null) {
+            handPrint = printableHand();
         } else {
-            handPrint = new String[0][0];
+            handPrint = new String[1][1];
+            handPrint[0][0] = "\t";
         }
 
         //calculate dimensions
-        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + 4;
+        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + 3;
         int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), handPrint[0].length);
         //utils
-        Printer printer = new Printer();
         int y=0;
 
         //initialize empty matrix
@@ -83,23 +104,21 @@ public class CLI {
         //show common table
         printableGame[y][0] = "COMMON TABLE:";
         y++;
-        printer.addPrintable(commonTablePrint, printableGame, 0, y);
+        addPrintable(commonTablePrint, printableGame, 0, y);
 
         //show scores
 
-        printer.addPrintable(scores, printableGame, commonTablePrint[0].length + 1, y + 1);
+        addPrintable(scores, printableGame, commonTablePrint[0].length + 1, y + 1);
         y += commonTablePrint.length;
 
         //show personal board
-        printableGame[y][0] = "\nYOUR PERSONAL BOARD:\n";
-        y++;
-        printer.addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
+        addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
         y += personalBoardPrint.length;
 
         //show player's hand
         printableGame[y][0] = "\nYOUR HAND:\n";
         y++;
-        printer.addPrintable(handPrint, printableGame, 0, y);
+        addPrintable(handPrint, printableGame, 0, y);
 
         showPrintable(printableGame);
     }
@@ -162,7 +181,6 @@ public class CLI {
         int yLine = yResource + yCardDim ;
         //utils
         int index = 0; //index to select the drawable element
-        Printer printer = new Printer();
         String selectedStyle = TextStyle.BACKGROUND_BEIGE.getStyleCode() + TextStyle.BLACK.getStyleCode();
         String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
         String leftPadding = "    ";
@@ -195,9 +213,9 @@ public class CLI {
             //insert uncovered cards
             if(i< miniCT.getResourceCards().size()){
                 Card r = miniCT.getResourceCards().get(i);
-                printer.addPrintable(r.getFront().printableSide(), ct, xResource, yResource);
+                addPrintable(r.getFront().printableSide(), ct, xResource, yResource);
             } else {
-                printer.addPrintable(printer.emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
+                addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
             }
             xResource += xCardDim + 1;
             index++;
@@ -209,9 +227,9 @@ public class CLI {
         xResource ++;
 
         if(miniCT.getResourceDeck() == null){
-            printer.addPrintable(printer.emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
+            addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
         } else {
-            printer.addPrintable(miniCT.getResourceDeck().getBack().printableSide(), ct, xResource, yResource);
+            addPrintable(miniCT.getResourceDeck().getBack().printableSide(), ct, xResource, yResource);
             decorateDeck(ct, xResource, yResource, xCardDim, yCardDim);
         }
         index++;
@@ -238,9 +256,9 @@ public class CLI {
 
             if(i < miniCT.getGoldCards().size()){
                 Card g = miniCT.getGoldCards().get(i);
-                printer.addPrintable(g.getFront().printableSide(), ct, xGold, yGold);
+                addPrintable(g.getFront().printableSide(), ct, xGold, yGold);
             } else {
-                printer.addPrintable(printer.emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
+                addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
             }
             xGold += xCardDim + 1;
 
@@ -254,9 +272,9 @@ public class CLI {
         xGold ++;
 
         if(miniCT.getGoldDeck() == null){
-            printer.addPrintable(printer.emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
+            addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
         } else {
-            printer.addPrintable(miniCT.getGoldDeck().getBack().printableSide(), ct, xGold, yGold);
+            addPrintable(miniCT.getGoldDeck().getBack().printableSide(), ct, xGold, yGold);
             decorateDeck(ct, xGold, yGold, xCardDim, yCardDim);
         }
 
@@ -270,7 +288,6 @@ public class CLI {
         String[][] missions = printableCommonMissions();
         //utils
         String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
-        Printer printer = new Printer();
         //dimensions
         int xDim = commonTable[0].length + missions[0].length + 1;
         int yDim = Math.max(commonTable.length, missions.length);
@@ -287,7 +304,7 @@ public class CLI {
         }
 
         //insert decks and drawable cards
-        printer.addPrintable(commonTable, commonTableAndMissions, 0, 1);
+        addPrintable(commonTable, commonTableAndMissions, 0, 1);
 
         //insert empty lines for alignment
         for(int j=0; j<(missions.length - commonTable.length); j++){
@@ -316,14 +333,13 @@ public class CLI {
         }
 
         //insert common mission cards (vertical)
-        printer.addPrintable(missions, commonTableAndMissions, commonTable[0].length + 1, 0);
+        addPrintable(missions, commonTableAndMissions, commonTable[0].length + 1, 0);
 
         return commonTableAndMissions;
     }
     public String[][] printableCommonMissions() {
         SimplifiedCommonTable miniCT = miniModel.getSimplifiedCommonTable();
-        //utils
-        Printer printer = new Printer();
+
         //calculate dimensions
         int yDim = (miniCT.getCommonMissions().get(0).getFront().printableSide().length+ 1)*2 + 1;
         int xDim = miniCT.getCommonMissions().get(0).getFront().printableSide()[0].length;
@@ -343,7 +359,7 @@ public class CLI {
         //add printable cards vertically
         y = 1;
         for(Card m: miniCT.getCommonMissions()){
-            printer.addPrintable(m.getFront().printableSide(), missions, 0, y);
+            addPrintable(m.getFront().printableSide(), missions, 0, y);
             y += m.getFront().printableSide().length + 2;
         }
 
@@ -357,7 +373,7 @@ public class CLI {
         int xOff = miniPB.getxMin()*2 -1;
         int yOff = miniPB.getyMin()*2 -1;
         String[][] board = new String[yDim][xDim];
-        String[][] reverseBoard = new String[yDim+1][xDim];
+        String[][] reverseBoard = new String[yDim+2][xDim];
 
         //utils
         String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
@@ -438,7 +454,12 @@ public class CLI {
             }
         }
 
-        int y=0;
+        reverseBoard[0][0] = "\nYOUR PERSONAL BOARD:\n";
+        for (int i=1; i<xDim; i++){
+            reverseBoard[0][i] = "\t";
+            reverseBoard[yDim+1][i] = "\t";
+        }
+        int y=1;
         //reverse the board
         for(int j=yDim-1; j>=0; j--){
             for(int i=0; i<xDim; i++) {
@@ -446,15 +467,10 @@ public class CLI {
             }
             y++;
         }
-        int x = 1;
-        while(x<xDim){
-            reverseBoard[yDim][x] = " ";
-            x++;
-        }
 
-        reverseBoard[yDim][0] = "\nYour resources: ";
+        reverseBoard[yDim+1][0] = "\nYour resources: ";
         for (Symbol s: Symbol.values()) {
-            reverseBoard[yDim][1] = reverseBoard[yDim][1] + miniPB.getVisibleResources().get(s) + " " + s.name() + "   ";
+            reverseBoard[yDim+1][1] = reverseBoard[yDim+1][1] + miniPB.getVisibleResources().get(s) + " " + s.name() + "   ";
         }
         return reverseBoard;
     }
@@ -493,7 +509,6 @@ public class CLI {
         }
         String[][] printableHand = printableHand();
         String[][] secretMission = miniPB.getSecretMission().getFront().printableSide();
-        Printer printer = new Printer();
 
         int xDim = printableHand[0].length + secretMission[0].length + 1;
         int yDim = printableHand.length;
@@ -508,12 +523,12 @@ public class CLI {
             }
         }
 
-        printer.addPrintable(printableHand, handAndMission, 0,0);
+        addPrintable(printableHand, handAndMission, 0,0);
         for(int i=0; i<yDim-1; i++){
             handAndMission[i][xSeparator] = "||      ";
         }
         handAndMission[0][printableHand[0].length] = "        Your Secret Mission: ";
-        printer.addPrintable(secretMission, handAndMission, printableHand[0].length + 1, 1);
+        addPrintable(secretMission, handAndMission, printableHand[0].length + 1, 1);
 
         return handAndMission;
     }
@@ -527,12 +542,11 @@ public class CLI {
 
         if(miniHand.getCards().isEmpty()){
             String[][] hand = new String[1][1];
-            hand[0][0] = "Your hand is empty, the cards will be distributed after the game setup.\n";
+            hand[0][0] = "\t\n";
             return hand;
         } else {
             //utils
             String selectedStyle = TextStyle.BACKGROUND_BEIGE.getStyleCode() + TextStyle.BLACK.getStyleCode();
-            Printer printer = new Printer();
             String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
 
             if(miniHand.getCards().get(0) instanceof MissionCard){
@@ -565,7 +579,7 @@ public class CLI {
                 y++;
                 //printable cards
                 for(Card c: miniHand.getCards()){
-                    printer.addPrintable(c.getFront().printableSide(), myHand, x, y);
+                    addPrintable(c.getFront().printableSide(), myHand, x, y);
                     x += xCardDim;
                     for(int j=0; j<yCardDim; j++){
                         myHand[y+j][x] = "        ";
@@ -624,9 +638,9 @@ public class CLI {
 
                         //printable side
                         if (c == miniHand.getSelectedCard() && miniHand.getSelectedSide().equals(c.getBack())) {
-                            printer.addPrintable(c.getBack().printableSide(), myHand, x, y);
+                            addPrintable(c.getBack().printableSide(), myHand, x, y);
                         } else {
-                            printer.addPrintable(c.getFront().printableSide(), myHand, x, y);
+                            addPrintable(c.getFront().printableSide(), myHand, x, y);
                         }
                         x += xCardDim;
                         for (int j = 0; j < yCardDim; j++) {
@@ -690,7 +704,7 @@ public class CLI {
                         myHand[y][x] = "            ";
                         y++;
                         //add empty printable
-                        printer.addPrintable(printer.emptyPrintable(xCardDim, yCardDim), myHand, x, y);
+                        addPrintable(emptyPrintable(xCardDim, yCardDim), myHand, x, y);
                         x += xCardDim;
                         for (int j = 0; j < yCardDim; j++) {
                             myHand[y + j][x] = "        ";
