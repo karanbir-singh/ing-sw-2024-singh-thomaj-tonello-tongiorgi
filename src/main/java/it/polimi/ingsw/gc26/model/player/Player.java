@@ -78,6 +78,7 @@ public class Player implements Serializable {
 
     /**
      * This method set the observable
+     *
      * @param observable
      */
     public void setObservable(ModelObservable observable) {
@@ -105,35 +106,22 @@ public class Player implements Serializable {
     /**
      * Sets the pawn color to the chosen one
      *
-     * @param color new pawn color
+     * @param pawn player's pawn
      */
-    public boolean setPawn(String color, ArrayList<Pawn> availableColors, String clientID) {
-        Pawn pawn;
-        boolean result = false;
-        switch (color) {
-            case "BLUE" -> pawn = Pawn.BLUE;
-            case "RED" -> pawn = Pawn.RED;
-            case "YELLOW" -> pawn = Pawn.YELLOW;
-            case "GREEN" -> pawn = Pawn.GREEN;
-            default -> pawn = null;
-        }
+    public void setPawn(Pawn pawn, String clientID) {
+        this.pawnColor = pawn;
 
-        if (pawn == null) {
-            // TODO gestire cosa fare nella view quando l'utente passa un colore non corretto
-            this.observable.notifyError("Color not available!", clientID);
-        } else if (!availableColors.contains(pawn)) {
-            // TODO gestire cosa fare nella view quando l'utente passa un colore non disponibile
-            this.observable.notifyError("Color not available!", clientID);
-        } else {
-            availableColors.remove(pawn);
-            this.pawnColor = pawn;
-            result = true;
-            this.observable.notifyUpdatePlayer(
-                    new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
-                    "Colore preso!",
-                    clientID);
-        }
-        return result;
+        // Notify client
+        this.observable.notifyUpdatePlayer(
+                new SimplifiedPlayer(
+                        ID,
+                        nickname,
+                        pawnColor,
+                        amIFirstPlayer,
+                        state
+                ),
+                STR."Colore \{pawn.toString()} impostato",
+                clientID);
     }
 
     /**
@@ -252,14 +240,14 @@ public class Player implements Serializable {
         String background = "▒";
         String fill = "█";
 
-        if(pawnColor != null){
+        if (pawnColor != null) {
             s.append(pawnColor.getFontColor());
         }
 
-        for (i=0; i<score; i++){
+        for (i = 0; i < score; i++) {
             s.append(fill);
         }
-        while (i<29){
+        while (i < 29) {
             s.append(background);
             i++;
         }
@@ -270,7 +258,7 @@ public class Player implements Serializable {
     }
 
     public String[][] printableHandAndMission() {
-        if(personalBoard.getSecretMission() == null){
+        if (personalBoard.getSecretMission() == null) {
             return new String[0][0];
         }
         String[][] hand = this.hand.printableHand();
@@ -284,14 +272,14 @@ public class Player implements Serializable {
         String[][] handAndMission = new String[yDim][xDim];
 
 
-        for(int i=0; i<handAndMission.length; i++){
-            for(int j=0; j<handAndMission[0].length; j++){
+        for (int i = 0; i < handAndMission.length; i++) {
+            for (int j = 0; j < handAndMission[0].length; j++) {
                 handAndMission[i][j] = " ";
             }
         }
 
-        printer.addPrintable(hand, handAndMission, 0,0);
-        for(int i=0; i<yDim-1; i++){
+        printer.addPrintable(hand, handAndMission, 0, 0);
+        for (int i = 0; i < yDim - 1; i++) {
             handAndMission[i][xSeparator] = "||      ";
         }
         handAndMission[0][hand[0].length] = "        Your Secret Mission: ";
