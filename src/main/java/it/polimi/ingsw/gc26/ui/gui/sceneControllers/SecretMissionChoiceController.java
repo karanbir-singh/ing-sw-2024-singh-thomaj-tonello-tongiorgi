@@ -1,6 +1,5 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
-import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -72,6 +71,7 @@ public class SecretMissionChoiceController extends GenericController{
             //this.handCard0.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(0).getFront().getImagePath()))));
             //this.handCard1.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(1).getFront().getImagePath()))));
             //this.handCard2.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(2).getFront().getImagePath()))));
+
 
             this.cardHBox.getChildren().setAll(
                     new ImageView(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(0).getFront().getImagePath())))),
