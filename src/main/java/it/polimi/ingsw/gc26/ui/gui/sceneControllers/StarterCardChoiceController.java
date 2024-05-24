@@ -23,6 +23,7 @@ public class StarterCardChoiceController extends GenericController{
     public void onClickFlipButton(ActionEvent event){
         try {
             this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
+
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
