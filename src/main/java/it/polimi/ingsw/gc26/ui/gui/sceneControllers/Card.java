@@ -4,24 +4,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Card {
-    ImageView imageView;
     final double width = 150;
     final double height = 98;
 
-
-    private void makeDraggable(){
-
-    }
-    private void clip(){
-
-    }
-
-    public ImageView getImageView() {
+    public ImageView getImageView(Image image, boolean isDraggable) {
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(this.width);
+        imageView.setFitHeight(this.height);
         return imageView;
     }
-    public void setImageView(Image image){
-        this.imageView.setImage(image);
-    }
+
+
 
 
 }

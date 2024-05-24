@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.ImagePattern;
 
 import java.rmi.RemoteException;
 
@@ -72,16 +73,14 @@ public class SecretMissionChoiceController extends GenericController{
             //this.handCard1.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(1).getFront().getImagePath()))));
             //this.handCard2.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(2).getFront().getImagePath()))));
 
+            ImageView imageView7 = new Card().getImageView(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(0).getFront().getImagePath()))), false);
+            ImageView imageView1 = new Card().getImageView(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(1).getFront().getImagePath()))), false);
+            ImageView imageView2 = new Card().getImageView(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(2).getFront().getImagePath()))), false);
 
             this.cardHBox.getChildren().setAll(
-                    new ImageView(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(0).getFront().getImagePath())))),
-                    new ImageView(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(1).getFront().getImagePath())))),
-                    new ImageView(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(2).getFront().getImagePath()))))
+                    imageView7,imageView1,imageView2
             );
 
-            /*this.handCard0.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(0).getFront().getImagePath()))));
-            this.handCard1.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(1).getFront().getImagePath()))));
-            this.handCard2.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(2).getFront().getImagePath()))));*/
         }
     }
 
