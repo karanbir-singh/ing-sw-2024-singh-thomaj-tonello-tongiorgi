@@ -82,7 +82,8 @@ public class TUIUpdate implements UpdateInterface {
         clearConsole();
         cli = new CLI(miniModel);
         try {
-            cli.printGame();
+            //cli.printGame();
+            System.out.println("Received update other personal board");
         } catch (Exception e) {
             System.out.println("err");
         }
