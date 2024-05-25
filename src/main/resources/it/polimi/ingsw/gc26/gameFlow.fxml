@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -65,28 +64,14 @@
                                 </TilePane>
                             </children>
                         </VBox>
-                        <ScrollPane hbarPolicy="NEVER" maxHeight="331.0" maxWidth="642.0" pannable="true" prefHeight="331.0" prefWidth="642.0" vbarPolicy="NEVER">
+                        <ScrollPane hbarPolicy="NEVER" hvalue="0.5" maxHeight="331.0" maxWidth="642.0" minHeight="331.0" minWidth="642.0" pannable="true" prefHeight="331.0" prefWidth="642.0" vbarPolicy="NEVER" vvalue="0.5">
                             <content>
-                                <AnchorPane fx:id="personalBoardPane" minHeight="0.0" minWidth="0.0">
+                                <AnchorPane fx:id="personalBoardPane" cacheShape="false" maxHeight="5000.0" maxWidth="9000.0" minHeight="5000.0" minWidth="9000.0" prefHeight="5000.0" prefWidth="9000.0">
                                     <children>
-                              <GridPane fx:id="gridPane" alignment="CENTER" gridLinesVisible="true" maxHeight="2000.0" maxWidth="2000.0" prefHeight="316.0" prefWidth="642.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <GridPane fx:id="gridPane" alignment="CENTER" gridLinesVisible="true" layoutX="-94.66666666666667" layoutY="-104.66666666666667" maxHeight="5000.0" maxWidth="9000.0" minHeight="5000.0" minWidth="9000.0" prefHeight="5000.0" prefWidth="9000.0">
                                 <columnConstraints>
-                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="115.0" minWidth="115.0" prefWidth="115.0" />
-                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="115.0" minWidth="115.0" prefWidth="115.0" />
-                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="115.0" minWidth="115.0" prefWidth="115.0" />
+                                    <ColumnConstraints />
                                 </columnConstraints>
-                                <rowConstraints>
-                                    <RowConstraints maxHeight="60.0" minHeight="60.0" prefHeight="60.0" valignment="CENTER" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="60.0" minHeight="60.0" prefHeight="60.0" valignment="CENTER" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="60.0" minHeight="60.0" prefHeight="60.0" valignment="CENTER" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <ImageView fx:id="starterCard" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                                       <image>
-                                          <Image url="@../../../../images/backSide/img_10.jpeg" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
                               </GridPane>
                                     </children>
                                 </AnchorPane>
