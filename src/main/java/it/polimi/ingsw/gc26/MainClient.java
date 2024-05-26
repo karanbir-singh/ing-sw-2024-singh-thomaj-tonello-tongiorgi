@@ -16,6 +16,7 @@ import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.io.*;
 import java.net.Socket;
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -87,6 +88,14 @@ public class MainClient {
      * Attribute used for synchronize actions between server and client
      */
     public final Object lock;
+
+    public static String asciiCodexNaturalis = "\n" +
+            "░█████╗░░█████╗░██████╗░███████╗██╗░░██╗  ███╗░░██╗░█████╗░████████╗██╗░░░██╗██████╗░░█████╗░██╗░░░░░██╗░██████╗\n" +
+            "██╔══██╗██╔══██╗██╔══██╗██╔════╝╚██╗██╔╝  ████╗░██║██╔══██╗╚══██╔══╝██║░░░██║██╔══██╗██╔══██╗██║░░░░░██║██╔════╝\n" +
+            "██║░░╚═╝██║░░██║██║░░██║█████╗░░░╚███╔╝░  ██╔██╗██║███████║░░░██║░░░██║░░░██║██████╔╝███████║██║░░░░░██║╚█████╗░\n" +
+            "██║░░██╗██║░░██║██║░░██║██╔══╝░░░██╔██╗░  ██║╚████║██╔══██║░░░██║░░░██║░░░██║██╔══██╗██╔══██║██║░░░░░██║░╚═══██╗\n" +
+            "╚█████╔╝╚█████╔╝██████╔╝███████╗██╔╝╚██╗  ██║░╚███║██║░░██║░░░██║░░░╚██████╔╝██║░░██║██║░░██║███████╗██║██████╔╝\n" +
+            "░╚════╝░░╚════╝░╚═════╝░╚══════╝╚═╝░░╚═╝  ╚═╝░░╚══╝╚═╝░░╚═╝░░░╚═╝░░░░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝╚═════╝░";
 
 
     public MainClient() {
@@ -192,6 +201,10 @@ public class MainClient {
 
 
     public static void main(String args[]) throws NotBoundException, IOException {
+        // print logo
+        System.out.println(asciiCodexNaturalis + "\n" +
+                "");
+
         // Get server IP and port
         Scanner scanner = new Scanner(System.in);
 
@@ -252,9 +265,15 @@ public class MainClient {
         MainClient mainClient = new MainClient();
 
         // Get remote object
-        Remote remoteObject = registry.lookup(remoteObjectName);
-        mainClient.setVirtualMainController((VirtualMainController) remoteObject);
-        mainClient.setVirtualView(new VirtualRMIView(mainClient.getViewController()));
+        try {
+            Remote remoteObject = registry.lookup(remoteObjectName);
+            mainClient.setVirtualMainController((VirtualMainController) remoteObject);
+            mainClient.setVirtualView(new VirtualRMIView(mainClient.getViewController()));
+        } catch (ConnectException ex) {
+            System.out.println("Server is down!");
+            System.exit(0);
+        }
+
 
         return mainClient;
     }

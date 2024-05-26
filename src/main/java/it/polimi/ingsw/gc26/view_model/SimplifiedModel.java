@@ -3,6 +3,8 @@ package it.polimi.ingsw.gc26.view_model;
 import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 
+import javax.swing.text.View;
+
 public class SimplifiedModel {
     private SimplifiedGame simplifiedGame;
     private SimplifiedCommonTable simplifiedCommonTable;
@@ -54,8 +56,10 @@ public class SimplifiedModel {
 
     public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) {
         this.otherPersonalBoard = otherPersonalBoard;
-        this.view.updateViewOtherPersonalBoard(otherPersonalBoard);
-        this.view.showMessage(message);
+        //this.view.updateViewOtherPersonalBoard(otherPersonalBoard); todo only when client requires it
+
+        //
+        // this.view.showMessage(message);
     }
 
     public void setSimplifiedChat(SimplifiedChat simplifiedChat, String message) {
@@ -103,5 +107,9 @@ public class SimplifiedModel {
 
     public SimplifiedChat getSimplifiedChat() {
         return simplifiedChat;
+    }
+
+    public UpdateInterface getView() {
+        return view;
     }
 }

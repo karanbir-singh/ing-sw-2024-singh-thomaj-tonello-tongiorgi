@@ -33,7 +33,7 @@ public class Chat implements Serializable {
      * Returns all messages in the server
      * @return messages
      */
-    public ArrayList<Message> getChat(){
+    public ArrayList<Message> getMessages(){
         return this.messages;
     }
 
@@ -43,7 +43,7 @@ public class Chat implements Serializable {
      */
     public void addMessage(Message message){
         messages.add(message);
-        this.observable.notifyUpdateChat(new SimplifiedChat(filterMessages(message.getReceiver())), "New message in chat!");
+        this.observable.notifyUpdateChat(this, "New message in chat!");
     }
 
     /**
@@ -51,14 +51,14 @@ public class Chat implements Serializable {
      * @param receiverPlayer the player that receives the message
      * @return arrayList containing the messages for the player
      */
-    public ArrayList<Message> filterMessages(Player receiverPlayer){
+    public ArrayList<Message> filterMessages(String playerID){
         ArrayList<Message> copy = new ArrayList<>();
         for(Message m : this.messages){
-            if (receiverPlayer != null) {
-                if (m.getReceiver().equals(receiverPlayer)) {
+            if (playerID!= null) {
+                if (m.getReceiver() == null || (m.getReceiver() != null && m.getReceiver().getID().equals(playerID))) {
                     copy.add(m);
                 }
-                if (m.getSender().equals(receiverPlayer)) {
+                if (m.getSender().getID().equals(playerID)) {
                     copy.add(m);
                 }
             } else {

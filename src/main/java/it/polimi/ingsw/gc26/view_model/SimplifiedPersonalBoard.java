@@ -21,8 +21,9 @@ public class SimplifiedPersonalBoard implements Serializable {
     private final Map<Symbol, Integer> visibleResources;
     private int selectedX = 0;
     private int selectedY = 0;
+    private String nickname;
 
-    public SimplifiedPersonalBoard(int xMin, int xMax, int yMax, int yMin, int score, ArrayList<Point> occupiedPositions, ArrayList<Point> playablePositions, ArrayList<Point> blockedPositions, Card secretMission, Map<Symbol, Integer> visibleResources, int selectedX, int selectedY) {
+    public SimplifiedPersonalBoard(int xMin, int xMax, int yMax, int yMin, int score, ArrayList<Point> occupiedPositions, ArrayList<Point> playablePositions, ArrayList<Point> blockedPositions, Card secretMission, Map<Symbol, Integer> visibleResources, int selectedX, int selectedY, String nickname) {
         this.xMin = xMin;
         this.xMax = xMax;
         this.yMax = yMax;
@@ -35,9 +36,10 @@ public class SimplifiedPersonalBoard implements Serializable {
         this.visibleResources = visibleResources;
         this.selectedX = selectedX;
         this.selectedY = selectedY;
+        this.nickname = nickname;
     }
 
-    public SimplifiedPersonalBoard(PersonalBoard personalBoard) {
+    public SimplifiedPersonalBoard(PersonalBoard personalBoard, String nickname) {
         this.xMin = personalBoard.getxMin();
         this.xMax = personalBoard.getxMax();
         this.yMax = personalBoard.getyMax();
@@ -50,6 +52,7 @@ public class SimplifiedPersonalBoard implements Serializable {
         this.visibleResources = personalBoard.getResources();
         this.selectedX = personalBoard.getSelectedX();
         this.selectedY = personalBoard.getSelectedY();
+        this.nickname = nickname;
     }
 
     public int getxMin() {
@@ -98,5 +101,9 @@ public class SimplifiedPersonalBoard implements Serializable {
 
     public int getSelectedY() {
         return selectedY;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 }

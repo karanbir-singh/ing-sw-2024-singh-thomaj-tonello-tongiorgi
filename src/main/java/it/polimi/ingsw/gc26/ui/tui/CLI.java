@@ -118,6 +118,100 @@ public class CLI {
         showPrintable(printableGame);
     }
 
+    public void printOtherGame(String nickname) {
+        //SimplifiedCommonTable simplifiedCommonTable = miniModel.getSimplifiedCommonTable();
+        SimplifiedPersonalBoard personalBoard = miniModel.getOtherPersonalBoard();
+
+        //COMMON TABLE: check if missions are already present
+//        String[][] commonTablePrint;
+//        if(simplifiedCommonTable.getCommonMissions().isEmpty()){
+//            commonTablePrint = printableCommonTable();
+//        } else {
+//            commonTablePrint = printableCommonTableAndMissions();
+//        }
+
+        //SCORES
+        //TODO aggiungere gli score
+        String[][] scores;
+        //if(miniModel.getSimplifiedGame().getGameState() == GameState.GAME_STARTED ||
+        //      miniModel.getSimplifiedGame().getGameState() == GameState.END_STAGE){
+        //scores = printableScores();
+        //} else {
+        scores = new String[1][1];
+        scores[0][0] = "\t";
+        //}
+
+        //PERSONAL BOARD
+        String[][] personalBoardPrint;
+        if(miniModel.getOtherPersonalBoard() != null){
+            personalBoardPrint = printablePersonalBoard(miniModel.getOtherPersonalBoard());
+        } else {
+            personalBoardPrint = new String[1][1];
+            personalBoardPrint[0][0] = "\t";
+        }
+
+        //HAND: check if secret mission is already present
+//        String[][] handPrint;
+//        if(miniModel.getSimplifiedHand() != null) {
+//            if(miniModel.getOtherPersonalBoard() != null && miniModel.getOtherPersonalBoard().getSecretMission() != null) {
+//                handPrint = printableHandAndMission();
+//            } else {
+//                handPrint = printableHand();
+//            }
+//        } else {
+//            handPrint = new String[1][1];
+//            handPrint[0][0] = "\t";
+//        }
+
+//        //SECRET HAND
+//        String[][] secretHand;
+//        if(miniModel.getSimplifiedGame().getGameState() == GameState.WAITING_SECRET_MISSION_CHOICE && miniModel.getSimplifiedSecretHand().getCards().size() == 2) {
+//            secretHand = printableSecretHand();
+//        } else {
+//            secretHand = new String[1][1];
+//            secretHand[0][0] = "\t";
+//        }
+
+        //calculate dimensions
+        int yDim =  personalBoardPrint.length  + 2;
+        int xDim = Math.max( scores[0].length + 1, personalBoardPrint[0].length);
+
+        //utils
+        int y=0;
+
+        //initialize empty matrix
+        String[][] printableGame = new String[yDim][xDim];
+        for(int i=0; i<yDim; i++){
+            for(int j=0; j<xDim; j++){
+                printableGame[i][j] = "\t";
+            }
+        }
+
+        //DESIGN THE MATRIX
+        //show common table
+//        printableGame[y][0] = "COMMON TABLE:";
+//        y++;
+//        addPrintable(commonTablePrint, printableGame, 0, y);
+
+        //show scores
+
+//        addPrintable(scores, printableGame, commonTablePrint[0].length + 1, y + 1);
+//        y += commonTablePrint.length;
+
+        //show personal board
+        addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
+        y += personalBoardPrint.length;
+
+//        //show player's hand
+//        addPrintable(handPrint, printableGame, 0, y);
+//        y += handPrint.length;
+//
+//        //show secret hand
+//        addPrintable(secretHand, printableGame, 0, y);
+
+        showPrintable(printableGame);
+    }
+
     public String[][] printableScores() {
         //dimensions
         int xDim = 2;

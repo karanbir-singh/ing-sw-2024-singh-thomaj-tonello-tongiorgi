@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.ui.tui;
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.game.GameState;
+import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.ui.UIInterface;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TUIApplication implements UIInterface {
@@ -151,7 +153,6 @@ public class TUIApplication implements UIInterface {
             }
             switch (gameState) {
                 case WAITING_STARTER_CARD_PLACEMENT:
-                    //TODO turn card
                     switch (option) {
                         case 1:
                             mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
@@ -160,15 +161,7 @@ public class TUIApplication implements UIInterface {
                             mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
                             break;
                         case 3:
-                            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
-                            String receiverNickname = new Scanner(System.in).nextLine();
-                            String message;
-                            do {
-                                System.out.println("Insert message: ");
-                                message = new Scanner(System.in).nextLine();
-                            } while (message.isEmpty());
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                            openChat();
                             break;
                         case 4:
                             System.exit(0);
@@ -183,15 +176,7 @@ public class TUIApplication implements UIInterface {
                             mainClient.getVirtualGameController().choosePawnColor(color, this.mainClient.getClientID());
                             break;
                         case 2:
-                            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
-                            String receiverNickname = new Scanner(System.in).nextLine();
-                            String message;
-                            do {
-                                System.out.println("Insert message: ");
-                                message = new Scanner(System.in).nextLine();
-                            } while (message.isEmpty());
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                            openChat();
                             break;
                         case 3:
                             System.exit(0);
@@ -211,15 +196,7 @@ public class TUIApplication implements UIInterface {
                             mainClient.getVirtualGameController().setSecretMission(this.mainClient.getClientID());
                             break;
                         case 3:
-                            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
-                            String receiverNickname = new Scanner(System.in).nextLine();
-                            String message;
-                            do {
-                                System.out.println("Insert message: ");
-                                message = new Scanner(System.in).nextLine();
-                            } while (message.isEmpty());
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                            openChat();
                             break;
                         case 4:
                             System.exit(0);
@@ -262,18 +239,14 @@ public class TUIApplication implements UIInterface {
                         case 7:
                             System.out.println("Insert the player's nickname owner of the board: ");
                             String playerNickname = new Scanner(System.in).nextLine();
+                            if (mainClient.getViewController().getSimplifiedModel().getOtherPersonalBoard().getNickname().equals(playerNickname)) {
+                                mainClient.getViewController().getSimplifiedModel().getView().updateViewOtherPersonalBoard(mainClient.getViewController().getSimplifiedModel().getOtherPersonalBoard());
+                                break;
+                            }
                             mainClient.getVirtualGameController().printPersonalBoard(playerNickname, this.mainClient.getClientID());
                             break;
                         case 8:
-                            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
-                            String receiverNickname = scan.nextLine();
-                            String message;
-                            do {
-                                System.out.println("Insert message: ");
-                                message = new Scanner(System.in).nextLine();
-                            } while (message.isEmpty());
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                            openChat();
                             break;
                         case 9:
                             System.exit(0);
@@ -283,15 +256,7 @@ public class TUIApplication implements UIInterface {
                 case END_STAGE:
                     switch (option) {
                         case 1:
-                            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
-                            String receiverNickname = new Scanner(System.in).nextLine();
-                            String message;
-                            do {
-                                System.out.println("Insert message: ");
-                                message = new Scanner(System.in).nextLine();
-                            } while (message.isEmpty());
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                            openChat();
                             break;
                         case 2:
                             System.exit(0);
@@ -303,5 +268,42 @@ public class TUIApplication implements UIInterface {
                     break;
             }
         }
+    }
+
+    private void openChat() throws RemoteException {
+        int function = 0;
+        do {
+            System.out.println("1) Open Chat.\n" +
+                    "2) Send new message.");
+            try {
+                function = Integer.parseInt( new Scanner(System.in).nextLine());
+            } catch (Exception ex) {
+                // pass
+            }
+        } while (function != 1 && function != 2);
+
+        if (function == 1) {
+            System.out.println("Insert the player's nickname to filter the messages: (Press enter for a all messages)");
+            String playerNickname = new Scanner(System.in).nextLine();
+            ArrayList<String> playersNicknames = this.mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getPlayersNicknames();
+            if ( mainClient.getViewController().getSimplifiedModel().getSimplifiedChat() == null) {
+                System.out.println("No messages!");
+                return;
+            }
+            for (Message message : mainClient.getViewController().getSimplifiedModel().getSimplifiedChat().filterMessagesByPlayer(playerNickname, playersNicknames)) {
+                System.out.println(message);
+            }
+        } else {
+            System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
+            String receiverNickname = new Scanner(System.in).nextLine();
+            String message;
+            do {
+                System.out.println("Insert message: ");
+                message = new Scanner(System.in).nextLine();
+            } while (message.isEmpty());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+        }
+
     }
 }

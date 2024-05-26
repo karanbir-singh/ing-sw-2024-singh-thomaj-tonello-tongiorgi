@@ -165,7 +165,9 @@ public class SocketServerHandler implements Runnable {
         for (JsonNode pawn : encodedGame.get("availablePawns")) {
             availablePawns.add(Pawn.valueOf(pawn.asText()));
         }
-        return new SimplifiedGame(gameState, currentPlayer, scores, winners, availablePawns);
+        // pawns already selected //TODO
+        HashMap<String, Pawn> pawnsSelected = new HashMap<>();
+        return new SimplifiedGame(gameState, currentPlayer, scores, winners, availablePawns, pawnsSelected);
     }
 
     public SimplifiedCommonTable buildSimplifiedCommonTable(JsonNode encodedTable) {
@@ -338,10 +340,11 @@ public class SocketServerHandler implements Runnable {
             visibleResources.put(Symbol.valueOf(entry.getKey()), entry.getValue().asInt());
         }
 
+        // TODO nickname
         return new SimplifiedPersonalBoard(encodedBoard.get("xMin").asInt(),
                 encodedBoard.get("xMax").asInt(), encodedBoard.get("yMax").asInt(), encodedBoard.get("yMin").asInt(),
                 encodedBoard.get("score").asInt(), occupiedPositions, playablePositions, blockedPositions, secretMission,
-                visibleResources, encodedBoard.get("selectedX").asInt(), encodedBoard.get("selectedY").asInt());
+                visibleResources, encodedBoard.get("selectedX").asInt(), encodedBoard.get("selectedY").asInt(), null);
     }
 
     private SimplifiedPlayer buildSimplifiedPlayer(JsonNode encodedPlayer) {
