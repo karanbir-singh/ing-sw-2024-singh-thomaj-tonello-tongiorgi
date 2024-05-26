@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.effect.Glow?>
@@ -10,6 +11,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -39,7 +41,7 @@
                                 </Label>
                                 <TilePane alignment="CENTER" hgap="20.0" prefHeight="278.0" prefWidth="556.0" scaleShape="false" vgap="20.0">
                                     <children>
-                                        <ImageView fx:id="resourceCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                        <ImageView fx:id="resourceCard0" fitHeight="98.0" fitWidth="150.0" onMouseClicked="#onClickCommonTableResourceCard0" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                         </ImageView>
                                         <ImageView fx:id="resourceCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
@@ -66,26 +68,29 @@
                         </VBox>
                         <ScrollPane hbarPolicy="NEVER" hvalue="0.5" maxHeight="331.0" maxWidth="642.0" minHeight="331.0" minWidth="642.0" pannable="true" prefHeight="331.0" prefWidth="642.0" vbarPolicy="NEVER" vvalue="0.5">
                             <content>
-                                <AnchorPane fx:id="personalBoardPane" cacheShape="false" maxHeight="5000.0" maxWidth="9000.0" minHeight="5000.0" minWidth="9000.0" prefHeight="5000.0" prefWidth="9000.0">
-                                    <children>
-                              <GridPane fx:id="gridPane" alignment="CENTER" gridLinesVisible="true" layoutX="-94.66666666666667" layoutY="-104.66666666666667" maxHeight="5000.0" maxWidth="9000.0" minHeight="5000.0" minWidth="9000.0" prefHeight="5000.0" prefWidth="9000.0">
+                                <AnchorPane fx:id="personalBoardPane" cacheShape="false" maxHeight="400.0" maxWidth="640.0" minHeight="314.0" minWidth="400.0" prefHeight="314.0" prefWidth="640.0">
+                           <children>
+                              <GridPane fx:id="gridPane">
                                 <columnConstraints>
-                                    <ColumnConstraints />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
                               </GridPane>
-                                    </children>
+                           </children>
                                 </AnchorPane>
                             </content>
                         </ScrollPane>
                         <TilePane alignment="CENTER" hgap="20.0" prefHeight="108.0" prefWidth="544.0">
                             <children>
-                                <ImageView fx:id="handCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                <ImageView fx:id="handCard0" fitHeight="98.0" fitWidth="150.0" onMouseClicked="#onClickMouseFirstHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                 </ImageView>
-                                <ImageView fx:id="handCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                <ImageView fx:id="handCard1" fitHeight="98.0" fitWidth="150.0" onMouseClicked="#onClickMouseSecondHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                 </ImageView>
-                                <ImageView fx:id="handCard2" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                <ImageView fx:id="handCard2" fitHeight="98.0" fitWidth="150.0" onMouseClicked="#onClickMouseThirdHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                 </ImageView>
                             </children>
@@ -119,6 +124,8 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
         </VBox>
+      <Button fx:id="turnSideButton" layoutX="100.0" layoutY="650.0" mnemonicParsing="false" onAction="#onClickTurnSideButton" text="TurnSide" />
+      <Button fx:id="drawCardButton" layoutX="200.0" layoutY="650.0" mnemonicParsing="false" onAction="#onClickDrawCardButton" text="DrawCard" />
     </children>
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
