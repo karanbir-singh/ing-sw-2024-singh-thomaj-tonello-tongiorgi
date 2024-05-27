@@ -77,8 +77,6 @@ public class GameFlowController extends GenericController implements Initializab
     private Button drawCardButton;
 
 
-    private int selectedHandCard;
-
     private String path = "/images/";
     private ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
     private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
@@ -104,7 +102,6 @@ public class GameFlowController extends GenericController implements Initializab
     //azioni per la mano
     public void onClickMouseFirstHandCard(javafx.scene.input.MouseEvent mouseEvent){
         try {
-            this.selectedHandCard = 0;
             this.mainClient.getVirtualGameController().selectCardFromHand(0,this.mainClient.getClientID());
         } catch (RemoteException e) {
             throw new RuntimeException(e);
@@ -113,7 +110,6 @@ public class GameFlowController extends GenericController implements Initializab
 
     public void onClickMouseSecondHandCard(javafx.scene.input.MouseEvent mouseEvent){
         try {
-            this.selectedHandCard = 1;
             this.mainClient.getVirtualGameController().selectCardFromHand(1,this.mainClient.getClientID());
         } catch (RemoteException e) {
             throw new RuntimeException(e);
@@ -121,7 +117,6 @@ public class GameFlowController extends GenericController implements Initializab
     }
     public void onClickMouseThirdHandCard(javafx.scene.input.MouseEvent mouseEvent){
         try {
-            this.selectedHandCard = 2;
             this.mainClient.getVirtualGameController().selectCardFromHand(2,this.mainClient.getClientID());
         } catch (RemoteException e) {
             throw new RuntimeException(e);
@@ -147,15 +142,7 @@ public class GameFlowController extends GenericController implements Initializab
             int column = toIndex(GridPane.getColumnIndex(node));
             System.out.println("image clicked at " + row + " " + column);
             //da inserire
-            if(this.selectedHandCard == 0){
-                this.handCard0.setVisible(false);
-            }
-            if(this.selectedHandCard == 1){
-                this.handCard1.setVisible(false);
-            }
-            if(this.selectedHandCard == 2){
-                this.handCard2.setVisible(false);
-            }
+
             this.mainClient.getVirtualGameController().selectPositionOnBoard(column-xPositionStarterCard,yPositionStarterCard-row,this.mainClient.getClientID());
             this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
         } catch (RemoteException e) {
@@ -251,6 +238,11 @@ public class GameFlowController extends GenericController implements Initializab
         //le righe sotto servono perchè quando un player gioca una carta dalla mano non si deve più vedere quella carta
 
 
+        if(simplifiedHand.getCards().size() == 2){
+            this.handCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(0).getFront().getImagePath()))));
+            this.handCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(1).getFront().getImagePath()))));
+            this.handCard2.setVisible(false);
+        }
     }
 
     @Override
