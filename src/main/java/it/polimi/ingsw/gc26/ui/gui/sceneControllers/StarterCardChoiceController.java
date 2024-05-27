@@ -35,6 +35,8 @@ public class StarterCardChoiceController extends GenericController implements In
     @FXML
     Label status;
 
+
+    String path = "/images/";
     public void onClickFlipButton(ActionEvent event){
         try {
             this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
@@ -57,7 +59,7 @@ public class StarterCardChoiceController extends GenericController implements In
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
         if(simplifiedHand.getSelectedSide() != null){
-            this.image.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getSelectedSide().getImagePath()))));
+            this.image.setImage(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getSelectedSide().getImagePath()))));
             //System.out.println("HA CAMBIATO LA GUI");
         }
 

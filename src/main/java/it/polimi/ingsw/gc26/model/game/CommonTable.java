@@ -120,6 +120,7 @@ public class CommonTable implements Serializable {
                 return;
         }
         this.observable.notifyMessage("Card selected on common table", clientID);
+        //this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(),"Card selected on common table");
         // TODO replace notify with update Common Table
     }
 
@@ -132,6 +133,8 @@ public class CommonTable implements Serializable {
      */
     public void addCard(Card card, ArrayList<Card> list, int index) {
         list.add(index, card);
+        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(this.resourceDeck.getTopCard(),
+                this.goldDeck.getTopCard(),this.commonMissions,this.resourceCards, this.goldCards),"added card to commonBoard");
     }
 
     /**

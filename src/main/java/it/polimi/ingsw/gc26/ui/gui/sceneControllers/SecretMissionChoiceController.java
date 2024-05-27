@@ -11,11 +11,11 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 
-import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
@@ -46,6 +46,7 @@ public class SecretMissionChoiceController extends GenericController implements 
     @FXML
     ImageView secretMission1;
 
+    String path = "/images/";
 
     public void onClickSecretMission0(){
         try {
@@ -78,9 +79,9 @@ public class SecretMissionChoiceController extends GenericController implements 
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
         if(simplifiedHand.getCards().size() >= 3){
-            this.handCard0.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(0).getFront().getImagePath()))));
-            this.handCard1.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(1).getFront().getImagePath()))));
-            this.handCard2.setImage(new Image(String.valueOf(getClass().getResource("/images/"+ simplifiedHand.getCards().get(2).getFront().getImagePath()))));
+            this.handCard0.setImage(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getCards().get(0).getFront().getImagePath()))));
+            this.handCard1.setImage(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getCards().get(1).getFront().getImagePath()))));
+            this.handCard2.setImage(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getCards().get(2).getFront().getImagePath()))));
 
 
 
@@ -91,8 +92,8 @@ public class SecretMissionChoiceController extends GenericController implements 
     @Override
     public void changeGUISecretHand(SimplifiedHand simplifiedSecretHand) {
         if(simplifiedSecretHand.getCards().size() >= 2) {
-            this.secretMission0.setImage(new Image(String.valueOf(getClass().getResource("/images/" + simplifiedSecretHand.getCards().get(0).getFront().getImagePath()))));
-            this.secretMission1.setImage(new Image(String.valueOf(getClass().getResource("/images/" + simplifiedSecretHand.getCards().get(1).getFront().getImagePath()))));
+            this.secretMission0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedSecretHand.getCards().get(0).getFront().getImagePath()))));
+            this.secretMission1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedSecretHand.getCards().get(1).getFront().getImagePath()))));
 
 
         }
