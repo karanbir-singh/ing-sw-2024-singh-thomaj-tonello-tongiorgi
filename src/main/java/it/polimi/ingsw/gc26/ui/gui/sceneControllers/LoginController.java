@@ -2,10 +2,15 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
+import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ResourceBundle;
 
 public class LoginController extends GenericController{
 
@@ -35,4 +40,5 @@ public class LoginController extends GenericController{
         }
 
     }
+
 }

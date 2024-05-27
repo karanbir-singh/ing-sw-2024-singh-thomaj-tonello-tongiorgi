@@ -7,9 +7,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 
 import java.awt.event.MouseEvent;
@@ -18,7 +21,6 @@ import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 public class SecretMissionChoiceController extends GenericController implements Initializable {
-
 
     @FXML
     Label status;
