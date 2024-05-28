@@ -12,23 +12,23 @@ public class SimplifiedPlayer implements Serializable {
     /**
      * This attributes represents the player with a unique id
      */
-    private String ID;
+    private final String ID;
     /**
      * This attribute represents the player's name and will be shown to the other players
      */
-    private String nickname;
+    private final String nickname;
     /**
      * This attribute represents the pawn, which represent the player in the board
      */
-    private Pawn pawnColor;
+    private final Pawn pawnColor;
     /**
      * This attribute represent whether the player is the first one
      */
-    private boolean amIFirstPlayer;
+    private final boolean amIFirstPlayer;
     /**
      * This attribute represents the player's state
      */
-    private PlayerState state;
+    private final PlayerState state;
 
     public SimplifiedPlayer(String ID, String nickname, Pawn pawnColor, boolean amIFirstPlayer, PlayerState state) {
         this.ID = ID;

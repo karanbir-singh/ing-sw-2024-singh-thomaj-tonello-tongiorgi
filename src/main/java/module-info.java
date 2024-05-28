@@ -9,7 +9,12 @@ module it.polimi.ingsw.gc26 {
     requires jdk.compiler;
     requires java.management;
 
-
+    exports it.polimi.ingsw.gc26.request.view_request;
+    opens it.polimi.ingsw.gc26.request.view_request to javafx.fxml;
+    exports it.polimi.ingsw.gc26.model.hand;
+    opens it.polimi.ingsw.gc26.model.hand to javafx.fxml;
+    exports it.polimi.ingsw.gc26.model.player;
+    opens it.polimi.ingsw.gc26.model.player to javafx.fxml;
     exports it.polimi.ingsw.gc26.model.game;
     opens it.polimi.ingsw.gc26.model.game to javafx.fxml;
     exports it.polimi.ingsw.gc26.model.card_side;

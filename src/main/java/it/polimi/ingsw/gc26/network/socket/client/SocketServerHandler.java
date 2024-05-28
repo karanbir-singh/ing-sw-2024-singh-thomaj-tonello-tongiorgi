@@ -20,7 +20,6 @@ import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.request.view_request.*;
 import it.polimi.ingsw.gc26.view_model.*;
-import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -40,7 +39,7 @@ public class SocketServerHandler implements Runnable {
     /**
      * This attributes represents the output to the server.
      */
-    private BufferedWriter outputToServer;
+    private final BufferedWriter outputToServer;
 
     /**
      * This attribute represents the clientController

@@ -32,12 +32,12 @@ public class MainController implements Serializable {
     /**
      * This attribute represents the list of players who are waiting for a new game
      */
-    private ArrayList<Player> waitingPlayers;
+    private final ArrayList<Player> waitingPlayers;
 
     /**
      * This attribute represents the list of game controllers of started games and id of that game controller
      */
-    private Map<Integer, GameController> gamesControllers;
+    private final Map<Integer, GameController> gamesControllers;
 
     /**
      * This attribute represents a priority queue of main requests
@@ -137,7 +137,7 @@ public class MainController implements Serializable {
     /**
      * Checks if the given nickname is alreadyUsed
      *
-     * @param nickname
+     * @param nickname nickname of the client
      * @return Returns true if waitingPlayer not contains other players with the given nickname, otherwise false
      */
     private boolean isNicknameValid(String nickname) {
@@ -268,13 +268,9 @@ public class MainController implements Serializable {
                 this.numberOfTotalGames = this.numberOfTotalGames + 1;
 
                 // Then, create a new game controller
-                try {
-                    game = new Game(waitingPlayers, waitingClients);
-                    gameController = new GameController(game, this.numberOfTotalGames);
-                } catch (IOException e) {
-                    System.out.println("COLPA DELLA CREAZIONE GAME CONTROLLER");
-                    e.printStackTrace();
-                }
+                game = new Game(waitingPlayers, waitingClients);
+                gameController = new GameController(game, this.numberOfTotalGames);
+
 
                 // Launch thread for pinging clients
                 this.createSingleGamePingThread(gameController.getGame().getObservable().getClients(), this.numberOfTotalGames);
@@ -283,14 +279,14 @@ public class MainController implements Serializable {
                 gamesControllers.put(numberOfTotalGames, gameController);
 
                 // Update of the view
-                for (VirtualView view : waitingClients) {
+                waitingClients.forEach(view -> {
                     try {
                         view.updateIDGame(numberOfTotalGames);
                         view.updateClientState(ClientState.BEGIN);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                }
+                });
 
                 // Start game
                 gameController.prepareCommonTable();
@@ -439,6 +435,8 @@ public class MainController implements Serializable {
 
 
     /**
+     * Destroy a game controller by its ID
+     *
      * @param gameControllerID ID of the game controller that you want to destroy
      */
     private void destroyGame(int gameControllerID) {
@@ -463,5 +461,14 @@ public class MainController implements Serializable {
             throw new RuntimeException(e);
         }
         System.out.println(STR."Game \{gameControllerID} destroyed");
+    }
+
+    /**
+     * Returns the queue of requests
+     *
+     * @return mainRequests
+     */
+    public PriorityQueue<MainRequest> getMainRequests() {
+        return mainRequests;
     }
 }

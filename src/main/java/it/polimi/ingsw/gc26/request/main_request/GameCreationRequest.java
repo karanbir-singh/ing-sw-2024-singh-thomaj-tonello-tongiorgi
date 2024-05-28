@@ -4,10 +4,10 @@ import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
 public class GameCreationRequest implements MainRequest {
-    private VirtualView client;
-    private String nickname;
-    private int numberOfPlayers;
-    private int priority;
+    private final VirtualView client;
+    private final String nickname;
+    private final int numberOfPlayers;
+    private final int priority;
 
     public GameCreationRequest(VirtualView client, String nickname, int numberOfPlayers, int priority) {
         this.client = client;

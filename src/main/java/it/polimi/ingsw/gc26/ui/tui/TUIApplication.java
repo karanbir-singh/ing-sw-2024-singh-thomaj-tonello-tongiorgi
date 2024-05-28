@@ -1,8 +1,9 @@
 package it.polimi.ingsw.gc26.ui.tui;
 
-import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.ui.UIInterface;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -15,26 +16,41 @@ public class TUIApplication implements UIInterface {
     MainClient mainClient;
 
     @Override
-    public void init(MainClient.NetworkType networkType) throws IOException, NotBoundException {
+    public void init(MainClient.NetworkType networkType) {
         this.start(networkType.toString());
     }
 
-    public void start(String... args) throws NotBoundException, IOException {
+    public void start(String... args) {
         String networkType = args[0];
 
         if (MainClient.NetworkType.valueOf(networkType) == MainClient.NetworkType.rmi) {
-            this.mainClient = MainClient.startRMIClient(MainClient.GraphicType.tui);
+            try {
+                this.mainClient = MainClient.startRMIClient(MainClient.GraphicType.tui);
+            }catch (RemoteException e){
+                ConsoleColors.printError(e.getMessage());
+                System.exit(-1);
+            }
         } else {
-            this.mainClient = MainClient.startSocketClient(MainClient.GraphicType.tui);
+            try {
+                this.mainClient = MainClient.startSocketClient(MainClient.GraphicType.tui);
+            } catch (IOException e) {
+                ConsoleColors.printError(e.getMessage());
+                System.exit(-1);
+            }
         }
 
-        new Thread(() -> {
-            try {
-                this.runConnection();
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
+        try {
+            this.runConnection();
+        } catch (RemoteException e) {
+            ConsoleColors.printError("[ERROR]: unable to communicate with the server");
+            System.exit(-1);
+        }
+
+        try {
+            this.runGame();
+        }catch (RemoteException e){
+
+        }
     }
 
     @Override
@@ -208,8 +224,7 @@ public class TUIApplication implements UIInterface {
 
     private int printOptions() {
         System.out.println("Select your option:");
-        System.out.println("" +
-                "1) Select a card.\n" +
+        System.out.println("1) Select a card.\n" +
                 "2) Turn selected card side.\n" +
                 "3) Play card from hand.\n" +
                 "4) Select position on board.\n" +

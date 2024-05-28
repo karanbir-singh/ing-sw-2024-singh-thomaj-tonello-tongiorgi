@@ -14,6 +14,7 @@ import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
 import it.polimi.ingsw.gc26.ui.gui.GUIUpdate;
 import it.polimi.ingsw.gc26.ui.tui.TUIApplication;
 import it.polimi.ingsw.gc26.ui.tui.TUIUpdate;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.io.*;
@@ -83,13 +84,16 @@ public class MainClient {
     /**
      * Client controller
      */
-    private ViewController viewController;
+    private final ViewController viewController;
 
     /**
      * Attribute used for synchronize actions between server and client
      */
     public final Object lock;
 
+    /**
+     * Server RMI registry
+     */
     private Registry registry;
 
     public MainClient(UpdateInterface view) {
@@ -197,26 +201,34 @@ public class MainClient {
         System.exit(0);
     }
 
-
-    public static void main(String args[]) throws NotBoundException, IOException {
+    public static void main(String[] args) {
         // Get server IP and port
         Scanner scanner = new Scanner(System.in);
 
+        // Insert server IP
         System.out.print("Enter server IP address (default: 127.0.0.1): ");
         String serverIP = scanner.nextLine();
-        if (!serverIP.isEmpty()) {
+        if (serverIP.matches(".*[a-zA-Z]+.*")) {
+            ConsoleColors.printError("[ERROR]: Invalid input -> Set default server IP address");
+        } else if (!serverIP.isEmpty()) {
             SERVER_IP = serverIP;
         }
 
+        // Insert RMI Server port
         System.out.print("Enter server RMI port (default 1099): ");
         String rmiServerPort = scanner.nextLine();
-        if (!rmiServerPort.isEmpty()) {
+        if (rmiServerPort.matches(".*[a-zA-Z]+.*")) {
+            ConsoleColors.printError("[ERROR]: Invalid input -> Set default RMI Server port");
+        } else if (!rmiServerPort.isEmpty()) {
             RMI_SERVER_PORT = Integer.parseInt(rmiServerPort);
         }
 
+        // Insert server socket port
         System.out.print("Enter server socket port (default 3060): ");
         String socketServerPort = scanner.nextLine();
-        if (!socketServerPort.isEmpty()) {
+        if (socketServerPort.matches(".*[a-zA-Z]+.*")) {
+            ConsoleColors.printError("[ERROR]: Invalid input -> Set default Server socket port");
+        } else if (!socketServerPort.isEmpty()) {
             SERVER_SOCKET_PORT = Integer.parseInt(socketServerPort);
         }
 
@@ -226,9 +238,8 @@ public class MainClient {
             System.out.println("What type of communication do you want to use? (rmi/socket)");
             try {
                 networkType = NetworkType.valueOf(scanner.nextLine().toLowerCase());
-
             } catch (IllegalArgumentException e) {
-                System.err.println("[ERROR]: Invalid input");
+                ConsoleColors.printError("[ERROR]: Invalid input");
             }
         } while (networkType == null);
 
@@ -239,7 +250,7 @@ public class MainClient {
             try {
                 graphicType = GraphicType.valueOf(scanner.nextLine().toLowerCase());
             } catch (IllegalArgumentException e) {
-                System.err.println("[ERROR]: Invalid input");
+                ConsoleColors.printError("[ERROR]: Invalid input");
             }
         } while (graphicType == null);
 
@@ -251,9 +262,7 @@ public class MainClient {
         }
     }
 
-    public static MainClient startRMIClient(GraphicType graphicType) throws RemoteException, NotBoundException {
-        // Finding the registry and getting the stub of virtualMainController in the registry
-
+    public static MainClient startRMIClient(GraphicType graphicType) throws RemoteException {
         // Create RMI Client
         MainClient mainClient = null;
 
@@ -264,12 +273,26 @@ public class MainClient {
             mainClient = new MainClient(new GUIUpdate());
         }
 
-        mainClient.registry = LocateRegistry.getRegistry(SERVER_IP, RMI_SERVER_PORT);
+        try {
+            mainClient.registry = LocateRegistry.getRegistry(SERVER_IP, RMI_SERVER_PORT);
+        } catch (RemoteException e) {
+            throw new RemoteException("[ERROR]: unable to find RMI registry");
+        }
 
         // Get remote object
-        Remote remoteObject = mainClient.registry.lookup(remoteObjectName);
+        Remote remoteObject = null;
+        try {
+            remoteObject = mainClient.registry.lookup(remoteObjectName);
+        } catch (RemoteException | NotBoundException e) {
+            throw new RemoteException("[ERROR]: unable to lookup remote object");
+        }
+
         mainClient.setVirtualMainController((VirtualMainController) remoteObject);
-        mainClient.setVirtualView(new VirtualRMIView(mainClient.getViewController()));
+        try {
+            mainClient.setVirtualView(new VirtualRMIView(mainClient.getViewController()));
+        } catch (RemoteException e) {
+            throw new RemoteException("[ERROR]: unable to create virtual RMI view");
+        }
 
         // Launch thread for pinging RMI server
         new Thread(new RMIServerPing(mainClient)).start();
@@ -279,11 +302,22 @@ public class MainClient {
 
     public static MainClient startSocketClient(GraphicType graphicType) throws IOException {
         // Create connection with the server
-        Socket serverSocket = new Socket(SERVER_IP, SERVER_SOCKET_PORT);
+        Socket serverSocket = null;
+        try {
+            serverSocket = new Socket(SERVER_IP, SERVER_SOCKET_PORT);
+        } catch (IOException e) {
+            throw new IOException("[ERROR]: unable to locate server");
+        }
 
         // Get input and out stream from the server
-        InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
-        OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
+        InputStreamReader socketRx;
+        OutputStreamWriter socketTx;
+        try {
+            socketRx = new InputStreamReader(serverSocket.getInputStream());
+            socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
+        } catch (IOException e) {
+            throw new IOException("[ERROR]: unable to get server input and output server");
+        }
 
         // Reader
         BufferedReader socketIn = new BufferedReader(socketRx);

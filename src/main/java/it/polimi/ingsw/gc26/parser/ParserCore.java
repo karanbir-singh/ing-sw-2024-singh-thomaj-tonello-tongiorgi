@@ -1,14 +1,27 @@
 package it.polimi.ingsw.gc26.parser;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.gc26.model.card.GoldCard;
+import it.polimi.ingsw.gc26.model.card.MissionCard;
+import it.polimi.ingsw.gc26.model.card.ResourceCard;
+import it.polimi.ingsw.gc26.model.card.StarterCard;
+import it.polimi.ingsw.gc26.model.card_side.*;
+import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
+import it.polimi.ingsw.gc26.model.card_side.ability.InkwellCounter;
+import it.polimi.ingsw.gc26.model.card_side.ability.ManuscriptCounter;
+import it.polimi.ingsw.gc26.model.card_side.ability.QuillCounter;
+import it.polimi.ingsw.gc26.model.card_side.mission.MissionDiagonalPattern;
+import it.polimi.ingsw.gc26.model.card_side.mission.MissionItemPattern;
+import it.polimi.ingsw.gc26.model.card_side.mission.MissionLPattern;
+import it.polimi.ingsw.gc26.model.card_side.mission.MissionTripletPattern;
+import it.polimi.ingsw.gc26.model.deck.Deck;
+
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
-import it.polimi.ingsw.gc26.model.card.*;
-import it.polimi.ingsw.gc26.model.card_side.*;
-import it.polimi.ingsw.gc26.model.card_side.ability.*;
-import it.polimi.ingsw.gc26.model.card_side.mission.*;
-import it.polimi.ingsw.gc26.model.deck.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class ParserCore {
     /**

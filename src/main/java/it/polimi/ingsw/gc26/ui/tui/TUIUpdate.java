@@ -1,7 +1,7 @@
 package it.polimi.ingsw.gc26.ui.tui;
 
-import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
+import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;

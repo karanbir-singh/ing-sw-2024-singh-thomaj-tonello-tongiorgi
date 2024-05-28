@@ -1,13 +1,13 @@
 package it.polimi.ingsw.gc26.model.game;
-import java.io.FileReader;
-import java.io.Serializable;
-import java.time.LocalTime;
-import java.util.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.model.player.Player;
+
+import java.io.Serializable;
+import java.time.LocalTime;
+import java.util.HashMap;
 
 /**
  * This class represents a message sent by players

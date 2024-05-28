@@ -12,23 +12,23 @@ public class SimplifiedCommonTable implements Serializable {
     /**
      * This attribute represents the resource cards deck
      */
-    private Card resourceDeck;
+    private final Card resourceDeck;
     /**
      * This attribute represents the gold cards deck
      */
-    private Card goldDeck;
+    private final Card goldDeck;
     /**
      * This attribute represents the two common mission that every player has
      */
-    private ArrayList<Card> commonMissions;
+    private final ArrayList<Card> commonMissions;
     /**
      * This attribute represents the two resource cards that are visible on the table
      */
-    private ArrayList<Card> resourceCards;
+    private final ArrayList<Card> resourceCards;
     /**
      * This attribute represents the two gold cards that are visible on the table
      */
-    private ArrayList<Card> goldCards;
+    private final ArrayList<Card> goldCards;
 
     public SimplifiedCommonTable(Card resourceDeck, Card goldDeck, ArrayList<Card> commonMissions, ArrayList<Card> resourceCards, ArrayList<Card> goldCards) {
         this.resourceDeck = resourceDeck;
@@ -113,9 +113,9 @@ public class SimplifiedCommonTable implements Serializable {
             //insert uncovered cards
             if(i<resourceCards.size()){
                 Card r = resourceCards.get(i);
-                printer.addPrintable(r.getFront().printableSide(), ct, xResource, yResource);
+//                printer.addPrintable(r.getFront().printableSide(), ct, xResource, yResource);
             } else {
-                printer.addPrintable(printer.emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
+//                printer.addPrintable(printer.emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
             }
             xResource += xCardDim + 1;
             index++;

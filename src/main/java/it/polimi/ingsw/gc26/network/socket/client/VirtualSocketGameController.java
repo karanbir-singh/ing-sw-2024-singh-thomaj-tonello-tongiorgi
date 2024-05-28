@@ -7,7 +7,6 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
@@ -147,8 +146,7 @@ public class VirtualSocketGameController implements VirtualGameController {
     /**
      * Encodes the parameters to play this function in the real controller.
      *
-     * @param cardX    coordinate X on the common table
-     * @param cardY    coordinate Y on the common table
+     * @param cardIndex position of the selected card on common table
      * @param playerID client's ID
      */
     @Override
