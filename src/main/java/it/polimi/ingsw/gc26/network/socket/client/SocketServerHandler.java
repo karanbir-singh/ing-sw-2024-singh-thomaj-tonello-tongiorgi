@@ -279,9 +279,6 @@ public class SocketServerHandler implements Runnable {
                     new MissionItemPattern(encodedCard.get("type").asInt());
             default -> null;
         };
-        if (missionCardFront == null) {
-            String a = "";
-        }
         return new MissionCard(missionCardFront, new CardBack());
     }
 
