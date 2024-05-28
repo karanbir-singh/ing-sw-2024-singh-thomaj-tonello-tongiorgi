@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
+import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
@@ -19,51 +20,29 @@ import javafx.scene.layout.*;
 
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class GameFlowController extends GenericController implements Initializable{
 
-    @FXML
-    public TilePane handPane;
-    //commonMissions
-    @FXML
-    private ImageView commonMission0;
-    @FXML
-    private ImageView commonMission1;
-    //end CommonMissions
 
-    // secretMission
     @FXML
-    private ImageView secretMission;
-    //secretMission
+    private VBox commonMissionsBox;
 
+    @FXML
+    private VBox secretMissionBox;
 
     //hand
     @FXML
-    private ImageView handCard0;
-    @FXML
-    private ImageView handCard1;
-    @FXML
-    private ImageView handCard2;
-    //end hand
+    private TilePane handPane;
+
 
 
     //CommonTable
     @FXML
-    private ImageView resourceCard0;
-    @FXML
-    private ImageView resourceCard1;
-    @FXML
-    private ImageView resourceDeck;
+    private TilePane commonTablePane;
 
-    @FXML
-    private ImageView goldCard0;
-    @FXML
-    private ImageView goldCard1;
-    @FXML
-    private ImageView goldDeck;
 
-    //end CommonTable
 
 
     @FXML
@@ -102,28 +81,15 @@ public class GameFlowController extends GenericController implements Initializab
 
 
     //azioni per la mano
-    public void onClickMouseFirstHandCard(javafx.scene.input.MouseEvent mouseEvent){
+    public void onClickMouseHandCard(javafx.scene.input.MouseEvent mouseEvent){
         try {
-            this.mainClient.getVirtualGameController().selectCardFromHand(0,this.mainClient.getClientID());
+            int index = Integer.valueOf(((ImageView)mouseEvent.getSource()).getAccessibleText());
+            this.mainClient.getVirtualGameController().selectCardFromHand(index,this.mainClient.getClientID());
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void onClickMouseSecondHandCard(javafx.scene.input.MouseEvent mouseEvent){
-        try {
-            this.mainClient.getVirtualGameController().selectCardFromHand(1,this.mainClient.getClientID());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public void onClickMouseThirdHandCard(javafx.scene.input.MouseEvent mouseEvent){
-        try {
-            this.mainClient.getVirtualGameController().selectCardFromHand(2,this.mainClient.getClientID());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
     //fine azioni per la mano
 
     private static int toIndex(Integer value) {
@@ -157,9 +123,10 @@ public class GameFlowController extends GenericController implements Initializab
     //fine azioni carte opache
 
     //azioni carte commonBoard
-    public void onClickCommonTableResourceCard0(MouseEvent mouseEvent){
+    public void onClickCommonTableCard(MouseEvent mouseEvent){
         try {
-            this.mainClient.getVirtualGameController().selectCardFromCommonTable(0,this.mainClient.getClientID());
+            int index =  Integer.valueOf(((ImageView)mouseEvent.getSource()).getAccessibleText());
+            this.mainClient.getVirtualGameController().selectCardFromCommonTable(index,this.mainClient.getClientID());
             System.out.println("hai cliccato su resourceCard");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
@@ -181,76 +148,74 @@ public class GameFlowController extends GenericController implements Initializab
     // String.valueOf(getClass().getResource
     @Override
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
-        if (simplifiedCommonTable.getGoldCards().size() >= 2 && simplifiedCommonTable.getResourceCards().size() >= 2
-                && simplifiedCommonTable.getCommonMissions().size() >= 2) {
-            this.resourceCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceCards().get(0).getFront().getImagePath()))));
-            this.resourceCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceCards().get(1).getFront().getImagePath()))));
-            this.resourceDeck.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
-
-            this.goldCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldCards().get(0).getFront().getImagePath()))));
-            this.goldCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldCards().get(1).getFront().getImagePath()))));
-            this.goldDeck.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
-
-            this.commonMission0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getCommonMissions().get(0).getFront().getImagePath()))));
-            this.commonMission1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getCommonMissions().get(1).getFront().getImagePath()))));
-
-            this.resourceCard0.setVisible(true);
-            this.resourceCard1.setVisible(true);
-            this.resourceDeck.setVisible(true);
-            this.goldCard0.setVisible(true);
-            this.goldCard1.setVisible(true);
-            this.goldDeck.setVisible(true);
+        ArrayList<ImageView> imageViews = new ArrayList<>();
+        int index = 0;
+        for(Card card: simplifiedCommonTable.getResourceCards()){
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
+            this.setParameters(imageView,String.valueOf(index));
+            imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageViews.add(imageView);
+            index++;
         }
+        ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
+        this.setParameters(resourceDeck, String.valueOf(index));
+        resourceDeck.setOnMouseClicked(this::onClickCommonTableCard);
+        imageViews.add(resourceDeck);
+        index++;
+        for(Card card: simplifiedCommonTable.getGoldCards()){
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
+            this.setParameters(imageView, String.valueOf(index));
+            imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageViews.add(imageView);
+            index++;
+        }
+        ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
+        this.setParameters(goldDeck,String.valueOf(index));
+        goldDeck.setOnMouseClicked(this::onClickCommonTableCard);
+        imageViews.add(goldDeck);
+        index++;
+        ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
+        for(Card card: simplifiedCommonTable.getCommonMissions()){
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
+            this.setParameters(imageView, String.valueOf(index));
+            imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageViewsCommonMissions.add(imageView);
+            index++;
+        }
+
+        this.commonMissionsBox.getChildren().setAll(imageViewsCommonMissions);
+
+        this.commonTablePane.getChildren().setAll(imageViews);
+
     }
 
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
-        if (simplifiedHand.getCards().size() >= 3) {
-            int index = 0;
-            for(index = 0; index< 3; index++){
-                if(simplifiedHand.getCards().get(index).equals(simplifiedHand.getSelectedCard())){
-                    break;
-                }
+        ArrayList<ImageView> imageViews = new ArrayList<>();
+        int index = 0;
+        for(Card card: simplifiedHand.getCards()){
+            ImageView imageView;
+            if(card.equals(simplifiedHand.getSelectedCard())){
+                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getSelectedSide().getImagePath()))));
+            }else{
+                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             }
-            if(index == 0){
-                this.handCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath()))));
-                this.handCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(1).getFront().getImagePath()))));
-                this.handCard2.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(2).getFront().getImagePath()))));
-            }
-            if(index == 1){
-                this.handCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(0).getFront().getImagePath()))));
-                this.handCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath()))));
-                this.handCard2.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(2).getFront().getImagePath()))));
-            }
-            if(index == 2){
-                this.handCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(0).getFront().getImagePath()))));
-                this.handCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(1).getFront().getImagePath()))));
-                this.handCard2.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath()))));
-            }
-            if(index == 3){ // la selected card è null
-                this.handCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(0).getFront().getImagePath()))));
-                this.handCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(1).getFront().getImagePath()))));
-                this.handCard2.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(2).getFront().getImagePath()))));
-            }
-
-            this.handCard0.setVisible(true);
-            this.handCard1.setVisible(true);
-            this.handCard2.setVisible(true);
+            this.setParameters(imageView,String.valueOf(index));
+            imageView.setOnMouseClicked(this::onClickMouseHandCard);
+            imageViews.add(imageView);
+            index++;
         }
-        //le righe sotto servono perchè quando un player gioca una carta dalla mano non si deve più vedere quella carta
+        this.handPane.getChildren().setAll(imageViews);
 
 
-        if(simplifiedHand.getCards().size() == 2){
-            this.handCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(0).getFront().getImagePath()))));
-            this.handCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(1).getFront().getImagePath()))));
-            this.handCard2.setVisible(false);
-        }
     }
 
     @Override
     public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         if(personalBoard.getSecretMission() != null){
-            this.secretMission.setImage(new Image(String.valueOf(getClass().getResource(path + personalBoard.getSecretMission().getFront().getImagePath()))));
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + personalBoard.getSecretMission().getFront().getImagePath()))));
+            this.setParameters(imageView,"0");
+            this.secretMissionBox.getChildren().setAll(imageView);
         }
         if (personalBoard.getOccupiedPositions().size() == 1) {
             ImageView starterCardImage = new ImageView(new Image(String.valueOf(getClass().getResource(path + personalBoard.getOccupiedPositions().getLast().getSide().getImagePath()))));
@@ -316,15 +281,16 @@ public class GameFlowController extends GenericController implements Initializab
 
     }
 
-    private void setParameters(ImageView imageView){
+    private void setParameters(ImageView imageView, String accessibleText){
         imageView.setFitWidth(150);
         imageView.setFitHeight(98);
         imageView.setPreserveRatio(true);
+        imageView.setAccessibleText(accessibleText);
 
     }
 
     private void addImage(ImageView imageView,int x, int y){
-        setParameters(imageView);
+        setParameters(imageView,"0");
         gridPane.add(imageView,x,y);
     }
 

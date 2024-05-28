@@ -39,24 +39,24 @@
                                         <Insets />
                                     </VBox.margin>
                                 </Label>
-                                <TilePane fx:id="handPane" alignment="CENTER" hgap="20.0" prefHeight="278.0" prefWidth="556.0" scaleShape="false" vgap="20.0">
+                                <TilePane fx:id="commonTablePane" alignment="CENTER" hgap="20.0" prefHeight="278.0" prefWidth="556.0" scaleShape="false" vgap="20.0">
                                     <children>
-                                        <ImageView fx:id="resourceCard0" fitHeight="98.0" fitWidth="150.0" onMouseClicked="#onClickCommonTableResourceCard0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                        <ImageView fx:id="resourceCard0" accessibleText="0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                         </ImageView>
-                                        <ImageView fx:id="resourceCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                        <ImageView fx:id="resourceCard1" accessibleText="1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                         </ImageView>
-                                        <ImageView fx:id="resourceDeck" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
+                                        <ImageView fx:id="resourceDeck" accessibleText="2" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
 
                                         </ImageView>
-                                        <ImageView fx:id="goldCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                        <ImageView fx:id="goldCard0" accessibleText="3" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                         </ImageView>
-                                        <ImageView fx:id="goldCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                        <ImageView fx:id="goldCard1" accessibleText="4" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                         </ImageView>
-                                        <ImageView fx:id="goldDeck" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
+                                        <ImageView fx:id="goldDeck" accessibleText="5" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
 
                                         </ImageView>
                                     </children>
@@ -82,15 +82,15 @@
                                 </AnchorPane>
                             </content>
                         </ScrollPane>
-                        <TilePane alignment="CENTER" hgap="20.0" prefHeight="108.0" prefWidth="544.0">
+                        <TilePane fx:id="handPane" alignment="CENTER" hgap="20.0" prefHeight="108.0" prefWidth="544.0">
                             <children>
-                                <ImageView fx:id="handCard0" fitHeight="98.0" fitWidth="150.0" onMouseClicked="#onClickMouseFirstHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                <ImageView fx:id="handCard0" accessibleText="0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                 </ImageView>
-                                <ImageView fx:id="handCard1" fitHeight="98.0" fitWidth="150.0" onMouseClicked="#onClickMouseSecondHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                <ImageView fx:id="handCard1" accessibleText="1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                 </ImageView>
-                                <ImageView fx:id="handCard2" fitHeight="98.0" fitWidth="150.0" onMouseClicked="#onClickMouseThirdHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                <ImageView fx:id="handCard2" accessibleText="2" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
                                 </ImageView>
                             </children>
@@ -102,30 +102,19 @@
                 </VBox>
             </children>
         </HBox>
-        <VBox alignment="TOP_CENTER" layoutX="1065.0" layoutY="11.0" prefHeight="704.0" prefWidth="250.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <children>
-                <Label text="Common Missions" />
-                <ImageView fx:id="commonMission0" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-
-                </ImageView>
-                <ImageView fx:id="commonMission1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-
-                </ImageView>
-                <Label text="Your secret mission">
-                    <VBox.margin>
-                        <Insets top="20.0" />
-                    </VBox.margin>
-                </Label>
-                <ImageView fx:id="secretMission" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-
-                </ImageView>
-            </children>
-            <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </padding>
-        </VBox>
       <Button fx:id="turnSideButton" layoutX="100.0" layoutY="650.0" mnemonicParsing="false" onAction="#onClickTurnSideButton" text="TurnSide" />
       <Button fx:id="drawCardButton" layoutX="200.0" layoutY="650.0" mnemonicParsing="false" onAction="#onClickDrawCardButton" text="DrawCard" />
+      <VBox fx:id="commonMissionsBox" alignment="CENTER" fillWidth="false" layoutX="1047.0" layoutY="30.0" prefHeight="342.0" prefWidth="232.0" spacing="10.0">
+         <children>
+            <ImageView fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </VBox>
+      <VBox fx:id="secretMissionBox" alignment="CENTER" fillWidth="false" layoutX="1047.0" layoutY="450.0" prefHeight="157.0" prefWidth="219.0" spacing="10.0">
+         <children>
+            <ImageView fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </VBox>
     </children>
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
