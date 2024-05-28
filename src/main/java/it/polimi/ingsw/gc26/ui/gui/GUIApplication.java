@@ -2,11 +2,12 @@ package it.polimi.ingsw.gc26.ui.gui;
 
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
+import it.polimi.ingsw.gc26.ui.UIInterface;
 import it.polimi.ingsw.gc26.ui.gui.sceneControllers.GenericController;
 import it.polimi.ingsw.gc26.ui.gui.sceneControllers.LoginController;
 import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneEnum;
 import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneInfo;
-import it.polimi.ingsw.gc26.ui.UIInterface;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -29,20 +30,30 @@ public class GUIApplication extends Application implements UIInterface {
 
 
     @Override
-    public void init(MainClient.NetworkType networkType) throws IOException, NotBoundException {
+    public void init(MainClient.NetworkType networkType) {
         launch(networkType.toString());
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         // Get value from args
         String networkType = getParameters().getUnnamed().get(0);
 
         //lanchaure prima startSocketClient e startRMiCLient
         if (MainClient.NetworkType.valueOf(networkType) == MainClient.NetworkType.rmi) {
-            this.mainClient = MainClient.startRMIClient(MainClient.GraphicType.gui);
+            try {
+                this.mainClient = MainClient.startRMIClient(MainClient.GraphicType.gui);
+            } catch (RemoteException e) {
+                ConsoleColors.printError(e.getMessage());
+                System.exit(-1);
+            }
         } else {
-            this.mainClient = MainClient.startSocketClient(MainClient.GraphicType.gui);
+            try {
+                this.mainClient = MainClient.startSocketClient(MainClient.GraphicType.gui);
+            } catch (IOException e) {
+                ConsoleColors.printError(e.getMessage());
+                System.exit(-1);
+            }
         }
 
         this.loadScenes();
@@ -199,7 +210,7 @@ public class GUIApplication extends Application implements UIInterface {
     }
 
     @Override
-    public void runGame() throws RemoteException {
+    public void runGame() {
 
     }
 }
