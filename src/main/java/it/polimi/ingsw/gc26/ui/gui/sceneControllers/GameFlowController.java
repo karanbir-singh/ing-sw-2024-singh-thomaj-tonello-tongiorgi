@@ -49,8 +49,8 @@ public class GameFlowController extends GenericController implements Initializab
     private GridPane gridPane;
     @FXML
     private AnchorPane personalBoardPane;
-    private final int xPositionStarterCard = 10;
-    private final int yPositionStarterCard = 10;
+    private final int xPositionStarterCard = 40;
+    private final int yPositionStarterCard = 40;
 
     @FXML
     private Button turnSideButton;
@@ -90,6 +90,17 @@ public class GameFlowController extends GenericController implements Initializab
         }
     }
 
+    //azioni carte commonBoard
+    public void onClickCommonTableCard(MouseEvent mouseEvent){
+        try {
+            int index =  Integer.valueOf(((ImageView)mouseEvent.getSource()).getAccessibleText());
+            this.mainClient.getVirtualGameController().selectCardFromCommonTable(index,this.mainClient.getClientID());
+            System.out.println("hai cliccato su resourceCard");
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //fine azioni per la mano
 
     private static int toIndex(Integer value) {
@@ -114,24 +125,13 @@ public class GameFlowController extends GenericController implements Initializab
             this.mainClient.getVirtualGameController().selectPositionOnBoard(column-xPositionStarterCard,yPositionStarterCard-row,this.mainClient.getClientID());
             this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
         } catch (RemoteException e) {
-           // throw new RuntimeException(e);
-       }
+            // throw new RuntimeException(e);
+        }
 
 
 
     }
     //fine azioni carte opache
-
-    //azioni carte commonBoard
-    public void onClickCommonTableCard(MouseEvent mouseEvent){
-        try {
-            int index =  Integer.valueOf(((ImageView)mouseEvent.getSource()).getAccessibleText());
-            this.mainClient.getVirtualGameController().selectCardFromCommonTable(index,this.mainClient.getClientID());
-            System.out.println("hai cliccato su resourceCard");
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
 
@@ -262,19 +262,15 @@ public class GameFlowController extends GenericController implements Initializab
     public void initialize(URL url, ResourceBundle resourceBundle) {
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
-        this.personalBoardPane.setPrefWidth(2500);
-        this.personalBoardPane.setPrefHeight(1400);
-        this.personalBoardPane.setMaxWidth(2500);
-        this.personalBoardPane.setMaxHeight(1400);
 
-        this.gridPane.setPrefWidth(1200);
-        this.gridPane.setPrefHeight(784);
-        this.gridPane.setMaxWidth(1200);
-        this.gridPane.setMaxHeight(784);
-        for(int row = 0; row < 21; row++) {
+        this.gridPane.setPrefWidth(8000);
+        this.gridPane.setPrefHeight(4000);
+        this.gridPane.setMaxWidth(8000);
+        this.gridPane.setMaxHeight(4000);
+        for(int row = 0; row < 81; row++) {
             gridPane.getRowConstraints().add(rowConstraints);
         }
-        for(int column = 0; column < 21; column++){
+        for(int column = 0; column < 81; column++){
             gridPane.getColumnConstraints().add(columnConstraints);
         }
 

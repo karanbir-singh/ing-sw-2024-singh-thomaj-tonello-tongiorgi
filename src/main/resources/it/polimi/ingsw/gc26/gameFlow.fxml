@@ -64,13 +64,9 @@
                                         <Glow />
                                     </effect>
                                 </TilePane>
-                            </children>
-                        </VBox>
-                        <ScrollPane hbarPolicy="NEVER" hvalue="0.5" maxHeight="331.0" maxWidth="642.0" minHeight="331.0" minWidth="642.0" pannable="true" prefHeight="331.0" prefWidth="642.0" vbarPolicy="NEVER" vvalue="0.5">
-                            <content>
-                                <AnchorPane fx:id="personalBoardPane" cacheShape="false" maxHeight="695.0" maxWidth="981.0" minHeight="314.0" minWidth="400.0" prefHeight="695.0" prefWidth="981.0">
-                           <children>
-                              <GridPane fx:id="gridPane" gridLinesVisible="true">
+                        <ScrollPane hvalue="0.5" pannable="true" prefHeight="331.0" prefWidth="642.0" vvalue="0.5">
+                           <content>
+                              <GridPane fx:id="gridPane" alignment="TOP_CENTER" gridLinesVisible="true" prefHeight="119.0" prefWidth="205.0">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>
@@ -78,10 +74,10 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                               </GridPane>
-                           </children>
-                                </AnchorPane>
-                            </content>
+                           </content>
                         </ScrollPane>
+                            </children>
+                        </VBox>
                         <TilePane fx:id="handPane" alignment="CENTER" hgap="20.0" prefHeight="108.0" prefWidth="544.0">
                             <children>
                                 <ImageView fx:id="handCard0" accessibleText="0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
