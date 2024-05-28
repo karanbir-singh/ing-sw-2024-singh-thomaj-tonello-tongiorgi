@@ -2,13 +2,19 @@ package it.polimi.ingsw.gc26.controller;
 
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
+import it.polimi.ingsw.gc26.request.game_request.ChoosePawnColorRequest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class GameControllerTest {
     private static GameController gameController;
@@ -28,7 +34,8 @@ class GameControllerTest {
         game = new Game(players, new ArrayList<>());
 
         try {
-            gameController = new GameController(game, 0);
+            gameController = new GameController(game, -1);
+            gameController.setDebug(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,6 +96,22 @@ class GameControllerTest {
             assertEquals(0, player.getHand().getCards().size());
             assertEquals(0, player.getPersonalBoard().getScore());
             assertEquals(1, player.getPersonalBoard().getOccupiedPositions().size());
+        }
+    }
+
+    @Test
+    void pawnColorChoosing() {
+        beforeAll();
+
+        starterCardPlacement();
+
+        assertEquals(GameState.WAITING_PAWNS_SELECTION, game.getState());
+        gameController.choosePawnColor("RED", players.get(0).getID());
+        assertEquals("RED", players.get(0).getPawnColor().toString());
+        assertEquals(3, gameController.getGame().getAvailablePawns().size());
+
+        for (Pawn pawn : gameController.getGame().getAvailablePawns()) {
+            assertNotEquals(pawn, players.get(0).getPawnColor());
         }
     }
 
@@ -311,5 +334,84 @@ class GameControllerTest {
         assertFalse(game.getCommonTable().getSelectedCard().isPresent());
         assertEquals(31, game.getCommonTable().getResourceDeck().getCards().size());
         assertEquals(2, game.getCommonTable().getResourceCards().size());
+    }
+
+    @Test
+    void broadcastMessage() {
+        beforeAll();
+
+        Player sender = players.getFirst();
+
+        String receveirName = "";
+        gameController.addMessage("This is a broadcast message!", receveirName, sender.getID(), null);
+
+        assertEquals(1, gameController.getGame().getChat().getMessages().size());
+        assertEquals("This is a broadcast message!", gameController.getGame().getChat().getMessages().get(0).getText());
+        assertEquals(sender, gameController.getGame().getChat().getMessages().get(0).getSender());
+        assertNull(gameController.getGame().getChat().getMessages().get(0).getReceiver());
+    }
+
+    @Test
+    void directMessage() {
+        beforeAll();
+
+        Player sender = players.getFirst();
+
+        String receveirName = players.get(1).getNickname();
+        gameController.addMessage("This is a direct message!", receveirName, sender.getID(), null);
+
+        assertEquals(1, gameController.getGame().getChat().getMessages().size());
+        assertEquals("This is a direct message!", gameController.getGame().getChat().getMessages().get(0).getText());
+        assertEquals(sender, gameController.getGame().getChat().getMessages().get(0).getSender());
+        assertEquals(players.get(1), gameController.getGame().getChat().getMessages().get(0).getReceiver());
+    }
+
+    @Test
+    void reAddView() {
+        beforeAll();
+        gameController.reAddView(null, players.get(0).getID());
+
+        assertEquals(1, gameController.getGame().getObservable().getClients().size());
+    }
+
+    @Test
+    void backupFileExistence() {
+        beforeAll();
+
+        gameController.backup();
+
+        File file = new File(STR."\{GameController.GAME_CONTROLLER_FILE_PATH}-1.bin");
+        assertTrue(file.exists());
+    }
+
+    @Test
+    void backupCheck() {
+        beforeAll();
+
+        gameController.backup();
+
+        try {
+            FileInputStream fileInputStream = new FileInputStream(STR."\{GameController.GAME_CONTROLLER_FILE_PATH}-1.bin");
+            ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
+
+            GameController fromBackup = (GameController) inputStream.readObject();
+
+            assertNotNull(fromBackup);
+            assertNotNull(fromBackup.getGame());
+            for (int i = 0; i < players.size(); i++) {
+                assertEquals(players.get(i).getID(), fromBackup.getGame().getPlayers().get(i).getID());
+                assertEquals(players.get(i).getNickname(), fromBackup.getGame().getPlayers().get(i).getNickname());
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+        }
+    }
+
+    @Test
+    void checkRequests() {
+        beforeAll();
+
+        gameController.addRequest(new ChoosePawnColorRequest("RED", "0"));
+        assertEquals(1, gameController.getGameRequests().size());
     }
 }
