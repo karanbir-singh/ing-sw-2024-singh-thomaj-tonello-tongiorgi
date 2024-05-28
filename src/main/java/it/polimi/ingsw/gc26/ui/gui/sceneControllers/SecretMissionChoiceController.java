@@ -18,21 +18,43 @@ import javafx.scene.paint.ImagePattern;
 
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class SecretMissionChoiceController extends GenericController implements Initializable {
+    //CommonTable
+    @FXML
+    private ImageView resourceCard0;
+    @FXML
+    private ImageView resourceCard1;
+    @FXML
+    private ImageView resourceDeck;
+
+    @FXML
+    private ImageView goldCard0;
+    @FXML
+    private ImageView goldCard1;
+    @FXML
+    private ImageView goldDeck;
+    @FXML
+    private VBox commonTableBox;
+
+    //commonMissions
+    @FXML
+    private ImageView commonMission0;
+    @FXML
+    private ImageView commonMission1;
+
+    //hand
+    @FXML
+    private ImageView handCard0;
+    @FXML
+    private ImageView handCard1;
+    @FXML
+    private ImageView handCard2;
 
     @FXML
     Label status;
-
-    @FXML
-    ImageView handCard0;
-
-    @FXML
-    ImageView handCard1;
-
-    @FXML
-    ImageView handCard2;
 
     @FXML
     HBox cardHBox;
@@ -45,6 +67,22 @@ public class SecretMissionChoiceController extends GenericController implements 
 
     @FXML
     ImageView secretMission1;
+
+    //layout
+    @FXML
+    HBox hLayoutBox;
+    @FXML
+    VBox leftVBox;
+    @FXML
+    VBox rightVBox;
+    @FXML
+    VBox centerVBox;
+    @FXML
+    ScrollPane rootScrollPane;
+    @FXML
+    AnchorPane rootAnchor;
+
+    private ArrayList<ImageView> cards = new ArrayList<>();
 
     String path = "/images/";
 
@@ -101,6 +139,23 @@ public class SecretMissionChoiceController extends GenericController implements 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        cards.add(handCard0);
+        cards.add(handCard1);
+        cards.add(handCard2);
+        cards.add(resourceCard0);
+        cards.add(resourceCard1);
+        cards.add(resourceDeck);
+        cards.add(goldCard0);
+        cards.add(goldCard1);
+        cards.add(goldDeck);
+        cards.add(commonMission0);
+        cards.add(commonMission1);
+        cards.add(secretMission0);
+        cards.add(secretMission1);
+
+        CommonLayout layout = new CommonLayout();
+        layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
 
     }
+
 }

@@ -12,6 +12,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -19,6 +20,7 @@ import javafx.scene.layout.*;
 
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class GameFlowController extends GenericController implements Initializable{
@@ -43,6 +45,8 @@ public class GameFlowController extends GenericController implements Initializab
     private ImageView handCard1;
     @FXML
     private ImageView handCard2;
+    @FXML
+    private TilePane handPane;
     //end hand
 
 
@@ -61,6 +65,9 @@ public class GameFlowController extends GenericController implements Initializab
     @FXML
     private ImageView goldDeck;
 
+    @FXML
+    private VBox commonTableBox;
+
     //end CommonTable
 
 
@@ -68,6 +75,8 @@ public class GameFlowController extends GenericController implements Initializab
     private GridPane gridPane;
     @FXML
     private AnchorPane personalBoardPane;
+    @FXML
+    private ScrollPane personalBoardScrollPane;
     private final int xPositionStarterCard = 4;
     private final int yPositionStarterCard = 4;
 
@@ -75,6 +84,17 @@ public class GameFlowController extends GenericController implements Initializab
     private Button turnSideButton;
     @FXML
     private Button drawCardButton;
+
+    //layout
+    @FXML
+    private VBox rightVBox;
+    @FXML
+    private VBox leftVBox;
+    @FXML
+    private AnchorPane rootAnchor;
+    @FXML
+    private ScrollPane rootScrollPane;
+    private ArrayList<ImageView> cards = new ArrayList<>();
 
 
     private String path = "/images/";
@@ -293,6 +313,22 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        cards.add(handCard0);
+        cards.add(handCard1);
+        cards.add(handCard2);
+        cards.add(resourceCard0);
+        cards.add(resourceCard1);
+        cards.add(resourceDeck);
+        cards.add(goldCard0);
+        cards.add(goldCard1);
+        cards.add(goldDeck);
+        cards.add(commonMission0);
+        cards.add(commonMission1);
+        cards.add(secretMission);
+
+        //page layout and dimensions bindings
+        layoutBindings();
+
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
         for(int row = 0; row < 10; row++) {
@@ -322,6 +358,52 @@ public class GameFlowController extends GenericController implements Initializab
     private void addImage(ImageView imageView,int x, int y){
         setParameters(imageView);
         gridPane.add(imageView,x,y);
+    }
+
+    private void layoutBindings(){
+        //page dimensions
+        //rootAnchor.prefWidthProperty().bind(rootScrollPane.widthProperty());
+        //rootAnchor.prefHeightProperty().bind(rootScrollPane.heightProperty());
+
+        leftVBox.setPrefHeight(rootAnchor.getPrefHeight());
+        rightVBox.setPrefHeight(rootAnchor.getPrefHeight());
+
+        AnchorPane.setTopAnchor(personalBoardScrollPane, 50.0 );
+
+        //personal board position
+        rootAnchor.heightProperty().addListener((obs, oldVal, newVal) -> {
+            leftVBox.prefHeightProperty().bind(rootAnchor.heightProperty());
+            rightVBox.prefHeightProperty().bind(rootAnchor.heightProperty());
+
+            commonTableBox.prefHeightProperty().bind(rootAnchor.heightProperty().multiply(0.3));
+
+            personalBoardScrollPane.prefHeightProperty().bind(rootAnchor.heightProperty().multiply(0.42));
+            AnchorPane.setTopAnchor(personalBoardScrollPane, rootAnchor.getHeight() * 0.35);
+
+        });
+
+        rootAnchor.widthProperty().addListener((obs, oldVal, newVal) -> {
+            leftVBox.prefWidthProperty().bind(rootAnchor.widthProperty().multiply(0.20));
+
+            for(ImageView card: cards){
+                card.fitHeightProperty().bind(rootAnchor.widthProperty().multiply(0.15));
+            }
+
+            AnchorPane.setLeftAnchor(leftVBox, rootAnchor.getWidth() * 0.01);
+            //AnchorPane.setRightAnchor(leftVBox, rootAnchor.getWidth() * 0.80);
+            //AnchorPane.setLeftAnchor(rightVBox, rootAnchor.getWidth() * 0.80);
+            AnchorPane.setRightAnchor(rightVBox, rootAnchor.getWidth() * 0.01);
+
+            AnchorPane.setLeftAnchor(commonTableBox, (rootAnchor.getWidth() - commonTableBox.getWidth()) / 2);
+            AnchorPane.setRightAnchor(rightVBox, rootAnchor.getWidth() * 0.01);
+
+            personalBoardScrollPane.prefWidthProperty().bind(rootAnchor.widthProperty().multiply(0.45));
+            AnchorPane.setLeftAnchor(personalBoardScrollPane, (rootAnchor.getWidth() * 0.55) / 2);
+
+            AnchorPane.setLeftAnchor(handPane, (rootAnchor.getWidth() - handPane.getWidth()) / 2);
+
+
+        });
     }
 
 }

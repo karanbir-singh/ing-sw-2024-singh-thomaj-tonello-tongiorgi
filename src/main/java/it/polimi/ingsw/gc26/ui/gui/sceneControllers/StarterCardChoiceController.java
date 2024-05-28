@@ -18,22 +18,54 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class StarterCardChoiceController extends GenericController implements Initializable {
+    //CommonTable
+    @FXML
+    private ImageView resourceCard0;
+    @FXML
+    private ImageView resourceCard1;
+    @FXML
+    private ImageView resourceDeck;
 
     @FXML
-    ScrollPane RootPane;
+    private ImageView goldCard0;
     @FXML
-    AnchorPane LayoutAnchorPane;
+    private ImageView goldCard1;
     @FXML
-    VBox VLayoutBox;
+    private ImageView goldDeck;
+
     @FXML
-    HBox HCardBox;
+    private VBox commonTableBox;
+
+    //hand
+    @FXML
+    private ImageView handCard0;
+    @FXML
+    private ImageView handCard1;
+    @FXML
+    private ImageView handCard2;
+
+    //layout
+    @FXML
+    VBox leftVBox;
+    @FXML
+    VBox rightVBox;
+    @FXML
+    VBox centerVBox;
+    @FXML
+    ScrollPane rootScrollPane;
+    @FXML
+    AnchorPane rootAnchor;
+    @FXML
+    HBox hCardBox;
     @FXML
     ImageView image;
     @FXML
     Label status;
+    private ArrayList<ImageView> cards = new ArrayList<>();
 
 
     String path = "/images/";
@@ -67,19 +99,18 @@ public class StarterCardChoiceController extends GenericController implements In
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        LayoutAnchorPane.prefWidthProperty().bind(RootPane.widthProperty());
-        LayoutAnchorPane.prefHeightProperty().bind(RootPane.heightProperty());
+        cards.add(handCard0);
+        cards.add(handCard1);
+        cards.add(handCard2);
+        cards.add(resourceCard0);
+        cards.add(resourceCard1);
+        cards.add(resourceDeck);
+        cards.add(goldCard0);
+        cards.add(goldCard1);
+        cards.add(goldDeck);
 
-        VLayoutBox.prefHeightProperty().bind(LayoutAnchorPane.heightProperty());
-        AnchorPane.setTopAnchor(VLayoutBox, 0.0);
-        AnchorPane.setLeftAnchor(VLayoutBox, (LayoutAnchorPane.getWidth() - VLayoutBox.getWidth()) / 2);
+        CommonLayout layout = new CommonLayout();
+        layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
 
-        LayoutAnchorPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            AnchorPane.setTopAnchor(VLayoutBox, 0.0);
-        });
-
-        LayoutAnchorPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            AnchorPane.setLeftAnchor(VLayoutBox, (newVal.doubleValue() - VLayoutBox.getWidth()) / 2);
-        });
     }
 }
