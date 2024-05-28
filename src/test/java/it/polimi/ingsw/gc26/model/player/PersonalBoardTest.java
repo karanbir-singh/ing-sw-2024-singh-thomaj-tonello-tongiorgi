@@ -1,6 +1,5 @@
 package it.polimi.ingsw.gc26.model.player;
 
-import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.deck.Deck;

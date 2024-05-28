@@ -1,7 +1,5 @@
-package it.polimi.ingsw.gc26.model;
+package it.polimi.ingsw.gc26.network;
 
-import it.polimi.ingsw.gc26.model.player.PersonalBoard;
-import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
@@ -11,8 +9,6 @@ import javafx.util.Pair;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ModelObservable implements Serializable {
     private transient ArrayList<Pair<VirtualView, String>> clients;
