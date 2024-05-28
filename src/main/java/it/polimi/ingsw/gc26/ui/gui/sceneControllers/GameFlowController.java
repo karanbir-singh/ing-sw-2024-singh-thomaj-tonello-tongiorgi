@@ -23,6 +23,8 @@ import java.util.ResourceBundle;
 
 public class GameFlowController extends GenericController implements Initializable{
 
+    @FXML
+    public TilePane handPane;
     //commonMissions
     @FXML
     private ImageView commonMission0;
@@ -68,8 +70,8 @@ public class GameFlowController extends GenericController implements Initializab
     private GridPane gridPane;
     @FXML
     private AnchorPane personalBoardPane;
-    private final int xPositionStarterCard = 4;
-    private final int yPositionStarterCard = 4;
+    private final int xPositionStarterCard = 10;
+    private final int yPositionStarterCard = 10;
 
     @FXML
     private Button turnSideButton;
@@ -295,20 +297,22 @@ public class GameFlowController extends GenericController implements Initializab
     public void initialize(URL url, ResourceBundle resourceBundle) {
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
-        for(int row = 0; row < 10; row++) {
-            gridPane.getRowConstraints().add(rowConstraints);
-        }
-        for(int column = 0; column < 10; column++){
-            gridPane.getColumnConstraints().add(columnConstraints);
-        }
-        this.personalBoardPane.setPrefWidth(1200);
-        this.personalBoardPane.setPrefHeight(784);
-        this.personalBoardPane.setMaxWidth(1200);
-        this.personalBoardPane.setMaxHeight(784);
+        this.personalBoardPane.setPrefWidth(2500);
+        this.personalBoardPane.setPrefHeight(1400);
+        this.personalBoardPane.setMaxWidth(2500);
+        this.personalBoardPane.setMaxHeight(1400);
+
         this.gridPane.setPrefWidth(1200);
         this.gridPane.setPrefHeight(784);
         this.gridPane.setMaxWidth(1200);
         this.gridPane.setMaxHeight(784);
+        for(int row = 0; row < 21; row++) {
+            gridPane.getRowConstraints().add(rowConstraints);
+        }
+        for(int column = 0; column < 21; column++){
+            gridPane.getColumnConstraints().add(columnConstraints);
+        }
+
 
     }
 

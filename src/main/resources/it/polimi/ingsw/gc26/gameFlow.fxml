@@ -39,7 +39,7 @@
                                         <Insets />
                                     </VBox.margin>
                                 </Label>
-                                <TilePane alignment="CENTER" hgap="20.0" prefHeight="278.0" prefWidth="556.0" scaleShape="false" vgap="20.0">
+                                <TilePane fx:id="handPane" alignment="CENTER" hgap="20.0" prefHeight="278.0" prefWidth="556.0" scaleShape="false" vgap="20.0">
                                     <children>
                                         <ImageView fx:id="resourceCard0" fitHeight="98.0" fitWidth="150.0" onMouseClicked="#onClickCommonTableResourceCard0" pickOnBounds="true" preserveRatio="true" styleClass="card">
 
@@ -68,9 +68,9 @@
                         </VBox>
                         <ScrollPane hbarPolicy="NEVER" hvalue="0.5" maxHeight="331.0" maxWidth="642.0" minHeight="331.0" minWidth="642.0" pannable="true" prefHeight="331.0" prefWidth="642.0" vbarPolicy="NEVER" vvalue="0.5">
                             <content>
-                                <AnchorPane fx:id="personalBoardPane" cacheShape="false" maxHeight="400.0" maxWidth="640.0" minHeight="314.0" minWidth="400.0" prefHeight="314.0" prefWidth="640.0">
+                                <AnchorPane fx:id="personalBoardPane" cacheShape="false" maxHeight="695.0" maxWidth="981.0" minHeight="314.0" minWidth="400.0" prefHeight="695.0" prefWidth="981.0">
                            <children>
-                              <GridPane fx:id="gridPane">
+                              <GridPane fx:id="gridPane" gridLinesVisible="true">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>
