@@ -544,7 +544,13 @@ public class CLI {
 
         //represent played cards
         for(Point p: miniPB.getOccupiedPositions()) {
-            String[][] s = p.getSide().printableSide();
+            String[][] s = null;
+            try {
+                s = p.getSide().printableSide();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             int j=0;
             for(int y=(p.getY())*2 -yOff +1; y>=(p.getY())*2 -yOff - 1; y--){
                 int i=2;

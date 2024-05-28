@@ -165,8 +165,14 @@ public class SocketServerHandler implements Runnable {
         for (JsonNode pawn : encodedGame.get("availablePawns")) {
             availablePawns.add(Pawn.valueOf(pawn.asText()));
         }
-        // pawns already selected //TODO
+
+        // pawns already selected
         HashMap<String, Pawn> pawnsSelected = new HashMap<>();
+        Iterator<Map.Entry<String, JsonNode>> selectedPawnsIterator = encodedGame.get("selectedPawns").fields();
+        while (selectedPawnsIterator.hasNext()) {
+            Map.Entry<String, JsonNode> entry = selectedPawnsIterator.next();
+            pawnsSelected.put(entry.getKey(), entry.getValue().isNull() ? null : Pawn.valueOf(entry.getValue().asText()));
+        }
         return new SimplifiedGame(gameState, currentPlayer, scores, winners, availablePawns, pawnsSelected);
     }
 
@@ -225,6 +231,9 @@ public class SocketServerHandler implements Runnable {
             case "QuillCounter" ->
                     new QuillCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
                             resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
+            case "GoldCardFront" ->
+                    new GoldCardFront(Symbol.valueOf(encodedCard.get("sideSymbol").asText()), resources,
+                            encodedCard.get("points").asInt(), corners.get(0), corners.get(1), corners.get(2), corners.get(3));
             default -> null;
         };
         Side backGold= new CardBack(Symbol.valueOf(encodedCard.get("sideSymbol").asText()));
@@ -260,16 +269,19 @@ public class SocketServerHandler implements Runnable {
     private MissionCard getMissionCard(JsonNode encodedCard) {
         if (encodedCard.isEmpty()) { return null;}
         MissionCardFront missionCardFront = switch (encodedCard.get("cardType").asText()) {
-            case "missionLPatter" ->
+            case "MissionLPattern" ->
                     new MissionLPattern(encodedCard.get("type").asInt());
-            case "missionDiagonalPatter" ->
+            case "MissionDiagonalPattern" ->
                     new MissionDiagonalPattern(encodedCard.get("type").asInt());
-            case "missionTriplet" ->
+            case "MissionTripletPattern" ->
                     new MissionTripletPattern(encodedCard.get("type").asInt());
-            case "missionItem" ->
+            case "MissionItemPattern" ->
                     new MissionItemPattern(encodedCard.get("type").asInt());
             default -> null;
         };
+        if (missionCardFront == null) {
+            String a = "";
+        }
         return new MissionCard(missionCardFront, new CardBack());
     }
 
@@ -320,9 +332,6 @@ public class SocketServerHandler implements Runnable {
         Card secretMission = getMissionCard(encodedBoard.get("secretMission"));
 
         ArrayList<Point> occupiedPositions = buildArrayPosition(encodedBoard.get("occupiedPositions"));
-        for( JsonNode occupiedPosition : encodedBoard.get("occupiedPositions")){
-            occupiedPositions.add(new Point(occupiedPosition.get("X").asInt(), occupiedPosition.get("Y").asInt()));
-        }
 
         for( JsonNode playablePosition : encodedBoard.get("playablePositions")){
             playablePositions.add(new Point(playablePosition.get("X").asInt(), playablePosition.get("Y").asInt()));
@@ -339,12 +348,12 @@ public class SocketServerHandler implements Runnable {
             Map.Entry<String, JsonNode> entry = resourceIterator.next();
             visibleResources.put(Symbol.valueOf(entry.getKey()), entry.getValue().asInt());
         }
-
-        // TODO nickname
+        // owner's nickname
+        String nickname = encodedBoard.get("nickname").asText();
         return new SimplifiedPersonalBoard(encodedBoard.get("xMin").asInt(),
                 encodedBoard.get("xMax").asInt(), encodedBoard.get("yMax").asInt(), encodedBoard.get("yMin").asInt(),
                 encodedBoard.get("score").asInt(), occupiedPositions, playablePositions, blockedPositions, secretMission,
-                visibleResources, encodedBoard.get("selectedX").asInt(), encodedBoard.get("selectedY").asInt(), null);
+                visibleResources, encodedBoard.get("selectedX").asInt(), encodedBoard.get("selectedY").asInt(), nickname);
     }
 
     private SimplifiedPlayer buildSimplifiedPlayer(JsonNode encodedPlayer) {
@@ -383,38 +392,47 @@ public class SocketServerHandler implements Runnable {
                 ArrayList<Corner> corners = getCorners(position.get("side"));
                 switch (position.get("type").asText()) {
                     case "CardBack":
-                        if (!position.get("side").get("permanentResources").isNull()) { //TODO check Symbol.valueof("plant")
-                            permanentResources.add(Symbol.valueOf(position.get("side").get("permanentResources").toString()));
+                        if (!position.get("side").get("permanentResources").isNull()) {
+                            permanentResources.add(Symbol.valueOf(position.get("side").get("permanentResources").asText()));
                         }
-                        side = new CardBack(position.get("side").get("sideSymbol").asText().equals("") ? null : Symbol.valueOf(position.get("side").get("sideSymbol").asText()),
+                        side = new CardBack(position.get("side").get("sideSymbol").asText().isEmpty() ? null : Symbol.valueOf(position.get("side").get("sideSymbol").asText()),
                                 corners.get(0), corners.get(1), corners.get(2), corners.get(3),
                                 permanentResources, new HashMap<>());
                         break;
                     case "StarterCardFront":
+                        if (!position.get("side").get("permanentResources").isNull()) {
+                            for (JsonNode permanentResource : position.get("side").get("permanentResources")) {
+                                permanentResources.add(Symbol.valueOf(permanentResource.asText()));
+                            }
+                        }
                         side = new StarterCardFront(permanentResources,
                                 corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case "ResourceCardFront":
-                        side = new ResourceCardFront(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new ResourceCardFront(!Objects.equals(position.get("side").get("sideSymbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("sideSymbol").asText()) : null,
                                 position.get("side").get("points").asInt(),
                                 corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case "CornerCounter":
-                        side = new CornerCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new CornerCounter(!Objects.equals(position.get("side").get("sideSymbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("sideSymbol").asText()) : null,
                                 requestedResources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case "QuillCounter":
-                        side = new QuillCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new QuillCounter(!Objects.equals(position.get("side").get("sideSymbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("sideSymbol").asText()) : null,
                                 requestedResources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case "InkwellCounter":
-                        side = new InkwellCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new InkwellCounter(!Objects.equals(position.get("side").get("sideSymbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("sideSymbol").asText()) : null,
                                 requestedResources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case "ManuscriptCounter":
-                        side = new ManuscriptCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new ManuscriptCounter(!Objects.equals(position.get("side").get("sideSymbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("sideSymbol").asText()) : null,
                                 requestedResources,
                                 corners.get(0), corners.get(1), corners.get(2), corners.get(3));
+                        break;
+                    case "GoldCardFront" :
+                        side = new GoldCardFront(position.get("side").get("sideSymbol").asText().isEmpty() ? null : Symbol.valueOf(position.get("side").get("sideSymbol").asText()),
+                        requestedResources, position.get("side").get("points").asInt(), corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case null, default:
                         break;

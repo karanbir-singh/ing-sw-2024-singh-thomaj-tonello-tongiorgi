@@ -334,6 +334,9 @@ public class VirtualSocketView implements VirtualView {
             visibleResources.put(resource.getKey().toString(), resource.getValue().toString());
         }
 
+        //nickname
+        root.put("nickname", personalBoard.getNickname());
+
         try {
             sendToClient("updatePersonalBoard", om.writeValueAsString(root));
         } catch (JsonProcessingException e) {
@@ -384,6 +387,9 @@ public class VirtualSocketView implements VirtualView {
         for (Map.Entry<Symbol, Integer> resource : otherPersonalBoard.getVisibleResources().entrySet()) {
             visibleResources.put(resource.getKey().toString(), resource.getValue().toString());
         }
+
+        //nickname
+        root.put("nickname", otherPersonalBoard.getNickname());
 
         try {
             sendToClient("updateOtherPersonalBoard", om.writeValueAsString(root));
@@ -461,7 +467,14 @@ public class VirtualSocketView implements VirtualView {
         for (Pawn pawn : simplifiedGame.getAvailablePawns()) {
             availablePawn.add(pawn.toString());
         }
-        root.set("availablePawn", availablePawn);
+        root.set("availablePawns", availablePawn);
+
+        // selected pawns
+        ObjectNode selectedPawns = om.createObjectNode();
+        root.set("selectedPawns", selectedPawns);
+        for(Map.Entry<String, Pawn> pawn : simplifiedGame.getPawnsSelected().entrySet()) {
+            selectedPawns.put(pawn.getKey(), pawn.getValue() != null ? pawn.getValue().toString() : null);
+        }
 
         try {
             sendToClient("updateGame", om.writeValueAsString(root));
@@ -512,6 +525,9 @@ public class VirtualSocketView implements VirtualView {
         cardNode.put("cardType", goldCard.getClass().getSimpleName());
         cardNode.put("sideSymbol", goldCard.getSideSymbol().isPresent() ? goldCard.getSideSymbol().get().toString() : "");
 
+        // points
+        cardNode.put("points", goldCard.getPoints());
+
         // resources
         ObjectNode resourcesNode = om.createObjectNode();
         for (Map.Entry<Symbol, Integer> resource : goldCard.getRequestedResources().entrySet()) {
@@ -529,7 +545,7 @@ public class VirtualSocketView implements VirtualView {
         }
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
-        cardNode.put("cardType", missionCard.getClass().getSimpleName());
+        cardNode.put("cardType", missionCard.getFront().getClass().getSimpleName()); //TODO get front
         cardNode.put("type", missionCard.getFront().getType());
         return cardNode;
     }
@@ -557,7 +573,7 @@ public class VirtualSocketView implements VirtualView {
         // permanent resources
         ArrayNode permanentResourcesBack = om.createArrayNode();
         for (Symbol symbol : starterCard.getFront().getPermanentResources()) {
-            permanentResources.add(symbol.toString());
+            permanentResourcesBack.add(symbol.toString());
         }
         back.set("permanentResources", permanentResources);
 

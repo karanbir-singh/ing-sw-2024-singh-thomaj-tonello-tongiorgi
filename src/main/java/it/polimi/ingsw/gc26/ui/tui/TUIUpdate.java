@@ -24,7 +24,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            System.out.println("err");
+            System.out.println("Common table not available yet!");
         }
         printOptions();
     }
@@ -36,7 +36,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            System.out.println("err");
+            System.out.println("Player not available yet!");
         }
         printOptions();
     }
@@ -48,7 +48,8 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            System.out.println("err");
+            e.printStackTrace();
+            System.out.println("Hand not available yet!");
         }
         printOptions();
     }
@@ -60,7 +61,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            System.out.println("err");
+            System.out.println("Secret hand not available yet!");
         }
         printOptions();
     }
@@ -72,7 +73,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            System.out.println("err");
+            System.out.println("Personal not available yet!");
         }
         printOptions();
     }
@@ -84,7 +85,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printOtherGame(""); //TODO si puà prendere nickname direttamente da la board senza parametro
         } catch (Exception e) {
-            System.out.println("err");
+            System.out.println("Other personal board not available yet!");
         }
         printOptions();
 
@@ -96,7 +97,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            System.out.println("err");
+            System.out.println("Simplified chat not available yet!");
         }
         printOptions();
     }
@@ -111,7 +112,7 @@ public class TUIUpdate implements UpdateInterface {
         try {
             cli.printGame();
         } catch (Exception e) {
-            System.out.println("err");
+            System.out.println("Game not available yet!");
         }
         printOptions();
     }
@@ -131,6 +132,7 @@ public class TUIUpdate implements UpdateInterface {
 
     private void clearConsole() {
         System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+
 //        try {
 //            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
 //        } catch (InterruptedException e) {
@@ -156,20 +158,23 @@ public class TUIUpdate implements UpdateInterface {
                         "1) Turn selected card side.\n" +
                         "2) Play card from hand.\n" +
                         "3) Open chat.\n" +
-                        "4) Exit game.\n");
+                        "4) Exit game.\n" +
+                        "5) Open rulebook.");
                 break;
             case WAITING_PAWNS_SELECTION:
                 System.out.println("" +
                         "1) Choose pawn color.\n" +
                         "2) Open chat.\n" +
-                        "3) Exit game.\n");
+                        "3) Exit game.\n" +
+                        "4) Open rulebook.");
                 break;
             case WAITING_SECRET_MISSION_CHOICE:
                 System.out.println("" +
                         "1) Select secret mission.\n" +
                         "2) Set secret mission.\n" +
                         "3) Open chat.\n" +
-                        "4) Exit game.\n");
+                        "4) Exit game.\n" +
+                        "5) Open rulebook.");
                 break;
             case GAME_STARTED:
                 System.out.println("" +
@@ -181,12 +186,14 @@ public class TUIUpdate implements UpdateInterface {
                         "6) Draw selected card.\n" +
                         "7) Print player's personal board.\n" +
                         "8) Open chat.\n" +
-                        "9) Exit game.\n");
+                        "9) Exit game.\n" +
+                        "10) Open rulebook.");
                 break;
             case END_STAGE:
                 System.out.println("" +
                         "1) Open chat.\n" +
-                        "2) Exit game.\n");
+                        "2) Exit game.\n" +
+                        "3) Open rulebook.");
                 break;
             case null, default:
                 //System.out.println("Invalid game state! -> " + gameState);

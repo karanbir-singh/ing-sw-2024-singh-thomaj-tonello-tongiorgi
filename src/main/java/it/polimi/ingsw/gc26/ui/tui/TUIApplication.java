@@ -6,6 +6,8 @@ import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.ui.UIInterface;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -166,6 +168,16 @@ public class TUIApplication implements UIInterface {
                         case 4:
                             System.exit(0);
                             break;
+                        case 5:
+                            if (Desktop.isDesktopSupported()) {
+                                try {
+                                    File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
+                                    Desktop.getDesktop().open(myFile);
+                                } catch (IOException ex) {
+                                    // no application registered for PDFs
+                                }
+                            }
+                            break;
                     }
                     break;
                 case WAITING_PAWNS_SELECTION:
@@ -180,6 +192,16 @@ public class TUIApplication implements UIInterface {
                             break;
                         case 3:
                             System.exit(0);
+                            break;
+                        case 4:
+                            if (Desktop.isDesktopSupported()) {
+                                try {
+                                    File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
+                                    Desktop.getDesktop().open(myFile);
+                                } catch (IOException ex) {
+                                    // no application registered for PDFs
+                                }
+                            }
                             break;
                     }
                     break;
@@ -200,6 +222,16 @@ public class TUIApplication implements UIInterface {
                             break;
                         case 4:
                             System.exit(0);
+                            break;
+                        case 5:
+                            if (Desktop.isDesktopSupported()) {
+                                try {
+                                    File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
+                                    Desktop.getDesktop().open(myFile);
+                                } catch (IOException ex) {
+                                    // no application registered for PDFs
+                                }
+                            }
                             break;
                     }
                     break;
@@ -251,6 +283,16 @@ public class TUIApplication implements UIInterface {
                         case 9:
                             System.exit(0);
                             break;
+                        case 10:
+                            if (Desktop.isDesktopSupported()) {
+                                try {
+                                    File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
+                                    Desktop.getDesktop().open(myFile);
+                                } catch (IOException ex) {
+                                    // no application registered for PDFs
+                                }
+                            }
+                            break;
                     }
                     break;
                 case END_STAGE:
@@ -260,6 +302,16 @@ public class TUIApplication implements UIInterface {
                             break;
                         case 2:
                             System.exit(0);
+                            break;
+                        case 3:
+                            if (Desktop.isDesktopSupported()) {
+                                try {
+                                    File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
+                                    Desktop.getDesktop().open(myFile);
+                                } catch (IOException ex) {
+                                    // no application registered for PDFs
+                                }
+                            }
                             break;
                     }
                     break;
