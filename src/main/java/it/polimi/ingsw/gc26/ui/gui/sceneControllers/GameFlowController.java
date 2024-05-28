@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -77,6 +78,8 @@ public class GameFlowController extends GenericController implements Initializab
     private AnchorPane personalBoardPane;
     @FXML
     private ScrollPane personalBoardScrollPane;
+    @FXML
+    private TabPane personalBoardTabPane;
     private final int xPositionStarterCard = 4;
     private final int yPositionStarterCard = 4;
 
@@ -91,9 +94,11 @@ public class GameFlowController extends GenericController implements Initializab
     @FXML
     private VBox leftVBox;
     @FXML
-    private AnchorPane rootAnchor;
+    private BorderPane rootBorder;
     @FXML
     private ScrollPane rootScrollPane;
+    @FXML
+    private ImageView scoreBoard;
     private ArrayList<ImageView> cards = new ArrayList<>();
 
 
@@ -362,45 +367,29 @@ public class GameFlowController extends GenericController implements Initializab
 
     private void layoutBindings(){
         //page dimensions
-        //rootAnchor.prefWidthProperty().bind(rootScrollPane.widthProperty());
-        //rootAnchor.prefHeightProperty().bind(rootScrollPane.heightProperty());
+        //rootBorder.prefWidthProperty().bind(rootScrollPane.widthProperty());
+        //
 
-        leftVBox.setPrefHeight(rootAnchor.getPrefHeight());
-        rightVBox.setPrefHeight(rootAnchor.getPrefHeight());
-
-        AnchorPane.setTopAnchor(personalBoardScrollPane, 50.0 );
+        leftVBox.setPrefHeight(rootBorder.getPrefHeight());
+        rightVBox.setPrefHeight(rootBorder.getPrefHeight());
 
         //personal board position
-        rootAnchor.heightProperty().addListener((obs, oldVal, newVal) -> {
-            leftVBox.prefHeightProperty().bind(rootAnchor.heightProperty());
-            rightVBox.prefHeightProperty().bind(rootAnchor.heightProperty());
-
-            commonTableBox.prefHeightProperty().bind(rootAnchor.heightProperty().multiply(0.3));
-
-            personalBoardScrollPane.prefHeightProperty().bind(rootAnchor.heightProperty().multiply(0.42));
-            AnchorPane.setTopAnchor(personalBoardScrollPane, rootAnchor.getHeight() * 0.35);
-
+        rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
+            //rootBorder.prefHeightProperty().bind(rootScrollPane.heightProperty());
+            personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.5));
         });
 
-        rootAnchor.widthProperty().addListener((obs, oldVal, newVal) -> {
-            leftVBox.prefWidthProperty().bind(rootAnchor.widthProperty().multiply(0.20));
+        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
+            //leftVBox.prefWidthProperty().bind(rootBorder.widthProperty().multiply(0.20));
 
             for(ImageView card: cards){
-                card.fitHeightProperty().bind(rootAnchor.widthProperty().multiply(0.15));
+                card.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.13));
             }
 
-            AnchorPane.setLeftAnchor(leftVBox, rootAnchor.getWidth() * 0.01);
-            //AnchorPane.setRightAnchor(leftVBox, rootAnchor.getWidth() * 0.80);
-            //AnchorPane.setLeftAnchor(rightVBox, rootAnchor.getWidth() * 0.80);
-            AnchorPane.setRightAnchor(rightVBox, rootAnchor.getWidth() * 0.01);
+            scoreBoard.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.2));
 
-            AnchorPane.setLeftAnchor(commonTableBox, (rootAnchor.getWidth() - commonTableBox.getWidth()) / 2);
-            AnchorPane.setRightAnchor(rightVBox, rootAnchor.getWidth() * 0.01);
 
-            personalBoardScrollPane.prefWidthProperty().bind(rootAnchor.widthProperty().multiply(0.45));
-            AnchorPane.setLeftAnchor(personalBoardScrollPane, (rootAnchor.getWidth() * 0.55) / 2);
-
-            AnchorPane.setLeftAnchor(handPane, (rootAnchor.getWidth() - handPane.getWidth()) / 2);
+            personalBoardTabPane.prefWidthProperty().bind(rootBorder.widthProperty().multiply(0.5));
 
 
         });

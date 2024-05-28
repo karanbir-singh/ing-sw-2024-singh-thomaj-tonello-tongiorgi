@@ -8,6 +8,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.TilePane?>
@@ -16,20 +18,11 @@
 
 <ScrollPane fx:id="rootScrollPane" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.StarterCardChoiceController">
    <content>
-      <AnchorPane fx:id="rootAnchor" minHeight="600.0">
-         <children>
-            <VBox fx:id="leftVBox" prefHeight="200.0" prefWidth="200.0">
+      <BorderPane>
+         <center>
+            <FlowPane>
                <children>
-                  <ImageView fx:id="scoreBoard" fitHeight="450.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../images/plateau_score.jpg" />
-                     </image>
-                  </ImageView>
-               </children>
-            </VBox>
-            <VBox fx:id="centerVBox" alignment="CENTER" fillWidth="false" minHeight="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <VBox alignment="CENTER" fillWidth="false" spacing="5.0">
+                  <VBox alignment="CENTER" fillWidth="false" maxWidth="1.7976931348623157E308" minWidth="500.0" spacing="5.0">
                      <children>
                         <Label text="Common Table">
                            <VBox.margin>
@@ -75,7 +68,7 @@
                         </TilePane>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="294.0" prefWidth="537.0">
+                  <VBox alignment="CENTER" prefHeight="350.0" prefWidth="600.0">
                      <children>
                         <Label fx:id="status" alignment="CENTER" contentDisplay="CENTER" text="CHOOSE YOUR STARTER CARD">
                            <font>
@@ -111,32 +104,48 @@
                         </Button>
                      </children>
                   </VBox>
-                  <AnchorPane prefHeight="98.0" prefWidth="308.0">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
+                  <HBox>
                      <children>
                         <ImageView fx:id="handCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                            <image>
                               <Image url="@../../../../images/frontSide/img_59.jpeg" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="handCard1" fitHeight="98.0" fitWidth="150.0" layoutX="391.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                        <ImageView fx:id="handCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                            <image>
                               <Image url="@../../../../images/frontSide/img_27.jpeg" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="handCard2" fitHeight="98.0" fitWidth="150.0" layoutX="195.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                        <ImageView fx:id="handCard2" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                            <image>
                               <Image url="@../../../../images/frontSide/img_27.jpeg" />
                            </image>
                         </ImageView>
                      </children>
-                  </AnchorPane>
+                  </HBox>
                </children>
+            </FlowPane>
+         </center>
+         <right>
+            <VBox fx:id="rightVBox" minWidth="120.0" BorderPane.alignment="CENTER" />
+         </right>
+         <left>
+            <VBox fx:id="leftVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="120.0" spacing="10.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="scoreBoard" fitHeight="389.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../images/plateau_score.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+               <BorderPane.margin>
+                  <Insets right="20.0" />
+               </BorderPane.margin>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
             </VBox>
-            <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="100.0" />
-         </children>
-      </AnchorPane>
+         </left>
+      </BorderPane>
    </content>
 </ScrollPane>
