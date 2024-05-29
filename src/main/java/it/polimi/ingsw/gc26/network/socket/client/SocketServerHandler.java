@@ -121,7 +121,7 @@ public class SocketServerHandler implements Runnable {
                         this.viewController.addRequest(new ChatUpdateRequest(simplifiedChat, value.get("message").asText()));
                         break;
                     case "updateGame":
-                        SimplifiedGame simplifiedGame = buildSimplifiedGame(value); //TODO check
+                        SimplifiedGame simplifiedGame = buildSimplifiedGame(value);
                         this.viewController.addRequest(new GameUpdateRequest(simplifiedGame, value.get("message").asText()));
                         break;
                     case "updateIDGame":
@@ -346,7 +346,7 @@ public class SocketServerHandler implements Runnable {
             visibleResources.put(Symbol.valueOf(entry.getKey()), entry.getValue().asInt());
         }
         // owner's nickname
-        String nickname = encodedBoard.get("nickname").asText();
+        String nickname = !encodedBoard.get("nickname").isNull() ? encodedBoard.get("nickname").asText() : null;
         return new SimplifiedPersonalBoard(encodedBoard.get("xMin").asInt(),
                 encodedBoard.get("xMax").asInt(), encodedBoard.get("yMax").asInt(), encodedBoard.get("yMin").asInt(),
                 encodedBoard.get("score").asInt(), occupiedPositions, playablePositions, blockedPositions, secretMission,

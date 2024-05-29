@@ -1,12 +1,8 @@
 package it.polimi.ingsw.gc26.ui.tui;
 
-import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
-import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.view_model.*;
-
-import java.io.IOException;
 
 public class TUIUpdate implements UpdateInterface {
 
@@ -26,7 +22,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Common table not available yet!");
         }
-        printOptions();
+        printOptions(getGameState());
     }
 
     @Override
@@ -38,7 +34,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Player not available yet!");
         }
-        printOptions();
+        printOptions(getGameState());
     }
 
     @Override
@@ -51,7 +47,7 @@ public class TUIUpdate implements UpdateInterface {
             e.printStackTrace();
             System.out.println("Hand not available yet!");
         }
-        printOptions();
+        printOptions(getGameState());
     }
 
     @Override
@@ -63,7 +59,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Secret hand not available yet!");
         }
-        printOptions();
+        printOptions(getGameState());
     }
 
     @Override
@@ -75,7 +71,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Personal not available yet!");
         }
-        printOptions();
+        printOptions(getGameState());
     }
 
     @Override
@@ -83,11 +79,11 @@ public class TUIUpdate implements UpdateInterface {
         //clearConsole(); i do not want to hide my personal board
         cli = new CLI(miniModel);
         try {
-            cli.printOtherGame(""); //TODO si puà prendere nickname direttamente da la board senza parametro
+            cli.printOtherGame(otherPersonalBoard.getNickname()); //TODO si puà prendere nickname direttamente da la board senza parametro
         } catch (Exception e) {
             System.out.println("Other personal board not available yet!");
         }
-        printOptions();
+        printOptions(getGameState());
 
     }
 
@@ -99,7 +95,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Simplified chat not available yet!");
         }
-        printOptions();
+        printOptions(getGameState());
     }
 
     /**
@@ -114,7 +110,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Game not available yet!");
         }
-        printOptions();
+        printOptions(getGameState());
     }
 
     @Override
@@ -127,7 +123,7 @@ public class TUIUpdate implements UpdateInterface {
     @Override
     public void showError(String message) {
         System.err.println(message);
-        printOptions();
+        printOptions(getGameState());
     }
 
     private void clearConsole() {
@@ -143,13 +139,25 @@ public class TUIUpdate implements UpdateInterface {
         //}
     }
 
-    private void printOptions() {
+    /**
+     * auxiliary function to get the current game state
+     * @return
+     */
+    private GameState getGameState() {
         GameState gameState;
         try {
             gameState = this.miniModel.getSimplifiedGame().getGameState();
         } catch (NullPointerException e) {
             gameState = GameState.WAITING_STARTER_CARD_PLACEMENT;
         }
+        return gameState;
+    }
+
+    /**
+     * Print's the options depending on the current game state
+     * @param gameState
+     */
+    public static void printOptions(GameState gameState) {
         System.out.println("\nSelect your option:");
 
         switch (gameState) {

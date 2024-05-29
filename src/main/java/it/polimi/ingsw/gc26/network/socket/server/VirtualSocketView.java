@@ -545,7 +545,7 @@ public class VirtualSocketView implements VirtualView {
         }
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
-        cardNode.put("cardType", missionCard.getFront().getClass().getSimpleName()); //TODO get front
+        cardNode.put("cardType", missionCard.getFront().getClass().getSimpleName());
         cardNode.put("type", missionCard.getFront().getType());
         return cardNode;
     }

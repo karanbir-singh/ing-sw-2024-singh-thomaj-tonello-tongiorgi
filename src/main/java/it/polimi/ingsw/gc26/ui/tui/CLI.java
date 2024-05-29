@@ -120,7 +120,7 @@ public class CLI {
 
     public void printOtherGame(String nickname) {
         //SimplifiedCommonTable simplifiedCommonTable = miniModel.getSimplifiedCommonTable();
-        SimplifiedPersonalBoard personalBoard = miniModel.getOtherPersonalBoard();
+        SimplifiedPersonalBoard personalBoard = miniModel.getOthersPersonalBoards().get(nickname);
 
         //COMMON TABLE: check if missions are already present
 //        String[][] commonTablePrint;
@@ -143,8 +143,8 @@ public class CLI {
 
         //PERSONAL BOARD
         String[][] personalBoardPrint;
-        if(miniModel.getOtherPersonalBoard() != null){
-            personalBoardPrint = printablePersonalBoard(miniModel.getOtherPersonalBoard());
+        if(personalBoard != null){
+            personalBoardPrint = printablePersonalBoard(personalBoard);
         } else {
             personalBoardPrint = new String[1][1];
             personalBoardPrint[0][0] = "\t";
@@ -610,7 +610,7 @@ public class CLI {
     }*/
 
     public String[][] printableHandAndMission() {
-        SimplifiedPersonalBoard miniPB = miniModel.getOtherPersonalBoard();
+        SimplifiedPersonalBoard miniPB = miniModel.getPersonalBoard(); //TODO check. Before getOtherPersonalBoard
 
         if(miniPB.getSecretMission() == null){
             String[][] empty = new String[1][1];

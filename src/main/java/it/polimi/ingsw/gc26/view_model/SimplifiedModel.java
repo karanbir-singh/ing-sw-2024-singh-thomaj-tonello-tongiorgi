@@ -4,6 +4,8 @@ import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 
 import javax.swing.text.View;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SimplifiedModel {
     private SimplifiedGame simplifiedGame;
@@ -12,7 +14,7 @@ public class SimplifiedModel {
     private SimplifiedHand simplifiedHand;
     private SimplifiedHand simplifiedSecretHand;
     private SimplifiedPersonalBoard personalBoard;
-    private SimplifiedPersonalBoard otherPersonalBoard;
+    private HashMap<String, SimplifiedPersonalBoard> otherPersonalBoards = new HashMap<>();
     private SimplifiedChat simplifiedChat;
 //    private OptionsMenu optionsMenu;
     UpdateInterface view;
@@ -55,7 +57,7 @@ public class SimplifiedModel {
     }
 
     public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) {
-        this.otherPersonalBoard = otherPersonalBoard;
+        this.otherPersonalBoards.put(otherPersonalBoard.getNickname(), otherPersonalBoard);
         //this.view.updateViewOtherPersonalBoard(otherPersonalBoard); todo only when client requires it
 
         //
@@ -101,8 +103,8 @@ public class SimplifiedModel {
         return personalBoard;
     }
 
-    public SimplifiedPersonalBoard getOtherPersonalBoard() {
-        return otherPersonalBoard;
+    public HashMap<String, SimplifiedPersonalBoard> getOthersPersonalBoards() {
+        return otherPersonalBoards;
     }
 
     public SimplifiedChat getSimplifiedChat() {

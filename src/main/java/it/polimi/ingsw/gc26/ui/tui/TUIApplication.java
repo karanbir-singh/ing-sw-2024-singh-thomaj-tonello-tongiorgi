@@ -163,7 +163,7 @@ public class TUIApplication implements UIInterface {
                             mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
                             break;
                         case 3:
-                            openChat();
+                            openChat(gameState);
                             break;
                         case 4:
                             System.exit(0);
@@ -188,7 +188,7 @@ public class TUIApplication implements UIInterface {
                             mainClient.getVirtualGameController().choosePawnColor(color, this.mainClient.getClientID());
                             break;
                         case 2:
-                            openChat();
+                            openChat(gameState);
                             break;
                         case 3:
                             System.exit(0);
@@ -218,7 +218,7 @@ public class TUIApplication implements UIInterface {
                             mainClient.getVirtualGameController().setSecretMission(this.mainClient.getClientID());
                             break;
                         case 3:
-                            openChat();
+                            openChat(gameState);
                             break;
                         case 4:
                             System.exit(0);
@@ -271,14 +271,18 @@ public class TUIApplication implements UIInterface {
                         case 7:
                             System.out.println("Insert the player's nickname owner of the board: ");
                             String playerNickname = new Scanner(System.in).nextLine();
-                            if (mainClient.getViewController().getSimplifiedModel().getOtherPersonalBoard().getNickname().equals(playerNickname)) {
-                                mainClient.getViewController().getSimplifiedModel().getView().updateViewOtherPersonalBoard(mainClient.getViewController().getSimplifiedModel().getOtherPersonalBoard());
+                            if (mainClient.getViewController().getSimplifiedModel().getOthersPersonalBoards().containsKey(playerNickname)) {
+                                mainClient.getViewController().getSimplifiedModel().getView().updateViewOtherPersonalBoard(mainClient.getViewController().getSimplifiedModel().getOthersPersonalBoards().get(playerNickname));
                                 break;
                             }
+//                            if (mainClient.getViewController().getSimplifiedModel().getOtherPersonalBoard().getNickname().equals(playerNickname)) {
+//                                mainClient.getViewController().getSimplifiedModel().getView().updateViewOtherPersonalBoard(mainClient.getViewController().getSimplifiedModel().getOtherPersonalBoard());
+//                                break;
+//                            }
                             mainClient.getVirtualGameController().printPersonalBoard(playerNickname, this.mainClient.getClientID());
                             break;
                         case 8:
-                            openChat();
+                            openChat(gameState);
                             break;
                         case 9:
                             System.exit(0);
@@ -289,7 +293,7 @@ public class TUIApplication implements UIInterface {
                                     File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
                                     Desktop.getDesktop().open(myFile);
                                 } catch (IOException ex) {
-                                    // no application registered for PDFs
+                                    System.out.println("Np application found to open the rulebook!");
                                 }
                             }
                             break;
@@ -298,7 +302,7 @@ public class TUIApplication implements UIInterface {
                 case END_STAGE:
                     switch (option) {
                         case 1:
-                            openChat();
+                            openChat(gameState);
                             break;
                         case 2:
                             System.exit(0);
@@ -322,7 +326,7 @@ public class TUIApplication implements UIInterface {
         }
     }
 
-    private void openChat() throws RemoteException {
+    private void openChat(GameState gameState) throws RemoteException {
         int function = 0;
         do {
             System.out.println("1) Open Chat.\n" +
@@ -345,6 +349,7 @@ public class TUIApplication implements UIInterface {
             for (Message message : mainClient.getViewController().getSimplifiedModel().getSimplifiedChat().filterMessagesByPlayer(playerNickname, playersNicknames)) {
                 System.out.println(message);
             }
+            TUIUpdate.printOptions(gameState);
         } else {
             System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
             String receiverNickname = new Scanner(System.in).nextLine();
