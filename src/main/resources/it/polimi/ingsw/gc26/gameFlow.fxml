@@ -40,7 +40,7 @@
               </VBox>
          </left>
          <center>
-            <FlowPane alignment="CENTER" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWrapLength="300.0" vgap="20.0" BorderPane.alignment="CENTER">
+            <FlowPane alignment="CENTER" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="20.0" BorderPane.alignment="CENTER">
                <children>
                   <VBox fx:id="commonTableBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="500.0" spacing="20.0">
                      <children>
@@ -93,7 +93,7 @@
                      <tabs>
                         <Tab closable="false" text="Your Personal Board">
                            <content>
-                                    <ScrollPane fx:id="personalBoardScrollPane" hbarPolicy="NEVER" hvalue="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" pannable="true" prefHeight="400.0" prefWidth="600.0" vbarPolicy="NEVER" vvalue="0.5">
+                                    <ScrollPane fx:id="personalBoardScrollPane" hbarPolicy="NEVER" hvalue="0.5" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" pannable="true" prefHeight="400.0" prefWidth="600.0" vbarPolicy="NEVER" vvalue="0.5">
                                         <content>
                                     <AnchorPane fx:id="personalBoardPane">
                                        <children>
@@ -136,23 +136,19 @@
             </FlowPane>
          </center>
          <right>
-              <VBox fx:id="rightVBox" alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="300.0" minWidth="120.0" spacing="10.0" BorderPane.alignment="CENTER">
+              <VBox fx:id="rightVBox" alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="300.0" minWidth="120.0" spacing="20.0" BorderPane.alignment="CENTER">
                   <children>
                       <Label text="Common Missions" />
-                  <VBox spacing="20.0">
-                     <children>
-                            <ImageView fx:id="commonMission1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../images/frontSide/img_98.jpeg" />
-                           </image>
-                        </ImageView>
-                            <ImageView fx:id="commonMission0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../images/frontSide/img_98.jpeg" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </VBox>
+                      <ImageView fx:id="commonMission1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../images/frontSide/img_98.jpeg" />
+                     </image>
+                  </ImageView>
+                      <ImageView fx:id="commonMission0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../images/frontSide/img_98.jpeg" />
+                     </image>
+                  </ImageView>
                       <Label text="Your secret mission">
                           <VBox.margin>
                               <Insets top="20.0" />
@@ -171,7 +167,7 @@
               </VBox>
          </right>
          <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </BorderPane>
    </content>

@@ -376,7 +376,8 @@ public class GameFlowController extends GenericController implements Initializab
         //personal board position
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
             //rootBorder.prefHeightProperty().bind(rootScrollPane.heightProperty());
-            personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.5));
+            //commonTableBox.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.3));
+            personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.45));
         });
 
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {

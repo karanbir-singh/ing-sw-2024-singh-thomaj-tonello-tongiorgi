@@ -10,6 +10,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -50,22 +51,23 @@ public class StarterCardChoiceController extends GenericController implements In
 
     //layout
     @FXML
-    VBox leftVBox;
+    private VBox rightVBox;
     @FXML
-    VBox rightVBox;
+    private VBox leftVBox;
     @FXML
-    VBox centerVBox;
+    private BorderPane rootBorder;
     @FXML
-    ScrollPane rootScrollPane;
+    private ScrollPane rootScrollPane;
     @FXML
-    AnchorPane rootAnchor;
+    private ImageView scoreBoard;
+    private ArrayList<ImageView> cards = new ArrayList<>();
     @FXML
-    HBox hCardBox;
+    VBox choosingBox;
+
     @FXML
     ImageView image;
     @FXML
     Label status;
-    private ArrayList<ImageView> cards = new ArrayList<>();
 
 
     String path = "/images/";

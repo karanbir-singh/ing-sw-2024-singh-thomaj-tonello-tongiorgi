@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,24 +11,23 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fx:id="rootScrollPane" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.StarterCardChoiceController">
+<ScrollPane fx:id="rootScrollPane" fitToHeight="true" fitToWidth="true" prefViewportHeight="800.0" prefViewportWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.StarterCardChoiceController">
    <content>
-      <BorderPane>
+      <BorderPane fx:id="rootBorder" prefHeight="200.0" prefWidth="200.0">
          <center>
-            <FlowPane>
+            <FlowPane alignment="CENTER" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="20.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="CENTER" fillWidth="false" maxWidth="1.7976931348623157E308" minWidth="500.0" spacing="5.0">
+                  <VBox fx:id="commonTableBox" alignment="CENTER" fillWidth="false" maxWidth="1.7976931348623157E308" minWidth="500.0" spacing="20.0">
                      <children>
                         <Label text="Common Table">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <TilePane alignment="CENTER" hgap="20.0" prefColumns="3" prefHeight="232.0" prefRows="3" prefWidth="556.0" scaleShape="false" vgap="20.0">
+                        <HBox spacing="10.0">
                            <children>
                               <ImageView fx:id="resourceCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
@@ -46,6 +44,10 @@
                                     <Image url="@../../../../images/backSide/img_2.jpeg" />
                                  </image>
                               </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox spacing="10.0">
+                           <children>
                               <ImageView fx:id="goldCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                                  <image>
                                     <Image url="@../../../../images/frontSide/img_55.jpeg" />
@@ -62,49 +64,42 @@
                                  </image>
                               </ImageView>
                            </children>
-                           <effect>
-                              <Glow />
-                           </effect>
-                        </TilePane>
+                        </HBox>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="350.0" prefWidth="600.0">
+                  <VBox fx:id="choosingBox" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" prefHeight="400.0" prefWidth="600.0">
                      <children>
                         <Label fx:id="status" alignment="CENTER" contentDisplay="CENTER" text="CHOOSE YOUR STARTER CARD">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                        <StackPane maxWidth="1.7976931348623157E308">
                            <children>
+                              <ImageView fx:id="image" fitHeight="95.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../images/backSide/img_1.jpeg" />
+                                 </image>
+                              </ImageView>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#onClickFlipButton" text="Flip Card" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="55.0">
+                                    <Button contentDisplay="CENTER" layoutX="420.0" layoutY="55.0" mnemonicParsing="false" onAction="#onClickFlipButton" text="Flip Card" AnchorPane.leftAnchor="420.0" AnchorPane.topAnchor="55.0">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Button>
+                                    <Button layoutX="418.0" layoutY="100.0" mnemonicParsing="false" onAction="#onClickGoToNextStep" text="Play Card">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Button>
                                  </children>
                               </AnchorPane>
-                              <HBox fx:id="HCardBox" alignment="CENTER" prefHeight="150.0" prefWidth="470.0">
-                                 <children>
-                                    <ImageView fx:id="image" fitHeight="95.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../../../images/backSide/img_1.jpeg" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                              </HBox>
                            </children>
                         </StackPane>
-                        <Button mnemonicParsing="false" onAction="#onClickGoToNextStep" text="Play Card">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Button>
                      </children>
                   </VBox>
-                  <HBox>
+                  <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
                      <children>
                         <ImageView fx:id="handCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
                            <image>
@@ -127,12 +122,12 @@
             </FlowPane>
          </center>
          <right>
-            <VBox fx:id="rightVBox" minWidth="120.0" BorderPane.alignment="CENTER" />
+            <VBox fx:id="rightVBox" maxWidth="300.0" minWidth="120.0" spacing="20.0" BorderPane.alignment="CENTER" />
          </right>
          <left>
-            <VBox fx:id="leftVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="120.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="leftVBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="300.0" minWidth="120.0" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="scoreBoard" fitHeight="389.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="scoreBoard" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../images/plateau_score.jpg" />
                      </image>
@@ -146,6 +141,9 @@
                </padding>
             </VBox>
          </left>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
       </BorderPane>
    </content>
 </ScrollPane>
