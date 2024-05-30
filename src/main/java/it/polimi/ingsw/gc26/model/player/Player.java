@@ -109,7 +109,7 @@ public class Player implements Serializable {
                         amIFirstPlayer,
                         state
                 ),
-                STR."Colore \{pawn.toString()} impostato",
+                "Color " + pawn.toString() + " set",
                 clientID);
     }
 
@@ -210,7 +210,7 @@ public class Player implements Serializable {
 
         this.observable.notifyUpdatePlayer(
                 new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
-                STR."State changed into \{state.toString()}",
+                "State changed into " + state.toString(),
                 clientID);
     }
 }

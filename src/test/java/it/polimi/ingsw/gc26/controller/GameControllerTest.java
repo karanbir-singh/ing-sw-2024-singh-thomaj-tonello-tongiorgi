@@ -380,7 +380,7 @@ class GameControllerTest {
 
         gameController.backup();
 
-        File file = new File(STR."\{GameController.GAME_CONTROLLER_FILE_PATH}-1.bin");
+        File file = new File(GameController.GAME_CONTROLLER_FILE_PATH + "-1.bin");
         assertTrue(file.exists());
     }
 
@@ -391,7 +391,7 @@ class GameControllerTest {
         gameController.backup();
 
         try {
-            FileInputStream fileInputStream = new FileInputStream(STR."\{GameController.GAME_CONTROLLER_FILE_PATH}-1.bin");
+            FileInputStream fileInputStream = new FileInputStream(GameController.GAME_CONTROLLER_FILE_PATH + "-1.bin");
             ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
 
             GameController fromBackup = (GameController) inputStream.readObject();

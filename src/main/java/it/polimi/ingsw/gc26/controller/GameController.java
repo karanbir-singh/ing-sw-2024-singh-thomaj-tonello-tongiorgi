@@ -73,7 +73,7 @@ public class GameController implements Serializable {
      */
     public void backup() {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(STR."\{GAME_CONTROLLER_FILE_PATH}\{ID}.bin");
+            FileOutputStream fileOutputStream = new FileOutputStream(GAME_CONTROLLER_FILE_PATH + ID + ".bin");
             ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
             outputStream.writeObject(this);
             outputStream.close();
@@ -94,7 +94,7 @@ public class GameController implements Serializable {
                     while (this.gameRequests.isEmpty()) {
                         try {
                             this.gameRequests.wait();
-                        } catch (InterruptedException e) {
+                        } catch (InterruptedException ignored) {
                         }
                     }
                     gameRequests.remove().execute(this);
@@ -216,7 +216,7 @@ public class GameController implements Serializable {
                         game.removePawn(pawn);
 
                         if (isDebug) {
-                            System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
+                            System.out.println(player.getNickname() + " chose color pawn " + color);
                         }
 
                         // Remove player from waiting list
@@ -360,7 +360,7 @@ public class GameController implements Serializable {
                 if (secretMission != null) {
                     player.getSecretMissionHand().setSelectedCard(secretMission, player.getID());
                     if (isDebug) {
-                        System.out.println(STR."\{player.getNickname()} selected mission: \{secretMission}");
+                        System.out.println(player.getNickname() + " selected mission: " + secretMission);
                     }
                 }
             } else {
@@ -395,7 +395,7 @@ public class GameController implements Serializable {
                     player.getSecretMissionHand().removeCard(secretMission, player.getID());
 
                     if (isDebug) {
-                        System.out.println(STR."\{player.getNickname()} set secret mission");
+                        System.out.println(player.getNickname() + " set secret mission");
                     }
 
                     // Remove player from list
@@ -434,7 +434,7 @@ public class GameController implements Serializable {
             // Get the player by his ID
             Player player = game.getPlayerByID(playerID);
             if (isDebug) {
-                System.out.println(STR."\{player.getNickname()} set as the first player");
+                System.out.println(player.getNickname() + " set as the first player");
             }
 
             // Set the player as the first
@@ -443,7 +443,7 @@ public class GameController implements Serializable {
 
             // Position the first player as the first element of the players' list
             game.getPlayers().remove(player);
-            game.getPlayers().addFirst(player);
+            game.getPlayers().add(0, player);
 
             // Change game state into GAME_IN_PROGRESS
             game.setState(GameState.GAME_STARTED);
@@ -473,7 +473,7 @@ public class GameController implements Serializable {
             if (selectedCard != null) {
                 player.getHand().setSelectedCard(selectedCard, player.getID());
                 if (isDebug) {
-                    System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
+                    System.out.println(player.getNickname() + " selected card: " + selectedCard);
                 }
             }
         } else {
@@ -493,7 +493,7 @@ public class GameController implements Serializable {
         // Get player who is turning the selected card side
         Player player = game.getPlayerByID(playerID);
         if (isDebug) {
-            System.out.println(STR."\{player.getNickname()} turn selected card side");
+            System.out.println(player.getNickname() + " turn selected card side");
         }
         // Turn selected card side
         player.getHand().turnSide(playerID);
@@ -514,7 +514,7 @@ public class GameController implements Serializable {
             // Get the player who is selecting the position on his personal board
             Player player = game.getPlayerByID(playerID);
             if (isDebug) {
-                System.out.println(STR."\{player.getNickname()} selected position [\{selectedX}, \{selectedY}] board");
+                System.out.println(player.getNickname() + " selected position [" + selectedX + "," + selectedY + "] board");
             }
 
             // Get the personal board
@@ -555,7 +555,7 @@ public class GameController implements Serializable {
                     player.getHand().removeCard(player.getHand().getSelectedCard().get(), player.getID());
 
                     if (isDebug) {
-                        System.out.println(STR."\{player.getNickname()} played card from hand");
+                        System.out.println(player.getNickname() + " played card from hand");
                     }
 
                     playersToWait.remove(player);
@@ -574,7 +574,7 @@ public class GameController implements Serializable {
                 // Check if it's the player's turn
                 if (player.equals(game.getCurrentPlayer()) && player.getState().equals(PlayerState.PLAYING)) {
                     if (isDebug) {
-                        System.out.println(STR."\{player.getNickname()} played card from hand");
+                        System.out.println(player.getNickname() + " played card from hand");
                     }
                     // Otherwise get the player's personal board and his hand
                     PersonalBoard personalBoard = player.getPersonalBoard();
@@ -620,7 +620,7 @@ public class GameController implements Serializable {
             // Check if it's the current player
             if (player.equals(game.getCurrentPlayer())) {
                 if (isDebug) {
-                    System.out.println(STR."[\{cardIndex}] card selected from common table");
+                    System.out.println("[" + cardIndex + "] card selected from common table");
                 }
                 // Set the selected card on the common table
                 game.getCommonTable().selectCard(cardIndex, playerID);
@@ -659,7 +659,7 @@ public class GameController implements Serializable {
                     hand.addCard(removedCard, playerID);
 
                     if (isDebug) {
-                        System.out.println(STR."\{player.getNickname()} drew selected card");
+                        System.out.println(player.getNickname() + " drew selected card");
                     }
 
                     // Change player's state

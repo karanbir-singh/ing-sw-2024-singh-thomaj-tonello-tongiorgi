@@ -219,7 +219,7 @@ public class CommonTable implements Serializable {
         Card selectedCard = null;
         if (selectedY == 0) {
             if (selectedX == 0) {
-                selectedCard = resourceCards.getFirst();
+                selectedCard = resourceCards.get(0);
             } else if (selectedX == 1) {
                 selectedCard = resourceCards.get(1);
             } else if (selectedX == 2) {
@@ -227,7 +227,7 @@ public class CommonTable implements Serializable {
             }
         } else if (selectedY == 1) {
             if (selectedX == 0) {
-                selectedCard = goldCards.getFirst();
+                selectedCard = goldCards.get(0);
             } else if (selectedX == 1) {
                 selectedCard = goldCards.get(1);
             } else if (selectedX == 2) {
