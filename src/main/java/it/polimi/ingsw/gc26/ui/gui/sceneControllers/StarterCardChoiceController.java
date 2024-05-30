@@ -112,7 +112,7 @@ public class StarterCardChoiceController extends GenericController implements In
         cards.add(goldDeck);
 
         CommonLayout layout = new CommonLayout();
-        layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
+        //layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
 
     }
 }

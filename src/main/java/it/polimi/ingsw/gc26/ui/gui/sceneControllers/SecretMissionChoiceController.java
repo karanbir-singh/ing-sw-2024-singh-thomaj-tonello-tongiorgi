@@ -154,7 +154,7 @@ public class SecretMissionChoiceController extends GenericController implements 
         cards.add(secretMission1);
 
         CommonLayout layout = new CommonLayout();
-        layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
+        //layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
 
     }
 

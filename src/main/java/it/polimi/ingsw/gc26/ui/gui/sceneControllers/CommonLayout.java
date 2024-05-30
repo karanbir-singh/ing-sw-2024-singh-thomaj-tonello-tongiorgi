@@ -1,27 +1,31 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
 public class CommonLayout {
-    public void pageBindings(ScrollPane rootScrollPane, AnchorPane rootAnchor, VBox centerVBox, VBox leftVBox, VBox rightVBox){
-        rootAnchor.prefWidthProperty().bind(rootScrollPane.widthProperty());
-        rootAnchor.prefHeightProperty().bind(rootScrollPane.heightProperty());
+    public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, TabPane personalBoardTabPane, VBox leftVBox, VBox rightVBox, ImageView scoreBoard, ArrayList<ImageView> cards){
 
-        centerVBox.prefHeightProperty().bind(rootAnchor.heightProperty());
-        AnchorPane.setTopAnchor(centerVBox, 0.0);
-        AnchorPane.setLeftAnchor(centerVBox, (rootAnchor.getWidth() - centerVBox.getWidth()) / 2);
-
-        rootAnchor.heightProperty().addListener((obs, oldVal, newVal) -> {
-            AnchorPane.setTopAnchor(centerVBox, 0.0);
+        rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
+            leftVBox.setPrefHeight(rootBorder.getPrefHeight());
+            rightVBox.setPrefHeight(rootBorder.getPrefHeight());
+            personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.45));
         });
 
-        rootAnchor.widthProperty().addListener((obs, oldVal, newVal) -> {
-            AnchorPane.setLeftAnchor(centerVBox, (newVal.doubleValue() - centerVBox.getWidth()) / 2);
+        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
+            for(ImageView card: cards){
+                card.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.13));
+            }
+
+            scoreBoard.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.2));
+            personalBoardTabPane.prefWidthProperty().bind(rootBorder.widthProperty().multiply(0.5));
+
         });
     }
 

@@ -332,7 +332,8 @@ public class GameFlowController extends GenericController implements Initializab
         cards.add(secretMission);
 
         //page layout and dimensions bindings
-        layoutBindings();
+        CommonLayout layout = new CommonLayout();
+        layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, leftVBox, rightVBox, scoreBoard, cards);
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
@@ -370,11 +371,11 @@ public class GameFlowController extends GenericController implements Initializab
         //rootBorder.prefWidthProperty().bind(rootScrollPane.widthProperty());
         //
 
-        leftVBox.setPrefHeight(rootBorder.getPrefHeight());
-        rightVBox.setPrefHeight(rootBorder.getPrefHeight());
 
         //personal board position
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
+            leftVBox.setPrefHeight(rootBorder.getPrefHeight());
+            rightVBox.setPrefHeight(rootBorder.getPrefHeight());
             //rootBorder.prefHeightProperty().bind(rootScrollPane.heightProperty());
             //commonTableBox.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.3));
             personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.45));
