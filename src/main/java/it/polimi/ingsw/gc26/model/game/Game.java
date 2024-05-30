@@ -325,7 +325,6 @@ public class Game implements Serializable {
         if(this.currentPlayer != null){
             currentPlayerNickname = this.currentPlayer.getNickname();
         }
-        this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState,currentPlayerNickname,points,nicknameWinners,this.availablePawns), message);
 
         HashMap<String, Pawn> pawnsSelected = new HashMap<>();
         for (Player player : this.players) {

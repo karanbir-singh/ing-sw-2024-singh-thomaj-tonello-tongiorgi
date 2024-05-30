@@ -275,11 +275,12 @@ public class TUIApplication implements UIInterface {
                                 mainClient.getViewController().getSimplifiedModel().getView().updateViewOtherPersonalBoard(mainClient.getViewController().getSimplifiedModel().getOthersPersonalBoards().get(playerNickname));
                                 break;
                             }
+                            System.out.println(playerNickname +  "'s Personal Board not found!");
 //                            if (mainClient.getViewController().getSimplifiedModel().getOtherPersonalBoard().getNickname().equals(playerNickname)) {
 //                                mainClient.getViewController().getSimplifiedModel().getView().updateViewOtherPersonalBoard(mainClient.getViewController().getSimplifiedModel().getOtherPersonalBoard());
 //                                break;
 //                            }
-                            mainClient.getVirtualGameController().printPersonalBoard(playerNickname, this.mainClient.getClientID());
+                            //mainClient.getVirtualGameController().printPersonalBoard(playerNickname, this.mainClient.getClientID());
                             break;
                         case 8:
                             openChat(gameState);

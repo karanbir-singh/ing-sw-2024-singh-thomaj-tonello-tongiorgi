@@ -234,7 +234,7 @@ public class SocketServerHandler implements Runnable {
                             resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3), imagePathFront);
             case "GoldCardFront" ->
                     new GoldCardFront(Symbol.valueOf(encodedCard.get("sideSymbol").asText()), resources,
-                            encodedCard.get("points").asInt(), corners.get(0), corners.get(1), corners.get(2), corners.get(3));
+                            encodedCard.get("points").asInt(), corners.get(0), corners.get(1), corners.get(2), corners.get(3), imagePathFront);
             default -> null;
         };
         String imagePath = ""; //TODO
@@ -431,7 +431,7 @@ public class SocketServerHandler implements Runnable {
                                 requestedResources, corners.get(0), corners.get(1), corners.get(2), corners.get(3), imagePathFront);
                         break;
                     case "InkwellCounter":
-                        side = new InkwellCounter(!Objects.equals(position.get("side").get("sideSymbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new InkwellCounter(!position.get("side").get("sideSymbol").asText().isEmpty() ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
                                 requestedResources, corners.get(0), corners.get(1), corners.get(2), corners.get(3), imagePathFront);
                         break;
                     case "ManuscriptCounter":
@@ -441,7 +441,7 @@ public class SocketServerHandler implements Runnable {
                         break;
                     case "GoldCardFront" :
                         side = new GoldCardFront(position.get("side").get("sideSymbol").asText().isEmpty() ? null : Symbol.valueOf(position.get("side").get("sideSymbol").asText()),
-                        requestedResources, position.get("side").get("points").asInt(), corners.get(0), corners.get(1), corners.get(2), corners.get(3));
+                        requestedResources, position.get("side").get("points").asInt(), corners.get(0), corners.get(1), corners.get(2), corners.get(3), imagePathFront);
                         break;
                     case null, default:
                         break;
