@@ -32,12 +32,13 @@ public class Message implements Serializable {
 
     /**
      * Initializes Message
-     * @param text string containing the information
+     *
+     * @param text     string containing the information
      * @param receiver Players that have to receive the message
-     * @param sender Player that send the message
-     * @param time Time the message was created
+     * @param sender   Player that send the message
+     * @param time     Time the message was created
      */
-    public Message(String text, Player receiver, Player sender, String time){
+    public Message(String text, Player receiver, Player sender, String time) {
         this.text = text;
         this.sender = sender;
         if (time == null) {
@@ -51,6 +52,7 @@ public class Message implements Serializable {
 
     /**
      * Initialize Messages
+     *
      * @param json_text string containing information to create the instance encoded as a json string
      * @throws JsonProcessingException error in the string's formatting
      */
@@ -66,70 +68,75 @@ public class Message implements Serializable {
 
     /**
      * Returns the message's sender
+     *
      * @return sender
      */
-    public Player getSender(){
+    public Player getSender() {
         return this.sender;
     }
 
     /**
      * Returns the text information
+     *
      * @return text
      */
-    public String getText(){
+    public String getText() {
         return this.text;
     }
 
     /**
      * Returns the Players that received the message
+     *
      * @return players
      */
-    public Player getReceiver(){
+    public Player getReceiver() {
         return this.receiver; //a copy
     }
 
     /**
      * Returns the time the message was created
+     *
      * @return time
      */
-   public LocalTime getTime(){
+    public LocalTime getTime() {
         return this.time;
-   }
+    }
 
 
     /**
      * Returns a json serialized string
+     *
      * @return json message
      */
-   public String toJson() {
-       HashMap<String, String>  data = new HashMap<>();
-       data.put("text", this.getText());
-       try {
-           data.put("receiver", this.getReceiver().getNickname());
-       } catch (NullPointerException e) {
-           data.put("receiver", "");
-       }
-       data.put("sender", this.getSender().getNickname());
-       data.put("time", this.getTime().toString());
-       ObjectMapper objectMapper = new ObjectMapper();
-       try {
-           return objectMapper.writeValueAsString(data);
-       }catch (JsonProcessingException e) {
-           return "";
-       }
-   }
+    public String toJson() {
+        HashMap<String, String> data = new HashMap<>();
+        data.put("text", this.getText());
+        try {
+            data.put("receiver", this.getReceiver().getNickname());
+        } catch (NullPointerException e) {
+            data.put("receiver", "");
+        }
+        data.put("sender", this.getSender().getNickname());
+        data.put("time", this.getTime().toString());
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(data);
+        } catch (JsonProcessingException e) {
+            return "";
+        }
+    }
 
 
     /**
      * Overrides the method toString to have more readability
+     *
      * @return string
      */
-   @Override
+    @Override
     public String toString() {
-       if (this.receiver != null) {
-           return STR."[\{this.getSender().getNickname()} -> \{this.getReceiver().getNickname()} | \{this.getTime().toString()} ]: \{this.getText()}";
-       }
-       return STR."[\{this.getSender().getNickname()} | \{this.getTime().toString()} ]: \{this.getText()}";
-
-   }
+        if (this.receiver != null) {
+            return "[ " + this.sender.getNickname() + " -> " + this.receiver.getNickname() + " | " + this.time.toString() + " ]: " + this.text;
+        }
+        return "[ " + this.sender.getNickname() + " | " + this.time.toString() + " ]: " + this.text;
+    }
 }
