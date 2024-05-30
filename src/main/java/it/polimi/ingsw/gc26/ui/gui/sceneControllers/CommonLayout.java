@@ -23,7 +23,7 @@ public class CommonLayout {
                 card.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.13));
             }
 
-            scoreBoard.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.2));
+            scoreBoard.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.15));
             personalBoardTabPane.prefWidthProperty().bind(rootBorder.widthProperty().multiply(0.5));
 
         });

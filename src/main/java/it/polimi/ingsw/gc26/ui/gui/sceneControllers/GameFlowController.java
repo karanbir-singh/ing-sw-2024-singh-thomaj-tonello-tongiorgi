@@ -50,7 +50,7 @@ public class GameFlowController extends GenericController implements Initializab
     @FXML
     private ImageView handCard2;
     @FXML
-    private TilePane handPane;
+    private AnchorPane handPane;
     //end hand
 
 
@@ -70,7 +70,9 @@ public class GameFlowController extends GenericController implements Initializab
     private ImageView goldDeck;
 
     @FXML
-    private VBox commonTableBox;
+    private HBox resourceCardBox;
+    @FXML
+    private HBox goldCardBox;
     @FXML
     private VBox commonMissionsBox;
     @FXML
@@ -81,10 +83,6 @@ public class GameFlowController extends GenericController implements Initializab
 
     @FXML
     private GridPane gridPane;
-    @FXML
-    private AnchorPane personalBoardPane;
-    @FXML
-    private ScrollPane personalBoardScrollPane;
     @FXML
     private TabPane personalBoardTabPane;
     private final int xPositionStarterCard = 40;
@@ -139,7 +137,7 @@ public class GameFlowController extends GenericController implements Initializab
 
 
     //azioni per la mano
-    public void onClickMouseHandCard(javafx.scene.input.MouseEvent mouseEvent){
+    public void onClickMouseHandCard(MouseEvent mouseEvent){
         try {
             int index = Integer.valueOf(((ImageView)mouseEvent.getSource()).getAccessibleText());
             this.mainClient.getVirtualGameController().selectCardFromHand(index,this.mainClient.getClientID());
@@ -203,44 +201,47 @@ public class GameFlowController extends GenericController implements Initializab
     // String.valueOf(getClass().getResource
     @Override
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
-        ArrayList<ImageView> imageViews = new ArrayList<>();
+        ArrayList<ImageView> resources = new ArrayList<>();
+        ArrayList<ImageView> goldens = new ArrayList<>();
+
         int index = 0;
         for(Card card: simplifiedCommonTable.getResourceCards()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView,String.valueOf(index));
-            imageView.setOnMouseClicked(this::onClickCommonTableCard);
-            imageViews.add(imageView);
+            //imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            resources.add(imageView);
             index++;
         }
         ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
         this.setParameters(resourceDeck, String.valueOf(index));
         resourceDeck.setOnMouseClicked(this::onClickCommonTableCard);
-        imageViews.add(resourceDeck);
+        resources.add(resourceDeck);
         index++;
         for(Card card: simplifiedCommonTable.getGoldCards()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(index));
-            imageView.setOnMouseClicked(this::onClickCommonTableCard);
-            imageViews.add(imageView);
+            //imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            goldens.add(imageView);
             index++;
         }
         ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
         this.setParameters(goldDeck,String.valueOf(index));
         goldDeck.setOnMouseClicked(this::onClickCommonTableCard);
-        imageViews.add(goldDeck);
+        goldens.add(goldDeck);
         index++;
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
         for(Card card: simplifiedCommonTable.getCommonMissions()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(index));
-            imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            //imageView.setOnMouseClicked(this::onClickCommonTableCard);
             imageViewsCommonMissions.add(imageView);
             index++;
         }
 
         this.commonMissionsBox.getChildren().setAll(imageViewsCommonMissions);
 
-        this.commonTableBox.getChildren().setAll(imageViews);
+        this.resourceCardBox.getChildren().setAll(resources);
+        this.goldCardBox.getChildren().setAll(goldens);
 
     }
 
@@ -339,6 +340,9 @@ public class GameFlowController extends GenericController implements Initializab
         //page layout and dimensions bindings
         CommonLayout layout = new CommonLayout();
         layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, leftVBox, rightVBox, scoreBoard, cards);
+        handPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            AnchorPane.setRightAnchor(handCard1, (newVal.doubleValue() - handCard1.getFitWidth()) / 2);
+        });
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
