@@ -9,6 +9,8 @@ module it.polimi.ingsw.gc26 {
     requires jdk.compiler;
     requires java.management;
 
+    exports it.polimi.ingsw.gc26.model.deck;
+    opens it.polimi.ingsw.gc26.model.deck to javafx.fxml;
     exports it.polimi.ingsw.gc26.request.view_request;
     opens it.polimi.ingsw.gc26.request.view_request to javafx.fxml;
     exports it.polimi.ingsw.gc26.model.hand;
