@@ -120,6 +120,7 @@ public class CommonTable implements Serializable {
                 return;
         }
         this.observable.notifyMessage("Card selected on common table", clientID);
+        //this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(),"Card selected on common table");
         // TODO replace notify with update Common Table
     }
 

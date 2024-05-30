@@ -72,6 +72,10 @@ public class ViewController {
         }
     }
 
+    public SimplifiedModel getSimplifiedModel() {
+        return simplifiedModel;
+    }
+
     /**
      * Updates the client's state (used during the game's initialization)
      *
@@ -134,6 +138,7 @@ public class ViewController {
 
     public void showMessage(String message) {
         System.out.println(STR."[SERVER]: \{message}");
+        this.simplifiedModel.showMessage(message);
     }
 
     /**
@@ -143,6 +148,7 @@ public class ViewController {
      */
     public void showError(String errorMessage) {
         System.err.println(STR."[ERROR]: \{errorMessage}");
+        this.simplifiedModel.showError(errorMessage);
     }
 
     public void setGameID(int gameID){

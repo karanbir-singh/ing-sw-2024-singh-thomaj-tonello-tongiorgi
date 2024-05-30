@@ -22,8 +22,8 @@ public class InkwellCounter extends GoldCardFront implements Serializable {
      * @param UPRIGHT Symbol in the up right corner.
      * @param DOWNRIGHT Symbol in the down right corner.
      */
-    public InkwellCounter(Symbol sideSymbol, Map<Symbol, Integer> requestedResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
-        super(sideSymbol, requestedResources, 0, UPLEFT, DOWNLEFT, UPRIGHT, DOWNRIGHT);
+    public InkwellCounter(Symbol sideSymbol, Map<Symbol, Integer> requestedResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, String imagePath) {
+        super(sideSymbol, requestedResources, 0, UPLEFT, DOWNLEFT, UPRIGHT, DOWNRIGHT, imagePath);
     }
 
     /**

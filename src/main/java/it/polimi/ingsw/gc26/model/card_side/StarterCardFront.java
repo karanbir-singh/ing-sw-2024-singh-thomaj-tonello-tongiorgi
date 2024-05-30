@@ -16,7 +16,7 @@ public class StarterCardFront extends Side implements Serializable {
      * @param UPRIGHT Symbol in the up right corner.
      * @param DOWNRIGHT Symbol in the down right corner.
      */
-    public StarterCardFront(ArrayList<Symbol> permanentResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
+    public StarterCardFront(ArrayList<Symbol> permanentResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, String imagePath) {
         setPermanentResources(permanentResources);
         setDOWNLEFT(DOWNLEFT);
         setDOWNRIGHT(DOWNRIGHT);
@@ -26,5 +26,6 @@ public class StarterCardFront extends Side implements Serializable {
         setType(0);
         setPoints(0);
         setSideSymbol(null);
+        setImagePath(imagePath);
     }
 }

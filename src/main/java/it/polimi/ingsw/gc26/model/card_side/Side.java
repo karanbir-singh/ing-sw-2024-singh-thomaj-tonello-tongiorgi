@@ -52,6 +52,11 @@ abstract public class Side implements Serializable {
     private Corner DOWNRIGHT;
 
     /**
+     * this attribute represents the path where the side's image is located
+     */
+    private String imagePath;
+
+    /**
      * This method returns the points that a Mission cards gives based on the Player's board
      * @param firstX X coordinate of the first card
      * @param firstY Y coordinate of the first card
@@ -240,6 +245,22 @@ abstract public class Side implements Serializable {
      */
     public void setDOWNRIGHT(Corner DOWNRIGHT) {
         this.DOWNRIGHT = DOWNRIGHT;
+    }
+
+    /**
+     * Sets the path representing the image
+     * @param imagePath
+     */
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    /**
+     * Returns the card's path
+     * @return
+     */
+    public String getImagePath() {
+        return imagePath;
     }
 
     /**

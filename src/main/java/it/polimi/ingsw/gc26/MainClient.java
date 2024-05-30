@@ -202,8 +202,7 @@ public class MainClient {
 
     public static void main(String args[]) throws NotBoundException, IOException {
         // print logo
-        System.out.println(asciiCodexNaturalis + "\n" +
-                "");
+        System.out.println(asciiCodexNaturalis + "\n");
 
         // Get server IP and port
         Scanner scanner = new Scanner(System.in);

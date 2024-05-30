@@ -18,7 +18,7 @@ public class MissionDiagonalPattern extends MissionCardFront implements Serializ
      * Creates a new instance of MissionDiagonalPattern
      * @param type represent which diagonal combination is needed to this card give points
      */
-    public MissionDiagonalPattern(int type) {
+    public MissionDiagonalPattern(int type, String imagePath) {
         setType(type);
         setPoints(0);
 
@@ -29,6 +29,7 @@ public class MissionDiagonalPattern extends MissionCardFront implements Serializ
         setUPRIGHT(new Corner(true, null));
         setPermanentResources(new ArrayList<>());
         setRequestedResources(new HashMap<>());
+        setImagePath(imagePath);
     }
 
     /**

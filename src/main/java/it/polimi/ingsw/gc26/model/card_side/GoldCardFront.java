@@ -22,7 +22,7 @@ public class GoldCardFront extends Side implements Serializable {
      * @param UPRIGHT Symbol in the up right corner.
      * @param DOWNRIGHT Symbol in the down right corner.
      */
-    public GoldCardFront(Symbol sideSymbol, Map<Symbol, Integer> requestedResources, int points, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
+    public GoldCardFront(Symbol sideSymbol, Map<Symbol, Integer> requestedResources, int points, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, String imagePath) {
         setSideSymbol(sideSymbol);
         setPoints(points);
         setDOWNLEFT(DOWNLEFT);
@@ -32,5 +32,6 @@ public class GoldCardFront extends Side implements Serializable {
         setRequestedResources(new HashMap<>(requestedResources));
         setPermanentResources(new ArrayList<>());
         setType(0);
+        setImagePath(imagePath);
     }
 }

@@ -3,9 +3,11 @@ package it.polimi.ingsw.gc26.view_model;
 import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 
-import javax.swing.text.View;
+import javax.swing.text.View; //TODO check
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import java.sql.SQLOutput; //TODO check
 
 public class SimplifiedModel {
     private SimplifiedGame simplifiedGame;
@@ -17,8 +19,12 @@ public class SimplifiedModel {
     private HashMap<String, SimplifiedPersonalBoard> otherPersonalBoards = new HashMap<>();
     private SimplifiedChat simplifiedChat;
 //    private OptionsMenu optionsMenu;
+
     UpdateInterface view;
-    
+
+    public void setViewUpdater(UpdateInterface view) {
+        this.view = view;
+    }
 
     public void setSimplifiedGame(SimplifiedGame simplifiedGame, String message) {
         this.simplifiedGame = simplifiedGame;
@@ -59,8 +65,6 @@ public class SimplifiedModel {
     public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) {
         this.otherPersonalBoards.put(otherPersonalBoard.getNickname(), otherPersonalBoard);
         //this.view.updateViewOtherPersonalBoard(otherPersonalBoard); todo only when client requires it
-
-        //
         // this.view.showMessage(message);
     }
 
@@ -73,10 +77,6 @@ public class SimplifiedModel {
 //    public void setOptionsMenu(OptionsMenu optionsMenu) {
 //        this.optionsMenu = optionsMenu;
 //    }
-
-    public void setViewUpdater(UpdateInterface view) {
-        this.view = view;
-    }
 
 
     public SimplifiedCommonTable getSimplifiedCommonTable() {
