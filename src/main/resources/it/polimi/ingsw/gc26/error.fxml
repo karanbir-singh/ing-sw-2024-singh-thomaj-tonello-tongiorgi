@@ -2,20 +2,25 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.ErrorController">
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.ErrorController">
    <children>
-      <Label layoutX="245.0" layoutY="104.0" text="ERROR" textFill="RED">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-      <Label fx:id="message" layoutX="254.0" layoutY="182.0" text="message">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Label>
+      <AnchorPane maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="245.0" layoutY="104.0" text="ERROR" textFill="RED">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+            <Label fx:id="message" alignment="CENTER" contentDisplay="CENTER" layoutX="254.0" layoutY="182.0" text="message">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</StackPane>
