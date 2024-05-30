@@ -1,11 +1,12 @@
 package it.polimi.ingsw.gc26;
 
-import it.polimi.ingsw.gc26.network.RMI.RMIServerPing;
+import it.polimi.ingsw.gc26.network.PingManager;
+import it.polimi.ingsw.gc26.network.RMI.RMIPingManager;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.network.socket.SocketServerPing;
+import it.polimi.ingsw.gc26.network.socket.SocketPingManager;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
 import it.polimi.ingsw.gc26.network.socket.server.VirtualSocketView;
@@ -25,6 +26,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class MainClient {
     /**
@@ -96,6 +99,11 @@ public class MainClient {
      */
     private Registry registry;
 
+    /**
+     * Runnable of the thread that manage the server ping
+     */
+    private PingManager pingManager;
+
     public MainClient(UpdateInterface view) {
         this.clientID = null;
         this.clientState = ClientState.CONNECTION;
@@ -104,6 +112,11 @@ public class MainClient {
 
     }
 
+    /**
+     * Set client's state
+     *
+     * @param clientState new client state
+     */
     public void setClientState(ClientState clientState) {
         synchronized (this.lock) {
             this.clientState = clientState;
@@ -111,6 +124,18 @@ public class MainClient {
         }
     }
 
+    /**
+     * @return client's state
+     */
+    public ClientState getClientState() {
+        return this.clientState;
+    }
+
+    /**
+     * Sets client's ID
+     *
+     * @param clientID ID
+     */
     public void setClientID(String clientID) {
         synchronized (this.lock) {
             this.clientID = clientID;
@@ -118,16 +143,34 @@ public class MainClient {
         }
     }
 
+    /**
+     * @return client's ID
+     */
     public String getClientID() {
         return clientID;
     }
 
+    /**
+     * @return main client's lock
+     */
     public Object getLock() {
         return this.lock;
     }
 
-    public ClientState getClientState() {
-        return this.clientState;
+    /**
+     * Sets main client's server ping manager
+     *
+     * @param pingManager the server ping manager
+     */
+    public void setPingManager(PingManager pingManager) {
+        this.pingManager = pingManager;
+    }
+
+    /**
+     * @return main client's server ping manager
+     */
+    public PingManager getPingManager() {
+        return pingManager;
     }
 
     /**
@@ -187,10 +230,6 @@ public class MainClient {
      */
     public ViewController getViewController() {
         return viewController;
-    }
-
-    public Registry getRegistry() {
-        return registry;
     }
 
     /**
@@ -280,7 +319,7 @@ public class MainClient {
         }
 
         // Get remote object
-        Remote remoteObject = null;
+        Remote remoteObject;
         try {
             remoteObject = mainClient.registry.lookup(remoteObjectName);
         } catch (RemoteException | NotBoundException e) {
@@ -294,15 +333,15 @@ public class MainClient {
             throw new RemoteException("[ERROR]: unable to create virtual RMI view");
         }
 
-        // Launch thread for pinging RMI server
-        new Thread(new RMIServerPing(mainClient)).start();
+        // Set RMI server ping manager
+        mainClient.setPingManager(new RMIPingManager(mainClient));
 
         return mainClient;
     }
 
     public static MainClient startSocketClient(GraphicType graphicType) throws IOException {
         // Create connection with the server
-        Socket serverSocket = null;
+        Socket serverSocket;
         try {
             serverSocket = new Socket(SERVER_IP, SERVER_SOCKET_PORT);
         } catch (IOException e) {
@@ -341,8 +380,8 @@ public class MainClient {
         // Launch a thread for managing server requests
         new SocketServerHandler(mainClient.getViewController(), socketIn, socketOut);
 
-        // Launch thread for pinging RMI server
-        new Thread(new SocketServerPing(mainClient)).start();
+        // Set Socket server ping manager
+        mainClient.setPingManager(new SocketPingManager(mainClient, 5));
 
         return mainClient;
     }

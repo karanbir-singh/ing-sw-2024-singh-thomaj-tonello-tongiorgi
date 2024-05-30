@@ -64,7 +64,7 @@ public interface VirtualView extends Remote {
 
     void updateIDGame(int id) throws RemoteException;
 
-    void isClientAlive() throws RemoteException;
+    void ping() throws RemoteException;
 
     void killProcess() throws RemoteException;
 }

@@ -87,26 +87,24 @@ public class MainServer {
         System.out.println("---------------------------");
 
         // Insert RMI server port
-        System.out.print(STR."Enter RMI server port (default: \{DEFAULT_RMI_SERVER_PORT}): ");
+        System.out.print("Enter RMI server port (default: " + DEFAULT_RMI_SERVER_PORT + "): ");
         String rmiServerPort = scanner.nextLine();
-        if(rmiServerPort.matches(".*[a-zA-Z]+.*")){
+        if (rmiServerPort.matches(".*[a-zA-Z]+.*")) {
             ConsoleColors.printError("[ERROR]: Invalid input -> Set default RMI server port");
             RMI_SERVER_PORT = DEFAULT_RMI_SERVER_PORT;
-        }
-        else if (rmiServerPort.isEmpty()) {
+        } else if (rmiServerPort.isEmpty()) {
             RMI_SERVER_PORT = DEFAULT_RMI_SERVER_PORT;
         } else {
             RMI_SERVER_PORT = Integer.parseInt(rmiServerPort);
         }
 
         // Insert Server socket port
-        System.out.print(STR."Enter server socket port (default: \{DEFAULT_SOCKET_SERVER_PORT}): ");
+        System.out.print("Enter server socket port (default: " + DEFAULT_SOCKET_SERVER_PORT + "): ");
         String serverSocketPort = scanner.nextLine();
-        if(serverSocketPort.matches(".*[a-zA-Z]+.*")){
+        if (serverSocketPort.matches(".*[a-zA-Z]+.*")) {
             ConsoleColors.printError("[ERROR]: Invalid input -> Set default Server socket port");
             SERVER_SOCKET_PORT = DEFAULT_SOCKET_SERVER_PORT;
-        }
-        else if (serverSocketPort.isEmpty()) {
+        } else if (serverSocketPort.isEmpty()) {
             SERVER_SOCKET_PORT = DEFAULT_SOCKET_SERVER_PORT;
         } else {
             SERVER_SOCKET_PORT = Integer.parseInt(serverSocketPort);

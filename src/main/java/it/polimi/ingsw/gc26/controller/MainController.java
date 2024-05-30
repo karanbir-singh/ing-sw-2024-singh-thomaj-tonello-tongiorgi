@@ -100,7 +100,7 @@ public class MainController implements Serializable {
     public void launchExecutor() {
         this.mainRequests = new PriorityQueue<>((a, b) -> a.getPriority() > b.getPriority() ? -1 : 1);
         this.waitingClients = new ArrayList<>();
-        //le due righe di prima servono solo perchè quando il server da down va in up esse diventano null
+
         new Thread(() -> {
             while (true) {
                 synchronized (mainRequests) {
@@ -271,10 +271,6 @@ public class MainController implements Serializable {
                 game = new Game(waitingPlayers, waitingClients);
                 gameController = new GameController(game, this.numberOfTotalGames);
 
-
-                // Launch thread for pinging clients
-                this.createSingleGamePingThread(gameController.getGame().getObservable().getClients(), this.numberOfTotalGames);
-
                 // Add game controller to the map
                 gamesControllers.put(numberOfTotalGames, gameController);
 
@@ -287,6 +283,9 @@ public class MainController implements Serializable {
                         e.printStackTrace();
                     }
                 });
+
+                // Launch thread for pinging clients
+                this.startClientsPing(gameController.getGame().getObservable().getClients(), this.numberOfTotalGames);
 
                 // Start game
                 gameController.prepareCommonTable();
@@ -331,7 +330,7 @@ public class MainController implements Serializable {
      */
     public void recreateGames() throws IOException, ClassNotFoundException {
         for (Integer gameControllerID : gamesControllers.keySet()) {
-            FileInputStream fileInputStream = new FileInputStream(STR."\{GameController.GAME_CONTROLLER_FILE_PATH}\{gameControllerID}.bin");
+            FileInputStream fileInputStream = new FileInputStream(GameController.GAME_CONTROLLER_FILE_PATH + gameControllerID + ".bin");
             ObjectInputStream inputStream = new ObjectInputStream(fileInputStream);
 
             // Retrieve game controller
@@ -370,7 +369,7 @@ public class MainController implements Serializable {
                 }
 
                 // Launch thread for pinging clients
-                this.createSingleGamePingThread(game.getObservable().getClients(), gameControllerID);
+                this.startClientsPing(game.getObservable().getClients(), gameControllerID);
             }
         }).start();
     }
@@ -381,7 +380,7 @@ public class MainController implements Serializable {
      * @param clients          Array of VirtualView and id of that particular Game
      * @param gameControllerID id of the game
      */
-    private void createSingleGamePingThread(ArrayList<Pair<VirtualView, String>> clients, int gameControllerID) {
+    private void startClientsPing(ArrayList<Pair<VirtualView, String>> clients, int gameControllerID) {
         new Thread(() -> {
             // Each client is alive
             boolean allClientAlive = true;
@@ -390,26 +389,25 @@ public class MainController implements Serializable {
             while (allClientAlive) {
 
                 // Ping each client of the game
-                for (Pair client : clients) {
-
+                for (Pair<VirtualView, String> client : clients) {
                     // Use a counter for managing
                     int numAttempt = 0;
                     while (numAttempt < NUM_RECONNECTION_ATTEMPTS) {
                         try {
                             // Ping client
-                            ((VirtualView) client.getKey()).isClientAlive();
+                            client.getKey().ping();
 
                             // Reset num of attempt for this client
                             numAttempt = NUM_RECONNECTION_ATTEMPTS;
                         } catch (RemoteException e) {
-                            System.out.println(STR."Trying to reconnecting with a client \{numAttempt}");
+                            System.out.println("Trying to reconnecting with a client " + numAttempt);
 
                             // Increase attempt num
                             numAttempt++;
 
                             // Check if attempt num reached max after error
                             if (numAttempt == NUM_RECONNECTION_ATTEMPTS) {
-                                System.out.println(STR."A client is disconnected \{client.getValue()}");
+                                System.out.println("A client is disconnected " + client.getValue());
 
                                 // Client is not alive
                                 allClientAlive = false;
@@ -425,14 +423,13 @@ public class MainController implements Serializable {
 
                 // Sleep thread
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     System.out.println("Thread interrupted");
                 }
             }
         }).start();
     }
-
 
     /**
      * Destroy a game controller by its ID
@@ -454,13 +451,13 @@ public class MainController implements Serializable {
         }
 
         // Delete game controller file
-        Path fileToDeletePath = Paths.get(STR."\{GameController.GAME_CONTROLLER_FILE_PATH}\{gameControllerID}.bin");
+        Path fileToDeletePath = Paths.get(GameController.GAME_CONTROLLER_FILE_PATH + gameControllerID + ".bin");
         try {
             Files.delete(fileToDeletePath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(STR."Game \{gameControllerID} destroyed");
+        System.out.println("Game " + gameControllerID + " destroyed");
     }
 
     /**

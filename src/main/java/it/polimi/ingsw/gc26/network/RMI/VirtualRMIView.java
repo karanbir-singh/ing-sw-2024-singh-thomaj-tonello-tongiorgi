@@ -85,13 +85,13 @@ public class VirtualRMIView implements VirtualView {
 
 
     @Override
-    public void updateIDGame(int gameID){
+    public void updateIDGame(int gameID) {
         this.viewController.setGameID(gameID);
     }
 
     @Override
-    public void isClientAlive(){
-        //TODO FORSE INSERIRE QUALCOSA
+    public void ping() throws RemoteException {
+        this.viewController.resetTimer();
     }
 
     /**

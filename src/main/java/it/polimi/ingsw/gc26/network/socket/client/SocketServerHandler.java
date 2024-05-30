@@ -47,7 +47,6 @@ public class SocketServerHandler implements Runnable {
     private final ViewController viewController;
 
     /**
-     *
      * @param viewController
      * @param inputFromServer
      * @param outputToServer
@@ -56,6 +55,7 @@ public class SocketServerHandler implements Runnable {
         this.viewController = viewController;
         this.inputFromServer = inputFromServer;
         this.outputToServer = outputToServer;
+
 
         new Thread(this).start();
     }
@@ -121,7 +121,9 @@ public class SocketServerHandler implements Runnable {
                     case "updateIDGame":
                         this.viewController.setGameID(value.get("idGame").asInt());
                         break;
-                    case "isClientAlive":
+                    case "ping":
+//                        System.out.println("Ping from server");
+                        this.viewController.resetTimer();
                         break;
                     case "killProcess":
                         this.viewController.killProcess();
@@ -178,22 +180,18 @@ public class SocketServerHandler implements Runnable {
         }
         ArrayList<Corner> corners = getCorners(encodedCard);
         Side frontGold = switch (encodedCard.get("cardType").asText()) {
-            case "CornerCounter" ->
-                    new CornerCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
-                            resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
-            case "InkwellCounter" ->
-                    new InkwellCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
-                            resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
-            case "ManuscriptCounter" ->
-                    new ManuscriptCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
-                            resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
-            case "QuillCounter" ->
-                    new QuillCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
-                            resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
+            case "CornerCounter" -> new CornerCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
+                    resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
+            case "InkwellCounter" -> new InkwellCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
+                    resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
+            case "ManuscriptCounter" -> new ManuscriptCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
+                    resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
+            case "QuillCounter" -> new QuillCounter(Symbol.valueOf(encodedCard.get("sideSymbol").asText()),
+                    resources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
             default -> null;
         };
-        Side backGold= new CardBack(Symbol.valueOf(encodedCard.get("sideSymbol").asText()));
-        return  new GoldCard(frontGold, backGold);
+        Side backGold = new CardBack(Symbol.valueOf(encodedCard.get("sideSymbol").asText()));
+        return new GoldCard(frontGold, backGold);
     }
 
     private ResourceCard getResourceCard(JsonNode encodedCard) {
@@ -212,7 +210,7 @@ public class SocketServerHandler implements Runnable {
         if (encodedCard.findValue("card") != null) {
             encodedCard = encodedCard.get("card");
         }
-        for ( JsonNode resource : encodedCard.get("front").get("permanentResources")) {
+        for (JsonNode resource : encodedCard.get("front").get("permanentResources")) {
             resources.add(Symbol.valueOf(resource.asText()));
         }
         ArrayList<Corner> corners = getCorners(encodedCard.get("front"));
@@ -223,16 +221,14 @@ public class SocketServerHandler implements Runnable {
     }
 
     private MissionCard getMissionCard(JsonNode encodedCard) {
-        if (encodedCard.isEmpty()) { return null;}
+        if (encodedCard.isEmpty()) {
+            return null;
+        }
         MissionCardFront missionCardFront = switch (encodedCard.get("cardType").asText()) {
-            case "missionLPatter" ->
-                    new MissionLPattern(encodedCard.get("type").asInt());
-            case "missionDiagonalPatter" ->
-                    new MissionDiagonalPattern(encodedCard.get("type").asInt());
-            case "missionTriplet" ->
-                    new MissionTripletPattern(encodedCard.get("type").asInt());
-            case "missionItem" ->
-                    new MissionItemPattern(encodedCard.get("type").asInt());
+            case "missionLPatter" -> new MissionLPattern(encodedCard.get("type").asInt());
+            case "missionDiagonalPatter" -> new MissionDiagonalPattern(encodedCard.get("type").asInt());
+            case "missionTriplet" -> new MissionTripletPattern(encodedCard.get("type").asInt());
+            case "missionItem" -> new MissionItemPattern(encodedCard.get("type").asInt());
             default -> null;
         };
         return new MissionCard(missionCardFront, new CardBack());
@@ -261,7 +257,7 @@ public class SocketServerHandler implements Runnable {
         Card selectedCard = encodedHand.get("selectedCard").asInt() != -1 ? cards.get(encodedHand.get("selectedCard").asInt()) : null;
         Side selectedSide = null;
         if (encodedHand.get("selectedSide").asInt() != -1) {
-            selectedSide = encodedHand.get("selectedSide").asInt() == 0 ? selectedCard.getFront(): selectedCard.getBack() ;
+            selectedSide = encodedHand.get("selectedSide").asInt() == 0 ? selectedCard.getFront() : selectedCard.getBack();
         }
         return new SimplifiedHand(cards, selectedCard, selectedSide);
     }
@@ -274,7 +270,7 @@ public class SocketServerHandler implements Runnable {
         Card selectedCard = encodedHand.get("selectedCard").asInt() != -1 ? cards.get(encodedHand.get("selectedCard").asInt()) : null;
         Side selectedSide = null;
         if (encodedHand.get("selectedSide").asInt() != -1) {
-            selectedSide = encodedHand.get("selectedSide").asInt() == 0 ? selectedCard.getFront(): selectedCard.getBack() ;
+            selectedSide = encodedHand.get("selectedSide").asInt() == 0 ? selectedCard.getFront() : selectedCard.getBack();
         }
         return new SimplifiedHand(cards, selectedCard, selectedSide);
     }
@@ -285,15 +281,15 @@ public class SocketServerHandler implements Runnable {
         Card secretMission = getMissionCard(encodedBoard.get("secretMission"));
 
         ArrayList<Point> occupiedPositions = buildArrayPosition(encodedBoard.get("occupiedPositions"));
-        for( JsonNode occupiedPosition : encodedBoard.get("occupiedPositions")){
+        for (JsonNode occupiedPosition : encodedBoard.get("occupiedPositions")) {
             occupiedPositions.add(new Point(occupiedPosition.get("X").asInt(), occupiedPosition.get("Y").asInt()));
         }
 
-        for( JsonNode playablePosition : encodedBoard.get("playablePositions")){
+        for (JsonNode playablePosition : encodedBoard.get("playablePositions")) {
             playablePositions.add(new Point(playablePosition.get("X").asInt(), playablePosition.get("Y").asInt()));
         }
 
-        for( JsonNode blockedPosition : encodedBoard.get("blockedPositions")){
+        for (JsonNode blockedPosition : encodedBoard.get("blockedPositions")) {
             blockedPositions.add(new Point(blockedPosition.get("X").asInt(), blockedPosition.get("Y").asInt()));
         }
 
@@ -322,7 +318,7 @@ public class SocketServerHandler implements Runnable {
 
     private SimplifiedChat buildSimplifiedChat(JsonNode encodedChat) throws JsonProcessingException {
         ArrayList<Message> messages = new ArrayList<>();
-        for (JsonNode encodedMessage :  encodedChat.get("messages")) {
+        for (JsonNode encodedMessage : encodedChat.get("messages")) {
             messages.add(new Message(encodedMessage.asText()));
         }
         return new SimplifiedChat(messages);
@@ -331,7 +327,7 @@ public class SocketServerHandler implements Runnable {
     private ArrayList<Point> buildArrayPosition(JsonNode arrayNode) {
         ArrayList<Point> positions = new ArrayList<>();
         // each point
-        for(JsonNode position : arrayNode){
+        for (JsonNode position : arrayNode) {
             // flags
             Map<Integer, Boolean> flags = new HashMap<>();
             Iterator<Map.Entry<String, JsonNode>> resourceIterator = position.get("flags").fields();
@@ -343,7 +339,7 @@ public class SocketServerHandler implements Runnable {
             Side side = null;
             ArrayList<Symbol> permanentResources = new ArrayList<>();
             Map<Symbol, Integer> requestedResources = new HashMap<>();
-            if(!position.get("type").isNull()) {
+            if (!position.get("type").isNull()) {
                 ArrayList<Corner> corners = getCorners(position.get("side"));
                 switch (position.get("type").asText()) {
                     case "CardBack":
@@ -359,24 +355,24 @@ public class SocketServerHandler implements Runnable {
                                 corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case "ResourceCardFront":
-                        side = new ResourceCardFront(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new ResourceCardFront(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
                                 position.get("side").get("points").asInt(),
                                 corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case "CornerCounter":
-                        side = new CornerCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new CornerCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
                                 requestedResources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case "QuillCounter":
-                        side = new QuillCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new QuillCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
                                 requestedResources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case "InkwellCounter":
-                        side = new InkwellCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new InkwellCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
                                 requestedResources, corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
                     case "ManuscriptCounter":
-                        side = new ManuscriptCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
+                        side = new ManuscriptCounter(!Objects.equals(position.get("side").get("DOWNRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(position.get("side").get("DOWNRIGHT").get("symbol").asText()) : null,
                                 requestedResources,
                                 corners.get(0), corners.get(1), corners.get(2), corners.get(3));
                         break;
@@ -397,13 +393,13 @@ public class SocketServerHandler implements Runnable {
                 !Objects.equals(side.get("UPLEFT").get("symbol").asText(), "") ? Symbol.valueOf(side.get("UPLEFT").get("symbol").asText()) : null,
                 side.get("UPLEFT").get("isHidden").asBoolean()));
         corners.add(new Corner(Boolean.parseBoolean(side.get("DOWNLEFT").get("isEvil").asText()),
-                        !Objects.equals(side.get("DOWNLEFT").get("symbol").asText(), "") ? Symbol.valueOf(side.get("DOWNLEFT").get("symbol").asText()) : null,
+                !Objects.equals(side.get("DOWNLEFT").get("symbol").asText(), "") ? Symbol.valueOf(side.get("DOWNLEFT").get("symbol").asText()) : null,
                 side.get("DOWNLEFT").get("isHidden").asBoolean()));
         corners.add(new Corner(Boolean.parseBoolean(side.get("UPRIGHT").get("isEvil").asText()),
-                        !Objects.equals(side.get("UPRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(side.get("UPRIGHT").get("symbol").asText()) : null,
+                !Objects.equals(side.get("UPRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(side.get("UPRIGHT").get("symbol").asText()) : null,
                 side.get("UPRIGHT").get("isHidden").asBoolean()));
         corners.add(new Corner(Boolean.parseBoolean(side.get("DOWNRIGHT").get("isEvil").asText()),
-                        !Objects.equals(side.get("DOWNRIGHT").get("symbol").asText(), "") ?  Symbol.valueOf(side.get("DOWNRIGHT").get("symbol").asText()) : null,
+                !Objects.equals(side.get("DOWNRIGHT").get("symbol").asText(), "") ? Symbol.valueOf(side.get("DOWNRIGHT").get("symbol").asText()) : null,
                 side.get("DOWNRIGHT").get("isHidden").asBoolean()));
         return corners;
     }

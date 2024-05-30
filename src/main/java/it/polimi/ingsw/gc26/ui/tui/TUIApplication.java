@@ -2,11 +2,13 @@ package it.polimi.ingsw.gc26.ui.tui;
 
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
+import it.polimi.ingsw.gc26.network.PingManager;
+import it.polimi.ingsw.gc26.network.RMI.RMIPingManager;
+import it.polimi.ingsw.gc26.network.socket.SocketPingManager;
 import it.polimi.ingsw.gc26.ui.UIInterface;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
 import java.io.IOException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -26,7 +28,7 @@ public class TUIApplication implements UIInterface {
         if (MainClient.NetworkType.valueOf(networkType) == MainClient.NetworkType.rmi) {
             try {
                 this.mainClient = MainClient.startRMIClient(MainClient.GraphicType.tui);
-            }catch (RemoteException e){
+            } catch (RemoteException e) {
                 ConsoleColors.printError(e.getMessage());
                 System.exit(-1);
             }
@@ -41,6 +43,10 @@ public class TUIApplication implements UIInterface {
 
         try {
             this.runConnection();
+
+            // Launch thread for managing server ping
+            new Thread(this.mainClient.getPingManager()).start();
+
         } catch (RemoteException e) {
             ConsoleColors.printError("[ERROR]: unable to communicate with the server");
             System.exit(-1);
@@ -48,7 +54,7 @@ public class TUIApplication implements UIInterface {
 
         try {
             this.runGame();
-        }catch (RemoteException e){
+        } catch (RemoteException ignored) {
 
         }
     }
@@ -211,9 +217,9 @@ public class TUIApplication implements UIInterface {
                     do {
                         System.out.println("Insert message: ");
                         message = scan.nextLine();
-                    } while (message == "");
+                    } while (message.isEmpty());
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-                    mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
+                    mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().format(formatter));
                     break;
                 case 12:
                     System.exit(0);

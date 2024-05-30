@@ -16,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -64,6 +63,10 @@ public class GUIApplication extends Application implements UIInterface {
         new Thread(() -> {
             try {
                 this.runConnection();
+
+                // Launch thread for managing server ping
+                new Thread(this.mainClient.getPingManager()).start();
+
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }

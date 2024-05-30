@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.request.view_request.ViewRequest;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -130,14 +131,18 @@ public class ViewController {
 //        System.out.println(message);
     }
 
+    public void resetTimer() {
+        this.mainClient.getPingManager().reset();
+    }
+
     /**
      * Reports a message from the server (for example error reports)
      *
-     * @param message
+     * @param message message sent by the server
      */
 
     public void showMessage(String message) {
-        System.out.println(STR."[SERVER]: \{message}");
+        System.out.println("[SERVER]: " + message);
     }
 
     /**
@@ -146,14 +151,15 @@ public class ViewController {
      * @param errorMessage message to print
      */
     public void showError(String errorMessage) {
-        System.err.println(STR."[ERROR]: \{errorMessage}");
+        ConsoleColors.printError(errorMessage);
     }
 
-    public void setGameID(int gameID){
+
+    public void setGameID(int gameID) {
         this.gameID = gameID;
     }
 
-    public int getGameID(){
+    public int getGameID() {
         return this.gameID;
     }
 

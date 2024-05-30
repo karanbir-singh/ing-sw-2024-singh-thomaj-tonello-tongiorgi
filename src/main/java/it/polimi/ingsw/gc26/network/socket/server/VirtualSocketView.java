@@ -627,8 +627,8 @@ public class VirtualSocketView implements VirtualView {
      * @throws RemoteException
      */
     @Override
-    public void isClientAlive() throws RemoteException {
-        sendToClient("isClientAlive", new HashMap<>());
+    public void ping() throws RemoteException {
+        sendToClient("ping", new HashMap<>());
     }
 
     /**
