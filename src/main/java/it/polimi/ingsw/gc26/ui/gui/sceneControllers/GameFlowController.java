@@ -240,7 +240,7 @@ public class GameFlowController extends GenericController implements Initializab
 
         this.commonMissionsBox.getChildren().setAll(imageViewsCommonMissions);
 
-        this.commonTablePane.getChildren().setAll(imageViews);
+        this.commonTableBox.getChildren().setAll(imageViews);
 
     }
 

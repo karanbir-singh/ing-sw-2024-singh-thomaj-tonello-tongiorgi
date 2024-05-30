@@ -112,7 +112,7 @@
                         </Tab>
                      </tabs>
                   </TabPane>
-                  <AnchorPane>
+                  <AnchorPane fx:id="handPane">
                      <children>
                                 <ImageView fx:id="handCard0" fitWidth="180.0" onMouseClicked="#onClickMouseFirstHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
                            <image>
