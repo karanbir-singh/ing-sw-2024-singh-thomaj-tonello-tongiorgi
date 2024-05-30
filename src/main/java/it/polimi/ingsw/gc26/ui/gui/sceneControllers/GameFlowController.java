@@ -7,6 +7,7 @@ import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -100,11 +101,19 @@ public class GameFlowController extends GenericController implements Initializab
     @FXML
     private ImageView scoreBoard;
     private ArrayList<ImageView> cards = new ArrayList<>();
-
+    private ArrayList<ImageView> playablePrositions = new ArrayList<>();
+    private ArrayList<ImageView> handCards = new ArrayList<>();
+    private DraggableMaker draggableMaker = new DraggableMaker();
 
     private String path = "/images/";
     private ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
     private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
+
+    //forDraggability
+    private double mouseAnchorX;
+    private double mouseAnchorY;
+    private double initialX;
+    private double initialY;
 
     public void onClickTurnSideButton(ActionEvent actionEvent){
         try {
@@ -173,9 +182,6 @@ public class GameFlowController extends GenericController implements Initializab
         } catch (RemoteException e) {
            // throw new RuntimeException(e);
        }
-
-
-
     }
     //fine azioni carte opache
 
@@ -228,6 +234,8 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
+        handCards = new ArrayList<>();
+
         if (simplifiedHand.getCards().size() >= 3) {
             int index = 0;
             for(index = 0; index< 3; index++){
@@ -259,6 +267,10 @@ public class GameFlowController extends GenericController implements Initializab
             this.handCard0.setVisible(true);
             this.handCard1.setVisible(true);
             this.handCard2.setVisible(true);
+
+            handCards.add(handCard0);
+            handCards.add(handCard1);
+            handCards.add(handCard2);
         }
         //le righe sotto servono perchè quando un player gioca una carta dalla mano non si deve più vedere quella carta
 
@@ -267,11 +279,18 @@ public class GameFlowController extends GenericController implements Initializab
             this.handCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(0).getFront().getImagePath()))));
             this.handCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getCards().get(1).getFront().getImagePath()))));
             this.handCard2.setVisible(false);
+
+            handCards.add(handCard0);
+            handCards.add(handCard1);
         }
+        makeDraggable(handCards, playablePrositions);
+
     }
 
     @Override
     public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard) {
+        playablePrositions = new ArrayList<>();
+
         if(personalBoard.getSecretMission() != null){
             this.secretMission.setImage(new Image(String.valueOf(getClass().getResource(path + personalBoard.getSecretMission().getFront().getImagePath()))));
         }
@@ -282,9 +301,13 @@ public class GameFlowController extends GenericController implements Initializab
             for(Point point : personalBoard.getPlayablePositions()){
                 ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg"))));
                 imageView.setOnMouseClicked(this::onClickPlayablePosition);
-                imageView.setOpacity(0);
+                imageView.setOpacity(0.3);
+                imageView.setVisible(false);
                 addImage(imageView,this.xPositionStarterCard + point.getX(),
                         this.yPositionStarterCard - point.getY());
+
+                playablePrositions.add(imageView);
+                System.out.println(imageView.getImage().getUrl());
             }
 
         } else {
@@ -303,11 +326,13 @@ public class GameFlowController extends GenericController implements Initializab
             for(Point point : personalBoard.getPlayablePositions()){
                 ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg"))));
                 //il path di prima è solo per prova
-                imageView.setOpacity(0);
+                imageView.setOpacity(0.3);
+                imageView.setVisible(false);
                 imageView.setOnMouseClicked(this::onClickPlayablePosition);
                 addImage(imageView,this.xPositionStarterCard + point.getX(),
                         this.yPositionStarterCard - point.getY());
 
+                playablePrositions.add(imageView);
             }
         }
     }
@@ -366,35 +391,55 @@ public class GameFlowController extends GenericController implements Initializab
         gridPane.add(imageView,x,y);
     }
 
-    private void layoutBindings(){
-        //page dimensions
-        //rootBorder.prefWidthProperty().bind(rootScrollPane.widthProperty());
-        //
+    public void makeDraggable(ArrayList<ImageView> array, ArrayList<ImageView> targets) {
+        for(ImageView imageView: array){
+            imageView.setOnMousePressed(event -> {
+                initialX = imageView.getLayoutX();
+                initialY = imageView.getLayoutY();
+                mouseAnchorX = event.getSceneX() - initialX;
+                mouseAnchorY = event.getSceneY() - initialY;
+                for (ImageView target: targets) {
+                    target.setVisible(true);
+                }
+            });
 
+            imageView.setOnMouseDragged(event -> {
+                imageView.setLayoutX(event.getSceneX() - mouseAnchorX);
+                imageView.setLayoutY(event.getSceneY() - mouseAnchorY);
+            });
 
-        //personal board position
-        rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
-            leftVBox.setPrefHeight(rootBorder.getPrefHeight());
-            rightVBox.setPrefHeight(rootBorder.getPrefHeight());
-            //rootBorder.prefHeightProperty().bind(rootScrollPane.heightProperty());
-            //commonTableBox.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.3));
-            personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.45));
-        });
+            imageView.setOnMouseReleased(event -> {
+                for (ImageView target: targets) {
+                    if (isInTargetSpot(imageView, target)) {
 
-        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
-            //leftVBox.prefWidthProperty().bind(rootBorder.widthProperty().multiply(0.20));
+                        try {
+                            int row = gridPane.getRowIndex(target);
+                            int column = gridPane.getColumnIndex(target);
+                            //da inserire
 
-            for(ImageView card: cards){
-                card.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.13));
-            }
-
-            scoreBoard.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.2));
-
-
-            personalBoardTabPane.prefWidthProperty().bind(rootBorder.widthProperty().multiply(0.5));
-
-
-        });
+                            this.mainClient.getVirtualGameController().selectPositionOnBoard(column-xPositionStarterCard,yPositionStarterCard-row,this.mainClient.getClientID());
+                            this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
+                        } catch (RemoteException e) {
+                            // throw new RuntimeException(e);
+                        }
+                    }
+                }
+                imageView.setLayoutX(initialX);
+                imageView.setLayoutY(initialY);
+                for (ImageView target: targets) {
+                    target.setVisible(false);
+                }
+            });
+        }
     }
 
+    private boolean isInTargetSpot(ImageView imageView, ImageView target) {
+        Bounds imageViewBounds = imageView.localToScene(imageView.getBoundsInLocal());
+        Bounds targetBounds = target.localToScene(target.getBoundsInLocal());
+
+        return targetBounds.contains(
+                imageViewBounds.getMinX() + imageViewBounds.getWidth() / 2,
+                imageViewBounds.getMinY() + imageViewBounds.getHeight() / 2
+        );
+    }
 }

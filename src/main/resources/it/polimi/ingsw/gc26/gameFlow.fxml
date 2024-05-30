@@ -17,7 +17,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
 <ScrollPane fx:id="rootScrollPane" fitToHeight="true" fitToWidth="true" prefViewportHeight="800.0" prefViewportWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.GameFlowController">
    <content>
       <BorderPane fx:id="rootBorder" prefHeight="200.0" prefWidth="200.0">
@@ -113,25 +112,25 @@
                         </Tab>
                      </tabs>
                   </TabPane>
-                  <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
+                  <AnchorPane>
                      <children>
                                 <ImageView fx:id="handCard0" fitWidth="180.0" onMouseClicked="#onClickMouseFirstHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
                            <image>
                               <Image url="@../../../../images/backSide/img_7.jpeg" />
                            </image>
                         </ImageView>
-                                <ImageView fx:id="handCard1" fitWidth="180.0" onMouseClicked="#onClickMouseSecondHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                <ImageView fx:id="handCard1" fitWidth="180.0" layoutX="200.0" onMouseClicked="#onClickMouseSecondHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
                            <image>
                               <Image url="@../../../../images/backSide/img_7.jpeg" />
                            </image>
                         </ImageView>
-                                <ImageView fx:id="handCard2" fitWidth="180.0" onMouseClicked="#onClickMouseThirdHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                <ImageView fx:id="handCard2" fitWidth="180.0" layoutX="400.0" onMouseClicked="#onClickMouseThirdHandCard" pickOnBounds="true" preserveRatio="true" styleClass="card">
                            <image>
                               <Image url="@../../../../images/backSide/img_7.jpeg" />
                            </image>
                         </ImageView>
                      </children>
-                  </HBox>
+                  </AnchorPane>
                </children>
             </FlowPane>
          </center>
