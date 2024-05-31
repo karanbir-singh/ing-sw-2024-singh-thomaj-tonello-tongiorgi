@@ -72,12 +72,6 @@ public class SocketServerPing implements Runnable {
                                 // Reset virtual socket main controller
                                 mainClient.setVirtualMainController(new VirtualSocketMainController(socketOut));
 
-                                // TODO Gabi controlla sincronizzazione e vedi se togliere questa sleep
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException ex) {
-                                    throw new RuntimeException(ex);
-                                }
 
                                 // Get virtual socket game controller
                                 mainClient.getVirtualMainController().getVirtualGameController(mainClient.getViewController().getGameID());

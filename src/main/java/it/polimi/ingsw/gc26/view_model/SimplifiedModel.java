@@ -1,13 +1,8 @@
 package it.polimi.ingsw.gc26.view_model;
 
-import it.polimi.ingsw.gc26.Printer;
+
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
-
-import javax.swing.text.View; //TODO check
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import java.sql.SQLOutput; //TODO check
 
 public class SimplifiedModel {
     private SimplifiedGame simplifiedGame;
