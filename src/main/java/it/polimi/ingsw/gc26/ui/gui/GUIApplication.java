@@ -188,6 +188,9 @@ public class GUIApplication extends Application implements UIInterface {
                 }
             }
         }
+        //setting all of the right IDs
+       this.setToAllControllersNickname();
+
         System.out.println("Waiting for other players ...");
         Platform.runLater(() -> {
             this.primaryStage.setScene(this.getSceneInfo(SceneEnum.WAITING).getScene());
@@ -203,6 +206,7 @@ public class GUIApplication extends Application implements UIInterface {
                 }
             }
         }
+
 
 
         synchronized (this.mainClient.getLock()) {
@@ -252,6 +256,19 @@ public class GUIApplication extends Application implements UIInterface {
         //this.popupStage.setOnCloseRequest(we -> System.exit(0));
         this.popupStage.alwaysOnTopProperty();
         this.popupStage.show();
+    }
+
+
+    private void setToAllControllersNickname(){
+        for (int i = 0; i < SceneEnum.values().length; i++) {
+
+            this.getSceneController(scenes.get(i).getSceneEnum()).setNickName(
+                    ((LoginController)this.getSceneController(SceneEnum.LOGIN)).getText()
+            );
+
+            System.out.println(this.getSceneController(scenes.get(i).getSceneEnum()).getNickName());
+
+        }
     }
 
 }

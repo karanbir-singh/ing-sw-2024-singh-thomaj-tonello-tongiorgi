@@ -41,4 +41,8 @@ public class LoginController extends GenericController{
         }
 
     }
+
+    public String getText(){
+        return this.nicknameTXT.getText();
+    }
 }
