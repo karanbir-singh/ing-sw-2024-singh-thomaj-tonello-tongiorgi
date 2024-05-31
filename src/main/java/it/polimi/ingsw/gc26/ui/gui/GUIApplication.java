@@ -228,7 +228,7 @@ public class GUIApplication extends Application implements UIInterface {
     }
 
     public void openInfoPopup(String message) {
-        this.popupStage = new Stage();
+        /*this.popupStage = new Stage();
         //this.popupStage.setResizable(false);
         SceneInfo sceneInfo =this.getSceneInfo(SceneEnum.INFO);
         this.popupStage.setScene(sceneInfo.getScene());
@@ -239,6 +239,7 @@ public class GUIApplication extends Application implements UIInterface {
 
         this.popupStage.setX(primaryStage.getX() + (primaryStage.getWidth() - sceneInfo.getScene().getWidth()) * 0.5);
         this.popupStage.setY(primaryStage.getY() + (primaryStage.getHeight() - sceneInfo.getScene().getHeight()) * 0.5);
+         */
     }
 
 
