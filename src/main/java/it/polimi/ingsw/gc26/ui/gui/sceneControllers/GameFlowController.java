@@ -50,7 +50,7 @@ public class GameFlowController extends GenericController implements Initializab
     @FXML
     private ImageView handCard2;
     @FXML
-    private AnchorPane handPane;
+    private TilePane handPane;
     //end hand
 
 
@@ -284,7 +284,7 @@ public class GameFlowController extends GenericController implements Initializab
                 ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg"))));
                 imageView.setOnMouseClicked(this::onClickPlayablePosition);
                 imageView.setOpacity(0.3);
-                imageView.setVisible(false);
+                //imageView.setVisible(false);
                 addImage(imageView,this.xPositionStarterCard + point.getX(),
                         this.yPositionStarterCard - point.getY());
 
@@ -308,7 +308,7 @@ public class GameFlowController extends GenericController implements Initializab
                 ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg"))));
                 //il path di prima è solo per prova
                 imageView.setOpacity(0.3);
-                imageView.setVisible(false);
+                //imageView.setVisible(false);
                 imageView.setOnMouseClicked(this::onClickPlayablePosition);
                 addImage(imageView,this.xPositionStarterCard + point.getX(),
                         this.yPositionStarterCard - point.getY());
@@ -379,7 +379,7 @@ public class GameFlowController extends GenericController implements Initializab
                 mouseAnchorX = event.getSceneX() - initialX;
                 mouseAnchorY = event.getSceneY() - initialY;
                 for (ImageView target: targets) {
-                    target.setVisible(true);
+                    //target.setVisible(true);
                 }
             });
 
@@ -407,7 +407,7 @@ public class GameFlowController extends GenericController implements Initializab
                 imageView.setLayoutX(initialX);
                 imageView.setLayoutY(initialY);
                 for (ImageView target: targets) {
-                    target.setVisible(false);
+                    //target.setVisible(false);
                 }
             });
         }
