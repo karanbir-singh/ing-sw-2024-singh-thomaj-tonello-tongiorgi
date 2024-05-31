@@ -340,9 +340,6 @@ public class GameFlowController extends GenericController implements Initializab
         //page layout and dimensions bindings
         CommonLayout layout = new CommonLayout();
         layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, leftVBox, rightVBox, scoreBoard, cards);
-        handPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            AnchorPane.setRightAnchor(handCard1, (newVal.doubleValue() - handCard1.getFitWidth()) / 2);
-        });
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
