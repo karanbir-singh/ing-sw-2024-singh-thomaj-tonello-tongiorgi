@@ -533,7 +533,7 @@
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : "backSide/img_3.jpeg\""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {

@@ -140,7 +140,8 @@ public class GUIUpdate implements UpdateInterface {
 
     @Override
     public void showMessage(String message) {
-        Platform.runLater(()->this.guiApplication.openInfoPopup(message));
+        return;
+        //Platform.runLater(()->this.guiApplication.openInfoPopup(message)); //TODO kevin
     }
 
     @Override
