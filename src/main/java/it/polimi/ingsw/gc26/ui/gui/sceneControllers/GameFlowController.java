@@ -101,7 +101,7 @@ public class GameFlowController extends GenericController implements Initializab
     private double initialY;
 
     //TODO da spostare in css
-    private final Glow glowEffect = new Glow(0.5);
+    private final Glow glowEffect = new Glow(0.3);
 
     public void onClickTurnSideButton(ActionEvent actionEvent){
         try {
@@ -134,9 +134,8 @@ public class GameFlowController extends GenericController implements Initializab
     //azioni carte commonBoard
     public void onClickCommonTableCard(MouseEvent mouseEvent){
         try {
-            int index =  Integer.valueOf(((ImageView)mouseEvent.getSource()).getAccessibleText());
+            int index = Integer.valueOf(((ImageView)mouseEvent.getSource()).getAccessibleText());
             this.mainClient.getVirtualGameController().selectCardFromCommonTable(index,this.mainClient.getClientID());
-            System.out.println("hai cliccato su resourceCard");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -193,7 +192,7 @@ public class GameFlowController extends GenericController implements Initializab
         for(Card card: simplifiedCommonTable.getResourceCards()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView,String.valueOf(index));
-            //imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageView.setOnMouseClicked(this::onClickCommonTableCard);
             resources.add(imageView);
             index++;
         }
@@ -205,7 +204,7 @@ public class GameFlowController extends GenericController implements Initializab
         for(Card card: simplifiedCommonTable.getGoldCards()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(index));
-            //imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageView.setOnMouseClicked(this::onClickCommonTableCard);
             goldens.add(imageView);
             index++;
         }
@@ -218,7 +217,7 @@ public class GameFlowController extends GenericController implements Initializab
         for(Card card: simplifiedCommonTable.getCommonMissions()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(index));
-            //imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageView.setOnMouseClicked(this::onClickCommonTableCard);
             imageViewsCommonMissions.add(imageView);
             index++;
         }
@@ -297,7 +296,7 @@ public class GameFlowController extends GenericController implements Initializab
                 ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg"))));
                 //il path di prima è solo per prova
                 imageView.setOpacity(0.3);
-                //imageView.setVisible(false);
+                imageView.setVisible(false);
                 imageView.setOnMouseClicked(this::onClickPlayablePosition);
                 addImage(imageView,this.xPositionStarterCard + point.getX(),
                         this.yPositionStarterCard - point.getY());
@@ -348,19 +347,28 @@ public class GameFlowController extends GenericController implements Initializab
 
     public void makeDraggable(ImageView imageView, ArrayList<ImageView> targets) {
         imageView.setOnMousePressed(event -> {
-            initialX = imageView.getLayoutX();
-            initialY = imageView.getLayoutY();
-            mouseAnchorX = event.getSceneX() - initialX;
-            mouseAnchorY = event.getSceneY() - initialY;
-
-            for (ImageView target: targets) {
-                //target.setVisible(true);
+            if(event.getClickCount() == 2){
+                try {
+                    this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                initialX = imageView.getLayoutX();
+                initialY = imageView.getLayoutY();
+                mouseAnchorX = event.getSceneX() - initialX;
+                mouseAnchorY = event.getSceneY() - initialY;
             }
+
         });
 
         imageView.setOnMouseDragged(event -> {
             imageView.setLayoutX(event.getSceneX() - mouseAnchorX);
             imageView.setLayoutY(event.getSceneY() - mouseAnchorY);
+
+            for (ImageView target: targets) {
+                target.setVisible(true);
+            }
         });
 
         imageView.setOnMouseReleased(event -> {
@@ -382,7 +390,7 @@ public class GameFlowController extends GenericController implements Initializab
             imageView.setLayoutX(initialX);
             imageView.setLayoutY(initialY);
             for (ImageView target: targets) {
-                //target.setVisible(false);
+                target.setVisible(false);
             }
         });
     }
