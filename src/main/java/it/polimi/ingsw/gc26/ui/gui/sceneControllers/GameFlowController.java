@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class GameFlowController extends GenericController implements Initializable{
-
+    private ImageView selectedCard;
 
     //commonMissions
     @FXML
@@ -44,31 +45,11 @@ public class GameFlowController extends GenericController implements Initializab
 
     //hand
     @FXML
-    private ImageView handCard0;
-    @FXML
-    private ImageView handCard1;
-    @FXML
-    private ImageView handCard2;
-    @FXML
-    private TilePane handPane;
+    private AnchorPane handPane;
     //end hand
 
 
     //CommonTable
-    @FXML
-    private ImageView resourceCard0;
-    @FXML
-    private ImageView resourceCard1;
-    @FXML
-    private ImageView resourceDeck;
-
-    @FXML
-    private ImageView goldCard0;
-    @FXML
-    private ImageView goldCard1;
-    @FXML
-    private ImageView goldDeck;
-
     @FXML
     private HBox resourceCardBox;
     @FXML
@@ -94,6 +75,7 @@ public class GameFlowController extends GenericController implements Initializab
     private Button drawCardButton;
 
     //layout
+    CommonLayout layout = new CommonLayout();
     @FXML
     private VBox rightVBox;
     @FXML
@@ -117,6 +99,9 @@ public class GameFlowController extends GenericController implements Initializab
     private double mouseAnchorY;
     private double initialX;
     private double initialY;
+
+    //TODO da spostare in css
+    private final Glow glowEffect = new Glow(0.5);
 
     public void onClickTurnSideButton(ActionEvent actionEvent){
         try {
@@ -239,9 +224,12 @@ public class GameFlowController extends GenericController implements Initializab
         }
 
         this.commonMissionsBox.getChildren().setAll(imageViewsCommonMissions);
-
         this.resourceCardBox.getChildren().setAll(resources);
         this.goldCardBox.getChildren().setAll(goldens);
+
+        layout.cardsLayout(rootBorder, resources);
+        layout.cardsLayout(rootBorder, goldens);
+        layout.cardsLayout(rootBorder, imageViewsCommonMissions);
 
     }
 
@@ -254,17 +242,18 @@ public class GameFlowController extends GenericController implements Initializab
             ImageView imageView;
             if(card.equals(simplifiedHand.getSelectedCard())){
                 imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getSelectedSide().getImagePath()))));
+                makeDraggable(imageView, playablePrositions);
+                imageView.setEffect(glowEffect);
             }else{
                 imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
+                imageView.setOnMouseClicked(this::onClickMouseHandCard);
             }
             this.setParameters(imageView,String.valueOf(index));
-            imageView.setOnMouseClicked(this::onClickMouseHandCard);
             handCards.add(imageView);
             index++;
         }
         this.handPane.getChildren().setAll(handCards);
-
-        makeDraggable(handCards, playablePrositions);
+        layout.handLayout(rootBorder, handCards);
     }
 
     @Override
@@ -324,22 +313,8 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cards.add(handCard0);
-        cards.add(handCard1);
-        cards.add(handCard2);
-        cards.add(resourceCard0);
-        cards.add(resourceCard1);
-        cards.add(resourceDeck);
-        cards.add(goldCard0);
-        cards.add(goldCard1);
-        cards.add(goldDeck);
-        cards.add(commonMission0);
-        cards.add(commonMission1);
-        cards.add(secretMission);
-
         //page layout and dimensions bindings
-        CommonLayout layout = new CommonLayout();
-        layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, leftVBox, rightVBox, scoreBoard, cards);
+        layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, leftVBox, rightVBox, scoreBoard, handPane);
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
@@ -371,46 +346,45 @@ public class GameFlowController extends GenericController implements Initializab
         gridPane.add(imageView,x,y);
     }
 
-    public void makeDraggable(ArrayList<ImageView> array, ArrayList<ImageView> targets) {
-        for(ImageView imageView: array){
-            imageView.setOnMousePressed(event -> {
-                initialX = imageView.getLayoutX();
-                initialY = imageView.getLayoutY();
-                mouseAnchorX = event.getSceneX() - initialX;
-                mouseAnchorY = event.getSceneY() - initialY;
-                for (ImageView target: targets) {
-                    //target.setVisible(true);
-                }
-            });
+    public void makeDraggable(ImageView imageView, ArrayList<ImageView> targets) {
+        imageView.setOnMousePressed(event -> {
+            initialX = imageView.getLayoutX();
+            initialY = imageView.getLayoutY();
+            mouseAnchorX = event.getSceneX() - initialX;
+            mouseAnchorY = event.getSceneY() - initialY;
 
-            imageView.setOnMouseDragged(event -> {
-                imageView.setLayoutX(event.getSceneX() - mouseAnchorX);
-                imageView.setLayoutY(event.getSceneY() - mouseAnchorY);
-            });
+            for (ImageView target: targets) {
+                //target.setVisible(true);
+            }
+        });
 
-            imageView.setOnMouseReleased(event -> {
-                for (ImageView target: targets) {
-                    if (isInTargetSpot(imageView, target)) {
+        imageView.setOnMouseDragged(event -> {
+            imageView.setLayoutX(event.getSceneX() - mouseAnchorX);
+            imageView.setLayoutY(event.getSceneY() - mouseAnchorY);
+        });
 
-                        try {
-                            int row = gridPane.getRowIndex(target);
-                            int column = gridPane.getColumnIndex(target);
-                            //da inserire
+        imageView.setOnMouseReleased(event -> {
+            for (ImageView target: targets) {
+                if (isInTargetSpot(imageView, target)) {
 
-                            this.mainClient.getVirtualGameController().selectPositionOnBoard(column-xPositionStarterCard,yPositionStarterCard-row,this.mainClient.getClientID());
-                            this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
-                        } catch (RemoteException e) {
-                            // throw new RuntimeException(e);
-                        }
+                    try {
+                        int row = gridPane.getRowIndex(target);
+                        int column = gridPane.getColumnIndex(target);
+                        //da inserire
+
+                        this.mainClient.getVirtualGameController().selectPositionOnBoard(column-xPositionStarterCard,yPositionStarterCard-row,this.mainClient.getClientID());
+                        this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
+                    } catch (RemoteException e) {
+                        // throw new RuntimeException(e);
                     }
                 }
-                imageView.setLayoutX(initialX);
-                imageView.setLayoutY(initialY);
-                for (ImageView target: targets) {
-                    //target.setVisible(false);
-                }
-            });
-        }
+            }
+            imageView.setLayoutX(initialX);
+            imageView.setLayoutY(initialY);
+            for (ImageView target: targets) {
+                //target.setVisible(false);
+            }
+        });
     }
 
     private boolean isInTargetSpot(ImageView imageView, ImageView target) {
