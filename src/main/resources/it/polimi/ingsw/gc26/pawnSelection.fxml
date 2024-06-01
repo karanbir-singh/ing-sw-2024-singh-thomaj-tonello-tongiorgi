@@ -5,38 +5,42 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.Font?>
-
 
 <StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.PawnSelectionController">
    <children>
-      <AnchorPane maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0">
+      <AnchorPane minHeight="400.0" minWidth="600.0">
          <children>
             <Label fx:id="status" layoutX="184.0" text="Select the color of your pawn">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="greenButton" layoutX="179.0" layoutY="258.0" mnemonicParsing="false" onAction="#onClickGreenButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1dcf3d;" textFill="#1dcf3d">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Button>
-            <Button fx:id="redButton" layoutX="179.0" layoutY="129.0" mnemonicParsing="false" onAction="#onClickRedButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #FF0000;">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Button>
-            <Button fx:id="blueButton" layoutX="322.0" layoutY="129.0" mnemonicParsing="false" onAction="#onClickBlueButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #3305ff;" textFill="#3305ff">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Button>
-            <Button fx:id="yellowButton" layoutX="322.0" layoutY="258.0" mnemonicParsing="false" onAction="#onClickYellowButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #fff701;" textFill="#fff701">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Button>
+            <TilePane alignment="CENTER" hgap="30.0" layoutX="200.0" layoutY="200.0" minWidth="200.0" prefColumns="2" prefRows="2" vgap="30.0">
+               <children>
+                  <Button fx:id="greenButton" mnemonicParsing="false" onAction="#onClickGreenButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1dcf3d;" textFill="#1dcf3d">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="redButton" mnemonicParsing="false" onAction="#onClickRedButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #FF0000;">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="blueButton" mnemonicParsing="false" onAction="#onClickBlueButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #3305ff;" textFill="#3305ff">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="yellowButton" mnemonicParsing="false" onAction="#onClickYellowButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #fff701;" textFill="#fff701">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+               </children>
+            </TilePane>
          </children>
          <StackPane.margin>
             <Insets bottom="30.0" top="30.0" />

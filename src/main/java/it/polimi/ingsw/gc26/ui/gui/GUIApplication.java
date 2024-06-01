@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -56,6 +57,11 @@ public class GUIApplication extends Application implements UIInterface {
         this.setMainClientToSceneControllers();
         //settare i mainClient nei generalController
         this.primaryStage = primaryStage;
+        primaryStage.setHeight(800);
+        primaryStage.setWidth(1100);
+        primaryStage.setTitle(" Codex Naturalis");
+        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/title.png"))));
+
         //Platform.runLater(()->openInfoPopup("VAMOS"));
         new Thread(() -> {
             try {

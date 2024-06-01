@@ -133,35 +133,14 @@
          <right>
               <VBox fx:id="rightVBox" alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="200.0" minWidth="50.0" spacing="20.0" BorderPane.alignment="CENTER">
                   <children>
-                  <VBox fx:id="commonMissionsBox" spacing="20.0">
-                     <children>
-                            <Label text="Common Missions" />
-                            <ImageView fx:id="commonMission1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../images/frontSide/img_98.jpeg" />
-                           </image>
-                        </ImageView>
-                            <ImageView fx:id="commonMission0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../images/frontSide/img_98.jpeg" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </VBox>
-                  <VBox fx:id="secretMissionBox" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
-                     <children>
-                            <Label text="Your secret mission">
-                                <VBox.margin>
-                                    <Insets top="20.0" />
-                                </VBox.margin>
-                            </Label>
-                            <ImageView fx:id="secretMission" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../images/frontSide/img_98.jpeg" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </VBox>
+                      <Label text="Common Missions" />
+                  <VBox fx:id="commonMissionsBox" spacing="20.0" />
+                      <Label text="Your secret mission">
+                          <VBox.margin>
+                              <Insets top="20.0" />
+                          </VBox.margin>
+                      </Label>
+                  <VBox fx:id="secretMissionBox" prefHeight="200.0" prefWidth="100.0" spacing="20.0" />
                   <Button fx:id="turnSideButton" mnemonicParsing="false" onAction="#onClickTurnSideButton" text="TurnSide" />
                   </children>
                <BorderPane.margin>
