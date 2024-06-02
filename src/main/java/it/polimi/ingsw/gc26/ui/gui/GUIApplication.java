@@ -140,6 +140,7 @@ public class GUIApplication extends Application implements UIInterface {
             }
         }
 
+        mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             Platform.runLater(() -> {
                 this.getSceneController(SceneEnum.CREATOR).setNickName(this.getSceneController(SceneEnum.LOGIN).getNickName());
@@ -251,6 +252,10 @@ public class GUIApplication extends Application implements UIInterface {
         //this.popupStage.setOnCloseRequest(we -> System.exit(0));
         this.popupStage.alwaysOnTopProperty();
         this.popupStage.show();
+    }
+
+    public String getNickname() {
+        return mainClient.getNickname();
     }
 
 }

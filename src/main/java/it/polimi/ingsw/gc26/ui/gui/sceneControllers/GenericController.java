@@ -48,4 +48,8 @@ public class GenericController {
 
     }
 
+    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
+
+    }
+
 }

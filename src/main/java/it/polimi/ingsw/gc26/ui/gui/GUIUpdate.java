@@ -132,6 +132,7 @@ public class GUIUpdate implements UpdateInterface {
             case GAME_STARTED:
                 Platform.runLater(()->{
                     guiApplication.setCurrentSceneAndShow(SceneEnum.GAMEFLOW);
+                    this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
                 });
                 break;
         }

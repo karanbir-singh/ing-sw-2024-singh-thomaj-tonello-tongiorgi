@@ -130,7 +130,7 @@ public class ModelObservable implements Serializable {
 
     public void notifyUpdateChat(Chat chat, String message) {
         for (Pair client : this.clients) {
-            if (chat.getMessages().getFirst().getSender().equals(client.getValue())) {
+            if (chat.getMessages().getLast().getSender().equals(client.getValue())) {
                 // this is the client who sent the message
                 try {
                     ((VirtualView) client.getKey()).updateChat(new SimplifiedChat(chat.filterMessages(client.getValue().toString())), "Message sent!");
