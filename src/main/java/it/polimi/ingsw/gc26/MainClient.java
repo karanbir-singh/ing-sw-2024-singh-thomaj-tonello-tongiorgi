@@ -112,7 +112,7 @@ public class MainClient {
      */
     private PingManager pingManager;
 
-    public MainClient(UpdateInterface view) {
+    public MainClient() {
         this.clientID = null;
         this.clientState = ClientState.CONNECTION;
         this.lock = new Object();
