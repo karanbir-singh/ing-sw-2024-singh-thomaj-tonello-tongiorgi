@@ -11,9 +11,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 public class CommonLayout {
-    Rectangle clipper;
-
-    public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, TabPane personalBoardTabPane, VBox leftVBox, VBox rightVBox,
+   public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, TabPane personalBoardTabPane, VBox leftVBox, VBox rightVBox,
                              ImageView scoreBoard, AnchorPane handPane){
 
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
@@ -28,7 +26,6 @@ public class CommonLayout {
 
         });
     }
-
 
     public void cardsLayout(BorderPane rootBorder, ArrayList<ImageView> cards){
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {

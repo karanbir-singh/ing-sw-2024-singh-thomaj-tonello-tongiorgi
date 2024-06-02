@@ -194,7 +194,7 @@ public class GUIApplication extends Application implements UIInterface {
                 }
             }
         }
-        //setting all of the right IDs
+        //setting all the right nicknames
        this.setToAllControllersNickname();
 
         System.out.println("Waiting for other players ...");

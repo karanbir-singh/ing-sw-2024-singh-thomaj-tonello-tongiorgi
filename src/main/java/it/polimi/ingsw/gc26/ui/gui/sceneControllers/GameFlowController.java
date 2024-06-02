@@ -267,7 +267,7 @@ public class GameFlowController extends GenericController implements Initializab
             addImage(imageView,this.xPositionStarterCard + point.getX(),
                     this.yPositionStarterCard - point.getY(), this.gridPane);
 
-            playablePrositions.add(imageView)
+            playablePrositions.add(imageView);
         }
     }
 
