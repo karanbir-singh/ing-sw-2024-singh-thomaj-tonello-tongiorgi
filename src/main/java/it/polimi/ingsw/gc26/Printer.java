@@ -81,7 +81,7 @@ public class Printer {
 
     public void showEncodedPrintable(String[][] printable) throws UnsupportedEncodingException {
 
-        PrintStream ps = new PrintStream(System.out, true, StandardCharsets.UTF_8);
+        PrintStream ps = new PrintStream(System.out, true, "UTF-8");
 
         for (String[] row: printable) {
             for (String col: row) {
