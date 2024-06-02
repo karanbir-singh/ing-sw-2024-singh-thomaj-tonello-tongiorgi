@@ -610,7 +610,7 @@ public class CLI {
     }*/
 
     public String[][] printableHandAndMission() {
-        SimplifiedPersonalBoard miniPB = miniModel.getPersonalBoard(); //TODO check. Before getOtherPersonalBoard
+        SimplifiedPersonalBoard miniPB = miniModel.getPersonalBoard();
 
         if(miniPB.getSecretMission() == null){
             String[][] empty = new String[1][1];

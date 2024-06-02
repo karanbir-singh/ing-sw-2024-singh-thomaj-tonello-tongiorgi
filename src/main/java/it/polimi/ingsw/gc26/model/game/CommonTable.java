@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
+import javafx.beans.binding.IntegerExpression;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -119,8 +120,8 @@ public class CommonTable implements Serializable {
                 return;
         }
         //this.observable.notifyMessage("Card selected on common table", clientID);
-        //TODO position is wrong
-        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(resourceDeck.getTopCard(), goldDeck.getTopCard(), commonMissions, resourceCards, goldCards, selectedX + selectedY),"Card selected on common table");
+
+        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(resourceDeck.getTopCard(), goldDeck.getTopCard(), commonMissions, resourceCards, goldCards, cardIndex),"Card selected on common table");
     }
 
     /**
@@ -132,7 +133,7 @@ public class CommonTable implements Serializable {
      */
     public void addCard(Card card, ArrayList<Card> list, int index) {
         list.add(index, card);
-        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(this.resourceDeck.getTopCard(), this.goldDeck.getTopCard(), this.commonMissions, this.resourceCards, this.goldCards, this.selectedX + this.selectedY), "Common Table updated!");
+        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(this.resourceDeck.getTopCard(), this.goldDeck.getTopCard(), this.commonMissions, this.resourceCards, this.goldCards, -1), "Common Table updated!");
     }
 
     /**
@@ -200,7 +201,7 @@ public class CommonTable implements Serializable {
                         commonMissions,
                         resourceCards,
                         goldCards,
-                        selectedX+selectedY),
+                        -1),
                 "Card removed from common table"
         );
 

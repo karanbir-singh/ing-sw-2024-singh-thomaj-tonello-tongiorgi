@@ -269,7 +269,7 @@ public class Game implements Serializable {
                                 commonTable.getCommonMissions(),
                                 commonTable.getResourceCards(),
                                 commonTable.getGoldCards(),
-                                6),
+                                -1),
                         "Card added from common table"
                 );
                 break;
