@@ -118,8 +118,9 @@ public class CommonTable implements Serializable {
                 this.observable.notifyError("Select a position!", clientID);
                 return;
         }
-        this.observable.notifyMessage("Card selected on common table", clientID);
-        // TODO replace notify with update Common Table
+        //this.observable.notifyMessage("Card selected on common table", clientID);
+        //TODO position is wrong
+        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(resourceDeck.getTopCard(), goldDeck.getTopCard(), commonMissions, resourceCards, goldCards, selectedX + selectedY),"Card selected on common table");
     }
 
     /**
@@ -131,6 +132,7 @@ public class CommonTable implements Serializable {
      */
     public void addCard(Card card, ArrayList<Card> list, int index) {
         list.add(index, card);
+        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(this.resourceDeck.getTopCard(), this.goldDeck.getTopCard(), this.commonMissions, this.resourceCards, this.goldCards, this.selectedX + this.selectedY), "Common Table updated!");
     }
 
     /**
@@ -142,19 +144,17 @@ public class CommonTable implements Serializable {
      * @return removed card
      */
     private Card removeFromTable(ArrayList<Card> list, int index, Deck deck, String clientID) {
-        Card toRemove = null;
-
-        // Check if the position exists
-        if (list.get(index) != null) {
-            // Check if deck is empty, so the list can be refilled
-            if (!deck.getCards().isEmpty())
-                toRemove = list.set(index, deck.removeCard());
-            else
-                toRemove = list.set(index, null);
-        } else {
+        if (list.get(index) == null) {
+            //
             // TODO gestire quando la posizione selezionata non contiene una carta
             this.observable.notifyError("Position not valid!", clientID);
+            return null;
         }
+        Card toRemove = null;
+        if (!deck.getCards().isEmpty())
+            toRemove = list.set(index, deck.removeCard());
+        else
+            toRemove = list.set(index, null);
         return toRemove;
     }
 
@@ -164,49 +164,47 @@ public class CommonTable implements Serializable {
      * @return removed card
      */
     public Card removeSelectedCard(String clientID) {
-        // Check if there is the selected card
-        if (getSelectedCard().isPresent()) {
-            Card toRemove = null;
-
-            // Check if the selected card is a resource card
-            if (selectedY == 0) {
-                if (selectedX == 2) {
-                    // Check if resource deck is empty
-                    if (!resourceDeck.getCards().isEmpty())
-                        toRemove = resourceDeck.removeCard();
-                } else {
-                    toRemove = removeFromTable(resourceCards, selectedX, resourceDeck, clientID);
-                }
-            } else if (selectedY == 1) { // or gold card
-                if (selectedX == 2) {
-                    // Check if gold deck is empty
-                    if (!goldDeck.getCards().isEmpty())
-                        toRemove = goldDeck.removeCard();
-                } else {
-                    toRemove = removeFromTable(goldCards, selectedX, goldDeck, clientID);
-                }
-            }
-
-            // Reset selected card
-            selectedX = -1;
-            selectedY = -1;
-
-            this.observable.notifyUpdateCommonTable(
-                    new SimplifiedCommonTable(
-                            resourceDeck.getTopCard(),
-                            goldDeck.getTopCard(),
-                            commonMissions,
-                            resourceCards,
-                            goldCards),
-                    "Card removed from common table"
-            );
-
-            return toRemove;
-        } else {
-            // TODO notify view
+        if (!getSelectedCard().isPresent()) {
             this.observable.notifyError("Select a position first!", clientID);
             return null;
         }
+        Card toRemove = null;
+        if (selectedY == 0) {
+            if (selectedX == 2) {
+                if (!resourceDeck.getCards().isEmpty())
+                    toRemove = resourceDeck.removeCard();
+                else {
+                    // TODO gestire quando il mazzo è finito
+                }
+            } else {
+                toRemove = removeFromTable(resourceCards, selectedX, resourceDeck, clientID);
+            }
+        } else if (selectedY == 1) {
+            if (selectedX == 2) {
+                if (!goldDeck.getCards().isEmpty())
+                    toRemove = goldDeck.removeCard();
+                else {
+                    // TODO gestire quando il mazzo è finito
+                }
+            } else {
+                toRemove = removeFromTable(goldCards, selectedX, goldDeck, clientID);
+            }
+        }
+        selectedX = -1;
+        selectedY = -1;
+
+        this.observable.notifyUpdateCommonTable(
+                new SimplifiedCommonTable(
+                        resourceDeck.getTopCard(),
+                        goldDeck.getTopCard(),
+                        commonMissions,
+                        resourceCards,
+                        goldCards,
+                        selectedX+selectedY),
+                "Card removed from common table"
+        );
+
+        return toRemove;
 
     }
 

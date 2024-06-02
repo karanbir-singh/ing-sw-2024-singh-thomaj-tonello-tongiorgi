@@ -80,12 +80,14 @@ public class ParserCore {
             Corner cornerDownLeft = createCorner(frontCardJson, "DownSx");
             Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
 
-            Side front = new StarterCardFront( permanentResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+            String imagePathFront = frontCardJson.get("ImgFile").asText();
+            Side front = new StarterCardFront( permanentResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight, imagePathFront);
             cornerUpLeft = createCorner(backCardJson, "UpSx");
             cornerUpRight = createCorner(backCardJson, "UpDx");
             cornerDownLeft = createCorner(backCardJson, "DownSx");
             cornerDownRight = createCorner(backCardJson, "DownDx");
-            Side back = new CardBack(cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+            String imagePath = backCardJson.get("ImgFile").asText();
+            Side back = new CardBack(cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight, imagePath);
 
             starterCardDeck.addCard(new StarterCard(front, back));
 
@@ -107,27 +109,29 @@ public class ParserCore {
 
             Side front;
             String subclass = frontCardJson.get("Subclass").asText();
+            String imagePathFront = frontCardJson.get("ImgFile").asText();
             switch (subclass) {
                 case "Diagonal" : {
-                    front = new MissionDiagonalPattern(frontCardJson.get("Type").asInt());
+                    front = new MissionDiagonalPattern(frontCardJson.get("Type").asInt(), imagePathFront);
                     break;
                 }
                 case "L" : {
-                    front = new MissionLPattern(frontCardJson.get("Type").asInt());
+                    front = new MissionLPattern(frontCardJson.get("Type").asInt(), imagePathFront);
                     break;
                 }
                 case "Triplet" : {
-                    front = new MissionTripletPattern(frontCardJson.get("Type").asInt());
+                    front = new MissionTripletPattern(frontCardJson.get("Type").asInt(), imagePathFront);
                     break;
                 }
                 case "Item" : {
-                    front = new MissionItemPattern(frontCardJson.get("Type").asInt());
+                    front = new MissionItemPattern(frontCardJson.get("Type").asInt(), imagePathFront);
                     break;
                 }
                 default: front = null;
             }
 
-            Side back = new CardBack();
+            String imagePath = cardJson.get("Back").get("ImgFile").asText();
+            Side back = new CardBack(imagePath);
 
             MissionCardDeck.addCard(new MissionCard(front, back));
         }
@@ -152,9 +156,10 @@ public class ParserCore {
             Corner cornerUpRight = createCorner(frontCardJson, "UpDx");
             Corner cornerDownLeft = createCorner(frontCardJson, "DownSx");
             Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
-
-            Side front = new ResourceCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
-            Side back = new CardBack(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()));
+            String imagePathFront = frontCardJson.get("ImgFile").asText();
+            String imagePath = backCardJson.get("ImgFile").asText();
+            Side front = new ResourceCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight, imagePathFront);
+            Side back = new CardBack(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), imagePath);
 
             ResourceCardDeck.addCard(new ResourceCard(front, back));
 
@@ -191,19 +196,21 @@ public class ParserCore {
             Corner cornerDownLeft = createCorner(frontCardJson, "DownSx");
             Corner cornerDownRight = createCorner(frontCardJson, "DownDx");
             Side front;
+            String imagePathFront = frontCardJson.get("ImgFile").asText();
 
             if (frontCardJson.get("Constraint").asText().equals("Corner")) {
-                front = new CornerCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()),  requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new CornerCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()),  requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight, imagePathFront);
             } else if (frontCardJson.get("Constraint").asText().equals("Inkwell")) {
-                front = new InkwellCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new InkwellCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight, imagePathFront);
             } else if (frontCardJson.get("Constraint").asText().equals("Quill")) {
-                front = new QuillCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new QuillCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight, imagePathFront);
             } else if (frontCardJson.get("Constraint").asText().equals("Manuscript")) {
-                front = new ManuscriptCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new ManuscriptCounter(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight, imagePathFront);
             } else {
-                front = new GoldCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight);
+                front = new GoldCardFront(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), requestedResources, frontCardJson.get("Points").asInt(), cornerUpLeft, cornerDownLeft, cornerUpRight, cornerDownRight, imagePathFront);
             }
-            Side back = new CardBack(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()));
+            String imagePath = backCardJson.get("ImgFile").asText();
+            Side back = new CardBack(Symbol.valueOf(backCardJson.get("Resource").asText().toUpperCase()), imagePath);
 
             goldCardDeck.addCard(new GoldCard(front, back));
         }

@@ -1,10 +1,7 @@
 package it.polimi.ingsw.gc26.ui;
 
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
-import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
-import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
+import it.polimi.ingsw.gc26.view_model.*;
 
 public interface UpdateInterface {
 
@@ -16,11 +13,13 @@ public interface UpdateInterface {
 
     void updateViewSecretHand(SimplifiedHand simplifiedSecretHand);
 
-    void updateViewPersonalBoard(PersonalBoard personalBoard);
+    void updateViewPersonalBoard(SimplifiedPersonalBoard personalBoard);
 
-    void updateViewOtherPersonalBoard(PersonalBoard otherPersonalBoard);
+    void updateViewOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard);
 
     void updateViewSimplifiedChat(SimplifiedChat simplifiedChat);
+
+    void updateGame(SimplifiedGame simplifiedGame);
 
     void showMessage(String message);
 

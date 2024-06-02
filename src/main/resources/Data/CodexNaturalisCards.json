@@ -6,14 +6,14 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_81.jpeg"
     },
     "Back" : {
       "CornerUpDx" : "Plant",
       "CornerUpSx" : "Fungi",
       "CornerDownDx" : "Animal",
       "CornerDownSx" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_9.jpeg"
     }
   }, {
     "Front" : {
@@ -22,14 +22,14 @@
       "CornerUpSx" : "Animal",
       "CornerDownDx" : "Fungi",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_82.jpeg"
     },
     "Back" : {
       "CornerUpDx" : "Animal",
       "CornerUpSx" : "Plant",
       "CornerDownDx" : "Insect",
       "CornerDownSx" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_10.jpeg"
     }
   }, {
     "Front" : {
@@ -38,14 +38,14 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_83.jpeg"
     },
     "Back" : {
       "CornerUpDx" : "Animal",
       "CornerUpSx" : "Insect",
       "CornerDownDx" : "Plant",
       "CornerDownSx" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_11.jpeg"
     }
   }, {
     "Front" : {
@@ -54,14 +54,14 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_84.jpeg"
     },
     "Back" : {
       "CornerUpDx" : "Insect",
       "CornerUpSx" : "Plant",
       "CornerDownDx" : "Fungi",
       "CornerDownSx" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_12.jpeg"
     }
   }, {
     "Front" : {
@@ -70,14 +70,14 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_85.jpeg"
     },
     "Back" : {
       "CornerUpDx" : "Fungi",
       "CornerUpSx" : "Insect",
       "CornerDownDx" : "Animal",
       "CornerDownSx" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_13.jpeg"
     }
   }, {
     "Front" : {
@@ -86,14 +86,14 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_86.jpeg"
     },
     "Back" : {
       "CornerUpDx" : "Animal",
       "CornerUpSx" : "Fungi",
       "CornerDownDx" : "Insect",
       "CornerDownSx" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_14.jpeg"
     }
   }],
 
@@ -103,10 +103,10 @@
       "Requirements" : ["Fungi", "Fungi", "Fungi"],
       "Subclass" : "Diagonal",
       "Type" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_87.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -114,10 +114,10 @@
       "Requirements" : ["Plant", "Plant", "Plant"],
       "Subclass" : "Diagonal",
       "Type" : 2,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_88.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -125,10 +125,10 @@
       "Requirements" : ["Animal", "Animal", "Animal"],
       "Subclass" : "Diagonal",
       "Type" : 3,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_89.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -136,10 +136,10 @@
       "Requirements" : ["Insect", "Insect", "Insect"],
       "Subclass" : "Diagonal",
       "Type" : 4,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_90.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -147,10 +147,10 @@
       "Requirements" : ["Fungi", "Fungi", "Plant"],
       "Subclass" : "L",
       "Type" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_91.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -158,10 +158,10 @@
       "Requirements" : ["Plant", "Plant", "Insect"],
       "Subclass" : "L",
       "Type" : 2,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_92.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -169,10 +169,10 @@
       "Requirements" : ["Fungi", "Animal", "Animal"],
       "Subclass" : "L",
       "Type" : 3,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_93.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -180,10 +180,10 @@
       "Requirements" : ["Animal", "Insect", "Insect"],
       "Subclass" : "L",
       "Type" : 4,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_94.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -191,10 +191,10 @@
       "Requirements" : ["Fungi", "Fungi", "Fungi"],
       "Subclass" : "Triplet",
       "Type" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_95.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -202,10 +202,10 @@
       "Requirements" : ["Plant", "Plant", "Plant"],
       "Subclass" : "Triplet",
       "Type" : 2,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_96.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -213,10 +213,10 @@
       "Requirements" : ["Animal", "Animal", "Animal"],
       "Subclass" : "Triplet",
       "Type" : 3,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_97.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -224,10 +224,10 @@
       "Requirements" : ["Insect", "Insect", "Insect"],
       "Subclass" : "Triplet",
       "Type" : 4,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_98.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -235,10 +235,10 @@
       "Requirements" : ["Quill", "Inkwell", "Manuscript"],
       "Subclass" : "Item",
       "Type" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_99.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -246,10 +246,10 @@
       "Requirements" : ["Manuscript", "Manuscript"],
       "Subclass" : "Item",
       "Type" : 2,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_100.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   },{
     "Front" : {
@@ -257,10 +257,10 @@
       "Requirements" : ["Inkwell", "Inkwell"],
       "Subclass" : "Item",
       "Type" : 3,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_101.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }, {
     "Front" : {
@@ -268,10 +268,10 @@
       "Requirements" : ["Quill", "Quill"],
       "Subclass" : "Item",
       "Type" : 4,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_102.jpeg"
     },
     "Back" : {
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_15.jpeg"
     }
   }],
 
@@ -282,11 +282,11 @@
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Plant",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_11.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_2.jpeg"
     }
   }, {
     "Front" : {
@@ -295,11 +295,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_12.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_2.jpeg"
     }
   }, {
     "Front" : {
@@ -308,11 +308,11 @@
       "CornerDownDx" : "Plant",
       "CornerDownSx" : "Plant",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_13.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_2.jpeg"
     }
   }, {
     "Front" : {
@@ -321,11 +321,11 @@
       "CornerDownDx" : "Plant",
       "CornerDownSx" : null,
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_14.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_2.jpeg"
     }
   }, {
     "Front" : {
@@ -334,11 +334,11 @@
       "CornerDownDx" : "Plant",
       "CornerDownSx" : "Quill",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_15.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_2.jpeg"
     }
   }, {
     "Front" : {
@@ -347,11 +347,11 @@
       "CornerDownDx" : "Inkwell",
       "CornerDownSx" : "Evil",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_16.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_2.jpeg"
     }
   }, {
     "Front" : {
@@ -360,11 +360,11 @@
       "CornerDownDx" : "Animal",
       "CornerDownSx" : "Plant",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_17.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_2.jpeg"
     }
   }, {
     "Front" : {
@@ -372,12 +372,12 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Plant",
-      "Points" : 0,
-      "ImgFile" : ""
+      "Points" : 1,
+      "ImgFile" : "frontSide/img_18.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_2.jpeg"
     }
   }, {
     "Front" : {
@@ -386,11 +386,11 @@
       "CornerDownDx" : "Plant",
       "CornerDownSx" : "Evil",
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_19.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_2.jpeg"
     }
   }, {
     "Front" : {
@@ -399,11 +399,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : null,
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_20.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_2.jpeg"
     }
   }, {
     "Front" : {
@@ -412,11 +412,11 @@
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_21.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {
@@ -425,11 +425,11 @@
       "CornerDownDx" : "Animal",
       "CornerDownSx" : "Animal",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_22.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {
@@ -438,11 +438,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : "Animal",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_23.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {
@@ -451,11 +451,11 @@
       "CornerDownDx" : "Animal",
       "CornerDownSx" : "Evil",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_24.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {
@@ -464,11 +464,11 @@
       "CornerDownDx" : "Animal",
       "CornerDownSx" : "Inkwell",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_25.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {
@@ -477,11 +477,11 @@
       "CornerDownDx" : "Manuscript",
       "CornerDownSx" : "Evil",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_26.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {
@@ -490,11 +490,11 @@
       "CornerDownDx" : "Fungi",
       "CornerDownSx" : "Animal",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_27.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {
@@ -503,11 +503,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : "Animal",
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_28.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {
@@ -516,11 +516,11 @@
       "CornerDownDx" : "Animal",
       "CornerDownSx" : null,
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_29.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {
@@ -529,11 +529,11 @@
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_30.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_3.jpeg"
     }
   }, {
     "Front" : {
@@ -542,11 +542,11 @@
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Fungi",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_1.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_1.jpeg"
     }
   }, {
     "Front" : {
@@ -555,11 +555,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_2.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_1.jpeg"
     }
   }, {
     "Front" : {
@@ -568,11 +568,11 @@
       "CornerDownDx" : "Fungi",
       "CornerDownSx" : "Fungi",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_3.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_1.jpeg"
     }
   }, {
     "Front" : {
@@ -581,11 +581,11 @@
       "CornerDownDx" : "Fungi",
       "CornerDownSx" : null,
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_4.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_1.jpeg"
     }
   }, {
     "Front" : {
@@ -594,11 +594,11 @@
       "CornerDownDx" : "Fungi",
       "CornerDownSx" : "Plant",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_5.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_1.jpeg"
     }
   }, {
     "Front" : {
@@ -607,11 +607,11 @@
       "CornerDownDx" : "Animal",
       "CornerDownSx" : "Evil",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_6.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_1.jpeg"
     }
   }, {
     "Front" : {
@@ -620,11 +620,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : "Manuscript",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_7.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_1.jpeg"
     }
   }, {
     "Front" : {
@@ -633,11 +633,11 @@
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_8.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_1.jpeg"
     }
   }, {
     "Front" : {
@@ -646,11 +646,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : null,
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_9.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_1.jpeg"
     }
   }, {
     "Front" : {
@@ -659,11 +659,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : "Fungi",
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_10.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_1.jpeg"
     }
   }, {
     "Front" : {
@@ -672,11 +672,11 @@
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_31.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_4.jpeg"
     }
   }, {
     "Front" : {
@@ -685,11 +685,11 @@
       "CornerDownDx" : "Insect",
       "CornerDownSx" : "Insect",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_32.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_4.jpeg"
     }
   }, {
     "Front" : {
@@ -698,11 +698,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : "Insect",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_33.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_4.jpeg"
     }
   }, {
     "Front" : {
@@ -711,11 +711,11 @@
       "CornerDownDx" : "Insect",
       "CornerDownSx" : "Evil",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_34.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_4.jpeg"
     }
   }, {
     "Front" : {
@@ -724,11 +724,11 @@
       "CornerDownDx" : "Insect",
       "CornerDownSx" : "Animal",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_35.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_4.jpeg"
     }
   }, {
     "Front" : {
@@ -737,11 +737,11 @@
       "CornerDownDx" : "Fungi",
       "CornerDownSx" : "Evil",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_36.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_4.jpeg"
     }
   }, {
     "Front" : {
@@ -750,11 +750,11 @@
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Inkwell",
       "Points" : 0,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_37.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_4.jpeg"
     }
   }, {
     "Front" : {
@@ -763,11 +763,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : null,
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_38.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_4.jpeg"
     }
   }, {
     "Front" : {
@@ -776,11 +776,11 @@
       "CornerDownDx" : "Insect",
       "CornerDownSx" : "Evil",
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_39.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_4.jpeg"
     }
   }, {
     "Front" : {
@@ -789,11 +789,11 @@
       "CornerDownDx" : null,
       "CornerDownSx" : null,
       "Points" : 1,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_40.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_4.jpeg"
     }
   }],
 
@@ -806,11 +806,11 @@
       "CornerUpSx" : "Quill",
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_51.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_6.jpeg"
     }
   }, {
     "Front" : {
@@ -821,11 +821,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_52.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_6.jpeg"
     }
   }, {
     "Front" : {
@@ -836,11 +836,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : "Inkwell",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_53.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_6.jpeg"
     }
   }, {
     "Front" : {
@@ -851,11 +851,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : null,
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_54.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_6.jpeg"
     }
   }, {
     "Front" : {
@@ -866,11 +866,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_55.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_6.jpeg"
     }
   }, {
     "Front" : {
@@ -881,11 +881,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_56.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_6.jpeg"
     }
   }, {
     "Front" : {
@@ -896,11 +896,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Quill",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_57.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_6.jpeg"
     }
   }, {
     "Front" : {
@@ -911,11 +911,11 @@
       "CornerUpSx" : "Manuscript",
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_58.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_6.jpeg"
     }
   }, {
     "Front" : {
@@ -926,11 +926,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_59.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_6.jpeg"
     }
   }, {
     "Front" : {
@@ -941,11 +941,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_60.jpeg"
     },
     "Back" : {
       "Resource" : "Plant",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_6.jpeg"
     }
   }, {
     "Front" : {
@@ -956,11 +956,11 @@
       "CornerUpSx" : "Inkwell",
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_61.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_7.jpeg"
     }
   }, {
     "Front" : {
@@ -971,11 +971,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : "Manuscript",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_62.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_7.jpeg"
     }
   }, {
     "Front" : {
@@ -986,11 +986,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : "Quill",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_63.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_7.jpeg"
     }
   }, {
     "Front" : {
@@ -1001,11 +1001,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_64.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_7.jpeg"
     }
   }, {
     "Front" : {
@@ -1016,11 +1016,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_65.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_7.jpeg"
     }
   }, {
     "Front" : {
@@ -1031,11 +1031,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : null,
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_66.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_7.jpeg"
     }
   }, {
     "Front" : {
@@ -1046,11 +1046,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Manuscript",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_67.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_7.jpeg"
     }
   }, {
     "Front" : {
@@ -1061,11 +1061,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_68.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_7.jpeg"
     }
   }, {
     "Front" : {
@@ -1076,11 +1076,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : "Quill",
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_69.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_7.jpeg"
     }
   }, {
     "Front" : {
@@ -1091,11 +1091,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_70.jpeg"
     },
     "Back" : {
       "Resource" : "Animal",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_7.jpeg"
     }
   }, {
     "Front" : {
@@ -1106,11 +1106,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : "Quill",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_41.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_5.jpeg"
     }
   }, {
     "Front" : {
@@ -1121,11 +1121,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_42.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_5.jpeg"
     }
   }, {
     "Front" : {
@@ -1136,11 +1136,11 @@
       "CornerUpSx" : "Manuscript",
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_43.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_5.jpeg"
     }
   }, {
     "Front" : {
@@ -1151,11 +1151,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_44.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_5.jpeg"
     }
   }, {
     "Front" : {
@@ -1166,11 +1166,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_45.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_5.jpeg"
     }
   }, {
     "Front" : {
@@ -1181,11 +1181,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_46.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_5.jpeg"
     }
   }, {
     "Front" : {
@@ -1196,11 +1196,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Inkwell",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_47.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_5.jpeg"
     }
   }, {
     "Front" : {
@@ -1211,11 +1211,11 @@
       "CornerUpSx" : "Quill",
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_48.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_5.jpeg"
     }
   }, {
     "Front" : {
@@ -1226,11 +1226,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_5.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_49.jpeg"
     }
   }, {
     "Front" : {
@@ -1241,11 +1241,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_50.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_5.jpeg"
     }
   }, {
     "Front" : {
@@ -1256,11 +1256,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_71.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_8.jpeg"
     }
   }, {
     "Front" : {
@@ -1271,11 +1271,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : "Manuscript",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_72.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_8.jpeg"
     }
   }, {
     "Front" : {
@@ -1286,11 +1286,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : "Inkwell",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_73.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_8.jpeg"
     }
   }, {
     "Front" : {
@@ -1301,11 +1301,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_74.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_8.jpeg"
     }
   }, {
     "Front" : {
@@ -1316,11 +1316,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_75.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_8.jpeg"
     }
   }, {
     "Front" : {
@@ -1331,11 +1331,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : null,
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_76.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_8.jpeg"
     }
   }, {
     "Front" : {
@@ -1346,11 +1346,11 @@
       "CornerUpSx" : "Inkwell",
       "CornerDownDx" : "Evil",
       "CornerDownSx" : null,
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_77.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_8.jpeg"
     }
   }, {
     "Front" : {
@@ -1361,11 +1361,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_78.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_8.jpeg"
     }
   }, {
     "Front" : {
@@ -1376,11 +1376,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : null,
       "CornerDownSx" : "Quill",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_79.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_8.jpeg"
     }
   }, {
     "Front" : {
@@ -1391,11 +1391,11 @@
       "CornerUpSx" : null,
       "CornerDownDx" : "Evil",
       "CornerDownSx" : "Evil",
-      "ImgFile" : ""
+      "ImgFile" : "frontSide/img_80.jpeg"
     },
     "Back" : {
       "Resource" : "Insect",
-      "ImgFile" : ""
+      "ImgFile" : "backSide/img_8.jpeg"
     }
   }]
 }

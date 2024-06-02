@@ -18,7 +18,7 @@ public class ResourceCardFront extends Side implements Serializable {
      * @param UPRIGHT    Symbol in the up right corner.
      * @param DOWNRIGHT  Symbol in the down right corner.
      */
-    public ResourceCardFront(Symbol sideSymbol, int points, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT) {
+    public ResourceCardFront(Symbol sideSymbol, int points, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, String imagePath) {
         setSideSymbol(sideSymbol);
         setPoints(points);
         setDOWNLEFT(DOWNLEFT);
@@ -28,5 +28,6 @@ public class ResourceCardFront extends Side implements Serializable {
         setRequestedResources(new HashMap<>());
         setPermanentResources(new ArrayList<>());
         setType(0);
+        setImagePath(imagePath);
     }
 }

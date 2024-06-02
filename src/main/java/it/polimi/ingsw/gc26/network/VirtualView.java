@@ -59,6 +59,7 @@ public interface VirtualView extends Remote {
     void updatePlayer(SimplifiedPlayer simplifiedPlayer, String message) throws RemoteException;
 
 //    void updateOptionsMenu(OptionsMenu optionsMenu, String message) throws RemoteException;
+    void updateGame(SimplifiedGame simplifiedGame, String message) throws RemoteException;
 
     void updateChat(SimplifiedChat simplifiedChat, String message) throws RemoteException;
 

@@ -90,6 +90,11 @@ public class VirtualRMIView implements VirtualView {
     }
 
     @Override
+    public void updateGame(SimplifiedGame simplifiedGame, String message) throws RemoteException {
+        this.viewController.addRequest(new GameUpdateRequest(simplifiedGame, message));
+    }
+
+    @Override
     public void ping() throws RemoteException {
         this.viewController.resetTimer();
     }

@@ -33,9 +33,9 @@ public class ViewController {
      */
     private int gameID;
 
-    public ViewController(MainClient mainClient, UpdateInterface view) {
+    public ViewController(MainClient mainClient) {
         this.mainClient = mainClient;
-        this.simplifiedModel = new SimplifiedModel(view);
+        this.simplifiedModel = new SimplifiedModel();
         this.viewRequests = new ArrayDeque<>();
         this.lock = new Object();
         this.launchExecutor();
@@ -74,6 +74,10 @@ public class ViewController {
         }
     }
 
+    public SimplifiedModel getSimplifiedModel() {
+        return simplifiedModel;
+    }
+
     /**
      * Updates the client's state (used during the game's initialization)
      *
@@ -97,38 +101,35 @@ public class ViewController {
     }
 
     public void updateCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message) {
-        this.simplifiedModel.setSimplifiedCommonTable(simplifiedCommonTable);
-//        System.out.println(message);
+        this.simplifiedModel.setSimplifiedCommonTable(simplifiedCommonTable, message);
     }
 
     public void updateHand(SimplifiedHand simplifiedHand, String message) {
-        this.simplifiedModel.setSimplifiedHand(simplifiedHand);
-//        System.out.println(message);
+        this.simplifiedModel.setSimplifiedHand(simplifiedHand, message);
     }
 
     public void updateSecretHand(SimplifiedHand simplifiedSecretHand, String message) {
-        this.simplifiedModel.setSimplifiedSecretHand(simplifiedSecretHand);
-//        System.out.println(message);
+        this.simplifiedModel.setSimplifiedSecretHand(simplifiedSecretHand, message);
     }
 
     public void updatePersonalBoard(SimplifiedPersonalBoard personalBoard, String message) {
-        this.simplifiedModel.setPersonalBoard(personalBoard);
-//        System.out.println(message);
+        this.simplifiedModel.setPersonalBoard(personalBoard, message);
     }
 
     public void updateOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) {
-        this.simplifiedModel.setOtherPersonalBoard(otherPersonalBoard);
-//        System.out.println(message);
+        this.simplifiedModel.setOtherPersonalBoard(otherPersonalBoard, message);
     }
 
     public void updatePlayer(SimplifiedPlayer simplifiedPlayer, String message) {
-        this.simplifiedModel.setSimplifiedPlayer(simplifiedPlayer);
-//        System.out.println(message);
+        this.simplifiedModel.setSimplifiedPlayer(simplifiedPlayer, message);
     }
 
     public void updateChat(SimplifiedChat simplifiedChat, String message) {
-        this.simplifiedModel.setSimplifiedChat(simplifiedChat);
-//        System.out.println(message);
+        this.simplifiedModel.setSimplifiedChat(simplifiedChat, message);
+    }
+
+    public void updateGame(SimplifiedGame simplifiedGame, String message) {
+        this.simplifiedModel.setSimplifiedGame(simplifiedGame, message);
     }
 
     public void resetTimer() {
@@ -166,4 +167,6 @@ public class ViewController {
     public void killProcess() {
         this.mainClient.killProcesses();
     }
+
+
 }

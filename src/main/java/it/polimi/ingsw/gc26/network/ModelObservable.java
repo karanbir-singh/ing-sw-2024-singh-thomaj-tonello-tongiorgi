@@ -1,9 +1,10 @@
 package it.polimi.ingsw.gc26.network;
 
-import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
-import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
+import it.polimi.ingsw.gc26.model.game.Chat;
+import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.model.player.PersonalBoard;
+import it.polimi.ingsw.gc26.network.VirtualView;
+import it.polimi.ingsw.gc26.view_model.*;
 import javafx.util.Pair;
 
 import java.io.Serializable;
@@ -37,6 +38,16 @@ public class ModelObservable implements Serializable {
 
     public void removeObserver(VirtualView view) {
         this.clients.remove(view);
+    }
+
+    public void notifyUpdateGame(SimplifiedGame simplifiedGame, String message) {
+        for (Pair client : this.clients) {
+            try {
+                ((VirtualView) client.getKey()).updateGame(simplifiedGame, message);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void notifyUpdateCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message) {
@@ -81,6 +92,12 @@ public class ModelObservable implements Serializable {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
+            } else {
+                try {
+                    ((VirtualView) client.getKey()).updateOtherPersonalBoard(personalBoard, message);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -109,15 +126,26 @@ public class ModelObservable implements Serializable {
         }
     }
 
-//    public void notifyUpdateChat(SimplifiedChat simplifiedChat, String message) {
-//        for (Pair client : this.clients) {
-//            try {
-//                ((VirtualView) client.getKey()).updatePlayer(simplifiedPlayer, message);
-//            } catch (RemoteException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+    public void notifyUpdateChat(Chat chat, String message) {
+        for (Pair client : this.clients) {
+            if (chat.getMessages().getFirst().getSender().equals(client.getValue())) {
+                // this is the client who sent the message
+                try {
+                    ((VirtualView) client.getKey()).updateChat(new SimplifiedChat(chat.filterMessages(client.getValue().toString())), "Message sent!");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    ((VirtualView) client.getKey()).updateChat(new SimplifiedChat(chat.filterMessages(client.getValue().toString())), message);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
+    }
 
 //    public void notifyUpdateOptionsMenu(OptionsMenu optionsMenu, String message) {
 //        for (Pair client : this.clients) {

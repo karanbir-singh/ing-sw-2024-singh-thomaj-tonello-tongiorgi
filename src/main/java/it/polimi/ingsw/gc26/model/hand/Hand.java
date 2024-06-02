@@ -59,18 +59,18 @@ public class Hand implements Serializable {
      * @param selectedCard new selected card
      */
     public void setSelectedCard(Card selectedCard, String clientID) {
-        if (selectedCard != null) {
-            this.selectedCard = selectedCard;
-            this.selectedSide = selectedCard.getFront();
+        if (selectedCard == null) {
+            this.observable.notifyError("Select a card first!", clientID);
+            return;
+        }
 
-            this.observable.notifyUpdateHand(
+        this.selectedCard = selectedCard;
+        this.selectedSide = selectedCard.getFront();
+        this.observable.notifyUpdateHand(
                     new SimplifiedHand(cards, selectedCard, selectedSide),
                     "Card selected on hand",
-                    clientID
-            );
-        } else {
-            this.observable.notifyError("[ERROR]: select a card first", clientID);
-        }
+                    clientID);
+
     }
 
     /**
@@ -80,18 +80,17 @@ public class Hand implements Serializable {
      * @param clientID     ID of the client
      */
     public void setSelectedCard(MissionCard selectedCard, String clientID) {
-        if (selectedCard != null) {
-            this.selectedCard = selectedCard;
-            this.selectedSide = selectedCard.getFront();
-
-            this.observable.notifyUpdateSecretHand(
-                    new SimplifiedHand(cards, selectedCard, selectedSide),
-                    "Card selected on hand",
-                    clientID
-            );
-        } else {
-            this.observable.notifyError("[ERROR]: select a card first", clientID);
+        if (selectedCard == null) {
+            this.observable.notifyError("Select a card first!", clientID);
+            return;
         }
+        this.selectedCard = selectedCard;
+        this.selectedSide = selectedCard.getFront();
+        this.observable.notifyUpdateSecretHand(
+                new SimplifiedHand(cards, selectedCard, selectedSide),
+                "Card selected on hand",
+                clientID
+        );
     }
 
     /**
@@ -108,21 +107,21 @@ public class Hand implements Serializable {
      */
     public void turnSide(String clientID) {
         Optional<Card> selectedCard = Optional.ofNullable(this.selectedCard);
-        if (selectedCard.isPresent()) {
-            if (selectedCard.get().getFront().equals(selectedSide)) {
-                this.selectedSide = selectedCard.get().getBack();
-            } else {
-                this.selectedSide = selectedCard.get().getFront();
-            }
-
-            this.observable.notifyUpdateHand(
-                    new SimplifiedHand(cards, this.selectedCard, selectedSide),
-                    "Turned side of selected card",
-                    clientID
-            );
-        } else {
-            this.observable.notifyError("[ERROR]: select a card first", clientID);
+        if (!selectedCard.isPresent()) {
+            this.observable.notifyError("Select a card first!", clientID);
+            return;
         }
+
+        if (selectedCard.get().getFront().equals(selectedSide)) {
+            this.selectedSide = selectedCard.get().getBack();
+        } else {
+            this.selectedSide = selectedCard.get().getFront();
+        }
+        this.observable.notifyUpdateHand(
+                new SimplifiedHand(cards, this.selectedCard, selectedSide),
+                "Turned side of selected card",
+                clientID);
+
     }
 
     /**
@@ -166,12 +165,10 @@ public class Hand implements Serializable {
      */
     public void addCard(Card card, String clientID) {
         cards.add(card);
-
         this.observable.notifyUpdateHand(
-                new SimplifiedHand(cards, selectedCard, selectedSide),
-                "Card added to hand",
-                clientID
-        );
+                    new SimplifiedHand(cards, selectedCard, selectedSide),
+                    "Card added to hand",
+                    clientID);
     }
 
     /**
@@ -208,7 +205,7 @@ public class Hand implements Serializable {
         if (cardIndex >= leftLimit && cardIndex < rightLimit) {
             return cards.get(cardIndex);
         }
-        this.observable.notifyError("[ERROR]: invalid card position", clientID);
+        this.observable.notifyError("Invalid card position!", clientID);
         return null;
     }
 }

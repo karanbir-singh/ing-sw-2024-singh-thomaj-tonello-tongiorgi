@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.model.game;
 
 import it.polimi.ingsw.gc26.model.player.Player;
+import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
 import it.polimi.ingsw.gc26.network.ModelObservable;
 
 import java.io.Serializable;
@@ -34,7 +35,7 @@ public class Chat implements Serializable {
      *
      * @return messages
      */
-    public ArrayList<Message> getMessages() {
+    public ArrayList<Message> getMessages(){
         return this.messages;
     }
 
@@ -43,9 +44,9 @@ public class Chat implements Serializable {
      *
      * @param message new message
      */
-    public void addMessage(Message message) {
-        messages.add(message); //TODO chiamata di comunicazione con il client
-        //this.observable.notifyChat(message);
+    public void addMessage(Message message){
+        messages.add(message);
+        this.observable.notifyUpdateChat(this, "New message in chat!");
     }
 
     /**
@@ -54,13 +55,17 @@ public class Chat implements Serializable {
      * @param receiverPlayer the player that receives the message
      * @return arrayList containing the messages for the player
      */
-    public ArrayList<Message> filterMessages(Player receiverPlayer) {
+    public ArrayList<Message> filterMessages(String playerID){
         ArrayList<Message> copy = new ArrayList<>();
-        for (Message m : this.messages) {
-            if (m.getReceiver().equals(receiverPlayer)) {
-                copy.add(m);
-            }
-            if (m.getSender().equals(receiverPlayer)) {
+        for(Message m : this.messages){
+            if (playerID!= null) {
+                if (m.getReceiver() == null || (m.getReceiver() != null && m.getReceiver().getID().equals(playerID))) {
+                    copy.add(m);
+                }
+                if (m.getSender().getID().equals(playerID)) {
+                    copy.add(m);
+                }
+            } else {
                 copy.add(m);
             }
         }

@@ -28,14 +28,16 @@ public class SimplifiedCommonTable implements Serializable {
     /**
      * This attribute represents the two gold cards that are visible on the table
      */
-    private final ArrayList<Card> goldCards;
+    private ArrayList<Card> goldCards;
+    private int selectedIndex;
 
-    public SimplifiedCommonTable(Card resourceDeck, Card goldDeck, ArrayList<Card> commonMissions, ArrayList<Card> resourceCards, ArrayList<Card> goldCards) {
+    public SimplifiedCommonTable(Card resourceDeck, Card goldDeck, ArrayList<Card> commonMissions, ArrayList<Card> resourceCards, ArrayList<Card> goldCards, int selectedIndex) {
         this.resourceDeck = resourceDeck;
         this.goldDeck = goldDeck;
         this.commonMissions = commonMissions;
         this.resourceCards = resourceCards;
         this.goldCards = goldCards;
+        this.selectedIndex = selectedIndex;
     }
 
     public Card getResourceDeck() {
@@ -234,70 +236,7 @@ public class SimplifiedCommonTable implements Serializable {
 
         //insert common mission cards (vertical)
         printer.addPrintable(missions, commonTableAndMissions, commonTable[0].length + 1, 0);
-
-        return commonTableAndMissions;
     }
 
-    public String[][] printableCommonMissionsHorizontal() {
-        //utils
-        Printer printer = new Printer();
-        //dimensions
-        int yDim = commonMissions.get(0).getFront().printableSide().length + 1;
-        int xDim = (commonMissions.get(0).getFront().printableSide()[0].length)*2 + 1;
-        //initialize empty matrix
-        String[][] missions = new String[yDim][xDim];
-        for(int i=0; i<yDim; i++){
-            for(int j=0; j<xDim; j++){
-                missions[i][j] = "";
-            }
-        }
-
-        //titles;
-        missions[0][0] = "Common Mission 0             " ;
-        missions[0][1] = "Common Mission 1             " ;
-
-        //insert printable cards horizontally
-        int x = 0;
-        for(Card m: commonMissions){
-            printer.addPrintable(m.getFront().printableSide(), missions, x, 1);
-            if (commonMissions.indexOf(m) == 0){
-                x += m.getFront().printableSide()[0].length;
-                for(int i=1; i<(yDim); i++){
-                    missions[i][x] = "        ";
-                }
-                x++;
-            }
-        }
-
-        return missions;
-    }
-
-    public String[][] printableCommonMissionsVertical() {
-        //utils
-        Printer printer = new Printer();
-        //calculate dimensions
-        int yDim = (commonMissions.get(0).getFront().printableSide().length+ 1)*2 + 1;
-        int xDim = commonMissions.get(0).getFront().printableSide()[0].length;
-        int y;
-        //initialize empty matrix
-        String[][] missions = new String[yDim][xDim];
-        for(int i=0; i<yDim; i++){
-            for(int j=0; j<xDim; j++){
-                missions[i][j] = "";
-            }
-        }
-
-        //titles
-        missions[0][0] = "Common Mission 0           " ;
-        missions[yDim/2 + 1][0] = "Common Mission 1           " ;
-
-        //add printable cards vertically
-        y = 1;
-        for(Card m: commonMissions){
-            printer.addPrintable(m.getFront().printableSide(), missions, 0, y);
-            y += m.getFront().printableSide().length + 2;
-        }
-
-        return missions;
-    }
+    public int getSelectedIndex() { return selectedIndex;}
 }

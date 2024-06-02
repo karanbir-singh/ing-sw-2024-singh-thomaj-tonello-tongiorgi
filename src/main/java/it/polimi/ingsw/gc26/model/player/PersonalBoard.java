@@ -24,11 +24,12 @@ public class PersonalBoard implements Serializable {
     private int selectedX = 0;
     private int selectedY = 0;
     private final ModelObservable observable;
+    private String nickname;
 
     /**
      * The constructor initializes everything: the score, the resource, missions occupiedPositions , playablePositions, blockedPositions.
      */
-    public PersonalBoard(ModelObservable observable) {
+    public PersonalBoard(ModelObservable observable, String nickname) {
         score = 0;
         xMin = 0;
         xMax = 0;
@@ -45,6 +46,7 @@ public class PersonalBoard implements Serializable {
         visibleResources.put(Symbol.MANUSCRIPT, 0);
 
         this.secretMission = null;
+        this.nickname = nickname;
 
         occupiedPositions = new ArrayList<>();
         playablePositions = new ArrayList<>();
@@ -71,10 +73,11 @@ public class PersonalBoard implements Serializable {
     public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {
             this.secretMission = secretMission.get();
-            this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Secret mission set", clientID);
+            this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this, nickname), "Secret mission set", clientID);
             return this.secretMission;
         }
-        this.observable.notifyError("[ERROR]: select a secret mission first", clientID);
+        // TODO notify view
+        this.observable.notifyError("Secret mission not present!", clientID);
         return null;
     }
 
@@ -127,12 +130,12 @@ public class PersonalBoard implements Serializable {
     public void setPosition(int selectedX, int selectedY, String clientID) {
         //check if the position is valid
         if (!checkIfPlayablePosition(selectedX, selectedY)) {
-            this.observable.notifyError("[ERROR]: it's not a playable position", clientID);
+            this.observable.notifyError("It's not a playable position!", clientID);
             return;
         }
         this.selectedX = selectedX;
         this.selectedY = selectedY;
-        this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Position selected!", clientID);
+        this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this, nickname), "Position selected!", clientID);
 
     }
 
@@ -379,7 +382,7 @@ public class PersonalBoard implements Serializable {
     public boolean playSide(Side side, String clientID) {
         // You need to check if the board has enough resources for the side.
         if (!checkIfEnoughResources(side)) {
-            this.observable.notifyError("[ERROR]: not enough resources", clientID);
+            this.observable.notifyError("Not enough resources!", clientID);
             return false;
         }
 
@@ -389,7 +392,7 @@ public class PersonalBoard implements Serializable {
             playingPoint = ifPresent(selectedX, selectedY, playablePositions).orElseThrow(NullPointerException::new);
             playingPoint.setSide(side);
         } catch (NullPointerException e) {
-            this.observable.notifyError("[ERROR]: select a position first", clientID);
+            this.observable.notifyError("Select a position first!", clientID);
             return false;
         }
 
@@ -408,7 +411,7 @@ public class PersonalBoard implements Serializable {
             // Analyze point selectedX-1, selectedY-1
             analyzePoint(side.getDOWNLEFT(), -1, -1);
         } catch (NullPointerException e) {
-            this.observable.notifyError("[ERROR]: select a position first", clientID);
+            this.observable.notifyError("Select a position first!", clientID);
             return false;
         }
 
@@ -428,7 +431,7 @@ public class PersonalBoard implements Serializable {
 
         // Use card ability to add points if it has it
         this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
-        this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this), "Card placed!", clientID);
+        this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this, nickname), "Card placed!", clientID);
         return true;
     }
 

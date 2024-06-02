@@ -19,7 +19,7 @@ public class MissionLPattern extends MissionCardFront implements Serializable {
      *
      * @param type represent which L combination is needed to this card give points
      */
-    public MissionLPattern(int type) {
+    public MissionLPattern(int type, String imagePath) {
         setType(type);
         setPoints(0);
         setSideSymbol(null);
@@ -29,6 +29,7 @@ public class MissionLPattern extends MissionCardFront implements Serializable {
         setUPRIGHT(new Corner(true, null));
         setPermanentResources(new ArrayList<>());
         setRequestedResources(new HashMap<>());
+        setImagePath(imagePath);
     }
 
     /**

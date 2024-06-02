@@ -179,7 +179,7 @@ public class Player implements Serializable {
      * Creates the player's personal board
      */
     public void createPersonalBoard() {
-        this.personalBoard = new PersonalBoard(this.observable);
+        this.personalBoard = new PersonalBoard(this.observable, this.nickname);
     }
 
     /**
@@ -210,8 +210,7 @@ public class Player implements Serializable {
 
         this.observable.notifyUpdatePlayer(
                 new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
-                "State changed into " + state.toString(),
-                clientID);
+                "Your new state is " + this.state.toString(), clientID);
     }
 }
 

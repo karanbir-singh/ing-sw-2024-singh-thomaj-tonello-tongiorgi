@@ -8,9 +8,11 @@ import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.parser.ParserCore;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
+import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -104,7 +106,7 @@ public class Game implements Serializable {
         availablePawns.add(Pawn.YELLOW);
         availablePawns.add(Pawn.GREEN);
 
-        this.winners = null;
+        this.winners = new ArrayList<>();
         this.round = 0;
         this.finalRound = -1;
 
@@ -266,7 +268,8 @@ public class Game implements Serializable {
                                 commonTable.getGoldDeck().getTopCard(),
                                 commonTable.getCommonMissions(),
                                 commonTable.getResourceCards(),
-                                commonTable.getGoldCards()),
+                                commonTable.getGoldCards(),
+                                6),
                         "Card added from common table"
                 );
                 break;
@@ -296,7 +299,31 @@ public class Game implements Serializable {
                 break;
         }
 
-        // TODO Update view
+
+        HashMap<String,Integer> points = new HashMap<>();
+        for(Player player : this.players){
+            if(player.getPersonalBoard() != null){
+                points.put(player.getNickname(),player.getPersonalBoard().getScore());
+            }else{
+                points.put(player.getNickname(),0);
+            }
+
+        }
+        ArrayList<String> nicknameWinners = new ArrayList<>();
+        for(Player winner : this.winners){
+            nicknameWinners.add(winner.getNickname());
+        }
+        String currentPlayerNickname = null;
+        if(this.currentPlayer != null){
+            currentPlayerNickname = this.currentPlayer.getNickname();
+        }
+
+        HashMap<String, Pawn> pawnsSelected = new HashMap<>();
+        for (Player player : this.players) {
+            pawnsSelected.put(player.getNickname(), player.getPawnColor());
+        }
+        this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState,currentPlayerNickname,points,nicknameWinners,this.availablePawns, pawnsSelected), message);
+
     }
 
     /**

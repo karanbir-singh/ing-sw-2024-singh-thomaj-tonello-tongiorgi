@@ -20,6 +20,7 @@ import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.io.*;
 import java.net.Socket;
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -94,6 +95,13 @@ public class MainClient {
      */
     public final Object lock;
 
+    public static String asciiCodexNaturalis = "\n" +
+            "░█████╗░░█████╗░██████╗░███████╗██╗░░██╗  ███╗░░██╗░█████╗░████████╗██╗░░░██╗██████╗░░█████╗░██╗░░░░░██╗░██████╗\n" +
+            "██╔══██╗██╔══██╗██╔══██╗██╔════╝╚██╗██╔╝  ████╗░██║██╔══██╗╚══██╔══╝██║░░░██║██╔══██╗██╔══██╗██║░░░░░██║██╔════╝\n" +
+            "██║░░╚═╝██║░░██║██║░░██║█████╗░░░╚███╔╝░  ██╔██╗██║███████║░░░██║░░░██║░░░██║██████╔╝███████║██║░░░░░██║╚█████╗░\n" +
+            "██║░░██╗██║░░██║██║░░██║██╔══╝░░░██╔██╗░  ██║╚████║██╔══██║░░░██║░░░██║░░░██║██╔══██╗██╔══██║██║░░░░░██║░╚═══██╗\n" +
+            "╚█████╔╝╚█████╔╝██████╔╝███████╗██╔╝╚██╗  ██║░╚███║██║░░██║░░░██║░░░╚██████╔╝██║░░██║██║░░██║███████╗██║██████╔╝\n" +
+            "░╚════╝░░╚════╝░╚═════╝░╚══════╝╚═╝░░╚═╝  ╚═╝░░╚══╝╚═╝░░╚═╝░░░╚═╝░░░░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝╚═════╝░";
     /**
      * Server RMI registry
      */
@@ -108,7 +116,7 @@ public class MainClient {
         this.clientID = null;
         this.clientState = ClientState.CONNECTION;
         this.lock = new Object();
-        this.viewController = new ViewController(this, view);
+        this.viewController = new ViewController(this);
 
     }
 
@@ -240,7 +248,11 @@ public class MainClient {
         System.exit(0);
     }
 
-    public static void main(String[] args) {
+
+    public static void main(String args[]) {
+        // print logo
+        System.out.println(asciiCodexNaturalis + "\n");
+
         // Get server IP and port
         Scanner scanner = new Scanner(System.in);
 
@@ -303,14 +315,7 @@ public class MainClient {
 
     public static MainClient startRMIClient(GraphicType graphicType) throws RemoteException {
         // Create RMI Client
-        MainClient mainClient = null;
-
-        // Set view
-        if (graphicType.equals(GraphicType.tui)) {
-            mainClient = new MainClient(new TUIUpdate());
-        } else if (graphicType.equals(GraphicType.gui)) {
-            mainClient = new MainClient(new GUIUpdate());
-        }
+        MainClient mainClient = new MainClient();
 
         try {
             mainClient.registry = LocateRegistry.getRegistry(SERVER_IP, RMI_SERVER_PORT);
@@ -365,14 +370,7 @@ public class MainClient {
         BufferedWriter socketOut = new BufferedWriter(socketTx);
 
         // Create socket client
-        MainClient mainClient = null;
-
-        // Set view
-        if (graphicType.equals(GraphicType.tui)) {
-            mainClient = new MainClient(new TUIUpdate());
-        } else if (graphicType.equals(GraphicType.gui)) {
-            mainClient = new MainClient(new GUIUpdate());
-        }
+        MainClient mainClient = new MainClient();
 
         mainClient.setVirtualMainController(new VirtualSocketMainController(socketOut));
         mainClient.setVirtualView(new VirtualSocketView(null));

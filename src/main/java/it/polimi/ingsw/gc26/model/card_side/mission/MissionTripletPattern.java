@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.model.card_side.MissionCardFront;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.player.Point;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +21,7 @@ public class MissionTripletPattern extends MissionCardFront implements Serializa
      *
      * @param type represent which Triplet combination is needed to this card give points
      */
-    public MissionTripletPattern(int type) {
+    public MissionTripletPattern(int type, String imagePath) {
         setType(type);
         setPoints(0);
         setSideSymbol(null);
@@ -30,6 +31,8 @@ public class MissionTripletPattern extends MissionCardFront implements Serializa
         setUPRIGHT(new Corner(true, null));
         setPermanentResources(new ArrayList<>());
         setRequestedResources(new HashMap<>());
+        setImagePath(imagePath);
+
     }
 
     /**
