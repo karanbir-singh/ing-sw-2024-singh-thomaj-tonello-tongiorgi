@@ -17,12 +17,12 @@ public class CommonLayout {
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
             leftVBox.setPrefHeight(rootBorder.getPrefHeight());
             rightVBox.setPrefHeight(rootBorder.getPrefHeight());
-            personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.45));
+            personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.50));
         });
 
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
             scoreBoard.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.15));
-            personalBoardTabPane.prefWidthProperty().bind(rootBorder.widthProperty().multiply(0.5));
+            personalBoardTabPane.prefWidthProperty().bind(rootBorder.widthProperty().multiply(0.55));
 
         });
     }

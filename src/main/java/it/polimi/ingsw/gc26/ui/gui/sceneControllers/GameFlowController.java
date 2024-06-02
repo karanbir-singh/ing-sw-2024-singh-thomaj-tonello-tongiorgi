@@ -206,12 +206,12 @@ public class GameFlowController extends GenericController implements Initializab
             this.commonMissionsBox.getChildren().setAll(imageViewsCommonMissions);
             this.resourceCardBox.getChildren().setAll(resources);
             this.goldCardBox.getChildren().setAll(goldens);
+            layout.cardsLayout(rootBorder, resources);
+            layout.cardsLayout(rootBorder, goldens);
+            layout.cardsLayout(rootBorder, imageViewsCommonMissions);
         });
 
         //da controllare se vanno messi in platform.runlater
-        layout.cardsLayout(rootBorder, resources);
-        layout.cardsLayout(rootBorder, goldens);
-        layout.cardsLayout(rootBorder, imageViewsCommonMissions);
     }
 
     @Override
@@ -236,10 +236,10 @@ public class GameFlowController extends GenericController implements Initializab
 
         Platform.runLater(()->{
             this.handPane.getChildren().setAll(handCards);
+            layout.handLayout(rootBorder, handCards);
         });
 
         //controllare se va messo in run later
-        layout.handLayout(rootBorder, handCards);
     }
 
     @Override
