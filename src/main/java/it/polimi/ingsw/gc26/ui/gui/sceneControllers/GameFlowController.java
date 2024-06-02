@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -28,20 +30,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class GameFlowController extends GenericController implements Initializable{
-    private ImageView selectedCard;
-
-    //commonMissions
-    @FXML
-    private ImageView commonMission0;
-    @FXML
-    private ImageView commonMission1;
-    //end CommonMissions
-
-    // secretMission
-    @FXML
-    private ImageView secretMission;
-    //secretMission
-
 
     //hand
     @FXML
@@ -147,7 +135,7 @@ public class GameFlowController extends GenericController implements Initializab
         return value == null ? 0 : value;
     }
     //azione delle carte opache
-    public void onClickPlayablePosition(javafx.scene.input.MouseEvent mouseEvent){
+    public void onClickPlayablePosition(MouseEvent mouseEvent){
         try {
             Node node = (Node) mouseEvent.getSource();
             Parent p = node.getParent();
@@ -174,19 +162,12 @@ public class GameFlowController extends GenericController implements Initializab
 
 
 
-
-
-
-
-
-
-
-
     // String.valueOf(getClass().getResource
     @Override
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         ArrayList<ImageView> resources = new ArrayList<>();
         ArrayList<ImageView> goldens = new ArrayList<>();
+        ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
 
         int index = 0;
         for(Card card: simplifiedCommonTable.getResourceCards()){
@@ -213,7 +194,6 @@ public class GameFlowController extends GenericController implements Initializab
         goldDeck.setOnMouseClicked(this::onClickCommonTableCard);
         goldens.add(goldDeck);
         index++;
-        ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
         for(Card card: simplifiedCommonTable.getCommonMissions()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(index));
@@ -222,14 +202,16 @@ public class GameFlowController extends GenericController implements Initializab
             index++;
         }
 
-        this.commonMissionsBox.getChildren().setAll(imageViewsCommonMissions);
-        this.resourceCardBox.getChildren().setAll(resources);
-        this.goldCardBox.getChildren().setAll(goldens);
+        Platform.runLater(()->{
+            this.commonMissionsBox.getChildren().setAll(imageViewsCommonMissions);
+            this.resourceCardBox.getChildren().setAll(resources);
+            this.goldCardBox.getChildren().setAll(goldens);
+        });
 
+        //da controllare se vanno messi in platform.runlater
         layout.cardsLayout(rootBorder, resources);
         layout.cardsLayout(rootBorder, goldens);
         layout.cardsLayout(rootBorder, imageViewsCommonMissions);
-
     }
 
     @Override
@@ -251,7 +233,12 @@ public class GameFlowController extends GenericController implements Initializab
             handCards.add(imageView);
             index++;
         }
-        this.handPane.getChildren().setAll(handCards);
+
+        Platform.runLater(()->{
+            this.handPane.getChildren().setAll(handCards);
+        });
+
+        //controllare se va messo in run later
         layout.handLayout(rootBorder, handCards);
     }
 
@@ -262,50 +249,66 @@ public class GameFlowController extends GenericController implements Initializab
         if(personalBoard.getSecretMission() != null){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + personalBoard.getSecretMission().getFront().getImagePath()))));
             this.setParameters(imageView,"0");
-            this.secretMissionBox.getChildren().setAll(imageView);
+            Platform.runLater(()->{
+                this.secretMissionBox.getChildren().setAll(imageView);
+            });
         }
-        if (personalBoard.getOccupiedPositions().size() == 1) {
-            ImageView starterCardImage = new ImageView(new Image(String.valueOf(getClass().getResource(path + personalBoard.getOccupiedPositions().getLast().getSide().getImagePath()))));
-            this.addImage(starterCardImage,this.xPositionStarterCard,this.yPositionStarterCard);
+        ImageView imageCardToPlay = new ImageView(new Image(String.valueOf(
+                getClass().getResource(path + personalBoard.getOccupiedPositions().getLast().getSide().getImagePath()))));
+        this.addImage(imageCardToPlay,
+                this.xPositionStarterCard + personalBoard.getOccupiedPositions().getLast().getX(),
+                this.yPositionStarterCard - personalBoard.getOccupiedPositions().getLast().getY(), this.gridPane);
+        for(Point point : personalBoard.getPlayablePositions()){
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg"))));
+            //il path di prima è solo per prova
+            imageView.setOpacity(0.3);
+            imageView.setVisible(false);
+            imageView.setOnMouseClicked(this::onClickPlayablePosition);
+            addImage(imageView,this.xPositionStarterCard + point.getX(),
+                    this.yPositionStarterCard - point.getY(), this.gridPane);
 
-            for(Point point : personalBoard.getPlayablePositions()){
-                ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg"))));
-                imageView.setOnMouseClicked(this::onClickPlayablePosition);
-                imageView.setOpacity(0.3);
-                //imageView.setVisible(false);
-                addImage(imageView,this.xPositionStarterCard + point.getX(),
-                        this.yPositionStarterCard - point.getY());
-
-                playablePrositions.add(imageView);
-            }
-
-        } else {
-            //se aggiungo una colonna prima della starterCard, xPositionStarterCard aumenta di 1
-            //se aggiungo una colonna dopo la starterCard, xPositionStarterCard rimane invariato
-            //se aggiungo una riga sopra la starterCard, yPositionStarterCard aumenta di 1
-            //se aggiungo una riga sotto la starterCard, yPositionStarterCard rimane inviariato
-            //gli offset rispetto alla posizione della starterCard sono
-            // (x,y) = (xPositionStarterCard + point.getX, yPositionStarterCard - point.getY)
-            ImageView imageCardToPlay = new ImageView(new Image(String.valueOf(
-                    getClass().getResource(path + personalBoard.getOccupiedPositions().getLast().getSide().getImagePath()))));
-            this.addImage(imageCardToPlay,
-                    this.xPositionStarterCard + personalBoard.getOccupiedPositions().getLast().getX(),
-                    this.yPositionStarterCard - personalBoard.getOccupiedPositions().getLast().getY());
-
-            for(Point point : personalBoard.getPlayablePositions()){
-                ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg"))));
-                //il path di prima è solo per prova
-                imageView.setOpacity(0.3);
-                imageView.setVisible(false);
-                imageView.setOnMouseClicked(this::onClickPlayablePosition);
-                addImage(imageView,this.xPositionStarterCard + point.getX(),
-                        this.yPositionStarterCard - point.getY());
-
-                playablePrositions.add(imageView);
-            }
+            playablePrositions.add(imageView)
         }
     }
 
+    @Override
+    public void changeGUIotherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard){
+        boolean exist = false;
+        Tab consideredTab = null;
+        ScrollPane otherScrollPane = null;
+        GridPane otherGridPane = null;
+        //controlla che se esiste gia un tab con lo stesso nickname, e se esiste prendere i riferimenti allo scrollPane e griPane
+        for(Tab tab : personalBoardTabPane.getTabs()){
+            if(tab.getText().equals(otherPersonalBoard.getNickname())){
+                exist = true;
+                consideredTab = tab;
+                otherScrollPane = (ScrollPane)tab.getContent();
+                otherGridPane = (GridPane)otherScrollPane.getContent();
+            }
+        }
+
+        //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
+        if(!otherPersonalBoard.getNickname().equals(this.mainClient.getClientID()) && !exist){
+            consideredTab = new Tab();
+            consideredTab.setText(otherPersonalBoard.getNickname());
+            personalBoardTabPane.getTabs().add(consideredTab);
+            otherScrollPane = new ScrollPane();
+            otherScrollPane.setHvalue(0.5);
+            otherScrollPane.setVvalue(0.5);
+
+            otherGridPane = new GridPane();
+            otherScrollPane.setContent(otherGridPane);
+            this.creationAndSettingGridContraints(otherGridPane);
+            consideredTab.setContent(otherScrollPane);
+        }
+
+        ImageView imageCardToPlay = new ImageView(new Image(String.valueOf(
+                getClass().getResource(path + otherPersonalBoard.getOccupiedPositions().getLast().getSide().getImagePath()))));
+        this.addImage(imageCardToPlay,
+                this.xPositionStarterCard + otherPersonalBoard.getOccupiedPositions().getLast().getX(),
+                this.yPositionStarterCard - otherPersonalBoard.getOccupiedPositions().getLast().getY(), otherGridPane);
+
+    }
 
 
 
@@ -318,18 +321,24 @@ public class GameFlowController extends GenericController implements Initializab
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
 
-        this.gridPane.setPrefWidth(8000);
-        this.gridPane.setPrefHeight(4000);
-        this.gridPane.setMaxWidth(8000);
-        this.gridPane.setMaxHeight(4000);
+
+
+        this.creationAndSettingGridContraints(this.gridPane);
+
+
+    }
+
+    private void creationAndSettingGridContraints(GridPane gridPane){
+        gridPane.setPrefWidth(8000);
+        gridPane.setPrefHeight(4000);
+        gridPane.setMaxWidth(8000);
+        gridPane.setMaxHeight(4000);
         for(int row = 0; row < 81; row++) {
             gridPane.getRowConstraints().add(rowConstraints);
         }
         for(int column = 0; column < 81; column++){
             gridPane.getColumnConstraints().add(columnConstraints);
         }
-
-
     }
 
     private void setParameters(ImageView imageView, String accessibleText){
@@ -340,9 +349,11 @@ public class GameFlowController extends GenericController implements Initializab
 
     }
 
-    private void addImage(ImageView imageView,int x, int y){
+    private void addImage(ImageView imageView,int x, int y, GridPane gridPane){
         setParameters(imageView,"0");
-        gridPane.add(imageView,x,y);
+        Platform.runLater(()->{
+            gridPane.add(imageView,x,y);
+        });
     }
 
     public void makeDraggable(ImageView imageView, ArrayList<ImageView> targets) {
@@ -376,8 +387,9 @@ public class GameFlowController extends GenericController implements Initializab
                 if (isInTargetSpot(imageView, target)) {
 
                     try {
-                        int row = gridPane.getRowIndex(target);
-                        int column = gridPane.getColumnIndex(target);
+                        //TODO da controllare se G minuscola
+                        int row = GridPane.getRowIndex(target);
+                        int column = GridPane.getColumnIndex(target);
                         //da inserire
 
                         this.mainClient.getVirtualGameController().selectPositionOnBoard(column-xPositionStarterCard,yPositionStarterCard-row,this.mainClient.getClientID());

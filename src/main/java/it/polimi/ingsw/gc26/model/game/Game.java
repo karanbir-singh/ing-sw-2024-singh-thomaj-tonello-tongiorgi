@@ -188,8 +188,8 @@ public class Game implements Serializable {
             // Then increase the round
             this.increaseRound();
         }
-            this.observable.notifyMessage("It's you turn now",this.currentPlayer.getID());
-            // TODO update simplified Game & player
+        this.observable.notifyMessage("It's you turn now",this.currentPlayer.getID());
+        // TODO update simplified Game & player
     }
 
     /**

@@ -88,7 +88,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <TabPane fx:id="personalBoardTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                  <TabPane fx:id="personalBoardTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tabClosingPolicy="UNAVAILABLE">
                      <tabs>
                         <Tab closable="false" text="Your Personal Board">
                            <content>

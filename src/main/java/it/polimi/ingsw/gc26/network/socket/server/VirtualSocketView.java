@@ -169,10 +169,10 @@ public class VirtualSocketView implements VirtualView {
         root.put("message", message);
 
         // resourceDeck
-        root.set("resourceDeck", createResourceCardNode(simplifiedCommonTable.getResourceDeck().getFront()));
+        root.set("resourceDeck", createResourceCardNode(simplifiedCommonTable.getResourceDeck()));
 
         // goldDeck
-        root.set("goldDeck", createGoldCardNode(simplifiedCommonTable.getGoldDeck().getFront()));
+        root.set("goldDeck", createGoldCardNode(simplifiedCommonTable.getGoldDeck()));
 
         // commonMissions
         ObjectNode commonMissions = om.createObjectNode();
@@ -185,14 +185,14 @@ public class VirtualSocketView implements VirtualView {
         ObjectNode resourceCards = om.createObjectNode();
         root.set("resourceCards", resourceCards);
         for (int i = 0; i < simplifiedCommonTable.getResourceCards().size(); i++) {
-            resourceCards.set(String.valueOf(i), createResourceCardNode(simplifiedCommonTable.getResourceCards().get(i).getFront()));
+            resourceCards.set(String.valueOf(i), createResourceCardNode(simplifiedCommonTable.getResourceCards().get(i)));
         }
 
         // resourceCards
         ObjectNode goldCards = om.createObjectNode();
         root.set("goldCards", goldCards);
         for (int i = 0; i < simplifiedCommonTable.getGoldCards().size(); i++) {
-            goldCards.set(String.valueOf(i), createGoldCardNode(simplifiedCommonTable.getGoldCards().get(i).getFront()));
+            goldCards.set(String.valueOf(i), createGoldCardNode(simplifiedCommonTable.getGoldCards().get(i)));
         }
 
         try {
@@ -224,11 +224,11 @@ public class VirtualSocketView implements VirtualView {
             switch(card.getClass().getSimpleName()){
                 case "GoldCard":
                     genericCard.put("type", "goldCard");
-                    genericCard.set("card", createGoldCardNode(card.getFront()));
+                    genericCard.set("card", createGoldCardNode(card));
                     break;
                 case "ResourceCard":
                     genericCard.put("type", "resourceCard");
-                    genericCard.set("card", createResourceCardNode(card.getFront()));
+                    genericCard.set("card", createResourceCardNode(card));
                     break;
                 case "StarterCard":
                     genericCard.put("type", "starterCard");
@@ -510,13 +510,52 @@ public class VirtualSocketView implements VirtualView {
 
     }
 
+    private ObjectNode createResourceCardNode(Card resourceCard) {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode cardNode = om.createObjectNode();
+        cardNode.put("sideSymbol", resourceCard.getFront().getSideSymbol().isPresent() ? resourceCard.getFront().getSideSymbol().get().toString() : "" );
+        cardNode.put("points", String.valueOf(resourceCard.getFront().getPoints()));
+        // images
+        cardNode.put("imagePathFront", resourceCard.getFront().getImagePath());
+        cardNode.put("imagePathBack", resourceCard.getBack().getImagePath());
+        // corners
+        return createCornerNodes(resourceCard.getFront(), om, cardNode);
+    }
+
     private ObjectNode createResourceCardNode(Side resourceCard) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
         cardNode.put("sideSymbol", resourceCard.getSideSymbol().isPresent() ? resourceCard.getSideSymbol().get().toString() : "" );
         cardNode.put("points", String.valueOf(resourceCard.getPoints()));
+        // images
+        cardNode.put("imagePathFront", resourceCard.getImagePath());
+        cardNode.put("imagePathBack", resourceCard.getImagePath());
         // corners
         return createCornerNodes(resourceCard, om, cardNode);
+    }
+
+    private ObjectNode createGoldCardNode(Card goldCard) {
+        ObjectMapper om = new ObjectMapper();
+        ObjectNode cardNode = om.createObjectNode();
+        cardNode.put("cardType", goldCard.getFront().getClass().getSimpleName());
+        cardNode.put("sideSymbol", goldCard.getFront().getSideSymbol().isPresent() ? goldCard.getFront().getSideSymbol().get().toString() : "");
+
+        // points
+        cardNode.put("points", goldCard.getFront().getPoints());
+
+        // resources
+        ObjectNode resourcesNode = om.createObjectNode();
+        for (Map.Entry<Symbol, Integer> resource : goldCard.getFront().getRequestedResources().entrySet()) {
+            resourcesNode.put(resource.getKey().toString(), resource.getValue().toString());
+        }
+        cardNode.set("requestedResources", resourcesNode);
+
+        // images
+        cardNode.put("imagePathFront", goldCard.getFront().getImagePath());
+        cardNode.put("imagePathBack", goldCard.getBack().getImagePath());
+
+        // corners
+        return createCornerNodes(goldCard.getFront(), om, cardNode);
     }
 
     private ObjectNode createGoldCardNode(Side goldCard) {
@@ -535,6 +574,10 @@ public class VirtualSocketView implements VirtualView {
         }
         cardNode.set("requestedResources", resourcesNode);
 
+        // images
+        cardNode.put("imagePathFront", goldCard.getImagePath());
+        cardNode.put("imagePathBack", goldCard.getImagePath());
+
         // corners
         return createCornerNodes(goldCard, om, cardNode);
     }
@@ -547,6 +590,9 @@ public class VirtualSocketView implements VirtualView {
         ObjectNode cardNode = om.createObjectNode();
         cardNode.put("cardType", missionCard.getFront().getClass().getSimpleName());
         cardNode.put("type", missionCard.getFront().getType());
+        // images
+        cardNode.put("imagePathFront", missionCard.getFront().getImagePath());
+        cardNode.put("imagePathBack", missionCard.getBack().getImagePath());
         return cardNode;
     }
 
@@ -564,6 +610,9 @@ public class VirtualSocketView implements VirtualView {
         }
         front.set("permanentResources", permanentResources);
 
+        // image
+        front.put("imagePathFront", starterCard.getFront().getImagePath());
+
         // front corners
         createCornerNodes(starterCard.getFront(), om, front);
 
@@ -576,6 +625,9 @@ public class VirtualSocketView implements VirtualView {
             permanentResourcesBack.add(symbol.toString());
         }
         back.set("permanentResources", permanentResources);
+
+        // image
+        back.put("imagePathBack", starterCard.getBack().getImagePath());
 
         // back corners
         createCornerNodes(starterCard.getBack(), om, back);
@@ -592,6 +644,9 @@ public class VirtualSocketView implements VirtualView {
             permanentResources.add(symbol.toString());
         }
         cardNode.set("permanentResources", permanentResources);
+
+        // image
+        cardNode.put("imagePathFront", starterCard.getImagePath());
 
         return createCornerNodes(starterCard, om, cardNode);
     }
@@ -633,6 +688,9 @@ public class VirtualSocketView implements VirtualView {
             sideNode.set("permanentResources", null);
 
         }
+
+        // image
+        sideNode.put("imagePathBack", side.getImagePath());
         // corners
         return createCornerNodes(side, om, sideNode);
     }
@@ -649,6 +707,8 @@ public class VirtualSocketView implements VirtualView {
             for (Map.Entry<Integer, Boolean> flag : point.getFlags().entrySet()) {
                 flags.put(flag.getKey().toString(), flag.getValue());
             }
+            //image
+
             genericPoint.set("flags", flags);
             // side
             if (point.getSide() != null) {
@@ -663,7 +723,7 @@ public class VirtualSocketView implements VirtualView {
                     case "ResourceCardFront":
                         genericPoint.set("side", createResourceCardNode(point.getSide()));
                         break;
-                    case "CornerCounter","QuillCounter", "InkwellCounter", "ManuscriptCounter":
+                    case "CornerCounter","QuillCounter", "InkwellCounter", "ManuscriptCounter", "GoldCardFront":
                         genericPoint.set("side", createGoldCardNode(point.getSide()));
                         break;
                     case null, default:

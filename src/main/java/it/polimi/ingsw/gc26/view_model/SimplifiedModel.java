@@ -1,13 +1,8 @@
 package it.polimi.ingsw.gc26.view_model;
 
-import it.polimi.ingsw.gc26.Printer;
+
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
-
-import javax.swing.text.View; //TODO check
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import java.sql.SQLOutput; //TODO check
 
 public class SimplifiedModel {
     private SimplifiedGame simplifiedGame;
@@ -64,7 +59,7 @@ public class SimplifiedModel {
 
     public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) {
         this.otherPersonalBoards.put(otherPersonalBoard.getNickname(), otherPersonalBoard);
-        //this.view.updateViewOtherPersonalBoard(otherPersonalBoard); I do not want to show the new personal board
+        this.view.updateViewOtherPersonalBoard(otherPersonalBoard); //I do not want to show the new personal board
         // this.view.showMessage(message);
     }
 

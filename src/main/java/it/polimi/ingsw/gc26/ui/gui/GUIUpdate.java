@@ -19,13 +19,11 @@ public class GUIUpdate implements UpdateInterface {
     @Override
     public void updateViewCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         if(this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)){
-            Platform.runLater(()->this.guiApplication.getCurrentScene().getSceneController().changeGUICommonTable(simplifiedCommonTable)); //cosi aggiorno solo questa
+            this.guiApplication.getCurrentScene().getSceneController().changeGUICommonTable(simplifiedCommonTable); //cosi aggiorno solo questa
         }else{
-            Platform.runLater(()->{
-                this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUICommonTable(simplifiedCommonTable);
-                this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUICommonTable(simplifiedCommonTable);
-                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUICommonTable(simplifiedCommonTable);
-            });
+            this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUICommonTable(simplifiedCommonTable);
+            this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUICommonTable(simplifiedCommonTable);
+            this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUICommonTable(simplifiedCommonTable);
 
         }
     }
@@ -45,26 +43,22 @@ public class GUIUpdate implements UpdateInterface {
     @Override
     public void updateViewHand(SimplifiedHand simplifiedHand) {
         if(this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)){
-            Platform.runLater(()->this.guiApplication.getCurrentScene().getSceneController().changeGUIHand(simplifiedHand)); //cosi aggiorno solo questa
+            this.guiApplication.getCurrentScene().getSceneController().changeGUIHand(simplifiedHand); //cosi aggiorno solo questa
         }else{
-            Platform.runLater(()->{
-                this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIHand(simplifiedHand);
-                this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIHand(simplifiedHand);
-                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIHand(simplifiedHand);
-            });
+            this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIHand(simplifiedHand);
+            this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIHand(simplifiedHand);
+            this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIHand(simplifiedHand);
         }
     }
 
     @Override
     public void updateViewSecretHand(SimplifiedHand simplifiedSecretHand) {
         if(this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)){
-            Platform.runLater(()->this.guiApplication.getCurrentScene().getSceneController().changeGUISecretHand(simplifiedSecretHand)); //cosi aggiorno solo questa
+            this.guiApplication.getCurrentScene().getSceneController().changeGUISecretHand(simplifiedSecretHand); //cosi aggiorno solo questa
         }else{
-            Platform.runLater(()->{
-                this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUISecretHand(simplifiedSecretHand);
-                this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUISecretHand(simplifiedSecretHand);
-                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUISecretHand(simplifiedSecretHand);
-            });
+            this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUISecretHand(simplifiedSecretHand);
+            this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUISecretHand(simplifiedSecretHand);
+            this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUISecretHand(simplifiedSecretHand);
 
         }
     }
@@ -72,15 +66,11 @@ public class GUIUpdate implements UpdateInterface {
     @Override
     public void updateViewPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         if(this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)){
-            Platform.runLater(()->this.guiApplication.getCurrentScene().getSceneController().changeGUIPersonalBoard(personalBoard)); //cosi aggiorno solo questa
+           this.guiApplication.getCurrentScene().getSceneController().changeGUIPersonalBoard(personalBoard); //cosi aggiorno solo questa
         }else{
-            Platform.runLater(()->{
-                this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIPersonalBoard(personalBoard);
-                this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIPersonalBoard(personalBoard);
-                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIPersonalBoard(personalBoard);
-
-            });
-
+            this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIPersonalBoard(personalBoard);
+            this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIPersonalBoard(personalBoard);
+            this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIPersonalBoard(personalBoard);
         }
     }
 
@@ -140,7 +130,8 @@ public class GUIUpdate implements UpdateInterface {
 
     @Override
     public void showMessage(String message) {
-        Platform.runLater(()->this.guiApplication.openInfoPopup(message));
+        return;
+        //Platform.runLater(()->this.guiApplication.openInfoPopup(message)); //TODO kevin
     }
 
     @Override

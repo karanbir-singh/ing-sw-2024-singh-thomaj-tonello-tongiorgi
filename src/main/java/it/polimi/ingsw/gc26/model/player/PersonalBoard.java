@@ -478,9 +478,7 @@ public class PersonalBoard implements Serializable {
     public boolean playSide(Side side, String clientID) {
         // you need to check if the board has enough resources for the side.
         if (!checkIfEnoughResources(side)) {
-            //TODO update show error
             this.observable.notifyError("Not enough resources!", clientID);
-            //update della view
             return false;
         }
 

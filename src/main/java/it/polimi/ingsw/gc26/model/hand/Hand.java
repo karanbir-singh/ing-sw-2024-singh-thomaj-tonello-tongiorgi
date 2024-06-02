@@ -69,41 +69,32 @@ public class Hand implements Serializable {
      * @param selectedCard new selected card
      */
     public void setSelectedCard(Card selectedCard, String clientID) {
-        if (selectedCard != null) {
-            this.selectedCard = selectedCard;
-            this.selectedSide = selectedCard.getFront();
-            // TODO notify view
-
-//            try {
-//                this.modelObservable.notifySelectedCardFromHand(clientID);
-                this.observable.notifyUpdateHand(
-                        new SimplifiedHand(cards, selectedCard, selectedSide),
-                        "Card selected on hand",
-                        clientID
-                );
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-        } else {
-            // TODO notify
+        if (selectedCard == null) {
             this.observable.notifyError("Select a card first!", clientID);
+            return;
         }
+
+        this.selectedCard = selectedCard;
+        this.selectedSide = selectedCard.getFront();
+        this.observable.notifyUpdateHand(
+                    new SimplifiedHand(cards, selectedCard, selectedSide),
+                    "Card selected on hand",
+                    clientID);
+
     }
 
     public void setSelectedCard(MissionCard selectedCard, String clientID) {
-        if (selectedCard != null) {
-            this.selectedCard = selectedCard;
-            this.selectedSide = selectedCard.getFront();
-            // TODO notify view
-            this.observable.notifyUpdateSecretHand(
-                    new SimplifiedHand(cards, selectedCard, selectedSide),
-                    "Card selected on hand",
-                    clientID
-            );
-        } else {
-            // TODO notify
+        if (selectedCard == null) {
             this.observable.notifyError("Select a card first!", clientID);
+            return;
         }
+        this.selectedCard = selectedCard;
+        this.selectedSide = selectedCard.getFront();
+        this.observable.notifyUpdateSecretHand(
+                new SimplifiedHand(cards, selectedCard, selectedSide),
+                "Card selected on hand",
+                clientID
+        );
     }
 
     /**
@@ -120,26 +111,21 @@ public class Hand implements Serializable {
      */
     public void turnSide(String clientID) {
         Optional<Card> selectedCard = Optional.ofNullable(this.selectedCard);
-        if (selectedCard.isPresent()) {
-            if (selectedCard.get().getFront().equals(selectedSide)) {
-                this.selectedSide = selectedCard.get().getBack();
-            } else {
-                this.selectedSide = selectedCard.get().getFront();
-            }
-//            try {
-//                ModelObservable.getInstance().notifyMessage("You have turned a card", clientID);
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-            this.observable.notifyUpdateHand(
-                    new SimplifiedHand(cards, this.selectedCard, selectedSide),
-                    "Turned side of selected card",
-                    clientID
-            );
-        } else {
-            // TODO lancia eccezione di carta non selezionata
+        if (!selectedCard.isPresent()) {
             this.observable.notifyError("Select a card first!", clientID);
+            return;
         }
+
+        if (selectedCard.get().getFront().equals(selectedSide)) {
+            this.selectedSide = selectedCard.get().getBack();
+        } else {
+            this.selectedSide = selectedCard.get().getFront();
+        }
+        this.observable.notifyUpdateHand(
+                new SimplifiedHand(cards, this.selectedCard, selectedSide),
+                "Turned side of selected card",
+                clientID);
+
     }
 
     /**
@@ -178,17 +164,10 @@ public class Hand implements Serializable {
      */
     public void addCard(Card card, String clientID) {
         cards.add(card);
-//        try {
-//            this.modelObservable.notifyMessage("Added a card to the hand", clientID);
-
-            this.observable.notifyUpdateHand(
+        this.observable.notifyUpdateHand(
                     new SimplifiedHand(cards, selectedCard, selectedSide),
                     "Card added to hand",
-                    clientID
-            );
-//        } catch (RemoteException e) {
-//            throw new RuntimeException(e);
-//        }
+                    clientID);
     }
 
     /**
@@ -222,14 +201,10 @@ public class Hand implements Serializable {
     public Card getCard(int leftLimit, int rightLimit, int cardIndex, String clientID) {
         // Check if the given index is correct
         if (cardIndex >= leftLimit && cardIndex < rightLimit) {
-//            try {
-                //this.observable.notifyMessage("Card selected at index: " + cardIndex, clientID);
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
+            // i do not know if updateHand or updateSecretHand
+            //this.observable.notifyUpdateHand(new SimplifiedHand(cards, selectedCard, selectedSide), "Card selected on common table!", clientID);
             return cards.get(cardIndex);
         }
-        // TODO notify view
         this.observable.notifyError("Invalid position!", clientID);
         return null;
     }

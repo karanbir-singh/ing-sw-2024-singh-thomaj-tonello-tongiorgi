@@ -241,8 +241,7 @@ public class Player implements Serializable {
 
         this.observable.notifyUpdatePlayer(
                 new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
-                "Turn changed!",
-                clientID);
+                "Your new state is " + this.state.toString(), clientID);
     }
 
     public String printableScore() {
