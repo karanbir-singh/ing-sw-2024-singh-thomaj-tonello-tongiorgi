@@ -292,8 +292,7 @@ public class GameFlowController extends GenericController implements Initializab
                     this.yPositionStarterCard - point.getY(), this.gridPane);
 
             //TODO non so vedere
-            // playablePrositions.add(imageView);
-
+            // playablePrositions.add(imageView)
         }
     }
 
