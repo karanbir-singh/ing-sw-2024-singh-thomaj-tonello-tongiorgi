@@ -708,28 +708,6 @@ public class GameController implements Serializable {
     }
 
     /**
-     * Prints the personal board of given player nickname
-     *
-     * @param nickname nickname of the player
-     * @param playerID ID of the player who is requesting to print personal board
-     */
-    public void printPersonalBoard(String nickname, String playerID) {
-        if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
-            // Player player = game.getPlayerByNickname(nickname);
-
-            // TODO need to add a method in PersonalBoard for update view
-            if (isDebug) {
-                // System.out.println(player.getNickname() + " printed personal board");
-            }
-
-            // TODO need to add a method in PersonalBoard
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
-        }
-
-    }
-
-    /**
      * @return game controlled by this game controller
      */
     public Game getGame() {
