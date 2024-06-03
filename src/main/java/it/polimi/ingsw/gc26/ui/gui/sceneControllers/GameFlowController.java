@@ -311,18 +311,18 @@ public class GameFlowController extends GenericController implements Initializab
         newTextField.setPrefWidth(208);
         newTextField.setPrefHeight(26);
         newTextField.setLayoutX(9);
-        newTextField.setLayoutY(289);
+        newTextField.setLayoutY(489);
         newTextField.setPromptText("Type Message");
         newTextField.setStyle("-fx-border-radius: 5px;");
         newAnchorPane.getChildren().add(newTextField);
         Button newButton = new Button();
         newButton.setText("Send");
         newButton.setLayoutX(231);
-        newButton.setLayoutY(289);
+        newButton.setLayoutY(489);
         newAnchorPane.getChildren().add(newButton);
         ScrollPane newScrollPane = new ScrollPane();
-        newScrollPane.setMinHeight(240);
-        newScrollPane.setPrefHeight(240);
+        newScrollPane.setMinHeight(440);
+        newScrollPane.setPrefHeight(440);
         newScrollPane.setMinWidth(262);
         newScrollPane.setMaxWidth(262);
         newScrollPane.setLayoutX(9);
@@ -331,13 +331,13 @@ public class GameFlowController extends GenericController implements Initializab
         VBox newVBox = new VBox();
         newScrollPane.setContent(newVBox);
         newVBox.maxWidth(229);
-        newVBox.maxHeight(240);
+        newVBox.maxHeight(440);
         newVBox.prefWidth(229);
         newScrollPane.setContent(newVBox);
         newScrollPane.setPadding(new Insets(5,0,5,5));
         ((TabPane)chatBox.getContent()).getTabs().add(newTab);
         newTextField.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER) {
+            if (keyEvent.getCode() == KeyCode.ENTER && !newTextField.getText().isEmpty()) {
                 sendMessage(newTextField, newVBox, newScrollPane, newTab);
             }
             keyEvent.consume();
@@ -387,6 +387,7 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void createChats(SimplifiedGame simplifiedGame, String nickname) {
+        this.nickname = nickname;
         for(String playerNickname : simplifiedGame.getPlayersNicknames()) {
             if (!playerNickname.equals(nickname)) {
                 createChatTab(playerNickname, chat);
@@ -399,13 +400,34 @@ public class GameFlowController extends GenericController implements Initializab
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();
         if (newMessage.getReceiver() == null) {
-            addMessageInChat(newMessage.getText(), "Group Chat");
+            if (!newMessage.getSender().getNickname().equals(nickname)) {
+                if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
+                        !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size()-2).getSender().getNickname()))) {
+                    addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname() );
+                } else {
+                    addMessageInChat(newMessage.getText(), "Group Chat", null);
+                }
+            }
         } else {
-            addMessageInChat(newMessage.getText(), newMessage.getSender().getNickname());
+            addMessageInChat(newMessage.getText(), newMessage.getSender().getNickname(), null);
         }
     }
 
-    private void addMessageInChat(String message, String sender) {
+    private void addMessageInChat(String message, String sender, String labelMessage) {
+        HBox labelBox = new HBox();
+        Text labelText;
+        TextFlow labelTextFlow;
+        if (labelMessage != null) {
+            labelBox.setAlignment(Pos.BASELINE_LEFT);
+            labelBox.setPadding(new Insets(0, 30, 0, 5));
+            labelText = new Text(labelMessage);
+            labelText.setStyle("-fx-font-size: 10px;");
+            labelTextFlow = new TextFlow(labelText);
+            labelBox.setMinWidth(150);
+            labelBox.setMaxWidth(150);
+            labelText.setFill(Color.color(0.25, 0.25, 0.25));
+            labelBox.getChildren().add(labelTextFlow);
+        }
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.BASELINE_LEFT);
         hBox.setPadding(new Insets(5, 30, 5, 5));
@@ -424,6 +446,9 @@ public class GameFlowController extends GenericController implements Initializab
             @Override
             public void run() {
                 try {
+                    if (labelMessage != null) {
+                        chats.get(sender).getChildren().add(labelBox);
+                    }
                     chats.get(sender).getChildren().add(hBox);
                 } catch (NullPointerException e) {}
             }

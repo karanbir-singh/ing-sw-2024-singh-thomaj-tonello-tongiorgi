@@ -35,7 +35,7 @@
                         </ImageView>
                      </content>
                 </TitledPane>
-                <TitledPane fx:id="chat" animated="false" prefHeight="0.0" prefWidth="293.0" text="Chat">
+                <TitledPane fx:id="chat" animated="false" prefHeight="600.0" prefWidth="293.0" text="Chat">
                      <content>
                         <TabPane prefHeight="359.0" prefWidth="290.0" tabClosingPolicy="UNAVAILABLE" />
                      </content>
