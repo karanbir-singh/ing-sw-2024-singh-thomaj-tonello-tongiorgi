@@ -13,7 +13,7 @@ class PointTest {
     @Test
     void creation() {
         //     public Point(int x, int y, Map<Integer, Boolean> flags, Side side) {
-        Point point = new Point(0, 0, new HashMap<>(), new CardBack());
+        Point point = new Point(0, 0, new HashMap<>(), new CardBack("src/main/resources/images/backSide/img_1.jpeg"));
 
         assertNotNull(point);
         assertEquals(0, point.getFlags().size());
