@@ -646,7 +646,7 @@ public class GameFlowController extends GenericController implements Initializab
             HBoxLeftPanel.setMaxWidth(40);
             chatIsVisible = false;
         } else {
-            anchorPaneChat.setTranslateX(-290);
+            anchorPaneChat.setTranslateX(-270);
             HBoxLeftPanel.setMinWidth(340);
             HBoxLeftPanel.setMaxWidth(340);
             chatIsVisible = true;

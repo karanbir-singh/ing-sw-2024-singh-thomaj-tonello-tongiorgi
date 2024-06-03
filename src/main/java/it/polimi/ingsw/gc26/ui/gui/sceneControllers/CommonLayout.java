@@ -15,13 +15,19 @@ public class CommonLayout {
                              ImageView scoreBoard, AnchorPane handPane){
 
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
-            leftVBox.setPrefHeight(rootBorder.getPrefHeight());
+            try {
+                leftVBox.setPrefHeight(rootBorder.getPrefHeight());
+            } catch (NullPointerException e) {}
             rightVBox.setPrefHeight(rootBorder.getPrefHeight());
             personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.50));
         });
 
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
-            scoreBoard.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.15));
+            try {
+                scoreBoard.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.15));
+            } catch (NullPointerException e) {
+
+            }
             personalBoardTabPane.prefWidthProperty().bind(rootBorder.widthProperty().multiply(0.55));
 
         });
