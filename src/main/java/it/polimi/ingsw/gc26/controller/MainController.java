@@ -64,6 +64,8 @@ public class MainController implements Serializable {
      */
     private int numberOfTotalGames;
 
+    public boolean threadStarted = false;
+    public Boolean lock = true;
 
     /**
      * Initializes waiting players' list and games controllers' list
@@ -103,6 +105,10 @@ public class MainController implements Serializable {
 
         new Thread(() -> {
             while (true) {
+                synchronized (lock) {
+                    threadStarted = true;
+                    lock.notifyAll();
+                }
                 synchronized (mainRequests) {
                     while (mainRequests.isEmpty() || gameOnCreation || invalidNickname) {
                         try {
@@ -145,19 +151,23 @@ public class MainController implements Serializable {
     }
 
     public void connect(VirtualView client, String nickname) {
-        // Check if there is not a game waiting for players
-        if (!this.existsWaitingGame()) {
-            // Set new game on creation
-            gameOnCreation = true;
-            this.mainRequests.notifyAll();
-            try {
-                client.updateClientState(ClientState.CREATOR);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+        synchronized (mainRequests) {
+            // Check if there is not a game waiting for players
+            if (!this.existsWaitingGame()) {
+                // Set new game on creation
+                gameOnCreation = true;
+                synchronized (mainRequests) {
+                    this.mainRequests.notifyAll();
+                }
+                try {
+                    client.updateClientState(ClientState.CREATOR);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Otherwise client joins into a game on creation
+                this.joinWaitingList(client, nickname);
             }
-        } else {
-            // Otherwise client joins into a game on creation
-            this.joinWaitingList(client, nickname);
         }
 
         // Copy on disk
@@ -199,7 +209,9 @@ public class MainController implements Serializable {
 
             // The game is "created" but waiting for players
             this.gameOnCreation = false;
-            this.mainRequests.notifyAll();
+            synchronized (mainRequests) {
+                this.mainRequests.notifyAll();
+            }
 
             try {
                 client.setClientID(clientID);
@@ -210,7 +222,9 @@ public class MainController implements Serializable {
         } else {
             // Otherwise the game is still on creation
             this.gameOnCreation = true;
-            this.mainRequests.notifyAll();
+            synchronized (mainRequests) {
+                this.mainRequests.notifyAll();
+            }
             try {
                 client.updateClientState(ClientState.INVALID_NUMBER_OF_PLAYER);
             } catch (RemoteException e) {
@@ -232,7 +246,7 @@ public class MainController implements Serializable {
      *
      * @param nickname Nickname of the player who is joining the waiting list
      */
-    private void joinWaitingList(VirtualView client, String nickname) {
+    public void joinWaitingList(VirtualView client, String nickname) {
         GameController gameController = null;
         Game game;
 
@@ -240,7 +254,9 @@ public class MainController implements Serializable {
         if (!this.isNicknameValid(nickname)) {
             try {
                 invalidNickname = true;
-                this.mainRequests.notifyAll();
+                synchronized (mainRequests) {
+                    this.mainRequests.notifyAll();
+                }
                 client.updateClientState(ClientState.INVALID_NICKNAME);
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -250,7 +266,10 @@ public class MainController implements Serializable {
             String clientID = UUID.randomUUID().toString();
 
             invalidNickname = false;
-            this.mainRequests.notifyAll();
+
+            synchronized (mainRequests) {
+                this.mainRequests.notifyAll();
+            }
 
             // Otherwise, add client in waiting list
             this.waitingClients.add(client);
@@ -345,7 +364,7 @@ public class MainController implements Serializable {
             fileInputStream.close();
         }
 
-        // Launch a thread for recreating al games
+        // Launch a thread for recreating ping
         this.createGeneratorPingThread();
         System.out.println("Games recreated");
     }
@@ -436,7 +455,7 @@ public class MainController implements Serializable {
      *
      * @param gameControllerID ID of the game controller that you want to destroy
      */
-    private void destroyGame(int gameControllerID) {
+    public void destroyGame(int gameControllerID) {
         // Notify game destruction
         gamesControllers.get(gameControllerID).getGame().getObservable().notifyGameClosed();
 
@@ -467,5 +486,9 @@ public class MainController implements Serializable {
      */
     public PriorityQueue<MainRequest> getMainRequests() {
         return mainRequests;
+    }
+
+    public ArrayList<VirtualView> getWaitingClients() {
+        return waitingClients;
     }
 }
