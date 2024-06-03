@@ -62,18 +62,12 @@ public class GameFlowController extends GenericController implements Initializab
     private AnchorPane handPane;
     //end hand
 
-
-    private TilePane handPane;
-
     //CommonTable
     @FXML
     private HBox resourceCardBox;
     @FXML
     private HBox goldCardBox;
-    @FXML
-    private VBox commonMissionsBox;
-    @FXML
-    private VBox secretMissionBox;
+
 
     //end CommonTable
 
@@ -85,6 +79,7 @@ public class GameFlowController extends GenericController implements Initializab
     @FXML
     private AnchorPane personalBoardPane;
 
+    @FXML
     private TabPane personalBoardTabPane;
     private final int xPositionStarterCard = 40;
     private final int yPositionStarterCard = 40;
@@ -106,8 +101,7 @@ public class GameFlowController extends GenericController implements Initializab
     private BorderPane rootBorder;
     @FXML
     private ScrollPane rootScrollPane;
-    @FXML
-    private ImageView scoreBoard;
+
     private ArrayList<ImageView> cards = new ArrayList<>();
     private ArrayList<ImageView> playablePrositions = new ArrayList<>();
     private ArrayList<ImageView> handCards = new ArrayList<>();
