@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.player.Point;
+import it.polimi.ingsw.gc26.ui.gui.PawnsCoords;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
@@ -32,6 +33,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -55,6 +57,7 @@ public class GameFlowController extends GenericController implements Initializab
     public HBox HBoxLeftPanel;
     public AnchorPane anchorPaneChat;
     public TabPane chatTabPane;
+    public GridPane scoreBoardGrid;
 
     @FXML
     private VBox commonMissionsBox;
@@ -550,6 +553,7 @@ public class GameFlowController extends GenericController implements Initializab
             }
         }
         createChatTab("Group Chat");
+        fullScoreBoard();
     }
 
     @Override
@@ -651,5 +655,31 @@ public class GameFlowController extends GenericController implements Initializab
             HBoxLeftPanel.setMaxWidth(340);
             chatIsVisible = true;
         }
+    }
+
+    private void fullScoreBoard() {
+        for (PawnsCoords pawn : PawnsCoords.values()) {
+
+            Point pawnPoint = pawn.getCoords();
+            Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
+            if (cell != null) {
+                GridPane miniGrid = ((GridPane) cell);
+                miniGrid.add(new Circle(7), 0, 0);
+                miniGrid.add(new Circle(7), 0, 1);
+                miniGrid.add(new Circle(7), 1, 0);
+                miniGrid.add(new Circle(7), 1, 1);
+            }
+
+        }
+    }
+
+    private Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == row
+                    && GridPane.getColumnIndex(node) != null && GridPane.getColumnIndex(node) == column) {
+                return node;
+            }
+        }
+        return null;
     }
 }
