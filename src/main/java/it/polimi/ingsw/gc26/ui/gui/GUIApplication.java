@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -56,6 +57,11 @@ public class GUIApplication extends Application implements UIInterface {
         this.setMainClientToSceneControllers();
         //settare i mainClient nei generalController
         this.primaryStage = primaryStage;
+        primaryStage.setHeight(800);
+        primaryStage.setWidth(1100);
+        primaryStage.setTitle(" Codex Naturalis");
+        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/title.png"))));
+
         //Platform.runLater(()->openInfoPopup("VAMOS"));
         new Thread(() -> {
             try {
@@ -189,6 +195,9 @@ public class GUIApplication extends Application implements UIInterface {
                 }
             }
         }
+        //setting all the right nicknames
+       this.setToAllControllersNickname();
+
         System.out.println("Waiting for other players ...");
         Platform.runLater(() -> {
             this.primaryStage.setScene(this.getSceneInfo(SceneEnum.WAITING).getScene());
@@ -229,7 +238,7 @@ public class GUIApplication extends Application implements UIInterface {
     }
 
     public void openInfoPopup(String message) {
-        this.popupStage = new Stage();
+        /*this.popupStage = new Stage();
         //this.popupStage.setResizable(false);
         SceneInfo sceneInfo =this.getSceneInfo(SceneEnum.INFO);
         this.popupStage.setScene(sceneInfo.getScene());
@@ -240,6 +249,7 @@ public class GUIApplication extends Application implements UIInterface {
 
         this.popupStage.setX(primaryStage.getX() + (primaryStage.getWidth() - sceneInfo.getScene().getWidth()) * 0.5);
         this.popupStage.setY(primaryStage.getY() + (primaryStage.getHeight() - sceneInfo.getScene().getHeight()) * 0.5);
+         */
     }
 
 
@@ -252,6 +262,19 @@ public class GUIApplication extends Application implements UIInterface {
         //this.popupStage.setOnCloseRequest(we -> System.exit(0));
         this.popupStage.alwaysOnTopProperty();
         this.popupStage.show();
+    }
+
+
+    private void setToAllControllersNickname(){
+        for (int i = 0; i < SceneEnum.values().length; i++) {
+
+            this.getSceneController(scenes.get(i).getSceneEnum()).setNickName(
+                    ((LoginController)this.getSceneController(SceneEnum.LOGIN)).getText()
+            );
+
+            System.out.println(this.getSceneController(scenes.get(i).getSceneEnum()).getNickName());
+
+        }
     }
 
     public String getNickname() {

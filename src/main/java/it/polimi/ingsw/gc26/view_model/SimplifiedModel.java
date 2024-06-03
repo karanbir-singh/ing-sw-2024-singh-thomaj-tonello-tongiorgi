@@ -59,7 +59,7 @@ public class SimplifiedModel {
 
     public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) {
         this.otherPersonalBoards.put(otherPersonalBoard.getNickname(), otherPersonalBoard);
-        //this.view.updateViewOtherPersonalBoard(otherPersonalBoard); I do not want to show the new personal board
+        this.view.updateViewOtherPersonalBoard(otherPersonalBoard); //I do not want to show the new personal board
         // this.view.showMessage(message);
     }
 

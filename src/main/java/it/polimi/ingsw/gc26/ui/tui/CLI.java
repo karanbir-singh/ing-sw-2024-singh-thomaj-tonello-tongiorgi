@@ -7,7 +7,7 @@ import it.polimi.ingsw.gc26.model.card_side.ability.InkwellCounter;
 import it.polimi.ingsw.gc26.model.card_side.ability.ManuscriptCounter;
 import it.polimi.ingsw.gc26.model.card_side.ability.QuillCounter;
 import it.polimi.ingsw.gc26.model.game.GameState;
-import it.polimi.ingsw.gc26.model.player.PersonalBoard;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
@@ -15,6 +15,7 @@ import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
 import it.polimi.ingsw.gc26.view_model.SimplifiedModel;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
+import java.util.HashMap;
 
 public class CLI {
     private SimplifiedModel miniModel;
@@ -39,13 +40,13 @@ public class CLI {
         //SCORES
         //TODO aggiungere gli score
         String[][] scores;
-        //if(miniModel.getSimplifiedGame().getGameState() == GameState.GAME_STARTED ||
-          //      miniModel.getSimplifiedGame().getGameState() == GameState.END_STAGE){
-            //scores = printableScores();
-        //} else {
+        if(miniModel.getSimplifiedGame().getGameState() == GameState.GAME_STARTED ||
+                miniModel.getSimplifiedGame().getGameState() == GameState.END_STAGE){
+            scores = allPrintableScores();
+        } else {
             scores = new String[1][1];
             scores[0][0] = "\t";
-        //}
+        }
 
         //PERSONAL BOARD
         String[][] personalBoardPrint;
@@ -212,37 +213,67 @@ public class CLI {
         showPrintable(printableGame);
     }
 
-    public String[][] printableScores() {
+    public String[][] allPrintableScores() {
+        HashMap<String, Integer> scoresMap = miniModel.getSimplifiedGame().getScores();
+        HashMap<String, Pawn> pawnMap = miniModel.getSimplifiedGame().getPawnsSelected();
+
         //dimensions
         int xDim = 2;
-        int yDim = 1 + 1;
-//        int yDim = players.size() + 1;
+        int yDim = scoresMap.size() + 1;
+        int yCursor = 0;
 
         String[][] scores = new String[yDim][xDim];
-//
-//        //calculate the spaces needed to align the names
-//        int maxLenght = 0;
-//        StringBuilder spaces;
-//        for (Player p: players) {
-//            maxLenght = Math.max(maxLenght, p.getNickname().length());
-//        }
-//        maxLenght ++;
-//
-//        //design the matrix
-//        scores[0][0] = "CURRENT SCORES:";
-//        scores[0][1] = "";
-//        for (Player p: players) {
-//            int i = 0;
-//            spaces = new StringBuilder();
-//            while(i + p.getNickname().length() < maxLenght){
-//                spaces.append(" ");
-//                i++;
-//            }
-//            scores[players.indexOf(p)+1][0] = p.getNickname() + spaces;
-//            scores[players.indexOf(p)+1][1] = p.printableScore();
-//        }
+
+        //calculate the spaces needed to align the names
+        int maxLength = 0;
+        StringBuilder spaces;
+        for (String nickname: scoresMap.keySet()) {
+            maxLength = Math.max(maxLength, nickname.length());
+        }
+        maxLength ++;
+
+        //design the matrix
+        scores[yCursor][0] = "CURRENT SCORES:";
+        scores[yCursor][1] = "";
+        yCursor++;
+
+        for (String nickname: scoresMap.keySet()) {
+            int i = 0;
+            spaces = new StringBuilder();
+            while(i + nickname.length() < maxLength){
+                spaces.append(" ");
+                i++;
+            }
+            scores[yCursor][0] = nickname + spaces;
+            scores[yCursor][1] = printableScore(scoresMap.get(nickname), pawnMap.get(nickname));
+            yCursor++;
+        }
 
         return scores;
+    }
+
+    public String printableScore(int score, Pawn pawnColor) {
+        System.out.println(score);
+        int i;
+        StringBuilder s = new StringBuilder();
+        String background = "▒";
+        String fill = "█";
+
+        if(pawnColor != null){
+            s.append(pawnColor.getFontColor());
+        }
+
+        for (i=0; i<score; i++){
+            s.append(fill);
+        }
+        while (i<29){
+            s.append(background);
+            i++;
+        }
+
+        s.append(TextStyle.STYLE_RESET.getStyleCode()).append(" ").append(score);
+
+        return s.toString();
     }
 
     //COMMON TABLE
@@ -582,32 +613,6 @@ public class CLI {
         }
         return reverseBoard;
     }
-
-    //PLAYER
-    //TODO gestire la stampa del punteggio
-    /*public String printableScore(PersonalBoard personalBoard) {
-        int score = personalBoard.getScore();
-        int i;
-        StringBuilder s = new StringBuilder();
-        String background = "▒";
-        String fill = "█";
-
-        if(pawnColor != null){
-            s.append(pawnColor.getFontColor());
-        }
-
-        for (i=0; i<score; i++){
-            s.append(fill);
-        }
-        while (i<29){
-            s.append(background);
-            i++;
-        }
-
-        s.append(TextStyle.STYLE_RESET.getStyleCode()).append(" ").append(score);
-
-        return s.toString();
-    }*/
 
     public String[][] printableHandAndMission() {
         SimplifiedPersonalBoard miniPB = miniModel.getPersonalBoard(); //TODO check. Before getOtherPersonalBoard

@@ -1,135 +1,171 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.GameFlowController">
-    <children>
-        <VBox alignment="CENTER" prefHeight="724.0" prefWidth="300.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <children>
-            <Button fx:id="drawCardButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onClickDrawCardButton" text="DrawCard" />
-            <Button fx:id="turnSideButton" mnemonicParsing="false" onAction="#onClickTurnSideButton" text="TurnSide" />
-            <Accordion>
-              <panes>
-                <TitledPane animated="false" text="Score Board">
-                     <content>
-                            <ImageView fx:id="scoreBoard" fitHeight="480.0" fitWidth="290.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@../../../../images/plateau_score.jpg" />
-                           </image>
-                        </ImageView>
-                     </content>
-                </TitledPane>
-                <TitledPane fx:id="chat" animated="false" prefHeight="600.0" prefWidth="293.0" text="Chat">
-                     <content>
-                        <TabPane prefHeight="359.0" prefWidth="290.0" tabClosingPolicy="UNAVAILABLE" />
-                     </content>
-                </TitledPane>
-              </panes>
-            </Accordion>
-            </children>
-            <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </padding>
-        </VBox>
-        <HBox alignment="CENTER" layoutX="296.0" prefHeight="720.0" prefWidth="772.0" AnchorPane.leftAnchor="296.0" AnchorPane.rightAnchor="296.0">
-            <children>
-                <VBox alignment="CENTER" fillWidth="false" prefHeight="762.0" prefWidth="652.0" spacing="10.0">
-                    <children>
-                        <VBox alignment="CENTER" fillWidth="false" spacing="5.0">
-                            <children>
-                                <Label text="Common Table">
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.TitledPane?>
+<ScrollPane fx:id="rootScrollPane" fitToHeight="true" fitToWidth="true" prefViewportHeight="800.0" prefViewportWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.GameFlowController">
+   <content>
+      <BorderPane fx:id="rootBorder" prefHeight="200.0" prefWidth="200.0">
+         <left>
+              <VBox fx:id="leftVBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="200.0" minWidth="50.0" spacing="10.0" BorderPane.alignment="CENTER">
+                  <padding>
+                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+               <children>
+                  <Button fx:id="drawCardButton" mnemonicParsing="false" onAction="#onClickDrawCardButton" text="DrawCard" />
+                   <Accordion>
+                       <panes>
+                           <TitledPane animated="false" text="Score Board">
+                               <content>
+                                   <ImageView fx:id="scoreBoard" fitHeight="480.0" fitWidth="290.0" pickOnBounds="true">
+                                       <image>
+                                           <Image url="@../../../../images/plateau_score.jpg" />
+                                       </image>
+                                   </ImageView>
+                               </content>
+                           </TitledPane>
+                           <TitledPane fx:id="chat" animated="false" prefHeight="600.0" prefWidth="293.0" text="Chat">
+                               <content>
+                                   <TabPane prefHeight="359.0" prefWidth="290.0" tabClosingPolicy="UNAVAILABLE" />
+                               </content>
+                           </TitledPane>
+                       </panes>
+                   </Accordion>
+               </children>
+               <BorderPane.margin>
+                  <Insets right="20.0" />
+               </BorderPane.margin>
+              </VBox>
+         </left>
+         <center>
+            <FlowPane alignment="CENTER" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="20.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="500.0" spacing="20.0">
+                     <children>
+                                <Label alignment="CENTER" contentDisplay="CENTER" text="COMMON TABLE">
                                     <VBox.margin>
                                         <Insets />
                                     </VBox.margin>
                                 </Label>
-                                <TilePane fx:id="commonTablePane" alignment="CENTER" hgap="20.0" prefHeight="278.0" prefWidth="556.0" scaleShape="false" style="-fx-background-color: #C4A484;" vgap="20.0">
-                                    <children>
-                                        <ImageView fx:id="resourceCard0" accessibleText="0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-
-                                        </ImageView>
-                                        <ImageView fx:id="resourceCard1" accessibleText="1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-
-                                        </ImageView>
-                                        <ImageView fx:id="resourceDeck" accessibleText="2" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
-
-                                        </ImageView>
-                                        <ImageView fx:id="goldCard0" accessibleText="3" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-
-                                        </ImageView>
-                                        <ImageView fx:id="goldCard1" accessibleText="4" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-
-                                        </ImageView>
-                                        <ImageView fx:id="goldDeck" accessibleText="5" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
-
-                                        </ImageView>
-                                    </children>
-                                    <effect>
-                                        <Glow />
-                                    </effect>
-                                </TilePane>
-                        <ScrollPane hvalue="0.5" pannable="true" prefHeight="331.0" prefWidth="642.0" style="-fx-background-color: #ebebeb;" vvalue="0.5">
+                        <HBox fx:id="resourceCardBox" alignment="CENTER" spacing="10.0">
+                           <children>
+                                        <ImageView fx:id="resourceCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                 <image>
+                                    <Image url="@../../../../images/backSide/img_2.jpeg" />
+                                 </image>
+                              </ImageView>
+                                        <ImageView fx:id="resourceCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
+                                 <image>
+                                    <Image url="@../../../../images/backSide/img_2.jpeg" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="resourceDeck" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                 <image>
+                                    <Image url="@../../../../images/backSide/img_2.jpeg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <HBox fx:id="goldCardBox" alignment="CENTER" spacing="10.0">
+                           <children>
+                                        <ImageView fx:id="goldCard0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                 <image>
+                                    <Image url="@../../../../images/backSide/img_2.jpeg" />
+                                 </image>
+                              </ImageView>
+                                        <ImageView fx:id="goldCard1" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
+                                 <image>
+                                    <Image url="@../../../../images/backSide/img_2.jpeg" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="goldDeck" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                 <image>
+                                    <Image url="@../../../../images/backSide/img_2.jpeg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <TabPane fx:id="personalBoardTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" tabClosingPolicy="UNAVAILABLE">
+                     <tabs>
+                        <Tab closable="false" text="Your Personal Board">
                            <content>
-                              <GridPane fx:id="gridPane" alignment="TOP_CENTER" gridLinesVisible="true" prefHeight="119.0" prefWidth="205.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                              </GridPane>
+                                    <ScrollPane hbarPolicy="NEVER" hvalue="0.5" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" pannable="true" prefHeight="400.0" prefWidth="600.0" vbarPolicy="NEVER" vvalue="0.5">
+                                        <content>
+                                    <GridPane fx:id="gridPane">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                    </GridPane>
+                                        </content>
+                                    </ScrollPane>
                            </content>
-                        </ScrollPane>
-                            </children>
-                        </VBox>
-                        <TilePane fx:id="handPane" alignment="CENTER" hgap="20.0" prefHeight="108.0" prefWidth="544.0">
-                            <children>
-                                <ImageView fx:id="handCard0" accessibleText="0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-
-                                </ImageView>
-                                <ImageView fx:id="handCard1" accessibleText="1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-
-                                </ImageView>
-                                <ImageView fx:id="handCard2" accessibleText="2" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-
-                                </ImageView>
-                            </children>
-                        </TilePane>
-                    </children>
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </padding>
-                </VBox>
-            </children>
-        </HBox>
-      <VBox fx:id="commonMissionsBox" alignment="CENTER" fillWidth="false" layoutX="1047.0" layoutY="30.0" prefHeight="342.0" prefWidth="232.0" spacing="10.0">
-         <children>
-            <ImageView fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-         </children>
-      </VBox>
-      <VBox fx:id="secretMissionBox" alignment="CENTER" fillWidth="false" layoutX="1047.0" layoutY="450.0" prefHeight="157.0" prefWidth="219.0" spacing="10.0">
-         <children>
-            <ImageView fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-         </children>
-      </VBox>
-    </children>
-    <padding>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-    </padding>
-</AnchorPane>
+                        </Tab>
+                     </tabs>
+                  </TabPane>
+                  <AnchorPane fx:id="handPane" minWidth="200.0" prefWidth="600.0">
+                     <children>
+                                <ImageView fx:id="handCard0" fitWidth="180.0" layoutX="10.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                           <image>
+                              <Image url="@../../../../images/backSide/img_7.jpeg" />
+                           </image>
+                        </ImageView>
+                                <ImageView fx:id="handCard2" fitWidth="180.0" layoutX="210.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                           <image>
+                              <Image url="@../../../../images/backSide/img_7.jpeg" />
+                           </image>
+                        </ImageView>
+                                <ImageView fx:id="handCard1" fitWidth="180.0" layoutX="410.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                           <image>
+                              <Image url="@../../../../images/backSide/img_7.jpeg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </FlowPane>
+         </center>
+         <right>
+              <VBox fx:id="rightVBox" alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="200.0" minWidth="50.0" spacing="20.0" BorderPane.alignment="CENTER">
+                  <children>
+                      <Label text="Common Missions" />
+                  <VBox fx:id="commonMissionsBox" spacing="20.0" />
+                      <Label text="Your secret mission">
+                          <VBox.margin>
+                              <Insets top="20.0" />
+                          </VBox.margin>
+                      </Label>
+                  <VBox fx:id="secretMissionBox" prefHeight="200.0" prefWidth="100.0" spacing="20.0" />
+                  <Button fx:id="turnSideButton" mnemonicParsing="false" onAction="#onClickTurnSideButton" text="TurnSide" />
+                  </children>
+               <BorderPane.margin>
+                  <Insets left="20.0" />
+               </BorderPane.margin>
+              </VBox>
+         </right>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </BorderPane>
+   </content>
+</ScrollPane>
