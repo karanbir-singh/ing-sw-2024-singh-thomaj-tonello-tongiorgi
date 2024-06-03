@@ -197,23 +197,6 @@ public class VirtualSocketGameController implements VirtualGameController {
     }
 
     /**
-     * Encodes the parameters to play this function in the real controller.
-     *
-     * @param nickname nickname of the player who owns the board
-     * @param playerID client's ID
-     * @throws RemoteException
-     */
-    @Override
-    public void printPersonalBoard(String nickname, String playerID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
-        data.replace("function", "printPersonalBoard");
-        HashMap<String, String> msg = new HashMap<>();
-        msg.put("nickname", nickname);
-        msg.put("playerID", playerID);
-        writeToServer(data, msg);
-    }
-
-    /**
      * This method creates the basic structure for this protocol.
      *
      * @return base structure

@@ -115,9 +115,6 @@ public class SocketClientHandler implements Runnable {
                     case "setSecretMission":
                         this.gameController.addRequest(new SetSecretMissionRequest(value.get("playerID").asText()));
                         break;
-                    case "printPersonalBoard":
-                        this.gameController.addRequest(new PrintPersonalBoardRequest(value.get("nickname").asText(), value.get("playerID").asText()));
-                        break;
                     case "reAddView":
                         this.gameController.addRequest(new ReAddViewRequest(this.virtualSocketView, value.get("clientID").asText()));
                         break;

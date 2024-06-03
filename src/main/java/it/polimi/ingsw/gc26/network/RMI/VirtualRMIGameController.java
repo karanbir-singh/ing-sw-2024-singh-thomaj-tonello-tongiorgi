@@ -67,11 +67,6 @@ public class VirtualRMIGameController implements VirtualGameController {
     }
 
     @Override
-    public void printPersonalBoard(String nickname, String playerID) throws RemoteException {
-        this.gameController.addRequest(new PrintPersonalBoardRequest(nickname, playerID));
-    }
-
-    @Override
     public void addMessage(String line, String nicknameReceiver, String senderID, String time) throws RemoteException {
         this.gameController.addRequest(new AddMessageRequest(line, nicknameReceiver, senderID, time));
     }
