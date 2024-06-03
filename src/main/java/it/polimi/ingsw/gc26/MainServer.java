@@ -49,7 +49,7 @@ public class MainServer {
         Registry registry = null;
         try {
             System.out.println("Getting registry...");
-            registry = LocateRegistry.createRegistry(RMI_SERVER_PORT);
+            registry = LocateRegistry.getRegistry(RMI_SERVER_PORT);
         } catch (RemoteException e) {
             throw new RemoteException("[ERROR]: Cannot find RMI registry");
         }
