@@ -50,6 +50,11 @@ public class GameFlowController extends GenericController implements Initializab
     public TitledPane chat;
     @FXML
     public ImageView scoreBoard;
+    public Button scoreBoardButton;
+    public AnchorPane anchorPaneScoreBoard;
+    public HBox HBoxLeftPanel;
+    public AnchorPane anchorPaneChat;
+    public TabPane chatTabPane;
 
     @FXML
     private VBox commonMissionsBox;
@@ -90,6 +95,9 @@ public class GameFlowController extends GenericController implements Initializab
     private Button turnSideButton;
     @FXML
     private Button drawCardButton;
+
+    private boolean scoreBoardIsVisible = false;
+    private boolean chatIsVisible = false;
 
     //layout
     CommonLayout layout = new CommonLayout();
@@ -449,7 +457,7 @@ public class GameFlowController extends GenericController implements Initializab
         );
     }
 
-    private void createChatTab(String nickname, TitledPane chatBox) {
+    private void createChatTab(String nickname) {
         Tab newTab = new Tab();
         newTab.setText(nickname);
         newTab.setStyle("-fx-border-radius: 0px 0px 5px 5px;");
@@ -484,7 +492,7 @@ public class GameFlowController extends GenericController implements Initializab
         newVBox.prefWidth(229);
         newScrollPane.setContent(newVBox);
         newScrollPane.setPadding(new Insets(5,0,5,5));
-        ((TabPane)chatBox.getContent()).getTabs().add(newTab);
+        chatTabPane.getTabs().add(newTab);
         newTextField.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER && !newTextField.getText().isEmpty()) {
                 sendMessage(newTextField, newVBox, newScrollPane, newTab);
@@ -505,7 +513,6 @@ public class GameFlowController extends GenericController implements Initializab
         hBox.setAlignment(Pos.BASELINE_RIGHT);
         hBox.setPadding(new Insets(5, 5, 5, 30));
         Text text = new Text(newTextField.getText());
-        chat.setSnapToPixel(true);
         TextFlow textFlow = new TextFlow(text);
         textFlow.setSnapToPixel(true);
         textFlow.setStyle("-fx-background-color: rgb(15,125,242);" + "-fx-color: rgb(239, 242,255);" + "-fx-background-radius: 7px;");
@@ -539,10 +546,10 @@ public class GameFlowController extends GenericController implements Initializab
         this.nickname = nickname;
         for(String playerNickname : simplifiedGame.getPlayersNicknames()) {
             if (!playerNickname.equals(nickname)) {
-                createChatTab(playerNickname, chat);
+                createChatTab(playerNickname);
             }
         }
-        createChatTab("Group Chat", chat);
+        createChatTab("Group Chat");
     }
 
     @Override
@@ -581,7 +588,6 @@ public class GameFlowController extends GenericController implements Initializab
         hBox.setAlignment(Pos.BASELINE_LEFT);
         hBox.setPadding(new Insets(5, 30, 5, 5));
         Text text = new Text(message);
-        chat.setSnapToPixel(true);
         TextFlow textFlow = new TextFlow(text);
         textFlow.setSnapToPixel(true);
         textFlow.setStyle("-fx-background-color: rgb(233,233,235);" + "-fx-background-radius: 7px;");
@@ -605,5 +611,45 @@ public class GameFlowController extends GenericController implements Initializab
 
 
         //newScrollPane.setVvalue(newScrollPane.getVmax());
+    }
+
+    public void toggleScoreBoard(ActionEvent actionEvent) {
+        if(chatIsVisible) {
+            anchorPaneChat.setTranslateX(-2000);
+            HBoxLeftPanel.setMinWidth(40);
+            HBoxLeftPanel.setMaxWidth(40);
+            chatIsVisible = false;
+        }
+        if (scoreBoardIsVisible) {
+            anchorPaneScoreBoard.setTranslateX(-2000);
+            HBoxLeftPanel.setMinWidth(40);
+            HBoxLeftPanel.setMaxWidth(40);
+            scoreBoardIsVisible = false;
+        } else {
+            anchorPaneScoreBoard.setTranslateX(0);
+            HBoxLeftPanel.setMinWidth(340);
+            HBoxLeftPanel.setMaxWidth(340);
+            scoreBoardIsVisible = true;
+        }
+    }
+
+    public void toggleChat(ActionEvent actionEvent) {
+        if (scoreBoardIsVisible) {
+            anchorPaneScoreBoard.setTranslateX(-2000);
+            HBoxLeftPanel.setMinWidth(40);
+            HBoxLeftPanel.setMaxWidth(40);
+            scoreBoardIsVisible = false;
+        }
+        if (chatIsVisible) {
+            anchorPaneChat.setTranslateX(-2000);
+            HBoxLeftPanel.setMinWidth(40);
+            HBoxLeftPanel.setMaxWidth(40);
+            chatIsVisible = false;
+        } else {
+            anchorPaneChat.setTranslateX(-290);
+            HBoxLeftPanel.setMinWidth(340);
+            HBoxLeftPanel.setMaxWidth(340);
+            chatIsVisible = true;
+        }
     }
 }

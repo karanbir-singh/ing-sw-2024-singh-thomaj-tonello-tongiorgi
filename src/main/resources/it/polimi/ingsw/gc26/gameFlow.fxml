@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
@@ -22,37 +23,6 @@
 <ScrollPane fx:id="rootScrollPane" fitToHeight="true" fitToWidth="true" prefViewportHeight="800.0" prefViewportWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.GameFlowController">
    <content>
       <BorderPane fx:id="rootBorder" prefHeight="200.0" prefWidth="200.0">
-         <left>
-              <VBox fx:id="leftVBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="300.0" minWidth="50.0" spacing="10.0" BorderPane.alignment="CENTER">
-                  <padding>
-                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                  </padding>
-               <children>
-                  <Button fx:id="drawCardButton" mnemonicParsing="false" onAction="#onClickDrawCardButton" text="DrawCard" />
-                   <Accordion>
-                       <panes>
-                           <TitledPane animated="false" text="Score Board">
-                               <content>
-                                   <ImageView fx:id="scoreBoard" fitHeight="480.0" fitWidth="290.0" pickOnBounds="true">
-                                       <image>
-                                           <Image url="@../../../../images/plateau_score.jpg" />
-                                       </image>
-                                   </ImageView>
-                               </content>
-                           </TitledPane>
-                           <TitledPane fx:id="chat" animated="false" prefHeight="600.0" prefWidth="293.0" text="Chat">
-                               <content>
-                                   <TabPane prefHeight="359.0" prefWidth="290.0" tabClosingPolicy="UNAVAILABLE" />
-                               </content>
-                           </TitledPane>
-                       </panes>
-                   </Accordion>
-               </children>
-               <BorderPane.margin>
-                  <Insets right="20.0" />
-               </BorderPane.margin>
-              </VBox>
-         </left>
          <center>
             <FlowPane alignment="CENTER" columnHalignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="20.0" BorderPane.alignment="CENTER">
                <children>
@@ -166,6 +136,62 @@
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
+         <bottom>
+              <VBox fx:id="leftVBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="300.0" minWidth="50.0" spacing="10.0" BorderPane.alignment="CENTER">
+                  <padding>
+                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+               <children>
+                  <Button fx:id="drawCardButton" mnemonicParsing="false" onAction="#onClickDrawCardButton" text="DrawCard" />
+                   <Accordion>
+                       <panes>
+                           <TitledPane animated="false" text="Score Board">
+                               <content>
+                                   <ImageView fx:id="scoreBoard" fitHeight="480.0" fitWidth="290.0" pickOnBounds="true">
+                                       <image>
+                                           <Image url="@../../../../images/plateau_score.jpg" />
+                                       </image>
+                                   </ImageView>
+                               </content>
+                           </TitledPane>
+                       </panes>
+                   </Accordion>
+               </children>
+               <BorderPane.margin>
+                  <Insets right="20.0" />
+               </BorderPane.margin>
+              </VBox>
+         </bottom>
+         <left>
+            <HBox fx:id="HBoxLeftPanel" minWidth="40.0" prefHeight="100.0" prefWidth="40.0" BorderPane.alignment="CENTER">
+               <children>
+                  <AnchorPane maxWidth="50.0" minWidth="40.0" prefHeight="889.0" prefWidth="50.0">
+                     <children>
+                        <ButtonBar buttonMinWidth="40.0" buttonOrder="U+FBIX_NCYOA_R" layoutX="-80.0" layoutY="88.0" maxHeight="30.0" prefHeight="30.0" prefWidth="200.0" rotate="90.0">
+                          <buttons>
+                            <Button fx:id="scoreBoardButton" mnemonicParsing="false" onAction="#toggleScoreBoard" text="Score Board" />
+                              <Button layoutX="135.0" layoutY="17.0" mnemonicParsing="false" onAction="#toggleChat" text="Chat" />
+                          </buttons>
+                        </ButtonBar>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="anchorPaneScoreBoard" prefHeight="889.0" prefWidth="107.0" translateX="-2000.0">
+                     <children>
+                        <ImageView fx:id="scoreBoard1" fitHeight="480.0" fitWidth="290.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@../../../../images/plateau_score.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="anchorPaneChat" prefHeight="600.0" prefWidth="200.0" translateX="-2000.0">
+                     <children>
+                             <TabPane fx:id="chatTabPane" prefHeight="600.0" prefWidth="290.0" tabClosingPolicy="UNAVAILABLE" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </HBox>
+         </left>
       </BorderPane>
    </content>
 </ScrollPane>
