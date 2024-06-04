@@ -1,20 +1,21 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
+import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
+
 public enum SceneEnum {
-    LOGIN("/it/polimi/ingsw/gc26/login.fxml"),
-    CREATOR("/it/polimi/ingsw/gc26/creator.fxml"),
-    WAITING("/it/polimi/ingsw/gc26/waiting.fxml"),
-    STARTERCARDCHOICE("/it/polimi/ingsw/gc26/starterCardChoice.fxml"),
-    PAWNSELECTION("/it/polimi/ingsw/gc26/pawnSelection.fxml"),
-    SECRETMISSIONCHOICE("/it/polimi/ingsw/gc26/secretMissionChoice.fxml"),
-    GAMEFLOW("/it/polimi/ingsw/gc26/gameFlow.fxml"),
-    INFO("/it/polimi/ingsw/gc26/info.fxml"),
-    ERROR("/it/polimi/ingsw/gc26/error.fxml");
+    LOGIN(GUIApplication.scenesPath + "/login.fxml"),
+    CREATOR(GUIApplication.scenesPath + "/creator.fxml"),
+    WAITING(GUIApplication.scenesPath + "/waiting.fxml"),
+    STARTERCARDCHOICE(GUIApplication.scenesPath + "/starterCardChoice.fxml"),
+    PAWNSELECTION(GUIApplication.scenesPath + "/pawnSelection.fxml"),
+    SECRETMISSIONCHOICE(GUIApplication.scenesPath + "/secretMissionChoice.fxml"),
+    GAMEFLOW(GUIApplication.scenesPath + "/gameFlow.fxml"),
+    INFO(GUIApplication.scenesPath + "/info.fxml"),
+    ERROR(GUIApplication.scenesPath + "/error.fxml");
     //altre
 
     //all the scenes
     private final String value;
-
 
     SceneEnum(final String value) {
         this.value = value;

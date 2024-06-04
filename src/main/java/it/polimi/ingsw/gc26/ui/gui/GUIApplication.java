@@ -19,10 +19,11 @@ import java.util.ArrayList;
 
 
 public class GUIApplication extends Application implements UIInterface {
+
+    public static final String scenesPath = "/it/polimi/ingsw/gc26";
+
     private MainClient mainClient;
-
     private ArrayList<SceneInfo> scenes; //scene in order
-
     private Stage primaryStage;
     private SceneInfo currentSceneInfo;
     private Stage popupStage;
@@ -36,8 +37,6 @@ public class GUIApplication extends Application implements UIInterface {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Get value from args
-
-
         String networkType = getParameters().getUnnamed().get(0);
 
         //lanchaure prima startSocketClient e startRMiCLient
@@ -53,8 +52,9 @@ public class GUIApplication extends Application implements UIInterface {
                         new GUIUpdate(this)
                 );
 
+        // Load all scenes
         this.loadScenes();
-        this.setMainClientToSceneControllers();
+
         //settare i mainClient nei generalController
         this.primaryStage = primaryStage;
         primaryStage.setHeight(800);
@@ -74,8 +74,6 @@ public class GUIApplication extends Application implements UIInterface {
 
 
     private void loadScenes() {
-        //Loads all the scenes available to be showed during the game
-
         scenes = new ArrayList<>();
         FXMLLoader loader;
         Parent root;
@@ -84,17 +82,12 @@ public class GUIApplication extends Application implements UIInterface {
             loader = new FXMLLoader(getClass().getResource(SceneEnum.values()[i].value()));
             try {
                 root = loader.load();
-                genericController = loader.getController(); //sarà di tipo dinamico corretto
+                genericController = loader.getController();
+                genericController.setMainClient(mainClient);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             scenes.add(new SceneInfo(genericController, new Scene(root), SceneEnum.values()[i]));
-        }
-    }
-
-    private void setMainClientToSceneControllers() {
-        for (SceneInfo scene : scenes) {
-            scene.getSceneController().setMainClient(this.mainClient);
         }
     }
 
