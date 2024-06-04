@@ -240,9 +240,7 @@ public class GameFlowController extends GenericController implements Initializab
         for(Card card: simplifiedCommonTable.getCommonMissions()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(index));
-            imageView.setOnMouseClicked(this::onClickCommonTableCard);
             imageViewsCommonMissions.add(imageView);
-            index++;
         }
 
         Platform.runLater(()->{
@@ -331,7 +329,7 @@ public class GameFlowController extends GenericController implements Initializab
         }
 
         //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
-        if(!otherPersonalBoard.getNickname().equals(this.mainClient.getClientID()) && !exist){
+        if(!otherPersonalBoard.getNickname().equals(this.nickname) && !exist){
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
             personalBoardTabPane.getTabs().add(consideredTab);
