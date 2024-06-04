@@ -1,12 +1,13 @@
 package it.polimi.ingsw.gc26;
 
-import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.deck.Deck;
+import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class Printer {
@@ -80,7 +81,7 @@ public class Printer {
 
     public void showEncodedPrintable(String[][] printable) throws UnsupportedEncodingException {
 
-        PrintStream ps = new PrintStream(System.out, true, "UTF-8");
+        PrintStream ps = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
         for (String[] row: printable) {
             for (String col: row) {

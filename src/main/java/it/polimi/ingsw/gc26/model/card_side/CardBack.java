@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * This class represent a card's back side.
@@ -30,6 +29,7 @@ public class CardBack extends Side implements Serializable {
 
     /**
      * Initializes a card's back for Resources cards and Gold Cards
+     *
      * @param side Symbol that represent the card's color
      */
     public CardBack(Symbol side, String imagePath){
@@ -47,13 +47,12 @@ public class CardBack extends Side implements Serializable {
         setImagePath(imagePath);
     }
 
-    // Starter Card back constructor
-
     /**
      * Initializes a card's back for Starter Cards
-     * @param UPLEFT up left corner
-     * @param DOWNLEFT down left corner
-     * @param UPRIGHT up right corner
+     *
+     * @param UPLEFT    up left corner
+     * @param DOWNLEFT  down left corner
+     * @param UPRIGHT   up right corner
      * @param DOWNRIGHT down right corner
      */
     public CardBack(Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, String imagePath){
@@ -70,7 +69,18 @@ public class CardBack extends Side implements Serializable {
         setImagePath(imagePath);
     }
 
-    public CardBack(Symbol side, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, ArrayList<Symbol> permanentResources, Map<Symbol, Integer> requestedResources, String imagePath){
+    /**
+     * Initializes a general card's back, passing all attributes (used for socket stream)
+     *
+     * @param side               Symbol that represent the card's color
+     * @param UPLEFT             up left corner
+     * @param DOWNLEFT           down left corner
+     * @param UPRIGHT            up right corner
+     * @param DOWNRIGHT          down right corner
+     * @param permanentResources resources that are always visible
+     * @param requestedResources resources that are requested
+     */
+    public CardBack(Symbol side, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, ArrayList<Symbol> permanentResources, Map<Symbol, Integer> requestedResources, String imagePath) {
         setSideSymbol(side);
         setDOWNLEFT(DOWNLEFT);
         setDOWNRIGHT(DOWNRIGHT);

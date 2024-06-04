@@ -1,24 +1,14 @@
 package it.polimi.ingsw.gc26.model.hand;
 
-import it.polimi.ingsw.gc26.Printer;
-import it.polimi.ingsw.gc26.model.ModelObservable;
-import it.polimi.ingsw.gc26.model.card.*;
 import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.card.GoldCard;
 import it.polimi.ingsw.gc26.model.card.MissionCard;
-import it.polimi.ingsw.gc26.model.card.ResourceCard;
 import it.polimi.ingsw.gc26.model.card_side.Side;
-import it.polimi.ingsw.gc26.model.card_side.Symbol;
-import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
-import it.polimi.ingsw.gc26.model.card_side.ability.InkwellCounter;
-import it.polimi.ingsw.gc26.model.card_side.ability.ManuscriptCounter;
-import it.polimi.ingsw.gc26.model.card_side.ability.QuillCounter;
+import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
-import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * This class represents the current hand for a player
@@ -40,7 +30,7 @@ public class Hand implements Serializable {
     /**
      * Observable to notify client
      */
-    private ModelObservable observable;
+    private final ModelObservable observable;
 
     /**
      * Initializes the hand for the player
@@ -83,6 +73,12 @@ public class Hand implements Serializable {
 
     }
 
+    /**
+     * Sets the selected secret mission
+     *
+     * @param selectedCard selected secret mission on initial phase of the game
+     * @param clientID     ID of the client
+     */
     public void setSelectedCard(MissionCard selectedCard, String clientID) {
         if (selectedCard == null) {
             this.observable.notifyError("Select a card first!", clientID);
@@ -139,19 +135,24 @@ public class Hand implements Serializable {
         selectedCard = null;
 
         this.observable.notifyUpdateHand(
-                new SimplifiedHand(cards, selectedCard, selectedSide),
+                new SimplifiedHand(cards, null, null),
                 "Card removed from hand",
                 clientID
         );
     }
 
+    /**
+     * Removes the secret mission card given as parameter from the secret hand
+     *
+     * @param card card to be removed
+     */
     public void removeCard(MissionCard card, String clientID) {
         cards.remove(card);
         selectedSide = null;
         selectedCard = null;
 
         this.observable.notifyUpdateSecretHand(
-                new SimplifiedHand(cards, selectedCard, selectedSide),
+                new SimplifiedHand(cards, null, null),
                 "Card removed from hand",
                 clientID
         );
@@ -171,8 +172,9 @@ public class Hand implements Serializable {
     }
 
     /**
+     * Adds a secret mission card into secret hand
      *
-     * @param card new card in hand
+     * @param card new secret mission card in secret hand
      */
     public void addCard(MissionCard card, String clientID) {
         cards.add(card);
@@ -201,173 +203,9 @@ public class Hand implements Serializable {
     public Card getCard(int leftLimit, int rightLimit, int cardIndex, String clientID) {
         // Check if the given index is correct
         if (cardIndex >= leftLimit && cardIndex < rightLimit) {
-            // i do not know if updateHand or updateSecretHand
-            //this.observable.notifyUpdateHand(new SimplifiedHand(cards, selectedCard, selectedSide), "Card selected on common table!", clientID);
             return cards.get(cardIndex);
         }
-        this.observable.notifyError("Invalid position!", clientID);
+        this.observable.notifyError("Invalid card position!", clientID);
         return null;
-    }
-
-
-    /**
-     * Creates a String matrix with a printable representation of the hand
-     */
-    public String[][] printableHand() {
-        Printer printer = new Printer();
-
-        if(cards.isEmpty()){
-            String[][] hand = new String[1][1];
-            hand[0][0] = "\t\n";
-            return hand;
-        } else {
-            //utils
-            String selectedStyle = TextStyle.BACKGROUND_BEIGE.getStyleCode() + TextStyle.BLACK.getStyleCode();
-            String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
-
-            //calculate dimensions
-            int xCardDim = cards.get(0).getFront().printableSide()[0].length;
-            int yCardDim = cards.get(0).getFront().printableSide().length;
-            int xMax = (xCardDim + 1) * 3 + 1;
-            int yMax = yCardDim + 6;
-
-            //index to select the card
-            int index = 0;
-
-            //initialize empty matrix
-            String[][] myHand = new String[yMax][xMax];
-            for(int j=0; j<yMax; j++){
-                for(int i=0; i<xMax; i++){
-                    myHand[j][i] = " ";
-                }
-            }
-
-            //titles
-
-            myHand[0][0] = "\nYOUR HAND:\n";
-            myHand[1][0] = "Card:      ";
-            for(int i=2; i<xCardDim + 2; i++){
-                myHand[i][0] = "            ";
-            }
-            myHand[5][0] = "Type:     ";
-            myHand[6][0] = "Points:   ";
-            myHand[7][0] = "Requires: ";
-
-            for(int i=0; i<3; i++) {
-                int x = 1 + i*(xCardDim+1);
-                int y = 1;
-                if (i < cards.size()) {
-                    Card c = cards.get(i);
-
-                    //titles
-                    if (c == selectedCard) {
-                        if (selectedSide == c.getBack()) {
-                            myHand[y][x] =  index + ") " + selectedStyle + " Back  \u001B[0m   ";
-                        } else {
-                            myHand[y][x] = index + ") " + selectedStyle + " Front \u001B[0m   ";
-                        }
-                    } else {
-                        myHand[y][x] = index + ")" + "  Front    ";
-                    }
-                    myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
-                    y++;
-
-                    //printable side
-                    if (c == selectedCard && selectedSide.equals(c.getBack())) {
-                        printer.addPrintable(c.getBack().printableSide(), myHand, x, y);
-                    } else {
-                        printer.addPrintable(c.getFront().printableSide(), myHand, x, y);
-                    }
-                    x += xCardDim;
-                    for (int j = 0; j < yCardDim; j++) {
-                        myHand[y + j][x] = "          ";
-                    }
-                    y += yCardDim;
-
-                    //card type
-                    if (c instanceof GoldCard) {
-                        myHand[y][x] = "Gold         ";
-                    } else if (c instanceof ResourceCard) {
-                        myHand[y][x] = "Resource     ";
-                    } else if (c instanceof StarterCard) {
-                        myHand[y][x] = "Starter      ";
-                    }
-                    myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
-                    y++;
-
-                    //points
-                    if (!(c == selectedCard && selectedSide.equals(c.getBack()))) {
-                        switch (c.getFront()) {
-                            case CornerCounter cornerCounter -> myHand[y][x] = "2 pt " + "x" + Character.toString(0x2B1C);
-                            case InkwellCounter inkwellCounter -> myHand[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
-                            case ManuscriptCounter manuscriptCounter -> myHand[y][x] = "1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
-                            case QuillCounter quillCounter -> myHand[y][x] = "1 pt " + "x" + Symbol.QUILL.getAlias();
-                            case null, default -> myHand[y][x] = c.getFront().getPoints() + " pt " + "        ";
-                        }
-                        if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
-                            myHand[y][x] = myHand[y][x] + "       " + blackSquare + blackSquare;
-                        } else {
-                            myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
-                        }
-
-                    } else {
-                        myHand[y][x] = "0 pt         " + blackSquare + blackSquare + blackSquare;
-                    }
-                    y++;
-
-                    //requirements
-                    myHand[y][x] = "";
-                    int n;
-                    int spaces = 5;
-
-                    if(!(c == selectedCard && selectedSide.equals(c.getBack()))){
-                        for(Symbol s: c.getFront().getRequestedResources().keySet()){
-                            n = c.getFront().getRequestedResources().get(s);
-                            for(int j=0; j<n; j++){
-                                myHand[y][x] = myHand[y][x] + s.getAlias();
-                            }
-                            spaces = spaces - n;
-                        }
-                    }
-                    while (spaces>0){
-                        myHand[y][x] = myHand[y][x] +  blackSquare;
-                        spaces--;
-                    }
-                    myHand[y][x] = myHand[y][x] + "      "+ blackSquare ;
-
-                } else if(!(!cards.isEmpty() && cards.get(0) instanceof StarterCard)) {
-                    //EMPTY CARDS
-                    myHand[y][x] = "            ";
-                    y++;
-                    //add empty printable
-                    printer.addPrintable(printer.emptyPrintable(xCardDim, yCardDim), myHand, x, y);
-                    x += xCardDim;
-                    for (int j = 0; j < yCardDim; j++) {
-                        myHand[y + j][x] = "        ";
-                    }
-                    y += yCardDim;
-
-                    //type
-                    myHand[y][x] = "           " + blackSquare + blackSquare + blackSquare;
-                    y++;
-
-                    //points
-                    myHand[y][x] = "           " + blackSquare + blackSquare + blackSquare;
-                    y++;
-
-                    //requirements
-                    myHand[y][x] = blackSquare + blackSquare + blackSquare + blackSquare + blackSquare + "    "+ blackSquare;
-                }
-                index++;
-            }
-
-            //align right border
-            for(int i=yCardDim+1; i<yMax; i++){
-                myHand[i][xMax-1] = myHand[i][xMax-1] + "  ";
-            }
-
-            return myHand;
-
-        }
     }
 }

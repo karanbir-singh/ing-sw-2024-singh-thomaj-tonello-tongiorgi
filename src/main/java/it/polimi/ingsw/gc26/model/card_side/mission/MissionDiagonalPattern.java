@@ -8,7 +8,9 @@ import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class represents a mission card with a Diagonal pattern.
@@ -16,6 +18,7 @@ import java.util.*;
 public class MissionDiagonalPattern extends MissionCardFront implements Serializable {
     /**
      * Creates a new instance of MissionDiagonalPattern
+     *
      * @param type represent which diagonal combination is needed to this card give points
      */
     public MissionDiagonalPattern(int type, String imagePath) {
@@ -34,7 +37,8 @@ public class MissionDiagonalPattern extends MissionCardFront implements Serializ
 
     /**
      * This method returns the extra points that are awarded considering its position in the Player's board.
-     * @param visibleResources Player's visible resources in the board
+     *
+     * @param visibleResources  Player's visible resources in the board
      * @param occupiedPositions list of the position occupied in the Player's board
      * @return points given by this card
      */

@@ -22,11 +22,11 @@ public class SimplifiedHand implements Serializable {
     /**
      * This attribute represents the selected card to be played
      */
-    private Card selectedCard;
+    private final Card selectedCard;
     /**
      * This attribute represent the selected side of the selected card to be played
      */
-    private Side selectedSide;
+    private final Side selectedSide;
 
     /**
      * Initializes the hand for the player

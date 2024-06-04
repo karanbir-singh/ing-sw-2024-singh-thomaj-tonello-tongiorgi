@@ -1,15 +1,18 @@
 package it.polimi.ingsw.gc26.ui.tui;
 
-import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.MainClient;
+import it.polimi.ingsw.gc26.network.PingManager;
+import it.polimi.ingsw.gc26.network.RMI.RMIPingManager;
+import it.polimi.ingsw.gc26.network.socket.SocketPingManager;
 import it.polimi.ingsw.gc26.ui.UIInterface;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -20,17 +23,27 @@ public class TUIApplication implements UIInterface {
     MainClient mainClient;
 
     @Override
-    public void init(MainClient.NetworkType networkType) throws IOException, NotBoundException {
+    public void init(MainClient.NetworkType networkType) {
         this.start(networkType.toString());
     }
 
-    public void start(String... args) throws NotBoundException, IOException {
+    public void start(String... args) {
         String networkType = args[0];
 
         if (MainClient.NetworkType.valueOf(networkType) == MainClient.NetworkType.rmi) {
-            this.mainClient = MainClient.startRMIClient(MainClient.GraphicType.tui);
+            try {
+                this.mainClient = MainClient.startRMIClient(MainClient.GraphicType.tui);
+            } catch (RemoteException e) {
+                ConsoleColors.printError(e.getMessage());
+                System.exit(-1);
+            }
         } else {
-            this.mainClient = MainClient.startSocketClient(MainClient.GraphicType.tui);
+            try {
+                this.mainClient = MainClient.startSocketClient(MainClient.GraphicType.tui);
+            } catch (IOException e) {
+                ConsoleColors.printError(e.getMessage());
+                System.exit(-1);
+            }
         }
 
         this.mainClient
@@ -38,8 +51,22 @@ public class TUIApplication implements UIInterface {
                 .getSimplifiedModel()
                 .setViewUpdater(
                         new TUIUpdate(this.mainClient.getViewController().getSimplifiedModel()));
-        this.runConnection();
-        this.runGame();
+        try {
+            this.runConnection();
+
+            // Launch thread for managing server ping
+            new Thread(this.mainClient.getPingManager()).start();
+
+        } catch (RemoteException e) {
+            ConsoleColors.printError("[ERROR]: unable to communicate with the server");
+            System.exit(-1);
+        }
+
+        try {
+            this.runGame();
+        } catch (RemoteException ignored) {
+
+        }
     }
 
     @Override

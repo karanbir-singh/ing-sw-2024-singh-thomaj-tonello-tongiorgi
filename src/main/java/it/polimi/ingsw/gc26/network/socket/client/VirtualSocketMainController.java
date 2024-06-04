@@ -114,15 +114,6 @@ public class VirtualSocketMainController implements VirtualMainController {
             throw new RemoteException();
         }
     }
-
-    @Override
-    public void amAlive() throws RemoteException {
-        HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
-        data.replace("function", "amAlive");
-        writeToServer(data, new HashMap<>());
-    }
-
-
 }
 
 

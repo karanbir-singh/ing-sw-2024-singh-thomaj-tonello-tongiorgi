@@ -8,7 +8,9 @@ import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class represents a mission card with an L pattern.
@@ -16,6 +18,7 @@ import java.util.*;
 public class MissionLPattern extends MissionCardFront implements Serializable {
     /**
      * Creates a new instance of MissionLPattern
+     *
      * @param type represent which L combination is needed to this card give points
      */
     public MissionLPattern(int type, String imagePath) {
@@ -33,7 +36,8 @@ public class MissionLPattern extends MissionCardFront implements Serializable {
 
     /**
      * This method returns the extra points that are awarded considering the card position in the Player's board.
-     * @param visibleResources Player's visible resources in the board
+     *
+     * @param visibleResources  Player's visible resources in the board
      * @param occupiedPositions list of the position occupied in the Player's board
      * @return points given by this card
      */

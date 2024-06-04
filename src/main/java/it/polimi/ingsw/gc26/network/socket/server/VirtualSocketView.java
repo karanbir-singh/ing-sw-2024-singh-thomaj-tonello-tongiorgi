@@ -17,7 +17,9 @@ import it.polimi.ingsw.gc26.view_model.*;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class represents the client for the server
@@ -749,8 +751,8 @@ public class VirtualSocketView implements VirtualView {
      * @throws RemoteException
      */
     @Override
-    public void isClientAlive() throws RemoteException {
-        sendToClient("isClientAlive", new HashMap<>());
+    public void ping() throws RemoteException {
+        sendToClient("ping", new HashMap<>());
     }
 
     /**

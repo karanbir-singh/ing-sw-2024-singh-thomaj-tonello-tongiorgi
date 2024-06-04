@@ -1,9 +1,12 @@
 package it.polimi.ingsw.gc26;
 
+import it.polimi.ingsw.gc26.network.PingManager;
+import it.polimi.ingsw.gc26.network.RMI.RMIPingManager;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import it.polimi.ingsw.gc26.network.socket.SocketPingManager;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
 import it.polimi.ingsw.gc26.network.socket.server.VirtualSocketView;
@@ -12,6 +15,7 @@ import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
 import it.polimi.ingsw.gc26.ui.gui.GUIUpdate;
 import it.polimi.ingsw.gc26.ui.tui.TUIApplication;
 import it.polimi.ingsw.gc26.ui.tui.TUIUpdate;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.io.*;
@@ -23,6 +27,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class MainClient {
     /**
@@ -82,7 +88,7 @@ public class MainClient {
     /**
      * Client controller
      */
-    private ViewController viewController;
+    private final ViewController viewController;
 
     /**
      * Attribute used for synchronize actions between server and client
@@ -96,7 +102,15 @@ public class MainClient {
             "██║░░██╗██║░░██║██║░░██║██╔══╝░░░██╔██╗░  ██║╚████║██╔══██║░░░██║░░░██║░░░██║██╔══██╗██╔══██║██║░░░░░██║░╚═══██╗\n" +
             "╚█████╔╝╚█████╔╝██████╔╝███████╗██╔╝╚██╗  ██║░╚███║██║░░██║░░░██║░░░╚██████╔╝██║░░██║██║░░██║███████╗██║██████╔╝\n" +
             "░╚════╝░░╚════╝░╚═════╝░╚══════╝╚═╝░░╚═╝  ╚═╝░░╚══╝╚═╝░░╚═╝░░░╚═╝░░░░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝╚═════╝░";
+    /**
+     * Server RMI registry
+     */
+    private Registry registry;
 
+    /**
+     * Runnable of the thread that manage the server ping
+     */
+    private PingManager pingManager;
 
     public MainClient() {
         this.clientID = null;
@@ -106,6 +120,11 @@ public class MainClient {
 
     }
 
+    /**
+     * Set client's state
+     *
+     * @param clientState new client state
+     */
     public void setClientState(ClientState clientState) {
         synchronized (this.lock) {
             this.clientState = clientState;
@@ -113,6 +132,18 @@ public class MainClient {
         }
     }
 
+    /**
+     * @return client's state
+     */
+    public ClientState getClientState() {
+        return this.clientState;
+    }
+
+    /**
+     * Sets client's ID
+     *
+     * @param clientID ID
+     */
     public void setClientID(String clientID) {
         synchronized (this.lock) {
             this.clientID = clientID;
@@ -120,16 +151,34 @@ public class MainClient {
         }
     }
 
+    /**
+     * @return client's ID
+     */
     public String getClientID() {
         return clientID;
     }
 
+    /**
+     * @return main client's lock
+     */
     public Object getLock() {
         return this.lock;
     }
 
-    public ClientState getClientState() {
-        return this.clientState;
+    /**
+     * Sets main client's server ping manager
+     *
+     * @param pingManager the server ping manager
+     */
+    public void setPingManager(PingManager pingManager) {
+        this.pingManager = pingManager;
+    }
+
+    /**
+     * @return main client's server ping manager
+     */
+    public PingManager getPingManager() {
+        return pingManager;
     }
 
     /**
@@ -200,28 +249,37 @@ public class MainClient {
     }
 
 
-    public static void main(String args[]) throws NotBoundException, IOException {
+    public static void main(String args[]) {
         // print logo
         System.out.println(asciiCodexNaturalis + "\n");
 
         // Get server IP and port
         Scanner scanner = new Scanner(System.in);
 
+        // Insert server IP
         System.out.print("Enter server IP address (default: 127.0.0.1): ");
         String serverIP = scanner.nextLine();
-        if (!serverIP.isEmpty()) {
+        if (serverIP.matches(".*[a-zA-Z]+.*")) {
+            ConsoleColors.printError("[ERROR]: Invalid input -> Set default server IP address");
+        } else if (!serverIP.isEmpty()) {
             SERVER_IP = serverIP;
         }
 
+        // Insert RMI Server port
         System.out.print("Enter server RMI port (default 1099): ");
         String rmiServerPort = scanner.nextLine();
-        if (!rmiServerPort.isEmpty()) {
+        if (rmiServerPort.matches(".*[a-zA-Z]+.*")) {
+            ConsoleColors.printError("[ERROR]: Invalid input -> Set default RMI Server port");
+        } else if (!rmiServerPort.isEmpty()) {
             RMI_SERVER_PORT = Integer.parseInt(rmiServerPort);
         }
 
+        // Insert server socket port
         System.out.print("Enter server socket port (default 3060): ");
         String socketServerPort = scanner.nextLine();
-        if (!socketServerPort.isEmpty()) {
+        if (socketServerPort.matches(".*[a-zA-Z]+.*")) {
+            ConsoleColors.printError("[ERROR]: Invalid input -> Set default Server socket port");
+        } else if (!socketServerPort.isEmpty()) {
             SERVER_SOCKET_PORT = Integer.parseInt(socketServerPort);
         }
 
@@ -231,9 +289,8 @@ public class MainClient {
             System.out.println("What type of communication do you want to use? (rmi/socket)");
             try {
                 networkType = NetworkType.valueOf(scanner.nextLine().toLowerCase());
-
             } catch (IllegalArgumentException e) {
-                System.err.println("[ERROR]: Invalid input");
+                ConsoleColors.printError("[ERROR]: Invalid input");
             }
         } while (networkType == null);
 
@@ -244,7 +301,7 @@ public class MainClient {
             try {
                 graphicType = GraphicType.valueOf(scanner.nextLine().toLowerCase());
             } catch (IllegalArgumentException e) {
-                System.err.println("[ERROR]: Invalid input");
+                ConsoleColors.printError("[ERROR]: Invalid input");
             }
         } while (graphicType == null);
 
@@ -256,34 +313,55 @@ public class MainClient {
         }
     }
 
-    public static MainClient startRMIClient(GraphicType graphicType) throws RemoteException, NotBoundException {
-        // Finding the registry and getting the stub of virtualMainController in the registry
-        Registry registry = LocateRegistry.getRegistry(SERVER_IP, RMI_SERVER_PORT);
-
+    public static MainClient startRMIClient(GraphicType graphicType) throws RemoteException {
         // Create RMI Client
         MainClient mainClient = new MainClient();
 
-        // Get remote object
         try {
-            Remote remoteObject = registry.lookup(remoteObjectName);
-            mainClient.setVirtualMainController((VirtualMainController) remoteObject);
-            mainClient.setVirtualView(new VirtualRMIView(mainClient.getViewController()));
-        } catch (ConnectException ex) {
-            System.out.println("Server is down!");
-            System.exit(0);
+            mainClient.registry = LocateRegistry.getRegistry(SERVER_IP, RMI_SERVER_PORT);
+        } catch (RemoteException e) {
+            throw new RemoteException("[ERROR]: unable to find RMI registry");
         }
 
+        // Get remote object
+        Remote remoteObject;
+        try {
+            remoteObject = mainClient.registry.lookup(remoteObjectName);
+        } catch (RemoteException | NotBoundException e) {
+            throw new RemoteException("[ERROR]: unable to lookup remote object");
+        }
+
+        mainClient.setVirtualMainController((VirtualMainController) remoteObject);
+        try {
+            mainClient.setVirtualView(new VirtualRMIView(mainClient.getViewController()));
+        } catch (RemoteException e) {
+            throw new RemoteException("[ERROR]: unable to create virtual RMI view");
+        }
+
+        // Set RMI server ping manager
+        mainClient.setPingManager(new RMIPingManager(mainClient));
 
         return mainClient;
     }
 
     public static MainClient startSocketClient(GraphicType graphicType) throws IOException {
         // Create connection with the server
-        Socket serverSocket = new Socket(SERVER_IP, SERVER_SOCKET_PORT);
+        Socket serverSocket;
+        try {
+            serverSocket = new Socket(SERVER_IP, SERVER_SOCKET_PORT);
+        } catch (IOException e) {
+            throw new IOException("[ERROR]: unable to locate server");
+        }
 
         // Get input and out stream from the server
-        InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
-        OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
+        InputStreamReader socketRx;
+        OutputStreamWriter socketTx;
+        try {
+            socketRx = new InputStreamReader(serverSocket.getInputStream());
+            socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
+        } catch (IOException e) {
+            throw new IOException("[ERROR]: unable to get server input and output server");
+        }
 
         // Reader
         BufferedReader socketIn = new BufferedReader(socketRx);
@@ -299,6 +377,9 @@ public class MainClient {
 
         // Launch a thread for managing server requests
         new SocketServerHandler(mainClient.getViewController(), socketIn, socketOut);
+
+        // Set Socket server ping manager
+        mainClient.setPingManager(new SocketPingManager(mainClient, 5));
 
         return mainClient;
     }

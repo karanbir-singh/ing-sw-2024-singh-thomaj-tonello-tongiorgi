@@ -21,7 +21,6 @@ import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.request.view_request.*;
 import it.polimi.ingsw.gc26.view_model.*;
-import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -41,7 +40,7 @@ public class SocketServerHandler implements Runnable {
     /**
      * This attributes represents the output to the server.
      */
-    private BufferedWriter outputToServer;
+    private final BufferedWriter outputToServer;
 
     /**
      * This attribute represents the clientController
@@ -49,7 +48,6 @@ public class SocketServerHandler implements Runnable {
     private final ViewController viewController;
 
     /**
-     *
      * @param viewController
      * @param inputFromServer
      * @param outputToServer
@@ -127,7 +125,8 @@ public class SocketServerHandler implements Runnable {
                     case "updateIDGame":
                         this.viewController.setGameID(value.get("idGame").asInt());
                         break;
-                    case "isClientAlive":
+                    case "ping":
+                        this.viewController.resetTimer();
                         break;
                     case "killProcess":
                         this.viewController.killProcess();
@@ -239,7 +238,7 @@ public class SocketServerHandler implements Runnable {
         };
         String imagePath = encodedCard.get("imagePathBack") != null ? encodedCard.get("imagePathBack").asText() : null;
         Side backGold= new CardBack(Symbol.valueOf(encodedCard.get("sideSymbol").asText()), imagePath);
-        return  new GoldCard(frontGold, backGold);
+        return new GoldCard(frontGold, backGold);
     }
 
     private ResourceCard getResourceCard(JsonNode encodedCard) {
@@ -260,7 +259,7 @@ public class SocketServerHandler implements Runnable {
         if (encodedCard.findValue("card") != null) {
             encodedCard = encodedCard.get("card");
         }
-        for ( JsonNode resource : encodedCard.get("front").get("permanentResources")) {
+        for (JsonNode resource : encodedCard.get("front").get("permanentResources")) {
             resources.add(Symbol.valueOf(resource.asText()));
         }
         ArrayList<Corner> corners = getCorners(encodedCard.get("front"));
@@ -313,7 +312,7 @@ public class SocketServerHandler implements Runnable {
         Card selectedCard = encodedHand.get("selectedCard").asInt() != -1 ? cards.get(encodedHand.get("selectedCard").asInt()) : null;
         Side selectedSide = null;
         if (encodedHand.get("selectedSide").asInt() != -1) {
-            selectedSide = encodedHand.get("selectedSide").asInt() == 0 ? selectedCard.getFront(): selectedCard.getBack() ;
+            selectedSide = encodedHand.get("selectedSide").asInt() == 0 ? selectedCard.getFront() : selectedCard.getBack();
         }
         return new SimplifiedHand(cards, selectedCard, selectedSide);
     }
@@ -326,7 +325,7 @@ public class SocketServerHandler implements Runnable {
         Card selectedCard = encodedHand.get("selectedCard").asInt() != -1 ? cards.get(encodedHand.get("selectedCard").asInt()) : null;
         Side selectedSide = null;
         if (encodedHand.get("selectedSide").asInt() != -1) {
-            selectedSide = encodedHand.get("selectedSide").asInt() == 0 ? selectedCard.getFront(): selectedCard.getBack() ;
+            selectedSide = encodedHand.get("selectedSide").asInt() == 0 ? selectedCard.getFront() : selectedCard.getBack();
         }
         return new SimplifiedHand(cards, selectedCard, selectedSide);
     }
@@ -338,11 +337,11 @@ public class SocketServerHandler implements Runnable {
 
         ArrayList<Point> occupiedPositions = buildArrayPosition(encodedBoard.get("occupiedPositions"));
 
-        for( JsonNode playablePosition : encodedBoard.get("playablePositions")){
+        for (JsonNode playablePosition : encodedBoard.get("playablePositions")) {
             playablePositions.add(new Point(playablePosition.get("X").asInt(), playablePosition.get("Y").asInt()));
         }
 
-        for( JsonNode blockedPosition : encodedBoard.get("blockedPositions")){
+        for (JsonNode blockedPosition : encodedBoard.get("blockedPositions")) {
             blockedPositions.add(new Point(blockedPosition.get("X").asInt(), blockedPosition.get("Y").asInt()));
         }
 
@@ -372,7 +371,7 @@ public class SocketServerHandler implements Runnable {
 
     private SimplifiedChat buildSimplifiedChat(JsonNode encodedChat) throws JsonProcessingException {
         ArrayList<Message> messages = new ArrayList<>();
-        for (JsonNode encodedMessage :  encodedChat.get("messages")) {
+        for (JsonNode encodedMessage : encodedChat.get("messages")) {
             messages.add(new Message(encodedMessage.asText()));
         }
         return new SimplifiedChat(messages);
@@ -381,7 +380,7 @@ public class SocketServerHandler implements Runnable {
     private ArrayList<Point> buildArrayPosition(JsonNode arrayNode) {
         ArrayList<Point> positions = new ArrayList<>();
         // each point
-        for(JsonNode position : arrayNode){
+        for (JsonNode position : arrayNode) {
             // flags
             Map<Integer, Boolean> flags = new HashMap<>();
             Iterator<Map.Entry<String, JsonNode>> resourceIterator = position.get("flags").fields();
@@ -393,7 +392,7 @@ public class SocketServerHandler implements Runnable {
             Side side = null;
             ArrayList<Symbol> permanentResources = new ArrayList<>();
             Map<Symbol, Integer> requestedResources = new HashMap<>();
-            if(!position.get("type").isNull()) {
+            if (!position.get("type").isNull()) {
                 ArrayList<Corner> corners = getCorners(position.get("side"));
                 switch (position.get("type").asText()) {
                     case "CardBack":

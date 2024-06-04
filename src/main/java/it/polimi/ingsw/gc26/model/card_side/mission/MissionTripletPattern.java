@@ -9,7 +9,10 @@ import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.awt.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class represents a mission card with a triplet pattern.
@@ -17,6 +20,7 @@ import java.util.*;
 public class MissionTripletPattern extends MissionCardFront implements Serializable {
     /**
      * Creates a new instance of MissionTripletPattern
+     *
      * @param type represent which Triplet combination is needed to this card give points
      */
     public MissionTripletPattern(int type, String imagePath) {
@@ -35,14 +39,15 @@ public class MissionTripletPattern extends MissionCardFront implements Serializa
 
     /**
      * This method returns the extra points that are awarded considering the card position in the Player's board.
-     * @param visibleResources Player's visible resources in the board
+     *
+     * @param visibleResources  Player's visible resources in the board
      * @param occupiedPositions list of the position occupied in the Player's board
      * @return points given by this card
      */
     public int checkPattern(Map<Symbol, Integer> visibleResources, ArrayList<Point> occupiedPositions) {
         int points = 0;
         if (getType() == 1) {
-            points = points + 3 * Arrays.stream(new int[] {visibleResources.get(Symbol.INKWELL),
+            points = points + 3 * Arrays.stream(new int[]{visibleResources.get(Symbol.INKWELL),
                     visibleResources.get(Symbol.QUILL),
                     visibleResources.get(Symbol.MANUSCRIPT)}).min().getAsInt();
         } else if (getType() == 2) {

@@ -2,9 +2,11 @@ package it.polimi.ingsw.gc26.view_model;
 
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
-import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.request.view_request.ViewRequest;
+import it.polimi.ingsw.gc26.ui.UpdateInterface;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
+
 import java.util.ArrayDeque;
 import java.util.Queue;
 
@@ -12,9 +14,9 @@ public class ViewController {
     /**
      * References to the main client of which this object is controller
      */
-    private MainClient mainClient;
+    private final MainClient mainClient;
 
-    private SimplifiedModel simplifiedModel;
+    private final SimplifiedModel simplifiedModel;
 
     /**
      * This attribute represents the list of requests sent from server
@@ -79,7 +81,7 @@ public class ViewController {
     /**
      * Updates the client's state (used during the game's initialization)
      *
-     * @param clientState
+     * @param clientState state of the client
      */
     public void updateClientState(ClientState clientState) {
         mainClient.setClientState(clientState);
@@ -88,7 +90,7 @@ public class ViewController {
     /**
      * Used only with socket implementation
      *
-     * @param clientID
+     * @param clientID ID of the client
      */
     public void setClientID(String clientID) {
         mainClient.setClientID(clientID);
@@ -130,30 +132,35 @@ public class ViewController {
         this.simplifiedModel.setSimplifiedGame(simplifiedGame, message);
     }
 
+    public void resetTimer() {
+        this.mainClient.getPingManager().reset();
+    }
+
     /**
      * Reports a message from the server (for example error reports)
      *
-     * @param message
+     * @param message message sent by the server
      */
 
     public void showMessage(String message) {
-        System.out.println(STR."[SERVER]: \{message}");
+        System.out.println("[SERVER]: " + message);
     }
 
     /**
      * Reports an error message from the server
      *
-     * @param errorMessage
+     * @param errorMessage message to print
      */
     public void showError(String errorMessage) {
-        System.err.println(STR."[ERROR]: \{errorMessage}");
+        ConsoleColors.printError(errorMessage);
     }
 
-    public void setGameID(int gameID){
+
+    public void setGameID(int gameID) {
         this.gameID = gameID;
     }
 
-    public int getGameID(){
+    public int getGameID() {
         return this.gameID;
     }
 

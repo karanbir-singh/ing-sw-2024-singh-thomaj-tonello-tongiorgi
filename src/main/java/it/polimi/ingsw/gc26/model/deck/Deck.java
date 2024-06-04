@@ -3,7 +3,8 @@ package it.polimi.ingsw.gc26.model.deck;
 import it.polimi.ingsw.gc26.model.card.Card;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * This class represents a deck of cards
@@ -23,6 +24,7 @@ public class Deck implements Serializable {
 
     /**
      * Adds a card in the deck
+     *
      * @param card new card to be added in the deck
      */
     public void addCard(Card card) {
@@ -31,18 +33,20 @@ public class Deck implements Serializable {
 
     /**
      * Returns the top card in the deck without removing it
+     *
      * @return the top card in the deck
      */
     public Card getTopCard() {
-        return cards.getLast();
+        return cards.get(cards.size() - 1);
     }
 
     /**
      * Returns the last card of the deck and removes the card from it
+     *
      * @return top card
      */
     public Card removeCard() {
-        return cards.removeLast();
+        return cards.remove(cards.size() - 1);
     }
 
     /**
@@ -54,14 +58,10 @@ public class Deck implements Serializable {
 
     /**
      * Return the complete deck
+     *
      * @return deck of cards
      */
     public ArrayList<Card> getCards() {
         return this.cards;
     }
-
-    public String[][] printableDeck(){
-        return this.getTopCard().getBack().printableSide();
-    }
-
 }

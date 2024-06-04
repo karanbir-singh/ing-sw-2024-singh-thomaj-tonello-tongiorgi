@@ -4,16 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.controller.GameController;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-
 import it.polimi.ingsw.gc26.controller.MainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.game_request.*;
 import it.polimi.ingsw.gc26.request.main_request.ConnectionRequest;
 import it.polimi.ingsw.gc26.request.main_request.GameCreationRequest;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 /**
  * This class represents the handler to decode json from the client.
@@ -115,9 +114,6 @@ public class SocketClientHandler implements Runnable {
                         break;
                     case "setSecretMission":
                         this.gameController.addRequest(new SetSecretMissionRequest(value.get("playerID").asText()));
-                        break;
-                    case "printPersonalBoard":
-                        this.gameController.addRequest(new PrintPersonalBoardRequest(value.get("nickname").asText(), value.get("playerID").asText()));
                         break;
                     case "reAddView":
                         this.gameController.addRequest(new ReAddViewRequest(this.virtualSocketView, value.get("clientID").asText()));

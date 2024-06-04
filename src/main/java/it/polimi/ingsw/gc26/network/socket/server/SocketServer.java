@@ -49,11 +49,11 @@ public class SocketServer {
      */
     public void runServer() throws IOException {
         Socket clientSocket;
-        System.out.println(STR."\nStarting Socket Server... \nListening in port: \{this.listenSocket.getLocalPort()}");
+        System.out.println("\nStarting Socket Server... \nListening in port: " + this.listenSocket.getLocalPort());
 
         // Keep server on listening for connection
         while ((clientSocket = this.listenSocket.accept()) != null) {
-            System.out.println(STR."Client\{clientSocket.getRemoteSocketAddress()}connected");
+            System.out.println("Client " + clientSocket.getRemoteSocketAddress() + " connected");
 
             // Get input and out stream from the client
             InputStreamReader socketRx = new InputStreamReader(clientSocket.getInputStream());

@@ -1,9 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
-import it.polimi.ingsw.gc26.Printer;
-import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.hand.Hand;
-import it.polimi.ingsw.gc26.model.utils.TextStyle;
+import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
 
 import java.io.Serializable;
@@ -20,7 +18,7 @@ public class Player implements Serializable {
     /**
      * This attribute represents the player's name and will be shown to the other players
      */
-    private String nickname;
+    private final String nickname;
     /**
      * This attribute represents the pawn, which represent the player in the board
      */
@@ -78,19 +76,11 @@ public class Player implements Serializable {
 
     /**
      * This method set the observable
-     * @param observable
+     *
+     * @param observable contains a list of the observers
      */
     public void setObservable(ModelObservable observable) {
         this.observable = observable;
-    }
-
-    /**
-     * Sets the player nickname
-     *
-     * @param name new nickname
-     */
-    public void setNickname(String name) {
-        this.nickname = name;
     }
 
     /**
@@ -105,35 +95,22 @@ public class Player implements Serializable {
     /**
      * Sets the pawn color to the chosen one
      *
-     * @param color new pawn color
+     * @param pawn player's pawn
      */
-    public boolean setPawn(String color, ArrayList<Pawn> availableColors, String clientID) {
-        Pawn pawn;
-        boolean result = false;
-        switch (color) {
-            case "BLUE" -> pawn = Pawn.BLUE;
-            case "RED" -> pawn = Pawn.RED;
-            case "YELLOW" -> pawn = Pawn.YELLOW;
-            case "GREEN" -> pawn = Pawn.GREEN;
-            default -> pawn = null;
-        }
+    public void setPawn(Pawn pawn, String clientID) {
+        this.pawnColor = pawn;
 
-        if (pawn == null) {
-            // TODO gestire cosa fare nella view quando l'utente passa un colore non corretto
-            this.observable.notifyError("Color not available!", clientID);
-        } else if (!availableColors.contains(pawn)) {
-            // TODO gestire cosa fare nella view quando l'utente passa un colore non disponibile
-            this.observable.notifyError("Color not available!", clientID);
-        } else {
-            availableColors.remove(pawn);
-            this.pawnColor = pawn;
-            result = true;
-            this.observable.notifyUpdatePlayer(
-                    new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
-                    "Pawn color " + this.pawnColor + " has been picked!",
-                    clientID);
-        }
-        return result;
+        // Notify client
+        this.observable.notifyUpdatePlayer(
+                new SimplifiedPlayer(
+                        ID,
+                        nickname,
+                        pawnColor,
+                        amIFirstPlayer,
+                        state
+                ),
+                "Color " + pawn.toString() + " set",
+                clientID);
     }
 
     /**
@@ -152,16 +129,9 @@ public class Player implements Serializable {
         this.amIFirstPlayer = true;
 
         this.observable.notifyUpdatePlayer(
-                new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
+                new SimplifiedPlayer(clientID, nickname, pawnColor, true, state),
                 "You are the first player!",
                 clientID);
-    }
-
-    /**
-     * Sets boolean that indicates the player is not the first one to false
-     */
-    public void setNotFirstPlayer() {
-        this.amIFirstPlayer = false;
     }
 
     /**
@@ -185,11 +155,10 @@ public class Player implements Serializable {
      */
     public void createSecretMissionHand() {
         this.secretMissionHand = new Hand(new ArrayList<>(), this.observable);
-        ;
     }
 
     /**
-     * Return the player's secret mission hand
+     * Returns the player's secret mission hand
      *
      * @return secretMissionHand
      */
@@ -198,7 +167,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Return the player's hand
+     * Returns the player's hand
      *
      * @return hand
      */
@@ -242,61 +211,6 @@ public class Player implements Serializable {
         this.observable.notifyUpdatePlayer(
                 new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
                 "Your new state is " + this.state.toString(), clientID);
-    }
-
-    public String printableScore() {
-        int score = this.personalBoard.getScore();
-        int i;
-        StringBuilder s = new StringBuilder();
-        String background = "▒";
-        String fill = "█";
-
-        if(pawnColor != null){
-            s.append(pawnColor.getFontColor());
-        }
-
-        for (i=0; i<score; i++){
-            s.append(fill);
-        }
-        while (i<29){
-            s.append(background);
-            i++;
-        }
-
-        s.append(TextStyle.STYLE_RESET.getStyleCode()).append(" ").append(score);
-
-        return s.toString();
-    }
-
-    public String[][] printableHandAndMission() {
-        if(personalBoard.getSecretMission() == null){
-            return new String[0][0];
-        }
-        String[][] hand = this.hand.printableHand();
-        String[][] secretMission = this.personalBoard.getSecretMission().getFront().printableSide();
-        Printer printer = new Printer();
-
-        int xDim = hand[0].length + secretMission[0].length + 1;
-        int yDim = hand.length;
-        int xSeparator = hand[0].length;
-
-        String[][] handAndMission = new String[yDim][xDim];
-
-
-        for(int i=0; i<handAndMission.length; i++){
-            for(int j=0; j<handAndMission[0].length; j++){
-                handAndMission[i][j] = " ";
-            }
-        }
-
-        printer.addPrintable(hand, handAndMission, 0,0);
-        for(int i=0; i<yDim-1; i++){
-            handAndMission[i][xSeparator] = "||      ";
-        }
-        handAndMission[0][hand[0].length] = "        Your Secret Mission: ";
-        printer.addPrintable(secretMission, handAndMission, hand[0].length + 1, 1);
-
-        return handAndMission;
     }
 }
 

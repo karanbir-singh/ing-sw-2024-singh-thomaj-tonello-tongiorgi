@@ -1,17 +1,16 @@
 package it.polimi.ingsw.gc26.model.game;
 
-import it.polimi.ingsw.gc26.Printer;
-import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
-import it.polimi.ingsw.gc26.parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
-import java.io.Serializable;
+import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import it.polimi.ingsw.gc26.parser.ParserCore;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -40,11 +39,11 @@ public class Game implements Serializable {
     /**
      * THis attribute represents all the players in the game
      */
-    private ArrayList<Player> players;
+    private final ArrayList<Player> players;
     /**
      * This attribute represents the common table to all the players
      */
-    private CommonTable commonTable;
+    private final CommonTable commonTable;
     /**
      * This attribute represents how many rounds have been played
      */
@@ -65,11 +64,13 @@ public class Game implements Serializable {
      * This attribute represents the available pawns in the game
      */
     private final ArrayList<Pawn> availablePawns;
-
-    private  ModelObservable observable; //unico per il game
+    /**
+     * This attribute represents the observers if this game
+     */
+    private final ModelObservable observable;
 
     /**
-     * Initializes the game, creates the decks and sets the common table
+     * Setups the games
      *
      * @param players list of players of the game
      */
@@ -78,38 +79,43 @@ public class Game implements Serializable {
 
         this.players = new ArrayList<>();
         this.players.addAll(players);
-        this.winners = new ArrayList<>();
 
+        // Add observers
         this.observable = new ModelObservable();
         for (int i = 0; i < clients.size(); i++) {
             this.observable.addObserver(clients.get(i), players.get(i).getID());
         }
-        for(Player player: players) {
+        for (Player player : players) {
             player.setObservable(this.observable);
         }
 
+        // Create each deck
         ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
         Deck resourceCardDeck = p.getResourceCards();
         Deck missionDeck = p.getMissionCards();
         Deck starterDeck = p.getStarterCards();
 
+        // Create common table
         this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck, this.observable);
-        this.round = 0;
-        this.finalRound = -1;
-        this.chat = new Chat(this.observable);
 
+        // Fill list of available pawns
         availablePawns = new ArrayList<>();
         availablePawns.add(Pawn.BLUE);
         availablePawns.add(Pawn.RED);
         availablePawns.add(Pawn.YELLOW);
         availablePawns.add(Pawn.GREEN);
 
+        this.winners = new ArrayList<>();
+        this.round = 0;
+        this.finalRound = -1;
 
+        // Create chat box
+        this.chat = new Chat(this.observable);
     }
 
     /**
-     * Returns the player associated to the playerID
+     * Returns the player by his ID
      *
      * @param playerID ID of the searched player
      */
@@ -118,32 +124,18 @@ public class Game implements Serializable {
     }
 
     /**
-     * Returns the player associated to the playerNickname
+     * Returns the player by his nickname
      *
      * @param playerNickname Nickname of the searched player
      */
     public Player getPlayerByNickname(String playerNickname) {
-        if (playerNickname.equals("")) {
+        if (playerNickname.isEmpty()) {
             return null;
         }
         try {
             return players.stream().filter((Player p) -> p.getNickname().equals(playerNickname)).findAny().get();
         } catch (Exception e) {
             return null;
-        }
-    }
-
-    /**
-     * Adds a player in the game
-     *
-     * @param newPlayer new player to be added in the game
-     */
-    public void addPlayer(Player newPlayer) {
-        if (this.players.size() < numberOfPlayers) {
-            this.players.add(newPlayer);
-        }
-        if (this.players.size() == numberOfPlayers) {
-            gameState = GameState.COMMON_TABLE_PREPARATION;
         }
     }
 
@@ -188,12 +180,12 @@ public class Game implements Serializable {
             // Then increase the round
             this.increaseRound();
         }
-        this.observable.notifyMessage("It's you turn now",this.currentPlayer.getID());
+        this.observable.notifyMessage("It's you turn now", this.currentPlayer.getID());
         // TODO update simplified Game & player
     }
 
     /**
-     * Sets the current Player to the parameter given
+     * Sets the current player to the parameter given
      *
      * @param currentPlayer new current player
      */
@@ -277,7 +269,7 @@ public class Game implements Serializable {
                                 commonTable.getCommonMissions(),
                                 commonTable.getResourceCards(),
                                 commonTable.getGoldCards(),
-                                6),
+                                -1),
                         "Card added from common table"
                 );
                 break;
@@ -353,9 +345,30 @@ public class Game implements Serializable {
     }
 
     /**
+     * Checks if the passed pawn is available
+     *
+     * @param pawn pawn to check
+     * @return true if availablePawn contains pawn
+     */
+    public boolean checkPawnAvailability(Pawn pawn) {
+        return availablePawns.contains(pawn);
+    }
+
+    /**
+     * Removes passed pawn from availablePawns
+     *
+     * @param pawn pawn to remove
+     */
+    public void removePawn(Pawn pawn) {
+        availablePawns.remove(pawn);
+
+        // TODO notifica a tutti i client che è stato preso un colore
+    }
+
+    /**
      * Sets final round
      *
-     * @param finalRound
+     * @param finalRound the last round, after that there will be declared the winners
      */
     public void setFinalRound(int finalRound) {
         this.finalRound = finalRound;
@@ -370,106 +383,22 @@ public class Game implements Serializable {
         return this.chat;
     }
 
+    /**
+     * Notifies the clients of triggered error
+     *
+     * @param clientID     id of the client
+     * @param errorMessage error message
+     */
+    public void sendError(String clientID, String errorMessage) {
+        this.observable.notifyError(errorMessage, clientID);
+    }
+
     // THIS IS FOR TESTING
     public ArrayList<Player> getWinners() {
         return winners;
     }
 
-    public void errorState(String clientID){
-        this.observable.notifyError("YOU CANNOT DO THAT NOW",clientID);
-    }
-
-    public String[][] printableGame(Player player) {
-        //COMMON TABLE: check if missions are already present
-        String[][] commonTablePrint;
-        if (getCommonTable().getCommonMissions().isEmpty()) {
-            commonTablePrint = commonTable.printableCommonTable();
-        } else {
-            commonTablePrint = commonTable.printableCommonTableAndMissions();
-        }
-        //SCORES
-        String[][] scores = printableScores();
-        //PERSONAL BOARD
-        String[][] personalBoardPrint = player.getPersonalBoard().printablePersonalBoard();
-        //HAND: check if secret mission is already present
-        String[][] handPrint;
-        if (player.getPersonalBoard().getSecretMission() == null) {
-            handPrint = player.getHand().printableHand();
-        } else {
-            handPrint = player.printableHandAndMission();
-        }
-        //calculate dimensions
-        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + 4;
-        int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), handPrint[0].length);
-        //utils
-        Printer printer = new Printer();
-        int y = 0;
-
-        //initialize empty matrix
-        String[][] printableGame = new String[yDim][xDim];
-        for (int i = 0; i < yDim; i++) {
-            for (int j = 0; j < xDim; j++) {
-                printableGame[i][j] = "\t";
-            }
-        }
-
-        //DESIGN THE MATRIX
-        //show common table
-        printableGame[y][0] = "COMMON TABLE:";
-        y++;
-        printer.addPrintable(commonTablePrint, printableGame, 0, y);
-
-        //show scores
-
-        printer.addPrintable(scores, printableGame, commonTablePrint[0].length + 1, y + 1);
-        y += commonTablePrint.length;
-
-        //show personal board
-        printableGame[y][0] = "\nYOUR PERSONAL BOARD:\n";
-        y++;
-        printer.addPrintable(personalBoardPrint, printableGame, (xDim - personalBoardPrint[0].length) / 2, y);
-        y += personalBoardPrint.length;
-
-        //show player's hand
-        printableGame[y][0] = "\nYOUR HAND:\n";
-        y++;
-        printer.addPrintable(handPrint, printableGame, 0, y);
-
-        return printableGame;
-    }
-
-    public String[][] printableScores() {
-        //dimensions
-        int xDim = 2;
-        int yDim = players.size() + 1;
-        String[][] scores = new String[yDim][xDim];
-
-        //calculate the spaces needed to align the names
-        int maxLenght = 0;
-        StringBuilder spaces;
-        for (Player p : players) {
-            maxLenght = Math.max(maxLenght, p.getNickname().length());
-        }
-        maxLenght++;
-
-        //design the matrix
-        scores[0][0] = "CURRENT SCORES:";
-        scores[0][1] = "";
-        for (Player p : players) {
-            int i = 0;
-            spaces = new StringBuilder();
-            while (i + p.getNickname().length() < maxLenght) {
-                spaces.append(" ");
-                i++;
-            }
-            scores[players.indexOf(p) + 1][0] = p.getNickname() + spaces;
-            scores[players.indexOf(p) + 1][1] = p.printableScore();
-        }
-
-        return scores;
-    }
-
-    public ModelObservable getObservable(){
+    public ModelObservable getObservable() {
         return this.observable;
     }
 }

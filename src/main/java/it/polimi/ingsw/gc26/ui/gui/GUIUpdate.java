@@ -1,6 +1,5 @@
 package it.polimi.ingsw.gc26.ui.gui;
 
-import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneEnum;
 import it.polimi.ingsw.gc26.ui.gui.sceneControllers.StarterCardChoiceController;
@@ -8,6 +7,7 @@ import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import it.polimi.ingsw.gc26.ui.UpdateInterface;
 
 public class GUIUpdate implements UpdateInterface {
     GUIApplication guiApplication;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.model;
+package it.polimi.ingsw.gc26.network;
 
 import it.polimi.ingsw.gc26.model.game.Chat;
 import it.polimi.ingsw.gc26.model.game.Message;
@@ -10,8 +10,6 @@ import javafx.util.Pair;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ModelObservable implements Serializable {
     private transient ArrayList<Pair<VirtualView, String>> clients;

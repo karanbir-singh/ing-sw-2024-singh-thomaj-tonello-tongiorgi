@@ -1,20 +1,28 @@
 package it.polimi.ingsw.gc26.controller;
 
-import it.polimi.ingsw.gc26.model.card.MissionCard;
-import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.card.Card;
+import it.polimi.ingsw.gc26.model.card.MissionCard;
 import it.polimi.ingsw.gc26.model.game.CommonTable;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
+import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.hand.Hand;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.game_request.GameRequest;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
-import java.io.*;
-import java.util.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.Random;
 
 public class GameController implements Serializable {
     /**
@@ -28,7 +36,7 @@ public class GameController implements Serializable {
     /**
      * This attribute represents the execution type
      */
-    private final boolean isDebug;
+    private boolean isDebug;
     /**
      * This attribute represents the game that the game controller controls
      */
@@ -47,7 +55,7 @@ public class GameController implements Serializable {
      *
      * @param game the object that represents the game
      */
-    public GameController(Game game, int ID) throws IOException {
+    public GameController(Game game, int ID) {
         this.game = game;
         this.game.setState(GameState.COMMON_TABLE_PREPARATION);
         this.playersToWait = new ArrayList<>();
@@ -57,25 +65,21 @@ public class GameController implements Serializable {
         this.launchExecutor();
         this.backup();
 
-        this.isDebug = java.lang.management.ManagementFactory.
-                getRuntimeMXBean().
-                getInputArguments().toString().contains("jdwp");
+        this.isDebug = java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments().toString().contains("jdwp");
     }
 
     /**
      * Copy everything on the disk
-     *
-     * @throws IOException
      */
-    private void backup() {
+    public void backup() {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(STR."\{GAME_CONTROLLER_FILE_PATH}\{ID}.bin");
+            FileOutputStream fileOutputStream = new FileOutputStream(GAME_CONTROLLER_FILE_PATH + ID + ".bin");
             ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
             outputStream.writeObject(this);
             outputStream.close();
             fileOutputStream.close();
         } catch (IOException e) {
-            System.err.println("[ERROR]: error while saving game on file");
+            ConsoleColors.printError("[ERROR]: error while saving game on file");
         }
     }
 
@@ -90,8 +94,7 @@ public class GameController implements Serializable {
                     while (this.gameRequests.isEmpty()) {
                         try {
                             this.gameRequests.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                        } catch (InterruptedException ignored) {
                         }
                     }
                     gameRequests.remove().execute(this);
@@ -147,8 +150,6 @@ public class GameController implements Serializable {
 
             // Then prepare starter cards
             this.prepareStarterCards();
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
         }
 
         // Backup game controller
@@ -185,8 +186,6 @@ public class GameController implements Serializable {
 
             // Change game state
             game.setState(GameState.WAITING_STARTER_CARD_PLACEMENT);
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
         }
 
         // Backup game controller
@@ -204,29 +203,44 @@ public class GameController implements Serializable {
             // Get the player who is choosing the color by his ID
             Player player = game.getPlayerByID(playerID);
 
-            // Set pawn
-            boolean isPawnSet = player.setPawn(color, game.getAvailablePawns(), playerID);
+            // Check if the player has already chosen the pawn or not
+            if (playersToWait.contains(player)) {
+                try {
+                    // Get pawn
+                    Pawn pawn = Pawn.valueOf(color);
 
-            if (isDebug) {
-                System.out.println(STR."\{player.getNickname()} chose \{color} pawn color");
-            }
+                    // Check if pawn is available
+                    if (game.checkPawnAvailability(pawn)) {
+                        // Set pawn
+                        player.setPawn(pawn, playerID);
+                        game.removePawn(pawn);
 
-            // Remove from list
-            if (isPawnSet) {
-                playersToWait.remove(player);
-            }
+                        if (isDebug) {
+                            System.out.println(player.getNickname() + " chose color pawn " + color);
+                        }
 
-            // Check if all players have chosen the pawn
-            if (playersToWait.isEmpty()) {
-                // Change game state
-                game.setState(GameState.HAND_PREPARATION);
+                        // Remove player from waiting list
+                        playersToWait.remove(player);
 
-                // Prepare hand for each player
-                this.preparePlayersHand();
+                        // Check if all players have chosen the pawn
+                        if (playersToWait.isEmpty()) {
+                            // Change game state
+                            game.setState(GameState.HAND_PREPARATION);
+
+                            // Prepare hand for each player
+                            this.preparePlayersHand();
+                        }
+                    } else {
+                        game.sendError(playerID, "[ERROR]: pawn color not available");
+                    }
+                } catch (IllegalArgumentException e) {
+                    game.sendError(playerID, "[ERROR]: invalid input, retry again");
+                }
+            } else {
+                game.sendError(playerID, "[ERROR]: you have already chosen the pawn color]");
             }
         } else {
-            // TODO gestire ome cambiare il model quando lo stato e' errato
-            game.errorState(playerID);
+            game.sendError(playerID, "[ERROR]: you can't do that know]");
         }
 
         // Backup game controller
@@ -257,8 +271,6 @@ public class GameController implements Serializable {
 
             // Then prepare common mission
             this.prepareCommonMissions();
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
         }
 
         // Backup game controller
@@ -288,8 +300,6 @@ public class GameController implements Serializable {
 
             // Then give two secret missions to each player
             this.prepareSecretMissions();
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
         }
 
         // Backup game controller
@@ -324,8 +334,6 @@ public class GameController implements Serializable {
 
             // Change game state
             game.setState(GameState.WAITING_SECRET_MISSION_CHOICE);
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
         }
 
         // Backup game controller
@@ -343,19 +351,23 @@ public class GameController implements Serializable {
             // Get the player who is selecting the card by his ID
             Player player = game.getPlayerByID(playerID);
 
-            // Get selected secret mission
-            MissionCard secretMission = (MissionCard) player.getSecretMissionHand().getCard(0, 2, cardIndex, playerID);
+            // Check if the player has already chosen the secret mission or not
+            if (playersToWait.contains(player)) {
+                // Get selected secret mission
+                MissionCard secretMission = (MissionCard) player.getSecretMissionHand().getCard(0, 2, cardIndex, playerID);
 
-            // Select the chosen card
-            if (secretMission != null) {
-                player.getSecretMissionHand().setSelectedCard(secretMission, player.getID());
-                if (isDebug) {
-                    System.out.println(STR."\{player.getNickname()} selected mission: \{secretMission}");
+                // Select the chosen card
+                if (secretMission != null) {
+                    player.getSecretMissionHand().setSelectedCard(secretMission, player.getID());
+                    if (isDebug) {
+                        System.out.println(player.getNickname() + " selected mission: " + secretMission);
+                    }
                 }
+            } else {
+                game.sendError(playerID, "[ERROR]: you have already set the secret mission");
             }
         } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
-            game.errorState(playerID);
+            game.sendError(playerID, "[ERROR]: you can't do that know");
         }
 
         // Backup game controller
@@ -372,34 +384,40 @@ public class GameController implements Serializable {
             // Get the player who is setting the card by his ID
             Player player = game.getPlayerByID(playerID);
 
-            // Set the secret mission on the personal board of the players
-            MissionCard secretMission = (MissionCard) player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard(), playerID);
+            // Check if the player has already chosen the secret mission or not
+            if (playersToWait.contains(player)) {
+                // Set the secret mission on the personal board of the players
+                MissionCard secretMission = (MissionCard) player.getPersonalBoard().setSecretMission(player.getSecretMissionHand().getSelectedCard(), playerID);
 
-            if (secretMission != null) {
-                // Remove the card from the secondary hand
-                player.getSecretMissionHand().removeCard(secretMission, player.getID());
-                if (isDebug) {
-                    System.out.println(STR."\{player.getNickname()} set secret mission");
+                // Check if a secret mission is selected
+                if (secretMission != null) {
+                    // Remove the card from the secondary hand
+                    player.getSecretMissionHand().removeCard(secretMission, player.getID());
+
+                    if (isDebug) {
+                        System.out.println(player.getNickname() + " set secret mission");
+                    }
+
+                    // Remove player from list
+                    playersToWait.remove(player);
+
+                    // Check if all players have chosen the secret
+                    if (playersToWait.isEmpty()) {
+                        // Get first player ID randomly and start game
+                        String firstPlayerID = game.getPlayers().get(new Random().nextInt(game.getPlayers().size())).getID();
+
+                        // Change game state
+                        game.setState(GameState.FIRST_PLAYER_EXTRACTION);
+
+                        // Then extract first player
+                        this.setFirstPlayer(firstPlayerID);
+                    }
                 }
-
-                // Remove player from list
-                playersToWait.remove(player);
-
-                // Check if all players have chosen the secret
-                if (playersToWait.isEmpty()) {
-                    // Get first player ID randomly and start game
-                    String firstPlayerID = game.getPlayers().get(new Random().nextInt(game.getPlayers().size())).getID();
-
-                    // Change game state
-                    game.setState(GameState.FIRST_PLAYER_EXTRACTION);
-
-                    // Then extract first player
-                    this.setFirstPlayer(firstPlayerID);
-                }
+            } else {
+                game.sendError(playerID, "[ERROR]: you have already set the secret mission");
             }
         } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
-            game.errorState(playerID);
+            game.sendError(playerID, "[ERROR]: you can't do that know");
         }
 
         // Backup game controller
@@ -416,7 +434,7 @@ public class GameController implements Serializable {
             // Get the player by his ID
             Player player = game.getPlayerByID(playerID);
             if (isDebug) {
-                System.out.println(STR."\{player.getNickname()} set as the first player");
+                System.out.println(player.getNickname() + " set as the first player");
             }
 
             // Set the player as the first
@@ -425,13 +443,10 @@ public class GameController implements Serializable {
 
             // Position the first player as the first element of the players' list
             game.getPlayers().remove(player);
-            game.getPlayers().addFirst(player);
+            game.getPlayers().add(0, player);
 
             // Change game state into GAME_IN_PROGRESS
             game.setState(GameState.GAME_STARTED);
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
-            game.errorState(playerID);
         }
 
         // Backup game controller
@@ -458,13 +473,11 @@ public class GameController implements Serializable {
             if (selectedCard != null) {
                 player.getHand().setSelectedCard(selectedCard, player.getID());
                 if (isDebug) {
-                    System.out.println(STR."\{player.getNickname()} selected card: \{selectedCard}");
+                    System.out.println(player.getNickname() + " selected card: " + selectedCard);
                 }
             }
         } else {
-            // TODO gestire cosa modificare nel model se lo stato è errato
-            game.errorState(playerID);
-            System.out.println("stato erroneo");
+            game.sendError(playerID, "[ERROR]: you can't do that know");
         }
 
         // Backup game controller
@@ -480,7 +493,7 @@ public class GameController implements Serializable {
         // Get player who is turning the selected card side
         Player player = game.getPlayerByID(playerID);
         if (isDebug) {
-            System.out.println(STR."\{player.getNickname()} turn selected card side");
+            System.out.println(player.getNickname() + " turn selected card side");
         }
         // Turn selected card side
         player.getHand().turnSide(playerID);
@@ -501,7 +514,7 @@ public class GameController implements Serializable {
             // Get the player who is selecting the position on his personal board
             Player player = game.getPlayerByID(playerID);
             if (isDebug) {
-                System.out.println(STR."\{player.getNickname()} selected position [\{selectedX}, \{selectedY}] board");
+                System.out.println(player.getNickname() + " selected position [" + selectedX + "," + selectedY + "] board");
             }
 
             // Get the personal board
@@ -510,8 +523,7 @@ public class GameController implements Serializable {
             // Set the selected position
             personalBoard.setPosition(selectedX, selectedY, playerID);
         } else {
-            // TODO gestisci cosa modificare del model se lo stato è errato
-            game.errorState(playerID);
+            game.sendError(playerID, "[ERROR]: you can't do that know");
         }
 
         // Backup game controller
@@ -543,7 +555,7 @@ public class GameController implements Serializable {
                     player.getHand().removeCard(player.getHand().getSelectedCard().get(), player.getID());
 
                     if (isDebug) {
-                        System.out.println(STR."\{player.getNickname()} played card from hand");
+                        System.out.println(player.getNickname() + " played card from hand");
                     }
 
                     playersToWait.remove(player);
@@ -562,7 +574,7 @@ public class GameController implements Serializable {
                 // Check if it's the player's turn
                 if (player.equals(game.getCurrentPlayer()) && player.getState().equals(PlayerState.PLAYING)) {
                     if (isDebug) {
-                        System.out.println(STR."\{player.getNickname()} played card from hand");
+                        System.out.println(player.getNickname() + " played card from hand");
                     }
                     // Otherwise get the player's personal board and his hand
                     PersonalBoard personalBoard = player.getPersonalBoard();
@@ -572,7 +584,6 @@ public class GameController implements Serializable {
                     if (hand.getSelectedCard().isPresent()) {
                         // Place the selected card side on the personal board
                         if (!personalBoard.playSide(hand.getSelectedSide().get(), playerID)) {
-                            game.errorState(playerID); //TODO create another notify
                             return;
                         }
 
@@ -582,15 +593,13 @@ public class GameController implements Serializable {
                         // Change player state
                         player.setState(PlayerState.CARD_PLAYED, player.getID());
                     } else {
-                        // TODO gestire cosa fare quando la carta non è selezionata
+                        game.sendError(playerID, "[ERROR]: you need to select a card");
                     }
                 } else {
-                    // TODO gestire cosa fare quando non è il giocatore corrente a provare a giocare la carta selezionata
-                    game.errorState(playerID);
+                    game.sendError(playerID, "[ERROR]: it's not you turn, you can't play a card");
                 }
             } else {
-                // TODO gestisci come cambiare il model quando lo stato è errato
-                game.errorState(playerID);
+                game.sendError(playerID, "[ERROR]: you can't do that know");
             }
         }
 
@@ -602,7 +611,7 @@ public class GameController implements Serializable {
      * Selects the card on the common table that the currentPlayer wants to draw
      *
      * @param cardIndex index of the card on the common table
-     * @param playerID ID of the player who is trying to select the card on the common table
+     * @param playerID  ID of the player who is trying to select the card on the common table
      */
     public void selectCardFromCommonTable(int cardIndex, String playerID) {
         if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
@@ -611,14 +620,15 @@ public class GameController implements Serializable {
             // Check if it's the current player
             if (player.equals(game.getCurrentPlayer())) {
                 if (isDebug) {
-                    System.out.println(STR."[\{cardIndex}] card selected from common table");
+                    System.out.println("[" + cardIndex + "] card selected from common table");
                 }
                 // Set the selected card on the common table
                 game.getCommonTable().selectCard(cardIndex, playerID);
+            } else {
+                game.sendError(playerID, "[ERROR]: it's not your turn, you can't select a card on the common table");
             }
         } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
-            game.errorState(playerID);
+            game.sendError(playerID, "[ERROR]: you can't do that know");
         }
 
         // Backup game controller
@@ -647,8 +657,9 @@ public class GameController implements Serializable {
                 if (removedCard != null) {
                     // Add card in player's hand
                     hand.addCard(removedCard, playerID);
+
                     if (isDebug) {
-                        System.out.println(STR."\{player.getNickname()} drew selected card");
+                        System.out.println(player.getNickname() + " drew selected card");
                     }
 
                     // Change player's state
@@ -667,11 +678,10 @@ public class GameController implements Serializable {
                     this.changeTurn();
                 }
             } else {
-                game.errorState(playerID);
+                game.sendError(playerID, "[ERROR]: it's not your turn, you can't draw a card");
             }
         } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
-            game.errorState(playerID);
+            game.sendError(playerID, "[ERROR]: you can't do that know");
         }
 
         // Backup game controller
@@ -698,28 +708,6 @@ public class GameController implements Serializable {
     }
 
     /**
-     * Prints the personal board of given player nickname
-     *
-     * @param nickname nickname of the player
-     * @param playerID ID of the player who is requesting to print personal board
-     */
-    public void printPersonalBoard(String nickname, String playerID) {
-        if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
-            // Player player = game.getPlayerByNickname(nickname);
-
-            // TODO need to add a method in PersonalBoard for update view
-            if (isDebug) {
-                // System.out.println(player.getNickname() + " printed personal board");
-            }
-
-            // TODO need to add a method in PersonalBoard
-        } else {
-            //TODO gestisci come cambiare il model quando lo stato è errato
-        }
-
-    }
-
-    /**
      * @return game controlled by this game controller
      */
     public Game getGame() {
@@ -742,5 +730,13 @@ public class GameController implements Serializable {
 
     public void reAddView(VirtualView view, String clientID) {
         this.game.getObservable().addObserver(view, clientID);
+    }
+
+    public void setDebug(boolean debug) {
+        isDebug = debug;
+    }
+
+    public Queue<GameRequest> getGameRequests() {
+        return gameRequests;
     }
 }

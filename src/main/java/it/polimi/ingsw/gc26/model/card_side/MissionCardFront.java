@@ -1,8 +1,10 @@
 package it.polimi.ingsw.gc26.model.card_side;
+
 import it.polimi.ingsw.gc26.model.player.Point;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * This abstract class represent a Mission Card Front
@@ -10,15 +12,16 @@ import java.util.*;
 public abstract class MissionCardFront extends Side implements Serializable {
     /**
      * This method returns the points that a Mission cards gives based on the Player's board
-     * @param firstX X coordinate of the first card
-     * @param firstY Y coordinate of the first card
-     * @param secondX X coordinate of the second card
-     * @param secondY Y coordinate of the second card
+     *
+     * @param firstX            X coordinate of the first card
+     * @param firstY            Y coordinate of the first card
+     * @param secondX           X coordinate of the second card
+     * @param secondY           Y coordinate of the second card
      * @param occupiedPositions Position occupied by Player's cards in the Player's Board
-     * @param diagSymbol Symbol that represent the cards to be checked
-     * @param vertSymbol Symbol that represent the cards to be checked
-     * @param flag flag that equals true if the card has already been count in a pattern
-     * @param points points given for every combination found
+     * @param diagSymbol        Symbol that represent the cards to be checked
+     * @param vertSymbol        Symbol that represent the cards to be checked
+     * @param flag              flag that equals true if the card has already been count in a pattern
+     * @param points            points given for every combination found
      * @return total points given by this card
      */
     @Override

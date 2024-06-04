@@ -4,12 +4,13 @@ import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.MissionCardFront;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.player.Point;
-
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class represents a mission card with an Item pattern.
@@ -17,6 +18,7 @@ import java.util.*;
 public class MissionItemPattern extends MissionCardFront implements Serializable {
     /**
      * Creates a new instance of MissionItemPattern
+     *
      * @param type represent which item combination is needed to this card give points
      */
     public MissionItemPattern(int type, String imagePath) {
@@ -34,7 +36,8 @@ public class MissionItemPattern extends MissionCardFront implements Serializable
 
     /**
      * This method returns the extra points that are awarded considering the card position in the Player's board.
-     * @param visibleResources Player's visible resources in the board
+     *
+     * @param visibleResources  Player's visible resources in the board
      * @param occupiedPositions list of the position occupied in the Player's board
      * @return points given by this card
      */

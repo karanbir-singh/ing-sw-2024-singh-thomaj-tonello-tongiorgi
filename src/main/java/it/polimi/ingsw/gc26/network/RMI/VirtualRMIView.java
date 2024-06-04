@@ -4,8 +4,6 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.view_request.*;
 import it.polimi.ingsw.gc26.view_model.*;
-import it.polimi.ingsw.gc26.view_model.ViewController;
-
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -87,7 +85,7 @@ public class VirtualRMIView implements VirtualView {
 
 
     @Override
-    public void updateIDGame(int gameID){
+    public void updateIDGame(int gameID) {
         this.viewController.setGameID(gameID);
     }
 
@@ -97,8 +95,8 @@ public class VirtualRMIView implements VirtualView {
     }
 
     @Override
-    public void isClientAlive(){
-        //TODO FORSE INSERIRE QUALCOSA
+    public void ping() throws RemoteException {
+        this.viewController.resetTimer();
     }
 
     /**
