@@ -1,0 +1,25 @@
+.root{
+    /*-fx-background-image: url('../../../../../images/background-with-title-dx.png');
+    -fx-background-position: center center;
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;*/
+    -fx-font-size: 18px;
+}
+.label{
+    -fx-text-fill: #fff;
+}
+#welcomeLabel{
+    -fx-font-size: 30px;
+}
+#loginButton{
+    -fx-background-color: #fff;
+    -fx-background-radius: 50px;
+    -fx-border-radius: 50px;
+    -fx-font-size: 20px;
+}
+#nicknameTXT{
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+    -fx-font-size: 20px;
+    -fx-min-height: 30px;
+}

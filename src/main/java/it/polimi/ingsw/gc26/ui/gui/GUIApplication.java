@@ -60,7 +60,7 @@ public class GUIApplication extends Application implements UIInterface {
         primaryStage.setHeight(800);
         primaryStage.setWidth(1100);
         primaryStage.setTitle(" Codex Naturalis");
-        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/title.png"))));
+        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/icon.png"))));
 
         //Platform.runLater(()->openInfoPopup("VAMOS"));
         new Thread(() -> {
