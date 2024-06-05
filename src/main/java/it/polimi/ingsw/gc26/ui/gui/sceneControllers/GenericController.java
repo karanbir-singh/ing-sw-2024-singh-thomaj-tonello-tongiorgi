@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.view_model.*;
+import javafx.stage.Stage;
 
 public class GenericController {
     public MainClient mainClient;
@@ -45,6 +46,10 @@ public class GenericController {
     }
 
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
+
+    }
+
+    public void setStageListeners(Stage stage) {
 
     }
 

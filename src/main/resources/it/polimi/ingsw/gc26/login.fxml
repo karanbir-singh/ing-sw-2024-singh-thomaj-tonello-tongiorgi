@@ -7,43 +7,49 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="RootPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.LoginController">
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.LoginController">
    <children>
-      <AnchorPane fx:id="rootPane">
+      <ImageView fx:id="background" fitHeight="588.0" fitWidth="964.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../images/background-upscaled.png" />
+         </image>
+      </ImageView>
+      <VBox fx:id="logoVBox" alignment="TOP_CENTER" fillWidth="false" layoutX="497.0" layoutY="20.0" minHeight="300.0" minWidth="200.0" prefHeight="596.0" prefWidth="438.0" spacing="10.0" AnchorPane.bottomAnchor="-50.0" AnchorPane.topAnchor="20.0">
          <children>
-            <ImageView fx:id="background" fitHeight="684.0" fitWidth="964.0" layoutX="-127.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../images/background_center.png" />
-               </image>
-            </ImageView>
-            <VBox fx:id="Background" alignment="CENTER" fillWidth="false" layoutX="468.0" layoutY="6.0" minHeight="300.0" minWidth="200.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="427.0" prefWidth="419.0">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
                <children>
-                  <ImageView fitHeight="281.0" fitWidth="367.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="logo" fitHeight="415.0" fitWidth="422.0" layoutX="41.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../images/title.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="status" text="Status" textAlignment="CENTER" visible="false">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <TextField fx:id="nicknameTXT" prefHeight="27.0" prefWidth="205.0" />
-                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onClickButton" prefHeight="39.0" prefWidth="82.0" text="Login">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
                </children>
-            </VBox>
+            </AnchorPane>
          </children>
-      </AnchorPane>
+      </VBox>
+      <VBox fx:id="loginVBox" alignment="BOTTOM_CENTER" fillWidth="false" layoutX="271.0" minHeight="300.0" minWidth="200.0" prefHeight="596.0" prefWidth="438.0" spacing="10.0" AnchorPane.bottomAnchor="50.0">
+         <children>
+            <Label fx:id="status" text="Status" textAlignment="CENTER" visible="false">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="nicknameTXT" prefHeight="27.0" prefWidth="205.0" />
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onClickButton" prefHeight="39.0" prefWidth="82.0" text="Login">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
    </children>
-</StackPane>
+</AnchorPane>

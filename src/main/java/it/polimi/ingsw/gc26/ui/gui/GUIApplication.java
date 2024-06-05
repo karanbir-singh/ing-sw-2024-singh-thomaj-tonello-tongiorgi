@@ -119,6 +119,7 @@ public class GUIApplication extends Application implements UIInterface {
     public void setCurrentSceneAndShow(SceneEnum sceneEnum){
         this.currentSceneInfo = getSceneInfo(sceneEnum);
         this.primaryStage.setScene(this.getSceneInfo(sceneEnum).getScene());
+        currentSceneInfo.getSceneController().setStageListeners(primaryStage);
         this.primaryStage.show();
 
     }
