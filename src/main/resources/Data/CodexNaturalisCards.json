@@ -1174,7 +1174,7 @@
     }
   }, {
     "Front" : {
-      "Requirements" : ["Plant", "Plant", "Plant", "Insect"],
+      "Requirements" : ["Fungi", "Fungi", "Fungi", "Insect"],
       "Constraint" : "Corner",
       "Points" : 2,
       "CornerUpDx" : "Evil",
