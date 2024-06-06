@@ -1226,11 +1226,11 @@
       "CornerUpSx" : "Evil",
       "CornerDownDx" : null,
       "CornerDownSx" : "Evil",
-      "ImgFile" : "backSide/img_5.jpeg"
+      "ImgFile" : "frontSide/img_49.jpeg"
     },
     "Back" : {
       "Resource" : "Fungi",
-      "ImgFile" : "frontSide/img_49.jpeg"
+      "ImgFile" : "backSide/img_5.jpeg"
     }
   }, {
     "Front" : {

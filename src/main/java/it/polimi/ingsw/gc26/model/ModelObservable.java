@@ -130,20 +130,21 @@ public class ModelObservable implements Serializable {
 
     public void notifyUpdateChat(Chat chat, String message) {
         for (Pair client : this.clients) {
-            if (chat.getMessages().getFirst().getSender().equals(client.getValue())) {
+            if (chat.getMessages().getLast().getSender().getID().equals(client.getValue())) {
                 // this is the client who sent the message
                 try {
                     ((VirtualView) client.getKey()).updateChat(new SimplifiedChat(chat.filterMessages(client.getValue().toString())), "Message sent!");
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-            } else {
+            } else if (chat.getMessages().getLast().getReceiver() == null || chat.getMessages().getLast().getSender().getID().equals(client.getValue()) || chat.getMessages().getLast().getReceiver().getID().equals(client.getValue())) {
                 try {
                     ((VirtualView) client.getKey()).updateChat(new SimplifiedChat(chat.filterMessages(client.getValue().toString())), message);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
             }
+
 
 
         }

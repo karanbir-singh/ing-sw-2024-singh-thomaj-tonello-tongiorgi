@@ -60,6 +60,8 @@ public class SimplifiedCommonTable implements Serializable {
         return goldCards;
     }
 
-    public int getSelectedIndex() { return selectedIndex;}
+    public int getSelectedIndex() {
+        return selectedIndex;
+    }
 
 }

@@ -149,6 +149,7 @@ public class GUIApplication extends Application implements UIInterface {
             }
         }
 
+        mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             Platform.runLater(() -> {
                 this.getSceneController(SceneEnum.CREATOR).setNickName(this.getSceneController(SceneEnum.LOGIN).getNickName());
@@ -217,7 +218,6 @@ public class GUIApplication extends Application implements UIInterface {
         }
 
 
-
         synchronized (this.mainClient.getLock()) {
             /*Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getScene()));
             Platform.runLater(() -> this.primaryStage.show());*/
@@ -278,6 +278,10 @@ public class GUIApplication extends Application implements UIInterface {
             System.out.println(this.getSceneController(scenes.get(i).getSceneEnum()).getNickName());
 
         }
+    }
+
+    public String getNickname() {
+        return mainClient.getNickname();
     }
 
 }
