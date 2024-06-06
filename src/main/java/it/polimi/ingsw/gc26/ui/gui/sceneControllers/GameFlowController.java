@@ -18,7 +18,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -88,9 +87,6 @@ public class GameFlowController extends GenericController implements Initializab
     private double initialX;
     private double initialY;
 
-    //TODO da spostare in css
-    private final Glow glowEffect = new Glow(0.3);
-
     public void onClickTurnSideButton(ActionEvent actionEvent){
         try {
             this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
@@ -158,16 +154,13 @@ public class GameFlowController extends GenericController implements Initializab
     }
     //fine azioni carte opache
 
-
-
-
-
     // String.valueOf(getClass().getResource
     @Override
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         ArrayList<ImageView> resources = new ArrayList<>();
         ArrayList<ImageView> goldens = new ArrayList<>();
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
+        System.out.println("selected index: " + simplifiedCommonTable.getSelectedIndex());
 
         int index = 0;
         for(Card card: simplifiedCommonTable.getResourceCards()){
@@ -175,24 +168,36 @@ public class GameFlowController extends GenericController implements Initializab
             this.setParameters(imageView,String.valueOf(index));
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
             resources.add(imageView);
+            if(index == simplifiedCommonTable.getSelectedIndex()){
+                layout.makeGlow(imageView);
+            }
             index++;
         }
         ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
         this.setParameters(resourceDeck, String.valueOf(index));
         resourceDeck.setOnMouseClicked(this::onClickCommonTableCard);
         resources.add(resourceDeck);
+        if(index == simplifiedCommonTable.getSelectedIndex()){
+            layout.makeGlow(resourceDeck);
+        }
         index++;
         for(Card card: simplifiedCommonTable.getGoldCards()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(index));
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
             goldens.add(imageView);
+            if(index == simplifiedCommonTable.getSelectedIndex()){
+                layout.makeGlow(imageView);
+            }
             index++;
         }
         ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
         this.setParameters(goldDeck,String.valueOf(index));
         goldDeck.setOnMouseClicked(this::onClickCommonTableCard);
         goldens.add(goldDeck);
+        if(index == simplifiedCommonTable.getSelectedIndex()){
+            layout.makeGlow(goldDeck);
+        }
         index++;
         for(Card card: simplifiedCommonTable.getCommonMissions()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
@@ -211,7 +216,6 @@ public class GameFlowController extends GenericController implements Initializab
             layout.cardsLayout(rootBorder, imageViewsCommonMissions);
         });
 
-        //da controllare se vanno messi in platform.runlater
     }
 
     @Override
@@ -224,7 +228,7 @@ public class GameFlowController extends GenericController implements Initializab
             if(card.equals(simplifiedHand.getSelectedCard())){
                 imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getSelectedSide().getImagePath()))));
                 makeDraggable(imageView, playablePrositions);
-                imageView.setEffect(glowEffect);
+                layout.makeGlow(imageView);
             }else{
                 imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
                 imageView.setOnMouseClicked(this::onClickMouseHandCard);
@@ -239,7 +243,6 @@ public class GameFlowController extends GenericController implements Initializab
             layout.handLayout(rootBorder, handCards);
         });
 
-        //controllare se va messo in run later
     }
 
     @Override

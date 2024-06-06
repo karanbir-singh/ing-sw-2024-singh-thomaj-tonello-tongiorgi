@@ -121,7 +121,6 @@ public class GUIApplication extends Application implements UIInterface {
         Scene scene = getSceneInfo(sceneEnum).getScene();
         scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/it/polimi/ingsw/gc26/css/LOGIN.css")).toExternalForm());
         this.primaryStage.setScene(scene);
-        currentSceneInfo.getSceneController().setStageListeners(primaryStage);
         this.primaryStage.show();
 
     }

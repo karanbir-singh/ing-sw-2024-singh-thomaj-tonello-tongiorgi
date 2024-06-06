@@ -1,17 +1,19 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
 public class CommonLayout {
-   public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, TabPane personalBoardTabPane, VBox leftVBox, VBox rightVBox,
+    public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, TabPane personalBoardTabPane, VBox leftVBox, VBox rightVBox,
                              ImageView scoreBoard, AnchorPane handPane){
 
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
@@ -45,5 +47,25 @@ public class CommonLayout {
                 card.setLayoutX(20.0 + rootBorder.getWidth()*0.13 * handCards.indexOf(card));
             });
         }
+    }
+
+    public void makeGlow(ImageView card){
+        DropShadow glow = new DropShadow();
+        glow.setColor(Color.BLUE);
+        glow.setOffsetX(0f);
+        glow.setOffsetY(0f);
+        glow.setWidth(30);
+        glow.setHeight(30);
+        card.setEffect(glow);
+    }
+
+    public void updateViewport(AnchorPane rootPane, ImageView background, double initialImageWidth, double initialImageHeight) {
+        double viewportWidth = Math.min(initialImageWidth, rootPane.getWidth());
+        double viewportHeight = Math.min(initialImageHeight, rootPane.getHeight());
+
+        double x = (initialImageWidth - viewportWidth) / 2;
+        double y = (initialImageHeight - viewportHeight) / 2;
+
+        background.setViewport(new Rectangle2D(x, y, viewportWidth, viewportHeight));
     }
 }

@@ -24,29 +24,28 @@ import java.util.ResourceBundle;
 public class LoginController extends GenericController implements Initializable{
 
     @FXML
-    Label status;
+    private Label status;
     @FXML
-    TextField nicknameTXT;
+    private TextField nicknameTXT;
     @FXML
-    Button loginButton;
+    private Button loginButton;
     @FXML
-    ImageView background;
+    private ImageView background;
     @FXML
-    ImageView logo;
+    private ImageView logo;
     @FXML
-    AnchorPane rootPane;
+    private AnchorPane rootPane;
     @FXML
-    AnchorPane logoPane;
+    private AnchorPane logoPane;
     @FXML
-    double initialLogoHeight;
+    private HBox logoBox;
     @FXML
-    HBox logoBox;
-    @FXML
-    VBox loginVBox;
+    private VBox loginVBox;
 
 
-    private double initialImageWidth;
+    private CommonLayout layout = new CommonLayout();
     private double initialImageHeight;
+    private double initialImageWidth;
 
 
     public void setStatus(String message){
@@ -54,12 +53,12 @@ public class LoginController extends GenericController implements Initializable{
         this.status.setVisible(true);
     }
 
-    public void onClickButton(ActionEvent actionEvent){
+    public void onLoginButtonClick(ActionEvent event){
         //chiedere se il thread viene creato in modo automatico o devo crearlo io
-        if(nicknameTXT.getText().equals("")){
+        if(nicknameTXT.getText().isEmpty()){
             status.setText("Insert again, not valid nickname");
-            status.setVisible(true); //setto visibile il label
-        }else{
+            status.setVisible(true);
+        } else {
             try {
                 this.setNickName(nicknameTXT.getText());
                 this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(),this.nickname,this.mainClient.getClientState());
@@ -67,7 +66,6 @@ public class LoginController extends GenericController implements Initializable{
                 throw new RuntimeException(e);
             }
         }
-
     }
 
     public String getText(){
@@ -78,8 +76,11 @@ public class LoginController extends GenericController implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initialImageWidth = background.getImage().getWidth();
         initialImageHeight = background.getImage().getHeight();
-        initialLogoHeight = logo.getFitHeight();
 
+        loginButton.setOnAction(this::onLoginButtonClick);
+        nicknameTXT.setOnAction(event -> {
+            loginButton.fire();
+        });
 
         background.fitHeightProperty().bind(rootPane.heightProperty());
         background.fitWidthProperty().bind(rootPane.widthProperty());
@@ -91,7 +92,7 @@ public class LoginController extends GenericController implements Initializable{
         AnchorPane.setRightAnchor(loginVBox, (rootPane.getWidth()-loginVBox.getWidth())/2);
 
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            updateViewport();
+            layout.updateViewport(rootPane, background, initialImageWidth, initialImageHeight);
             AnchorPane.setRightAnchor(loginVBox, (rootPane.getWidth()-loginVBox.getWidth())/2);
 
             if(rootPane.getWidth() < 800){
@@ -105,32 +106,12 @@ public class LoginController extends GenericController implements Initializable{
 
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             logo.setFitHeight(rootPane.getHeight()*0.5);
-            background.fitHeightProperty().bind(rootPane.heightProperty());
+            //background.fitHeightProperty().bind(rootPane.heightProperty());
 
             if(rootPane.getHeight() < 650 && rootPane.getWidth()<800){
                 AnchorPane.setBottomAnchor(logoBox, 0.0);
             }
-            updateViewport();
-        });
-    }
-
-    private void updateViewport() {
-        double viewportWidth = Math.min(initialImageWidth, rootPane.getWidth());
-        double viewportHeight = Math.min(initialImageHeight, rootPane.getHeight());
-
-        double x = (initialImageWidth - viewportWidth) / 2;
-        double y = (initialImageHeight - viewportHeight) / 2;
-
-        background.setViewport(new Rectangle2D(x, y, viewportWidth, viewportHeight));
-    }
-
-    public void setStageListeners(Stage stage){
-        rootPane.prefWidthProperty().bind(stage.widthProperty());
-        rootPane.prefHeightProperty().bind(stage.heightProperty());
-        background.fitHeightProperty().bind(stage.heightProperty());
-
-        stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            rootPane.prefWidthProperty().bind(stage.widthProperty());
+            layout.updateViewport(rootPane, background, initialImageWidth, initialImageHeight);
         });
     }
 }
