@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -35,7 +36,11 @@ public class LoginController extends GenericController implements Initializable{
     @FXML
     AnchorPane rootPane;
     @FXML
-    VBox logoVBox;
+    AnchorPane logoPane;
+    @FXML
+    double initialLogoHeight;
+    @FXML
+    HBox logoBox;
     @FXML
     VBox loginVBox;
 
@@ -73,38 +78,39 @@ public class LoginController extends GenericController implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initialImageWidth = background.getImage().getWidth();
         initialImageHeight = background.getImage().getHeight();
+        initialLogoHeight = logo.getFitHeight();
 
 
         background.fitHeightProperty().bind(rootPane.heightProperty());
         background.fitWidthProperty().bind(rootPane.widthProperty());
+        logo.fitWidthProperty().bind(rootPane.heightProperty());
+        logoPane.setPrefHeight(rootPane.getHeight());
 
-        logoVBox.setPrefHeight(rootPane.getHeight());
-        AnchorPane.setRightAnchor(logoVBox, rootPane.getWidth()*0.05);
+        AnchorPane.setTopAnchor(logoPane, 20.0);
+        AnchorPane.setRightAnchor(logoPane, rootPane.getWidth()*0.05);
         AnchorPane.setRightAnchor(loginVBox, (rootPane.getWidth()-loginVBox.getWidth())/2);
 
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
             updateViewport();
             AnchorPane.setRightAnchor(loginVBox, (rootPane.getWidth()-loginVBox.getWidth())/2);
 
-            System.out.println(rootPane.getWidth());
             if(rootPane.getWidth() < 800){
-                AnchorPane.setRightAnchor(logoVBox, (rootPane.getWidth()-logoVBox.getWidth())/2);
+                AnchorPane.setRightAnchor(logoPane, (rootPane.getWidth()-logoPane.getWidth())/2);
+                AnchorPane.setBottomAnchor(logoBox, 70.0);
             } else {
-                AnchorPane.setRightAnchor(logoVBox, rootPane.getWidth()*0.1);
+                AnchorPane.setRightAnchor(logoPane, rootPane.getWidth()*0.05);
+                AnchorPane.setBottomAnchor(logoBox, 0.0);
             }
         });
 
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            logo.setFitHeight(rootPane.getHeight()*0.5);
             background.fitHeightProperty().bind(rootPane.heightProperty());
-            logoVBox.prefHeightProperty().bind(rootPane.heightProperty());
 
-            updateViewport();
-
-            if(rootPane.getWidth() > 500){
-                AnchorPane.setBottomAnchor(logo, 70.0);
-            } else {
-                AnchorPane.setBottomAnchor(logo, 0.0);
+            if(rootPane.getHeight() < 650 && rootPane.getWidth()<800){
+                AnchorPane.setBottomAnchor(logoBox, 0.0);
             }
+            updateViewport();
         });
     }
 

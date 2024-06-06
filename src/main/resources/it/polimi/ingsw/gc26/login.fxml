@@ -7,6 +7,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -17,22 +18,19 @@
             <Image url="@../../../../images/background-upscaled.png" />
          </image>
       </ImageView>
-      <VBox fx:id="logoVBox" alignment="TOP_CENTER" fillWidth="false" layoutX="497.0" layoutY="20.0" minHeight="300.0" minWidth="200.0" prefHeight="596.0" prefWidth="438.0" spacing="10.0" AnchorPane.bottomAnchor="-50.0" AnchorPane.topAnchor="20.0">
+      <AnchorPane fx:id="logoPane" layoutX="484.6000061035156" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="427.0" prefWidth="474.0">
          <children>
-            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="427.0" prefWidth="419.0">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
+            <HBox fx:id="logoBox" alignment="CENTER" layoutX="26.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ImageView fx:id="logo" fitHeight="415.0" fitWidth="422.0" layoutX="41.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="logo" fitHeight="415.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../images/title.png" />
                      </image>
                   </ImageView>
                </children>
-            </AnchorPane>
+            </HBox>
          </children>
-      </VBox>
+      </AnchorPane>
       <VBox fx:id="loginVBox" alignment="BOTTOM_CENTER" fillWidth="false" layoutX="271.0" minHeight="300.0" minWidth="200.0" prefHeight="596.0" prefWidth="438.0" spacing="10.0" AnchorPane.bottomAnchor="50.0">
          <children>
             <Label fx:id="status" text="Status" textAlignment="CENTER" visible="false">

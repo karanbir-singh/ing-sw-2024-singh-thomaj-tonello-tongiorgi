@@ -16,6 +16,7 @@ import java.io.*;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class GUIApplication extends Application implements UIInterface {
@@ -117,8 +118,9 @@ public class GUIApplication extends Application implements UIInterface {
     }
 
     public void setCurrentSceneAndShow(SceneEnum sceneEnum){
-        this.currentSceneInfo = getSceneInfo(sceneEnum);
-        this.primaryStage.setScene(this.getSceneInfo(sceneEnum).getScene());
+        Scene scene = getSceneInfo(sceneEnum).getScene();
+        scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/it/polimi/ingsw/gc26/css/LOGIN.css")).toExternalForm());
+        this.primaryStage.setScene(scene);
         currentSceneInfo.getSceneController().setStageListeners(primaryStage);
         this.primaryStage.show();
 
@@ -133,6 +135,7 @@ public class GUIApplication extends Application implements UIInterface {
     public void runConnection() throws RemoteException {
         //Initial state in CONNECTION
 
+        this.getSceneInfo(SceneEnum.LOGIN).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/it/polimi/ingsw/gc26/css/LOGIN.css")).toExternalForm());
         Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.LOGIN).getScene()));
         Platform.runLater(() -> this.primaryStage.show());
         this.currentSceneInfo = this.getSceneInfo(SceneEnum.LOGIN);
