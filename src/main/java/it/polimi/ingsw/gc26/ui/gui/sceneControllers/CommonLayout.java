@@ -48,6 +48,12 @@ public class CommonLayout {
         double spacing = 20.0;
         handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
 
+        for (int i = 0; i < handCards.size(); i++) {
+            ImageView card = handCards.get(i);
+            card.setFitWidth(rootBorder.getWidth() * 0.13);
+            card.setLayoutX(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * i);
+        }
+
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
             handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
 
@@ -70,8 +76,8 @@ public class CommonLayout {
     }
 
     public void buttonSetup(ImageView closeIcon, ImageView visibleIcon, Button button) {
-        double iconDimension = 35;
-        double buttonDim = 60;
+        double iconDimension = 30;
+        double buttonDim = 50;
 
         closeIcon.setFitWidth(iconDimension);
         closeIcon.setFitHeight(iconDimension);
@@ -80,6 +86,9 @@ public class CommonLayout {
         button.setGraphic(closeIcon);
         button.setPrefWidth(buttonDim);
         button.setPrefHeight(buttonDim);
+
+        button.getStyleClass().clear();
+        button.getStyleClass().add("buttonClose");
     }
 
     public void updateViewport(AnchorPane rootPane, ImageView background, double initialImageWidth, double initialImageHeight) {

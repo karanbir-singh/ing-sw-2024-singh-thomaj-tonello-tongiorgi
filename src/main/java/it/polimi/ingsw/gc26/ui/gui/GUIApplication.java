@@ -119,8 +119,8 @@ public class GUIApplication extends Application implements UIInterface {
 
     public void setCurrentSceneAndShow(SceneEnum sceneEnum){
         Scene scene = getSceneInfo(sceneEnum).getScene();
-        scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/it/polimi/ingsw/gc26/css/GeneralStyle.css")).toExternalForm());
-        scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/it/polimi/ingsw/gc26/css/LOGIN.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/LOGIN.css")).toExternalForm());
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
 
@@ -134,8 +134,8 @@ public class GUIApplication extends Application implements UIInterface {
     @Override
     public void runConnection() throws RemoteException {
         //Initial state in CONNECTION
-
-        this.getSceneInfo(SceneEnum.LOGIN).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/it/polimi/ingsw/gc26/css/LOGIN.css")).toExternalForm());
+        this.getSceneInfo(SceneEnum.LOGIN).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
+        this.getSceneInfo(SceneEnum.LOGIN).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/LOGIN.css")).toExternalForm());
         Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.LOGIN).getScene()));
         Platform.runLater(() -> this.primaryStage.show());
         this.currentSceneInfo = this.getSceneInfo(SceneEnum.LOGIN);

@@ -73,6 +73,10 @@ public class GameFlowController extends GenericController implements Initializab
     private VBox commonMissionsBox;
     @FXML
     private VBox secretMissionBox;
+    @FXML
+    private ImageView commonMissionLabel;
+    @FXML
+    private ImageView secretMissionLabel;
 
     //end CommonTable
 
@@ -91,10 +95,10 @@ public class GameFlowController extends GenericController implements Initializab
 
     private boolean scoreBoardIsVisible = false;
     private boolean chatIsVisible = false;
-    private ImageView scoreIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/score-icon-white.png").toExternalForm()));
-    private ImageView scoreIconClose = new ImageView(new Image(getClass().getResource("/images/icons/score-icon1.png").toExternalForm()));
-    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white1.png").toExternalForm()));
-    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon.png").toExternalForm()));
+    private ImageView scoreIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/sparkle-icon-white.png").toExternalForm()));
+    private ImageView scoreIconClose = new ImageView(new Image(getClass().getResource("/images/icons/sparkle-icon-white.png").toExternalForm()));
+    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
 
     //layout
     CommonLayout layout = new CommonLayout();
@@ -106,6 +110,10 @@ public class GameFlowController extends GenericController implements Initializab
     private BorderPane rootBorder;
     @FXML
     private ScrollPane rootScrollPane;
+    @FXML
+    private ImageView background;
+    @FXML
+    private AnchorPane rootAnchor;
 
     private ArrayList<ImageView> cards = new ArrayList<>();
     private ArrayList<ImageView> playablePrositions = new ArrayList<>();
@@ -620,6 +628,8 @@ public class GameFlowController extends GenericController implements Initializab
     public void toggleScoreBoard(ActionEvent actionEvent) {
         if(chatIsVisible) {
             chatButton.setGraphic(chatIconClose);
+            chatButton.getStyleClass().clear();
+            chatButton.getStyleClass().add("buttonClose");
             anchorPaneChat.setTranslateX(-2000);
             HBoxLeftPanel.setMinWidth(40);
             HBoxLeftPanel.setMaxWidth(40);
@@ -627,12 +637,16 @@ public class GameFlowController extends GenericController implements Initializab
         }
         if (scoreBoardIsVisible) {
             scoreBoardButton.setGraphic(scoreIconClose);
+            scoreBoardButton.getStyleClass().clear();
+            scoreBoardButton.getStyleClass().add("buttonClose");
             anchorPaneScoreBoard.setTranslateX(-2000);
             HBoxLeftPanel.setMinWidth(40);
             HBoxLeftPanel.setMaxWidth(40);
             scoreBoardIsVisible = false;
         } else {
             scoreBoardButton.setGraphic(scoreIconVisible);
+            scoreBoardButton.getStyleClass().clear();
+            scoreBoardButton.getStyleClass().add("buttonVisible");
             anchorPaneScoreBoard.setTranslateX(0);
             HBoxLeftPanel.setMinWidth(340);
             HBoxLeftPanel.setMaxWidth(340);
@@ -643,6 +657,8 @@ public class GameFlowController extends GenericController implements Initializab
     public void toggleChat(ActionEvent actionEvent) {
         if (scoreBoardIsVisible) {
             scoreBoardButton.setGraphic(scoreIconClose);
+            scoreBoardButton.getStyleClass().clear();
+            scoreBoardButton.getStyleClass().add("buttonClose");
             anchorPaneScoreBoard.setTranslateX(-2000);
             HBoxLeftPanel.setMinWidth(40);
             HBoxLeftPanel.setMaxWidth(40);
@@ -650,12 +666,16 @@ public class GameFlowController extends GenericController implements Initializab
         }
         if (chatIsVisible) {
             chatButton.setGraphic(chatIconClose);
+            chatButton.getStyleClass().clear();
+            chatButton.getStyleClass().add("buttonClose");
             anchorPaneChat.setTranslateX(-2000);
             HBoxLeftPanel.setMinWidth(40);
             HBoxLeftPanel.setMaxWidth(40);
             chatIsVisible = false;
         } else {
             chatButton.setGraphic(chatIconVisible);
+            chatButton.getStyleClass().clear();
+            chatButton.getStyleClass().add("buttonVisible");
             anchorPaneChat.setTranslateX(-270);
             HBoxLeftPanel.setMinWidth(340);
             HBoxLeftPanel.setMaxWidth(340);
