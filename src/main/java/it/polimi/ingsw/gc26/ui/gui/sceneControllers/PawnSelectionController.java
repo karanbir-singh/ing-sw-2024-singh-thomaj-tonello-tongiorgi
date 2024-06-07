@@ -1,6 +1,5 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
-import it.polimi.ingsw.gc26.model.player.Pawn;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,7 +8,7 @@ import javafx.scene.control.Label;
 import java.rmi.RemoteException;
 
 
-public class PawnSelectionController extends GenericController{
+public class PawnSelectionController extends SceneController {
 
     @FXML
     Label status;

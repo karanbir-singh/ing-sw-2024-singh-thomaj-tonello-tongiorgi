@@ -4,17 +4,17 @@ import javafx.scene.Scene;
 
 public class SceneInfo {
 
-    private final GenericController genericController;
+    private final SceneController sceneController;
     private final Scene scene;
     private final SceneEnum sceneEnum;
 
-    public SceneInfo(GenericController generalController, Scene scene,  SceneEnum sceneEnum){
-        this.genericController = generalController;
+    public SceneInfo(SceneController generalController, Scene scene, SceneEnum sceneEnum){
+        this.sceneController = generalController;
         this.sceneEnum = sceneEnum;
         this.scene = scene;
     }
-    public GenericController getSceneController(){
-        return this.genericController;
+    public SceneController getSceneController(){
+        return this.sceneController;
     }
 
     public Scene getScene() {

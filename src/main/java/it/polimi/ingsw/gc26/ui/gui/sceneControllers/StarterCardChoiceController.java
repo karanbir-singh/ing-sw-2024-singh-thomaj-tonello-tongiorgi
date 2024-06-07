@@ -1,7 +1,6 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,20 +8,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class StarterCardChoiceController extends GenericController implements Initializable {
+public class StarterCardChoiceController extends SceneController implements Initializable {
     //CommonTable
     @FXML
     private ImageView resourceCard0;

@@ -300,21 +300,21 @@ public class Game implements Serializable {
         }
 
 
-        HashMap<String,Integer> points = new HashMap<>();
-        for(Player player : this.players){
-            if(player.getPersonalBoard() != null){
-                points.put(player.getNickname(),player.getPersonalBoard().getScore());
-            }else{
-                points.put(player.getNickname(),0);
+        HashMap<String, Integer> points = new HashMap<>();
+        for (Player player : this.players) {
+            if (player.getPersonalBoard() != null) {
+                points.put(player.getNickname(), player.getPersonalBoard().getScore());
+            } else {
+                points.put(player.getNickname(), 0);
             }
 
         }
         ArrayList<String> nicknameWinners = new ArrayList<>();
-        for(Player winner : this.winners){
+        for (Player winner : this.winners) {
             nicknameWinners.add(winner.getNickname());
         }
         String currentPlayerNickname = null;
-        if(this.currentPlayer != null){
+        if (this.currentPlayer != null) {
             currentPlayerNickname = this.currentPlayer.getNickname();
         }
 
@@ -322,7 +322,7 @@ public class Game implements Serializable {
         for (Player player : this.players) {
             pawnsSelected.put(player.getNickname(), player.getPawnColor());
         }
-        this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState,currentPlayerNickname,points,nicknameWinners,this.availablePawns, pawnsSelected), message);
+        this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState, currentPlayerNickname, points, nicknameWinners, this.availablePawns, pawnsSelected), message);
 
     }
 

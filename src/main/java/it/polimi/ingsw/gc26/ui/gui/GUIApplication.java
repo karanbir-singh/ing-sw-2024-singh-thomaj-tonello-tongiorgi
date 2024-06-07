@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class GUIApplication extends Application implements UIInterface {
@@ -65,83 +66,109 @@ public class GUIApplication extends Application implements UIInterface {
         // Load all scenes
         this.loadScenes();
 
-        //settare i mainClient nei generalController
+        // Setup starting stage
         this.primaryStage = primaryStage;
-        primaryStage.setHeight(800);
-        primaryStage.setWidth(1100);
-        primaryStage.setTitle(" Codex Naturalis");
+        primaryStage.setHeight(400);
+        primaryStage.setWidth(600);
         primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/title.png"))));
+        primaryStage.setTitle(" Codex Naturalis");
 
-        //Platform.runLater(()->openInfoPopup("VAMOS"));
+        // Launch thread for managing connection
         new Thread(() -> {
             try {
+                // Run client connection
                 this.runConnection();
 
                 // Launch thread for managing server ping
                 new Thread(this.mainClient.getPingManager()).start();
-
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                // TODO manage on GUI
             }
         }).start();
     }
 
-
+    /**
+     * Load scenes into the list
+     */
     private void loadScenes() {
         scenes = new ArrayList<>();
-        FXMLLoader loader;
-        Parent root;
-        GenericController genericController;
-        for (int i = 0; i < SceneEnum.values().length; i++) {
-            loader = new FXMLLoader(getClass().getResource(SceneEnum.values()[i].value()));
-            try {
-                root = loader.load();
-                genericController = loader.getController();
-                genericController.setMainClient(mainClient);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            scenes.add(new SceneInfo(genericController, new Scene(root), SceneEnum.values()[i]));
-        }
+        Arrays.stream(SceneEnum.values())
+                .forEach(sceneEnum -> {
+                    // Get scene
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(sceneEnum.value()));
+
+                    Parent root = null;
+                    try {
+                        root = loader.load();
+                    } catch (IOException e) {
+                        ConsoleColors.printError("[ERROR]: cannot load scenes");
+                        System.exit(-1);
+                    }
+                    SceneController sceneController = loader.getController();
+                    sceneController.setMainClient(mainClient);
+
+                    // Add scene
+                    scenes.add(new SceneInfo(sceneController, new Scene(root), sceneEnum));
+                });
+
     }
 
+    /**
+     * Returns the scene info of the given scene enum
+     *
+     * @param sceneEnum scene enum of the researched scene info
+     * @return SceneInfo
+     */
     public SceneInfo getSceneInfo(SceneEnum sceneEnum) {
-        for (int i = 0; i < SceneEnum.values().length; i++) {
-            if (scenes.get(i).getSceneEnum().equals(sceneEnum)) {
-                return scenes.get(i);
-            }
-        }
-        return null; //se non l ho trovato
+        return scenes.stream()
+                .filter(scene -> scene.getSceneEnum().equals(sceneEnum))
+                .findFirst()
+                .orElse(null);
     }
 
-    public GenericController getSceneController(SceneEnum sceneEnum) {
-        for (int i = 0; i < SceneEnum.values().length; i++) {
-            if (scenes.get(i).getSceneEnum().equals(sceneEnum)) {
-                return scenes.get(i).getSceneController();
-            }
-        }
-        return null; //se non l ho trovato
+    /**
+     * Returns the scene controller of the given scene enum
+     *
+     * @param sceneEnum scene enum of the researched scene controller
+     * @return SceneController
+     */
+    public SceneController getSceneController(SceneEnum sceneEnum) {
+        return scenes.stream()
+                .filter(scene -> scene.getSceneEnum().equals(sceneEnum))
+                .map(SceneInfo::getSceneController)
+                .findFirst()
+                .orElse(null);
     }
 
-    public void setCurrentSceneAndShow(SceneEnum sceneEnum){
-        this.currentSceneInfo = getSceneInfo(sceneEnum);
-        this.primaryStage.setScene(this.getSceneInfo(sceneEnum).getScene());
-        this.primaryStage.show();
+    /**
+     * Changes the showing scene
+     *
+     * @param sceneEnum selected scene
+     */
+    public void setCurrentScene(SceneEnum sceneEnum) {
+        // Update current scene info
+        this.currentSceneInfo = this.getSceneInfo(sceneEnum);
+
+        Platform.runLater(() -> {
+            // Update stage
+            this.primaryStage.setScene(this.currentSceneInfo.getScene());
+            this.primaryStage.show();
+        });
 
     }
 
-    public SceneInfo getCurrentScene(){
+    /**
+     * @return current showing scene info
+     */
+    public SceneInfo getCurrentScene() {
         return this.currentSceneInfo;
     }
 
 
     @Override
     public void runConnection() throws RemoteException {
-        //Initial state in CONNECTION
-
-        Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.LOGIN).getScene()));
-        Platform.runLater(() -> this.primaryStage.show());
-        this.currentSceneInfo = this.getSceneInfo(SceneEnum.LOGIN);
+        // Set login scene
+        this.setCurrentScene(SceneEnum.LOGIN);
 
         synchronized (this.mainClient.getLock()) {
             while (this.mainClient.getClientState() == ClientState.CONNECTION) {
@@ -157,9 +184,10 @@ public class GUIApplication extends Application implements UIInterface {
             Platform.runLater(() -> {
                 this.getSceneController(SceneEnum.CREATOR).setNickName(this.getSceneController(SceneEnum.LOGIN).getNickName());
             });
-            Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.CREATOR).getScene()));
-            Platform.runLater(() -> this.primaryStage.show());
-            this.currentSceneInfo = this.getSceneInfo(SceneEnum.CREATOR);
+
+            // Set creator scene
+            this.setCurrentScene(SceneEnum.CREATOR);
+
             synchronized (this.mainClient.getLock()) {
                 while (this.mainClient.getClientState() == ClientState.CREATOR) {
                     try {
@@ -183,12 +211,12 @@ public class GUIApplication extends Application implements UIInterface {
                 }
             }
         } else if (this.mainClient.getClientState() == ClientState.INVALID_NICKNAME) {
+            // Set login scene again
+            this.setCurrentScene(SceneEnum.LOGIN);
             Platform.runLater(() -> {
-                this.primaryStage.setScene(this.getSceneInfo(SceneEnum.LOGIN).getScene());
-                ((LoginController) this.getSceneController(SceneEnum.LOGIN)).setStatus("NICKNAME INVALIDO, REINSERISCI");
+                ((LoginController) this.getSceneController(SceneEnum.LOGIN)).setStatus("Invalid Nickname, please try again!");
             });
-            this.currentSceneInfo = this.getSceneInfo(SceneEnum.LOGIN);
-            Platform.runLater(() -> this.primaryStage.show());
+
             while (this.mainClient.getClientState() == ClientState.INVALID_NICKNAME) {
                 synchronized (this.mainClient.getLock()) {
                     while (this.mainClient.getClientState() == ClientState.CONNECTION) {
@@ -201,15 +229,13 @@ public class GUIApplication extends Application implements UIInterface {
                 }
             }
         }
-        //setting all the right nicknames
-       this.setToAllControllersNickname();
 
-        System.out.println("Waiting for other players ...");
-        Platform.runLater(() -> {
-            this.primaryStage.setScene(this.getSceneInfo(SceneEnum.WAITING).getScene());
-        });
-        Platform.runLater(() -> this.primaryStage.show());
-        this.currentSceneInfo = this.getSceneInfo(SceneEnum.WAITING);
+        // Set nickname for all scene controllers
+        this.setToAllControllersNickname();
+
+        // Set waiting scene
+        this.setCurrentScene(SceneEnum.WAITING);
+
         synchronized (this.mainClient.getLock()) {
             while (this.mainClient.getClientState() == ClientState.WAITING) {
                 try {
@@ -221,12 +247,7 @@ public class GUIApplication extends Application implements UIInterface {
         }
 
 
-
         synchronized (this.mainClient.getLock()) {
-            /*Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getScene()));
-            Platform.runLater(() -> this.primaryStage.show());*/
-            //questo viene fatto tramite update
-
             this.mainClient.setVirtualGameController(this.mainClient.getVirtualMainController().getVirtualGameController(this.mainClient.getViewController().getGameID()));
             while (this.mainClient.getVirtualGameController() == null) {
                 try {
@@ -236,35 +257,17 @@ public class GUIApplication extends Application implements UIInterface {
                 }
             }
         }
-        System.out.println("Game begin");
     }
 
     @Override
     public void runGame() {
-
     }
 
-    public void openInfoPopup(String message) {
-        /*this.popupStage = new Stage();
-        //this.popupStage.setResizable(false);
-        SceneInfo sceneInfo =this.getSceneInfo(SceneEnum.INFO);
-        this.popupStage.setScene(sceneInfo.getScene());
-        ((InfoController)sceneInfo.getSceneController()).setMessage(message);
-
-        //this.popupStage.setOnCloseRequest(we -> System.exit(0));
-        this.popupStage.show();
-
-        this.popupStage.setX(primaryStage.getX() + (primaryStage.getWidth() - sceneInfo.getScene().getWidth()) * 0.5);
-        this.popupStage.setY(primaryStage.getY() + (primaryStage.getHeight() - sceneInfo.getScene().getHeight()) * 0.5);
-         */
-    }
-
-
-    public void openErrorPopup(String message){
+    public void openErrorPopup(String message) {
         this.popupStage = new Stage();
-        SceneInfo sceneInfo =this.getSceneInfo(SceneEnum.ERROR);
+        SceneInfo sceneInfo = this.getSceneInfo(SceneEnum.ERROR);
         this.popupStage.setScene(sceneInfo.getScene());
-        ((ErrorController)sceneInfo.getSceneController()).setMessage(message);
+        ((ErrorController) sceneInfo.getSceneController()).setMessage(message);
 
         //this.popupStage.setOnCloseRequest(we -> System.exit(0));
         this.popupStage.alwaysOnTopProperty();
@@ -272,16 +275,8 @@ public class GUIApplication extends Application implements UIInterface {
     }
 
 
-    private void setToAllControllersNickname(){
-        for (int i = 0; i < SceneEnum.values().length; i++) {
-
-            this.getSceneController(scenes.get(i).getSceneEnum()).setNickName(
-                    ((LoginController)this.getSceneController(SceneEnum.LOGIN)).getText()
-            );
-
-            System.out.println(this.getSceneController(scenes.get(i).getSceneEnum()).getNickName());
-
-        }
+    private void setToAllControllersNickname() {
+        scenes.forEach(scene -> scene.getSceneController().setNickName(((LoginController) this.getSceneController(SceneEnum.LOGIN)).getText()));
     }
 
 }

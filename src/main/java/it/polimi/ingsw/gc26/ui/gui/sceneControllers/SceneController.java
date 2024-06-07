@@ -3,7 +3,7 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.view_model.*;
 
-public class GenericController {
+public class SceneController {
     public MainClient mainClient;
     public String nickname;
 

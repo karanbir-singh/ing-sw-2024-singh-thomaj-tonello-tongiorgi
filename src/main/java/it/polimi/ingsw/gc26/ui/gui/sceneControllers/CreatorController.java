@@ -7,7 +7,7 @@ import javafx.scene.control.RadioButton;
 
 import java.rmi.RemoteException;
 
-public class CreatorController extends GenericController{
+public class CreatorController extends SceneController {
 
     @FXML
     private RadioButton secondRadioButton;
@@ -29,12 +29,14 @@ public class CreatorController extends GenericController{
         this.thirdRadioButton.setSelected(false);
         this.fourthRadioButton.setSelected(false);
     }
+
     @FXML
     public void onThirdRadioButtonClick(ActionEvent actionEvent){
         this.numMaxPlayer = Integer.parseInt(thirdRadioButton.getText());
         this.secondRadioButton.setSelected(false);
         this.fourthRadioButton.setSelected(false);
     }
+
     @FXML
     public void onFourthRadioButtonClick(ActionEvent actionEvent){
         this.numMaxPlayer = Integer.parseInt(fourthRadioButton.getText());
@@ -46,7 +48,7 @@ public class CreatorController extends GenericController{
     public void onClickButton(ActionEvent actionEvent) {
         try { //TODO da cambiare il nickname
             this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(),this.nickname,this.numMaxPlayer);
-            this.status.setText("Adesso aspetta che altri client entrino");
+            this.status.setText("Now wait other players to join...");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

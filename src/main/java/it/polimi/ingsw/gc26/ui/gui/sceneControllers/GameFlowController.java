@@ -29,7 +29,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class GameFlowController extends GenericController implements Initializable{
+public class GameFlowController extends SceneController implements Initializable {
 
     //hand
     @FXML
@@ -74,13 +74,12 @@ public class GameFlowController extends GenericController implements Initializab
     private ScrollPane rootScrollPane;
     @FXML
     private ImageView scoreBoard;
-    private ArrayList<ImageView> cards = new ArrayList<>();
-    private ArrayList<ImageView> playablePrositions = new ArrayList<>();
-    private ArrayList<ImageView> handCards = new ArrayList<>();
 
-    private String path = "/images/";
-    private ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
-    private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
+    private ArrayList<ImageView> playablePositions = new ArrayList<>();
+
+    private final String path = "/images/";
+    private final ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
+    private final RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
 
     //forDraggability
     private double mouseAnchorX;
@@ -91,7 +90,8 @@ public class GameFlowController extends GenericController implements Initializab
     //TODO da spostare in css
     private final Glow glowEffect = new Glow(0.3);
 
-    public void onClickTurnSideButton(ActionEvent actionEvent){
+    @FXML
+    public void onClickTurnSideButton(ActionEvent actionEvent) {
         try {
             this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
         } catch (RemoteException e) {
@@ -99,7 +99,8 @@ public class GameFlowController extends GenericController implements Initializab
         }
     }
 
-    public void onClickDrawCardButton(ActionEvent actionEvent){
+    @FXML
+    public void onClickDrawCardButton(ActionEvent actionEvent) {
         try {
             this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
         } catch (RemoteException e) {
@@ -108,22 +109,12 @@ public class GameFlowController extends GenericController implements Initializab
         //this.drawCardButton.setVisible(false);
     }
 
-
-    //azioni per la mano
-    public void onClickMouseHandCard(MouseEvent mouseEvent){
-        try {
-            int index = Integer.valueOf(((ImageView)mouseEvent.getSource()).getAccessibleText());
-            this.mainClient.getVirtualGameController().selectCardFromHand(index,this.mainClient.getClientID());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     //azioni carte commonBoard
-    public void onClickCommonTableCard(MouseEvent mouseEvent){
+    @FXML
+    public void onClickCommonTableCard(MouseEvent mouseEvent) {
         try {
-            int index = Integer.valueOf(((ImageView)mouseEvent.getSource()).getAccessibleText());
-            this.mainClient.getVirtualGameController().selectCardFromCommonTable(index,this.mainClient.getClientID());
+            int index = Integer.valueOf(((ImageView) mouseEvent.getSource()).getId());
+            this.mainClient.getVirtualGameController().selectCardFromCommonTable(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -134,8 +125,9 @@ public class GameFlowController extends GenericController implements Initializab
     private static int toIndex(Integer value) {
         return value == null ? 0 : value;
     }
+
     //azione delle carte opache
-    public void onClickPlayablePosition(MouseEvent mouseEvent){
+    public void onClickPlayablePosition(MouseEvent mouseEvent) {
         try {
             Node node = (Node) mouseEvent.getSource();
             Parent p = node.getParent();
@@ -150,16 +142,13 @@ public class GameFlowController extends GenericController implements Initializab
             System.out.println("image clicked at " + row + " " + column);
             //da inserire
 
-            this.mainClient.getVirtualGameController().selectPositionOnBoard(column-xPositionStarterCard,yPositionStarterCard-row,this.mainClient.getClientID());
+            this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
             this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
         } catch (RemoteException e) {
-           // throw new RuntimeException(e);
-       }
+            // throw new RuntimeException(e);
+        }
     }
     //fine azioni carte opache
-
-
-
 
 
     // String.valueOf(getClass().getResource
@@ -170,39 +159,39 @@ public class GameFlowController extends GenericController implements Initializab
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
 
         int index = 0;
-        for(Card card: simplifiedCommonTable.getResourceCards()){
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
-            this.setParameters(imageView,String.valueOf(index));
+        for (Card card : simplifiedCommonTable.getResourceCards()) {
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
+            this.setCardImageParameters(imageView, index);
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
             resources.add(imageView);
             index++;
         }
-        ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
-        this.setParameters(resourceDeck, String.valueOf(index));
+        ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
+        this.setCardImageParameters(resourceDeck, index);
         resourceDeck.setOnMouseClicked(this::onClickCommonTableCard);
         resources.add(resourceDeck);
         index++;
-        for(Card card: simplifiedCommonTable.getGoldCards()){
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
-            this.setParameters(imageView, String.valueOf(index));
+        for (Card card : simplifiedCommonTable.getGoldCards()) {
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
+            this.setCardImageParameters(imageView, index);
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
             goldens.add(imageView);
             index++;
         }
-        ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
-        this.setParameters(goldDeck,String.valueOf(index));
+        ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
+        this.setCardImageParameters(goldDeck, index);
         goldDeck.setOnMouseClicked(this::onClickCommonTableCard);
         goldens.add(goldDeck);
         index++;
-        for(Card card: simplifiedCommonTable.getCommonMissions()){
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
-            this.setParameters(imageView, String.valueOf(index));
+        for (Card card : simplifiedCommonTable.getCommonMissions()) {
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
+            this.setCardImageParameters(imageView, index);
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
             imageViewsCommonMissions.add(imageView);
             index++;
         }
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             this.commonMissionsBox.getChildren().setAll(imageViewsCommonMissions);
             this.resourceCardBox.getChildren().setAll(resources);
             this.goldCardBox.getChildren().setAll(goldens);
@@ -216,25 +205,31 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
-        handCards = new ArrayList<>();
+        // List of card images
+        ArrayList<ImageView> handCards = new ArrayList<>();
 
+        // Hand cards
+        ArrayList<Card> hand = simplifiedHand.getCards();
+
+        // Update hand
         int index = 0;
-        for(Card card: simplifiedHand.getCards()){
+        for (Card card : hand) {
             ImageView imageView;
-            if(card.equals(simplifiedHand.getSelectedCard())){
-                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getSelectedSide().getImagePath()))));
-                makeDraggable(imageView, playablePrositions);
+            if (card.equals(simplifiedHand.getSelectedCard())) {
+                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath()))));
                 imageView.setEffect(glowEffect);
-            }else{
-                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
-                imageView.setOnMouseClicked(this::onClickMouseHandCard);
+            } else {
+                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
             }
-            this.setParameters(imageView,String.valueOf(index));
+            this.setCardImageParameters(imageView, index);
+            makeDraggable(imageView, playablePositions);
+            imageView.setOnMouseClicked(this::onHandCardClicked);
+
             handCards.add(imageView);
             index++;
         }
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             this.handPane.getChildren().setAll(handCards);
             layout.handLayout(rootBorder, handCards);
         });
@@ -244,12 +239,12 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard) {
-        playablePrositions = new ArrayList<>();
+        playablePositions = new ArrayList<>();
 
-        if(personalBoard.getSecretMission() != null){
+        if (personalBoard.getSecretMission() != null) {
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + personalBoard.getSecretMission().getFront().getImagePath()))));
-            this.setParameters(imageView,"0");
-            Platform.runLater(()->{
+            this.setCardImageParameters(imageView, 0);
+            Platform.runLater(() -> {
                 this.secretMissionBox.getChildren().setAll(imageView);
             });
         }
@@ -258,37 +253,37 @@ public class GameFlowController extends GenericController implements Initializab
         this.addImage(imageCardToPlay,
                 this.xPositionStarterCard + personalBoard.getOccupiedPositions().getLast().getX(),
                 this.yPositionStarterCard - personalBoard.getOccupiedPositions().getLast().getY(), this.gridPane);
-        for(Point point : personalBoard.getPlayablePositions()){
+        for (Point point : personalBoard.getPlayablePositions()) {
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg"))));
             //il path di prima è solo per prova
             imageView.setOpacity(0.3);
             imageView.setVisible(false);
             imageView.setOnMouseClicked(this::onClickPlayablePosition);
-            addImage(imageView,this.xPositionStarterCard + point.getX(),
+            addImage(imageView, this.xPositionStarterCard + point.getX(),
                     this.yPositionStarterCard - point.getY(), this.gridPane);
 
-            playablePrositions.add(imageView);
+            playablePositions.add(imageView);
         }
     }
 
     @Override
-    public void changeGUIotherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard){
+    public void changeGUIotherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
         boolean exist = false;
         Tab consideredTab = null;
         ScrollPane otherScrollPane = null;
         GridPane otherGridPane = null;
         //controlla che se esiste gia un tab con lo stesso nickname, e se esiste prendere i riferimenti allo scrollPane e griPane
-        for(Tab tab : personalBoardTabPane.getTabs()){
-            if(tab.getText().equals(otherPersonalBoard.getNickname())){
+        for (Tab tab : personalBoardTabPane.getTabs()) {
+            if (tab.getText().equals(otherPersonalBoard.getNickname())) {
                 exist = true;
                 consideredTab = tab;
-                otherScrollPane = (ScrollPane)tab.getContent();
-                otherGridPane = (GridPane)otherScrollPane.getContent();
+                otherScrollPane = (ScrollPane) tab.getContent();
+                otherGridPane = (GridPane) otherScrollPane.getContent();
             }
         }
 
         //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
-        if(!otherPersonalBoard.getNickname().equals(this.mainClient.getClientID()) && !exist){
+        if (!otherPersonalBoard.getNickname().equals(this.mainClient.getClientID()) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
             personalBoardTabPane.getTabs().add(consideredTab);
@@ -311,8 +306,6 @@ public class GameFlowController extends GenericController implements Initializab
     }
 
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //page layout and dimensions bindings
@@ -321,78 +314,67 @@ public class GameFlowController extends GenericController implements Initializab
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
 
-
-
         this.creationAndSettingGridContraints(this.gridPane);
-
-
     }
 
-    private void creationAndSettingGridContraints(GridPane gridPane){
+    private void creationAndSettingGridContraints(GridPane gridPane) {
         gridPane.setPrefWidth(8000);
         gridPane.setPrefHeight(4000);
         gridPane.setMaxWidth(8000);
         gridPane.setMaxHeight(4000);
-        for(int row = 0; row < 81; row++) {
+        for (int row = 0; row < 81; row++) {
             gridPane.getRowConstraints().add(rowConstraints);
         }
-        for(int column = 0; column < 81; column++){
+        for (int column = 0; column < 81; column++) {
             gridPane.getColumnConstraints().add(columnConstraints);
         }
     }
 
-    private void setParameters(ImageView imageView, String accessibleText){
+    private void setCardImageParameters(ImageView imageView, int index) {
+        imageView.setId(String.valueOf(index));
         imageView.setFitWidth(150);
         imageView.setFitHeight(98);
         imageView.setPreserveRatio(true);
-        imageView.setAccessibleText(accessibleText);
-
     }
 
-    private void addImage(ImageView imageView,int x, int y, GridPane gridPane){
-        setParameters(imageView,"0");
-        Platform.runLater(()->{
-            gridPane.add(imageView,x,y);
+    private void addImage(ImageView imageView, int x, int y, GridPane gridPane) {
+        setCardImageParameters(imageView, 0);
+        Platform.runLater(() -> {
+            gridPane.add(imageView, x, y);
         });
     }
 
     public void makeDraggable(ImageView imageView, ArrayList<ImageView> targets) {
+        // Set on card pressed
         imageView.setOnMousePressed(event -> {
-            if(event.getClickCount() == 2){
-                try {
-                    this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                initialX = imageView.getLayoutX();
-                initialY = imageView.getLayoutY();
-                mouseAnchorX = event.getSceneX() - initialX;
-                mouseAnchorY = event.getSceneY() - initialY;
-            }
-
+            initialX = imageView.getLayoutX();
+            initialY = imageView.getLayoutY();
+            mouseAnchorX = event.getSceneX() - initialX;
+            mouseAnchorY = event.getSceneY() - initialY;
         });
 
+        // Set on card dragging
         imageView.setOnMouseDragged(event -> {
             imageView.setLayoutX(event.getSceneX() - mouseAnchorX);
             imageView.setLayoutY(event.getSceneY() - mouseAnchorY);
 
-            for (ImageView target: targets) {
+            for (ImageView target : targets) {
                 target.setVisible(true);
             }
         });
 
+        // Set on card released
         imageView.setOnMouseReleased(event -> {
-            for (ImageView target: targets) {
+            for (ImageView target : targets) {
                 if (isInTargetSpot(imageView, target)) {
 
                     try {
                         //TODO da controllare se G minuscola
                         int row = GridPane.getRowIndex(target);
                         int column = GridPane.getColumnIndex(target);
-                        //da inserire
 
-                        this.mainClient.getVirtualGameController().selectPositionOnBoard(column-xPositionStarterCard,yPositionStarterCard-row,this.mainClient.getClientID());
+                        this.mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(imageView.getId()),this.mainClient.getClientID());
+                        this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
                         this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
                     } catch (RemoteException e) {
                         // throw new RuntimeException(e);
@@ -401,10 +383,28 @@ public class GameFlowController extends GenericController implements Initializab
             }
             imageView.setLayoutX(initialX);
             imageView.setLayoutY(initialY);
-            for (ImageView target: targets) {
+            for (ImageView target : targets) {
                 target.setVisible(false);
             }
         });
+    }
+
+    public void onHandCardClicked(MouseEvent mouseEvent) {
+        if (mouseEvent.getClickCount() == 2) {
+            try {
+                this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+
+        } else {
+            try {
+                int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+                this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private boolean isInTargetSpot(ImageView imageView, ImageView target) {

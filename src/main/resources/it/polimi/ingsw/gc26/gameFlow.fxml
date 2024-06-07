@@ -108,25 +108,7 @@
                         </Tab>
                      </tabs>
                   </TabPane>
-                  <AnchorPane fx:id="handPane" minWidth="200.0" prefWidth="600.0">
-                     <children>
-                                <ImageView fx:id="handCard0" fitWidth="180.0" layoutX="10.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                           <image>
-                              <Image url="@../../../../images/backSide/img_7.jpeg" />
-                           </image>
-                        </ImageView>
-                                <ImageView fx:id="handCard2" fitWidth="180.0" layoutX="210.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                           <image>
-                              <Image url="@../../../../images/backSide/img_7.jpeg" />
-                           </image>
-                        </ImageView>
-                                <ImageView fx:id="handCard1" fitWidth="180.0" layoutX="410.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                           <image>
-                              <Image url="@../../../../images/backSide/img_7.jpeg" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </AnchorPane>
+                   <AnchorPane fx:id="handPane" minWidth="200.0" prefWidth="600.0"/>
                </children>
             </FlowPane>
          </center>

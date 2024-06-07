@@ -1,27 +1,22 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.ImagePattern;
 
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class SecretMissionChoiceController extends GenericController implements Initializable {
+public class SecretMissionChoiceController extends SceneController implements Initializable {
     //CommonTable
     @FXML
     private ImageView resourceCard0;

@@ -2,35 +2,29 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 
-import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.ResourceBundle;
 
-public class LoginController extends GenericController{
-
-    @FXML
-    Label status;
+public class LoginController extends SceneController {
 
     @FXML
-    TextField nicknameTXT;
+    private Label status;
+
+    @FXML
+    private TextField nicknameTXT;
 
     public void setStatus(String message){
         this.status.setText(message);
         this.status.setVisible(true);
     }
 
+    @FXML
     public void onClickButton(ActionEvent actionEvent){
-        //chiedere se il thread viene creato in modo automatico o devo crearlo io
         if(nicknameTXT.getText().equals("")){
-            status.setText("Insert again, not valid nickname");
-            status.setVisible(true); //setto visibile il label
+            status.setText("Nickname not valid, insert again");
+            status.setVisible(true);
         }else{
             try {
                 this.setNickName(nicknameTXT.getText());
