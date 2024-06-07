@@ -87,11 +87,6 @@ public class GameFlowController extends GenericController implements Initializab
 
     private HashMap<String,VBox> chats = new HashMap<>();
 
-    @FXML
-    private Button turnSideButton;
-    @FXML
-    private Button drawCardButton;
-
     private boolean scoreBoardIsVisible = false;
     private boolean chatIsVisible = false;
 
@@ -122,25 +117,6 @@ public class GameFlowController extends GenericController implements Initializab
     private double initialX;
     private double initialY;
 
-    public void onClickTurnSideButton(ActionEvent actionEvent){
-        try {
-            this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @FXML
-    public void onClickDrawCardButton(ActionEvent actionEvent){
-        try {
-            this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        //this.drawCardButton.setVisible(false);
-    }
-
-
     //azioni per la mano
     @FXML
     public void onClickMouseHandCard(MouseEvent mouseEvent){
@@ -151,6 +127,7 @@ public class GameFlowController extends GenericController implements Initializab
             throw new RuntimeException(e);
         }
     }
+    //fine azioni per la mano
 
     //azioni carte commonBoard
     public void onClickCommonTableCard(MouseEvent mouseEvent){
@@ -162,11 +139,20 @@ public class GameFlowController extends GenericController implements Initializab
         }
     }
 
-    //fine azioni per la mano
+    public void onSelectedClickCommonTableCard(MouseEvent mouseEvent){
+        try {
+            this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //fine azioni per la commonTable
 
     private static int toIndex(Integer value) {
         return value == null ? 0 : value;
     }
+
+
     //azione delle carte opache
     public void onClickPlayablePosition(MouseEvent mouseEvent){
         try {
@@ -192,9 +178,6 @@ public class GameFlowController extends GenericController implements Initializab
     //fine azioni carte opache
 
 
-
-
-    // String.valueOf(getClass().getResource
     @Override
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         ArrayList<ImageView> resources = new ArrayList<>();
@@ -206,39 +189,48 @@ public class GameFlowController extends GenericController implements Initializab
         for(Card card: simplifiedCommonTable.getResourceCards()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView,String.valueOf(index));
-            imageView.setOnMouseClicked(this::onClickCommonTableCard);
             resources.add(imageView);
             if(index == simplifiedCommonTable.getSelectedIndex()){
                 layout.makeGlow(imageView);
+                imageView.setOnMouseClicked(this::onSelectedClickCommonTableCard);
+            } else {
+                imageView.setOnMouseClicked(this::onClickCommonTableCard);
             }
             index++;
         }
         ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
         this.setParameters(resourceDeck, String.valueOf(index));
-        resourceDeck.setOnMouseClicked(this::onClickCommonTableCard);
         resources.add(resourceDeck);
         if(index == simplifiedCommonTable.getSelectedIndex()){
             layout.makeGlow(resourceDeck);
+            resourceDeck.setOnMouseClicked(this::onSelectedClickCommonTableCard);
+        } else {
+            resourceDeck.setOnMouseClicked(this::onClickCommonTableCard);
         }
         index++;
         for(Card card: simplifiedCommonTable.getGoldCards()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(index));
-            imageView.setOnMouseClicked(this::onClickCommonTableCard);
             goldens.add(imageView);
             if(index == simplifiedCommonTable.getSelectedIndex()){
                 layout.makeGlow(imageView);
+                imageView.setOnMouseClicked(this::onSelectedClickCommonTableCard);
+            } else {
+                imageView.setOnMouseClicked(this::onClickCommonTableCard);
             }
             index++;
         }
         ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
         this.setParameters(goldDeck,String.valueOf(index));
-        goldDeck.setOnMouseClicked(this::onClickCommonTableCard);
         goldens.add(goldDeck);
         if(index == simplifiedCommonTable.getSelectedIndex()){
             layout.makeGlow(goldDeck);
+            goldDeck.setOnMouseClicked(this::onSelectedClickCommonTableCard);
+        } else {
+            goldDeck.setOnMouseClicked(this::onClickCommonTableCard);
         }
         index++;
+
         for(Card card: simplifiedCommonTable.getCommonMissions()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(index));
@@ -280,7 +272,7 @@ public class GameFlowController extends GenericController implements Initializab
 
         Platform.runLater(()->{
             this.handPane.getChildren().setAll(handCards);
-            layout.handLayout(rootBorder, handCards);
+            layout.handLayout(rootBorder, handCards, handPane);
         });
 
     }
@@ -354,20 +346,16 @@ public class GameFlowController extends GenericController implements Initializab
     }
 
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //page layout and dimensions bindings
-        layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, leftVBox, rightVBox, scoreBoard, handPane);
+        layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, leftVBox, rightVBox, scoreBoard, handCards, handPane);
+        layout.handLayout(rootBorder, handCards, handPane);
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
 
-
-
         this.creationAndSettingGridContraints(this.gridPane);
-
 
     }
 

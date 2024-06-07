@@ -119,6 +119,7 @@ public class GUIApplication extends Application implements UIInterface {
 
     public void setCurrentSceneAndShow(SceneEnum sceneEnum){
         Scene scene = getSceneInfo(sceneEnum).getScene();
+        scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/it/polimi/ingsw/gc26/css/GeneralStyle.css")).toExternalForm());
         scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/it/polimi/ingsw/gc26/css/LOGIN.css")).toExternalForm());
         this.primaryStage.setScene(scene);
         this.primaryStage.show();

@@ -38,6 +38,9 @@ public class CreatorController extends GenericController implements Initializabl
     @FXML
     private Button playButton;
 
+    @FXML
+    private AnchorPane menu;
+
     private int numMaxPlayer = 2;
     private final CommonLayout layout = new CommonLayout();
     private double initialImageWidth;

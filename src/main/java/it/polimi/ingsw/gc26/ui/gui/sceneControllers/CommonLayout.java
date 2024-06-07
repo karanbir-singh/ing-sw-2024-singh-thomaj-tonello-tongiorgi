@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class CommonLayout {
     public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, TabPane personalBoardTabPane, VBox leftVBox, VBox rightVBox,
-                             ImageView scoreBoard, AnchorPane handPane){
+                             ImageView scoreBoard, ArrayList<ImageView> handCards, AnchorPane handPane){
 
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
             try {
@@ -38,26 +38,29 @@ public class CommonLayout {
     public void cardsLayout(BorderPane rootBorder, ArrayList<ImageView> cards){
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
             for(ImageView card: cards){
-                card.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.13));
+                card.setFitWidth(rootBorder.getWidth()*0.13);
             }
         });
     }
 
-    public void handLayout(BorderPane rootBorder, ArrayList<ImageView> handCards){
-        for(ImageView card: handCards){
-            card.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.13));
-            card.setLayoutX(25.0 + rootBorder.getWidth()*0.13 * handCards.indexOf(card));
+    public void handLayout(BorderPane rootBorder, ArrayList<ImageView> handCards, AnchorPane handPane) {
+        double spacing = 20.0;
+        handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
 
-            rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
-                card.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.13));
-                card.setLayoutX(20.0 + rootBorder.getWidth()*0.13 * handCards.indexOf(card));
-            });
-        }
+        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
+            handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
+
+            for (int i = 0; i < handCards.size(); i++) {
+                ImageView card = handCards.get(i);
+                card.setFitWidth(rootBorder.getWidth() * 0.13);
+                card.setLayoutX(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * i);
+            }
+        });
     }
 
     public void makeGlow(ImageView card){
         DropShadow glow = new DropShadow();
-        glow.setColor(Color.BLUE);
+        glow.setColor(Color.CORNSILK);
         glow.setOffsetX(0f);
         glow.setOffsetY(0f);
         glow.setWidth(30);
