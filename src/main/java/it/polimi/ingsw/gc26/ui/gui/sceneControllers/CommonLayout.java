@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.effect.DropShadow;
@@ -66,6 +67,19 @@ public class CommonLayout {
         glow.setWidth(30);
         glow.setHeight(30);
         card.setEffect(glow);
+    }
+
+    public void buttonSetup(ImageView closeIcon, ImageView visibleIcon, Button button) {
+        double iconDimension = 35;
+        double buttonDim = 60;
+
+        closeIcon.setFitWidth(iconDimension);
+        closeIcon.setFitHeight(iconDimension);
+        visibleIcon.setFitWidth(iconDimension);
+        visibleIcon.setFitHeight(iconDimension);
+        button.setGraphic(closeIcon);
+        button.setPrefWidth(buttonDim);
+        button.setPrefHeight(buttonDim);
     }
 
     public void updateViewport(AnchorPane rootPane, ImageView background, double initialImageWidth, double initialImageHeight) {

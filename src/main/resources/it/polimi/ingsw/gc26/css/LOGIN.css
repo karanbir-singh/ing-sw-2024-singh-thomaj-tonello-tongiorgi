@@ -27,31 +27,6 @@
     -fx-text-decoration: none;
 }
 
-#loginButton {
-    -fx-background-color: linear-gradient(to right, #0bbdd9 10%, #0dd696 100%, #fffb8f );
-    -fx-background-radius: 50px;
-    -fx-border-radius: 50px;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-}
-
-#loginButton:hover {
-    -fx-background-color: linear-gradient(to right, #abffeb 2%, #0dd696 100% );
-    -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0,0,1 );
-    -fx-background-radius: 50px;
-    -fx-border-radius: 50px;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-}
-
-#loginButton:pressed{
-    -fx-background-color: linear-gradient(to right, #e3fff2, #0dd696 100%,  #fffb8f 80% );
-    -fx-background-radius: 50px;
-    -fx-border-radius: 50px;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-}
-
 #nicknameTXT{
     -fx-background-color: rgba(255, 255, 255, 0.8);
     -fx-background-radius: 40px;

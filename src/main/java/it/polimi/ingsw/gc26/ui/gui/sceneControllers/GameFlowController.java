@@ -55,6 +55,8 @@ public class GameFlowController extends GenericController implements Initializab
     public HBox HBoxLeftPanel;
     public AnchorPane anchorPaneChat;
     public TabPane chatTabPane;
+    @FXML
+    private Button chatButton;
     public GridPane scoreBoardGrid;
 
     //hand
@@ -89,6 +91,10 @@ public class GameFlowController extends GenericController implements Initializab
 
     private boolean scoreBoardIsVisible = false;
     private boolean chatIsVisible = false;
+    private ImageView scoreIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/score-icon-white.png").toExternalForm()));
+    private ImageView scoreIconClose = new ImageView(new Image(getClass().getResource("/images/icons/score-icon1.png").toExternalForm()));
+    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white1.png").toExternalForm()));
+    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon.png").toExternalForm()));
 
     //layout
     CommonLayout layout = new CommonLayout();
@@ -348,6 +354,12 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        layout.buttonSetup(scoreIconClose, scoreIconVisible, scoreBoardButton);
+        scoreBoardButton.setOnAction(this::toggleScoreBoard);
+        layout.buttonSetup(chatIconClose, chatIconVisible, chatButton);
+        chatButton.setOnAction(this::toggleChat);
+
+
         //page layout and dimensions bindings
         layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, leftVBox, rightVBox, scoreBoard, handCards, handPane);
         layout.handLayout(rootBorder, handCards, handPane);
@@ -607,17 +619,20 @@ public class GameFlowController extends GenericController implements Initializab
 
     public void toggleScoreBoard(ActionEvent actionEvent) {
         if(chatIsVisible) {
+            chatButton.setGraphic(chatIconClose);
             anchorPaneChat.setTranslateX(-2000);
             HBoxLeftPanel.setMinWidth(40);
             HBoxLeftPanel.setMaxWidth(40);
             chatIsVisible = false;
         }
         if (scoreBoardIsVisible) {
+            scoreBoardButton.setGraphic(scoreIconClose);
             anchorPaneScoreBoard.setTranslateX(-2000);
             HBoxLeftPanel.setMinWidth(40);
             HBoxLeftPanel.setMaxWidth(40);
             scoreBoardIsVisible = false;
         } else {
+            scoreBoardButton.setGraphic(scoreIconVisible);
             anchorPaneScoreBoard.setTranslateX(0);
             HBoxLeftPanel.setMinWidth(340);
             HBoxLeftPanel.setMaxWidth(340);
@@ -627,17 +642,20 @@ public class GameFlowController extends GenericController implements Initializab
 
     public void toggleChat(ActionEvent actionEvent) {
         if (scoreBoardIsVisible) {
+            scoreBoardButton.setGraphic(scoreIconClose);
             anchorPaneScoreBoard.setTranslateX(-2000);
             HBoxLeftPanel.setMinWidth(40);
             HBoxLeftPanel.setMaxWidth(40);
             scoreBoardIsVisible = false;
         }
         if (chatIsVisible) {
+            chatButton.setGraphic(chatIconClose);
             anchorPaneChat.setTranslateX(-2000);
             HBoxLeftPanel.setMinWidth(40);
             HBoxLeftPanel.setMaxWidth(40);
             chatIsVisible = false;
         } else {
+            chatButton.setGraphic(chatIconVisible);
             anchorPaneChat.setTranslateX(-270);
             HBoxLeftPanel.setMinWidth(340);
             HBoxLeftPanel.setMaxWidth(340);
