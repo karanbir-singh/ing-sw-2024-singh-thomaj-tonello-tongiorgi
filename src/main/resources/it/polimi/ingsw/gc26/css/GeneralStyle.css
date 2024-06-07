@@ -1,5 +1,8 @@
 .label {
     -fx-font-size: 16px;
     -fx-font-family: -apple-system;
+    -fx-text-alignment: center center;
     -fx-text-fill: white;
+    -fx-background-color: rgba(255, 137, 133, 0.8);
+    -fx-padding: 10px 45px;
 }

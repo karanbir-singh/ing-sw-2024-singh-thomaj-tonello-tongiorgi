@@ -17,7 +17,6 @@
     -fx-transition: 0.5s;
     -fx-background-size: 200% auto;
     -fx-color: white;
-    -fx-box-shadow: 0 0 20px #eee;
     -fx-border-radius: 10px;
     -fx-display: block;
 }
@@ -54,31 +53,22 @@
 }
 
 #nicknameTXT{
-    -fx-border-radius: 50px;
-    -fx-background-radius: 50px;
-    -fx-border-width: 0px;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 40px;
+    -fx-min-width: 150px;
+    -fx-border: none;
     -fx-font-size: 16px;
     -fx-min-height: 40px;
+    -fx-text-alignment: center center;
     -fx-effect: dropshadow( gaussian , transparent , 0,0,0,0 );
-    -fx-effect: innershadow( gaussian , transparent , 0,0,0,0 );
 }
 
 #nicknameTXT:hover{
-    -fx-border-radius: 50px;
-    -fx-background-radius: 50px;
-    -fx-border-width: 0px;
-    -fx-font-size: 16px;
-    -fx-min-height: 40px;
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.7) , 0,0,0,0 );
-    -fx-effect: innershadow( gaussian , #e3fff2 , 10,0,0,0 );
+    -fx-background-color: rgba(255, 255, 255, 0.85);
+    -fx-effect: dropshadow( gaussian , #e3fff2 , 20,0,0,0 );
 }
 
 #nicknameTXT:focused{
-    -fx-border-radius: 50px;
-    -fx-background-radius: 50px;
-    -fx-border-width: 0px;
-    -fx-font-size: 16px;
-    -fx-min-height: 40px;
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.7) , 0,0,0,0 );
-    -fx-effect: innershadow( gaussian , #e3fff2 , 10,0,0,0 );
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-effect: dropshadow( gaussian , #e3fff2 , 5,0,0,0 );
 }
