@@ -237,6 +237,7 @@ public class GameFlowController extends GenericController implements Initializab
         goldDeck.setOnMouseClicked(this::onClickCommonTableCard);
         goldens.add(goldDeck);
         index++;
+        
         for(Card card: simplifiedCommonTable.getCommonMissions()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(index));

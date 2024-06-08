@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.Printer;
 import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
+import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
 
 import java.io.Serializable;
@@ -132,6 +133,7 @@ public class Player implements Serializable {
                     new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
                     "Pawn color " + this.pawnColor + " has been picked!",
                     clientID);
+
         }
         return result;
     }

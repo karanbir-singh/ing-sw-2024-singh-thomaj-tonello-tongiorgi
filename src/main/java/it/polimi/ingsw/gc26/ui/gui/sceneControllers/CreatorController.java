@@ -17,10 +17,6 @@ public class CreatorController extends GenericController{
 
     @FXML
     private RadioButton fourthRadioButton;
-
-    @FXML
-    private Label status;
-
     private int numMaxPlayer = 0;
 
     @FXML
@@ -46,7 +42,6 @@ public class CreatorController extends GenericController{
     public void onClickButton(ActionEvent actionEvent) {
         try { //TODO da cambiare il nickname
             this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(),this.nickname,this.numMaxPlayer);
-            this.status.setText("Adesso aspetta che altri client entrino");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
