@@ -15,17 +15,12 @@
             <Image url="@../../../../images/background-upscaled.png" />
          </image>
       </ImageView>
-      <VBox fx:id="centerVBox" alignment="TOP_CENTER" layoutX="404.0" layoutY="9.0" prefHeight="542.0" prefWidth="175.0" spacing="20.0" AnchorPane.topAnchor="20.0">
+      <VBox fx:id="centerVBox" alignment="TOP_CENTER" layoutX="202.0" layoutY="66.0" prefHeight="357.0" prefWidth="559.0" spacing="20.0" AnchorPane.topAnchor="66.0">
          <children>
             <Label fx:id="status" text="How many players in the game?" />
-            <AnchorPane fx:id="menu" prefHeight="200.0" prefWidth="200.0">
+            <AnchorPane fx:id="menu">
                <children>
-                  <ImageView fitHeight="239.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../images/choice-background.png" />
-                     </image>
-                  </ImageView>
-                  <VBox layoutX="66.0" layoutY="69.0">
+                  <VBox layoutX="258.0" layoutY="59.0" prefHeight="166.0" prefWidth="43.0">
                      <children>
                         <RadioButton fx:id="secondRadioButton" mnemonicParsing="false" onAction="#onSecondRadioButtonClick" text="2" />
                         <RadioButton fx:id="thirdRadioButton" mnemonicParsing="false" onAction="#onThirdRadioButtonClick" text="3" />

@@ -81,20 +81,7 @@ public class CreatorController extends GenericController implements Initializabl
         playButton.setOnAction(this::onClickButton);
         secondRadioButton.setSelected(true);
 
-        initialImageWidth = background.getImage().getWidth();
-        initialImageHeight = background.getImage().getHeight();
-
-        background.fitHeightProperty().bind(rootPane.heightProperty());
-        background.fitWidthProperty().bind(rootPane.widthProperty());
-
-        rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            layout.updateViewport(rootPane, background, initialImageWidth, initialImageHeight);
-        });
-
-        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            layout.updateViewport(rootPane, background, initialImageWidth, initialImageHeight);
-        });
-
+        layout.setBackground(rootPane, background);
     }
 
     public void setStageListeners(Stage stage){

@@ -5,27 +5,29 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
 public class CommonLayout {
-    public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, TabPane personalBoardTabPane, VBox leftVBox, VBox rightVBox,
+    private Image gameBackground = new Image(getClass().getResource("/images/game-background.png").toExternalForm());
+    public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, TabPane personalBoardTabPane, HBox leftHBox, VBox rightVBox,
                              ImageView scoreBoard, ArrayList<ImageView> handCards, AnchorPane handPane){
 
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
+            setGameBackground(rootBorder);
             try {
-                leftVBox.setPrefHeight(rootBorder.getPrefHeight());
+                leftHBox.setPrefHeight(rootBorder.getPrefHeight());
             } catch (NullPointerException e) {}
             rightVBox.setPrefHeight(rootBorder.getPrefHeight());
             personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.50));
         });
 
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
+            setGameBackground(rootBorder);
             try {
                 scoreBoard.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.15));
             } catch (NullPointerException e) {
@@ -91,13 +93,37 @@ public class CommonLayout {
         button.getStyleClass().add("buttonClose");
     }
 
-    public void updateViewport(AnchorPane rootPane, ImageView background, double initialImageWidth, double initialImageHeight) {
-        double viewportWidth = Math.min(initialImageWidth, rootPane.getWidth());
-        double viewportHeight = Math.min(initialImageHeight, rootPane.getHeight());
+    public void setBackground(AnchorPane rootPane, ImageView background) {
+        double initialImageWidth = background.getImage().getWidth();
+        double initialImageHeight = background.getImage().getHeight();
+
+        background.fitHeightProperty().bind(rootPane.heightProperty());
+        background.fitWidthProperty().bind(rootPane.widthProperty());
+
+        rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            updateViewport(rootPane.getWidth(), rootPane.getHeight(), background, initialImageWidth, initialImageHeight);
+        });
+
+        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            updateViewport(rootPane.getWidth(), rootPane.getHeight(), background, initialImageWidth, initialImageHeight);
+        });
+    }
+
+    public void updateViewport(double paneWidth, double paneHeight, ImageView background, double initialImageWidth, double initialImageHeight) {
+        double viewportWidth = Math.min(initialImageWidth, paneWidth);
+        double viewportHeight = Math.min(initialImageHeight, paneHeight);
 
         double x = (initialImageWidth - viewportWidth) / 2;
         double y = (initialImageHeight - viewportHeight) / 2;
 
         background.setViewport(new Rectangle2D(x, y, viewportWidth, viewportHeight));
+    }
+
+    public void setGameBackground(BorderPane rootBorder) {
+        rootBorder.setBackground(new Background(new BackgroundImage(gameBackground,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                BackgroundSize.DEFAULT)));
     }
 }

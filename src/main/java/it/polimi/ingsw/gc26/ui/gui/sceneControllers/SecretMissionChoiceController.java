@@ -10,10 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 
 import java.net.URL;
@@ -80,9 +78,11 @@ public class SecretMissionChoiceController extends GenericController implements 
     @FXML
     ScrollPane rootScrollPane;
     @FXML
-    AnchorPane rootAnchor;
+    BorderPane rootBorder;
 
     private ArrayList<ImageView> cards = new ArrayList<>();
+    private ImageView image1 = new ImageView(new Image(getClass().getResource("/images/game-background.png").toExternalForm()));
+    BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
 
     String path = "/images/";
 
@@ -154,6 +154,8 @@ public class SecretMissionChoiceController extends GenericController implements 
         cards.add(secretMission1);
 
         CommonLayout layout = new CommonLayout();
+
+        layout.setGameBackground(rootBorder);
         //layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
 
     }

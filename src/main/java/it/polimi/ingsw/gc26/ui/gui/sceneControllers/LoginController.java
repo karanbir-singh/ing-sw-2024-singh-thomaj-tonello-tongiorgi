@@ -74,16 +74,14 @@ public class LoginController extends GenericController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initialImageWidth = background.getImage().getWidth();
-        initialImageHeight = background.getImage().getHeight();
+
+        layout.setBackground(rootPane, background);
 
         loginButton.setOnAction(this::onLoginButtonClick);
         nicknameTXT.setOnAction(event -> {
             loginButton.fire();
         });
 
-        background.fitHeightProperty().bind(rootPane.heightProperty());
-        background.fitWidthProperty().bind(rootPane.widthProperty());
         logo.fitWidthProperty().bind(rootPane.heightProperty());
         logoPane.setPrefHeight(rootPane.getHeight());
 
@@ -92,7 +90,6 @@ public class LoginController extends GenericController implements Initializable{
         AnchorPane.setRightAnchor(loginVBox, (rootPane.getWidth()-loginVBox.getWidth())/2);
 
         rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            layout.updateViewport(rootPane, background, initialImageWidth, initialImageHeight);
             AnchorPane.setRightAnchor(loginVBox, (rootPane.getWidth()-loginVBox.getWidth())/2);
 
             if(rootPane.getWidth() < 800){
@@ -111,7 +108,6 @@ public class LoginController extends GenericController implements Initializable{
             if(rootPane.getHeight() < 650 && rootPane.getWidth()<800){
                 AnchorPane.setBottomAnchor(logoBox, 0.0);
             }
-            layout.updateViewport(rootPane, background, initialImageWidth, initialImageHeight);
         });
     }
 }

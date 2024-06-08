@@ -46,20 +46,36 @@ import java.util.ResourceBundle;
 
 public class GameFlowController extends GenericController implements Initializable{
 
+    //Chat
     @FXML
-    public TitledPane chat;
+    private TitledPane chat;
     @FXML
-    public ImageView scoreBoard;
-    public Button scoreBoardButton;
-    public AnchorPane anchorPaneScoreBoard;
-    public HBox HBoxLeftPanel;
-    public AnchorPane anchorPaneChat;
-    public TabPane chatTabPane;
+    private AnchorPane anchorPaneChat;
+    @FXML
+    private TabPane chatTabPane;
     @FXML
     private Button chatButton;
-    public GridPane scoreBoardGrid;
+    private HashMap<String,VBox> chats = new HashMap<>();
+    private boolean chatHasBeenCreate = false;
+    private boolean chatIsVisible = false;
+    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
 
-    //hand
+    //ScoreBoard
+    @FXML
+    private ImageView scoreBoard;
+    @FXML
+    private Button scoreBoardButton;
+    @FXML
+    private AnchorPane anchorPaneScoreBoard;
+    @FXML
+    private GridPane scoreBoardGrid;
+    private boolean scoreBoardIsVisible = false;
+    private ImageView scoreIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/sparkle-icon-white.png").toExternalForm()));
+    private ImageView scoreIconClose = new ImageView(new Image(getClass().getResource("/images/icons/sparkle-icon-white.png").toExternalForm()));
+
+
+    //Hand
     @FXML
     private AnchorPane handPane;
     //end hand
@@ -81,6 +97,7 @@ public class GameFlowController extends GenericController implements Initializab
     //end CommonTable
 
 
+    //PersonalBoard
     @FXML
     private GridPane gridPane;
     @FXML
@@ -90,22 +107,19 @@ public class GameFlowController extends GenericController implements Initializab
     private TabPane personalBoardTabPane;
     private final int xPositionStarterCard = 40;
     private final int yPositionStarterCard = 40;
+    private ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
+    private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
 
-    private HashMap<String,VBox> chats = new HashMap<>();
 
-    private boolean scoreBoardIsVisible = false;
-    private boolean chatIsVisible = false;
-    private ImageView scoreIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/sparkle-icon-white.png").toExternalForm()));
-    private ImageView scoreIconClose = new ImageView(new Image(getClass().getResource("/images/icons/sparkle-icon-white.png").toExternalForm()));
-    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
-    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
 
     //layout
     CommonLayout layout = new CommonLayout();
     @FXML
-    private VBox rightVBox;
+    private HBox HBoxLeftPanel;
     @FXML
-    private VBox leftVBox;
+    private VBox centerVBox;
+    @FXML
+    private VBox rightVBox;
     @FXML
     private BorderPane rootBorder;
     @FXML
@@ -114,16 +128,14 @@ public class GameFlowController extends GenericController implements Initializab
     private ImageView background;
     @FXML
     private AnchorPane rootAnchor;
+    private double initialImageHeight;
+    private double initialImageWidth;
 
     private ArrayList<ImageView> cards = new ArrayList<>();
     private ArrayList<ImageView> playablePrositions = new ArrayList<>();
     private ArrayList<ImageView> handCards = new ArrayList<>();
 
-    private boolean chatHasBeenCreate = false;
     private String path = "/images/";
-    private ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
-    private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
-
 
     //forDraggability
     private double mouseAnchorX;
@@ -359,9 +371,11 @@ public class GameFlowController extends GenericController implements Initializab
 
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        layout.setGameBackground(rootBorder);
+
+        //buttons setup
         layout.buttonSetup(scoreIconClose, scoreIconVisible, scoreBoardButton);
         scoreBoardButton.setOnAction(this::toggleScoreBoard);
         layout.buttonSetup(chatIconClose, chatIconVisible, chatButton);
@@ -369,14 +383,13 @@ public class GameFlowController extends GenericController implements Initializab
 
 
         //page layout and dimensions bindings
-        layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, leftVBox, rightVBox, scoreBoard, handCards, handPane);
+        layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, HBoxLeftPanel, rightVBox, scoreBoard, handCards, handPane);
         layout.handLayout(rootBorder, handCards, handPane);
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
 
         this.creationAndSettingGridContraints(this.gridPane);
-
     }
 
     private void creationAndSettingGridContraints(GridPane gridPane){
@@ -530,7 +543,7 @@ public class GameFlowController extends GenericController implements Initializab
         hBox.setMinWidth(240);
         hBox.setMaxWidth(240);
         textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.setStyle("-fx-font-smoothing-type: gray;" + "-fx-text-fill: white;");
+        text.setStyle("-fx-font-smoothing-type: #a8a8a8 ;" + "-fx-text-fill: white;");
         text.setFill(Color.color(1, 1, 1));
         hBox.getChildren().add(textFlow);
         newVBox.getChildren().add(hBox);

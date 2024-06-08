@@ -22,18 +22,6 @@ public class WaitingController extends GenericController implements Initializabl
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initialImageWidth = background.getImage().getWidth();
-        initialImageHeight = background.getImage().getHeight();
-
-        background.fitHeightProperty().bind(rootPane.heightProperty());
-        background.fitWidthProperty().bind(rootPane.widthProperty());
-
-        rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            layout.updateViewport(rootPane, background, initialImageWidth, initialImageHeight);
-        });
-
-        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            layout.updateViewport(rootPane, background, initialImageWidth, initialImageHeight);
-        });
+        layout.setBackground(rootPane, background);
     }
 }

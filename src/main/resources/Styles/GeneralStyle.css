@@ -52,7 +52,7 @@
 
 .buttonClose:hover {
     -fx-background-color: linear-gradient(to top, #0bbdd9 10%, #0dd696 100%, #fffb8f );
-    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.8)  , 5, 0.5, 0,1 );
+    -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0,0,1 );
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
     -fx-text-fill: black;
@@ -83,7 +83,7 @@
 
 .buttonVisible:hover {
     -fx-background-color: linear-gradient(to top, #0bbdd9 10%, #0dd696 100%, #fffb8f );
-    -fx-effect: dropshadow( gaussian , rgba(255, 255, 255, 0.8)  , 5, 0.5, 0,1 );
+    -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0,0,1 );
     -fx-text-fill: black;
     -fx-font-size: 12px;
     -fx-background-radius: 50px;
