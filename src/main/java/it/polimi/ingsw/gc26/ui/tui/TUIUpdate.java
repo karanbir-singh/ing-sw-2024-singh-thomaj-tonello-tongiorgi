@@ -116,13 +116,13 @@ public class TUIUpdate implements UpdateInterface {
     @Override
     public void showMessage(String message) {
         //clearConsole();
-        System.out.println(message);
+        System.out.println(STR."[SERVER]: \{message}");
         //printOptions();
     }
 
     @Override
     public void showError(String message) {
-        System.err.println(message);
+        System.err.println(STR."[ERROR]: \{message}");
         printOptions(getGameState());
     }
 

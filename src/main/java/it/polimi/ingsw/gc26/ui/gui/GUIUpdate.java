@@ -9,6 +9,10 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
 public class GUIUpdate implements UpdateInterface {
     GUIApplication guiApplication;
 
@@ -123,20 +127,31 @@ public class GUIUpdate implements UpdateInterface {
                 Platform.runLater(()->{
                     guiApplication.setCurrentSceneAndShow(SceneEnum.GAMEFLOW);
                     this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
+                    this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().updatePointScoreBoard(simplifiedGame.getScores(), simplifiedGame.getPawnsSelected());
                 });
                 break;
         }
+
 
     }
 
     @Override
     public void showMessage(String message) {
-        return;
+        try {
+            Platform.runLater(()-> this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, false));
+        } catch (Exception e) {
+            String a = "";
+        }
         //Platform.runLater(()->this.guiApplication.openInfoPopup(message)); //TODO kevin
     }
 
     @Override
     public void showError(String message) {
-        Platform.runLater(()->this.guiApplication.openErrorPopup(message));
+        try {
+            Platform.runLater(()->this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, true));
+        } catch (Exception e) {
+            String d = "";
+        }
+        //Platform.runLater(()->this.guiApplication.openErrorPopup(message));
     }
 }

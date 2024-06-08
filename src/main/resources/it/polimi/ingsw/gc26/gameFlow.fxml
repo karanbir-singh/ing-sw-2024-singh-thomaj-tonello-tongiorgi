@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -126,6 +128,24 @@
                   <VBox fx:id="secretMissionBox" prefHeight="200.0" prefWidth="100.0" spacing="20.0" />
                   <Button fx:id="turnSideButton" mnemonicParsing="false" onAction="#onClickTurnSideButton" text="TurnSide" />
                   <Button fx:id="drawCardButton" mnemonicParsing="false" onAction="#onClickDrawCardButton" text="DrawCard" />
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <VBox layoutY="-1.0" prefHeight="207.2" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <TextField alignment="CENTER" editable="false" text="Messages from Server">
+                                 <cursor>
+                                    <Cursor fx:constant="DISAPPEAR" />
+                                 </cursor>
+                              </TextField>
+                              <ScrollPane fx:id="serverMessagesScrollPane" prefHeight="200.0" prefWidth="200.0" vvalue="1.0">
+                                 <content>
+                                    <VBox fx:id="serverMessagesDisplayer" prefHeight="168.0" prefWidth="178.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
                   </children>
                <BorderPane.margin>
                   <Insets left="20.0" />
@@ -140,15 +160,26 @@
                <children>
                   <AnchorPane maxWidth="50.0" minWidth="40.0" prefHeight="889.0" prefWidth="50.0">
                      <children>
-                        <ButtonBar buttonMinWidth="40.0" buttonOrder="U+FBIX_NCYOA_R" layoutX="-80.0" layoutY="88.0" maxHeight="30.0" prefHeight="30.0" prefWidth="200.0" rotate="90.0">
+                        <ButtonBar buttonMinWidth="40.0" buttonOrder="U+FBIX_NCYOA_R" layoutX="-155.0" layoutY="162.0" maxHeight="30.0" prefWidth="350.0" rotate="90.0">
                           <buttons>
-                            <Button fx:id="scoreBoardButton" mnemonicParsing="false" onAction="#toggleScoreBoard" text="Score Board" />
-                              <Button layoutX="135.0" layoutY="17.0" mnemonicParsing="false" onAction="#toggleChat" text="Chat" />
+                            <Button fx:id="scoreBoardButton" mnemonicParsing="false" onAction="#toggleScoreBoard" text="Score Board">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Button>
+                              <Button layoutX="135.0" layoutY="17.0" mnemonicParsing="false" onAction="#toggleChat" text="Chat">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></Button>
+                              <Button layoutX="116.0" layoutY="12.0" mnemonicParsing="false" onAction="#openRulebook" text="Open Rulebook">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
                           </buttons>
                         </ButtonBar>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="anchorPaneScoreBoard" prefHeight="889.0" prefWidth="107.0" translateY="-2000.0">
+                  <AnchorPane fx:id="anchorPaneScoreBoard" prefHeight="889.0" prefWidth="107.0" translateX="-2000.0">
                      <children>
                         <ImageView fx:id="scoreBoard1" fitHeight="480.0" fitWidth="290.0" pickOnBounds="true">
                            <image>
@@ -191,6 +222,9 @@
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" right="-10.0" top="3.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="5" GridPane.rowIndex="1">
                                  <columnConstraints>
@@ -201,6 +235,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="10.0" right="-5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="7" GridPane.rowIndex="1">
                                  <columnConstraints>
@@ -211,6 +248,9 @@
                                     <RowConstraints maxHeight="33.59999313354492" minHeight="10.0" prefHeight="30.4" vgrow="SOMETIMES" />
                                     <RowConstraints maxHeight="34.4" minHeight="10.0" prefHeight="30.4" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets right="-3.0" top="3.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="2" GridPane.rowIndex="2">
                                  <columnConstraints>
@@ -221,6 +261,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane prefWidth="30.0" GridPane.columnIndex="5" GridPane.rowIndex="2">
                                  <columnConstraints>
@@ -231,6 +274,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="-15.0" right="-5.0" top="15.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="8" GridPane.rowIndex="2">
                                  <columnConstraints>
@@ -241,6 +287,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets left="3.0" right="-3.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="8" GridPane.rowIndex="4">
                                  <columnConstraints>
@@ -251,6 +300,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="20.0" left="3.0" right="-3.0" top="-5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="5" GridPane.rowIndex="4">
                                  <columnConstraints>
@@ -261,6 +313,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="-10.0" left="5.0" right="-5.0" top="20.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="2" GridPane.rowIndex="4">
                                  <columnConstraints>
@@ -271,6 +326,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="20.0" left="5.0" top="-5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="2" GridPane.rowIndex="5">
                                  <columnConstraints>
@@ -281,6 +339,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="10.0" left="5.0" top="-5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="8" GridPane.rowIndex="5">
                                  <columnConstraints>
@@ -291,6 +352,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="10.0" left="5.0" right="-5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="8" GridPane.rowIndex="6">
                                  <columnConstraints>
@@ -301,6 +365,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" right="-5.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="6" GridPane.rowIndex="6">
                                  <columnConstraints>
@@ -311,6 +378,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="-5.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="4" GridPane.rowIndex="6">
                                  <columnConstraints>
@@ -321,6 +391,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="2" GridPane.rowIndex="6">
                                  <columnConstraints>
@@ -331,6 +404,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="2" GridPane.rowIndex="7">
                                  <columnConstraints>
@@ -341,6 +417,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="4" GridPane.rowIndex="7">
                                  <columnConstraints>
@@ -351,6 +430,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="6" GridPane.rowIndex="7">
                                  <columnConstraints>
@@ -361,6 +443,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" right="-5.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="8" GridPane.rowIndex="7">
                                  <columnConstraints>
@@ -371,6 +456,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="-5.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="2" GridPane.rowIndex="8">
                                  <columnConstraints>
@@ -381,6 +469,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" top="10.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="4" GridPane.rowIndex="8">
                                  <columnConstraints>
@@ -391,6 +482,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets right="-5.0" top="10.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="6" GridPane.rowIndex="8">
                                  <columnConstraints>
@@ -401,6 +495,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets left="3.0" right="-10.0" top="10.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="8" GridPane.rowIndex="8">
                                  <columnConstraints>
@@ -411,6 +508,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets left="5.0" right="-5.0" top="10.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="2" GridPane.rowIndex="9">
                                  <columnConstraints>
@@ -421,6 +521,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" top="10.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="4" GridPane.rowIndex="9">
                                  <columnConstraints>
@@ -431,6 +534,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" top="10.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="8" GridPane.rowIndex="9">
                                  <columnConstraints>
@@ -441,6 +547,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="2.0" right="-5.0" top="10.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="6" GridPane.rowIndex="9">
                                  <columnConstraints>
@@ -451,6 +560,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="-5.0" top="10.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="7" GridPane.rowIndex="10">
                                  <columnConstraints>
@@ -461,6 +573,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="-10.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="5" GridPane.rowIndex="10">
                                  <columnConstraints>
@@ -471,6 +586,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="3.0" right="-7.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                               <GridPane GridPane.columnIndex="3" GridPane.rowIndex="10">
                                  <columnConstraints>
@@ -481,6 +599,9 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" right="-5.0" top="5.0" />
+                                 </GridPane.margin>
                               </GridPane>
                            </children>
                         </GridPane>

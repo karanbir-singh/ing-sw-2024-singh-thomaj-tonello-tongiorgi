@@ -137,7 +137,7 @@ public class ViewController {
      */
 
     public void showMessage(String message) {
-        System.out.println(STR."[SERVER]: \{message}");
+        this.simplifiedModel.getView().showMessage(message);
     }
 
     /**
@@ -146,7 +146,7 @@ public class ViewController {
      * @param errorMessage
      */
     public void showError(String errorMessage) {
-        System.err.println(STR."[ERROR]: \{errorMessage}");
+        this.simplifiedModel.getView().showError(errorMessage);
     }
 
     public void setGameID(int gameID){
