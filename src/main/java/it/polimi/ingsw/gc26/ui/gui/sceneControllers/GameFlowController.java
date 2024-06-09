@@ -757,34 +757,34 @@ public class GameFlowController extends SceneController implements Initializable
     }
 
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected){
-        clearScoreBoard();
-
-        for (Map.Entry<String, Integer> playerScore : scores.entrySet()) {
-            if (pawnsSelected.containsKey(playerScore.getKey())) {
-                Point pawnPoint = PawnsCoords.getCoords(playerScore.getValue());
-                Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
-                if (cell != null) {
-                    GridPane miniGrid = ((GridPane) cell);
-                    Circle circle = new Circle(6);
-                    circle.setFill(Color.valueOf(pawnsSelected.get(playerScore.getKey()).toString()));
-                    Platform.runLater(()-> {switch (miniGrid.getChildren().size()) {
-                        case 0 :
-                            miniGrid.add(circle, 0, 0);
-                            break;
-                        case 1:
-                            miniGrid.add(circle, 0, 1);
-                            break;
-                        case 2:
-                            miniGrid.add(circle, 1, 0);
-                            break;
-                        case 3:
-                            miniGrid.add(circle, 1, 1);
-                            break;
-                    }});
-
-
-                }
-            }
-        }
+//        clearScoreBoard();
+//
+//        for (Map.Entry<String, Integer> playerScore : scores.entrySet()) {
+//            if (pawnsSelected.containsKey(playerScore.getKey())) {
+//                Point pawnPoint = PawnsCoords.getCoords(playerScore.getValue());
+//                Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
+//                if (cell != null) {
+//                    GridPane miniGrid = ((GridPane) cell);
+//                    Circle circle = new Circle(6);
+//                    circle.setFill(Color.valueOf(pawnsSelected.get(playerScore.getKey()).toString()));
+//                    Platform.runLater(()-> {switch (miniGrid.getChildren().size()) {
+//                        case 0 :
+//                            miniGrid.add(circle, 0, 0);
+//                            break;
+//                        case 1:
+//                            miniGrid.add(circle, 0, 1);
+//                            break;
+//                        case 2:
+//                            miniGrid.add(circle, 1, 0);
+//                            break;
+//                        case 3:
+//                            miniGrid.add(circle, 1, 1);
+//                            break;
+//                    }});
+//
+//
+//                }
+//            }
+//        }
     }
 }

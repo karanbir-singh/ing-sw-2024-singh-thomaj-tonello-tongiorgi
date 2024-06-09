@@ -16,7 +16,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
-public class CreatorController extends SceneController {
+public class CreatorController extends SceneController implements Initializable{
 
     @FXML
     private AnchorPane rootPane;

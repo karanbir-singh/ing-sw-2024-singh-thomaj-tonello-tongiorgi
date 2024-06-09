@@ -13,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -73,7 +75,6 @@ public class GUIApplication extends Application implements UIInterface {
         this.primaryStage = primaryStage;
         primaryStage.setHeight(400);
         primaryStage.setWidth(600);
-        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/title.png"))));
         primaryStage.setTitle(" Codex Naturalis");
         primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/icon.png"))));
 

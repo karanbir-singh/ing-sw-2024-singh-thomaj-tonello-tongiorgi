@@ -21,7 +21,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
-public class LoginController extends SceneController {
+public class LoginController extends SceneController implements Initializable{
 
     @FXML
     private Label status;
