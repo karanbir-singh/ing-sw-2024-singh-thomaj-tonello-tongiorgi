@@ -362,7 +362,33 @@ public class Game implements Serializable {
     public void removePawn(Pawn pawn) {
         availablePawns.remove(pawn);
 
-        // TODO notifica a tutti i client che è stato preso un colore
+        HashMap<String, Integer> points = new HashMap<>();
+        for (Player player : this.players) {
+            if (player.getPersonalBoard() != null) {
+                points.put(player.getNickname(), player.getPersonalBoard().getScore());
+            } else {
+                points.put(player.getNickname(), 0);
+            }
+
+        }
+        ArrayList<String> nicknameWinners = new ArrayList<>();
+        for (Player winner : this.winners) {
+            nicknameWinners.add(winner.getNickname());
+        }
+        String currentPlayerNickname = null;
+        if (this.currentPlayer != null) {
+            currentPlayerNickname = this.currentPlayer.getNickname();
+        }
+
+        HashMap<String, Pawn> pawnsSelected = new HashMap<>();
+        for (Player player : this.players) {
+            pawnsSelected.put(player.getNickname(), player.getPawnColor());
+        }
+
+        this.observable.notifyUpdateGame(
+                new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected),
+                pawn.toString() + " color has been chosen"
+        );
     }
 
     /**

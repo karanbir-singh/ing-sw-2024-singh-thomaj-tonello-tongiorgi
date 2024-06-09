@@ -93,31 +93,31 @@ public class GUIUpdate implements UpdateInterface {
 
     /**
      * Updates the current showed scene
+     *
      * @param simplifiedGame game
      */
     @Override
     public void updateGame(SimplifiedGame simplifiedGame) {
         switch (simplifiedGame.getGameState()) {
             case WAITING_STARTER_CARD_PLACEMENT:
-                Platform.runLater(() -> this.guiApplication.setCurrentScene(SceneEnum.STARTERCARDCHOICE));
+                this.guiApplication.setCurrentScene(SceneEnum.STARTERCARDCHOICE);
                 break;
             case WAITING_PAWNS_SELECTION:
-                Platform.runLater(() -> this.guiApplication.setCurrentScene(SceneEnum.PAWNSELECTION));
+                this.guiApplication.setCurrentScene(SceneEnum.PAWNSELECTION);
                 break;
             case WAITING_SECRET_MISSION_CHOICE:
-                Platform.runLater(() -> this.guiApplication.setCurrentScene(SceneEnum.SECRETMISSIONCHOICE));
+                this.guiApplication.setCurrentScene(SceneEnum.SECRETMISSIONCHOICE);
                 break;
             case GAME_STARTED:
-                Platform.runLater(() -> {
-                    this.guiApplication.setCurrentScene(SceneEnum.GAMEFLOW))
-                    this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname();
-                });
+                this.guiApplication.setCurrentScene(SceneEnum.GAMEFLOW);
+                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
                 break;
         }
 
-        if(this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)){
-            this.guiApplication.getCurrentScene().getSceneController().changeGUIGame(simplifiedGame); ; //cosi aggiorno solo questa
-        }else{
+        if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
+            this.guiApplication.getCurrentScene().getSceneController().changeGUIGame(simplifiedGame);
+            ; //cosi aggiorno solo questa
+        } else {
             this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().changeGUIGame(simplifiedGame);
             this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIGame(simplifiedGame);
             this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIGame(simplifiedGame);
