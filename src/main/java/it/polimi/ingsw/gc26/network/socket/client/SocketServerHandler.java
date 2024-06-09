@@ -203,7 +203,7 @@ public class SocketServerHandler implements Runnable {
         }
 
 
-        return new SimplifiedCommonTable(resourceCard, goldCard, commonMission, resourceCards, goldCards,6);
+        return new SimplifiedCommonTable(resourceCard, goldCard, commonMission, resourceCards, goldCards, 6);
     }
 
     private GoldCard getGoldCard(JsonNode encodedCard) {
@@ -272,7 +272,9 @@ public class SocketServerHandler implements Runnable {
     }
 
     private MissionCard getMissionCard(JsonNode encodedCard) {
-        if (encodedCard.isEmpty()) { return null;}
+        if (encodedCard.isEmpty()) {
+            return null;
+        }
         String imagePathFront = encodedCard.get("imagePathFront").asText();
         MissionCardFront missionCardFront = switch (encodedCard.get("cardType").asText()) {
             case "MissionLPattern" ->
@@ -434,9 +436,9 @@ public class SocketServerHandler implements Runnable {
                                 requestedResources, corners.get(0), corners.get(1), corners.get(2),
                                 corners.get(3), position.get("side").get("imagePathFront").asText());
                         break;
-                    case "GoldCardFront" :
+                    case "GoldCardFront":
                         side = new GoldCardFront(position.get("side").get("sideSymbol").asText().isEmpty() ? null : Symbol.valueOf(position.get("side").get("sideSymbol").asText()),
-                        requestedResources, position.get("side").get("points").asInt(), corners.get(0), corners.get(1),
+                                requestedResources, position.get("side").get("points").asInt(), corners.get(0), corners.get(1),
                                 corners.get(2), corners.get(3), position.get("side").get("imagePathFront").asText());
                         break;
                     case null, default:

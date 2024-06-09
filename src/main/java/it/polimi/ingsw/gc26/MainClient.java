@@ -37,6 +37,11 @@ public class MainClient {
     private String clientID;
 
     /**
+     * Client's nickname
+     */
+    private String nickname;
+
+    /**
      * State of the client
      */
     private ClientState clientState;
@@ -248,6 +253,21 @@ public class MainClient {
         System.exit(0);
     }
 
+    /**
+     * Return the client's nickname
+     * @return
+     */
+    public String getNickname() {
+        return nickname;
+    }
+
+    /**
+     * Set's the client's nickname
+     * @param nickname
+     */
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public static void main(String args[]) {
         // print logo

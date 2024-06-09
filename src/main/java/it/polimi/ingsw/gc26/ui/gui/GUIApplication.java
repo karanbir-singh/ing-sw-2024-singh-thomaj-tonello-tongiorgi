@@ -180,6 +180,7 @@ public class GUIApplication extends Application implements UIInterface {
             }
         }
 
+        mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             Platform.runLater(() -> {
                 this.getSceneController(SceneEnum.CREATOR).setNickName(this.getSceneController(SceneEnum.LOGIN).getNickName());
@@ -277,6 +278,10 @@ public class GUIApplication extends Application implements UIInterface {
 
     private void setToAllControllersNickname() {
         scenes.forEach(scene -> scene.getSceneController().setNickName(((LoginController) this.getSceneController(SceneEnum.LOGIN)).getText()));
+    }
+
+    public String getNickname() {
+        return mainClient.getNickname();
     }
 
 }

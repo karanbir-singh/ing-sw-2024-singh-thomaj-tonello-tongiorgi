@@ -48,4 +48,11 @@ public class SceneController {
 
     }
 
+    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
+
+    }
+    public void changeGUIGame(SimplifiedGame simplifiedGame){
+
+    }
+
 }

@@ -17,10 +17,6 @@ public class CreatorController extends SceneController {
 
     @FXML
     private RadioButton fourthRadioButton;
-
-    @FXML
-    private Label status;
-
     private int numMaxPlayer = 0;
 
     @FXML
@@ -48,7 +44,6 @@ public class CreatorController extends SceneController {
     public void onClickButton(ActionEvent actionEvent) {
         try { //TODO da cambiare il nickname
             this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(),this.nickname,this.numMaxPlayer);
-            this.status.setText("Now wait other players to join...");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

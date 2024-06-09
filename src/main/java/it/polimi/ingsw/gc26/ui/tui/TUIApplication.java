@@ -126,6 +126,7 @@ public class TUIApplication implements UIInterface {
                 System.err.flush();
                 System.out.println("Insert new nickname: ");
                 nickname = scanner.nextLine();
+                this.mainClient.setNickname(nickname);
 
                 this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), nickname, this.mainClient.getClientState());
 
