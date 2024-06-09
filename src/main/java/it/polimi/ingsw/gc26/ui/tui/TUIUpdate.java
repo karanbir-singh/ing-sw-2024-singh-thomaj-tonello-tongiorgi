@@ -15,6 +15,7 @@ public class TUIUpdate implements UpdateInterface {
     }
 
     private CLI cli;
+
     @Override
     public void updateViewCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         clearConsole();
@@ -118,13 +119,13 @@ public class TUIUpdate implements UpdateInterface {
     @Override
     public void showMessage(String message) {
         //clearConsole();
-        System.out.println(STR."[SERVER]: \{message}");
+        System.out.println("[SERVER]: " + message);
         //printOptions();
     }
 
     @Override
     public void showError(String message) {
-        System.err.println(STR."[ERROR]: \{message}");
+        System.err.println("[ERROR]: " + message);
         printOptions(getGameState());
     }
 
@@ -136,13 +137,14 @@ public class TUIUpdate implements UpdateInterface {
 //        } catch (InterruptedException e) {
 //            throw new RuntimeException(e);
 //        } catch (IOException e) {
-            //System.out.print("\033[H\033[2J");
-            // System.out.print("\033\143");
+        //System.out.print("\033[H\033[2J");
+        // System.out.print("\033\143");
         //}
     }
 
     /**
      * auxiliary function to get the current game state
+     *
      * @return
      */
     private GameState getGameState() {
@@ -157,6 +159,7 @@ public class TUIUpdate implements UpdateInterface {
 
     /**
      * Print's the options depending on the current game state
+     *
      * @param gameState
      */
     public static void printOptions(GameState gameState) {
