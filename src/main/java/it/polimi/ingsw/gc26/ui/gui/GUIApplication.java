@@ -153,6 +153,7 @@ public class GUIApplication extends Application implements UIInterface {
         mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             Platform.runLater(() -> {
+                this.getSceneInfo(SceneEnum.CREATOR).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
                 this.getSceneController(SceneEnum.CREATOR).setNickName(this.getSceneController(SceneEnum.LOGIN).getNickName());
             });
             Platform.runLater(() -> this.primaryStage.setScene(this.getSceneInfo(SceneEnum.CREATOR).getScene()));

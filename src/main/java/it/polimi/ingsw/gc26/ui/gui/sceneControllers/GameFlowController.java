@@ -205,6 +205,8 @@ public class GameFlowController extends GenericController implements Initializab
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
         System.out.println("selected index: " + simplifiedCommonTable.getSelectedIndex());
 
+        layout.setGameBackground(rootBorder);
+
         int index = 0;
         for(Card card: simplifiedCommonTable.getResourceCards()){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
@@ -274,6 +276,7 @@ public class GameFlowController extends GenericController implements Initializab
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
         handCards = new ArrayList<>();
 
+        layout.setGameBackground(rootBorder);
         int index = 0;
         for(Card card: simplifiedHand.getCards()){
             ImageView imageView;
@@ -301,6 +304,7 @@ public class GameFlowController extends GenericController implements Initializab
     public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         playablePrositions = new ArrayList<>();
 
+        layout.setGameBackground(rootBorder);
         if(personalBoard.getSecretMission() != null){
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + personalBoard.getSecretMission().getFront().getImagePath()))));
             this.setParameters(imageView,"0");
@@ -328,6 +332,8 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void changeGUIotherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard){
+
+        layout.setGameBackground(rootBorder);
         boolean exist = false;
         Tab consideredTab = null;
         ScrollPane otherScrollPane = null;
@@ -367,7 +373,6 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        layout.setGameBackground(rootBorder);
 
         //buttons setup
         layout.buttonSetup(scoreIconClose, scoreIconVisible, scoreBoardButton);
@@ -386,6 +391,8 @@ public class GameFlowController extends GenericController implements Initializab
         rowConstraints.setValignment(VPos.CENTER);
 
         this.creationAndSettingGridContraints(this.gridPane);
+
+        layout.setGameBackground(rootBorder);
     }
 
     private void creationAndSettingGridContraints(GridPane gridPane){
@@ -575,6 +582,8 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
+
+        layout.setGameBackground(rootBorder);
         Message newMessage = simplifiedChat.getMessages().getLast();
         if (newMessage.getReceiver() == null) {
             if (!newMessage.getSender().getNickname().equals(nickname)) {

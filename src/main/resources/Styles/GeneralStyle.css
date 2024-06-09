@@ -159,3 +159,15 @@
     -fx-border-radius: 50px;
     -fx-background-radius: 50px;
 }
+
+.number-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.number-button:hover {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+
+    -fx-effect: dropshadow( gaussian , #fffff0  , 10,0,0,1 );
+}

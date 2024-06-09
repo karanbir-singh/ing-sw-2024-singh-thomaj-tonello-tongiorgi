@@ -15,6 +15,7 @@ public class WaitingController extends GenericController implements Initializabl
     @FXML
     ImageView background;
 
+
     private CommonLayout layout = new CommonLayout();
     private double initialImageHeight;
     private double initialImageWidth;
@@ -23,5 +24,6 @@ public class WaitingController extends GenericController implements Initializabl
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         layout.setBackground(rootPane, background);
+
     }
 }

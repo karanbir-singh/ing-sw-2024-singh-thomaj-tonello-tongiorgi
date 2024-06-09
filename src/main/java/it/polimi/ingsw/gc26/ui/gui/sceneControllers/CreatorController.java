@@ -24,13 +24,11 @@ public class CreatorController extends GenericController implements Initializabl
     private ImageView background;
 
     @FXML
-    private RadioButton secondRadioButton;
-
+    private Button twoButton;
     @FXML
-    private RadioButton thirdRadioButton;
-
+    private Button threeButton;
     @FXML
-    private RadioButton fourthRadioButton;
+    private Button fourButton;
 
     @FXML
     private Label status;
@@ -39,30 +37,35 @@ public class CreatorController extends GenericController implements Initializabl
     private Button playButton;
 
     @FXML
-    private AnchorPane menu;
+    private ImageView selector;
+    @FXML
+    private ImageView selector1;
+    @FXML
+    private ImageView selector2;
 
     private int numMaxPlayer = 2;
     private final CommonLayout layout = new CommonLayout();
-    private double initialImageWidth;
-    private double initialImageHeight;
 
     @FXML
-    public void onSecondRadioButtonClick(ActionEvent actionEvent){
-        this.numMaxPlayer = Integer.parseInt(secondRadioButton.getText());
-        this.thirdRadioButton.setSelected(false);
-        this.fourthRadioButton.setSelected(false);
+    public void onSecondButtonClick(ActionEvent actionEvent){
+        this.numMaxPlayer = 2;
+        selector.setVisible(true);
+        selector1.setVisible(false);
+        selector2.setVisible(false);
     }
     @FXML
-    public void onThirdRadioButtonClick(ActionEvent actionEvent){
-        this.numMaxPlayer = Integer.parseInt(thirdRadioButton.getText());
-        this.secondRadioButton.setSelected(false);
-        this.fourthRadioButton.setSelected(false);
+    public void onThirdButtonClick(ActionEvent actionEvent){
+        this.numMaxPlayer = 3;
+        selector1.setVisible(true);
+        selector.setVisible(false);
+        selector2.setVisible(false);
     }
     @FXML
-    public void onFourthRadioButtonClick(ActionEvent actionEvent){
-        this.numMaxPlayer = Integer.parseInt(fourthRadioButton.getText());
-        this.thirdRadioButton.setSelected(false);
-        this.secondRadioButton.setSelected(false);
+    public void onFourthButtonClick(ActionEvent actionEvent){
+        this.numMaxPlayer = 4;
+        selector2.setVisible(true);
+        selector1.setVisible(false);
+        selector.setVisible(false);
     }
 
     @FXML
@@ -79,18 +82,17 @@ public class CreatorController extends GenericController implements Initializabl
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         playButton.setOnAction(this::onClickButton);
-        secondRadioButton.setSelected(true);
+
+        twoButton.setOnAction(this::onSecondButtonClick);
+        twoButton.getStyleClass().add("number-button");
+
+        threeButton.setOnAction(this::onThirdButtonClick);
+        threeButton.getStyleClass().add("number-button");
+
+        fourButton.setOnAction(this::onFourthButtonClick);
+        fourButton.getStyleClass().add("number-button");
 
         layout.setBackground(rootPane, background);
     }
 
-    public void setStageListeners(Stage stage){
-        rootPane.prefWidthProperty().bind(stage.widthProperty());
-        rootPane.prefHeightProperty().bind(stage.heightProperty());
-        background.fitHeightProperty().bind(stage.heightProperty());
-
-        stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            rootPane.prefWidthProperty().bind(stage.widthProperty());
-        });
-    }
 }

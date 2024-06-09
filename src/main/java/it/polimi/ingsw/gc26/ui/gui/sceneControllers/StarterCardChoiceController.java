@@ -74,14 +74,6 @@ public class StarterCardChoiceController extends GenericController implements In
 
 
     String path = "/images/";
-    public void onClickFlipButton(ActionEvent event){
-        try {
-            this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
-
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void onClickGoToNextStep(ActionEvent event){
         try {
