@@ -5,6 +5,10 @@ import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
 public class GUIUpdate implements UpdateInterface {
     GUIApplication guiApplication;
 
@@ -111,6 +115,7 @@ public class GUIUpdate implements UpdateInterface {
             case GAME_STARTED:
                 this.guiApplication.setCurrentScene(SceneEnum.GAMEFLOW);
                 this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
+                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().updatePointScoreBoard(simplifiedGame.getScores(), simplifiedGame.getPawnsSelected());
                 break;
         }
 
@@ -130,11 +135,19 @@ public class GUIUpdate implements UpdateInterface {
 
     @Override
     public void showMessage(String message) {
+        try {
+            Platform.runLater(()-> this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, false));
+        } catch (Exception e) {
+        }
         //Platform.runLater(()->this.guiApplication.openInfoPopup(message)); //TODO kevin
     }
 
     @Override
     public void showError(String message) {
-        Platform.runLater(() -> this.guiApplication.openErrorPopup(message));
+        try {
+            Platform.runLater(()->this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, true));
+        } catch (Exception e) {
+        }
+        //Platform.runLater(()->this.guiApplication.openErrorPopup(message));
     }
 }

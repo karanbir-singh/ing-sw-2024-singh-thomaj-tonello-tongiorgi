@@ -14,8 +14,10 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Arrays;
 
 
@@ -283,5 +285,18 @@ public class GUIApplication extends Application implements UIInterface {
     public String getNickname() {
         return mainClient.getNickname();
     }
+
+    public static void openRulebook() {
+
+        if (Desktop.isDesktopSupported()) {
+            try {
+                File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
+                Desktop.getDesktop().open(myFile);
+            } catch (IOException ex) {
+                // no application registered for PDFs
+            }
+        }
+    }
+
 
 }

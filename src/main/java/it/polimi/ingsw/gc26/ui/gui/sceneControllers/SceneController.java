@@ -1,7 +1,10 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.MainClient;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.view_model.*;
+
+import java.util.HashMap;
 
 public class SceneController {
     public MainClient mainClient;
@@ -55,4 +58,10 @@ public class SceneController {
 
     }
 
+    public void addMessageServerDisplayer(String messageFromServer, boolean isErrorMessage) {
+
+    }
+
+    public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
+    }
 }

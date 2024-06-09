@@ -2,16 +2,16 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Point;
+import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
 import it.polimi.ingsw.gc26.ui.gui.PawnsCoords;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
@@ -37,13 +37,13 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import javax.swing.*;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GameFlowController extends SceneController implements Initializable {
@@ -58,6 +58,9 @@ public class GameFlowController extends SceneController implements Initializable
     public AnchorPane anchorPaneChat;
     public TabPane chatTabPane;
     public GridPane scoreBoardGrid;
+    public VBox serverMessagesDisplayer;
+    @FXML
+    private ScrollPane serverMessagesScrollPane;
 
     @FXML
     private VBox commonMissionsBox;
@@ -92,7 +95,7 @@ public class GameFlowController extends SceneController implements Initializable
     private final int xPositionStarterCard = 40;
     private final int yPositionStarterCard = 40;
 
-    private HashMap<String,VBox> chats = new HashMap<>();
+    private HashMap<String,ScrollPane> chats = new HashMap<>();
 
     @FXML
     private Button turnSideButton;
@@ -113,12 +116,13 @@ public class GameFlowController extends SceneController implements Initializable
     @FXML
     private ScrollPane rootScrollPane;
 
-    private boolean chatHasBeenCreate = false;
     private ArrayList<ImageView> playablePositions = new ArrayList<>();
 
-    private final String path = "/images/";
-    private final ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
-    private final RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
+    private boolean chatHasBeenCreated = false;
+    private String path = "/images/";
+    private ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
+    private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
+
 
     //forDraggability
     private double mouseAnchorX;
@@ -496,15 +500,18 @@ public class GameFlowController extends SceneController implements Initializable
             if (keyEvent.getCode() == KeyCode.ENTER && !newTextField.getText().isEmpty()) {
                 sendMessage(newTextField, newVBox, newScrollPane, newTab);
             }
+            Platform.runLater(()->newScrollPane.setVvalue(1.0));
             keyEvent.consume();
         });
         newButton.setOnMouseClicked(event -> {
             if (!newTextField.getText().isEmpty()) {
                 sendMessage(newTextField, newVBox, newScrollPane, newTab);
             }
+            Platform.runLater(()->newScrollPane.setVvalue(1.0));
             event.consume();
         });
-        chats.put(nickname, newVBox);
+        Platform.runLater(()->newScrollPane.setVvalue(1.0));
+        chats.put(nickname, newScrollPane);
     }
 
     private void sendMessage(TextField newTextField, VBox newVBox, ScrollPane newScrollPane, Tab newTab) {
@@ -521,9 +528,7 @@ public class GameFlowController extends SceneController implements Initializable
         text.setStyle("-fx-font-smoothing-type: gray;" + "-fx-text-fill: white;");
         text.setFill(Color.color(1, 1, 1));
         hBox.getChildren().add(textFlow);
-        newVBox.getChildren().add(hBox);
 
-        newScrollPane.setVvalue(newScrollPane.getVmax());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         try {
             this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
@@ -531,25 +536,25 @@ public class GameFlowController extends SceneController implements Initializable
             System.err.println("RemoteException while sending message!");
         }
         newTextField.clear();
-        //                Platform.runLater(() -> {
-//                    newVBox.layout();
-//                    newScrollPane.layout(); // Ensure the layout is updated
-//                    newScrollPane.setVvalue(newScrollPane.getVmax()); // Scroll to bottom
-//                });
-
+        Platform.runLater(()-> {
+            newVBox.getChildren().add(hBox);
+            newScrollPane.setVvalue(1.0);});
 
     }
 
     @Override
     public void createChats(SimplifiedGame simplifiedGame, String nickname) {
-        this.nickname = nickname;
-        for(String playerNickname : simplifiedGame.getPlayersNicknames()) {
-            if (!playerNickname.equals(nickname)) {
-                createChatTab(playerNickname);
+        if (!chatHasBeenCreated) {
+            this.nickname = nickname;
+            for(String playerNickname : simplifiedGame.getPlayersNicknames()) {
+                if (!playerNickname.equals(nickname)) {
+                    createChatTab(playerNickname);
+                }
             }
+            createChatTab("Group Chat");
+            chatHasBeenCreated = true;
         }
-        createChatTab("Group Chat");
-        fullScoreBoard();
+
     }
 
     @Override
@@ -595,22 +600,26 @@ public class GameFlowController extends SceneController implements Initializable
         hBox.setMaxWidth(240);
         textFlow.setPadding(new Insets(2, 5, 2, 5));
         text.setFill(Color.color(0.0, 0.0, 0.0));
-        hBox.getChildren().add(textFlow);
+
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 try {
+                    hBox.getChildren().add(textFlow);
                     if (labelMessage != null) {
-                        chats.get(sender).getChildren().add(labelBox);
+                        ((VBox)chats.get(sender).getContent()).getChildren().add(labelBox);
                     }
-                    chats.get(sender).getChildren().add(hBox);
-                } catch (NullPointerException e) {}
+                    ((VBox)chats.get(sender).getContent()).getChildren().add(hBox);
+                    chats.get(sender).setVvalue(1.0);
+                } catch (NullPointerException e) {
+
+                }
             }
         });
 
 
-        //newScrollPane.setVvalue(newScrollPane.getVmax());
+
     }
 
     public void toggleScoreBoard(ActionEvent actionEvent) {
@@ -653,19 +662,13 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
-    private void fullScoreBoard() {
-        for (PawnsCoords pawn : PawnsCoords.values()) {
-
-            Point pawnPoint = pawn.getCoords();
+    private void clearScoreBoard() {
+        for (Point pawnPoint : PawnsCoords.getCoords()) {
             Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
             if (cell != null) {
                 GridPane miniGrid = ((GridPane) cell);
-                miniGrid.add(new Circle(7), 0, 0);
-                miniGrid.add(new Circle(7), 0, 1);
-                miniGrid.add(new Circle(7), 1, 0);
-                miniGrid.add(new Circle(7), 1, 1);
+                miniGrid.getChildren().clear();
             }
-
         }
     }
 
@@ -677,5 +680,63 @@ public class GameFlowController extends SceneController implements Initializable
             }
         }
         return null;
+    }
+
+    public void addMessageServerDisplayer(String messageFromServer, boolean isErrorMessage) {
+        Text text = new Text(messageFromServer);
+        TextFlow textFlow = new TextFlow(text);
+        textFlow.setMinWidth(180);
+        textFlow.setMaxWidth(180);
+        if (isErrorMessage) {
+            text.setFill(Color.color(1, 0.0, 0.0));
+        } else {
+            text.setFill(Color.color(0.0, 0.0, 0.0));
+        }
+
+        try {
+            Platform.runLater(()-> {
+                serverMessagesDisplayer.getChildren().add(textFlow);
+                serverMessagesDisplayer.layout();
+                serverMessagesScrollPane.layout();
+                serverMessagesScrollPane.setVvalue(1.0);});
+
+        } catch (NullPointerException e) {}
+
+    }
+
+    public void openRulebook(ActionEvent actionEvent) {
+        Platform.runLater(()-> GUIApplication.openRulebook());
+    }
+
+    public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected){
+        clearScoreBoard();
+
+        for (Map.Entry<String, Integer> playerScore : scores.entrySet()) {
+            if (pawnsSelected.containsKey(playerScore.getKey())) {
+                Point pawnPoint = PawnsCoords.getCoords(playerScore.getValue());
+                Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
+                if (cell != null) {
+                    GridPane miniGrid = ((GridPane) cell);
+                    Circle circle = new Circle(6);
+                    circle.setFill(Color.valueOf(pawnsSelected.get(playerScore.getKey()).toString()));
+                    Platform.runLater(()-> {switch (miniGrid.getChildren().size()) {
+                        case 0 :
+                            miniGrid.add(circle, 0, 0);
+                            break;
+                        case 1:
+                            miniGrid.add(circle, 0, 1);
+                            break;
+                        case 2:
+                            miniGrid.add(circle, 1, 0);
+                            break;
+                        case 3:
+                            miniGrid.add(circle, 1, 1);
+                            break;
+                    }});
+
+
+                }
+            }
+        }
     }
 }

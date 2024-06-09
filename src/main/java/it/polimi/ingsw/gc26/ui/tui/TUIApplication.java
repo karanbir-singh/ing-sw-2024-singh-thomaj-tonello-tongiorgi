@@ -197,14 +197,8 @@ public class TUIApplication implements UIInterface {
                             System.exit(0);
                             break;
                         case 5:
-                            if (Desktop.isDesktopSupported()) {
-                                try {
-                                    File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
-                                    Desktop.getDesktop().open(myFile);
-                                } catch (IOException ex) {
-                                    // no application registered for PDFs
-                                }
-                            }
+                            openRulebook();
+                            TUIUpdate.printOptions(gameState);
                             break;
                     }
                     break;
@@ -222,14 +216,8 @@ public class TUIApplication implements UIInterface {
                             System.exit(0);
                             break;
                         case 4:
-                            if (Desktop.isDesktopSupported()) {
-                                try {
-                                    File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
-                                    Desktop.getDesktop().open(myFile);
-                                } catch (IOException ex) {
-                                    // no application registered for PDFs
-                                }
-                            }
+                            openRulebook();
+                            TUIUpdate.printOptions(gameState);
                             break;
                     }
                     break;
@@ -252,14 +240,8 @@ public class TUIApplication implements UIInterface {
                             System.exit(0);
                             break;
                         case 5:
-                            if (Desktop.isDesktopSupported()) {
-                                try {
-                                    File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
-                                    Desktop.getDesktop().open(myFile);
-                                } catch (IOException ex) {
-                                    // no application registered for PDFs
-                                }
-                            }
+                            openRulebook();
+                            TUIUpdate.printOptions(gameState);
                             break;
                     }
                     break;
@@ -325,6 +307,7 @@ public class TUIApplication implements UIInterface {
                                     System.out.println("Np application found to open the rulebook!");
                                 }
                             }
+                            TUIUpdate.printOptions(gameState);
                             break;
                     }
                     break;
@@ -337,20 +320,24 @@ public class TUIApplication implements UIInterface {
                             System.exit(0);
                             break;
                         case 3:
-                            if (Desktop.isDesktopSupported()) {
-                                try {
-                                    File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
-                                    Desktop.getDesktop().open(myFile);
-                                } catch (IOException ex) {
-                                    // no application registered for PDFs
-                                }
-                            }
+                            openRulebook();
                             break;
                     }
                     break;
                 case null, default:
                     System.out.println("Invalid option");
                     break;
+            }
+        }
+    }
+
+    private static void openRulebook() {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
+                Desktop.getDesktop().open(myFile);
+            } catch (IOException ex) {
+                // no application registered for PDFs
             }
         }
     }

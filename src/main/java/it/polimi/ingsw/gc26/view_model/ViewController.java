@@ -143,7 +143,7 @@ public class ViewController {
      */
 
     public void showMessage(String message) {
-        System.out.println("[SERVER]: " + message);
+        this.simplifiedModel.getView().showMessage(message);
     }
 
     /**
@@ -152,9 +152,8 @@ public class ViewController {
      * @param errorMessage message to print
      */
     public void showError(String errorMessage) {
-        ConsoleColors.printError(errorMessage);
+        this.simplifiedModel.getView().showError(errorMessage);
     }
-
 
     public void setGameID(int gameID) {
         this.gameID = gameID;
