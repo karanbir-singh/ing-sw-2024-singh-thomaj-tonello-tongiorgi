@@ -183,12 +183,37 @@ public class Game implements Serializable {
         // Change player's state
         this.currentPlayer.setState(PlayerState.PLAYING, currentPlayer.getID());
 
+        HashMap<String,Integer> points = new HashMap<>();
+        for(Player player : this.players){
+            if(player.getPersonalBoard() != null){
+                points.put(player.getNickname(),player.getPersonalBoard().getScore());
+            }else{
+                points.put(player.getNickname(),0);
+            }
+
+        }
+
         // Check if the next current player is the first player
         if (this.currentPlayer.isFirstPlayer()) {
             // Then increase the round
             this.increaseRound();
         }
         this.observable.notifyMessage("It's you turn now",this.currentPlayer.getID());
+        ArrayList<String> nicknameWinners = new ArrayList<>();
+        for(Player winner : this.winners){
+            nicknameWinners.add(winner.getNickname());
+        }
+        String currentPlayerNickname = null;
+        if(this.currentPlayer != null){
+            currentPlayerNickname = this.currentPlayer.getNickname();
+        }
+
+        HashMap<String, Pawn> pawnsSelected = new HashMap<>();
+        for (Player player : this.players) {
+            pawnsSelected.put(player.getNickname(), player.getPawnColor());
+        }
+        String message = "Current player has changed!";
+        this.observable.notifyUpdateGame(new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected), message);
         // TODO update simplified Game & player
     }
 

@@ -120,7 +120,7 @@ public class GameFlowController extends GenericController implements Initializab
     private ArrayList<ImageView> playablePrositions = new ArrayList<>();
     private ArrayList<ImageView> handCards = new ArrayList<>();
 
-    private boolean chatHasBeenCreate = false;
+    private boolean chatHasBeenCreated = false;
     private String path = "/images/";
     private ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
     private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
@@ -547,13 +547,17 @@ public class GameFlowController extends GenericController implements Initializab
 
     @Override
     public void createChats(SimplifiedGame simplifiedGame, String nickname) {
-        this.nickname = nickname;
-        for(String playerNickname : simplifiedGame.getPlayersNicknames()) {
-            if (!playerNickname.equals(nickname)) {
-                createChatTab(playerNickname);
+        if (!chatHasBeenCreated) {
+            this.nickname = nickname;
+            for(String playerNickname : simplifiedGame.getPlayersNicknames()) {
+                if (!playerNickname.equals(nickname)) {
+                    createChatTab(playerNickname);
+                }
             }
+            createChatTab("Group Chat");
+            chatHasBeenCreated = true;
         }
-        createChatTab("Group Chat");
+
     }
 
     @Override
@@ -668,7 +672,6 @@ public class GameFlowController extends GenericController implements Initializab
                 GridPane miniGrid = ((GridPane) cell);
                 miniGrid.getChildren().clear();
             }
-
         }
     }
 
@@ -719,7 +722,7 @@ public class GameFlowController extends GenericController implements Initializab
                     GridPane miniGrid = ((GridPane) cell);
                     Circle circle = new Circle(6);
                     circle.setFill(Color.valueOf(pawnsSelected.get(playerScore.getKey()).toString()));
-                    switch (miniGrid.getChildren().size()) {
+                    Platform.runLater(()-> {switch (miniGrid.getChildren().size()) {
                         case 0 :
                             miniGrid.add(circle, 0, 0);
                             break;
@@ -732,7 +735,8 @@ public class GameFlowController extends GenericController implements Initializab
                         case 3:
                             miniGrid.add(circle, 1, 1);
                             break;
-                    }
+                    }});
+
 
                 }
             }
