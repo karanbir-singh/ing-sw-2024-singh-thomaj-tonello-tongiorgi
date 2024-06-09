@@ -19,6 +19,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.util.Objects;
 
 
 public class GUIApplication extends Application implements UIInterface {
@@ -74,6 +75,7 @@ public class GUIApplication extends Application implements UIInterface {
         primaryStage.setWidth(600);
         primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/title.png"))));
         primaryStage.setTitle(" Codex Naturalis");
+        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/icon.png"))));
 
         // Launch thread for managing connection
         new Thread(() -> {
@@ -141,7 +143,6 @@ public class GUIApplication extends Application implements UIInterface {
                 .findFirst()
                 .orElse(null);
     }
-
     /**
      * Changes the showing scene
      *
@@ -150,10 +151,12 @@ public class GUIApplication extends Application implements UIInterface {
     public void setCurrentScene(SceneEnum sceneEnum) {
         // Update current scene info
         this.currentSceneInfo = this.getSceneInfo(sceneEnum);
-
+        Scene scene = getSceneInfo(sceneEnum).getScene();
         Platform.runLater(() -> {
             // Update stage
-            this.primaryStage.setScene(this.currentSceneInfo.getScene());
+            scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/LOGIN.css")).toExternalForm());
+            this.primaryStage.setScene(scene);
             this.primaryStage.show();
         });
 
@@ -170,7 +173,10 @@ public class GUIApplication extends Application implements UIInterface {
     @Override
     public void runConnection() throws RemoteException {
         // Set login scene
+        this.getSceneInfo(SceneEnum.LOGIN).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
+        this.getSceneInfo(SceneEnum.LOGIN).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/LOGIN.css")).toExternalForm());
         this.setCurrentScene(SceneEnum.LOGIN);
+
 
         synchronized (this.mainClient.getLock()) {
             while (this.mainClient.getClientState() == ClientState.CONNECTION) {
@@ -185,6 +191,7 @@ public class GUIApplication extends Application implements UIInterface {
         mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             Platform.runLater(() -> {
+                this.getSceneInfo(SceneEnum.CREATOR).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
                 this.getSceneController(SceneEnum.CREATOR).setNickName(this.getSceneController(SceneEnum.LOGIN).getNickName());
             });
 

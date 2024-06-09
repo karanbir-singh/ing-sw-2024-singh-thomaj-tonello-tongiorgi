@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,9 +9,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -44,16 +51,18 @@ public class StarterCardChoiceController extends SceneController implements Init
     private ImageView handCard2;
 
     //layout
+    CommonLayout layout = new CommonLayout();
+    @FXML
+    private HBox HBoxLeftPanel;
+    @FXML
+    private VBox centerVBox;
     @FXML
     private VBox rightVBox;
-    @FXML
-    private VBox leftVBox;
     @FXML
     private BorderPane rootBorder;
     @FXML
     private ScrollPane rootScrollPane;
-    @FXML
-    private ImageView scoreBoard;
+
     private ArrayList<ImageView> cards = new ArrayList<>();
     @FXML
     VBox choosingBox;
@@ -65,14 +74,6 @@ public class StarterCardChoiceController extends SceneController implements Init
 
 
     String path = "/images/";
-    public void onClickFlipButton(ActionEvent event){
-        try {
-            this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
-
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void onClickGoToNextStep(ActionEvent event){
         try {
@@ -84,13 +85,23 @@ public class StarterCardChoiceController extends SceneController implements Init
     }
 
 
+    public void onImageClick(MouseEvent event){
+        if(event.getClickCount() == 2){
+            try {
+                this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
+
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
         if(simplifiedHand.getSelectedSide() != null){
             this.image.setImage(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getSelectedSide().getImagePath()))));
-            //System.out.println("HA CAMBIATO LA GUI");
+            this.image.setOnMouseClicked(this::onImageClick);
         }
-
     }
 
     @Override
@@ -105,8 +116,8 @@ public class StarterCardChoiceController extends SceneController implements Init
         cards.add(goldCard1);
         cards.add(goldDeck);
 
-        CommonLayout layout = new CommonLayout();
-        //layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
+        layout.setGameBackground(rootBorder);
+        layout.pageBindings(rootScrollPane, rootBorder, HBoxLeftPanel, rightVBox, centerVBox);
 
     }
 }

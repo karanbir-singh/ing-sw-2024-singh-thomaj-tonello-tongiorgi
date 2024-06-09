@@ -30,8 +30,6 @@ public class SecretMissionChoiceController extends SceneController implements In
     //CommonTable
     @FXML
     private VBox commonTableBox;
-    @FXML
-    private TabPane personalBoardTabPane;
 
     @FXML
     private Label status;
@@ -51,19 +49,24 @@ public class SecretMissionChoiceController extends SceneController implements In
 
     //layout
     @FXML
-    private HBox hLayoutBox;
+    TabPane personalBoardTabPane;
+
+    //layout
+    CommonLayout layout = new CommonLayout();
     @FXML
-    private VBox leftVBox;
-    @FXML
-    private VBox rightVBox;
+    private HBox HBoxLeftPanel;
     @FXML
     private VBox centerVBox;
     @FXML
-    private ScrollPane rootScrollPane;
+    private VBox rightVBox;
     @FXML
-    private AnchorPane rootAnchor;
+    private BorderPane rootBorder;
+    @FXML
+    private ScrollPane rootScrollPane;
 
     private ArrayList<ImageView> cards = new ArrayList<>();
+    private ImageView image1 = new ImageView(new Image(getClass().getResource("/images/game-background.png").toExternalForm()));
+    BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
 
 
     @FXML
@@ -254,8 +257,11 @@ public class SecretMissionChoiceController extends SceneController implements In
 
         this.creationAndSettingGridContraints(this.gridPane);
 
-        CommonLayout layout = new CommonLayout();
+
+        layout.setGameBackground(rootBorder);
         //layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
+        layout.pageBindings(rootScrollPane, rootBorder, HBoxLeftPanel, rightVBox, centerVBox);
+        layout.setPersonalBoardRatio(rootBorder, personalBoardTabPane, 0.3, 0.4);
 
     }
 
