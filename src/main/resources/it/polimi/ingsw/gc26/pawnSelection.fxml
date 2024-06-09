@@ -5,55 +5,60 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane fx:id="rootAnchor" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.PawnSelectionController">
-   <children>
-      <HBox alignment="CENTER" layoutY="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+<BorderPane fx:id="rootBorder" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.PawnSelectionController">
+   <center>
+      <AnchorPane fx:id="rootAnchor" >
          <children>
-            <VBox alignment="CENTER">
+            <HBox alignment="CENTER" layoutY="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
                <children>
-                  <ImageView fitHeight="94.0" fitWidth="396.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../images/labels/ChoosePawnLabel.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="status">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TilePane alignment="CENTER" hgap="30.0" maxWidth="300.0" minWidth="300.0" prefColumns="2" prefHeight="300.0" prefRows="2" prefWidth="300.0" vgap="30.0">
+                  <VBox alignment="CENTER">
                      <children>
-                        <Button fx:id="greenButton" mnemonicParsing="false" onAction="#onClickGreenButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1dcf3d;" textFill="#1dcf3d">
+                        <ImageView fitHeight="94.0" fitWidth="396.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../images/labels/ChoosePawnLabel.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="status">
                            <font>
-                              <Font size="24.0" />
+                              <Font size="18.0" />
                            </font>
-                        </Button>
-                        <Button fx:id="redButton" mnemonicParsing="false" onAction="#onClickRedButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #FF0000;">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="blueButton" mnemonicParsing="false" onAction="#onClickBlueButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #3305ff;" textFill="#3305ff">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="yellowButton" mnemonicParsing="false" onAction="#onClickYellowButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #fff701;" textFill="#fff701">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Button>
+                        </Label>
+                        <TilePane alignment="CENTER" hgap="30.0" maxWidth="300.0" minWidth="300.0" prefColumns="2" prefHeight="300.0" prefRows="2" prefWidth="300.0" vgap="30.0">
+                           <children>
+                              <Button fx:id="greenButton" mnemonicParsing="false" onAction="#onClickGreenButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1dcf3d;" textFill="#1dcf3d">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="redButton" mnemonicParsing="false" onAction="#onClickRedButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #FF0000;">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="blueButton" mnemonicParsing="false" onAction="#onClickBlueButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #3305ff;" textFill="#3305ff">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="yellowButton" mnemonicParsing="false" onAction="#onClickYellowButton" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #fff701;" textFill="#fff701">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </TilePane>
                      </children>
-                  </TilePane>
+                  </VBox>
                </children>
-            </VBox>
+            </HBox>
          </children>
-      </HBox>
-   </children>
-</AnchorPane>
+      </AnchorPane>
+   </center>
+</BorderPane>

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.model.player.Pawn;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,7 +18,7 @@ import java.util.ResourceBundle;
 public class PawnSelectionController extends GenericController implements Initializable {
 
     @FXML
-    AnchorPane rootAnchor;
+    BorderPane rootBorder;
 
     @FXML
     Label status;
@@ -30,6 +31,8 @@ public class PawnSelectionController extends GenericController implements Initia
     Button blueButton;
     @FXML
     Button yellowButton;
+
+    private Image gameBackground = new Image(getClass().getResource("/images/game-background.png").toExternalForm());
 
     public void onClickRedButton(ActionEvent event){
         try {
@@ -71,12 +74,8 @@ public class PawnSelectionController extends GenericController implements Initia
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Image gameBackground = new Image(getClass().getResource("/images/game-background.png").toExternalForm());
-
-        rootAnchor.setBackground(new Background(new BackgroundImage(gameBackground,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                BackgroundSize.DEFAULT)));
+        CommonLayout layout = new CommonLayout();
+        layout.setGameBackground(rootBorder);
     }
+
 }

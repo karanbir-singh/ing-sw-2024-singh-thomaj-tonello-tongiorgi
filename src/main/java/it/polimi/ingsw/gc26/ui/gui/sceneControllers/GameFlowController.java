@@ -345,6 +345,9 @@ public class GameFlowController extends GenericController implements Initializab
                 consideredTab = tab;
                 otherScrollPane = (ScrollPane)tab.getContent();
                 otherGridPane = (GridPane)otherScrollPane.getContent();
+                otherScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                otherScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                otherScrollPane.getStyleClass().add("tabScrollPane");
             }
         }
 

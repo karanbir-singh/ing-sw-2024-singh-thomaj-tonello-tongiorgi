@@ -30,58 +30,58 @@
                      </VBox.margin>
                   </ImageView>
                   <Label fx:id="status" />
-                  <HBox alignment="CENTER" prefHeight="245.0" prefWidth="559.0" style="-fx-background-color: rgb(2555, 255, 240, 0.5);">
+                  <HBox alignment="CENTER" prefHeight="245.0" prefWidth="559.0">
                      <children>
                         <VBox alignment="CENTER" prefHeight="294.0" prefWidth="88.0">
                            <children>
-                              <StackPane prefHeight="48.0" prefWidth="88.0">
+                              <StackPane prefHeight="83.0" prefWidth="110.0">
                                  <children>
-                                    <Button fx:id="twoButton" mnemonicParsing="false" prefHeight="44.0" prefWidth="47.0">
+                                    <Button fx:id="twoButton" mnemonicParsing="false" prefHeight="81.0" prefWidth="86.0">
                                        <graphic>
-                                          <ImageView fitHeight="47.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="62.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../../../images/creator/2Label.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <ImageView fx:id="selector" fitHeight="87.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="selector" fitHeight="42.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true" styleClass="customLabel">
                                        <image>
                                           <Image url="@../../../../images/creator/selector.png" />
                                        </image>
                                     </ImageView>
                                  </children>
                               </StackPane>
-                              <StackPane prefHeight="45.0" prefWidth="88.0">
+                              <StackPane prefHeight="83.0" prefWidth="107.0">
                                  <children>
-                                    <Button fx:id="threeButton" mnemonicParsing="false" prefHeight="44.0" prefWidth="47.0">
+                                    <Button fx:id="threeButton" mnemonicParsing="false" prefHeight="83.0" prefWidth="88.0">
                                        <graphic>
-                                          <ImageView fitHeight="60.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="62.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../../../images/creator/3Label.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <ImageView fx:id="selector1" fitHeight="87.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                    <ImageView fx:id="selector1" fitHeight="42.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true" styleClass="customLabel" visible="false">
                                        <image>
                                           <Image url="@../../../../images/creator/selector.png" />
                                        </image>
                                     </ImageView>
                                  </children>
                               </StackPane>
-                              <StackPane prefHeight="45.0" prefWidth="88.0">
+                              <StackPane prefHeight="83.0" prefWidth="109.0">
                                  <children>
-                                    <Button fx:id="fourButton" mnemonicParsing="false" prefHeight="44.0" prefWidth="47.0">
+                                    <Button fx:id="fourButton" mnemonicParsing="false" prefHeight="83.0" prefWidth="85.0">
                                        <graphic>
-                                          <ImageView fitHeight="20.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="68.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../../../images/creator/4Label.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <ImageView fx:id="selector2" fitHeight="87.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                    <ImageView fx:id="selector2" fitHeight="42.0" fitWidth="126.0" pickOnBounds="true" preserveRatio="true" styleClass="customLabel" visible="false">
                                        <image>
                                           <Image url="@../../../../images/creator/selector.png" />
                                        </image>

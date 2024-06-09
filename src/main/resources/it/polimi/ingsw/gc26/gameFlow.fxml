@@ -67,7 +67,7 @@
                      <tabs>
                         <Tab closable="false" text="Your Personal Board">
                            <content>
-                                    <ScrollPane hbarPolicy="NEVER" hvalue="0.5" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" pannable="true" prefHeight="400.0" prefWidth="600.0" vbarPolicy="NEVER" vvalue="0.5">
+                                    <ScrollPane fx:id="tabScrollPane" hbarPolicy="NEVER" hvalue="0.5" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" pannable="true" prefHeight="400.0" prefWidth="600.0" styleClass="tabScrollPane" vbarPolicy="NEVER" vvalue="0.5">
                                         <content>
                                     <GridPane fx:id="gridPane">
                                       <columnConstraints>
@@ -111,25 +111,24 @@
          <right>
               <VBox fx:id="rightVBox" alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="200.0" minWidth="50.0" spacing="20.0" BorderPane.alignment="CENTER">
                   <children>
-                  <VBox prefHeight="200.0" prefWidth="202.0" spacing="20.0">
-                     <children>
-                        <ImageView fx:id="commonMissionLabel" fitHeight="30.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../images/labels/CommonMissionsLabel.png" />
-                           </image>
-                        </ImageView>
-                        <VBox fx:id="commonMissionsBox" spacing="20.0" />
-                        <ImageView fx:id="secretMissionLabel" fitHeight="29.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../images/labels/SecretMissionLabel.png" />
-                           </image>
-                        </ImageView>
-                        <VBox fx:id="secretMissionBox" prefHeight="200.0" prefWidth="100.0" spacing="20.0" />
-                     </children>
-                  </VBox>
+                  <ImageView fx:id="commonMissionLabel" fitHeight="30.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../images/labels/CommonMissionsLabel.png" />
+                     </image>
+                  </ImageView>
+                  <VBox fx:id="commonMissionsBox" spacing="20.0" />
+                  <ImageView fx:id="secretMissionLabel" fitHeight="29.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../images/labels/SecretMissionLabel.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets right="5.0" />
+                     </VBox.margin>
+                  </ImageView>
+                  <VBox fx:id="secretMissionBox" prefHeight="200.0" prefWidth="100.0" spacing="20.0" />
                   </children>
                <BorderPane.margin>
-                  <Insets left="20.0" />
+                  <Insets left="20.0" right="10.0" />
                </BorderPane.margin>
               </VBox>
          </right>

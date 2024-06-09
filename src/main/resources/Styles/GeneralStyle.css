@@ -14,6 +14,10 @@
     -fx-padding: 10px 45px;
 }
 
+.customLabel {
+    -fx-effect: dropshadow( gaussian , #e3fff2  , 20,0,0,1 );;
+}
+
 .button {
     -fx-background-color: linear-gradient(to right, #0bbdd9 10%, #0dd696 100%, #fffb8f );
     -fx-background-radius: 50px;
@@ -109,14 +113,15 @@
     -fx-background-color: transparent;
 }
 
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 50px;
+}
+
 .tab-pane .tab {
     -fx-border-radius: 0px;
     -fx-background-color: transparent;
-    -fx-border-width: 0px 0px 0px 0px;
-}
-
-.tab-pane .tab-header-area {
-    -fx-padding: 0 0 0 200px;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: transparent;
 }
 
 .tab-pane .tab:hover {
@@ -150,12 +155,12 @@
     -fx-padding: 0 5 0 5;
 }
 
-#tabScrollPane {
+.tabScrollPane {
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
 }
 
-#tabScrollPane .viewport {
+.tabScrollPane .viewport {
     -fx-border-radius: 50px;
     -fx-background-radius: 50px;
 }
