@@ -103,3 +103,59 @@
 .tab-pane {
 
 }
+
+
+.tab-header-area .tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 0px 0px;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 200px;
+}
+
+.tab-pane .tab:hover {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: linear-gradient(to right, #0bbdd9 100%, #0dd696 100%, #fffb8f );
+}
+
+.tab-pane .tab:selected {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: linear-gradient(to right, #abffeb 2%, #0dd696 100% );
+}
+
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator
+{
+    -fx-border-radius: 0px;
+    -fx-border-width: 0px 0px 0px 0px;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-effect: null;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: white;
+    /*-fx-text-fill: linear-gradient(to right, #0bbdd9 10%, #0dd696 100%, #fffb8f );*/
+    -fx-padding: 0 5 0 5;
+}
+
+#tabScrollPane {
+    -fx-background-radius: 50px;
+    -fx-border-radius: 50px;
+}
+
+#tabScrollPane .viewport {
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+}

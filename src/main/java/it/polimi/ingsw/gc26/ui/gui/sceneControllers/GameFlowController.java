@@ -124,12 +124,6 @@ public class GameFlowController extends GenericController implements Initializab
     private BorderPane rootBorder;
     @FXML
     private ScrollPane rootScrollPane;
-    @FXML
-    private ImageView background;
-    @FXML
-    private AnchorPane rootAnchor;
-    private double initialImageHeight;
-    private double initialImageWidth;
 
     private ArrayList<ImageView> cards = new ArrayList<>();
     private ArrayList<ImageView> playablePrositions = new ArrayList<>();
@@ -383,8 +377,10 @@ public class GameFlowController extends GenericController implements Initializab
 
 
         //page layout and dimensions bindings
-        layout.pageBindings(rootScrollPane, rootBorder, personalBoardTabPane, HBoxLeftPanel, rightVBox, scoreBoard, handCards, handPane);
+        layout.pageBindings(rootScrollPane, rootBorder, HBoxLeftPanel, rightVBox, centerVBox);
         layout.handLayout(rootBorder, handCards, handPane);
+
+        layout.setPersonalBoardRatio(rootBorder, personalBoardTabPane, 0.55, 0.55);
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);

@@ -14,8 +14,7 @@ import java.util.ArrayList;
 
 public class CommonLayout {
     private Image gameBackground = new Image(getClass().getResource("/images/game-background.png").toExternalForm());
-    public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, TabPane personalBoardTabPane, HBox leftHBox, VBox rightVBox,
-                             ImageView scoreBoard, ArrayList<ImageView> handCards, AnchorPane handPane){
+    public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, HBox leftHBox, VBox rightVBox, VBox centerVBox){
 
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
             setGameBackground(rootBorder);
@@ -23,18 +22,19 @@ public class CommonLayout {
                 leftHBox.setPrefHeight(rootBorder.getPrefHeight());
             } catch (NullPointerException e) {}
             rightVBox.setPrefHeight(rootBorder.getPrefHeight());
-            personalBoardTabPane.prefHeightProperty().bind(rootScrollPane.heightProperty().multiply(0.50));
         });
 
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
             setGameBackground(rootBorder);
-            try {
-                scoreBoard.fitWidthProperty().bind(rootBorder.widthProperty().multiply(0.15));
-            } catch (NullPointerException e) {
+        });
+    }
 
-            }
-            personalBoardTabPane.prefWidthProperty().bind(rootBorder.widthProperty().multiply(0.55));
-
+    public void setPersonalBoardRatio(BorderPane rootBorder, TabPane personalBoardTabPane, double vRatio, double hRatio) {
+        rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
+            personalBoardTabPane.prefHeightProperty().bind(rootBorder.heightProperty().multiply(vRatio));
+        });
+        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
+            personalBoardTabPane.prefWidthProperty().bind(rootBorder.widthProperty().multiply(hRatio));
         });
     }
 

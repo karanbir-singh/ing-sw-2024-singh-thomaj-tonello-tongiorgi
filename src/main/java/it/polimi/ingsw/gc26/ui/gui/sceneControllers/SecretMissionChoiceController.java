@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -65,20 +66,21 @@ public class SecretMissionChoiceController extends GenericController implements 
 
     @FXML
     ImageView secretMission1;
+    @FXML
+    TabPane personalBoardTabPane;
 
     //layout
+    CommonLayout layout = new CommonLayout();
     @FXML
-    HBox hLayoutBox;
+    private HBox HBoxLeftPanel;
     @FXML
-    VBox leftVBox;
+    private VBox centerVBox;
     @FXML
-    VBox rightVBox;
+    private VBox rightVBox;
     @FXML
-    VBox centerVBox;
+    private BorderPane rootBorder;
     @FXML
-    ScrollPane rootScrollPane;
-    @FXML
-    BorderPane rootBorder;
+    private ScrollPane rootScrollPane;
 
     private ArrayList<ImageView> cards = new ArrayList<>();
     private ImageView image1 = new ImageView(new Image(getClass().getResource("/images/game-background.png").toExternalForm()));
@@ -139,6 +141,7 @@ public class SecretMissionChoiceController extends GenericController implements 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //TODO mettere le carte giuste
         cards.add(handCard0);
         cards.add(handCard1);
         cards.add(handCard2);
@@ -153,10 +156,11 @@ public class SecretMissionChoiceController extends GenericController implements 
         cards.add(secretMission0);
         cards.add(secretMission1);
 
-        CommonLayout layout = new CommonLayout();
 
         layout.setGameBackground(rootBorder);
         //layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
+        layout.pageBindings(rootScrollPane, rootBorder, HBoxLeftPanel, rightVBox, centerVBox);
+        layout.setPersonalBoardRatio(rootBorder, personalBoardTabPane, 0.3, 0.4);
 
     }
 
