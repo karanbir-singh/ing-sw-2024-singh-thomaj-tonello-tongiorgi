@@ -64,13 +64,17 @@ public class Hand implements Serializable {
             return;
         }
 
+        // Check if the card is already selected
+        if (this.selectedCard == selectedCard) {
+            return;
+        }
+
         this.selectedCard = selectedCard;
         this.selectedSide = selectedCard.getFront();
         this.observable.notifyUpdateHand(
-                    new SimplifiedHand(cards, selectedCard, selectedSide),
-                    "Card selected on hand",
-                    clientID);
-
+                new SimplifiedHand(cards, selectedCard, selectedSide),
+                "Card selected on hand",
+                clientID);
     }
 
     /**
@@ -166,9 +170,9 @@ public class Hand implements Serializable {
     public void addCard(Card card, String clientID) {
         cards.add(card);
         this.observable.notifyUpdateHand(
-                    new SimplifiedHand(cards, selectedCard, selectedSide),
-                    "Card added to hand",
-                    clientID);
+                new SimplifiedHand(cards, selectedCard, selectedSide),
+                "Card added to hand",
+                clientID);
     }
 
     /**

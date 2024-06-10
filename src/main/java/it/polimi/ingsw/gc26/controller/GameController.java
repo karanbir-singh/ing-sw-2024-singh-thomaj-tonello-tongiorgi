@@ -467,7 +467,10 @@ public class GameController implements Serializable {
             Player player = game.getPlayerByID(playerID);
 
             // Get card to select
-            Card selectedCard = player.getHand().getCard(0, 3, cardIndex, playerID);
+            Card selectedCard = null;
+            if (cardIndex >= 0 && cardIndex < player.getHand().getCards().size()) {
+                selectedCard = player.getHand().getCard(0, 3, cardIndex, playerID);
+            }
 
             // Set the selected card
             if (selectedCard != null) {

@@ -56,7 +56,7 @@ public class GameFlowController extends SceneController implements Initializable
     private TabPane chatTabPane;
     @FXML
     private Button chatButton;
-    private HashMap<String,ScrollPane> chats = new HashMap<>();
+    private HashMap<String, ScrollPane> chats = new HashMap<>();
     private boolean chatHasBeenCreated = false;
     private boolean chatIsVisible = false;
     private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
@@ -152,7 +152,7 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
-    public void onSelectedClickCommonTableCard(MouseEvent mouseEvent){
+    public void onSelectedClickCommonTableCard(MouseEvent mouseEvent) {
         try {
             this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
         } catch (RemoteException e) {
@@ -201,11 +201,11 @@ public class GameFlowController extends SceneController implements Initializable
         layout.setGameBackground(rootBorder);
 
         int index = 0;
-        for(Card card: simplifiedCommonTable.getResourceCards()){
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
+        for (Card card : simplifiedCommonTable.getResourceCards()) {
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
             this.setCardImageParameters(imageView, index);
             resources.add(imageView);
-            if(index == simplifiedCommonTable.getSelectedIndex()){
+            if (index == simplifiedCommonTable.getSelectedIndex()) {
                 layout.makeGlow(imageView);
                 imageView.setOnMouseClicked(this::onSelectedClickCommonTableCard);
             } else {
@@ -216,7 +216,7 @@ public class GameFlowController extends SceneController implements Initializable
         ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
         this.setCardImageParameters(resourceDeck, index);
         resources.add(resourceDeck);
-        if(index == simplifiedCommonTable.getSelectedIndex()){
+        if (index == simplifiedCommonTable.getSelectedIndex()) {
             layout.makeGlow(resourceDeck);
             resourceDeck.setOnMouseClicked(this::onSelectedClickCommonTableCard);
         } else {
@@ -227,7 +227,7 @@ public class GameFlowController extends SceneController implements Initializable
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
             this.setCardImageParameters(imageView, index);
             goldens.add(imageView);
-            if(index == simplifiedCommonTable.getSelectedIndex()){
+            if (index == simplifiedCommonTable.getSelectedIndex()) {
                 layout.makeGlow(imageView);
                 imageView.setOnMouseClicked(this::onSelectedClickCommonTableCard);
             } else {
@@ -238,7 +238,7 @@ public class GameFlowController extends SceneController implements Initializable
         ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
         this.setCardImageParameters(goldDeck, index);
         goldens.add(goldDeck);
-        if(index == simplifiedCommonTable.getSelectedIndex()){
+        if (index == simplifiedCommonTable.getSelectedIndex()) {
             layout.makeGlow(goldDeck);
             goldDeck.setOnMouseClicked(this::onSelectedClickCommonTableCard);
         } else {
@@ -337,8 +337,8 @@ public class GameFlowController extends SceneController implements Initializable
             if (tab.getText().equals(otherPersonalBoard.getNickname())) {
                 exist = true;
                 consideredTab = tab;
-                otherScrollPane = (ScrollPane)tab.getContent();
-                otherGridPane = (GridPane)otherScrollPane.getContent();
+                otherScrollPane = (ScrollPane) tab.getContent();
+                otherGridPane = (GridPane) otherScrollPane.getContent();
                 otherScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 otherScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 otherScrollPane.getStyleClass().add("tabScrollPane");
@@ -346,7 +346,7 @@ public class GameFlowController extends SceneController implements Initializable
         }
 
         //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
-        if(!otherPersonalBoard.getNickname().equals(this.nickname) && !exist){
+        if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
             personalBoardTabPane.getTabs().add(consideredTab);
@@ -423,6 +423,14 @@ public class GameFlowController extends SceneController implements Initializable
     public void makeDraggable(ImageView imageView, ArrayList<ImageView> targets) {
         // Set on card pressed
         imageView.setOnMousePressed(event -> {
+            if (event.getClickCount() == 2) {
+                try {
+                    this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+
             initialX = imageView.getLayoutX();
             initialY = imageView.getLayoutY();
             mouseAnchorX = event.getSceneX() - initialX;
@@ -449,7 +457,7 @@ public class GameFlowController extends SceneController implements Initializable
                         int row = GridPane.getRowIndex(target);
                         int column = GridPane.getColumnIndex(target);
 
-                        this.mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(imageView.getId()),this.mainClient.getClientID());
+                        this.mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(imageView.getId()), this.mainClient.getClientID());
                         this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
                         this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
                     } catch (RemoteException e) {
@@ -466,20 +474,12 @@ public class GameFlowController extends SceneController implements Initializable
     }
 
     public void onHandCardClicked(MouseEvent mouseEvent) {
-        if (mouseEvent.getClickCount() == 2) {
-            try {
-                this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-
-        } else {
-            try {
-                int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
-                this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+            System.out.println("card clicked: " + index);
+            this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -527,23 +527,23 @@ public class GameFlowController extends SceneController implements Initializable
         newVBox.maxHeight(440);
         newVBox.prefWidth(229);
         newScrollPane.setContent(newVBox);
-        newScrollPane.setPadding(new Insets(5,0,5,5));
+        newScrollPane.setPadding(new Insets(5, 0, 5, 5));
         chatTabPane.getTabs().add(newTab);
         newTextField.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER && !newTextField.getText().isEmpty()) {
                 sendMessage(newTextField, newVBox, newScrollPane, newTab);
             }
-            Platform.runLater(()->newScrollPane.setVvalue(1.0));
+            Platform.runLater(() -> newScrollPane.setVvalue(1.0));
             keyEvent.consume();
         });
         newButton.setOnMouseClicked(event -> {
             if (!newTextField.getText().isEmpty()) {
                 sendMessage(newTextField, newVBox, newScrollPane, newTab);
             }
-            Platform.runLater(()->newScrollPane.setVvalue(1.0));
+            Platform.runLater(() -> newScrollPane.setVvalue(1.0));
             event.consume();
         });
-        Platform.runLater(()->newScrollPane.setVvalue(1.0));
+        Platform.runLater(() -> newScrollPane.setVvalue(1.0));
         chats.put(nickname, newScrollPane);
     }
 
@@ -569,9 +569,10 @@ public class GameFlowController extends SceneController implements Initializable
             System.err.println("RemoteException while sending message!");
         }
         newTextField.clear();
-        Platform.runLater(()-> {
+        Platform.runLater(() -> {
             newVBox.getChildren().add(hBox);
-            newScrollPane.setVvalue(1.0);});
+            newScrollPane.setVvalue(1.0);
+        });
 
     }
 
@@ -579,7 +580,7 @@ public class GameFlowController extends SceneController implements Initializable
     public void createChats(SimplifiedGame simplifiedGame, String nickname) {
         if (!chatHasBeenCreated) {
             this.nickname = nickname;
-            for(String playerNickname : simplifiedGame.getPlayersNicknames()) {
+            for (String playerNickname : simplifiedGame.getPlayersNicknames()) {
                 if (!playerNickname.equals(nickname)) {
                     createChatTab(playerNickname);
                 }
@@ -596,8 +597,8 @@ public class GameFlowController extends SceneController implements Initializable
         if (newMessage.getReceiver() == null) {
             if (!newMessage.getSender().getNickname().equals(nickname)) {
                 if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
-                        !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size()-2).getSender().getNickname()))) {
-                    addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname() );
+                        !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
+                    addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname());
                 } else {
                     addMessageInChat(newMessage.getText(), "Group Chat", null);
                 }
@@ -641,9 +642,9 @@ public class GameFlowController extends SceneController implements Initializable
                 try {
                     hBox.getChildren().add(textFlow);
                     if (labelMessage != null) {
-                        ((VBox)chats.get(sender).getContent()).getChildren().add(labelBox);
+                        ((VBox) chats.get(sender).getContent()).getChildren().add(labelBox);
                     }
-                    ((VBox)chats.get(sender).getContent()).getChildren().add(hBox);
+                    ((VBox) chats.get(sender).getContent()).getChildren().add(hBox);
                     chats.get(sender).setVvalue(1.0);
                 } catch (NullPointerException e) {
 
@@ -653,7 +654,7 @@ public class GameFlowController extends SceneController implements Initializable
     }
 
     public void toggleScoreBoard(ActionEvent actionEvent) {
-        if(chatIsVisible) {
+        if (chatIsVisible) {
             chatButton.setGraphic(chatIconClose);
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonClose");
@@ -742,21 +743,23 @@ public class GameFlowController extends SceneController implements Initializable
         }
 
         try {
-            Platform.runLater(()-> {
+            Platform.runLater(() -> {
                 serverMessagesDisplayer.getChildren().add(textFlow);
                 serverMessagesDisplayer.layout();
                 serverMessagesScrollPane.layout();
-                serverMessagesScrollPane.setVvalue(1.0);});
+                serverMessagesScrollPane.setVvalue(1.0);
+            });
 
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
 
     }
 
     public void openRulebook(ActionEvent actionEvent) {
-        Platform.runLater(()-> GUIApplication.openRulebook());
+        Platform.runLater(() -> GUIApplication.openRulebook());
     }
 
-    public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected){
+    public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
 //        clearScoreBoard();
 //
 //        for (Map.Entry<String, Integer> playerScore : scores.entrySet()) {
