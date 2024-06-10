@@ -20,6 +20,8 @@ public class RMIPingManager implements PingManager {
      */
     private static final int TIMEOUT = 5;
 
+    private boolean firstPingArrived;
+
     /**
      * This attributes represents the last ping time from the server
      */
@@ -39,6 +41,7 @@ public class RMIPingManager implements PingManager {
         this.mainClient = mainClient;
         this.lock = new Object();
         this.lastPingTime = System.currentTimeMillis();
+        this.firstPingArrived = false;
     }
 
     /**
@@ -48,6 +51,7 @@ public class RMIPingManager implements PingManager {
     public void reset() {
         synchronized (lock) {
             lastPingTime = System.currentTimeMillis();
+            this.firstPingArrived = true;
         }
     }
 
@@ -63,7 +67,11 @@ public class RMIPingManager implements PingManager {
             // Check how much time has passed
             long elapsed;
             synchronized (lock) {
-                elapsed = (currentTime - lastPingTime) / 1000;
+                if(firstPingArrived) {
+                    elapsed = (currentTime - lastPingTime) / 1000;
+                }else{
+                    elapsed = 0;
+                }
             }
 
             // Manage when it's timeout

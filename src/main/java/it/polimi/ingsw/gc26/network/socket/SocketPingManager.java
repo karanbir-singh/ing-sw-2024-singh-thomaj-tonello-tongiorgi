@@ -25,6 +25,8 @@ public class SocketPingManager implements PingManager {
      */
     private long lastPingTime;
 
+    private boolean firstPingArrived;
+
     /**
      * Used as a lock for synchronization
      */
@@ -35,10 +37,11 @@ public class SocketPingManager implements PingManager {
      *
      * @param mainClient main client reference
      */
-    public SocketPingManager(MainClient mainClient, int timeout) {
+    public SocketPingManager(MainClient mainClient) {
         this.mainClient = mainClient;
         this.lock = new Object();
         this.lastPingTime = System.currentTimeMillis();
+        this.firstPingArrived = false;
     }
 
     /**
@@ -48,6 +51,7 @@ public class SocketPingManager implements PingManager {
     public void reset() {
         synchronized (lock) {
             lastPingTime = System.currentTimeMillis();
+            firstPingArrived = true;
         }
     }
 
@@ -63,7 +67,13 @@ public class SocketPingManager implements PingManager {
             // Check how much time has passed
             long elapsed;
             synchronized (lock) {
-                elapsed = (currentTime - lastPingTime) / 1000;
+                synchronized (lock) {
+                    if (firstPingArrived) {
+                        elapsed = (currentTime - lastPingTime) / 1000;
+                    } else {
+                        elapsed = 0;
+                    }
+                }
             }
 
             // Manage when it's timeout

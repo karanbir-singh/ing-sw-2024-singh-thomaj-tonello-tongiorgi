@@ -399,7 +399,7 @@ public class MainClient {
         new SocketServerHandler(mainClient.getViewController(), socketIn, socketOut);
 
         // Set Socket server ping manager
-        mainClient.setPingManager(new SocketPingManager(mainClient, 5));
+        mainClient.setPingManager(new SocketPingManager(mainClient));
 
         return mainClient;
     }
