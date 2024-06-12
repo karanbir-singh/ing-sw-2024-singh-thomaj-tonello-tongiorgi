@@ -18,7 +18,7 @@ public class RMIPingManager implements PingManager {
     /**
      * This attribute represents the server timeout seconds
      */
-    private static final int TIMEOUT = 5;
+    private static final int TIMEOUT = 10;
 
     private boolean firstPingArrived;
 
@@ -77,7 +77,7 @@ public class RMIPingManager implements PingManager {
             // Manage when it's timeout
             if (elapsed >= TIMEOUT) {
                 System.out.println("Server is down, wait for reconnection...");
-
+                mainClient.getViewController().showError("Server is down, wait for reconnection...");
                 // Server is down
                 boolean isServerUp = false;
 
@@ -107,6 +107,7 @@ public class RMIPingManager implements PingManager {
                     }
                 }
                 System.out.println("Server is up, you can restart to play");
+                mainClient.getViewController().closeErrorPopup();
 
                 synchronized (lock) {
                     lastPingTime = System.currentTimeMillis();

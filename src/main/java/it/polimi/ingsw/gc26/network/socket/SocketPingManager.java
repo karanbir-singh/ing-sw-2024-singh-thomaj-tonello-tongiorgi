@@ -18,7 +18,7 @@ public class SocketPingManager implements PingManager {
     /**
      * This attribute represents the server timeout seconds
      */
-    private static final int TIMEOUT = 5;
+    private static final int TIMEOUT = 10;
 
     /**
      * This attributes represents the last ping time from the server
@@ -67,19 +67,17 @@ public class SocketPingManager implements PingManager {
             // Check how much time has passed
             long elapsed;
             synchronized (lock) {
-                synchronized (lock) {
-                    if (firstPingArrived) {
-                        elapsed = (currentTime - lastPingTime) / 1000;
-                    } else {
-                        elapsed = 0;
-                    }
+                if (firstPingArrived) {
+                    elapsed = (currentTime - lastPingTime) / 1000;
+                } else {
+                    elapsed = 0;
                 }
             }
 
             // Manage when it's timeout
             if (elapsed >= TIMEOUT) {
                 System.out.println("Server is down, wait for reconnection...");
-
+                mainClient.getViewController().showError("Server is down, wait for reconnection...");
                 // Server is down
                 boolean isServerUp = false;
 
@@ -103,11 +101,11 @@ public class SocketPingManager implements PingManager {
                         mainClient.setVirtualMainController(new VirtualSocketMainController(socketOut));
 
                         // TODO Gabi controlla sincronizzazione e vedi se togliere questa sleep
-                        try {
+                        /*try {
                             Thread.sleep(1000);
                         } catch (InterruptedException ex) {
                             throw new RuntimeException(ex);
-                        }
+                        }*/
 
                         // Get virtual socket game controller
                         mainClient.getVirtualMainController().getVirtualGameController(mainClient.getViewController().getGameID());
@@ -133,6 +131,7 @@ public class SocketPingManager implements PingManager {
                     }
                 }
                 System.out.println("Server is up, you can restart to play");
+                mainClient.getViewController().closeErrorPopup();
 
                 synchronized (lock) {
                     lastPingTime = System.currentTimeMillis();
