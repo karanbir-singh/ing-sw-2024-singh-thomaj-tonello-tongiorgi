@@ -15,7 +15,7 @@
    <children>
       <ImageView fx:id="background" fitHeight="588.0" fitWidth="964.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../images/background-upscaled.png" />
+            <Image url="@sceneControllers/images/background-upscaled.png" />
          </image>
       </ImageView>
       <AnchorPane fx:id="logoPane" layoutX="484.6000061035156" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="427.0" prefWidth="474.0">
@@ -24,7 +24,7 @@
                <children>
                   <ImageView fx:id="logo" fitHeight="415.0" fitWidth="422.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../images/title.png" />
+                        <Image url="@sceneControllers/images/title.png" />
                      </image>
                   </ImageView>
                </children>

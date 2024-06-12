@@ -202,8 +202,10 @@ public class SocketServerHandler implements Runnable {
             goldCards.add(getGoldCard(gold));
         }
 
+        // selected index
+        int selectedIndex = encodedTable.get("selectedIndex").asInt();
 
-        return new SimplifiedCommonTable(resourceCard, goldCard, commonMission, resourceCards, goldCards, 6);
+        return new SimplifiedCommonTable(resourceCard, goldCard, commonMission, resourceCards, goldCards, selectedIndex);
     }
 
     private GoldCard getGoldCard(JsonNode encodedCard) {

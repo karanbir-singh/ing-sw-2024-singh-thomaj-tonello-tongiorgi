@@ -65,7 +65,7 @@ public class SecretMissionChoiceController extends SceneController implements In
     private ScrollPane rootScrollPane;
 
     private ArrayList<ImageView> cards = new ArrayList<>();
-    private ImageView image1 = new ImageView(new Image(getClass().getResource("/images/game-background.png").toExternalForm()));
+    private ImageView image1 = new ImageView(new Image(getClass().getResource("images/game-background.png").toExternalForm()));
     BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
 
 
@@ -76,7 +76,7 @@ public class SecretMissionChoiceController extends SceneController implements In
     private ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
     private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
 
-    String path = "/images/";
+    String path = "images/";
 
     public void onClickSecretMission(MouseEvent mouseEvent){
         try {

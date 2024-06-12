@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class CommonLayout {
-    private Image gameBackground = new Image(getClass().getResource("/images/game-background.png").toExternalForm());
+    private Image gameBackground = new Image(getClass().getResource("images/game-background.png").toExternalForm());
     public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, HBox leftHBox, VBox rightVBox, VBox centerVBox){
 
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {

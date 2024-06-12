@@ -59,8 +59,8 @@ public class GameFlowController extends SceneController implements Initializable
     private HashMap<String, ScrollPane> chats = new HashMap<>();
     private boolean chatHasBeenCreated = false;
     private boolean chatIsVisible = false;
-    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
-    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
 
     //ScoreBoard
     @FXML
@@ -72,8 +72,8 @@ public class GameFlowController extends SceneController implements Initializable
     @FXML
     private GridPane scoreBoardGrid;
     private boolean scoreBoardIsVisible = false;
-    private ImageView scoreIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/sparkle-icon-white.png").toExternalForm()));
-    private ImageView scoreIconClose = new ImageView(new Image(getClass().getResource("/images/icons/sparkle-icon-white.png").toExternalForm()));
+    private ImageView scoreIconVisible = new ImageView(new Image(getClass().getResource("images/icons/sparkle-icon-white.png").toExternalForm()));
+    private ImageView scoreIconClose = new ImageView(new Image(getClass().getResource("images/icons/sparkle-icon-white.png").toExternalForm()));
 
 
     //Hand
@@ -128,7 +128,7 @@ public class GameFlowController extends SceneController implements Initializable
     private ArrayList<ImageView> playablePositions = new ArrayList<>();
     private ArrayList<ImageView> handCards = new ArrayList<>();
 
-    private String path = "/images/";
+    private String path = "images/";
 
     //forDraggability
     private double mouseAnchorX;
@@ -196,7 +196,6 @@ public class GameFlowController extends SceneController implements Initializable
         ArrayList<ImageView> resources = new ArrayList<>();
         ArrayList<ImageView> goldens = new ArrayList<>();
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
-        System.out.println("selected index: " + simplifiedCommonTable.getSelectedIndex());
 
         layout.setGameBackground(rootBorder);
 

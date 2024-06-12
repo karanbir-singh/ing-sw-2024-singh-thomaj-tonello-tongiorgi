@@ -5,20 +5,25 @@ import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 import javax.swing.text.html.ImageView;
 import java.awt.*;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 
-public class PawnSelectionController extends SceneController {
+public class PawnSelectionController extends SceneController implements Initializable {
 
     @FXML
     private Label status;
+
+    CommonLayout layout = new CommonLayout();
 
     @FXML
     private HBox buttonHBox;
@@ -55,7 +60,8 @@ public class PawnSelectionController extends SceneController {
 
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-
-
+    }
 }

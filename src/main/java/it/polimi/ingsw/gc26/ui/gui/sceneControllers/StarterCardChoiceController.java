@@ -73,7 +73,7 @@ public class StarterCardChoiceController extends SceneController implements Init
     Label status;
 
 
-    String path = "/images/";
+    String path = "images/";
 
     public void onClickGoToNextStep(ActionEvent event){
         try {

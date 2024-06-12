@@ -1,8 +1,7 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
+import it.polimi.ingsw.gc26.ui.gui.SceneEnum;
 import javafx.scene.Scene;
-
-import java.util.Objects;
 
 public class    SceneInfo {
 

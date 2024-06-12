@@ -1,13 +1,8 @@
 package it.polimi.ingsw.gc26.ui.gui;
 
-import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneEnum;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class GUIUpdate implements UpdateInterface {
     GUIApplication guiApplication;

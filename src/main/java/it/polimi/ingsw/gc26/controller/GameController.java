@@ -28,7 +28,8 @@ public class GameController implements Serializable {
     /**
      * This attribute represents the first part of the file path for saving the game controller
      */
-    public static final String GAME_CONTROLLER_FILE_PATH = "src/main/resources/gameController";
+//    public static final String GAME_CONTROLLER_FILE_PATH = "src/main/resources/gameController";
+    public static final String GAME_CONTROLLER_FILE_PATH = "gameController";
     /**
      * This attribute represents the ID of the game controller
      */
@@ -73,6 +74,7 @@ public class GameController implements Serializable {
      */
     public void backup() {
         try {
+//            FileOutputStream fileOutputStream = new FileOutputStream(String.valueOf(getClass().getResourceAsStream(GAME_CONTROLLER_FILE_PATH + ID + ".bin")));
             FileOutputStream fileOutputStream = new FileOutputStream(GAME_CONTROLLER_FILE_PATH + ID + ".bin");
             ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
             outputStream.writeObject(this);

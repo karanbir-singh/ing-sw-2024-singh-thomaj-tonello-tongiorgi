@@ -16,10 +16,9 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.rmi.NotBoundException;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -73,10 +72,9 @@ public class GUIApplication extends Application implements UIInterface {
 
         // Setup starting stage
         this.primaryStage = primaryStage;
-        primaryStage.setHeight(400);
-        primaryStage.setWidth(600);
+        primaryStage.setMaximized(true);
         primaryStage.setTitle(" Codex Naturalis");
-        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/icon.png"))));
+        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("sceneControllers/images/icon.png"))));
 
         // Launch thread for managing connection
         new Thread(() -> {
@@ -97,24 +95,24 @@ public class GUIApplication extends Application implements UIInterface {
      */
     private void loadScenes() {
         scenes = new ArrayList<>();
-        Arrays.stream(SceneEnum.values())
-                .forEach(sceneEnum -> {
-                    // Get scene
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(sceneEnum.value()));
 
-                    Parent root = null;
-                    try {
-                        root = loader.load();
-                    } catch (IOException e) {
-                        ConsoleColors.printError("[ERROR]: cannot load scenes");
-                        System.exit(-1);
-                    }
-                    SceneController sceneController = loader.getController();
-                    sceneController.setMainClient(mainClient);
+        for(SceneEnum sceneEnum : SceneEnum.values()){
+            FXMLLoader loader = new FXMLLoader(this.getClass().getResource(sceneEnum.value()));
 
-                    // Add scene
-                    scenes.add(new SceneInfo(sceneController, new Scene(root), sceneEnum));
-                });
+            Parent root = null;
+            try {
+                root = loader.load();
+            } catch (IOException e) {
+//                        ConsoleColors.printError("[ERROR]: cannot load scenes");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+            SceneController sceneController = loader.getController();
+            sceneController.setMainClient(mainClient);
+
+            // Add scene
+            scenes.add(new SceneInfo(sceneController, new Scene(root), sceneEnum));
+        }
 
     }
 

@@ -33,19 +33,19 @@
                                         <ImageView fx:id="resourceCard0" fitWidth="180.0" pickOnBounds="true"
                                                    preserveRatio="true" styleClass="card">
                                             <image>
-                                                <Image url="@../../../../images/backSide/img_2.jpeg"/>
+                                                <Image url="@sceneControllers/images/backSide/img_2.jpeg"/>
                                             </image>
                                         </ImageView>
                                         <ImageView fx:id="resourceCard1" fitWidth="180.0" pickOnBounds="true"
                                                    preserveRatio="true" styleClass="resourceDeck">
                                             <image>
-                                                <Image url="@../../../../images/backSide/img_2.jpeg"/>
+                                                <Image url="@sceneControllers/images/backSide/img_2.jpeg"/>
                                             </image>
                                         </ImageView>
                                         <ImageView fx:id="resourceDeck" fitWidth="180.0" pickOnBounds="true"
                                                    preserveRatio="true" styleClass="card">
                                             <image>
-                                                <Image url="@../../../../images/backSide/img_2.jpeg"/>
+                                                <Image url="@sceneControllers/images/backSide/img_2.jpeg"/>
                                             </image>
                                         </ImageView>
                                     </children>
@@ -55,19 +55,19 @@
                                         <ImageView fx:id="goldCard0" fitWidth="180.0" pickOnBounds="true"
                                                    preserveRatio="true" styleClass="card">
                                             <image>
-                                                <Image url="@../../../../images/backSide/img_2.jpeg"/>
+                                                <Image url="@sceneControllers/images/backSide/img_2.jpeg"/>
                                             </image>
                                         </ImageView>
                                         <ImageView fx:id="goldCard1" fitWidth="180.0" pickOnBounds="true"
                                                    preserveRatio="true" styleClass="resourceDeck">
                                             <image>
-                                                <Image url="@../../../../images/backSide/img_2.jpeg"/>
+                                                <Image url="@sceneControllers/images/backSide/img_2.jpeg"/>
                                             </image>
                                         </ImageView>
                                         <ImageView fx:id="goldDeck" fitWidth="180.0" pickOnBounds="true"
                                                    preserveRatio="true" styleClass="card">
                                             <image>
-                                                <Image url="@../../../../images/backSide/img_2.jpeg"/>
+                                                <Image url="@sceneControllers/images/backSide/img_2.jpeg"/>
                                             </image>
                                         </ImageView>
                                     </children>
@@ -115,14 +115,14 @@
                         <ImageView fx:id="commonMissionLabel" fitHeight="30.0" fitWidth="195.0" pickOnBounds="true"
                                    preserveRatio="true">
                             <image>
-                                <Image url="@../../../../images/labels/CommonMissionsLabel.png"/>
+                                <Image url="@sceneControllers/images/labels/CommonMissionsLabel.png"/>
                             </image>
                         </ImageView>
                         <VBox fx:id="commonMissionsBox" spacing="20.0"/>
                         <ImageView fx:id="secretMissionLabel" fitHeight="29.0" fitWidth="231.0" pickOnBounds="true"
                                    preserveRatio="true">
                             <image>
-                                <Image url="@../../../../images/labels/SecretMissionLabel.png"/>
+                                <Image url="@sceneControllers/images/labels/SecretMissionLabel.png"/>
                             </image>
                             <VBox.margin>
                                 <Insets right="5.0"/>
@@ -191,7 +191,7 @@
                             <children>
                                 <ImageView fx:id="scoreBoard1" fitHeight="480.0" fitWidth="290.0" pickOnBounds="true">
                                     <image>
-                                        <Image url="@../../../../images/plateau_score.jpg"/>
+                                        <Image url="@sceneControllers/images/plateau_score.jpg"/>
                                     </image>
                                 </ImageView>
                                 <GridPane fx:id="scoreBoardGrid" layoutX="14.0" layoutY="14.0" prefHeight="450.0"
