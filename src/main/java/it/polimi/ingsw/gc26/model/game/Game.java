@@ -167,6 +167,7 @@ public class Game implements Serializable {
             winners = players.stream()
                     .filter(player -> player.getPersonalBoard().getScore() == (maxScore % 29))
                     .collect(Collectors.toCollection(ArrayList::new));
+            //TODO CAMBIARE STATO DEL GAME IN WINNER E NOTIFICARE
         }
 
         // Change current player

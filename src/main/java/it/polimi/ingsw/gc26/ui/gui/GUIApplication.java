@@ -7,11 +7,14 @@ import it.polimi.ingsw.gc26.ui.UIInterface;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.awt.*;
 import java.io.File;
@@ -157,6 +160,9 @@ public class GUIApplication extends Application implements UIInterface {
             // Update stage
             scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
             scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/LOGIN.css")).toExternalForm());
+            this.primaryStage.setOnCloseRequest((WindowEvent windowEvent) ->{
+                this.mainClient.killProcesses();
+            });
             this.primaryStage.setScene(scene);
             this.primaryStage.show();
         });
@@ -279,8 +285,7 @@ public class GUIApplication extends Application implements UIInterface {
         SceneInfo sceneInfo = this.getSceneInfo(SceneEnum.ERROR);
         this.popupStage.setScene(sceneInfo.getScene());
         ((ErrorController) sceneInfo.getSceneController()).setMessage(message);
-
-        //this.popupStage.setOnCloseRequest(we -> System.exit(0));
+        this.popupStage.setOnCloseRequest(Event::consume);
         this.popupStage.alwaysOnTopProperty();
         this.popupStage.show();
     }

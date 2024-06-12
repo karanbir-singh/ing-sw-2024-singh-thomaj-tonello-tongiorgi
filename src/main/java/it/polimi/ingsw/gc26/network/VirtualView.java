@@ -67,5 +67,5 @@ public interface VirtualView extends Remote {
 
     void ping() throws RemoteException;
 
-    void killProcess() throws RemoteException;
+    void killProcess(String nickname) throws RemoteException;
 }

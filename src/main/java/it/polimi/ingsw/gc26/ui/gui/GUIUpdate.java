@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneEnum;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
+import javafx.stage.WindowEvent;
 
 import java.awt.*;
 import java.io.File;
@@ -66,6 +67,7 @@ public class GUIUpdate implements UpdateInterface {
     public void updateViewPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
             this.guiApplication.getCurrentScene().getSceneController().changeGUIPersonalBoard(personalBoard);
+            System.out.println("your points: " +personalBoard.getScore());
         } else {
             this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIPersonalBoard(personalBoard);
             this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIPersonalBoard(personalBoard);
@@ -144,10 +146,23 @@ public class GUIUpdate implements UpdateInterface {
 
     @Override
     public void showError(String message) {
+        if(message.equals("Server is down, wait for reconnection...")){
+            Platform.runLater(()->this.guiApplication.openErrorPopup(message));
+        }
         try {
             Platform.runLater(()->this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, true));
         } catch (Exception e) {
         }
-        //Platform.runLater(()->this.guiApplication.openErrorPopup(message));
+
+    }
+
+    @Override
+    public void closeErrorPopup(){ //this is called in the client ping thread
+        Platform.runLater(()->{
+            //so that it can be closed
+            this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().setOnCloseRequest((WindowEvent event)->{});
+            //close the error scene
+            this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().hide();
+        });
     }
 }

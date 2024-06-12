@@ -39,4 +39,5 @@ public class VirtualRMIMainController implements VirtualMainController {
     public VirtualGameController getVirtualGameController(int id) throws RemoteException {
         return new VirtualRMIGameController(this.mainController.getGameController(id));
     }
+
 }

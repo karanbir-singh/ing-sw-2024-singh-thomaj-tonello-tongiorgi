@@ -24,4 +24,5 @@ public interface UpdateInterface {
     void showMessage(String message);
 
     void showError(String message);
+    void closeErrorPopup();
 }

@@ -183,6 +183,9 @@ public class GameFlowController extends SceneController implements Initializable
 
             this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
             this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
+            for (ImageView target : playablePositions) {
+                target.setVisible(false);
+            }
         } catch (RemoteException e) {
             // throw new RuntimeException(e);
         }

@@ -430,9 +430,8 @@ public class MainController implements Serializable {
 
                                 // Client is not alive
                                 allClientAlive = false;
-
-                                // Destry game
-                                this.destroyGame(gameControllerID);
+                                // Destroy game
+                                this.destroyGame(gameControllerID, client.getValue()); //getValue non è il nickname
                             }
                         }
                     }
@@ -455,10 +454,9 @@ public class MainController implements Serializable {
      *
      * @param gameControllerID ID of the game controller that you want to destroy
      */
-    public void destroyGame(int gameControllerID) {
+    public void destroyGame(int gameControllerID, String nickname) {
         // Notify game destruction
-        gamesControllers.get(gameControllerID).getGame().getObservable().notifyGameClosed();
-
+        gamesControllers.get(gameControllerID).getGame().getObservable().notifyGameClosed(nickname);
         // Remove game from the map
         gamesControllers.remove(gameControllerID);
 
