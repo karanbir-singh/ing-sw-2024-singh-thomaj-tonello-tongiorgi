@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.WinnerController">
+   <children>
+      <Label fx:id="title" layoutX="258.0" layoutY="50.0" text="Label">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="status" layoutX="401.0" layoutY="173.0" text="Label">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="rank" layoutX="125.0" layoutY="173.0" text="Label">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="rank1" layoutX="135.0" layoutY="183.0" text="Label">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="rank11" layoutX="125.0" layoutY="209.0" text="Label">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label fx:id="rank111" layoutX="135.0" layoutY="262.0" text="Label">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

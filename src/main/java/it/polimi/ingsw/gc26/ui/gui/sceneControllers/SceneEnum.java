@@ -11,7 +11,8 @@ public enum SceneEnum {
     SECRETMISSIONCHOICE(GUIApplication.scenesPath + "/secretMissionChoice.fxml"),
     GAMEFLOW(GUIApplication.scenesPath + "/gameFlow.fxml"),
     INFO(GUIApplication.scenesPath + "/info.fxml"),
-    ERROR(GUIApplication.scenesPath + "/error.fxml");
+    ERROR(GUIApplication.scenesPath + "/error.fxml"),
+    WINNER(GUIApplication.scenesPath + "/winner.fxml");
     //altre
 
     //all the scenes

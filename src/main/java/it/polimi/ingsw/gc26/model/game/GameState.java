@@ -16,5 +16,6 @@ public enum GameState implements Serializable {
     WAITING_SECRET_MISSION_CHOICE,
     FIRST_PLAYER_EXTRACTION,
     GAME_STARTED,
-    END_STAGE
+    END_STAGE,
+    WINNER
 }

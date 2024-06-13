@@ -167,6 +167,7 @@ public class Game implements Serializable {
             winners = players.stream()
                     .filter(player -> player.getPersonalBoard().getScore() == (maxScore % 29))
                     .collect(Collectors.toCollection(ArrayList::new));
+
             //TODO CAMBIARE STATO DEL GAME IN WINNER E NOTIFICARE
         }
 
@@ -207,6 +208,7 @@ public class Game implements Serializable {
         }
         String message = "Current player has changed!";
         this.observable.notifyUpdateGame(new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected), message);
+        this.setState(GameState.WINNER);
         // TODO update simplified player
     }
 
@@ -323,6 +325,8 @@ public class Game implements Serializable {
             case GAME_STARTED:
                 message = "GAME STARTED!";
                 break;
+            case WINNER:
+                message = "Game ended, here are the winners";
         }
 
 
