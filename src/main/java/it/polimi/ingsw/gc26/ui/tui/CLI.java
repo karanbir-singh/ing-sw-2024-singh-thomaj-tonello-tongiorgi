@@ -31,12 +31,16 @@ public class CLI {
 
         //COMMON TABLE: check if missions are already present
         String[][] commonTablePrint;
-        if(simplifiedCommonTable.getCommonMissions().isEmpty()){
-            commonTablePrint = printableCommonTable();
+        if(simplifiedCommonTable != null) {
+            if (simplifiedCommonTable.getCommonMissions().isEmpty()) {
+                commonTablePrint = printableCommonTable();
+            } else {
+                commonTablePrint = printableCommonTableAndMissions();
+            }
         } else {
-            commonTablePrint = printableCommonTableAndMissions();
+            commonTablePrint = new String[1][1];
+            commonTablePrint[0][0] = "\t";
         }
-
         //SCORES
         //TODO aggiungere gli score
         String[][] scores;

@@ -28,8 +28,7 @@ public class GameController implements Serializable {
     /**
      * This attribute represents the first part of the file path for saving the game controller
      */
-//    public static final String GAME_CONTROLLER_FILE_PATH = "src/main/resources/gameController";
-    public static final String GAME_CONTROLLER_FILE_PATH = "gameController";
+    public static final String GAME_CONTROLLER_FILE_PATH = "../gameController";
     /**
      * This attribute represents the ID of the game controller
      */

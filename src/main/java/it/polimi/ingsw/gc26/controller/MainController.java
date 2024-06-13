@@ -22,8 +22,7 @@ public class MainController implements Serializable {
     /**
      * This attribute represents the file path for saving the main controller
      */
-//    public static final String MAIN_CONTROLLER_FILE_PATH = "src/main/resources/mainController.bin";
-    public static final String MAIN_CONTROLLER_FILE_PATH = "mainController.bin";
+    public static final String MAIN_CONTROLLER_FILE_PATH = "../mainController.bin";
 
     /**
      * This attribute represents the list of clients who are waiting for a new game
