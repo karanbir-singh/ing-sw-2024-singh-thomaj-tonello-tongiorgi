@@ -26,101 +26,107 @@ public class CLI {
 
     //GAME
     public void printGame() {
-        SimplifiedCommonTable simplifiedCommonTable = miniModel.getSimplifiedCommonTable();
-        SimplifiedPersonalBoard personalBoard = miniModel.getPersonalBoard();
+        if(miniModel != null) {
+            SimplifiedCommonTable simplifiedCommonTable = miniModel.getSimplifiedCommonTable();
+            SimplifiedPersonalBoard personalBoard = miniModel.getPersonalBoard();
 
-        //COMMON TABLE: check if missions are already present
-        String[][] commonTablePrint;
-        if(simplifiedCommonTable != null) {
-            if (simplifiedCommonTable.getCommonMissions().isEmpty()) {
-                commonTablePrint = printableCommonTable();
+            //COMMON TABLE: check if missions are already present
+            String[][] commonTablePrint;
+            if(simplifiedCommonTable != null) {
+                if (simplifiedCommonTable.getCommonMissions().isEmpty()) {
+                    commonTablePrint = printableCommonTable();
+                } else {
+                    commonTablePrint = printableCommonTableAndMissions();
+                }
             } else {
-                commonTablePrint = printableCommonTableAndMissions();
+                commonTablePrint = new String[1][1];
+                commonTablePrint[0][0] = "\t";
             }
-        } else {
-            commonTablePrint = new String[1][1];
-            commonTablePrint[0][0] = "\t";
-        }
-        //SCORES
-        //TODO aggiungere gli score
-        String[][] scores;
-        if(miniModel.getSimplifiedGame().getGameState() == GameState.GAME_STARTED ||
-                miniModel.getSimplifiedGame().getGameState() == GameState.END_STAGE){
-            scores = allPrintableScores();
-        } else {
-            scores = new String[1][1];
-            scores[0][0] = "\t";
-        }
-
-        //PERSONAL BOARD
-        String[][] personalBoardPrint;
-        if(miniModel.getPersonalBoard() != null){
-            personalBoardPrint = printablePersonalBoard(miniModel.getPersonalBoard());
-        } else {
-            personalBoardPrint = new String[1][1];
-            personalBoardPrint[0][0] = "\t";
-        }
-
-        //HAND: check if secret mission is already present
-        String[][] handPrint;
-        if(miniModel.getSimplifiedHand() != null) {
-            if(miniModel.getPersonalBoard() != null && miniModel.getPersonalBoard().getSecretMission() != null) {
-                handPrint = printableHandAndMission();
+            //SCORES
+            //TODO aggiungere gli score
+            String[][] scores;
+            if(miniModel.getSimplifiedGame() != null &&
+                    (miniModel.getSimplifiedGame().getGameState() == GameState.GAME_STARTED ||
+                        miniModel.getSimplifiedGame().getGameState() == GameState.END_STAGE)){
+                    scores = allPrintableScores();
             } else {
-                handPrint = printableHand();
+                scores = new String[1][1];
+                scores[0][0] = "\t";
             }
-        } else {
-            handPrint = new String[1][1];
-            handPrint[0][0] = "\t";
-        }
 
-        //SECRET HAND
-        String[][] secretHand;
-        if(miniModel.getSimplifiedGame().getGameState() == GameState.WAITING_SECRET_MISSION_CHOICE && miniModel.getSimplifiedSecretHand().getCards().size() == 2) {
-            secretHand = printableSecretHand();
-        } else {
-            secretHand = new String[1][1];
-            secretHand[0][0] = "\t";
-        }
-
-        //calculate dimensions
-        int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + secretHand.length + 2;
-        int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), Math.max(handPrint[0].length, secretHand[0].length));
-
-        //utils
-        int y=0;
-
-        //initialize empty matrix
-        String[][] printableGame = new String[yDim][xDim];
-        for(int i=0; i<yDim; i++){
-            for(int j=0; j<xDim; j++){
-                printableGame[i][j] = "\t";
+            //PERSONAL BOARD
+            String[][] personalBoardPrint;
+            if(miniModel.getPersonalBoard() != null){
+                personalBoardPrint = printablePersonalBoard(miniModel.getPersonalBoard());
+            } else {
+                personalBoardPrint = new String[1][1];
+                personalBoardPrint[0][0] = "\t";
             }
+
+            //HAND: check if secret mission is already present
+            String[][] handPrint;
+            if(miniModel.getSimplifiedHand() != null) {
+                if(miniModel.getPersonalBoard() != null && miniModel.getPersonalBoard().getSecretMission() != null) {
+                    handPrint = printableHandAndMission();
+                } else {
+                    handPrint = printableHand();
+                }
+            } else {
+                handPrint = new String[1][1];
+                handPrint[0][0] = "\t";
+            }
+
+            //SECRET HAND
+            String[][] secretHand;
+            if(miniModel.getSimplifiedGame() != null &&
+                    miniModel.getSimplifiedGame().getGameState() == GameState.WAITING_SECRET_MISSION_CHOICE &&
+                    miniModel.getSimplifiedSecretHand().getCards().size() == 2) {
+                secretHand = printableSecretHand();
+            } else {
+                secretHand = new String[1][1];
+                secretHand[0][0] = "\t";
+            }
+
+            //calculate dimensions
+            int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + secretHand.length + 2;
+            int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), Math.max(handPrint[0].length, secretHand[0].length));
+
+            //utils
+            int y=0;
+
+            //initialize empty matrix
+            String[][] printableGame = new String[yDim][xDim];
+            for(int i=0; i<yDim; i++){
+                for(int j=0; j<xDim; j++){
+                    printableGame[i][j] = "\t";
+                }
+            }
+
+            //DESIGN THE MATRIX
+            //show common table
+            printableGame[y][0] = "COMMON TABLE:";
+            y++;
+            addPrintable(commonTablePrint, printableGame, 0, y);
+
+            //show scores
+
+            addPrintable(scores, printableGame, commonTablePrint[0].length + 1, y + 1);
+            y += commonTablePrint.length;
+
+            //show personal board
+            addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
+            y += personalBoardPrint.length;
+
+            //show player's hand
+            addPrintable(handPrint, printableGame, 0, y);
+            y += handPrint.length;
+
+            //show secret hand
+            addPrintable(secretHand, printableGame, 0, y);
+
+            showPrintable(printableGame);
+
         }
-
-        //DESIGN THE MATRIX
-        //show common table
-        printableGame[y][0] = "COMMON TABLE:";
-        y++;
-        addPrintable(commonTablePrint, printableGame, 0, y);
-
-        //show scores
-
-        addPrintable(scores, printableGame, commonTablePrint[0].length + 1, y + 1);
-        y += commonTablePrint.length;
-
-        //show personal board
-        addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
-        y += personalBoardPrint.length;
-
-        //show player's hand
-        addPrintable(handPrint, printableGame, 0, y);
-        y += handPrint.length;
-
-        //show secret hand
-        addPrintable(secretHand, printableGame, 0, y);
-
-        showPrintable(printableGame);
     }
 
     public void printOtherGame(String nickname) {
