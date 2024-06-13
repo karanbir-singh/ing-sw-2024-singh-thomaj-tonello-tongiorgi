@@ -203,7 +203,6 @@ public class GameFlowController extends SceneController implements Initializable
         ArrayList<ImageView> resources = new ArrayList<>();
         ArrayList<ImageView> goldens = new ArrayList<>();
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
-        System.out.println("selected index: " + simplifiedCommonTable.getSelectedIndex());
 
         int index = 0;
         for (Card card : simplifiedCommonTable.getResourceCards()) {
@@ -477,7 +476,6 @@ public class GameFlowController extends SceneController implements Initializable
     public void onHandCardClicked(MouseEvent mouseEvent) {
         try {
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
-            System.out.println("card clicked: " + index);
             this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
             throw new RuntimeException(e);

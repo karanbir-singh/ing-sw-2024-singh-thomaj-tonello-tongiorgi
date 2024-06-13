@@ -102,7 +102,7 @@
                       </VBox>
                   </right>
                   <padding>
-                      <Insets bottom="20.0" />
+                      <Insets bottom="20.0" left="20.0" top="20.0" />
                   </padding>
                   <left>
                       <HBox fx:id="HBoxLeftPanel" minWidth="40.0" prefHeight="100.0" prefWidth="40.0" BorderPane.alignment="CENTER">
