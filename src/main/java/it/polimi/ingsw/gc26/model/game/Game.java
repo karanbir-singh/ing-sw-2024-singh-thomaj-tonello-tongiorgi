@@ -207,7 +207,7 @@ public class Game implements Serializable {
         }
         String message = "Current player has changed!";
         this.observable.notifyUpdateGame(new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected), message);
-        // TODO update simplified Game & player
+        // TODO update simplified player
     }
 
     /**

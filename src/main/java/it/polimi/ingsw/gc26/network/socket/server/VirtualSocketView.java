@@ -466,6 +466,7 @@ public class VirtualSocketView implements VirtualView {
             scores.put(score.getKey(), score.getValue().toString());
         }
 
+
         // winners
         ArrayNode winners = om.createArrayNode();
         for ( String winner : simplifiedGame.getWinners() ) {

@@ -149,8 +149,10 @@ public class SocketServerHandler implements Runnable {
 
         // scores
         HashMap<String, Integer> scores = new HashMap<>();
-        for (JsonNode score : encodedGame.get("scores")) {
-            scores.put(score.asText(), score.asInt());
+        Iterator<Map.Entry<String, JsonNode>> scoreIterator = encodedGame.get("scores").fields();
+        while (scoreIterator.hasNext()) {
+            Map.Entry<String, JsonNode> entry = scoreIterator.next();
+            scores.put(entry.getKey(), entry.getValue().asInt());
         }
 
         // winners

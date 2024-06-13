@@ -45,14 +45,17 @@ public class MainServer {
         System.out.println("Constructing RMI Server...");
         VirtualMainController virtualMainController = new VirtualRMIMainController(mainController);
 
+        System.out.println("Creating registry...");
+        Registry registry = LocateRegistry.createRegistry(RMI_SERVER_PORT); //TODO delete
+
         // Create registry
-        Registry registry = null;
-        try {
-            System.out.println("Getting registry...");
-            registry = LocateRegistry.createRegistry(RMI_SERVER_PORT);
-        } catch (RemoteException e) {
-            throw new RemoteException("[ERROR]: Cannot find RMI registry");
-        }
+        //Registry registry = null;
+//        try {
+//            System.out.println("Getting registry...");
+//            registry = LocateRegistry.getRegistry(RMI_SERVER_PORT);
+//        } catch (RemoteException e) {
+//            throw new RemoteException("[ERROR]: Cannot find RMI registry");
+//        }
 
         // Bind main controller
         try {

@@ -597,7 +597,7 @@ public class GameFlowController extends SceneController implements Initializable
     @Override
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();
-        if (newMessage.getReceiver() == null) {
+        if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
             if (!newMessage.getSender().getNickname().equals(nickname)) {
                 if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
                         !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
@@ -679,8 +679,8 @@ public class GameFlowController extends SceneController implements Initializable
             scoreBoardButton.getStyleClass().clear();
             scoreBoardButton.getStyleClass().add("buttonVisible");
             anchorPaneScoreBoard.setTranslateX(0);
-            HBoxLeftPanel.setMinWidth(340);
-            HBoxLeftPanel.setMaxWidth(340);
+            HBoxLeftPanel.setMinWidth(380);
+            HBoxLeftPanel.setMaxWidth(380);
             scoreBoardIsVisible = true;
         }
     }
@@ -708,8 +708,8 @@ public class GameFlowController extends SceneController implements Initializable
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonVisible");
             anchorPaneChat.setTranslateX(-270);
-            HBoxLeftPanel.setMinWidth(340);
-            HBoxLeftPanel.setMaxWidth(340);
+            HBoxLeftPanel.setMinWidth(380);
+            HBoxLeftPanel.setMaxWidth(380);
             chatIsVisible = true;
         }
     }
@@ -763,34 +763,34 @@ public class GameFlowController extends SceneController implements Initializable
     }
 
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
-//        clearScoreBoard();
-//
-//        for (Map.Entry<String, Integer> playerScore : scores.entrySet()) {
-//            if (pawnsSelected.containsKey(playerScore.getKey())) {
-//                Point pawnPoint = PawnsCoords.getCoords(playerScore.getValue());
-//                Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
-//                if (cell != null) {
-//                    GridPane miniGrid = ((GridPane) cell);
-//                    Circle circle = new Circle(6);
-//                    circle.setFill(Color.valueOf(pawnsSelected.get(playerScore.getKey()).toString()));
-//                    Platform.runLater(()-> {switch (miniGrid.getChildren().size()) {
-//                        case 0 :
-//                            miniGrid.add(circle, 0, 0);
-//                            break;
-//                        case 1:
-//                            miniGrid.add(circle, 0, 1);
-//                            break;
-//                        case 2:
-//                            miniGrid.add(circle, 1, 0);
-//                            break;
-//                        case 3:
-//                            miniGrid.add(circle, 1, 1);
-//                            break;
-//                    }});
-//
-//
-//                }
-//            }
-//        }
+        Platform.runLater(() ->{
+            clearScoreBoard();
+
+            for (Map.Entry<String, Integer> playerScore : scores.entrySet()) {
+                if (pawnsSelected.containsKey(playerScore.getKey())) {
+                    Point pawnPoint = PawnsCoords.getCoords(playerScore.getValue());
+                    Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
+                    if (cell != null) {
+                        GridPane miniGrid = ((GridPane) cell);
+                        Circle circle = new Circle(6);
+                        circle.setFill(Color.valueOf(pawnsSelected.get(playerScore.getKey()).toString()));
+                        Platform.runLater(()-> {switch (miniGrid.getChildren().size()) {
+                            case 0 :
+                                miniGrid.add(circle, 0, 0);
+                                break;
+                            case 1:
+                                miniGrid.add(circle, 0, 1);
+                                break;
+                            case 2:
+                                miniGrid.add(circle, 1, 0);
+                                break;
+                            case 3:
+                                miniGrid.add(circle, 1, 1);
+                                break;
+                        }});
+                    }
+                }
+            }
+        });
     }
 }
