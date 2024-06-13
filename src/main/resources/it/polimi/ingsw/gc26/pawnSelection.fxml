@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.PawnSelectionController">
@@ -39,6 +42,33 @@
                         <Font size="24.0" />
                      </font>
                   </Button>
+               </children>
+            </HBox>
+            <HBox fx:id="HBoxLeftPanel" layoutX="10.0" layoutY="10.0" minWidth="40.0" prefHeight="100.0" prefWidth="40.0">
+               <children>
+                  <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="50.0" minWidth="40.0" prefHeight="889.0" prefWidth="50.0">
+                     <children>
+                        <VBox alignment="BOTTOM_LEFT" prefHeight="632.0" prefWidth="60.0" spacing="10.0" AnchorPane.bottomAnchor="0.0">
+                           <children>
+                              <Button fx:id="chatButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0">
+                                 <text>
+                                    <Cursor fx:constant="HAND" />
+                                 </text>
+                              </Button>
+                              <Button layoutX="116.0" layoutY="12.0" mnemonicParsing="false" onAction="#openRulebook">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="anchorPaneChat" prefHeight="600.0" prefWidth="290.0" translateX="-2000.0">
+                     <children>
+                        <TabPane fx:id="chatTabPane" prefHeight="600.0" prefWidth="290.0" tabClosingPolicy="UNAVAILABLE" />
+                     </children>
+                  </AnchorPane>
                </children>
             </HBox>
          </children>

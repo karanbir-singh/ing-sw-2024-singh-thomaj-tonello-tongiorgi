@@ -89,6 +89,7 @@ public class GUIUpdate implements UpdateInterface {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
             this.guiApplication.getCurrentScene().getSceneController().changeGUIChat(simplifiedChat);
         } else {
+            this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().changeGUIChat(simplifiedChat);
             this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIChat(simplifiedChat);
             this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIChat(simplifiedChat);
             this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIChat(simplifiedChat);
@@ -108,6 +109,7 @@ public class GUIUpdate implements UpdateInterface {
                 break;
             case WAITING_PAWNS_SELECTION:
                 this.guiApplication.setCurrentScene(SceneEnum.PAWNSELECTION);
+                this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
                 break;
             case WAITING_SECRET_MISSION_CHOICE:
                 this.guiApplication.setCurrentScene(SceneEnum.SECRETMISSIONCHOICE);
