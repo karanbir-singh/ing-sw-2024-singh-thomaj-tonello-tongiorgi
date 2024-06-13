@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="rootPane" prefHeight="690.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.StarterCardChoiceController">
    <children>
       <ImageView fx:id="background" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
@@ -20,7 +19,7 @@
          <content>
             <BorderPane fx:id="rootBorder" prefHeight="200.0" prefWidth="200.0">
                <center>
-                  <VBox fx:id="centerVBox" spacing="20.0" BorderPane.alignment="CENTER">
+                  <VBox fx:id="centerVBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0" BorderPane.alignment="CENTER">
                      <children>
                         <VBox fx:id="commonTableBox" alignment="CENTER" fillWidth="false" maxWidth="1.7976931348623157E308" minWidth="500.0" spacing="20.0">
                            <children>
@@ -114,10 +113,10 @@
                   </VBox>
                </center>
                <right>
-                  <VBox fx:id="rightVBox" maxWidth="300.0" spacing="20.0" BorderPane.alignment="CENTER" />
+                  <VBox fx:id="rightVBox" maxWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER" />
                </right>
                <left>
-                  <HBox fx:id="HBoxLeftPanel" minWidth="40.0" prefHeight="100.0" prefWidth="40.0" BorderPane.alignment="CENTER">
+                  <HBox fx:id="HBoxLeftPanel" maxWidth="200.0" minWidth="40.0" prefHeight="100.0" prefWidth="40.0" BorderPane.alignment="CENTER">
                      <BorderPane.margin>
                         <Insets right="20.0" />
                      </BorderPane.margin>
