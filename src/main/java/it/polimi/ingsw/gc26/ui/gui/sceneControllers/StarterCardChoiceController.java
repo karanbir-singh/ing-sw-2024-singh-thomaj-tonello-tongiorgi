@@ -61,7 +61,9 @@ public class StarterCardChoiceController extends SceneController implements Init
     @FXML
     private BorderPane rootBorder;
     @FXML
-    private ScrollPane rootScrollPane;
+    private AnchorPane rootPane;
+    @FXML
+    private ImageView background;
 
     private ArrayList<ImageView> cards = new ArrayList<>();
     @FXML
@@ -106,18 +108,7 @@ public class StarterCardChoiceController extends SceneController implements Init
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cards.add(handCard0);
-        cards.add(handCard1);
-        cards.add(handCard2);
-        cards.add(resourceCard0);
-        cards.add(resourceCard1);
-        cards.add(resourceDeck);
-        cards.add(goldCard0);
-        cards.add(goldCard1);
-        cards.add(goldDeck);
 
-        layout.setGameBackground(rootBorder);
-        layout.pageBindings(rootScrollPane, rootBorder, HBoxLeftPanel, rightVBox, centerVBox);
-
+        layout.pageBindings(rootPane, rootBorder, background);
     }
 }

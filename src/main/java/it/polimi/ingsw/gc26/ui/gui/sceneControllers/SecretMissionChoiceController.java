@@ -11,10 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -62,7 +59,11 @@ public class SecretMissionChoiceController extends SceneController implements In
     @FXML
     private BorderPane rootBorder;
     @FXML
-    private ScrollPane rootScrollPane;
+    private AnchorPane rootPane;
+    @FXML
+    private ImageView background;
+    @FXML
+    private Button confirmButton;
 
     private ArrayList<ImageView> cards = new ArrayList<>();
     private ImageView image1 = new ImageView(new Image(getClass().getResource("/images/game-background.png").toExternalForm()));
@@ -125,7 +126,7 @@ public class SecretMissionChoiceController extends SceneController implements In
         }
 
         Platform.runLater(()->{
-            this.rightVBox.getChildren().setAll(imageViewsCommonMissions);
+            this.rightVBox.getChildren().addAll(imageViewsCommonMissions);
             this.resourceHbox.getChildren().setAll(resources);
             this.goldHbox.getChildren().setAll(goldens);
 
@@ -213,6 +214,7 @@ public class SecretMissionChoiceController extends SceneController implements In
 
         Platform.runLater(()->{
             this.secretMissionHBox.getChildren().setAll(secretHand);
+            this.secretMissionHBox.getChildren().add(confirmButton);
         });
     }
 
@@ -253,16 +255,9 @@ public class SecretMissionChoiceController extends SceneController implements In
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
 
-
-
         this.creationAndSettingGridContraints(this.gridPane);
 
-
-        layout.setGameBackground(rootBorder);
-        //layout.pageBindings(rootScrollPane, rootAnchor, centerVBox, leftVBox, rightVBox);
-        layout.pageBindings(rootScrollPane, rootBorder, HBoxLeftPanel, rightVBox, centerVBox);
-        layout.setPersonalBoardRatio(rootBorder, personalBoardTabPane, 0.3, 0.4);
-
+        layout.pageBindings(rootPane, rootBorder, background);
     }
 
 }

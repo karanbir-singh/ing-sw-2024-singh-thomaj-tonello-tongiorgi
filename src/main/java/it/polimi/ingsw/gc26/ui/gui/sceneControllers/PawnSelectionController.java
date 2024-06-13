@@ -7,6 +7,7 @@ import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
 import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
@@ -20,9 +21,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -39,22 +38,37 @@ import java.util.ResourceBundle;
 
 public class PawnSelectionController extends SceneController implements Initializable {
 
+    @FXML
     public HBox HBoxLeftPanel;
+    @FXML
     public AnchorPane anchorPaneChat;
+    @FXML
     public TabPane chatTabPane;
+    @FXML
     public Button chatButton;
     @FXML
     private Label status;
     CommonLayout layout = new CommonLayout();
 
     @FXML
-    private HBox buttonHBox;
+    private TilePane pawnsTile;
+    @FXML
+    private ImageView background;
+    @FXML
+    private AnchorPane rootPane;
+    @FXML
+    private BorderPane rootBorder;
+    @FXML
+    public VBox centerVBox;
+    @FXML
+    public VBox rightVBox;
+
     private HashMap<String, ScrollPane> chats = new HashMap<>();
 
     private boolean chatIsVisible = false;
     private boolean chatHasBeenCreated = false;
-    private javafx.scene.image.ImageView chatIconVisible = new javafx.scene.image.ImageView(new javafx.scene.image.Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
-    private javafx.scene.image.ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
 
     public void onClickButton(ActionEvent event){
         String pawnColor = ((Button)event.getSource()).getAccessibleText();
@@ -73,11 +87,11 @@ public class PawnSelectionController extends SceneController implements Initiali
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        layout.pageBindings(rootPane, rootBorder, background);
 
         //buttons setup
         layout.buttonSetup(chatIconClose, chatIconVisible, chatButton);
         chatButton.setOnAction(this::toggleChat);
-
     }
 
     @Override
@@ -91,7 +105,7 @@ public class PawnSelectionController extends SceneController implements Initiali
             buttons.add(button);
         }
         Platform.runLater(()->{
-            buttonHBox.getChildren().setAll(buttons);
+            pawnsTile.getChildren().setAll(buttons);
         });
 
 
@@ -113,7 +127,7 @@ public class PawnSelectionController extends SceneController implements Initiali
             HBoxLeftPanel.setMinWidth(40);
             HBoxLeftPanel.setMaxWidth(40);
             chatIsVisible = false;
-            buttonHBox.setTranslateX(0);
+            //buttonHBox.setTranslateX(0);
         } else {
             chatButton.setGraphic(chatIconVisible);
             chatButton.getStyleClass().clear();
@@ -122,7 +136,7 @@ public class PawnSelectionController extends SceneController implements Initiali
             HBoxLeftPanel.setMinWidth(380);
             HBoxLeftPanel.setMaxWidth(380);
             chatIsVisible = true;
-            buttonHBox.setTranslateX(500);
+            //buttonHBox.setTranslateX(500);
         }
     }
 

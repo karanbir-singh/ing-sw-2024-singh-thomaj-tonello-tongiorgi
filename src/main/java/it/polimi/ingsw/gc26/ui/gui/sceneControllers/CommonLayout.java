@@ -14,27 +14,22 @@ import java.util.ArrayList;
 
 public class CommonLayout {
     private Image gameBackground = new Image(getClass().getResource("/images/game-background.png").toExternalForm());
-    public void pageBindings(ScrollPane rootScrollPane, BorderPane rootBorder, HBox leftHBox, VBox rightVBox, VBox centerVBox){
-
-        rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
-            setGameBackground(rootBorder);
-            try {
-                leftHBox.setPrefHeight(rootBorder.getPrefHeight());
-            } catch (NullPointerException e) {}
-            rightVBox.setPrefHeight(rootBorder.getPrefHeight());
+    public void pageBindings(AnchorPane rootPane, BorderPane rootBorder, ImageView background){
+        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            rootBorder.setPrefHeight(newVal.doubleValue());
         });
 
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
-            setGameBackground(rootBorder);
+            rootBorder.setPrefWidth(newVal.doubleValue());
         });
+
+        background.setImage(gameBackground);
+        setBackground(rootPane, background);
     }
 
     public void setPersonalBoardRatio(BorderPane rootBorder, TabPane personalBoardTabPane, double vRatio, double hRatio) {
         rootBorder.heightProperty().addListener((obs, oldVal, newVal) -> {
             personalBoardTabPane.prefHeightProperty().bind(rootBorder.heightProperty().multiply(vRatio));
-        });
-        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
-            personalBoardTabPane.prefWidthProperty().bind(rootBorder.widthProperty().multiply(hRatio));
         });
     }
 
@@ -117,13 +112,5 @@ public class CommonLayout {
         double y = (initialImageHeight - viewportHeight) / 2;
 
         background.setViewport(new Rectangle2D(x, y, viewportWidth, viewportHeight));
-    }
-
-    public void setGameBackground(BorderPane rootBorder) {
-        rootBorder.setBackground(new Background(new BackgroundImage(gameBackground,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                BackgroundSize.DEFAULT)));
     }
 }

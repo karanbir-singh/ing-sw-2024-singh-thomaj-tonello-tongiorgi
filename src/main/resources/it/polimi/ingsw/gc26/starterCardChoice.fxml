@@ -12,138 +12,144 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane fx:id="rootScrollPane" fitToHeight="true" fitToWidth="true" prefViewportHeight="800.0" prefViewportWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.StarterCardChoiceController">
-   <content>
-      <BorderPane fx:id="rootBorder" prefHeight="200.0" prefWidth="200.0">
-         <center>
-            <VBox fx:id="centerVBox" spacing="20.0" BorderPane.alignment="CENTER">
-               <children>
-                  <VBox fx:id="commonTableBox" alignment="CENTER" fillWidth="false" maxWidth="1.7976931348623157E308" minWidth="500.0" spacing="20.0">
+
+<AnchorPane fx:id="rootPane" prefHeight="690.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.StarterCardChoiceController">
+   <children>
+      <ImageView fx:id="background" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+      <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <content>
+            <BorderPane fx:id="rootBorder" prefHeight="200.0" prefWidth="200.0">
+               <center>
+                  <VBox fx:id="centerVBox" spacing="20.0" BorderPane.alignment="CENTER">
                      <children>
-                        <HBox spacing="10.0">
+                        <VBox fx:id="commonTableBox" alignment="CENTER" fillWidth="false" maxWidth="1.7976931348623157E308" minWidth="500.0" spacing="20.0">
                            <children>
-                              <ImageView fx:id="resourceCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                                 <image>
-                                    <Image url="@../../../../images/frontSide/img_1.jpeg" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fx:id="resourceCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                                 <image>
-                                    <Image url="@../../../../images/frontSide/img_11.jpeg" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fx:id="resourceDeck" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
-                                 <image>
-                                    <Image url="@../../../../images/backSide/img_2.jpeg" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                        <HBox spacing="10.0">
-                           <children>
-                              <ImageView fx:id="goldCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                                 <image>
-                                    <Image url="@../../../../images/frontSide/img_55.jpeg" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fx:id="goldCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                                 <image>
-                                    <Image url="@../../../../images/frontSide/img_71.jpeg" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fx:id="goldDeck" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
-                                 <image>
-                                    <Image url="@../../../../images/backSide/img_3.jpeg" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  <VBox fx:id="choosingBox" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" prefHeight="300.0" spacing="10.0">
-                     <children>
-                        <ImageView fitHeight="56.0" fitWidth="410.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../images/labels/StarterLabel.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="status" alignment="CENTER" contentDisplay="CENTER" text="Double click on the card to select the other side">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fx:id="image" fitHeight="95.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../images/backSide/img_1.jpeg" />
-                           </image>
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </ImageView>
-                        <Button mnemonicParsing="false" onAction="#onClickGoToNextStep" text="Play Card">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </VBox>
-                  <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
-                     <children>
-                        <ImageView fx:id="handCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                           <image>
-                              <Image url="@../../../../images/frontSide/img_59.jpeg" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="handCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                           <image>
-                              <Image url="@../../../../images/frontSide/img_27.jpeg" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="handCard2" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                           <image>
-                              <Image url="@../../../../images/frontSide/img_27.jpeg" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </center>
-         <right>
-            <VBox fx:id="rightVBox" maxWidth="300.0" minWidth="120.0" spacing="20.0" BorderPane.alignment="CENTER" />
-         </right>
-         <left>
-            <HBox fx:id="HBoxLeftPanel" minWidth="40.0" prefHeight="100.0" prefWidth="40.0" BorderPane.alignment="CENTER">
-               <BorderPane.margin>
-                  <Insets right="20.0" />
-               </BorderPane.margin>
-               <children>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <VBox alignment="BOTTOM_LEFT" prefHeight="632.0" prefWidth="60.0" spacing="10.0" AnchorPane.bottomAnchor="0.0">
-                           <children>
-                              <Button mnemonicParsing="false" text=" " />
-                              <Button mnemonicParsing="false" text=" " />
-                              <Button mnemonicParsing="false" text=" " />
+                              <HBox spacing="10.0">
+                                 <children>
+                                    <ImageView fx:id="resourceCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                       <image>
+                                          <Image url="@../../../../images/frontSide/img_1.jpeg" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fx:id="resourceCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                       <image>
+                                          <Image url="@../../../../images/frontSide/img_11.jpeg" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fx:id="resourceDeck" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
+                                       <image>
+                                          <Image url="@../../../../images/backSide/img_2.jpeg" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <HBox spacing="10.0">
+                                 <children>
+                                    <ImageView fx:id="goldCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                       <image>
+                                          <Image url="@../../../../images/frontSide/img_55.jpeg" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fx:id="goldCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                       <image>
+                                          <Image url="@../../../../images/frontSide/img_71.jpeg" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fx:id="goldDeck" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="resourceDeck">
+                                       <image>
+                                          <Image url="@../../../../images/backSide/img_3.jpeg" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
+                        <VBox fx:id="choosingBox" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" prefHeight="300.0" spacing="10.0">
+                           <children>
+                              <ImageView fitHeight="56.0" fitWidth="410.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../images/labels/StarterLabel.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="status" alignment="CENTER" contentDisplay="CENTER" text="Double click on the card to select the other side">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fx:id="image" fitHeight="95.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../images/backSide/img_1.jpeg" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Button mnemonicParsing="false" onAction="#onClickGoToNextStep" text="Play Card">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </VBox>
+                        <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
+                           <children>
+                              <ImageView fx:id="handCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                 <image>
+                                    <Image url="@../../../../images/frontSide/img_59.jpeg" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="handCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                 <image>
+                                    <Image url="@../../../../images/frontSide/img_27.jpeg" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="handCard2" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
+                                 <image>
+                                    <Image url="@../../../../images/frontSide/img_27.jpeg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
                      </children>
-                  </AnchorPane>
-                  <AnchorPane>
+                  </VBox>
+               </center>
+               <right>
+                  <VBox fx:id="rightVBox" maxWidth="300.0" spacing="20.0" BorderPane.alignment="CENTER" />
+               </right>
+               <left>
+                  <HBox fx:id="HBoxLeftPanel" minWidth="40.0" prefHeight="100.0" prefWidth="40.0" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets right="20.0" />
+                     </BorderPane.margin>
                      <children>
-                        <ImageView fx:id="scoreBoard" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                           <image>
-                              <Image url="@../../../../images/plateau_score.jpg" />
-                           </image>
-                        </ImageView>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <VBox alignment="BOTTOM_LEFT" prefHeight="632.0" prefWidth="60.0" spacing="10.0" AnchorPane.bottomAnchor="0.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" text=" " />
+                                    <Button mnemonicParsing="false" text=" " />
+                                    <Button mnemonicParsing="false" text=" " />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane>
+                           <children>
+                              <ImageView fx:id="scoreBoard" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                                 <image>
+                                    <Image url="@../../../../images/plateau_score.jpg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
                      </children>
-                  </AnchorPane>
-               </children>
-            </HBox>
-         </left>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </BorderPane>
-   </content>
-</ScrollPane>
+                  </HBox>
+               </left>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </BorderPane>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

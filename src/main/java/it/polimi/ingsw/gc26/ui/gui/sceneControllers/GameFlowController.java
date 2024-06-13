@@ -115,6 +115,8 @@ public class GameFlowController extends SceneController implements Initializable
     //layout
     CommonLayout layout = new CommonLayout();
     @FXML
+    private AnchorPane rootPane;
+    @FXML
     private HBox HBoxLeftPanel;
     @FXML
     private VBox centerVBox;
@@ -124,6 +126,8 @@ public class GameFlowController extends SceneController implements Initializable
     private BorderPane rootBorder;
     @FXML
     private ScrollPane rootScrollPane;
+    @FXML
+    private ImageView background;
 
     private ArrayList<ImageView> playablePositions = new ArrayList<>();
     private ArrayList<ImageView> handCards = new ArrayList<>();
@@ -200,8 +204,6 @@ public class GameFlowController extends SceneController implements Initializable
         ArrayList<ImageView> goldens = new ArrayList<>();
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
         System.out.println("selected index: " + simplifiedCommonTable.getSelectedIndex());
-
-        layout.setGameBackground(rootBorder);
 
         int index = 0;
         for (Card card : simplifiedCommonTable.getResourceCards()) {
@@ -383,17 +385,13 @@ public class GameFlowController extends SceneController implements Initializable
 
 
         //page layout and dimensions bindings
-        layout.pageBindings(rootScrollPane, rootBorder, HBoxLeftPanel, rightVBox, centerVBox);
+        layout.pageBindings(rootPane, rootBorder, background);
         layout.handLayout(rootBorder, handCards, handPane);
-
-        layout.setPersonalBoardRatio(rootBorder, personalBoardTabPane, 0.55, 0.55);
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
 
         this.creationAndSettingGridContraints(this.gridPane);
-
-        layout.setGameBackground(rootBorder);
     }
 
     private void creationAndSettingGridContraints(GridPane gridPane) {

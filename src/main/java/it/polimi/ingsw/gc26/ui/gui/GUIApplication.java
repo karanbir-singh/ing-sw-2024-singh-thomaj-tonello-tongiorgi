@@ -76,8 +76,8 @@ public class GUIApplication extends Application implements UIInterface {
 
         // Setup starting stage
         this.primaryStage = primaryStage;
-        primaryStage.setHeight(400);
-        primaryStage.setWidth(600);
+        primaryStage.setHeight(800);
+        primaryStage.setWidth(1000);
         primaryStage.setTitle(" Codex Naturalis");
         primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/icon.png"))));
 
@@ -109,7 +109,7 @@ public class GUIApplication extends Application implements UIInterface {
                     try {
                         root = loader.load();
                     } catch (IOException e) {
-                        ConsoleColors.printError("[ERROR]: cannot load scenes");
+                        ConsoleColors.printError("[ERROR]: cannot load " + sceneEnum.name());
                         System.exit(-1);
                     }
                     SceneController sceneController = loader.getController();
