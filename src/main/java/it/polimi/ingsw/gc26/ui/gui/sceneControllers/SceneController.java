@@ -2,7 +2,10 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.model.player.Pawn;
+import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
 import it.polimi.ingsw.gc26.view_model.*;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 
 import java.util.HashMap;
 
@@ -64,4 +67,9 @@ public class SceneController {
 
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
     }
+
+    public void openRulebook(ActionEvent actionEvent) {
+        Platform.runLater(() -> GUIApplication.openRulebook());
+    }
+
 }

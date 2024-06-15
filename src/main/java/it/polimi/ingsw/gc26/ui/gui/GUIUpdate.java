@@ -116,6 +116,7 @@ public class GUIUpdate implements UpdateInterface {
                 this.guiApplication.setCurrentScene(SceneEnum.PAWNSELECTION);
                 this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
                 this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
+                this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
                 break;
             case WAITING_SECRET_MISSION_CHOICE:
                 this.guiApplication.setCurrentScene(SceneEnum.SECRETMISSIONCHOICE);

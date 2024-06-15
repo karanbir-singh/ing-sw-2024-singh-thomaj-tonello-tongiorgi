@@ -112,10 +112,6 @@ public class PawnSelectionController extends SceneController implements Initiali
     }
 
 
-    public void openRulebook(ActionEvent actionEvent) {
-        Platform.runLater(() -> GUIApplication.openRulebook());
-    }
-
 
     public void toggleChat(ActionEvent actionEvent) {
 
