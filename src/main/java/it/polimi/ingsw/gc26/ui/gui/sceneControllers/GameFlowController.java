@@ -754,10 +754,6 @@ public class GameFlowController extends SceneController implements Initializable
 
     }
 
-    public void openRulebook(ActionEvent actionEvent) {
-        Platform.runLater(() -> GUIApplication.openRulebook());
-    }
-
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
 //        clearScoreBoard();
 //

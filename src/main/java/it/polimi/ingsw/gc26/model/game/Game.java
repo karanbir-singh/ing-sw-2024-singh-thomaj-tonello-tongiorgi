@@ -6,13 +6,14 @@ import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.parser.ParserCore;
+import it.polimi.ingsw.gc26.utils.ParserCore;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -90,7 +91,7 @@ public class Game implements Serializable {
         }
 
         // Create each deck
-        ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
+        ParserCore p = new ParserCore("CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
         Deck resourceCardDeck = p.getResourceCards();
         Deck missionDeck = p.getMissionCards();

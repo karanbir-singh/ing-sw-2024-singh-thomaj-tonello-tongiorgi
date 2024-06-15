@@ -16,10 +16,8 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 
@@ -292,11 +290,10 @@ public class GUIApplication extends Application implements UIInterface {
         return mainClient.getNickname();
     }
 
-    public static void openRulebook() {
-
+    public static void openRulebook(String filePath) {
         if (Desktop.isDesktopSupported()) {
             try {
-                File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
+                File myFile = new File(filePath);
                 Desktop.getDesktop().open(myFile);
             } catch (IOException ex) {
                 // no application registered for PDFs

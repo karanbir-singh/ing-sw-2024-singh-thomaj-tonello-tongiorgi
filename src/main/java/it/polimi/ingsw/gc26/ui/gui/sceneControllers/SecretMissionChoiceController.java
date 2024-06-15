@@ -5,12 +5,10 @@ import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -19,7 +17,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.ImagePattern;
 
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -38,7 +35,6 @@ public class SecretMissionChoiceController extends SceneController implements In
     private HBox cardHBox;
     @FXML
     private HBox secretMissionHBox;
-
 
 
     @FXML
@@ -78,17 +74,17 @@ public class SecretMissionChoiceController extends SceneController implements In
 
     String path = "images/";
 
-    public void onClickSecretMission(MouseEvent mouseEvent){
+    public void onClickSecretMission(MouseEvent mouseEvent) {
         try {
-            int index = Integer.valueOf(((ImageView)mouseEvent.getSource()).getAccessibleText());
-            this.mainClient.getVirtualGameController().selectSecretMission(index,this.mainClient.getClientID());
+            int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getAccessibleText());
+            this.mainClient.getVirtualGameController().selectSecretMission(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public void onClickConfermButton(){
+    public void onClickConfirmButton() {
         try {
             this.mainClient.getVirtualGameController().setSecretMission(this.mainClient.getClientID());
         } catch (RemoteException e) {
@@ -102,29 +98,29 @@ public class SecretMissionChoiceController extends SceneController implements In
         ArrayList<ImageView> goldens = new ArrayList<>();
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
 
-        for(Card card: simplifiedCommonTable.getResourceCards()){
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
-            this.setParameters(imageView,String.valueOf(0));
+        for (Card card : simplifiedCommonTable.getResourceCards()) {
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
+            this.setParameters(imageView, String.valueOf(0));
             resources.add(imageView);
         }
-        ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
+        ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
         this.setParameters(resourceDeck, String.valueOf(0));
         resources.add(resourceDeck);
-        for(Card card: simplifiedCommonTable.getGoldCards()){
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
+        for (Card card : simplifiedCommonTable.getGoldCards()) {
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(0));
             goldens.add(imageView);
         }
-        ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path+ simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
-        this.setParameters(goldDeck,String.valueOf(0));
+        ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
+        this.setParameters(goldDeck, String.valueOf(0));
         goldens.add(goldDeck);
-        for(Card card: simplifiedCommonTable.getCommonMissions()){
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
+        for (Card card : simplifiedCommonTable.getCommonMissions()) {
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
             this.setParameters(imageView, String.valueOf(0));
             imageViewsCommonMissions.add(imageView);
         }
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             this.rightVBox.getChildren().setAll(imageViewsCommonMissions);
             this.resourceHbox.getChildren().setAll(resources);
             this.goldHbox.getChildren().setAll(goldens);
@@ -136,22 +132,22 @@ public class SecretMissionChoiceController extends SceneController implements In
 
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
-        ArrayList<ImageView>handCards = new ArrayList<>();
-        for(Card card: simplifiedHand.getCards()){
+        ArrayList<ImageView> handCards = new ArrayList<>();
+        for (Card card : simplifiedHand.getCards()) {
             ImageView imageView;
-            imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
-            this.setParameters(imageView,String.valueOf(0));
+            imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
+            this.setParameters(imageView, String.valueOf(0));
             handCards.add(imageView);
         }
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             this.cardHBox.getChildren().setAll(handCards);
         });
 
     }
 
     @Override
-    public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard){
+    public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         ImageView imageCardToPlay = new ImageView(new Image(String.valueOf(
                 getClass().getResource(path + personalBoard.getOccupiedPositions().getLast().getSide().getImagePath()))));
         this.addImage(imageCardToPlay,
@@ -159,24 +155,25 @@ public class SecretMissionChoiceController extends SceneController implements In
                 this.yPositionStarterCard - personalBoard.getOccupiedPositions().getLast().getY(), this.gridPane);
 
     }
+
     @Override
-    public void changeGUIotherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard){
-       boolean exist = false;
+    public void changeGUIotherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
+        boolean exist = false;
         Tab consideredTab = null;
         ScrollPane otherScrollPane = null;
         GridPane otherGridPane = null;
         //controlla che se esiste gia un tab con lo stesso nickname, e se esiste prendere i riferimenti allo scrollPane e griPane
-        for(Tab tab : personalBoardTabPane.getTabs()){
-            if(tab.getText().equals(otherPersonalBoard.getNickname())){
+        for (Tab tab : personalBoardTabPane.getTabs()) {
+            if (tab.getText().equals(otherPersonalBoard.getNickname())) {
                 exist = true;
                 consideredTab = tab;
-                otherScrollPane = (ScrollPane)tab.getContent();
-                otherGridPane = (GridPane)otherScrollPane.getContent();
+                otherScrollPane = (ScrollPane) tab.getContent();
+                otherGridPane = (GridPane) otherScrollPane.getContent();
             }
         }
 
         //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
-        if(!otherPersonalBoard.getNickname().equals(this.nickname) && !exist){
+        if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
             this.personalBoardTabPane.getTabs().add(consideredTab);
@@ -202,21 +199,21 @@ public class SecretMissionChoiceController extends SceneController implements In
     public void changeGUISecretHand(SimplifiedHand simplifiedSecretHand) {
         ArrayList<ImageView> secretHand = new ArrayList<>();
         int index = 0;
-        for(Card card: simplifiedSecretHand.getCards()){
+        for (Card card : simplifiedSecretHand.getCards()) {
             ImageView imageView;
-            imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path+ card.getFront().getImagePath()))));
-            this.setParameters(imageView,String.valueOf(index));
+            imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
+            this.setParameters(imageView, String.valueOf(index));
             imageView.setOnMouseClicked(this::onClickSecretMission);
             secretHand.add(imageView);
             index++;
         }
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             this.secretMissionHBox.getChildren().setAll(secretHand);
         });
     }
 
-    private void setParameters(ImageView imageView, String accessibleText){
+    private void setParameters(ImageView imageView, String accessibleText) {
         imageView.setFitWidth(150);
         imageView.setFitHeight(98);
         imageView.setPreserveRatio(true);
@@ -225,34 +222,31 @@ public class SecretMissionChoiceController extends SceneController implements In
     }
 
 
-    private void creationAndSettingGridContraints(GridPane gridPane){
+    private void creationAndSettingGridContraints(GridPane gridPane) {
         gridPane.setPrefWidth(8000);
         gridPane.setPrefHeight(4000);
         gridPane.setMaxWidth(8000);
         gridPane.setMaxHeight(4000);
-        for(int row = 0; row < 81; row++) {
+        for (int row = 0; row < 81; row++) {
             gridPane.getRowConstraints().add(rowConstraints);
         }
-        for(int column = 0; column < 81; column++){
+        for (int column = 0; column < 81; column++) {
             gridPane.getColumnConstraints().add(columnConstraints);
         }
     }
-    private void addImage(ImageView imageView,int x, int y, GridPane gridPane){
-        setParameters(imageView,"0");
-        Platform.runLater(()->{
-            gridPane.add(imageView,x,y);
+
+    private void addImage(ImageView imageView, int x, int y, GridPane gridPane) {
+        setParameters(imageView, "0");
+        Platform.runLater(() -> {
+            gridPane.add(imageView, x, y);
         });
     }
-
-
-
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
-
 
 
         this.creationAndSettingGridContraints(this.gridPane);

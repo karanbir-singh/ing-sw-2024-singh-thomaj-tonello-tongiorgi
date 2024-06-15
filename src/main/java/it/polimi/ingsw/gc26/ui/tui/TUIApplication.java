@@ -13,6 +13,7 @@ import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -331,13 +332,13 @@ public class TUIApplication implements UIInterface {
         }
     }
 
-    private static void openRulebook() {
+    private void openRulebook() {
         if (Desktop.isDesktopSupported()) {
             try {
-                File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
+                File myFile = new File(String.valueOf(getClass().getResource("CODEX_Rulebook_EN.pdf").toURI().getPath()));
                 Desktop.getDesktop().open(myFile);
-            } catch (IOException ex) {
-                // no application registered for PDFs
+            } catch (IOException | URISyntaxException ex) {
+                ex.printStackTrace();
             }
         }
     }
