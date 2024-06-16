@@ -7,11 +7,14 @@ import it.polimi.ingsw.gc26.ui.UIInterface;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.awt.*;
 import java.io.File;
@@ -70,7 +73,8 @@ public class GUIApplication extends Application implements UIInterface {
 
         // Setup starting stage
         this.primaryStage = primaryStage;
-        primaryStage.setMaximized(true);
+        primaryStage.setHeight(800);
+        primaryStage.setWidth(1000);
         primaryStage.setTitle(" Codex Naturalis");
         primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("sceneControllers/images/icon.png"))));
 
@@ -97,16 +101,15 @@ public class GUIApplication extends Application implements UIInterface {
         for(SceneEnum sceneEnum : SceneEnum.values()){
             FXMLLoader loader = new FXMLLoader(this.getClass().getResource(sceneEnum.value()));
 
-            Parent root = null;
-            try {
-                root = loader.load();
-            } catch (IOException e) {
-//                        ConsoleColors.printError("[ERROR]: cannot load scenes");
-                e.printStackTrace();
-                System.exit(-1);
-            }
-            SceneController sceneController = loader.getController();
-            sceneController.setMainClient(mainClient);
+                    Parent root = null;
+                    try {
+                        root = loader.load();
+                    } catch (IOException e) {
+                        ConsoleColors.printError("[ERROR]: cannot load " + sceneEnum.name());
+                        System.exit(-1);
+                    }
+                    SceneController sceneController = loader.getController();
+                    sceneController.setMainClient(mainClient);
 
             // Add scene
             scenes.add(new SceneInfo(sceneController, new Scene(root), sceneEnum));
@@ -153,6 +156,9 @@ public class GUIApplication extends Application implements UIInterface {
             // Update stage
             scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
             scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/LOGIN.css")).toExternalForm());
+            this.primaryStage.setOnCloseRequest((WindowEvent windowEvent) ->{
+                this.mainClient.killProcesses();
+            });
             this.primaryStage.setScene(scene);
             this.primaryStage.show();
         });
@@ -275,8 +281,7 @@ public class GUIApplication extends Application implements UIInterface {
         SceneInfo sceneInfo = this.getSceneInfo(SceneEnum.ERROR);
         this.popupStage.setScene(sceneInfo.getScene());
         ((ErrorController) sceneInfo.getSceneController()).setMessage(message);
-
-        //this.popupStage.setOnCloseRequest(we -> System.exit(0));
+        this.popupStage.setOnCloseRequest(Event::consume);
         this.popupStage.alwaysOnTopProperty();
         this.popupStage.show();
     }

@@ -1,12 +1,12 @@
 package it.polimi.ingsw.gc26.ui.gui;
 
+
 import it.polimi.ingsw.gc26.model.player.Point;
 
 import java.util.ArrayList;
 
 public class PawnsCoords {
     static ArrayList<Point> pointsCoord = new ArrayList<>() {{
-        add(new Point(3, 10 ));
         add(new Point(3, 10 ));
         add(new Point(5, 10));
         add(new Point(7, 10));

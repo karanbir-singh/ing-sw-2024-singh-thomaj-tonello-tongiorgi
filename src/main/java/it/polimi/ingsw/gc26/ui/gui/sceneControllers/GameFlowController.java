@@ -115,6 +115,8 @@ public class GameFlowController extends SceneController implements Initializable
     //layout
     CommonLayout layout = new CommonLayout();
     @FXML
+    private AnchorPane rootPane;
+    @FXML
     private HBox HBoxLeftPanel;
     @FXML
     private VBox centerVBox;
@@ -124,6 +126,8 @@ public class GameFlowController extends SceneController implements Initializable
     private BorderPane rootBorder;
     @FXML
     private ScrollPane rootScrollPane;
+    @FXML
+    private ImageView background;
 
     private ArrayList<ImageView> playablePositions = new ArrayList<>();
     private ArrayList<ImageView> handCards = new ArrayList<>();
@@ -183,6 +187,9 @@ public class GameFlowController extends SceneController implements Initializable
 
             this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
             this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
+            for (ImageView target : playablePositions) {
+                target.setVisible(false);
+            }
         } catch (RemoteException e) {
             // throw new RuntimeException(e);
         }
@@ -196,8 +203,6 @@ public class GameFlowController extends SceneController implements Initializable
         ArrayList<ImageView> resources = new ArrayList<>();
         ArrayList<ImageView> goldens = new ArrayList<>();
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
-
-        layout.setGameBackground(rootBorder);
 
         int index = 0;
         for (Card card : simplifiedCommonTable.getResourceCards()) {
@@ -379,17 +384,13 @@ public class GameFlowController extends SceneController implements Initializable
 
 
         //page layout and dimensions bindings
-        layout.pageBindings(rootScrollPane, rootBorder, HBoxLeftPanel, rightVBox, centerVBox);
+        layout.pageBindings(rootPane, rootBorder, background);
         layout.handLayout(rootBorder, handCards, handPane);
-
-        layout.setPersonalBoardRatio(rootBorder, personalBoardTabPane, 0.55, 0.55);
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
 
         this.creationAndSettingGridContraints(this.gridPane);
-
-        layout.setGameBackground(rootBorder);
     }
 
     private void creationAndSettingGridContraints(GridPane gridPane) {
@@ -592,7 +593,7 @@ public class GameFlowController extends SceneController implements Initializable
     @Override
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();
-        if (newMessage.getReceiver() == null) {
+        if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
             if (!newMessage.getSender().getNickname().equals(nickname)) {
                 if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
                         !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
@@ -674,8 +675,8 @@ public class GameFlowController extends SceneController implements Initializable
             scoreBoardButton.getStyleClass().clear();
             scoreBoardButton.getStyleClass().add("buttonVisible");
             anchorPaneScoreBoard.setTranslateX(0);
-            HBoxLeftPanel.setMinWidth(340);
-            HBoxLeftPanel.setMaxWidth(340);
+            HBoxLeftPanel.setMinWidth(380);
+            HBoxLeftPanel.setMaxWidth(380);
             scoreBoardIsVisible = true;
         }
     }
@@ -703,8 +704,8 @@ public class GameFlowController extends SceneController implements Initializable
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonVisible");
             anchorPaneChat.setTranslateX(-270);
-            HBoxLeftPanel.setMinWidth(340);
-            HBoxLeftPanel.setMaxWidth(340);
+            HBoxLeftPanel.setMinWidth(380);
+            HBoxLeftPanel.setMaxWidth(380);
             chatIsVisible = true;
         }
     }
@@ -754,34 +755,34 @@ public class GameFlowController extends SceneController implements Initializable
     }
 
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
-//        clearScoreBoard();
-//
-//        for (Map.Entry<String, Integer> playerScore : scores.entrySet()) {
-//            if (pawnsSelected.containsKey(playerScore.getKey())) {
-//                Point pawnPoint = PawnsCoords.getCoords(playerScore.getValue());
-//                Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
-//                if (cell != null) {
-//                    GridPane miniGrid = ((GridPane) cell);
-//                    Circle circle = new Circle(6);
-//                    circle.setFill(Color.valueOf(pawnsSelected.get(playerScore.getKey()).toString()));
-//                    Platform.runLater(()-> {switch (miniGrid.getChildren().size()) {
-//                        case 0 :
-//                            miniGrid.add(circle, 0, 0);
-//                            break;
-//                        case 1:
-//                            miniGrid.add(circle, 0, 1);
-//                            break;
-//                        case 2:
-//                            miniGrid.add(circle, 1, 0);
-//                            break;
-//                        case 3:
-//                            miniGrid.add(circle, 1, 1);
-//                            break;
-//                    }});
-//
-//
-//                }
-//            }
-//        }
+        Platform.runLater(() ->{
+            clearScoreBoard();
+
+            for (Map.Entry<String, Integer> playerScore : scores.entrySet()) {
+                if (pawnsSelected.containsKey(playerScore.getKey())) {
+                    Point pawnPoint = PawnsCoords.getCoords(playerScore.getValue());
+                    Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
+                    if (cell != null) {
+                        GridPane miniGrid = ((GridPane) cell);
+                        Circle circle = new Circle(6);
+                        circle.setFill(Color.valueOf(pawnsSelected.get(playerScore.getKey()).toString()));
+                        Platform.runLater(()-> {switch (miniGrid.getChildren().size()) {
+                            case 0 :
+                                miniGrid.add(circle, 0, 0);
+                                break;
+                            case 1:
+                                miniGrid.add(circle, 0, 1);
+                                break;
+                            case 2:
+                                miniGrid.add(circle, 1, 0);
+                                break;
+                            case 3:
+                                miniGrid.add(circle, 1, 1);
+                                break;
+                        }});
+                    }
+                }
+            }
+        });
     }
 }

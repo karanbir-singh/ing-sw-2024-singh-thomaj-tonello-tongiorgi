@@ -82,6 +82,7 @@ public class VirtualSocketMainController implements VirtualMainController {
         return null;
     }
 
+
     /**
      * This method creates the basic structure for this protocol.
      *

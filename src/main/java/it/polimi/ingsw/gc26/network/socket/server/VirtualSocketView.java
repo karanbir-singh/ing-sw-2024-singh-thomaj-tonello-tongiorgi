@@ -762,7 +762,7 @@ public class VirtualSocketView implements VirtualView {
      * @throws RemoteException
      */
     @Override
-    public void killProcess() throws RemoteException {
+    public void killProcess(String nickname) throws RemoteException {
         sendToClient("killProcess", new HashMap<>());
     }
 }

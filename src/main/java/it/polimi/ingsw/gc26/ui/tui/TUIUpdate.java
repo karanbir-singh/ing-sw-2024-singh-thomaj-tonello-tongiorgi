@@ -213,4 +213,9 @@ public class TUIUpdate implements UpdateInterface {
                 break;
         }
     }
+
+
+    public void closeErrorPopup(){
+
+    }
 }

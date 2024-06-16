@@ -16,6 +16,7 @@ import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
 import it.polimi.ingsw.gc26.view_model.SimplifiedModel;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
 import java.util.HashMap;
+import java.util.List;
 
 public class CLI {
     private SimplifiedModel miniModel;
@@ -302,13 +303,12 @@ public class CLI {
         //dimensions
         int xCardDim = 3;
         int yCardDim = 3;
-        int xDim = 3*(xCardDim+2);
-        int yDim = 2*(yCardDim+1) + 2;
+        int xDim = 3*(xCardDim+2) + 1;
+        int yDim = 2*(yCardDim+4);
         //components offsets
-        int xResource = 0, yResource = 1;
-        int xGold = 0, yGold = yResource + yCardDim + 3;
-        //decoration offsets
-        int yLine = yResource + yCardDim ;
+        int xResource = 1, yResource = 1;
+        int xGold = 1, yGold = yResource + yCardDim + 4;
+
         //utils
         int index = 0; //index to select the drawable element
         String selectedStyle = TextStyle.BACKGROUND_BEIGE.getStyleCode() + TextStyle.BLACK.getStyleCode();
@@ -320,7 +320,21 @@ public class CLI {
         //initialize empty matrix
         String[][] ct = new String[yDim][xDim];
         for(int i=0; i<yDim; i++){
-            for(int j=0; j<xDim; j+=5){
+            if((i>0 && i<4) || (i>7 && i<11)){
+                ct[i][0] = "           ";
+            }
+
+            if(i == 0 || i == 7){
+                ct[i][0] = "Card:      " ;
+            }
+            if(i == 4 || i == 11){
+                ct[i][0] = "Points:    " ;
+            }
+            if(i == 5 || i == 12){
+                ct[i][0] = "Requires:  " ;
+            }
+
+            for(int j=1; j<xDim; j+=5){
                 ct[i][j] = leftPadding;
                 ct[i][j+1] = "";
                 ct[i][j+2] = "";
@@ -332,7 +346,7 @@ public class CLI {
         //RESOURCES
 
         for (int i=0; i<2; i++) {
-            int offSet = index*5;
+            int offSet = index*5 + 1;
             //titles and separators for alignment
             ct[yResource-1][offSet] = "(" + index + ")";
             ct[yResource-1][offSet+1] = " Resource Card";
@@ -352,11 +366,12 @@ public class CLI {
                 addPrintable(emptyPrintable(xCardDim,yCardDim), ct, xResource, yResource);
             }
             xResource += xCardDim + 1;
+
             index++;
         }
 
         //insert resource deck
-        ct[yResource-1][index*5] = "(" + index + ") Resource Deck"; //title
+        ct[yResource-1][index*5 + 1] = "(" + index + ") Resource Deck"; //title
         if(index == miniCT.getSelectedIndex()){
             ct[yResource-1][index*5] = selectedStyle + ct[yResource-1][index*5] + styleReset;
         }
@@ -371,18 +386,9 @@ public class CLI {
         }
         index++;
 
-        //empty lines
-        for(int j=0; j<2; j++){
-            for(int i=0; i<xDim; i+=5){
-                ct[yLine + j][i+1] = blackSquare;
-                ct[yLine + j][i+2] = "   " + blackSquare + "   ";
-                ct[yLine + j][i+3] = blackSquare;
-            }
-        }
-
         //insert uncovered gold cards
         for (int i=0; i<2; i++) {
-            int offSet = (index-3)*5;
+            int offSet = (index-3)*5 + 1;
             ct[yGold-1][offSet] = "(" + index + ")";
             ct[yGold-1][offSet+1] = " Gold Card    ";
             if(index == miniCT.getSelectedIndex()){
@@ -406,7 +412,7 @@ public class CLI {
         }
 
         //insert gold deck
-        ct[yGold-1][(index-3)*5] = "(" + index + ") Gold Deck    " ;
+        ct[yGold-1][(index-3)*5 + 1] = "(" + index + ") Gold Deck    " ;
         if(index == miniCT.getSelectedIndex()){
             ct[yGold-1][(index-3)*5] = selectedStyle + ct[yGold-1][(index-3)*5] + styleReset;
         }
@@ -419,6 +425,61 @@ public class CLI {
         } else {
             addPrintable(miniCT.getGoldDeck().getBack().printableSide(), ct, xGold, yGold);
             decorateDeck(ct, xGold, yGold, xCardDim, yCardDim);
+        }
+
+        //insert details
+        for(int i=0; i<6; i++) {
+            Card c;
+            int y;
+            int x = 2 + xCardDim*(i%3);
+            if(i<2) {
+                c = miniCT.getResourceCards().get(i);
+                y = yResource + yCardDim;
+            } else if (i==2) {
+                c = miniCT.getResourceDeck();
+                y = yResource + yCardDim;
+            } else if (i<5) {
+                c = miniCT.getGoldCards().get(i%3);
+                y = yGold + yCardDim;
+            } else {
+                c = miniCT.getGoldDeck();
+                y = yGold + yCardDim;
+            }
+
+            //points
+            switch (c.getFront()) {
+                case CornerCounter cornerCounter -> ct[y][x] = "2 pt " + "x" + Character.toString(0x2B1C);
+                case InkwellCounter inkwellCounter -> ct[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
+                case ManuscriptCounter manuscriptCounter -> ct[y][x] = "1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
+                case QuillCounter quillCounter -> ct[y][x] = "1 pt " + "x" + Symbol.QUILL.getAlias();
+                case null, default -> ct[y][x] = c.getFront().getPoints() + " pt " + "        ";
+            }
+            if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
+                ct[y][x+1] = "       " + blackSquare + blackSquare;
+            } else {
+                ct[y][x+1] = blackSquare + blackSquare + blackSquare;
+            }
+            ct[y][x+2] = "    ";
+            y++;
+
+            //requirements
+            ct[y][x] = "";
+            int n;
+            int spaces = 5;
+
+            for(Symbol s: c.getFront().getRequestedResources().keySet()){
+                n = c.getFront().getRequestedResources().get(s);
+                for(int j=0; j<n; j++){
+                    ct[y][x] = ct[y][x] + s.getAlias();
+                }
+                spaces = spaces - n;
+            }
+            while (spaces>0){
+                ct[y][x] = ct[y][x] +  blackSquare;
+                spaces--;
+            }
+            ct[y][x+1] = "      " + blackSquare ;
+            ct[y][x+2] = "    ";
         }
 
         return ct;
@@ -680,7 +741,7 @@ public class CLI {
             int xMax = (xCardDim + 1) * 3 + 1;
             int yMax = yCardDim + 5;
 
-            //index to select the card
+            //index of the select the card
             int index = 0;
 
             //initialize empty matrix
@@ -695,7 +756,7 @@ public class CLI {
 
             myHand[0][0] = "\nYOUR HAND:\n";
             myHand[1][0] = "Card:      ";
-            for(int i=2; i<xCardDim + 2; i++){
+            for(int i=2; i<yCardDim + 2; i++){
                 myHand[i][0] = "            ";
             }
             myHand[5][0] = "Type:     ";

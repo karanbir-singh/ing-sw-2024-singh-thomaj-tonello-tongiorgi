@@ -167,5 +167,8 @@ public class ViewController {
         this.mainClient.killProcesses();
     }
 
+    public void closeErrorPopup(){
+        this.simplifiedModel.getView().closeErrorPopup();
+    }
 
 }

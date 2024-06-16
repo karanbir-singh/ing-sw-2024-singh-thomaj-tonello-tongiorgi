@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.ui.gui;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
+import javafx.stage.WindowEvent;
 
 public class GUIUpdate implements UpdateInterface {
     GUIApplication guiApplication;
@@ -61,6 +62,7 @@ public class GUIUpdate implements UpdateInterface {
     public void updateViewPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
             this.guiApplication.getCurrentScene().getSceneController().changeGUIPersonalBoard(personalBoard);
+            System.out.println("your points: " +personalBoard.getScore());
         } else {
             this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIPersonalBoard(personalBoard);
             this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIPersonalBoard(personalBoard);
@@ -84,6 +86,7 @@ public class GUIUpdate implements UpdateInterface {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
             this.guiApplication.getCurrentScene().getSceneController().changeGUIChat(simplifiedChat);
         } else {
+            this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().changeGUIChat(simplifiedChat);
             this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIChat(simplifiedChat);
             this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIChat(simplifiedChat);
             this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIChat(simplifiedChat);
@@ -103,6 +106,7 @@ public class GUIUpdate implements UpdateInterface {
                 break;
             case WAITING_PAWNS_SELECTION:
                 this.guiApplication.setCurrentScene(SceneEnum.PAWNSELECTION);
+                this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
                 break;
             case WAITING_SECRET_MISSION_CHOICE:
                 this.guiApplication.setCurrentScene(SceneEnum.SECRETMISSIONCHOICE);
@@ -139,10 +143,23 @@ public class GUIUpdate implements UpdateInterface {
 
     @Override
     public void showError(String message) {
+        if(message.equals("Server is down, wait for reconnection...")){
+            Platform.runLater(()->this.guiApplication.openErrorPopup(message));
+        }
         try {
             Platform.runLater(()->this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, true));
         } catch (Exception e) {
         }
-        //Platform.runLater(()->this.guiApplication.openErrorPopup(message));
+
+    }
+
+    @Override
+    public void closeErrorPopup(){ //this is called in the client ping thread
+        Platform.runLater(()->{
+            //so that it can be closed
+            this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().setOnCloseRequest((WindowEvent event)->{});
+            //close the error scene
+            this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().hide();
+        });
     }
 }

@@ -42,8 +42,6 @@ public class LoginController extends SceneController implements Initializable {
 
 
     private CommonLayout layout = new CommonLayout();
-    private double initialImageHeight;
-    private double initialImageWidth;
 
 
     public void setStatus(String message) {
@@ -99,8 +97,7 @@ public class LoginController extends SceneController implements Initializable {
         });
 
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            logo.setFitHeight(rootPane.getHeight() * 0.5);
-            //background.fitHeightProperty().bind(rootPane.heightProperty());
+            logo.setFitHeight(rootPane.getHeight()*0.5);
 
             if (rootPane.getHeight() < 650 && rootPane.getWidth() < 800) {
                 AnchorPane.setBottomAnchor(logoBox, 0.0);

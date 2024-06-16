@@ -222,10 +222,10 @@ public class ModelObservable implements Serializable {
     }
 
 
-    public void notifyGameClosed() {
+    public void notifyGameClosed(String nickname) {
         for (Pair client : this.clients) {
             try {
-                ((VirtualView) client.getKey()).killProcess();
+                ((VirtualView) client.getKey()).killProcess(nickname);
             } catch (RemoteException e) {
                 //client is down, no need to notify
             }
