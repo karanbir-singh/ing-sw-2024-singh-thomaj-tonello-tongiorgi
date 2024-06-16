@@ -9,6 +9,7 @@ import javafx.util.Pair;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
@@ -393,23 +394,15 @@ public class MainController implements Serializable {
         }).start();
     }
 
-    /**
-     * Useful to verify if the client is online or not
-     *
-     * @param clients          Array of VirtualView and id of that particular Game
-     * @param gameControllerID id of the game
-     */
+
     private void startClientsPing(ArrayList<Pair<VirtualView, String>> clients, int gameControllerID) {
-        new Thread(() -> {
-            // Each client is alive
-            boolean allClientAlive = true;
 
-            // While
-            while (allClientAlive) {
+        // Ping each client of the game
+        for (Pair<VirtualView, String> client : clients) {
 
-                // Ping each client of the game
-                for (Pair<VirtualView, String> client : clients) {
-                    // Use a counter for managing
+            new Thread(()-> {
+                boolean isAlive = true;
+                while (isAlive) {
                     int numAttempt = 0;
                     while (numAttempt < NUM_RECONNECTION_ATTEMPTS) {
                         try {
@@ -427,27 +420,19 @@ public class MainController implements Serializable {
                             // Check if attempt num reached max after error
                             if (numAttempt == NUM_RECONNECTION_ATTEMPTS) {
                                 System.out.println("A client is disconnected " + client.getValue());
-
+                                isAlive = false;
                                 // Client is not alive
-                                allClientAlive = false;
                                 // Destroy game
                                 this.destroyGame(gameControllerID, client.getValue()); //getValue non è il nickname
                             }
                         }
                     }
-                    // Check if client is alive
-                    if (!allClientAlive) break;
                 }
-
-                // Sleep thread
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    System.out.println("Thread interrupted");
-                }
-            }
-        }).start();
+            }).start();
+        }
     }
+
+
 
     /**
      * Destroy a game controller by its ID
@@ -455,24 +440,29 @@ public class MainController implements Serializable {
      * @param gameControllerID ID of the game controller that you want to destroy
      */
     public void destroyGame(int gameControllerID, String nickname) {
+        //the game is already destroyed by another player
+        if(gamesControllers.get(gameControllerID) == null){
+            return;
+        }
         // Notify game destruction
         gamesControllers.get(gameControllerID).getGame().getObservable().notifyGameClosed(nickname);
         // Remove game from the map
         gamesControllers.remove(gameControllerID);
 
         // Copy to disk again
-        try {
+        /*try {
             this.backup();
         } catch (IOException e) {
             System.out.println("COLPA DEL COPY TO DISK in DESTROY GAME");
-        }
+        }*/
 
         // Delete game controller file
         Path fileToDeletePath = Paths.get(GameController.GAME_CONTROLLER_FILE_PATH + gameControllerID + ".bin");
         try {
             Files.delete(fileToDeletePath);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("non c'è il file, qualcuno ha gia eliminato il file prima");
+            return;
         }
         System.out.println("Game " + gameControllerID + " destroyed");
     }

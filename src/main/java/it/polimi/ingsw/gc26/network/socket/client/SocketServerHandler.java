@@ -72,68 +72,70 @@ public class SocketServerHandler implements Runnable {
                 ObjectMapper JsonMapper = new ObjectMapper();
                 JsonNode msg = JsonMapper.readTree(line);
                 ObjectMapper valueMapper = new ObjectMapper();
-                JsonNode value = valueMapper.readTree(msg.get("value").asText());
-
-                switch (msg.get("function").asText()) {
-                    case "setClientID":
-                        this.viewController.setClientID(value.get("clientID").asText());
-                        break;
-                    case "setGameController":
-                        this.viewController.setGameController(new VirtualSocketGameController(this.outputToServer));
-                        break;
-                    case "updateClientState":
-                        this.viewController.updateClientState(ClientState.valueOf(value.get("clientState").asText()));
-                        break;
-                    case "showMessage":
-                        this.viewController.showMessage(value.get("message").asText());
-                        break;
-                    case "showError":
-                        this.viewController.showError(value.get("errorMessage").asText());
-                        break;
-                    case "updateCommonTable":
-                        SimplifiedCommonTable commonTable = buildSimplifiedCommonTable(value);
-                        this.viewController.addRequest(new CommonTableUpdateRequest(commonTable, value.get("message").asText()));
-                        break;
-                    case "updateHand":
-                        SimplifiedHand hand = buildSimplifiedHand(value);
-                        viewController.addRequest(new HandUpdateRequest(hand, value.get("message").asText()));
-                        break;
-                    case "updateSecretHand":
-                        SimplifiedHand secretHand = buildSimplifiedSecretHand(value);
-                        this.viewController.addRequest(new SecretHandUpdateRequest(secretHand, value.get("message").asText()));
-                        break;
-                    case "updatePersonalBoard":
-                        SimplifiedPersonalBoard personalBoard = buildPersonalBoard(value);
-                        this.viewController.addRequest(new PersonalBoardUpdateRequest(personalBoard, value.get("message").asText()));
-                        break;
-                    case "updateOtherPersonalBoard":
-                        SimplifiedPersonalBoard otherPersonalBoard = buildPersonalBoard(value);
-                        this.viewController.addRequest(new OtherPersonalBoardUpdateRequest(otherPersonalBoard, value.get("message").asText()));
-                        break;
-                    case "updatePlayer":
-                        SimplifiedPlayer simplifiedPlayer = buildSimplifiedPlayer(value);
-                        this.viewController.addRequest(new PlayerUpdateRequest(simplifiedPlayer, value.get("message").asText()));
-                        break;
-                    case "updateChat":
-                        SimplifiedChat simplifiedChat = buildSimplifiedChat(value);
-                        this.viewController.addRequest(new ChatUpdateRequest(simplifiedChat, value.get("message").asText()));
-                        break;
-                    case "updateGame":
-                        SimplifiedGame simplifiedGame = buildSimplifiedGame(value);
-                        this.viewController.addRequest(new GameUpdateRequest(simplifiedGame, value.get("message").asText()));
-                        break;
-                    case "updateIDGame":
-                        this.viewController.setGameID(value.get("idGame").asInt());
-                        break;
-                    case "ping":
-                        this.viewController.resetTimer();
-                        break;
-                    case "killProcess":
-                        this.viewController.addRequest(new DestroyClientRequest());
-                        break;
-                    case null, default:
-                        break;
+                if(msg.get("value") != null){
+                    JsonNode value = valueMapper.readTree(msg.get("value").asText());
+                    switch (msg.get("function").asText()) {
+                        case "setClientID":
+                            this.viewController.setClientID(value.get("clientID").asText());
+                            break;
+                        case "setGameController":
+                            this.viewController.setGameController(new VirtualSocketGameController(this.outputToServer));
+                            break;
+                        case "updateClientState":
+                            this.viewController.updateClientState(ClientState.valueOf(value.get("clientState").asText()));
+                            break;
+                        case "showMessage":
+                            this.viewController.showMessage(value.get("message").asText());
+                            break;
+                        case "showError":
+                            this.viewController.showError(value.get("errorMessage").asText());
+                            break;
+                        case "updateCommonTable":
+                            SimplifiedCommonTable commonTable = buildSimplifiedCommonTable(value);
+                            this.viewController.addRequest(new CommonTableUpdateRequest(commonTable, value.get("message").asText()));
+                            break;
+                        case "updateHand":
+                            SimplifiedHand hand = buildSimplifiedHand(value);
+                            viewController.addRequest(new HandUpdateRequest(hand, value.get("message").asText()));
+                            break;
+                        case "updateSecretHand":
+                            SimplifiedHand secretHand = buildSimplifiedSecretHand(value);
+                            this.viewController.addRequest(new SecretHandUpdateRequest(secretHand, value.get("message").asText()));
+                            break;
+                        case "updatePersonalBoard":
+                            SimplifiedPersonalBoard personalBoard = buildPersonalBoard(value);
+                            this.viewController.addRequest(new PersonalBoardUpdateRequest(personalBoard, value.get("message").asText()));
+                            break;
+                        case "updateOtherPersonalBoard":
+                            SimplifiedPersonalBoard otherPersonalBoard = buildPersonalBoard(value);
+                            this.viewController.addRequest(new OtherPersonalBoardUpdateRequest(otherPersonalBoard, value.get("message").asText()));
+                            break;
+                        case "updatePlayer":
+                            SimplifiedPlayer simplifiedPlayer = buildSimplifiedPlayer(value);
+                            this.viewController.addRequest(new PlayerUpdateRequest(simplifiedPlayer, value.get("message").asText()));
+                            break;
+                        case "updateChat":
+                            SimplifiedChat simplifiedChat = buildSimplifiedChat(value);
+                            this.viewController.addRequest(new ChatUpdateRequest(simplifiedChat, value.get("message").asText()));
+                            break;
+                        case "updateGame":
+                            SimplifiedGame simplifiedGame = buildSimplifiedGame(value);
+                            this.viewController.addRequest(new GameUpdateRequest(simplifiedGame, value.get("message").asText()));
+                            break;
+                        case "updateIDGame":
+                            this.viewController.setGameID(value.get("idGame").asInt());
+                            break;
+                        case "ping":
+                            this.viewController.resetTimer();
+                            break;
+                        case "killProcess":
+                            this.viewController.addRequest(new DestroyClientRequest());
+                            break;
+                        case null, default:
+                            break;
+                    }
                 }
+
             }
         } catch (IOException e) {
             System.out.println("Server down");

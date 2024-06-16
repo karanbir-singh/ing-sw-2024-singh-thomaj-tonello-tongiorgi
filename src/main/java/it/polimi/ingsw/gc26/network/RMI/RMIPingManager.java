@@ -18,7 +18,7 @@ public class RMIPingManager implements PingManager {
     /**
      * This attribute represents the server timeout seconds
      */
-    private static final int TIMEOUT = 10;
+    private static final int TIMEOUT = 5;
 
     private boolean firstPingArrived;
 
