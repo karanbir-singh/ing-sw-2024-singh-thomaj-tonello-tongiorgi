@@ -475,7 +475,6 @@ public class GameFlowController extends SceneController implements Initializable
     public void onHandCardClicked(MouseEvent mouseEvent) {
         try {
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
-            System.out.println("card clicked: " + index);
             this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
             throw new RuntimeException(e);
