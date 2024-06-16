@@ -352,6 +352,7 @@ public class GameFlowController extends SceneController implements Initializable
         if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
+            consideredTab.setId("1");
             personalBoardTabPane.getTabs().add(consideredTab);
             otherScrollPane = new ScrollPane();
             otherScrollPane.setHvalue(0.5);
@@ -394,6 +395,7 @@ public class GameFlowController extends SceneController implements Initializable
         this.creationAndSettingGridContraints(this.gridPane);
 
         layout.setGameBackground(rootBorder);
+        this.personalBoardTabPane.getTabs().getFirst().setId("0");
     }
 
     private void creationAndSettingGridContraints(GridPane gridPane) {
@@ -453,7 +455,8 @@ public class GameFlowController extends SceneController implements Initializable
         // Set on card released
         imageView.setOnMouseReleased(event -> {
             for (ImageView target : targets) {
-                if (isInTargetSpot(imageView, target)) {
+                //control if is a target and if the tab is the right one
+                if (isInTargetSpot(imageView, target) && this.personalBoardTabPane.getSelectionModel().getSelectedItem().getId().equals("0")) {
 
                     try {
                         //TODO da controllare se G minuscola
