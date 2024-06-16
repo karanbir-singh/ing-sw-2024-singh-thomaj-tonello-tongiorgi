@@ -68,8 +68,8 @@ public class PawnSelectionController extends SceneController implements Initiali
 
     private boolean chatIsVisible = false;
     private boolean chatHasBeenCreated = false;
-    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
-    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
 
     public void onClickButton(ActionEvent event){
         String pawnColor = ((Button)event.getSource()).getAccessibleText();
@@ -111,12 +111,6 @@ public class PawnSelectionController extends SceneController implements Initiali
 
 
     }
-
-
-    public void openRulebook(ActionEvent actionEvent) {
-        Platform.runLater(() -> GUIApplication.openRulebook());
-    }
-
 
     public void toggleChat(ActionEvent actionEvent) {
 

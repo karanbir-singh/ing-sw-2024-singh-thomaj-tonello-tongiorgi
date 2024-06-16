@@ -2,7 +2,6 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -13,7 +12,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class CommonLayout {
-    private Image gameBackground = new Image(getClass().getResource("/images/game-background.png").toExternalForm());
+    private Image gameBackground = new Image(getClass().getResource("images/game-background.png").toExternalForm());
     public void pageBindings(AnchorPane rootPane, BorderPane rootBorder, ImageView background){
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             rootBorder.setPrefHeight(newVal.doubleValue());

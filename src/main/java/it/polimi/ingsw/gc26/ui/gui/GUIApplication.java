@@ -19,6 +19,7 @@ import javafx.stage.WindowEvent;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -99,12 +100,16 @@ public class GUIApplication extends Application implements UIInterface {
         scenes = new ArrayList<>();
 
         for(SceneEnum sceneEnum : SceneEnum.values()){
-            FXMLLoader loader = new FXMLLoader(this.getClass().getResource(sceneEnum.value()));
+            FXMLLoader loader = null;
 
-                    Parent root = null;
+            loader = new FXMLLoader(this.getClass().getResource(sceneEnum.value()));
+
+
+            Parent root = null;
                     try {
                         root = loader.load();
                     } catch (IOException e) {
+                        e.printStackTrace();
                         ConsoleColors.printError("[ERROR]: cannot load " + sceneEnum.name());
                         System.exit(-1);
                     }
