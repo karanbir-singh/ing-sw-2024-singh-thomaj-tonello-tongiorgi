@@ -181,6 +181,7 @@ public class GameFlowController extends SceneController implements Initializable
             System.out.println("image clicked at " + row + " " + column);
             //da inserire
 
+            //TODO CONTROLLARE CHE IL TAB SIA QUELLO CORRETTO
             this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
             this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
             for (ImageView target : playablePositions) {
@@ -199,7 +200,7 @@ public class GameFlowController extends SceneController implements Initializable
         ArrayList<ImageView> resources = new ArrayList<>();
         ArrayList<ImageView> goldens = new ArrayList<>();
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
-        System.out.println("selected index: " + simplifiedCommonTable.getSelectedIndex());
+        //System.out.println("selected index: " + simplifiedCommonTable.getSelectedIndex());
 
         layout.setGameBackground(rootBorder);
 
@@ -482,6 +483,9 @@ public class GameFlowController extends SceneController implements Initializable
     public void onHandCardClicked(MouseEvent mouseEvent) {
         try {
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+            for (ImageView target : playablePositions) {
+                target.setVisible(true);
+            }
             System.out.println("card clicked: " + index);
             this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
