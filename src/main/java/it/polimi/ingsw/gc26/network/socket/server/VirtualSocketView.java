@@ -197,14 +197,8 @@ public class VirtualSocketView implements VirtualView {
             goldCards.set(String.valueOf(i), createGoldCardNode(simplifiedCommonTable.getGoldCards().get(i)));
         }
 
-        // selected index
-        /*ObjectNode selectedIndex = om.createObjectNode();
-        selectedIndex.put("index", simplifiedCommonTable.getSelectedIndex());
-        root.set("selectedIndex", selectedIndex);*/
 
         root.put("selectedIndex", simplifiedCommonTable.getSelectedIndex());
-
-        System.out.println(root.toPrettyString());
 
         try {
             sendToClient("updateCommonTable", om.writeValueAsString(root));

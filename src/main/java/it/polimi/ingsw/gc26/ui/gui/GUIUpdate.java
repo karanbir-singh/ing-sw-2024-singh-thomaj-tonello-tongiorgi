@@ -121,11 +121,17 @@ public class GUIUpdate implements UpdateInterface {
                 this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
                 this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().updatePointScoreBoard(simplifiedGame.getScores(), simplifiedGame.getPawnsSelected());
                 break;
+            case END_STAGE:
+                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
+                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().updatePointScoreBoard(simplifiedGame.getScores(), simplifiedGame.getPawnsSelected());
+                break;
             case WINNER:
                 this.guiApplication.setCurrentScene(SceneEnum.WINNER);
+                break;
+
         }
 
-        if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
+        if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW) || this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.WINNER)) {
             this.guiApplication.getCurrentScene().getSceneController().changeGUIGame(simplifiedGame);
             this.guiApplication.getSceneInfo(SceneEnum.WINNER).getSceneController().changeGUIGame(simplifiedGame);
             ; //cosi aggiorno solo questa
