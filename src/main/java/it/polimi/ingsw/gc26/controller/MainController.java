@@ -450,11 +450,11 @@ public class MainController implements Serializable {
         gamesControllers.remove(gameControllerID);
 
         // Copy to disk again
-        /*try {
+        try {
             this.backup();
         } catch (IOException e) {
             System.out.println("COLPA DEL COPY TO DISK in DESTROY GAME");
-        }*/
+        }
 
         // Delete game controller file
         Path fileToDeletePath = Paths.get(GameController.GAME_CONTROLLER_FILE_PATH + gameControllerID + ".bin");
