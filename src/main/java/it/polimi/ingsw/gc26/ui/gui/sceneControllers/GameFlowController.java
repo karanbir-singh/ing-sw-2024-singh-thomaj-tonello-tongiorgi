@@ -148,7 +148,7 @@ public class GameFlowController extends SceneController implements Initializable
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
             this.mainClient.getVirtualGameController().selectCardFromCommonTable(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait!");
         }
     }
 
@@ -156,7 +156,7 @@ public class GameFlowController extends SceneController implements Initializable
         try {
             this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait!");
         }
     }
     //fine azioni per la commonTable
@@ -188,7 +188,7 @@ public class GameFlowController extends SceneController implements Initializable
                 target.setVisible(false);
             }
         } catch (RemoteException e) {
-            // throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait!");
         }
     }
     //fine azioni carte opache
@@ -489,7 +489,7 @@ public class GameFlowController extends SceneController implements Initializable
             System.out.println("card clicked: " + index);
             this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait!");
         }
     }
 
@@ -576,7 +576,7 @@ public class GameFlowController extends SceneController implements Initializable
         try {
             this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
         } catch (RemoteException e) {
-            System.err.println("RemoteException while sending message!");
+            System.out.println("Connection problem, please wait!");
         }
         newTextField.clear();
         Platform.runLater(() -> {
