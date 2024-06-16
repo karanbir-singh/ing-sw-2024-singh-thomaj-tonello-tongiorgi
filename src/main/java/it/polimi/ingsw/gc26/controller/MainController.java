@@ -461,7 +461,7 @@ public class MainController implements Serializable {
         try {
             Files.delete(fileToDeletePath);
         } catch (IOException e) {
-            System.out.println("non c'è il file, qualcuno ha gia eliminato il file prima");
+            System.out.println("There is no file on the disk, it is already been deleted");
             return;
         }
         System.out.println("Game " + gameControllerID + " destroyed");
