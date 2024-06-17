@@ -4,7 +4,6 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Point;
-import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
 import it.polimi.ingsw.gc26.ui.gui.PawnsCoords;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
@@ -34,7 +33,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.transform.Scale;
@@ -757,24 +755,23 @@ public class GameFlowController extends SceneController implements Initializable
                     Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
                     if (cell != null) {
                         GridPane miniGrid = ((GridPane) cell);
-                        Circle circle = new Circle(6);
-                        circle.setFill(Color.valueOf(pawnsSelected.get(playerScore.getKey()).toString()));
-                        Platform.runLater(() -> {
-                            switch (miniGrid.getChildren().size()) {
-                                case 0:
-                                    miniGrid.add(circle, 0, 0);
-                                    break;
-                                case 1:
-                                    miniGrid.add(circle, 0, 1);
-                                    break;
-                                case 2:
-                                    miniGrid.add(circle, 1, 0);
-                                    break;
-                                case 3:
-                                    miniGrid.add(circle, 1, 1);
-                                    break;
-                            }
-                        });
+                        ImageView image = new ImageView(new Image(getClass().getResource("images/pawns/" + pawnsSelected.get(playerScore.getKey()).toString().toLowerCase() + ".png").toExternalForm()));
+                        image.setFitHeight(20);
+                        image.setFitWidth(20);
+                        switch (miniGrid.getChildren().size()) {
+                            case 0:
+                                miniGrid.add(image, 0, 0);
+                                break;
+                            case 1:
+                                miniGrid.add(image, 0, 1);
+                                break;
+                            case 2:
+                                miniGrid.add(image, 1, 0);
+                                break;
+                            case 3:
+                                miniGrid.add(image, 1, 1);
+                                break;
+                        }
                     }
                 }
             }

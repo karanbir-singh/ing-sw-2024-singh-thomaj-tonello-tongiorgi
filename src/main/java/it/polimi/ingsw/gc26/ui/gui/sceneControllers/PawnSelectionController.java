@@ -83,7 +83,10 @@ public class PawnSelectionController extends SceneController implements Initiali
     private void setDimensionAndColor(Button button, String color) {
         button.setPrefWidth(100);
         button.setPrefHeight(100);
-        button.setStyle("-fx-background-color: " + color);
+        ImageView image = new ImageView(new Image(getClass().getResource("images/pawns/" + color.toLowerCase() + ".png").toExternalForm()));
+        image.setFitWidth(100);
+        image.setFitHeight(100);
+        button.setGraphic(image);
     }
 
     @Override
@@ -108,8 +111,6 @@ public class PawnSelectionController extends SceneController implements Initiali
         Platform.runLater(()->{
             pawnsTile.getChildren().setAll(buttons);
         });
-
-
     }
 
     public void toggleChat(ActionEvent actionEvent) {

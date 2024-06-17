@@ -83,8 +83,8 @@ public class StarterCardChoiceController extends SceneController implements Init
     private HashMap<String, ScrollPane> chats = new HashMap<>();
     private boolean chatIsVisible = false;
     private boolean chatHasBeenCreated = false;
-    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
-    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
 
     @FXML
     VBox choosingBox;

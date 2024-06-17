@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
@@ -31,8 +32,11 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class SecretMissionChoiceController extends SceneController implements Initializable {
+    @FXML
     public TabPane chatTabPane;
+    @FXML
     public Button chatButton;
+    @FXML
     public AnchorPane anchorPaneChat;
     //CommonTable
     @FXML
