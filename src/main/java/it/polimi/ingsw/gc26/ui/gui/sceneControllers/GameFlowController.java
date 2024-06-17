@@ -30,11 +30,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.scene.transform.Scale;
 
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -755,7 +758,7 @@ public class GameFlowController extends SceneController implements Initializable
     }
 
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
-        Platform.runLater(() ->{
+        Platform.runLater(() -> {
             clearScoreBoard();
 
             for (Map.Entry<String, Integer> playerScore : scores.entrySet()) {
@@ -766,23 +769,53 @@ public class GameFlowController extends SceneController implements Initializable
                         GridPane miniGrid = ((GridPane) cell);
                         Circle circle = new Circle(6);
                         circle.setFill(Color.valueOf(pawnsSelected.get(playerScore.getKey()).toString()));
-                        Platform.runLater(()-> {switch (miniGrid.getChildren().size()) {
-                            case 0 :
-                                miniGrid.add(circle, 0, 0);
-                                break;
-                            case 1:
-                                miniGrid.add(circle, 0, 1);
-                                break;
-                            case 2:
-                                miniGrid.add(circle, 1, 0);
-                                break;
-                            case 3:
-                                miniGrid.add(circle, 1, 1);
-                                break;
-                        }});
+                        Platform.runLater(() -> {
+                            switch (miniGrid.getChildren().size()) {
+                                case 0:
+                                    miniGrid.add(circle, 0, 0);
+                                    break;
+                                case 1:
+                                    miniGrid.add(circle, 0, 1);
+                                    break;
+                                case 2:
+                                    miniGrid.add(circle, 1, 0);
+                                    break;
+                                case 3:
+                                    miniGrid.add(circle, 1, 1);
+                                    break;
+                            }
+                        });
                     }
                 }
             }
         });
+    }
+
+    @FXML
+    public void onPersonalBoardScroll(ScrollEvent scrollEvent) {
+        if (scrollEvent.isControlDown()) {
+            scrollEvent.consume();
+
+            final double zoomFactor = scrollEvent.getDeltaY() > 0 ? 1.05 : 1 / 1.05;
+
+            Scale newScale = new Scale();
+            newScale.setX(zoomFactor);
+            newScale.setY(zoomFactor);
+
+            gridPane.getTransforms().add(newScale);
+        }
+    }
+
+    @FXML
+    public void onPersonalBoardZoom(ZoomEvent zoomEvent) {
+        zoomEvent.consume();
+
+        final double zoomFactor = zoomEvent.getZoomFactor() > 1 ? 1.01 : 1 / 1.01;
+
+        Scale newScale = new Scale();
+        newScale.setX(zoomFactor);
+        newScale.setY(zoomFactor);
+
+        gridPane.getTransforms().add(newScale);
     }
 }

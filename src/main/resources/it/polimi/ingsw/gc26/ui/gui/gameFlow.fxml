@@ -38,7 +38,7 @@
                                           <content>
                                               <ScrollPane fx:id="tabScrollPane" hbarPolicy="NEVER" hvalue="0.5" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" pannable="true" prefHeight="400.0" prefWidth="600.0" styleClass="tabScrollPane" vbarPolicy="NEVER" vvalue="0.5">
                                                   <content>
-                                                      <GridPane fx:id="gridPane">
+                                                      <GridPane fx:id="gridPane" onScroll="#onPersonalBoardScroll" onZoom="#onPersonalBoardZoom">
                                                           <columnConstraints>
                                                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                           </columnConstraints>
