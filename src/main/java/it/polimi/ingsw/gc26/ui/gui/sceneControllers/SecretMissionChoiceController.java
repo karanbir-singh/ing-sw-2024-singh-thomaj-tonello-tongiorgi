@@ -150,7 +150,7 @@ public class SecretMissionChoiceController extends SceneController implements In
         }
 
         Platform.runLater(()->{
-            this.rightVBox.getChildren().addAll(imageViewsCommonMissions);
+            this.rightVBox.getChildren().setAll(imageViewsCommonMissions);
             this.resourceHbox.getChildren().setAll(resources);
             this.goldHbox.getChildren().setAll(goldens);
 
