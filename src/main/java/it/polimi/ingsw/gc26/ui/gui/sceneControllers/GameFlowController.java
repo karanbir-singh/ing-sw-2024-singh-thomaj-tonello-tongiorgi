@@ -206,8 +206,6 @@ public class GameFlowController extends SceneController implements Initializable
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
         //System.out.println("selected index: " + simplifiedCommonTable.getSelectedIndex());
 
-        layout.setGameBackground(rootBorder);
-
         int index = 0;
         for (Card card : simplifiedCommonTable.getResourceCards()) {
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
@@ -397,7 +395,6 @@ public class GameFlowController extends SceneController implements Initializable
 
         this.creationAndSettingGridContraints(this.gridPane);
 
-        layout.setGameBackground(rootBorder);
         this.personalBoardTabPane.getTabs().getFirst().setId("0");
     }
 
