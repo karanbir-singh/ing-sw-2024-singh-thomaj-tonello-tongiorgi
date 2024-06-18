@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.WaitingController">
+   <children>
+      <ImageView fx:id="background" fitHeight="588.0" fitWidth="964.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@sceneControllers/images/background-upscaled.png" />
+         </image>
+      </ImageView>
+      <VBox alignment="CENTER" layoutY="235.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="35.0" prefWidth="964.0">
+               <children>
+                  <ImageView fitHeight="301.0" fitWidth="458.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@sceneControllers/images/labels/WaitingLabel.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

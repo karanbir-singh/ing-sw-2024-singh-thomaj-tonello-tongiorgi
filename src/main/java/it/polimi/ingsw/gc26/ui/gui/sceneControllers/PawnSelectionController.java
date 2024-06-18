@@ -7,6 +7,7 @@ import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
 import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.scene.image.Image;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
@@ -20,9 +21,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -39,22 +38,38 @@ import java.util.ResourceBundle;
 
 public class PawnSelectionController extends SceneController implements Initializable {
 
+    @FXML
     public HBox HBoxLeftPanel;
+    @FXML
     public AnchorPane anchorPaneChat;
+    @FXML
     public TabPane chatTabPane;
+    @FXML
     public Button chatButton;
     @FXML
     private Label status;
+
     CommonLayout layout = new CommonLayout();
 
     @FXML
-    private HBox buttonHBox;
+    private TilePane pawnsTile;
+    @FXML
+    private ImageView background;
+    @FXML
+    private AnchorPane rootPane;
+    @FXML
+    private BorderPane rootBorder;
+    @FXML
+    public VBox centerVBox;
+    @FXML
+    public VBox rightVBox;
+
     private HashMap<String, ScrollPane> chats = new HashMap<>();
 
     private boolean chatIsVisible = false;
     private boolean chatHasBeenCreated = false;
-    private javafx.scene.image.ImageView chatIconVisible = new javafx.scene.image.ImageView(new javafx.scene.image.Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
-    private javafx.scene.image.ImageView chatIconClose = new ImageView(new Image(getClass().getResource("/images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
 
     public void onClickButton(ActionEvent event){
         String pawnColor = ((Button)event.getSource()).getAccessibleText();
@@ -68,16 +83,19 @@ public class PawnSelectionController extends SceneController implements Initiali
     private void setDimensionAndColor(Button button, String color) {
         button.setPrefWidth(100);
         button.setPrefHeight(100);
-        button.setStyle("-fx-background-color: " + color);
+        ImageView image = new ImageView(new Image(getClass().getResource("images/pawns/" + color.toLowerCase() + ".png").toExternalForm()));
+        image.setFitWidth(100);
+        image.setFitHeight(100);
+        button.setGraphic(image);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        layout.pageBindings(rootPane, rootBorder, background);
 
         //buttons setup
         layout.buttonSetup(chatIconClose, chatIconVisible, chatButton);
         chatButton.setOnAction(this::toggleChat);
-
     }
 
     @Override
@@ -91,17 +109,9 @@ public class PawnSelectionController extends SceneController implements Initiali
             buttons.add(button);
         }
         Platform.runLater(()->{
-            buttonHBox.getChildren().setAll(buttons);
+            pawnsTile.getChildren().setAll(buttons);
         });
-
-
     }
-
-
-    public void openRulebook(ActionEvent actionEvent) {
-        Platform.runLater(() -> GUIApplication.openRulebook());
-    }
-
 
     public void toggleChat(ActionEvent actionEvent) {
 
@@ -113,7 +123,7 @@ public class PawnSelectionController extends SceneController implements Initiali
             HBoxLeftPanel.setMinWidth(40);
             HBoxLeftPanel.setMaxWidth(40);
             chatIsVisible = false;
-            buttonHBox.setTranslateX(0);
+            //buttonHBox.setTranslateX(0);
         } else {
             chatButton.setGraphic(chatIconVisible);
             chatButton.getStyleClass().clear();
@@ -122,7 +132,7 @@ public class PawnSelectionController extends SceneController implements Initiali
             HBoxLeftPanel.setMinWidth(380);
             HBoxLeftPanel.setMaxWidth(380);
             chatIsVisible = true;
-            buttonHBox.setTranslateX(500);
+            //buttonHBox.setTranslateX(500);
         }
     }
 
@@ -174,17 +184,25 @@ public class PawnSelectionController extends SceneController implements Initiali
     @Override
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();
-        if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-            if (!newMessage.getSender().getNickname().equals(nickname)) {
-                if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
-                        !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
-                    addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname());
-                } else {
-                    addMessageInChat(newMessage.getText(), "Group Chat", null);
+        if (!newMessage.getSender().getNickname().equals(this.nickname)) {
+            if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
+                if (!newMessage.getSender().getNickname().equals(nickname)) {
+                    if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
+                            !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
+                        addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname());
+                    } else {
+                        addMessageInChat(newMessage.getText(), "Group Chat", null);
+                    }
                 }
+            } else {
+                addMessageInChat(newMessage.getText(), newMessage.getSender().getNickname(), null);
             }
         } else {
-            addMessageInChat(newMessage.getText(), newMessage.getSender().getNickname(), null);
+            if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
+                addMessageFromSender(newMessage.getText(), "Group Chat");
+            } else {
+                addMessageFromSender(newMessage.getText(), newMessage.getReceiver().getNickname());
+            }
         }
     }
 
@@ -240,14 +258,14 @@ public class PawnSelectionController extends SceneController implements Initiali
         chatTabPane.getTabs().add(newTab);
         newTextField.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER && !newTextField.getText().isEmpty()) {
-                sendMessage(newTextField, newVBox, newScrollPane, newTab);
+                sendMessage(newTextField, newTab);
             }
             Platform.runLater(() -> newScrollPane.setVvalue(1.0));
             keyEvent.consume();
         });
         newButton.setOnMouseClicked(event -> {
             if (!newTextField.getText().isEmpty()) {
-                sendMessage(newTextField, newVBox, newScrollPane, newTab);
+                sendMessage(newTextField, newTab);
             }
             Platform.runLater(() -> newScrollPane.setVvalue(1.0));
             event.consume();
@@ -256,21 +274,7 @@ public class PawnSelectionController extends SceneController implements Initiali
         chats.put(nickname, newScrollPane);
     }
 
-    private void sendMessage(javafx.scene.control.TextField newTextField, VBox newVBox, ScrollPane newScrollPane, Tab newTab) {
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.BASELINE_RIGHT);
-        hBox.setPadding(new Insets(5, 5, 5, 30));
-        Text text = new Text(newTextField.getText());
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setSnapToPixel(true);
-        textFlow.setStyle("-fx-background-color: rgb(15,125,242);" + "-fx-color: rgb(239, 242,255);" + "-fx-background-radius: 7px;");
-        hBox.setMinWidth(240);
-        hBox.setMaxWidth(240);
-        textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.setStyle("-fx-font-smoothing-type: #a8a8a8 ;" + "-fx-text-fill: white;");
-        text.setFill(Color.color(1, 1, 1));
-        hBox.getChildren().add(textFlow);
-
+    private void sendMessage(javafx.scene.control.TextField newTextField, Tab newTab) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         try {
             this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
@@ -278,10 +282,27 @@ public class PawnSelectionController extends SceneController implements Initiali
             System.err.println("RemoteException while sending message!");
         }
         newTextField.clear();
-        Platform.runLater(() -> {
-            newVBox.getChildren().add(hBox);
-            newScrollPane.setVvalue(1.0);
-        });
 
+    }
+
+    private void addMessageFromSender(String message, String sender) {
+        HBox hBox = new HBox();
+        hBox.setAlignment(Pos.BASELINE_RIGHT);
+        hBox.setPadding(new Insets(5, 5, 5, 30));
+        Text text = new Text(message);
+        TextFlow textFlow = new TextFlow(text);
+        textFlow.setSnapToPixel(true);
+        textFlow.setStyle("-fx-background-color: rgb(15,125,242);" + "-fx-color: rgb(239, 242,255);" + "-fx-background-radius: 7px;");
+        hBox.setMinWidth(240);
+        hBox.setMaxWidth(240);
+        textFlow.setPadding(new Insets(2, 5, 2, 5));
+        text.setStyle("-fx-text-fill: white;");
+        text.setFill(Color.color(1, 1, 1));
+        hBox.getChildren().add(textFlow);
+
+        Platform.runLater(() -> {
+            ((VBox) chats.get(sender).getContent()).getChildren().add(hBox);
+            chats.get(sender).setVvalue(1.0);
+        });
     }
 }

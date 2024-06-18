@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.parser;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.deck.Deck;
+import it.polimi.ingsw.gc26.utils.ParserCore;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -12,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ParserCoreTest {
 
-    ParserCore parser = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
+    ParserCore parser = new ParserCore("CodexNaturalisCards.json");
 
     @Test
     void getStarterCards() {

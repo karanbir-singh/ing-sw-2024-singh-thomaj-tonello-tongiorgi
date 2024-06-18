@@ -197,7 +197,7 @@ public class VirtualSocketView implements VirtualView {
             goldCards.set(String.valueOf(i), createGoldCardNode(simplifiedCommonTable.getGoldCards().get(i)));
         }
 
-
+        // selected index
         root.put("selectedIndex", simplifiedCommonTable.getSelectedIndex());
 
         try {
@@ -459,7 +459,6 @@ public class VirtualSocketView implements VirtualView {
         for (Map.Entry<String, Integer> score : simplifiedGame.getScores().entrySet()) {
             scores.put(score.getKey(), score.getValue().toString());
         }
-
 
         // winners
         ArrayNode winners = om.createArrayNode();

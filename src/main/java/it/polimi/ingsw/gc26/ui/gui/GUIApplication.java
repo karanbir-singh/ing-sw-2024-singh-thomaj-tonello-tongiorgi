@@ -19,11 +19,9 @@ import javafx.stage.WindowEvent;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.rmi.NotBoundException;
+import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Arrays;
 import java.util.Objects;
 
 
@@ -76,10 +74,10 @@ public class GUIApplication extends Application implements UIInterface {
 
         // Setup starting stage
         this.primaryStage = primaryStage;
-        primaryStage.setHeight(400);
-        primaryStage.setWidth(600);
+        primaryStage.setHeight(800);
+        primaryStage.setWidth(1000);
         primaryStage.setTitle(" Codex Naturalis");
-        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("/images/icon.png"))));
+        primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("sceneControllers/images/icon.png"))));
 
         // Launch thread for managing connection
         new Thread(() -> {
@@ -100,24 +98,27 @@ public class GUIApplication extends Application implements UIInterface {
      */
     private void loadScenes() {
         scenes = new ArrayList<>();
-        Arrays.stream(SceneEnum.values())
-                .forEach(sceneEnum -> {
-                    // Get scene
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(sceneEnum.value()));
 
-                    Parent root = null;
+        for(SceneEnum sceneEnum : SceneEnum.values()){
+            FXMLLoader loader = null;
+
+            loader = new FXMLLoader(this.getClass().getResource(sceneEnum.value()));
+
+
+            Parent root = null;
                     try {
                         root = loader.load();
                     } catch (IOException e) {
-                        ConsoleColors.printError("[ERROR]: cannot load scenes");
+                        e.printStackTrace();
+                        ConsoleColors.printError("[ERROR]: cannot load " + sceneEnum.name());
                         System.exit(-1);
                     }
                     SceneController sceneController = loader.getController();
                     sceneController.setMainClient(mainClient);
 
-                    // Add scene
-                    scenes.add(new SceneInfo(sceneController, new Scene(root), sceneEnum));
-                });
+            // Add scene
+            scenes.add(new SceneInfo(sceneController, new Scene(root), sceneEnum));
+        }
 
     }
 
@@ -299,11 +300,10 @@ public class GUIApplication extends Application implements UIInterface {
         return mainClient.getNickname();
     }
 
-    public static void openRulebook() {
-
+    public static void openRulebook(String filePath) {
         if (Desktop.isDesktopSupported()) {
             try {
-                File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
+                File myFile = new File(filePath);
                 Desktop.getDesktop().open(myFile);
             } catch (IOException ex) {
                 // no application registered for PDFs

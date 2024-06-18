@@ -1,14 +1,9 @@
 package it.polimi.ingsw.gc26.ui.gui;
 
-import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneEnum;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import javafx.stage.WindowEvent;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class GUIUpdate implements UpdateInterface {
     GUIApplication guiApplication;
@@ -88,13 +83,15 @@ public class GUIUpdate implements UpdateInterface {
 
     @Override
     public void updateViewSimplifiedChat(SimplifiedChat simplifiedChat) {
-        if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
-            this.guiApplication.getCurrentScene().getSceneController().changeGUIChat(simplifiedChat);
-        } else {
-            this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().changeGUIChat(simplifiedChat);
-            this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIChat(simplifiedChat);
-            this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIChat(simplifiedChat);
-            this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIChat(simplifiedChat);
+        if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW) ||
+                this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.SECRETMISSIONCHOICE) ||
+                this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.PAWNSELECTION) ||
+                this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.WAITING) ||
+                this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.STARTERCARDCHOICE)) {
+        this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().changeGUIChat(simplifiedChat);
+        this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIChat(simplifiedChat);
+        this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIChat(simplifiedChat);
+        this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIChat(simplifiedChat);
         }
     }
 
@@ -108,17 +105,19 @@ public class GUIUpdate implements UpdateInterface {
         switch (simplifiedGame.getGameState()) {
             case WAITING_STARTER_CARD_PLACEMENT:
                 this.guiApplication.setCurrentScene(SceneEnum.STARTERCARDCHOICE);
+                this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
+                this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
+                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
+                this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
                 break;
             case WAITING_PAWNS_SELECTION:
                 this.guiApplication.setCurrentScene(SceneEnum.PAWNSELECTION);
-                this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
                 break;
             case WAITING_SECRET_MISSION_CHOICE:
                 this.guiApplication.setCurrentScene(SceneEnum.SECRETMISSIONCHOICE);
                 break;
             case GAME_STARTED:
                 this.guiApplication.setCurrentScene(SceneEnum.GAMEFLOW);
-                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
                 this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().updatePointScoreBoard(simplifiedGame.getScores(), simplifiedGame.getPawnsSelected());
                 break;
             case END_STAGE:

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.PawnSelectionController">
+    <children>
+        <ImageView fx:id="background" fitHeight="613.0" fitWidth="660.0" pickOnBounds="true" preserveRatio="true" />
+        <BorderPane fx:id="rootBorder" layoutX="-1960.0" layoutY="27.200000762939453" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <left>
+                <HBox fx:id="HBoxLeftPanel" minWidth="40.0" prefHeight="100.0" prefWidth="40.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="50.0" minWidth="40.0" prefHeight="889.0" prefWidth="50.0">
+                            <children>
+                                <VBox alignment="BOTTOM_LEFT" prefHeight="632.0" prefWidth="60.0" spacing="10.0" AnchorPane.bottomAnchor="0.0">
+                                    <children>
+                                        <Button fx:id="chatButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="32.0">
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </Button>
+                                        <Button fx:id="rulesButton" layoutX="116.0" layoutY="12.0" mnemonicParsing="false" onAction="#openRulebook">
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </Button>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="anchorPaneChat" prefHeight="600.0" prefWidth="290.0" translateX="-2000.0">
+                            <children>
+                                <TabPane fx:id="chatTabPane" prefHeight="600.0" prefWidth="290.0" tabClosingPolicy="UNAVAILABLE" />
+                            </children>
+                        </AnchorPane>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets left="10.0" top="20.0" />
+                    </BorderPane.margin>
+                </HBox>
+            </left>
+            <center>
+                <VBox fx:id="centerVBox" alignment="CENTER" BorderPane.alignment="CENTER">
+                    <children>
+                        <TilePane fx:id="pawnsTile" alignment="CENTER" hgap="20.0" vgap="20.0">
+                            <children>
+                                <Button fx:id="greenButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1dcf3d;" textFill="#1dcf3d">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="redButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #FF0000;">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="blueButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #3305ff;" textFill="#3305ff">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="yellowButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #fff701;" textFill="#fff701">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </TilePane>
+                    </children>
+                </VBox>
+            </center>
+            <right>
+                <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+            </right>
+            <top>
+                <Label fx:id="status" text="Select the color of your pawn" BorderPane.alignment="CENTER">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </top>
+        </BorderPane>
+    </children>
+</AnchorPane>
