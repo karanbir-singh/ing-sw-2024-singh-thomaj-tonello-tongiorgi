@@ -284,6 +284,7 @@ public class GUIApplication extends Application implements UIInterface {
     public void openErrorPopup(String message) {
         this.popupStage = new Stage();
         SceneInfo sceneInfo = this.getSceneInfo(SceneEnum.ERROR);
+        sceneInfo.getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
         this.popupStage.setScene(sceneInfo.getScene());
         ((ErrorController) sceneInfo.getSceneController()).setMessage(message);
         this.popupStage.setOnCloseRequest(Event::consume);

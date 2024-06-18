@@ -17,7 +17,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="35.0" prefWidth="964.0">
                <children>
-                  <ImageView fitHeight="301.0" fitWidth="458.0" pickOnBounds="true">
+                  <ImageView fitHeight="301.0" fitWidth="458.0" pickOnBounds="true" styleClass="customLabel">
                      <image>
                         <Image url="@sceneControllers/images/labels/WaitingLabel.png" />
                      </image>

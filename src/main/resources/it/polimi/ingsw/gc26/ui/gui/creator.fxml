@@ -21,7 +21,7 @@
          <children>
             <VBox fx:id="centerVBox" alignment="CENTER" prefHeight="357.0" prefWidth="559.0" spacing="20.0">
                <children>
-                  <ImageView fitHeight="85.0" fitWidth="451.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="85.0" fitWidth="451.0" pickOnBounds="true" preserveRatio="true" styleClass="customLabel">
                      <image>
                         <Image url="@sceneControllers/images/labels/SelectPlayersLabel.png" />
                      </image>

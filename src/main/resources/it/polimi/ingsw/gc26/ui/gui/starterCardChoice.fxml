@@ -94,25 +94,6 @@
                               </Button>
                            </children>
                         </VBox>
-                        <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
-                           <children>
-                              <ImageView fx:id="handCard0" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                                 <image>
-                                    <Image url="@sceneControllers/images/frontSide/img_59.jpeg" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fx:id="handCard1" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                                 <image>
-                                    <Image url="@sceneControllers/images/frontSide/img_27.jpeg" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fx:id="handCard2" fitHeight="98.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" styleClass="card">
-                                 <image>
-                                    <Image url="@sceneControllers/images/frontSide/img_27.jpeg" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
                      </children>
                   </VBox>
                </center>
