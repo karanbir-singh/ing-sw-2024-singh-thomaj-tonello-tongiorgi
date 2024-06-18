@@ -1,7 +1,9 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
+import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
+import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
 import javafx.application.Platform;
@@ -26,6 +28,7 @@ import javafx.scene.text.TextFlow;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
@@ -35,9 +38,39 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class StarterCardChoiceController extends SceneController implements Initializable {
-    public AnchorPane anchorPaneChat;
-    public TabPane chatTabPane;
+    @FXML
+    private AnchorPane anchorPaneChat;
+    @FXML
+    private TabPane chatTabPane;
+    @FXML
     public Button chatButton;
+    @FXML
+    private HBox handHbox;
+    //CommonTable
+    @FXML
+    private ImageView resourceCard0;
+    @FXML
+    private ImageView resourceCard1;
+    @FXML
+    private ImageView resourceDeck;
+
+    @FXML
+    private ImageView goldCard0;
+    @FXML
+    private ImageView goldCard1;
+    @FXML
+    private ImageView goldDeck;
+
+    @FXML
+    private VBox commonTableBox;
+
+    //hand
+    @FXML
+    private ImageView handCard0;
+    @FXML
+    private ImageView handCard1;
+    @FXML
+    private ImageView handCard2;
 
     //layout
     CommonLayout layout = new CommonLayout();
@@ -100,6 +133,26 @@ public class StarterCardChoiceController extends SceneController implements Init
             this.image.setOnMouseClicked(this::onImageClick);
             layout.makeGlow(this.image);
         }
+
+    }
+
+    @Override
+    public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable){
+        if(simplifiedCommonTable.getResourceCards().size() >= 2){
+            resourceCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceCards().get(0).getFront().getImagePath()))));
+            resourceCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceCards().get(1).getFront().getImagePath()))));
+            resourceDeck.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
+        }
+
+
+
+        if(simplifiedCommonTable.getGoldCards().size() >= 2){
+            goldCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldCards().get(0).getFront().getImagePath()))));
+            goldCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldCards().get(1).getFront().getImagePath()))));
+            goldDeck.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
+        }
+
+
     }
 
     @Override

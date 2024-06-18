@@ -153,7 +153,7 @@ public class GameFlowController extends SceneController implements Initializable
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
             this.mainClient.getVirtualGameController().selectCardFromCommonTable(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait!");
         }
     }
 
@@ -161,7 +161,7 @@ public class GameFlowController extends SceneController implements Initializable
         try {
             this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait!");
         }
     }
     //fine azioni per la commonTable
@@ -192,7 +192,7 @@ public class GameFlowController extends SceneController implements Initializable
                 target.setVisible(false);
             }
         } catch (RemoteException e) {
-            // throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait!");
         }
     }
     //fine azioni carte opache
@@ -204,6 +204,7 @@ public class GameFlowController extends SceneController implements Initializable
         ArrayList<ImageView> resources = new ArrayList<>();
         ArrayList<ImageView> goldens = new ArrayList<>();
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
+        //System.out.println("selected index: " + simplifiedCommonTable.getSelectedIndex());
 
         int index = 0;
         for (Card card : simplifiedCommonTable.getResourceCards()) {
@@ -354,6 +355,7 @@ public class GameFlowController extends SceneController implements Initializable
         if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
+            consideredTab.setId("1");
             personalBoardTabPane.getTabs().add(consideredTab);
             otherScrollPane = new ScrollPane();
             otherScrollPane.setHvalue(0.5);
@@ -392,6 +394,8 @@ public class GameFlowController extends SceneController implements Initializable
         rowConstraints.setValignment(VPos.CENTER);
 
         this.creationAndSettingGridContraints(this.gridPane);
+
+        this.personalBoardTabPane.getTabs().getFirst().setId("0");
     }
 
     private void creationAndSettingGridContraints(GridPane gridPane) {
@@ -451,7 +455,8 @@ public class GameFlowController extends SceneController implements Initializable
         // Set on card released
         imageView.setOnMouseReleased(event -> {
             for (ImageView target : targets) {
-                if (isInTargetSpot(imageView, target)) {
+                //control if is a target and if the tab is the right one
+                if (isInTargetSpot(imageView, target) && this.personalBoardTabPane.getSelectionModel().getSelectedItem().getId().equals("0")) {
 
                     try {
                         //TODO da controllare se G minuscola
@@ -477,9 +482,12 @@ public class GameFlowController extends SceneController implements Initializable
     public void onHandCardClicked(MouseEvent mouseEvent) {
         try {
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+            for (ImageView target : playablePositions) {
+                target.setVisible(true);
+            }
             this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait!");
         }
     }
 
@@ -552,7 +560,7 @@ public class GameFlowController extends SceneController implements Initializable
         try {
             this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
         } catch (RemoteException e) {
-            System.err.println("RemoteException while sending message!");
+            System.out.println("Connection problem, please wait!");
         }
         newTextField.clear();
 
