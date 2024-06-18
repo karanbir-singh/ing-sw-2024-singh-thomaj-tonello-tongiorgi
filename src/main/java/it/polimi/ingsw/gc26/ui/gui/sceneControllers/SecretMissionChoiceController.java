@@ -121,26 +121,32 @@ public class SecretMissionChoiceController extends SceneController implements In
         ArrayList<ImageView> goldens = new ArrayList<>();
         ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
 
+        int index = 0;
         for (Card card : simplifiedCommonTable.getResourceCards()) {
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
-            this.setParameters(imageView, String.valueOf(0));
+            this.setParameters(imageView, String.valueOf(index));
             resources.add(imageView);
+            index++;
         }
         ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
-        this.setParameters(resourceDeck, String.valueOf(0));
+        this.setParameters(resourceDeck, String.valueOf(index));
+        index++;
         resources.add(resourceDeck);
         for (Card card : simplifiedCommonTable.getGoldCards()) {
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
-            this.setParameters(imageView, String.valueOf(0));
+            this.setParameters(imageView, String.valueOf(index));
             goldens.add(imageView);
+            index++;
         }
         ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
-        this.setParameters(goldDeck, String.valueOf(0));
+        this.setParameters(goldDeck, String.valueOf(index));
         goldens.add(goldDeck);
+        index++;
         for (Card card : simplifiedCommonTable.getCommonMissions()) {
             ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
-            this.setParameters(imageView, String.valueOf(0));
+            this.setParameters(imageView, String.valueOf(index));
             imageViewsCommonMissions.add(imageView);
+            index++;
         }
 
         Platform.runLater(()->{
