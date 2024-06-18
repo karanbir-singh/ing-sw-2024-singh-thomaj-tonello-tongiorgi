@@ -228,6 +228,9 @@ public class SecretMissionChoiceController extends SceneController implements In
             this.setParameters(imageView, String.valueOf(index));
             imageView.setOnMouseClicked(this::onClickSecretMission);
             secretHand.add(imageView);
+            if(card == simplifiedSecretHand.getSelectedCard()) {
+                layout.makeGlow(imageView);
+            }
             index++;
         }
 

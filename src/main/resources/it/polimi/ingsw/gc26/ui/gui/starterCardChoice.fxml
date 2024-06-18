@@ -64,9 +64,9 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox fx:id="choosingBox" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" prefHeight="300.0" spacing="10.0">
+                        <VBox fx:id="choosingBox" alignment="CENTER" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="200.0" prefHeight="300.0" spacing="5.0">
                            <children>
-                              <ImageView fitHeight="56.0" fitWidth="410.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="83.0" fitWidth="529.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@sceneControllers/images/labels/StarterLabel.png" />
                                  </image>
@@ -88,6 +88,9 @@
                                  <font>
                                     <Font size="18.0" />
                                  </font>
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
                               </Button>
                            </children>
                         </VBox>
@@ -126,7 +129,7 @@
                            <children>
                               <VBox alignment="BOTTOM_LEFT" prefHeight="632.0" prefWidth="60.0" spacing="10.0" AnchorPane.bottomAnchor="0.0">
                                  <children>
-                                    <Button fx:id="chatButton" mnemonicParsing="false"  />
+                                    <Button fx:id="chatButton" mnemonicParsing="false" />
                                     <Button mnemonicParsing="false" onAction="#openRulebook" />
                                  </children>
                               </VBox>

@@ -319,9 +319,9 @@ public class GameFlowController extends SceneController implements Initializable
                 this.xPositionStarterCard + personalBoard.getOccupiedPositions().getLast().getX(),
                 this.yPositionStarterCard - personalBoard.getOccupiedPositions().getLast().getY(), this.gridPane);
         for (Point point : personalBoard.getPlayablePositions()) {
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg"))));
-            //il path di prima è solo per prova
-            imageView.setOpacity(0.3);
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "playable-position.png"))));
+            imageView.setFitWidth(130);
+            imageView.setOpacity(0.5);
             imageView.setVisible(false);
             imageView.setOnMouseClicked(this::onClickPlayablePosition);
             addImage(imageView, this.xPositionStarterCard + point.getX(),

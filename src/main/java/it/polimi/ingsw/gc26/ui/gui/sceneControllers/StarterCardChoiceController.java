@@ -38,31 +38,6 @@ public class StarterCardChoiceController extends SceneController implements Init
     public AnchorPane anchorPaneChat;
     public TabPane chatTabPane;
     public Button chatButton;
-    //CommonTable
-    @FXML
-    private ImageView resourceCard0;
-    @FXML
-    private ImageView resourceCard1;
-    @FXML
-    private ImageView resourceDeck;
-
-    @FXML
-    private ImageView goldCard0;
-    @FXML
-    private ImageView goldCard1;
-    @FXML
-    private ImageView goldDeck;
-
-    @FXML
-    private VBox commonTableBox;
-
-    //hand
-    @FXML
-    private ImageView handCard0;
-    @FXML
-    private ImageView handCard1;
-    @FXML
-    private ImageView handCard2;
 
     //layout
     CommonLayout layout = new CommonLayout();
@@ -123,6 +98,7 @@ public class StarterCardChoiceController extends SceneController implements Init
         if(simplifiedHand.getSelectedSide() != null){
             this.image.setImage(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getSelectedSide().getImagePath()))));
             this.image.setOnMouseClicked(this::onImageClick);
+            layout.makeGlow(this.image);
         }
     }
 
