@@ -1,7 +1,6 @@
 package it.polimi.ingsw.gc26.model.card;
 
 import it.polimi.ingsw.gc26.model.card_side.Side;
-
 import java.io.Serializable;
 
 /**

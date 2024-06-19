@@ -24,6 +24,11 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Random;
 
+/**
+ * This class implements the controller for each game.
+ * It contains all the methods that are available to call from the client.
+ * It manages the recreation of the game after to handle its persistence.
+ */
 public class GameController implements Serializable {
     /**
      * This attribute represents the first part of the file path for saving the game controller
@@ -732,14 +737,26 @@ public class GameController implements Serializable {
         this.backup();
     }
 
+    /**
+     * Readds the virtual view after the server has gone down, because the connection must be recreated
+     * @param view client's view
+     * @param clientID client's original ID
+     */
     public void reAddView(VirtualView view, String clientID) {
         this.game.getObservable().addObserver(view, clientID);
     }
 
+    /**
+     * Sets debug flag
+     * @param debug
+     */
     public void setDebug(boolean debug) {
         isDebug = debug;
     }
-
+    /**
+     * A queue of requests from the client to be executed later
+     * @return all the game requests
+     */
     public Queue<GameRequest> getGameRequests() {
         return gameRequests;
     }

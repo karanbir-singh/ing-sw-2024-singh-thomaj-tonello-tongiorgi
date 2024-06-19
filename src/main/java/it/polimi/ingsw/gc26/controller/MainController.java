@@ -6,15 +6,17 @@ import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.main_request.MainRequest;
 import javafx.util.Pair;
-
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.*;
 
+/**
+ * This class implements the methods to join automatically the client to the games.
+ * It also destroys the games if a client is not longer reachable.
+ */
 public class MainController implements Serializable {
     /**
      * This constant represents the max numbers of reconnection attempts
@@ -65,7 +67,14 @@ public class MainController implements Serializable {
      */
     private int numberOfTotalGames;
 
+    /**
+     * This attribute represents the executor current state
+     */
     public boolean threadStarted = false;
+
+    /**
+     * This lock is used to synchronize the reading of threadStated
+     */
     public Boolean lock = true;
 
     /**
@@ -396,6 +405,12 @@ public class MainController implements Serializable {
     }
 
 
+    /**
+     * Creates a thread for every client and pings each one. If a client goes down, it attempts to reconnect.
+     * If the client doesn't go up, it destroys the game
+     * @param clients
+     * @param gameControllerID
+     */
     private void startClientsPing(ArrayList<Pair<VirtualView, String>> clients, int gameControllerID) {
 
         // Ping each client of the game
@@ -477,6 +492,10 @@ public class MainController implements Serializable {
         return mainRequests;
     }
 
+    /**
+     * Returns the clients that are waiting to be inserted in a game
+     * @return an arrayList representing all the waiting clients
+     */
     public ArrayList<VirtualView> getWaitingClients() {
         return waitingClients;
     }
