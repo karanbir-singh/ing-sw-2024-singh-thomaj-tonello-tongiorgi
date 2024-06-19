@@ -299,7 +299,7 @@ public class GameFlowController extends SceneController implements Initializable
 
     @Override
     public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard) {
-        playablePositions = new ArrayList<>();
+        playablePositions.clear();
 
         if (personalBoard.getSecretMission() != null) {
             this.secretMission.setImage(new Image(String.valueOf(getClass().getResource(path + personalBoard.getSecretMission().getFront().getImagePath())),831,556,true,true,false));
@@ -489,7 +489,6 @@ public class GameFlowController extends SceneController implements Initializable
                 if (isInTargetSpot(imageView, target) && this.personalBoardTabPane.getSelectionModel().getSelectedItem().getId().equals("0")) {
 
                     try {
-                        //TODO da controllare se G minuscola
                         int row = GridPane.getRowIndex(target);
                         int column = GridPane.getColumnIndex(target);
 
@@ -499,6 +498,7 @@ public class GameFlowController extends SceneController implements Initializable
                     } catch (RemoteException e) {
                         // throw new RuntimeException(e);
                     }
+                    break;
                 }
             }
             imageView.setLayoutX(initialX);
@@ -524,7 +524,10 @@ public class GameFlowController extends SceneController implements Initializable
     private boolean isInTargetSpot(ImageView imageView, ImageView target) {
         Bounds imageViewBounds = imageView.localToScene(imageView.getBoundsInLocal());
         Bounds targetBounds = target.localToScene(target.getBoundsInLocal());
-
+        if (!personalBoardTabPane.getChildrenUnmodifiable().getFirst().localToScene(personalBoardTabPane.getChildrenUnmodifiable().getFirst().getBoundsInLocal()).contains(imageViewBounds.getMinX() + imageViewBounds.getWidth() / 2,
+                imageViewBounds.getMinY() + imageViewBounds.getHeight() / 2)) {
+            return false;
+        }
         return targetBounds.contains(
                 imageViewBounds.getMinX() + imageViewBounds.getWidth() / 2,
                 imageViewBounds.getMinY() + imageViewBounds.getHeight() / 2
