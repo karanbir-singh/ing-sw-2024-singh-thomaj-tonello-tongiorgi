@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.ui.gui;
 
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
+import it.polimi.ingsw.gc26.network.ClientResetTimerToServer;
 import it.polimi.ingsw.gc26.ui.gui.sceneControllers.*;
 import it.polimi.ingsw.gc26.ui.UIInterface;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
@@ -87,6 +88,7 @@ public class GUIApplication extends Application implements UIInterface {
 
                 // Launch thread for managing server ping
                 new Thread(this.mainClient.getPingManager()).start();
+                new Thread(new ClientResetTimerToServer(this.mainClient)).start();
             } catch (RemoteException e) {
                 // TODO manage on GUI
             }

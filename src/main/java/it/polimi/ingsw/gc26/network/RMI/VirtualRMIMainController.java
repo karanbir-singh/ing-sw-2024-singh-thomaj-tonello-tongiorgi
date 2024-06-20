@@ -40,4 +40,8 @@ public class VirtualRMIMainController implements VirtualMainController {
         return new VirtualRMIGameController(this.mainController.getGameController(id));
     }
 
+    @Override
+    public void resetServerTimer(String clientID){
+        this.mainController.resetServerTimer(clientID);
+    }
 }

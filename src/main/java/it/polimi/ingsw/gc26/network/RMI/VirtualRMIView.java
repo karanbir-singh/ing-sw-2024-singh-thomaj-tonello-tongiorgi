@@ -103,7 +103,7 @@ public class VirtualRMIView implements VirtualView {
      * @throws RemoteException
      */
     @Override
-    public void killProcess(String nickname) throws RemoteException {
+    public void killProcess() throws RemoteException {
         this.viewController.addRequest(new DestroyClientRequest());
     }
 }

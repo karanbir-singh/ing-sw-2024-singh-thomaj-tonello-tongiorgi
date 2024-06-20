@@ -118,6 +118,9 @@ public class SocketClientHandler implements Runnable {
                     case "reAddView":
                         this.gameController.addRequest(new ReAddViewRequest(this.virtualSocketView, value.get("clientID").asText()));
                         break;
+                    case "resetServerTimer":
+                        this.mainController.resetServerTimer(value.get("clientID").asText());
+                        break;
                     case null, default:
                         break;
                 }

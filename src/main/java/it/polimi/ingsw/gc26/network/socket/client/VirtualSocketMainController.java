@@ -82,6 +82,15 @@ public class VirtualSocketMainController implements VirtualMainController {
         return null;
     }
 
+    @Override
+    public void resetServerTimer(String clientID) throws RemoteException {
+        HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
+        data.replace("function", "resetServerTimer");
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("clientID", String.valueOf(clientID));
+        writeToServer(data, msg);
+    }
+
 
     /**
      * This method creates the basic structure for this protocol.

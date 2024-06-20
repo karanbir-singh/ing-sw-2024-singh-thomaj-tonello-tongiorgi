@@ -18,7 +18,7 @@ public class SocketPingManager implements PingManager {
     /**
      * This attribute represents the server timeout seconds
      */
-    private static final int TIMEOUT = 10;
+    private static final int TIMEOUT = 5;
 
     /**
      * This attributes represents the last ping time from the server
@@ -130,6 +130,7 @@ public class SocketPingManager implements PingManager {
                         }
                     }
                 }
+                firstPingArrived = false;
                 System.out.println("Server is up, you can restart to play");
                 mainClient.getViewController().closeErrorPopup();
 
