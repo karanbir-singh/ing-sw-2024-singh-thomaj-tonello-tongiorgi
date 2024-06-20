@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.network.PingManager;
+import it.polimi.ingsw.gc26.network.ClientResetTimerToServer;
 import it.polimi.ingsw.gc26.network.RMI.RMIPingManager;
 import it.polimi.ingsw.gc26.network.socket.SocketPingManager;
 import it.polimi.ingsw.gc26.ui.UIInterface;
@@ -57,6 +58,7 @@ public class TUIApplication implements UIInterface {
 
             // Launch thread for managing server ping
             new Thread(this.mainClient.getPingManager()).start();
+            new Thread(new ClientResetTimerToServer(this.mainClient)).start();
 
         } catch (RemoteException e) {
             ConsoleColors.printError("[ERROR]: unable to communicate with the server");

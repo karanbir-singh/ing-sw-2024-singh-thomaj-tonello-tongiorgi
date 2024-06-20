@@ -9,6 +9,7 @@ import javafx.util.Pair;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
@@ -67,6 +68,9 @@ public class MainController implements Serializable {
     public boolean threadStarted = false;
     public Boolean lock = true;
 
+    transient private Map<String,Long> timers; //TODO RICORDARDI DI RICREARE LA MAPPA ANCHE DOPO CHE VA DA GIU A SU
+    private final long TIMEOUT = 5;
+
     /**
      * Initializes waiting players' list and games controllers' list
      */
@@ -80,6 +84,7 @@ public class MainController implements Serializable {
         invalidNickname = false;
         numberOfTotalGames = 0;
 
+        timers = new HashMap<>();
         this.launchExecutor();
     }
 
@@ -365,6 +370,8 @@ public class MainController implements Serializable {
             fileInputStream.close();
         }
 
+        //recreate timers
+        this.timers = new HashMap<>();
         // Launch a thread for recreating ping
         this.createGeneratorPingThread();
         System.out.println("Games recreated");
@@ -394,70 +401,72 @@ public class MainController implements Serializable {
         }).start();
     }
 
-    /**
-     * Useful to verify if the client is online or not
-     *
-     * @param clients          Array of VirtualView and id of that particular Game
-     * @param gameControllerID id of the game
-     */
+
     private void startClientsPing(ArrayList<Pair<VirtualView, String>> clients, int gameControllerID) {
-        new Thread(() -> {
-            // Each client is alive
-            boolean allClientAlive = true;
 
-            // While
-            while (allClientAlive) {
-
-                // Ping each client of the game
-                for (Pair<VirtualView, String> client : clients) {
-                    // Use a counter for managing
-                    int numAttempt = 0;
-                    while (numAttempt < NUM_RECONNECTION_ATTEMPTS) {
-                        try {
-                            // Ping client
-                            client.getKey().ping();
-
-                            // Reset num of attempt for this client
-                            numAttempt = NUM_RECONNECTION_ATTEMPTS;
-                        } catch (RemoteException e) {
-                            System.out.println("Trying to reconnecting with a client " + numAttempt);
-
-                            // Increase attempt num
-                            numAttempt++;
-
-                            // Check if attempt num reached max after error
-                            if (numAttempt == NUM_RECONNECTION_ATTEMPTS) {
-                                System.out.println("A client is disconnected " + client.getValue());
-
-                                // Client is not alive
-                                allClientAlive = false;
-                                // Destroy game
-                                this.destroyGame(gameControllerID, client.getValue()); //getValue non è il nickname
-                            }
-                        }
+        // Ping each client of the game
+        for (Pair<VirtualView, String> client : clients) {
+            new Thread(()->{
+                while(true){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
-                    // Check if client is alive
-                    if (!allClientAlive) break;
+                    try {
+                        client.getKey().ping();
+                    } catch (RemoteException e) {
+                        //System.out.println("Connection Problem, thread ping server to client");
+                    }
                 }
 
-                // Sleep thread
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    System.out.println("Thread interrupted");
+
+            }).start();
+
+            new Thread(()-> {
+                boolean isAlive = true;
+                while (isAlive) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    long elapsed;
+                    long currentTime = System.currentTimeMillis();
+                    if(this.timers.get(client.getValue()) == null){ //not exist a timer, so the first ping is not already arrived
+                        elapsed = 0;
+                    }else{
+                        elapsed = (currentTime - this.timers.get(client.getValue())) / 1000;
+                    }
+
+                    if(elapsed >= TIMEOUT){
+                        System.out.println("Client "+ client.getValue());
+                        isAlive = false;
+                        synchronized(this.timers){
+                            this.timers.remove(client.getValue());
+                        }
+                        this.destroyGame(gameControllerID);
+
+                    }
                 }
-            }
-        }).start();
+            }).start();
+        }
     }
+
+
 
     /**
      * Destroy a game controller by its ID
      *
      * @param gameControllerID ID of the game controller that you want to destroy
      */
-    public void destroyGame(int gameControllerID, String nickname) {
+    public void destroyGame(int gameControllerID) {
+        //the game is already destroyed by another player
+        if(gamesControllers.get(gameControllerID) == null){
+            return;
+        }
         // Notify game destruction
-        gamesControllers.get(gameControllerID).getGame().getObservable().notifyGameClosed(nickname);
+        gamesControllers.get(gameControllerID).getGame().getObservable().notifyGameClosed();
         // Remove game from the map
         gamesControllers.remove(gameControllerID);
 
@@ -473,10 +482,25 @@ public class MainController implements Serializable {
         try {
             Files.delete(fileToDeletePath);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("There is no file on the disk, it is already been deleted");
+            return;
         }
         System.out.println("Game " + gameControllerID + " destroyed");
     }
+
+    public void resetServerTimer(String clientID){
+        //is the first ping so we need to create the timer
+        if(this.timers.get(clientID) == null){
+            synchronized (this.timers){
+                this.timers.put(clientID,System.currentTimeMillis());
+            }
+        }else{ //exist already a timer so it s not the first ping that comes from that specific client
+            synchronized (this.timers){
+                this.timers.put(clientID, System.currentTimeMillis());
+            }
+        }
+    }
+
 
     /**
      * Returns the queue of requests
