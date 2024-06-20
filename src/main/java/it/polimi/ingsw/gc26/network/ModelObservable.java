@@ -1,12 +1,8 @@
 package it.polimi.ingsw.gc26.network;
 
 import it.polimi.ingsw.gc26.model.game.Chat;
-import it.polimi.ingsw.gc26.model.game.Message;
-import it.polimi.ingsw.gc26.model.player.PersonalBoard;
-import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.util.Pair;
-
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -148,55 +144,6 @@ public class ModelObservable implements Serializable {
         }
     }
 
-//    public void notifyUpdateOptionsMenu(OptionsMenu optionsMenu, String message) {
-//        for (Pair client : this.clients) {
-//            if (client.getValue().equals(clientID)) {
-//                try {
-//                    ((VirtualView) client.getKey()).updatePlayer(simplifiedPlayer, message);
-//                } catch (RemoteException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-
-    //    public void notifyChat(Message msg) {
-//        for (Pair client : this.clients) {
-//            if (!msg.getSender().equals(client.getValue())) {
-//                try {
-//                    ((VirtualView) client.getKey()).showChat(msg.toJson());
-//                } catch (RemoteException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//
-//        }
-//    }
-//
-//    public void notifyPersonalBoard(Player player, Player personalBoardOwner, PersonalBoard personalBoard) {
-//        for (Pair client : this.clients) {
-//            if (client.getValue().equals(player.getID())) {
-//                try {
-//                    ((VirtualView) client.getKey()).showPersonalBoard(player.getID(), personalBoardOwner.getNickname(), personalBoard.toString());
-//                } catch (RemoteException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
-//    }
-//
-//    public void notifySelectedCardFromHand(String clientID) throws RemoteException {
-//        for (Pair client : this.clients) {
-//            if (client.getValue().equals(clientID)) {
-//                try {
-//                    ((VirtualView) client.getKey()).updateSelectedCardFromHand(clientID);
-//                } catch (RemoteException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
-//    }
-//
     public void notifyMessage(String msg, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {

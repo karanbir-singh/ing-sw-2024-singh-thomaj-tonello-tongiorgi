@@ -6,6 +6,7 @@ import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.main_request.MainRequest;
 import javafx.util.Pair;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -161,6 +162,13 @@ public class MainController implements Serializable {
         return !waitingPlayers.stream().anyMatch(player -> player.getNickname().equals(nickname));
     }
 
+    /**
+     * Joins the new client to an existing game if there's any game with available player,
+     * otherwise it set the client's state to creator.
+     *
+     * @param client Virtual view representing the client
+     * @param nickname client's nickname
+     */
     public void connect(VirtualView client, String nickname) {
         synchronized (mainRequests) {
             // Check if there is not a game waiting for players
@@ -202,6 +210,7 @@ public class MainController implements Serializable {
     /**
      * Initializes the waiting list of players and updating max numbers of players for the next game
      *
+     * @param client     Virtual view representing the client
      * @param numPlayers number of players of the next game
      * @param nickname   nickname of the player who is initializing the waiting list
      */
@@ -343,6 +352,9 @@ public class MainController implements Serializable {
     }
 
     /**
+     * Returns the game controller if exists.
+     *
+     * @param gameControllerID unique identifier for the game
      * @return Returns the right game controller based on the id
      */
     public GameController getGameController(int gameControllerID) {
@@ -408,6 +420,7 @@ public class MainController implements Serializable {
     /**
      * Creates a thread for every client and pings each one. If a client goes down, it attempts to reconnect.
      * If the client doesn't go up, it destroys the game
+     *
      * @param clients
      * @param gameControllerID
      */
@@ -416,7 +429,7 @@ public class MainController implements Serializable {
         // Ping each client of the game
         for (Pair<VirtualView, String> client : clients) {
 
-            new Thread(()-> {
+            new Thread(() -> {
                 boolean isAlive = true;
                 while (isAlive) {
                     int numAttempt = 0;
@@ -449,7 +462,6 @@ public class MainController implements Serializable {
     }
 
 
-
     /**
      * Destroy a game controller by its ID
      *
@@ -457,7 +469,7 @@ public class MainController implements Serializable {
      */
     public void destroyGame(int gameControllerID, String nickname) {
         //the game is already destroyed by another player
-        if(gamesControllers.get(gameControllerID) == null){
+        if (gamesControllers.get(gameControllerID) == null) {
             return;
         }
         // Notify game destruction
@@ -494,6 +506,7 @@ public class MainController implements Serializable {
 
     /**
      * Returns the clients that are waiting to be inserted in a game
+     *
      * @return an arrayList representing all the waiting clients
      */
     public ArrayList<VirtualView> getWaitingClients() {

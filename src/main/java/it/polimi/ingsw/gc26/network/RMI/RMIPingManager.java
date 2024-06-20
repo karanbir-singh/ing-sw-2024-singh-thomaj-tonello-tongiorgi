@@ -23,7 +23,7 @@ public class RMIPingManager implements PingManager {
     private static final int TIMEOUT = 5;
 
     /**
-     * This attribute represents a flag indicating if the
+     * This attribute represents a flag indicating if the first ping from the server has arrived.
      */
     private boolean firstPingArrived;
 

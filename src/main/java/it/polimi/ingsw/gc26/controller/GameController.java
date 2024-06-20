@@ -739,6 +739,7 @@ public class GameController implements Serializable {
 
     /**
      * Readds the virtual view after the server has gone down, because the connection must be recreated
+     *
      * @param view client's view
      * @param clientID client's original ID
      */
