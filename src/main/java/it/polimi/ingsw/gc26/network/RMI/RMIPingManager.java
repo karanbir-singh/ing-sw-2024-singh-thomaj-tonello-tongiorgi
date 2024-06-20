@@ -10,6 +10,7 @@ import java.rmi.registry.Registry;
 
 /**
  * This class implements a ping to the server in order to notice when the server has gone down.
+ * Implementation for RMI network connection.
  */
 public class RMIPingManager implements PingManager {
     /**
@@ -50,7 +51,7 @@ public class RMIPingManager implements PingManager {
     }
 
     /**
-     * Resets the timer
+     * Resets timer in order to identify when the connection has been interrupted.
      */
     @Override
     public void reset() {

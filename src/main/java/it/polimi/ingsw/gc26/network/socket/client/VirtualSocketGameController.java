@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -229,6 +228,13 @@ public class VirtualSocketGameController implements VirtualGameController {
         }
     }
 
+    /**
+     * Readds the virtual view after the server has gone down, because the connection must be recreated
+     *
+     * @param view client's view
+     * @param clientID client's original ID
+     * @throws RemoteException if the remote object cannot be called
+     */
     @Override
     public void reAddView(VirtualView view, String clientID) throws RemoteException {
         HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();

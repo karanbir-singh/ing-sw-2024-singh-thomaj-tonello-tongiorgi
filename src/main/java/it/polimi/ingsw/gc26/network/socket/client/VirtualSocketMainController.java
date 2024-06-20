@@ -6,7 +6,6 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;

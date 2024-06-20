@@ -13,7 +13,6 @@ import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.*;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -22,18 +21,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class represents the client for the server
+ * This class contains the methods that can be called from the server to be executed on the client.
+ * Implementation for socket network connection.
  */
 public class VirtualSocketView implements VirtualView {
+
     /**
      * This represents the print writer to write output to the client
      */
     private final BufferedWriter outputToClient;
-
-    //@Override
-    /*public ClientState getState() throws RemoteException {
-        return null;
-    }*/
 
     /**
      * Virtual Socket view constructor. It initializes the print writer to the client
@@ -57,10 +53,10 @@ public class VirtualSocketView implements VirtualView {
     }
 
     /**
-     * Sends message in JSON format to client
+     * This method writes the message in the output stream to the client.
      *
-     * @param functionName represents the function to call client side
-     * @param valueMsg     represents a value that is need to the called function
+     * @param functionName name of the function to be called client side
+     * @param valueMsg     data to send
      */
     private void sendToClient(String functionName, HashMap<String, String> valueMsg) throws RemoteException {
         HashMap<String, String> data = getBaseMessage();
@@ -79,6 +75,12 @@ public class VirtualSocketView implements VirtualView {
         }
     }
 
+    /**
+     * This method writes the message in the output stream to the client.
+     *
+     * @param functionName name of the function to be called client side
+     * @param valueMsg data to send
+     */
     private void sendToClient(String functionName, String valueMsg) {
         HashMap<String, String> data = getBaseMessage();
         data.replace("function", functionName);
@@ -98,8 +100,8 @@ public class VirtualSocketView implements VirtualView {
     /**
      * Print messages from the server to the client.
      *
-     * @param message
-     * @throws RemoteException
+     * @param message string to be displayed as information
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void showMessage(String message) throws RemoteException {
@@ -111,8 +113,8 @@ public class VirtualSocketView implements VirtualView {
     /**
      * Notifies the clients about an error.
      *
-     * @param message
-     * @throws RemoteException
+     * @param message string to be displayed as an error
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void showError(String message) throws RemoteException {
@@ -124,8 +126,8 @@ public class VirtualSocketView implements VirtualView {
     /**
      * Updates the client's state (used during the game's initialization)
      *
-     * @param clientState
-     * @throws RemoteException
+     * @param clientState new client state
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void updateClientState(ClientState clientState) throws RemoteException {
@@ -135,10 +137,10 @@ public class VirtualSocketView implements VirtualView {
     }
 
     /**
-     * Encodes the parameters to play this function in the real controller.
+     * Sets the client's id. Used only with socket implementation.
      *
-     * @param clientID new client IS
-     * @throws RemoteException
+     * @param clientID new client's id
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void setClientID(String clientID) throws RemoteException {
@@ -148,9 +150,9 @@ public class VirtualSocketView implements VirtualView {
     }
 
     /**
-     * Encodes the parameters to play this function in the real controller.
+     * Sets the game controller. Used only with socket implementation.
      *
-     * @throws RemoteException
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void setGameController() throws RemoteException {
@@ -158,9 +160,12 @@ public class VirtualSocketView implements VirtualView {
     }
 
     /**
-     * @param simplifiedCommonTable
-     * @param message
-     * @throws RemoteException
+     * Updates the client's common table by giving a simplified version of model's common table.
+     * It also displays a message with information about the update.
+     *
+     * @param simplifiedCommonTable updated common table
+     * @param message updated message
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void updateCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message) throws RemoteException {
@@ -205,13 +210,15 @@ public class VirtualSocketView implements VirtualView {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**
-     * @param simplifiedHand
-     * @param message
-     * @throws RemoteException
+     * Updates the client's hand by giving a simplified version of model's one.
+     * It also displays a message with the information about the update.
+     *
+     * @param simplifiedHand updated hand
+     * @param message updated message
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void updateHand(SimplifiedHand simplifiedHand, String message) throws RemoteException {
@@ -258,9 +265,12 @@ public class VirtualSocketView implements VirtualView {
     }
 
     /**
-     * @param simplifiedSecretHand
-     * @param message
-     * @throws RemoteException
+     * Updates the client's secret hand by giving a simplified version of model's one.
+     * It also displays a message with the information about the update.
+     *
+     * @param simplifiedSecretHand updated hand
+     * @param message updated message
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void updateSecretHand(SimplifiedHand simplifiedSecretHand, String message) throws RemoteException {
@@ -299,9 +309,12 @@ public class VirtualSocketView implements VirtualView {
     }
 
     /**
-     * @param personalBoard
-     * @param message
-     * @throws RemoteException
+     * Updates the client's personal board by giving a simplified version of model's one.
+     * It also displays a message with the information about the update.
+     *
+     * @param personalBoard updated personal board
+     * @param message updated message
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void updatePersonalBoard(SimplifiedPersonalBoard personalBoard, String message) throws RemoteException {
@@ -350,9 +363,12 @@ public class VirtualSocketView implements VirtualView {
     }
 
     /**
-     * @param otherPersonalBoard
-     * @param message
-     * @throws RemoteException
+     * Updates the other players' personal boards by giving a simplified version of model's one.
+     * It also displays a message with the information about the update.
+     *
+     * @param otherPersonalBoard updated personal board
+     * @param message updated message
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void updateOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) throws RemoteException {
@@ -404,9 +420,12 @@ public class VirtualSocketView implements VirtualView {
     }
 
     /**
-     * @param simplifiedPlayer
-     * @param message
-     * @throws RemoteException
+     * Updates the client's representation of himself by giving a simplified version of model's one.
+     * It also displays a message with the information about the update.
+     *
+     * @param simplifiedPlayer updated player
+     * @param message updated message
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void updatePlayer(SimplifiedPlayer simplifiedPlayer, String message) throws RemoteException {
@@ -435,9 +454,12 @@ public class VirtualSocketView implements VirtualView {
     }
 
     /**
-     * @param simplifiedGame
-     * @param message
-     * @throws RemoteException
+     * Updates the game by giving a simplified version of model's one.
+     * It also displays a message with the information about the update.
+     *
+     * @param simplifiedGame updated game
+     * @param message updated message
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void updateGame(SimplifiedGame simplifiedGame, String message) throws RemoteException {
@@ -489,9 +511,12 @@ public class VirtualSocketView implements VirtualView {
     }
 
     /**
-     * @param simplifiedChat
-     * @param message
-     * @throws RemoteException
+     * Updates the client's chat by giving a simplified version of model's one.
+     * It also displays a message with the information about the update.
+     *
+     * @param simplifiedChat updated chat
+     * @param message updated message
+     * @throws RemoteException if the remote method cannot be called
      */
     @Override
     public void updateChat(SimplifiedChat simplifiedChat, String message) throws RemoteException {
@@ -515,6 +540,47 @@ public class VirtualSocketView implements VirtualView {
 
     }
 
+    /**
+     * Updates the client's game id.
+     * It also displays a message with the information about the update.
+     *
+     * @param idGame updated game ID
+     * @throws RemoteException if the remote method cannot be called
+     */
+    @Override
+    public void updateIDGame(int idGame) throws RemoteException {
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("idGame", String.valueOf(idGame));
+        sendToClient("updateIDGame", msg);
+    }
+
+    /**
+     * Resets the timer in the client so the client knows the server is up.
+     *
+     * @throws RemoteException if the remote method cannot be called
+     */
+    @Override
+    public void ping() throws RemoteException {
+        sendToClient("ping", new HashMap<>());
+    }
+
+    /**
+     * Kills the client ending the game.
+     *
+     * @param nickname
+     * @throws RemoteException if the remote method cannot be called
+     */
+    @Override
+    public void killProcess(String nickname) throws RemoteException {
+        sendToClient("killProcess", new HashMap<>());
+    }
+
+    /**
+     * Encodes a resource card to a json object
+     *
+     * @param resourceCard card to be encoded
+     * @return encoded card
+     */
     private ObjectNode createResourceCardNode(Card resourceCard) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
@@ -527,18 +593,30 @@ public class VirtualSocketView implements VirtualView {
         return createCornerNodes(resourceCard.getFront(), om, cardNode);
     }
 
-    private ObjectNode createResourceCardNode(Side resourceCard) {
+    /**
+     * Encodes a resource side to a json object
+     *
+     * @param resourceSide resource side to be encoded
+     * @return encoded side
+     */
+    private ObjectNode createResourceCardNode(Side resourceSide) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
-        cardNode.put("sideSymbol", resourceCard.getSideSymbol().isPresent() ? resourceCard.getSideSymbol().get().toString() : "" );
-        cardNode.put("points", String.valueOf(resourceCard.getPoints()));
+        cardNode.put("sideSymbol", resourceSide.getSideSymbol().isPresent() ? resourceSide.getSideSymbol().get().toString() : "" );
+        cardNode.put("points", String.valueOf(resourceSide.getPoints()));
         // images
-        cardNode.put("imagePathFront", resourceCard.getImagePath());
-        cardNode.put("imagePathBack", resourceCard.getImagePath());
+        cardNode.put("imagePathFront", resourceSide.getImagePath());
+        cardNode.put("imagePathBack", resourceSide.getImagePath());
         // corners
-        return createCornerNodes(resourceCard, om, cardNode);
+        return createCornerNodes(resourceSide, om, cardNode);
     }
 
+    /**
+     * Encodes a gold card to a json object
+     *
+     * @param goldCard card to be encoded
+     * @return encoded card
+     */
     private ObjectNode createGoldCardNode(Card goldCard) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
@@ -563,30 +641,42 @@ public class VirtualSocketView implements VirtualView {
         return createCornerNodes(goldCard.getFront(), om, cardNode);
     }
 
-    private ObjectNode createGoldCardNode(Side goldCard) {
+    /**
+     * Encodes a gold side to a json object
+     *
+     * @param goldSide side card to be encoded
+     * @return encoded side
+     */
+    private ObjectNode createGoldCardNode(Side goldSide) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
-        cardNode.put("cardType", goldCard.getClass().getSimpleName());
-        cardNode.put("sideSymbol", goldCard.getSideSymbol().isPresent() ? goldCard.getSideSymbol().get().toString() : "");
+        cardNode.put("cardType", goldSide.getClass().getSimpleName());
+        cardNode.put("sideSymbol", goldSide.getSideSymbol().isPresent() ? goldSide.getSideSymbol().get().toString() : "");
 
         // points
-        cardNode.put("points", goldCard.getPoints());
+        cardNode.put("points", goldSide.getPoints());
 
         // resources
         ObjectNode resourcesNode = om.createObjectNode();
-        for (Map.Entry<Symbol, Integer> resource : goldCard.getRequestedResources().entrySet()) {
+        for (Map.Entry<Symbol, Integer> resource : goldSide.getRequestedResources().entrySet()) {
             resourcesNode.put(resource.getKey().toString(), resource.getValue().toString());
         }
         cardNode.set("requestedResources", resourcesNode);
 
         // images
-        cardNode.put("imagePathFront", goldCard.getImagePath());
-        cardNode.put("imagePathBack", goldCard.getImagePath());
+        cardNode.put("imagePathFront", goldSide.getImagePath());
+        cardNode.put("imagePathBack", goldSide.getImagePath());
 
         // corners
-        return createCornerNodes(goldCard, om, cardNode);
+        return createCornerNodes(goldSide, om, cardNode);
     }
 
+    /**
+     * Encodes a mission card to a json object
+     *
+     * @param missionCard card to be encoded
+     * @return encoded card
+     */
     private ObjectNode createMissionCardNode(Card missionCard) {
         if (missionCard == null) {
             return new ObjectMapper().createObjectNode();
@@ -601,6 +691,12 @@ public class VirtualSocketView implements VirtualView {
         return cardNode;
     }
 
+    /**
+     * Encodes a starter card to a json object
+     *
+     * @param starterCard card to be encoded
+     * @return encoded card
+     */
     private ObjectNode createStarterCardNode(Card starterCard) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
@@ -639,24 +735,38 @@ public class VirtualSocketView implements VirtualView {
         return cardNode;
     }
 
-    private ObjectNode createStarterCardNode(Side starterCard) {
+    /**
+     * Encodes a starter side to a json object
+     *
+     * @param starterSide side to be encoded
+     * @return encoded side
+     */
+    private ObjectNode createStarterCardNode(Side starterSide) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
 
         // permanent resources
         ArrayNode permanentResources = om.createArrayNode();
-        for (Symbol symbol : starterCard.getPermanentResources()) {
+        for (Symbol symbol : starterSide.getPermanentResources()) {
             permanentResources.add(symbol.toString());
         }
         cardNode.set("permanentResources", permanentResources);
 
         // image
-        cardNode.put("imagePathFront", starterCard.getImagePath());
+        cardNode.put("imagePathFront", starterSide.getImagePath());
 
-        return createCornerNodes(starterCard, om, cardNode);
+        return createCornerNodes(starterSide, om, cardNode);
     }
 
 
+    /**
+     * Encodes all the corners of a card to a json object
+     *
+     * @param side corner's side to be encoded
+     * @param om mapper
+     * @param cardNode card side encoded where to add the corners encode
+     * @return card node with corners encoded
+     */
     private ObjectNode createCornerNodes(Side side, ObjectMapper om, ObjectNode cardNode) {
         ObjectNode UPLEFT = om.createObjectNode();
         cardNode.set("UPLEFT", UPLEFT);
@@ -681,6 +791,12 @@ public class VirtualSocketView implements VirtualView {
         return cardNode;
     }
 
+    /**
+     * Encodes a back card to a json object
+     *
+     * @param side back side
+     * @return encoded back side
+     */
     private ObjectNode createCardBack(Side side) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode sideNode = om.createObjectNode();
@@ -691,7 +807,6 @@ public class VirtualSocketView implements VirtualView {
             sideNode.put("permanentResources", side.getPermanentResources().getFirst().toString());
         } else {
             sideNode.set("permanentResources", null);
-
         }
 
         // image
@@ -700,6 +815,12 @@ public class VirtualSocketView implements VirtualView {
         return createCornerNodes(side, om, sideNode);
     }
 
+    /**
+     * Encodes an array of position containing side in it to a json object
+     *
+     * @param positions position in personal board
+     * @return encoded positions
+     */
     private ArrayNode createArrayPositionsNode(ArrayList<Point> positions) {
         ObjectMapper om = new ObjectMapper();
         ArrayNode arrayPositions = om.createArrayNode();
@@ -741,29 +862,6 @@ public class VirtualSocketView implements VirtualView {
             arrayPositions.add(genericPoint);
         }
         return arrayPositions;
-    }
-
-    @Override
-    public void updateIDGame(int idGame) throws RemoteException {
-        HashMap<String, String> msg = new HashMap<>();
-        msg.put("idGame", String.valueOf(idGame));
-        sendToClient("updateIDGame", msg);
-    }
-
-    /**
-     * @throws RemoteException
-     */
-    @Override
-    public void ping() throws RemoteException {
-        sendToClient("ping", new HashMap<>());
-    }
-
-    /**
-     * @throws RemoteException
-     */
-    @Override
-    public void killProcess(String nickname) throws RemoteException {
-        sendToClient("killProcess", new HashMap<>());
     }
 }
 
