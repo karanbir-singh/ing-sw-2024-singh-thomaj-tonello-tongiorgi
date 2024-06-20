@@ -5,7 +5,6 @@ import it.polimi.ingsw.gc26.model.card.MissionCard;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;

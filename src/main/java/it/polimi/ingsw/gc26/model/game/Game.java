@@ -9,11 +9,9 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.utils.ParserCore;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -329,9 +327,8 @@ public class Game implements Serializable {
                 break;
             case WINNER:
                 message = "Game ended, here are the winners";
-                System.out.println("WINNNERR");
+                break;
         }
-
 
         HashMap<String, Integer> points = new HashMap<>();
         for (Player player : this.players) {
@@ -356,7 +353,6 @@ public class Game implements Serializable {
             pawnsSelected.put(player.getNickname(), player.getPawnColor());
         }
         this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState, currentPlayerNickname, points, nicknameWinners, this.availablePawns, pawnsSelected), message);
-
     }
 
     /**
@@ -402,7 +398,6 @@ public class Game implements Serializable {
             } else {
                 points.put(player.getNickname(), 0);
             }
-
         }
         ArrayList<String> nicknameWinners = new ArrayList<>();
         for (Player winner : this.winners) {
@@ -452,11 +447,18 @@ public class Game implements Serializable {
         this.observable.notifyError(errorMessage, clientID);
     }
 
-    // THIS IS FOR TESTING
+    /**
+     * Return the game's winners (it can be more than one)
+     * @return winners
+     */
     public ArrayList<Player> getWinners() {
         return winners;
     }
 
+    /**
+     * Returns a reference to the observable of this class to notify the client
+     * @return observable
+     */
     public ModelObservable getObservable() {
         return this.observable;
     }

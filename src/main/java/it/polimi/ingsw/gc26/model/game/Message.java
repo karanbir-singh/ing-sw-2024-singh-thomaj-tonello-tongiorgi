@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.model.player.Player;
-
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -48,7 +47,6 @@ public class Message implements Serializable {
         }
         this.receiver = receiver;
     }
-
 
     /**
      * Initialize Messages
@@ -102,7 +100,6 @@ public class Message implements Serializable {
         return this.time;
     }
 
-
     /**
      * Returns a json serialized string
      *
@@ -125,7 +122,6 @@ public class Message implements Serializable {
             return "";
         }
     }
-
 
     /**
      * Overrides the method toString to have more readability

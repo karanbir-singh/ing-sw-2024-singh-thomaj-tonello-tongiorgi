@@ -3,12 +3,14 @@ package it.polimi.ingsw.gc26.network.RMI;
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.network.PingManager;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
-
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+/**
+ * This class implements a ping to the server in order to notice when the server has gone down.
+ */
 public class RMIPingManager implements PingManager {
     /**
      * This attribute represents the main client this thread for pinging RMI server is launched by
@@ -20,6 +22,9 @@ public class RMIPingManager implements PingManager {
      */
     private static final int TIMEOUT = 5;
 
+    /**
+     * This attribute represents a flag indicating if the
+     */
     private boolean firstPingArrived;
 
     /**
@@ -71,6 +76,7 @@ public class RMIPingManager implements PingManager {
                     elapsed = (currentTime - lastPingTime) / 1000;
                 }else{
                     elapsed = 0;
+
                 }
             }
 
