@@ -49,7 +49,7 @@ public class Chat implements Serializable {
     /**
      * Filters all the messages present by a player
      *
-     * @param receiverPlayer the player that receives the message
+     * @param playerID the player's that receives the message
      * @return arrayList containing the messages for the player
      */
     public ArrayList<Message> filterMessages(String playerID){

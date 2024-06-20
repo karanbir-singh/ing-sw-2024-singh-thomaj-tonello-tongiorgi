@@ -34,7 +34,7 @@ public class VirtualSocketMainController implements VirtualMainController {
      *
      * @param client   virtualView
      * @param nickName client's nickname
-     * @return clientID
+     * @param clientState current client's state
      * @throws RemoteException
      */
     @Override
