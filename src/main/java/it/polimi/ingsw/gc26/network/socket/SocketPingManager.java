@@ -130,6 +130,7 @@ public class SocketPingManager implements PingManager {
                         }
                     }
                 }
+                firstPingArrived = false;
                 System.out.println("Server is up, you can restart to play");
                 mainClient.getViewController().closeErrorPopup();
 
