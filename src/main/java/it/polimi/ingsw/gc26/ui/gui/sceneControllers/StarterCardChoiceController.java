@@ -91,8 +91,11 @@ public class StarterCardChoiceController extends SceneController implements Init
     private HashMap<String, ScrollPane> chats = new HashMap<>();
     private boolean chatIsVisible = false;
     private boolean chatHasBeenCreated = false;
-    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
-    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+
+    @FXML
+    private Button rulesButton;
+    private ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
 
     @FXML
     VBox choosingBox;
@@ -160,7 +163,7 @@ public class StarterCardChoiceController extends SceneController implements Init
 
         layout.pageBindings(rootPane, rootBorder, background);
         //buttons setup
-        layout.buttonSetup(chatIconClose, chatIconVisible, chatButton);
+        layout.buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
     }
 
@@ -337,7 +340,6 @@ public class StarterCardChoiceController extends SceneController implements Init
     public void toggleChat(ActionEvent actionEvent) {
 
         if (chatIsVisible) {
-            chatButton.setGraphic(chatIconClose);
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonClose");
             anchorPaneChat.setTranslateX(-2000);
@@ -346,7 +348,6 @@ public class StarterCardChoiceController extends SceneController implements Init
             chatIsVisible = false;
             //buttonHBox.setTranslateX(0);
         } else {
-            chatButton.setGraphic(chatIconVisible);
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonVisible");
             anchorPaneChat.setTranslateX(30);

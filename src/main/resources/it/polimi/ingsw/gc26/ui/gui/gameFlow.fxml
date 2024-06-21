@@ -51,6 +51,9 @@
                                           </content>
                                       </Tab>
                                   </tabs>
+                           <VBox.margin>
+                              <Insets left="20.0" />
+                           </VBox.margin>
                               </TabPane>
                               <AnchorPane fx:id="handPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="100.0" minWidth="-Infinity" />
                           </children>
@@ -115,7 +118,7 @@
                                         </Button>
                                               <Button fx:id="chatButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="30.0">
                                         </Button>
-                                              <Button mnemonicParsing="false" onAction="#openRulebook" prefHeight="25.0" prefWidth="30.0">
+                                              <Button fx:id="rulesButton" mnemonicParsing="false" onAction="#openRulebook" prefHeight="25.0" prefWidth="30.0">
                                         </Button>
                                           </children>
                                       </VBox>

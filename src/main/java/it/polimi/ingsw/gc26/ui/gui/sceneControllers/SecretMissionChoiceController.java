@@ -80,8 +80,12 @@ public class SecretMissionChoiceController extends SceneController implements In
     private HashMap<String, ScrollPane> chats = new HashMap<>();
     private boolean chatIsVisible = false;
     private boolean chatHasBeenCreated = false;
-    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
-    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+    private final ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+
+    @FXML
+    private Button rulesButton;
+    private final ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
+
 
     private ArrayList<ImageView> cards = new ArrayList<>();
     private ImageView image1 = new ImageView(new Image(getClass().getResource("images/game-background.png").toExternalForm()));
@@ -285,7 +289,7 @@ public class SecretMissionChoiceController extends SceneController implements In
 
         layout.pageBindings(rootPane, rootBorder, background);
         //buttons setup
-        layout.buttonSetup(chatIconClose, chatIconVisible, chatButton);
+        layout.buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
     }
 
@@ -462,7 +466,6 @@ public class SecretMissionChoiceController extends SceneController implements In
     public void toggleChat(ActionEvent actionEvent) {
 
         if (chatIsVisible) {
-            chatButton.setGraphic(chatIconClose);
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonClose");
             anchorPaneChat.setTranslateX(-2000);
@@ -471,7 +474,6 @@ public class SecretMissionChoiceController extends SceneController implements In
             chatIsVisible = false;
             //buttonHBox.setTranslateX(0);
         } else {
-            chatButton.setGraphic(chatIconVisible);
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonVisible");
             anchorPaneChat.setTranslateX(30);

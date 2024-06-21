@@ -76,7 +76,7 @@
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <ImageView fx:id="image" fitHeight="95.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="image" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@sceneControllers/images/backSide/img_1.jpeg" />
                                  </image>
@@ -111,7 +111,7 @@
                               <VBox alignment="BOTTOM_LEFT" prefHeight="632.0" prefWidth="60.0" spacing="10.0" AnchorPane.bottomAnchor="0.0">
                                  <children>
                                     <Button fx:id="chatButton" mnemonicParsing="false" />
-                                    <Button mnemonicParsing="false" onAction="#openRulebook" />
+                                    <Button fx:id="rulesButton" mnemonicParsing="false" onAction="#openRulebook" />
                                  </children>
                               </VBox>
                            </children>

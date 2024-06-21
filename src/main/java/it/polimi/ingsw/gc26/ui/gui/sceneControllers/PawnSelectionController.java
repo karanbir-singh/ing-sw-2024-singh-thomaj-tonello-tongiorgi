@@ -68,8 +68,7 @@ public class PawnSelectionController extends SceneController implements Initiali
 
     private boolean chatIsVisible = false;
     private boolean chatHasBeenCreated = false;
-    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
-    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+    private ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
 
     public void onClickButton(ActionEvent event){
         String pawnColor = ((Button)event.getSource()).getAccessibleText();
@@ -94,7 +93,7 @@ public class PawnSelectionController extends SceneController implements Initiali
         layout.pageBindings(rootPane, rootBorder, background);
 
         //buttons setup
-        layout.buttonSetup(chatIconClose, chatIconVisible, chatButton);
+        layout.buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
     }
 
@@ -116,7 +115,6 @@ public class PawnSelectionController extends SceneController implements Initiali
     public void toggleChat(ActionEvent actionEvent) {
 
         if (chatIsVisible) {
-            chatButton.setGraphic(chatIconClose);
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonClose");
             anchorPaneChat.setTranslateX(-2000);
@@ -125,7 +123,6 @@ public class PawnSelectionController extends SceneController implements Initiali
             chatIsVisible = false;
             //buttonHBox.setTranslateX(0);
         } else {
-            chatButton.setGraphic(chatIconVisible);
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonVisible");
             anchorPaneChat.setTranslateX(30);

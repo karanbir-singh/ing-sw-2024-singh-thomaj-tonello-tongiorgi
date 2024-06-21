@@ -60,8 +60,7 @@ public class GameFlowController extends SceneController implements Initializable
     private HashMap<String, ScrollPane> chats = new HashMap<>();
     private boolean chatHasBeenCreated = false;
     private boolean chatIsVisible = false;
-    private ImageView chatIconVisible = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
-    private ImageView chatIconClose = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+    private final ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
 
     //ScoreBoard
     @FXML
@@ -73,9 +72,12 @@ public class GameFlowController extends SceneController implements Initializable
     @FXML
     private GridPane scoreBoardGrid;
     private boolean scoreBoardIsVisible = false;
-    private ImageView scoreIconVisible = new ImageView(new Image(getClass().getResource("images/icons/sparkle-icon-white.png").toExternalForm()));
-    private ImageView scoreIconClose = new ImageView(new Image(getClass().getResource("images/icons/sparkle-icon-white.png").toExternalForm()));
+    private final ImageView scoreIcon = new ImageView(new Image(getClass().getResource("images/icons/sparkle-icon-white.png").toExternalForm()));
 
+
+    @FXML
+    private Button rulesButton;
+    private final ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
 
     //Hand
     @FXML
@@ -113,8 +115,8 @@ public class GameFlowController extends SceneController implements Initializable
     private TabPane personalBoardTabPane;
     private final int xPositionStarterCard = 40;
     private final int yPositionStarterCard = 40;
-    private ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
-    private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
+    private final ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
+    private final RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
 
 
     //layout
@@ -150,6 +152,8 @@ public class GameFlowController extends SceneController implements Initializable
     @FXML
     private ScrollPane serverMessagesScrollPane;
 
+
+    private ArrayList<ImageView> handImages;
     private ArrayList<ImageView> resourceCommonTableImages;
     private ArrayList<ImageView> goldCommonTableImages;
     private ArrayList<ImageView> commonMissionsCommonTableImages;
@@ -211,33 +215,28 @@ public class GameFlowController extends SceneController implements Initializable
 
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
-        // List of card images
-        handCards.clear();
 
-        // Hand cards
-        ArrayList<Card> hand = simplifiedHand.getCards();
 
         // Update hand
         int index = 0;
-        for (Card card : hand) {
-            ImageView imageView;
+        for (Card card : simplifiedHand.getCards()) {
             if (card.equals(simplifiedHand.getSelectedCard())) {
-                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())), 415, 278, true, false, false));
-                layout.makeGlow(imageView);
+                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())),831,556,true,true,false));
+                layout.makeGlow(handImages.get(index));
             } else {
-                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, false, false));
+                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())),831,556,true,true,false));
+                handImages.get(index).setEffect(null);
             }
-            this.setCardImageParameters(imageView, index);
-            makeDraggable(imageView, playablePositions);
-            imageView.setOnMouseClicked(this::onHandCardClicked);
-
-            handCards.add(imageView);
             index++;
         }
+        if(simplifiedHand.getCards().size() == 2){
+            handImages.get(2).setImage(null);
+        }
+
 
         Platform.runLater(() -> {
-            this.handPane.getChildren().setAll(handCards);
-            layout.handLayout(rootBorder, handCards, handPane);
+            this.handPane.getChildren().setAll(handImages);
+            layout.handLayout(rootBorder, handImages, handPane);
         });
 
     }
@@ -318,6 +317,15 @@ public class GameFlowController extends SceneController implements Initializable
 
         this.personalBoardTabPane.getTabs().getFirst().setId("0");
 
+        this.handImages = new ArrayList<>();
+        for(int i = 0; i< 3; i++){
+            ImageView imageView = new ImageView();
+            this.setCardImageParameters(imageView, i);
+            makeDraggable(imageView, playablePositions);
+            imageView.setOnMouseClicked(this::onHandCardClicked);
+            handImages.add(imageView);
+        }
+
         this.resourceCommonTableImages = new ArrayList<>();
         for(int i = 0; i < 3; i++){
             ImageView imageView = new ImageView();
@@ -343,9 +351,9 @@ public class GameFlowController extends SceneController implements Initializable
         }
 
         //buttons setup
-        layout.buttonSetup(scoreIconClose, scoreIconVisible, scoreBoardButton);
+        layout.buttonSetup(scoreIcon, scoreBoardButton);
         scoreBoardButton.setOnAction(this::toggleScoreBoard);
-        layout.buttonSetup(chatIconClose, chatIconVisible, chatButton);
+        layout.buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
 
 
@@ -623,7 +631,6 @@ public class GameFlowController extends SceneController implements Initializable
 
     public void toggleScoreBoard(ActionEvent actionEvent) {
         if (chatIsVisible) {
-            chatButton.setGraphic(chatIconClose);
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonClose");
             anchorPaneChat.setTranslateX(-2000);
@@ -632,7 +639,6 @@ public class GameFlowController extends SceneController implements Initializable
             chatIsVisible = false;
         }
         if (scoreBoardIsVisible) {
-            scoreBoardButton.setGraphic(scoreIconClose);
             scoreBoardButton.getStyleClass().clear();
             scoreBoardButton.getStyleClass().add("buttonClose");
             anchorPaneScoreBoard.setTranslateX(-2000);
@@ -640,7 +646,6 @@ public class GameFlowController extends SceneController implements Initializable
             HBoxLeftPanel.setMaxWidth(40);
             scoreBoardIsVisible = false;
         } else {
-            scoreBoardButton.setGraphic(scoreIconVisible);
             scoreBoardButton.getStyleClass().clear();
             scoreBoardButton.getStyleClass().add("buttonVisible");
             anchorPaneScoreBoard.setTranslateX(0);
@@ -652,7 +657,6 @@ public class GameFlowController extends SceneController implements Initializable
 
     public void toggleChat(ActionEvent actionEvent) {
         if (scoreBoardIsVisible) {
-            scoreBoardButton.setGraphic(scoreIconClose);
             scoreBoardButton.getStyleClass().clear();
             scoreBoardButton.getStyleClass().add("buttonClose");
             anchorPaneScoreBoard.setTranslateX(-2000);
@@ -661,7 +665,6 @@ public class GameFlowController extends SceneController implements Initializable
             scoreBoardIsVisible = false;
         }
         if (chatIsVisible) {
-            chatButton.setGraphic(chatIconClose);
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonClose");
             anchorPaneChat.setTranslateX(-2000);
@@ -669,7 +672,6 @@ public class GameFlowController extends SceneController implements Initializable
             HBoxLeftPanel.setMaxWidth(40);
             chatIsVisible = false;
         } else {
-            chatButton.setGraphic(chatIconVisible);
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonVisible");
             anchorPaneChat.setTranslateX(-270);

@@ -71,15 +71,13 @@ public class CommonLayout {
         card.setEffect(glow);
     }
 
-    public void buttonSetup(ImageView closeIcon, ImageView visibleIcon, Button button) {
+    public void buttonSetup(ImageView icon, Button button) {
         double iconDimension = 30;
         double buttonDim = 50;
 
-        closeIcon.setFitWidth(iconDimension);
-        closeIcon.setFitHeight(iconDimension);
-        visibleIcon.setFitWidth(iconDimension);
-        visibleIcon.setFitHeight(iconDimension);
-        button.setGraphic(closeIcon);
+        icon.setFitWidth(iconDimension);
+        icon.setFitHeight(iconDimension);
+        button.setGraphic(icon);
         button.setPrefWidth(buttonDim);
         button.setPrefHeight(buttonDim);
 
