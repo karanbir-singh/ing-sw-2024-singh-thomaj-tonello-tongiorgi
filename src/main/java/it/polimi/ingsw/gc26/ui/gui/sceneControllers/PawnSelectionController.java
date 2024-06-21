@@ -86,6 +86,7 @@ public class PawnSelectionController extends SceneController implements Initiali
         image.setFitWidth(100);
         image.setFitHeight(100);
         button.setGraphic(image);
+        button.getStyleClass().add("pawn");
     }
 
     @Override

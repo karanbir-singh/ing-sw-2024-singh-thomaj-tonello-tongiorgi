@@ -22,7 +22,11 @@
 }
 
 .customLabel {
-    -fx-effect: dropshadow( gaussian , #e3fff2  , 20,0.1,0,1 );;
+    -fx-effect: dropshadow( gaussian , #e3fff2  , 20,0.1,0,1 );
+}
+
+.cardHover:hover {
+    -fx-effect: dropshadow( gaussian , #e3fff2  , 20,0.1,0,1 );
 }
 
 .button {
@@ -110,13 +114,7 @@
     -fx-border-radius: 50px;
     -fx-wrap-text: true;
 }
-
-.tab-pane {
-
-}
-
-
-.tab-header-area .tab-header-background {
+.tab-pane .tab-header-area .tab-header-background {
     -fx-background-color: transparent;
 }
 
@@ -158,10 +156,92 @@
 .tab .tab-label {
     -fx-alignment: CENTER;
     -fx-text-fill: white;
-    /*-fx-text-fill: linear-gradient(to right, #0bbdd9 10%, #0dd696 100%, #fffb8f );*/
     -fx-padding: 0 5 0 5;
 }
 
+#RED.tab {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #d93d3d;
+}
+
+#RED.tab:hover {
+    -fx-border-radius: 0px;
+    -fx-background-color: rgba(255, 115, 77, 0.3);
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: linear-gradient(to right, #d93d3d, #ff734d );
+}
+
+#RED.tab:selected {
+    -fx-border-radius: 0px;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-background-color: rgba(255, 137, 133, 0.3);
+    -fx-border-color: #d93d3d;
+}
+
+#BLUE.tab {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #244aab;
+}
+
+#BLUE.tab:hover {
+    -fx-border-radius: 0px;
+    -fx-background-color: rgba(79, 122, 232, 0.2);
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: linear-gradient(to right, #244aab, #0bbdd9 );
+}
+
+#BLUE.tab:selected {
+    -fx-border-radius: 0px;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-background-color: rgba(79, 122, 232, 0.3);
+    -fx-border-color: #244aab;
+}
+
+#GREEN.tab {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #0dd696;
+}
+
+#GREEN.tab:hover {
+    -fx-border-radius: 0px;
+    -fx-background-color: rgba(29, 207, 61, 0.2);
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: linear-gradient(to right, #0dd696, #fffb8f );
+}
+
+#GREEN.tab:selected {
+    -fx-border-radius: 0px;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-background-color: rgba(29, 207, 61, 0.3);
+    -fx-border-color: #0dd696;
+}
+
+#YELLOW.tab {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #fffb8f;
+}
+
+#YELLOW.tab:hover {
+    -fx-border-radius: 0px;
+    -fx-background-color: rgba(255, 255, 100, 0.2);
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: linear-gradient(to right, #fffb8f, white );
+}
+
+#YELLOW.tab:selected {
+    -fx-border-radius: 0px;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-background-color: rgba(255, 255, 100, 0.3);
+    -fx-border-color: #fffb8f;
+}
 
 .scroll-pane {
     -fx-background-color: transparent;
@@ -195,86 +275,14 @@
     -fx-effect: dropshadow( gaussian , #fffff0  , 20,0.8,0,1 );
 }
 
-.RED {
-    -fx-border-radius: 0px;
+.pawn {
     -fx-background-color: transparent;
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: #d93d3d;
 }
 
-.RED:hover {
-    -fx-border-radius: 0px;
+.pawn:hover {
     -fx-background-color: transparent;
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: linear-gradient(to right, #d93d3d 100%, #fffb8f );
 }
 
-.RED:selected {
-    -fx-border-radius: 0px;
-    -fx-background-color: rgba(255, 137, 133, 0.8);
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: #d93d3d;
-}
-
-.BLUE {
-    -fx-border-radius: 0px;
+.pawn:pressed {
     -fx-background-color: transparent;
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: #d93d3d;
-}
-
-.BLUE:hover {
-    -fx-border-radius: 0px;
-    -fx-background-color: transparent;
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: linear-gradient(to right, #d93d3d 100%, #fffb8f );
-}
-
-.BLUE:selected {
-    -fx-border-radius: 0px;
-    -fx-background-color: rgba(255, 137, 133, 0.8);
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: #d93d3d;
-}
-
-.GREEN {
-    -fx-border-radius: 0px;
-    -fx-background-color: transparent;
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: #d93d3d;
-}
-
-.GREEN:hover {
-    -fx-border-radius: 0px;
-    -fx-background-color: transparent;
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: linear-gradient(to right, #d93d3d 100%, #fffb8f );
-}
-
-.GREEN:selected {
-    -fx-border-radius: 0px;
-    -fx-background-color: rgba(255, 137, 133, 0.8);
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: #d93d3d;
-}
-
-.YELLOW {
-    -fx-border-radius: 0px;
-    -fx-background-color: transparent;
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: #fffb8f;
-}
-
-.YELLOW:hover {
-    -fx-border-radius: 0px;
-    -fx-background-color: transparent;
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: linear-gradient(to right, #d93d3d 100%, #fffb8f );
-}
-
-.YELLOW:selected {
-    -fx-border-radius: 0px;
-    -fx-background-color: rgba(255, 137, 133, 0.8);
-    -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: #d93d3d;
 }

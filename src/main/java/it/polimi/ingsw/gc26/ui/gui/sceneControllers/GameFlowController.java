@@ -94,10 +94,6 @@ public class GameFlowController extends SceneController implements Initializable
     @FXML
     private VBox secretMissionBox;
 
-    private ArrayList<ImageView> resources = new ArrayList<>();
-    private ArrayList<ImageView> goldens = new ArrayList<>();
-    private ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
-
     //end CommonTable
 
 
@@ -273,7 +269,7 @@ public class GameFlowController extends SceneController implements Initializable
         if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
-            consideredTab.setId("1");
+            //consideredTab.setText("1");
             personalBoardTabPane.getTabs().add(consideredTab);
             otherScrollPane = new ScrollPane();
             otherScrollPane.setHvalue(0.5);
@@ -299,21 +295,25 @@ public class GameFlowController extends SceneController implements Initializable
         for (Tab tab : personalBoardTabPane.getTabs()) {
             pawn = simplifiedGame.getPawnsSelected().get(tab.getText());
             if(pawn != null) {
-                tab.getStyleClass().add(pawn.toString());
+                tab.setId(pawn.name());
             }
         }
     }
 
+    @Override
+    public void changeGUIPlayer (SimplifiedPlayer simplifiedPlayer) {
+        if(simplifiedPlayer.getPawnColor() != null) {
+            personalBoardTabPane.getTabs().getFirst().setId(simplifiedPlayer.getPawnColor().name());
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        this.personalBoardTabPane.getTabs().getFirst().setId("0");
-
         this.handImages = new ArrayList<>();
         for(int i = 0; i< 3; i++){
             ImageView imageView = new ImageView();
             this.setCardImageParameters(imageView, i);
+            imageView.getStyleClass().add("cardHover");
             makeDraggable(imageView, playablePositions);
             imageView.setOnMouseClicked(this::onHandCardClicked);
             handImages.add(imageView);
@@ -329,6 +329,7 @@ public class GameFlowController extends SceneController implements Initializable
             ImageView imageView = new ImageView();
             this.setCardImageParameters(imageView,i);
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageView.getStyleClass().add("cardHover");
             this.resourceCommonTableImages.add(imageView);
         }
 
@@ -337,6 +338,7 @@ public class GameFlowController extends SceneController implements Initializable
             ImageView imageView = new ImageView();
             this.setCardImageParameters(imageView,i);
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageView.getStyleClass().add("cardHover");
             this.goldCommonTableImages.add(imageView);
         }
 
@@ -431,7 +433,8 @@ public class GameFlowController extends SceneController implements Initializable
         imageView.setOnMouseReleased(event -> {
             for (ImageView target : targets) {
                 //control if is a target and if the tab is the right one
-                if (isInTargetSpot(imageView, target) && this.personalBoardTabPane.getSelectionModel().getSelectedItem().getId().equals("0")) {
+                if (isInTargetSpot(imageView, target) && this.personalBoardTabPane.getSelectionModel().getSelectedItem().equals(
+                        this.personalBoardTabPane.getTabs().getFirst())) {
 
                     try {
                         int row = GridPane.getRowIndex(target);

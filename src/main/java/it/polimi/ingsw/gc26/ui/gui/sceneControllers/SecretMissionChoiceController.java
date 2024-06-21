@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -221,6 +222,10 @@ public class SecretMissionChoiceController extends SceneController implements In
             otherScrollPane.setContent(otherGridPane);
             this.creationAndSettingGridContraints(otherGridPane);
             consideredTab.setContent(otherScrollPane);
+
+            otherScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            otherScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            otherScrollPane.getStyleClass().add("tabScrollPane");
         }
 
         ImageView imageCardToPlay = new ImageView(new Image(String.valueOf(
@@ -282,6 +287,23 @@ public class SecretMissionChoiceController extends SceneController implements In
         });
     }
 
+    @Override
+    public void changeGUIGame (SimplifiedGame simplifiedGame) {
+        Pawn pawn;
+        for (Tab tab : personalBoardTabPane.getTabs()) {
+            pawn = simplifiedGame.getPawnsSelected().get(tab.getText());
+            if(pawn != null) {
+                tab.setId(pawn.name());
+            }
+        }
+    }
+
+    @Override
+    public void changeGUIPlayer (SimplifiedPlayer simplifiedPlayer) {
+        if(simplifiedPlayer.getPawnColor() != null) {
+            personalBoardTabPane.getTabs().getFirst().setId(simplifiedPlayer.getPawnColor().name());
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
