@@ -19,7 +19,10 @@ import javafx.stage.WindowEvent;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -301,14 +304,22 @@ public class GUIApplication extends Application implements UIInterface {
         return mainClient.getNickname();
     }
 
-    public static void openRulebook(String filePath) {
-        if (Desktop.isDesktopSupported()) {
-            try {
-                File myFile = new File(filePath);
-                Desktop.getDesktop().open(myFile);
-            } catch (IOException ex) {
-                // no application registered for PDFs
+    public static void openRulebook(InputStream inputStream) {
+        try {
+            if (inputStream != null) {
+                File tempFile = File.createTempFile("CODEX_Rulebook_EN", ".pdf");
+                tempFile.deleteOnExit();
+
+                // Copy the input stream to a temporary file
+                Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                // Open the temporary file
+                Desktop.getDesktop().open(tempFile);
+            } else {
+                System.err.println("Resource not found: " );
             }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 

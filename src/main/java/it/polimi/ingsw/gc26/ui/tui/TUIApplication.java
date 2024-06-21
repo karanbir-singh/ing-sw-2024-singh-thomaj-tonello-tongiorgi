@@ -8,12 +8,17 @@ import it.polimi.ingsw.gc26.network.PingManager;
 import it.polimi.ingsw.gc26.network.RMI.RMIPingManager;
 import it.polimi.ingsw.gc26.network.socket.SocketPingManager;
 import it.polimi.ingsw.gc26.ui.UIInterface;
+import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
+import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneController;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -344,13 +349,22 @@ public class TUIApplication implements UIInterface {
     }
 
     private void openRulebook() {
-        if (Desktop.isDesktopSupported()) {
-            try {
-                File myFile = new File(String.valueOf(getClass().getResource("CODEX_Rulebook_EN.pdf").toURI().getPath()));
-                Desktop.getDesktop().open(myFile);
-            } catch (IOException | URISyntaxException ex) {
-                ex.printStackTrace();
+        InputStream inputStream = SceneController.class.getResourceAsStream("CODEX_Rulebook_EN.pdf");
+        try {
+            if (inputStream != null) {
+                File tempFile = File.createTempFile("CODEX_Rulebook_EN", ".pdf");
+                tempFile.deleteOnExit();
+
+                // Copy the input stream to a temporary file
+                Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                // Open the temporary file
+                Desktop.getDesktop().open(tempFile);
+            } else {
+                System.err.println("Resource not found: " );
             }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
