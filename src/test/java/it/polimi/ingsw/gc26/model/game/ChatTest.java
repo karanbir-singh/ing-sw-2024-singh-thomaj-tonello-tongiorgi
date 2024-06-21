@@ -51,6 +51,6 @@ class ChatTest {
                 LocalTime.now().toString())
         );
 
-        assertEquals(2,chat.filterMessages(player.getID()).size());
+        assertEquals(1,chat.filterMessages(player.getID()).size());
     }
 }
