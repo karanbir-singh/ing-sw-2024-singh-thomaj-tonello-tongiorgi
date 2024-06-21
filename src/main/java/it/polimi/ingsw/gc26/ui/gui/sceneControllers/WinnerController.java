@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -23,39 +24,59 @@ public class WinnerController extends SceneController implements Initializable {
     @FXML
     ImageView background;
     @FXML
-    private Label title;
+    ImageView winnerOrLoser;
 
     @FXML
-    private Label status;
-
-    private final int rankTextDimension = 16;
-    @FXML
-    private VBox winner;
-
+    private VBox results;
 
     @Override
     public void changeGUIGame(SimplifiedGame simplifiedGame){
         ArrayList<Label> rank = new ArrayList<>();
-        title.setText("GAME ENDED, HERE THE RESULTS");
+        Label title = new Label();
+        Label status = new Label();
         boolean areYouWinner = false;
+
+        if(simplifiedGame.getWinners().size() > 1) {
+            title.setText("Winners:");
+        } else {
+            title.setText("Winner:");
+        }
+        title.getStyleClass().add("winnerTitle");
+        rank.add(title);
+
         for(String winnerNickname : simplifiedGame.getWinners()){
             Label label = new Label();
-            label.setFont(new Font(rankTextDimension));
+            Label score = new Label();
             label.setText(winnerNickname);
+            label.getStyleClass().add("winnerName");
+            score.setText("score: " + simplifiedGame.getScores().get(winnerNickname) + " points");
+            score.getStyleClass().add("winnerLabel");
             rank.add(label);
+            rank.add(score);
             if(this.nickname.equals(winnerNickname)){
                 areYouWinner = true;
             }
         }
-        Platform.runLater(()->{
-            winner.getChildren().setAll(rank);
-        });
 
         if(areYouWinner){
-            status.setText("ERRRR PRIMOOOO");
+            winnerOrLoser.setImage(new Image(getClass().getResource("images/labels/WinnerLabel.png").toExternalForm()));
+            status.setText("\n\nCongratulations!");
+            status.getStyleClass().add("winnerLabel");
+            rank.add(status);
         }else{
-            status.setText("YOU LOSEEEEE");
+            winnerOrLoser.setImage(new Image(getClass().getResource("images/labels/LoserLabel.png").toExternalForm()));
+            status.setText("\n\nNext time you will do better!\nYour score: " + simplifiedGame.getScores().get(this.nickname) + " points");
+            status.getStyleClass().add("winnerLabel");
+            rank.add(status);
         }
+
+        winnerOrLoser.getStyleClass().add("winnerOrLoser");
+
+        Platform.runLater(()->{
+            results.getChildren().setAll(rank);
+            results.getStyleClass().add("winnerBox");
+        });
+
     }
 
     @Override

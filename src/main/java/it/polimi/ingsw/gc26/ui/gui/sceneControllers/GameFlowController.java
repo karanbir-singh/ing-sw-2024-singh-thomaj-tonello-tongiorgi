@@ -395,9 +395,12 @@ public class GameFlowController extends SceneController implements Initializable
 
     private void addImage(ImageView imageView, int x, int y, GridPane gridPane) {
         setCardImageParameters(imageView, 0);
-        Platform.runLater(() -> {
-            gridPane.add(imageView, x, y);
-        });
+        //TODO capire perché a volte è nullo
+        if(gridPane != null) {
+            Platform.runLater(() -> {
+                gridPane.add(imageView, x, y);
+            });
+        }
     }
 
     public void makeDraggable(ImageView imageView, ArrayList<ImageView> targets) {
