@@ -801,7 +801,7 @@ public class GameFlowController extends SceneController implements Initializable
     public void onPersonalBoardZoom(ZoomEvent zoomEvent) {
         zoomEvent.consume();
 
-        final double zoomFactor = zoomEvent.getZoomFactor() > 1 ? 1.01 : 1 / 1.01;
+        final double zoomFactor = zoomEvent.getZoomFactor() > 1 ? 1.1 : 1 / 1.1;
 
         Scale newScale = new Scale();
         newScale.setPivotX(zoomEvent.getX());
