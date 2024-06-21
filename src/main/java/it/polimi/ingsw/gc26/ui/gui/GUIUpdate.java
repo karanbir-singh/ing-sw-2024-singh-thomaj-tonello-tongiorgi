@@ -62,7 +62,6 @@ public class GUIUpdate implements UpdateInterface {
     public void updateViewPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
             this.guiApplication.getCurrentScene().getSceneController().changeGUIPersonalBoard(personalBoard);
-            System.out.println("your points: " +personalBoard.getScore());
         } else {
             this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIPersonalBoard(personalBoard);
             this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIPersonalBoard(personalBoard);
