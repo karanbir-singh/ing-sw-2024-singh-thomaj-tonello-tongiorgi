@@ -6,22 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.model.card.*;
 import it.polimi.ingsw.gc26.model.card_side.*;
-import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
-import it.polimi.ingsw.gc26.model.card_side.ability.InkwellCounter;
-import it.polimi.ingsw.gc26.model.card_side.ability.ManuscriptCounter;
-import it.polimi.ingsw.gc26.model.card_side.ability.QuillCounter;
-import it.polimi.ingsw.gc26.model.card_side.mission.MissionDiagonalPattern;
-import it.polimi.ingsw.gc26.model.card_side.mission.MissionItemPattern;
-import it.polimi.ingsw.gc26.model.card_side.mission.MissionLPattern;
-import it.polimi.ingsw.gc26.model.card_side.mission.MissionTripletPattern;
+import it.polimi.ingsw.gc26.model.card_side.ability.*;
+import it.polimi.ingsw.gc26.model.card_side.mission.*;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.game.Message;
-import it.polimi.ingsw.gc26.model.player.Pawn;
-import it.polimi.ingsw.gc26.model.player.PlayerState;
-import it.polimi.ingsw.gc26.model.player.Point;
+import it.polimi.ingsw.gc26.model.player.*;
 import it.polimi.ingsw.gc26.request.view_request.*;
 import it.polimi.ingsw.gc26.view_model.*;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -142,6 +133,12 @@ public class SocketServerHandler implements Runnable {
         }
     }
 
+    /**
+     * Decodes the string received from the server containing the game.
+     *
+     * @param encodedGame game's json string
+     * @return a simplified game instance built from the json
+     */
     private SimplifiedGame buildSimplifiedGame(JsonNode encodedGame) {
         // game state
         GameState gameState = GameState.valueOf(encodedGame.get("gameState").asText());
@@ -179,6 +176,12 @@ public class SocketServerHandler implements Runnable {
         return new SimplifiedGame(gameState, currentPlayer, scores, winners, availablePawns, pawnsSelected);
     }
 
+    /**
+     * Decodes the string received from the server containing the common table.
+     *
+     * @param encodedTable common table's json string
+     * @return simplified common table instance built from json string
+     */
     public SimplifiedCommonTable buildSimplifiedCommonTable(JsonNode encodedTable) {
 
         // resource card
@@ -192,7 +195,6 @@ public class SocketServerHandler implements Runnable {
         for (JsonNode mission : encodedTable.get("commonMissions")) {
             commonMission.add(getMissionCard(mission));
         }
-
 
         // resources Cards
         ArrayList<Card> resourceCards = new ArrayList<>();
@@ -212,6 +214,12 @@ public class SocketServerHandler implements Runnable {
         return new SimplifiedCommonTable(resourceCard, goldCard, commonMission, resourceCards, goldCards, selectedIndex);
     }
 
+    /**
+     * Decodes the string received from the server containing a gold card.
+     *
+     * @param encodedCard gold card's json string
+     * @return gold card instance built from json string
+     */
     private GoldCard getGoldCard(JsonNode encodedCard) {
         if (encodedCard.findValue("card") != null) {
             encodedCard = encodedCard.get("card");
@@ -247,6 +255,12 @@ public class SocketServerHandler implements Runnable {
         return new GoldCard(frontGold, backGold);
     }
 
+    /**
+     * Decodes the string received from the server containing a resource card.
+     *
+     * @param encodedCard resource card's json string
+     * @return resource card instance built from json string
+     */
     private ResourceCard getResourceCard(JsonNode encodedCard) {
         if (encodedCard.findValue("card") != null) {
             encodedCard = encodedCard.get("card");
@@ -260,6 +274,12 @@ public class SocketServerHandler implements Runnable {
         return new ResourceCard(frontResource, backResource);
     }
 
+    /**
+     * Decodes the string received from the server containing a stater card.
+     *
+     * @param encodedCard starter card's json string
+     * @return starter card instance built from json string
+     */
     private StarterCard getStarterCard(JsonNode encodedCard) {
         ArrayList<Symbol> resources = new ArrayList<>();
         if (encodedCard.findValue("card") != null) {
@@ -277,6 +297,12 @@ public class SocketServerHandler implements Runnable {
         return new StarterCard(front, back);
     }
 
+    /**
+     * Decodes the string received from the server containing a mission card.
+     *
+     * @param encodedCard mission card's json string
+     * @return mission card instance built from json string
+     */
     private MissionCard getMissionCard(JsonNode encodedCard) {
         if (encodedCard.isEmpty()) {
             return null;
@@ -293,10 +319,15 @@ public class SocketServerHandler implements Runnable {
                     new MissionItemPattern(encodedCard.get("type").asInt(), imagePathFront);
             default -> null;
         };
-        //String imagePath = encodedCard.get("imagePathBack") != null ? encodedCard.get("imagePathBack").asText() : null;
         return new MissionCard(missionCardFront, new CardBack(null));
     }
 
+    /**
+     * Decodes the string received from the server containing the simplified hand.
+     *
+     * @param encodedHand simplified hand's json string
+     * @return simplified hand instance built from json string
+     */
     private SimplifiedHand buildSimplifiedHand(JsonNode encodedHand) {
         ArrayList<Card> cards = new ArrayList<>();
         for (int i = 0; i < encodedHand.get("cards").size(); i++) {
@@ -325,6 +356,12 @@ public class SocketServerHandler implements Runnable {
         return new SimplifiedHand(cards, selectedCard, selectedSide);
     }
 
+    /**
+     * Decodes the string received from the server containing a secret hand.
+     *
+     * @param encodedHand encoded hand's json string
+     * @return simplified hand instance built from json string
+     */
     private SimplifiedHand buildSimplifiedSecretHand(JsonNode encodedHand) {
         ArrayList<Card> cards = new ArrayList<>();
         for (int i = 0; i < encodedHand.get("cards").size(); i++) {
@@ -338,6 +375,12 @@ public class SocketServerHandler implements Runnable {
         return new SimplifiedHand(cards, selectedCard, selectedSide);
     }
 
+    /**
+     * Decodes the string received from the server containing the personal board.
+     *
+     * @param encodedBoard simplified personal board's json string
+     * @return simplified personal board instance built from json string
+     */
     private SimplifiedPersonalBoard buildPersonalBoard(JsonNode encodedBoard) {
         ArrayList<Point> playablePositions = new ArrayList<>();
         ArrayList<Point> blockedPositions = new ArrayList<>();
@@ -368,8 +411,13 @@ public class SocketServerHandler implements Runnable {
                 visibleResources, encodedBoard.get("selectedX").asInt(), encodedBoard.get("selectedY").asInt(), nickname);
     }
 
+    /**
+     * Decodes the string received from the server containing the simplified player.
+     *
+     * @param encodedPlayer simplified player's json string
+     * @return simplified player instance built from json string
+     */
     private SimplifiedPlayer buildSimplifiedPlayer(JsonNode encodedPlayer) {
-
         return new SimplifiedPlayer(encodedPlayer.get("ID").asText(),
                 encodedPlayer.get("nickname").asText(),
                 Pawn.valueOf(encodedPlayer.get("pawnColor").asText()),
@@ -377,6 +425,13 @@ public class SocketServerHandler implements Runnable {
                 PlayerState.valueOf(encodedPlayer.get("state").asText()));
     }
 
+    /**
+     * Decodes the string received from the server containing the chat.
+     *
+     * @param encodedChat simplified chat's json string
+     * @return simplified chat instance built from json string
+     * @throws JsonProcessingException if json string is not well formatted
+     */
     private SimplifiedChat buildSimplifiedChat(JsonNode encodedChat) throws JsonProcessingException {
         ArrayList<Message> messages = new ArrayList<>();
         for (JsonNode encodedMessage : encodedChat.get("messages")) {
@@ -385,6 +440,13 @@ public class SocketServerHandler implements Runnable {
         return new SimplifiedChat(messages);
     }
 
+    /**
+     * Decodes the string received from the server containing the array position.
+     * Each point contains a side in it.
+     *
+     * @param arrayNode array's json string
+     * @return arrayList instance built from json string
+     */
     private ArrayList<Point> buildArrayPosition(JsonNode arrayNode) {
         ArrayList<Point> positions = new ArrayList<>();
         // each point
@@ -458,6 +520,12 @@ public class SocketServerHandler implements Runnable {
         return positions;
     }
 
+    /**
+     * Decodes the string received from the server containing the corners.
+     *
+     * @param side card side's json string to be able to decode all the corners
+     * @return array list containing the corners built from json string.
+     */
     private ArrayList<Corner> getCorners(JsonNode side) {
         ArrayList<Corner> corners = new ArrayList<>();
         corners.add(new Corner(Boolean.parseBoolean(side.get("UPLEFT").get("isEvil").asText()),

@@ -6,7 +6,6 @@ import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -35,7 +34,7 @@ public class VirtualSocketMainController implements VirtualMainController {
      *
      * @param client   virtualView
      * @param nickName client's nickname
-     * @return clientID
+     * @param clientState current client's state
      * @throws RemoteException
      */
     @Override

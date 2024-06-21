@@ -9,12 +9,15 @@ import javafx.util.Pair;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.*;
 
+/**
+ * This class implements the methods to join automatically the client to the games.
+ * It also destroys the games if a client is not longer reachable.
+ */
 public class MainController implements Serializable {
     /**
      * This constant represents the max numbers of reconnection attempts
@@ -65,10 +68,24 @@ public class MainController implements Serializable {
      */
     private int numberOfTotalGames;
 
+    /**
+     * This attribute represents the executor current state
+     */
     public boolean threadStarted = false;
+
+    /**
+     * This lock is used to synchronize the reading of threadStated
+     */
     public Boolean lock = true;
 
-    transient private Map<String,Long> timers; //TODO RICORDARDI DI RICREARE LA MAPPA ANCHE DOPO CHE VA DA GIU A SU
+    /**
+     * Map of timers, having clients' IDs as key
+     */
+    transient private Map<String, Long> timers;
+
+    /**
+     * Max time the server has to wait to suppose that a client is down
+     */
     private final long TIMEOUT = 5;
 
     /**
@@ -156,6 +173,13 @@ public class MainController implements Serializable {
         return !waitingPlayers.stream().anyMatch(player -> player.getNickname().equals(nickname));
     }
 
+    /**
+     * Joins the new client to an existing game if there's any game with available player,
+     * otherwise it set the client's state to creator.
+     *
+     * @param client   Virtual view representing the client
+     * @param nickname client's nickname
+     */
     public void connect(VirtualView client, String nickname) {
         synchronized (mainRequests) {
             // Check if there is not a game waiting for players
@@ -197,6 +221,7 @@ public class MainController implements Serializable {
     /**
      * Initializes the waiting list of players and updating max numbers of players for the next game
      *
+     * @param client     Virtual view representing the client
      * @param numPlayers number of players of the next game
      * @param nickname   nickname of the player who is initializing the waiting list
      */
@@ -338,6 +363,9 @@ public class MainController implements Serializable {
     }
 
     /**
+     * Returns the game controller if exists.
+     *
+     * @param gameControllerID unique identifier for the game
      * @return Returns the right game controller based on the id
      */
     public GameController getGameController(int gameControllerID) {
@@ -402,12 +430,19 @@ public class MainController implements Serializable {
     }
 
 
+    /**
+     * Creates a thread for every client and pings each one. If a client goes down, it attempts to reconnect.
+     * If the client doesn't go up, it destroys the game
+     *
+     * @param clients
+     * @param gameControllerID
+     */
     private void startClientsPing(ArrayList<Pair<VirtualView, String>> clients, int gameControllerID) {
 
         // Ping each client of the game
         for (Pair<VirtualView, String> client : clients) {
-            new Thread(()->{
-                while(true){
+            new Thread(() -> {
+                while (true) {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -423,7 +458,7 @@ public class MainController implements Serializable {
 
             }).start();
 
-            new Thread(()-> {
+            new Thread(() -> {
                 boolean isAlive = true;
                 while (isAlive) {
                     try {
@@ -433,27 +468,24 @@ public class MainController implements Serializable {
                     }
                     long elapsed;
                     long currentTime = System.currentTimeMillis();
-                    if(this.timers.get(client.getValue()) == null){ //not exist a timer, so the first ping is not already arrived
+                    if (this.timers.get(client.getValue()) == null) { //not exist a timer, so the first ping is not already arrived
                         elapsed = 0;
-                    }else{
+                    } else {
                         elapsed = (currentTime - this.timers.get(client.getValue())) / 1000;
                     }
 
-                    if(elapsed >= TIMEOUT){
-                        System.out.println("Client "+ client.getValue());
+                    if (elapsed >= TIMEOUT) {
+                        System.out.println("Client " + client.getValue());
                         isAlive = false;
-                        synchronized(this.timers){
+                        synchronized (this.timers) {
                             this.timers.remove(client.getValue());
                         }
                         this.destroyGame(gameControllerID);
-
                     }
                 }
             }).start();
         }
     }
-
-
 
     /**
      * Destroy a game controller by its ID
@@ -462,7 +494,7 @@ public class MainController implements Serializable {
      */
     public void destroyGame(int gameControllerID) {
         //the game is already destroyed by another player
-        if(gamesControllers.get(gameControllerID) == null){
+        if (gamesControllers.get(gameControllerID) == null) {
             return;
         }
         // Notify game destruction
@@ -488,14 +520,19 @@ public class MainController implements Serializable {
         System.out.println("Game " + gameControllerID + " destroyed");
     }
 
-    public void resetServerTimer(String clientID){
+    /**
+     * Resets server timer for the client caller
+     *
+     * @param clientID ID of the client
+     */
+    public void resetServerTimer(String clientID) {
         //is the first ping so we need to create the timer
-        if(this.timers.get(clientID) == null){
-            synchronized (this.timers){
-                this.timers.put(clientID,System.currentTimeMillis());
+        if (this.timers.get(clientID) == null) {
+            synchronized (this.timers) {
+                this.timers.put(clientID, System.currentTimeMillis());
             }
-        }else{ //exist already a timer so it s not the first ping that comes from that specific client
-            synchronized (this.timers){
+        } else { //exist already a timer so it s not the first ping that comes from that specific client
+            synchronized (this.timers) {
                 this.timers.put(clientID, System.currentTimeMillis());
             }
         }
@@ -511,6 +548,11 @@ public class MainController implements Serializable {
         return mainRequests;
     }
 
+    /**
+     * Returns the clients that are waiting to be inserted in a game
+     *
+     * @return an arrayList representing all the waiting clients
+     */
     public ArrayList<VirtualView> getWaitingClients() {
         return waitingClients;
     }

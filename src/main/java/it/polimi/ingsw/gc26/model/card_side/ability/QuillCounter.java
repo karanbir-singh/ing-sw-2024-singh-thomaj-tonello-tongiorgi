@@ -4,7 +4,6 @@ import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.GoldCardFront;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.player.Point;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;

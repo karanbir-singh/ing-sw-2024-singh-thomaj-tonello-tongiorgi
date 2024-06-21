@@ -44,7 +44,6 @@ public class WinnerController extends SceneController implements Initializable {
             label.setText(winnerNickname);
             rank.add(label);
             if(this.nickname.equals(winnerNickname)){
-                System.out.println("HAI VINTO");
                 areYouWinner = true;
             }
         }

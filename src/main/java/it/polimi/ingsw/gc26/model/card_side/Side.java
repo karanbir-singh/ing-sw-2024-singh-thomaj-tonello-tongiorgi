@@ -3,7 +3,6 @@ package it.polimi.ingsw.gc26.model.card_side;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;

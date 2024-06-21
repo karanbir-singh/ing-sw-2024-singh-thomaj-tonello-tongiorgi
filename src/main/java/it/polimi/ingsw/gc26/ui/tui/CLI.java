@@ -508,10 +508,10 @@ public class CLI {
         }
 
         //insert decks and drawable cards
-        addPrintable(commonTable, commonTableAndMissions, 0, 1);
+        addPrintable(commonTable, commonTableAndMissions, 0, 0);
 
         //insert empty lines for alignment
-        for(int j=0; j<(missions.length - commonTable.length); j++){
+        /*for(int j=0; j<(missions.length - commonTable.length); j++){
             if(j==0){
                 for(int i=0; i<(xDim-5); i+=5){
                     commonTableAndMissions[j][i] = "    ";
@@ -529,7 +529,7 @@ public class CLI {
                     commonTableAndMissions[yLine + j][i+4] = "       ";
                 }
             }
-        }
+        }*/
 
         //insert vertical separator between drawable and missions
         for(int i=0; i<yDim; i++){
@@ -946,9 +946,13 @@ public class CLI {
 
         for(String[] row: printable){
             x=0;
+            try {
             for(String col: row){
                 context[yBase + y][xBase + x] = col;
                 x++;
+            } }
+            catch (Exception e) {
+                String a ="";
             }
             y++;
         }

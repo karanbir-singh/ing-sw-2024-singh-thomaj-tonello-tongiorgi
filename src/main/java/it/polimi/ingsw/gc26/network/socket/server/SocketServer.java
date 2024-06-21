@@ -1,8 +1,6 @@
 package it.polimi.ingsw.gc26.network.socket.server;
 
-
 import it.polimi.ingsw.gc26.controller.MainController;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,10 +11,7 @@ import java.util.ArrayList;
  * It creates a new client handler for each new socket client
  */
 public class SocketServer {
-    /**
-     * File's path with the server configuration
-     */
-    public final static String filePath = "src/main/resources/envServer.json";
+
     /**
      * This attribute represents all the client handlers connected to the server
      */

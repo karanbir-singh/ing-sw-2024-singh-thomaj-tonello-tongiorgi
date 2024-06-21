@@ -9,12 +9,17 @@ import it.polimi.ingsw.gc26.network.ClientResetTimerToServer;
 import it.polimi.ingsw.gc26.network.RMI.RMIPingManager;
 import it.polimi.ingsw.gc26.network.socket.SocketPingManager;
 import it.polimi.ingsw.gc26.ui.UIInterface;
+import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
+import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneController;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -177,7 +182,8 @@ public class TUIApplication implements UIInterface {
         // Infinite loop
         while (true) {
             int cardIndex;
-            int option = scan.nextInt();
+            String option = scan.nextLine();
+
             GameState gameState;
             try {
                 gameState = this.mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getGameState();
@@ -187,70 +193,79 @@ public class TUIApplication implements UIInterface {
             switch (gameState) {
                 case WAITING_STARTER_CARD_PLACEMENT:
                     switch (option) {
-                        case 1:
+                        case "1":
                             mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
                             break;
-                        case 2:
+                        case "2":
                             mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
                             break;
-                        case 3:
+                        case "3":
                             openChat(gameState);
                             break;
-                        case 4:
+                        case "4":
                             System.exit(0);
                             break;
-                        case 5:
+                        case "5":
                             openRulebook();
                             TUIUpdate.printOptions(gameState);
+                            break;
+                        case null, default:
+                            System.out.println("Invalid option");
                             break;
                     }
                     break;
                 case WAITING_PAWNS_SELECTION:
                     switch (option) {
-                        case 1:
+                        case "1":
                             System.out.println("Insert the pawn color: ");
                             String color = new Scanner(System.in).nextLine();
                             mainClient.getVirtualGameController().choosePawnColor(color, this.mainClient.getClientID());
                             break;
-                        case 2:
+                        case "2":
                             openChat(gameState);
                             break;
-                        case 3:
+                        case "3":
                             System.exit(0);
                             break;
-                        case 4:
+                        case "4":
                             openRulebook();
                             TUIUpdate.printOptions(gameState);
+                            break;
+                        case null, default:
+                            System.out.println("Invalid option");
                             break;
                     }
                     break;
                 case WAITING_SECRET_MISSION_CHOICE:
                     switch (option) {
-                        case 1:
+                        case "1":
                             do {
                                 System.out.println("Insert the card index: (0/1) ");
                                 cardIndex = Integer.parseInt(new Scanner(System.in).nextLine());
                             } while (cardIndex != 0 && cardIndex != 1);
                             mainClient.getVirtualGameController().selectSecretMission(cardIndex, this.mainClient.getClientID());
                             break;
-                        case 2:
+                        case "2":
                             mainClient.getVirtualGameController().setSecretMission(this.mainClient.getClientID());
                             break;
-                        case 3:
+                        case "3":
                             openChat(gameState);
                             break;
-                        case 4:
+                        case "4":
                             System.exit(0);
                             break;
-                        case 5:
+                        case "5":
                             openRulebook();
                             TUIUpdate.printOptions(gameState);
+                            break;
+                        case null, default:
+                            System.out.println("Invalid option");
                             break;
                     }
                     break;
                 case GAME_STARTED:
                     switch (option) {
-                        case 1:
+                        case "1":
                             String xPosition;
                             do {
                                 System.out.println("Select the card position: (0/1/2)");
@@ -258,30 +273,30 @@ public class TUIApplication implements UIInterface {
                             } while (Integer.parseInt(xPosition) < 0 || Integer.parseInt(xPosition) > 2);
                             mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(xPosition), this.mainClient.getClientID());
                             break;
-                        case 2:
+                        case "2":
                             mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
                             break;
-                        case 3:
+                        case "3":
                             mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
                             break;
-                        case 4:
+                        case "4":
                             System.out.println("Insert the X coordinate: ");
                             String XPosition = new Scanner(System.in).nextLine();
                             System.out.println("Insert the Y coordinate: ");
                             String YPosition = new Scanner(System.in).nextLine();
                             mainClient.getVirtualGameController().selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), this.mainClient.getClientID());
                             break;
-                        case 5:
+                        case "5":
                             do {
                                 System.out.println("Insert the card index (0/1/2/3/4/5): ");
                                 cardIndex = Integer.parseInt(new Scanner(System.in).nextLine());
                             } while (cardIndex < 0 || cardIndex > 5);
                             mainClient.getVirtualGameController().selectCardFromCommonTable(cardIndex, this.mainClient.getClientID());
                             break;
-                        case 6:
+                        case "6":
                             mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
                             break;
-                        case 7:
+                        case "7":
                             System.out.println("Insert the player's nickname owner of the board: ");
                             String playerNickname = new Scanner(System.in).nextLine();
                             if (mainClient.getViewController().getSimplifiedModel().getOthersPersonalBoards().containsKey(playerNickname)) {
@@ -289,19 +304,14 @@ public class TUIApplication implements UIInterface {
                                 break;
                             }
                             System.out.println(playerNickname +  "'s Personal Board not found!");
-//                            if (mainClient.getViewController().getSimplifiedModel().getOtherPersonalBoard().getNickname().equals(playerNickname)) {
-//                                mainClient.getViewController().getSimplifiedModel().getView().updateViewOtherPersonalBoard(mainClient.getViewController().getSimplifiedModel().getOtherPersonalBoard());
-//                                break;
-//                            }
-                            //mainClient.getVirtualGameController().printPersonalBoard(playerNickname, this.mainClient.getClientID());
                             break;
-                        case 8:
+                        case "8":
                             openChat(gameState);
                             break;
-                        case 9:
+                        case "9":
                             System.exit(0);
                             break;
-                        case 10:
+                        case "10":
                             if (Desktop.isDesktopSupported()) {
                                 try {
                                     File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
@@ -312,18 +322,24 @@ public class TUIApplication implements UIInterface {
                             }
                             TUIUpdate.printOptions(gameState);
                             break;
+                        case null, default:
+                            System.out.println("Invalid option");
+                            break;
                     }
                     break;
                 case END_STAGE:
                     switch (option) {
-                        case 1:
+                        case "1":
                             openChat(gameState);
                             break;
-                        case 2:
+                        case "2":
                             System.exit(0);
                             break;
-                        case 3:
+                        case "3":
                             openRulebook();
+                            break;
+                        case null, default:
+                            System.out.println("Invalid option");
                             break;
                     }
                     break;
@@ -335,13 +351,22 @@ public class TUIApplication implements UIInterface {
     }
 
     private void openRulebook() {
-        if (Desktop.isDesktopSupported()) {
-            try {
-                File myFile = new File(String.valueOf(getClass().getResource("CODEX_Rulebook_EN.pdf").toURI().getPath()));
-                Desktop.getDesktop().open(myFile);
-            } catch (IOException | URISyntaxException ex) {
-                ex.printStackTrace();
+        InputStream inputStream = SceneController.class.getResourceAsStream("CODEX_Rulebook_EN.pdf");
+        try {
+            if (inputStream != null) {
+                File tempFile = File.createTempFile("CODEX_Rulebook_EN", ".pdf");
+                tempFile.deleteOnExit();
+
+                // Copy the input stream to a temporary file
+                Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                // Open the temporary file
+                Desktop.getDesktop().open(tempFile);
+            } else {
+                System.err.println("Resource not found: " );
             }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
