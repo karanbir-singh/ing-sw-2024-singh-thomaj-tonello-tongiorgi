@@ -59,7 +59,6 @@ public class GameFlowController extends SceneController implements Initializable
     private Button chatButton;
     private HashMap<String, ScrollPane> chats = new HashMap<>();
     private boolean chatHasBeenCreated = false;
-    private boolean chatIsVisible = false;
     private final ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
 
     //ScoreBoard
@@ -483,156 +482,6 @@ public class GameFlowController extends SceneController implements Initializable
         );
     }
 
-    private void createChatTab(String nickname) {
-        Tab newTab = new Tab();
-        newTab.setText(nickname);
-        newTab.setStyle("-fx-border-radius: 0px 0px 5px 5px;");
-        AnchorPane newAnchorPane = new AnchorPane();
-        newTab.setContent(newAnchorPane);
-        newAnchorPane.setStyle("-fx-background-color: #e8f4f8");
-        TextField newTextField = new TextField();
-        newTextField.setPrefWidth(208);
-        newTextField.setPrefHeight(26);
-        newTextField.setLayoutX(9);
-        newTextField.setLayoutY(489);
-        newTextField.setPromptText("Type Message");
-        newTextField.setStyle("-fx-border-radius: 5px;");
-        newAnchorPane.getChildren().add(newTextField);
-        Button newButton = new Button();
-        newButton.setText("Send");
-        newButton.setLayoutX(231);
-        newButton.setLayoutY(489);
-        newAnchorPane.getChildren().add(newButton);
-        ScrollPane newScrollPane = new ScrollPane();
-        newScrollPane.setMinHeight(440);
-        newScrollPane.setPrefHeight(440);
-        newScrollPane.setMinWidth(262);
-        newScrollPane.setMaxWidth(262);
-        newScrollPane.setLayoutX(9);
-        newScrollPane.setLayoutY(14);
-        newAnchorPane.getChildren().add(newScrollPane);
-        VBox newVBox = new VBox();
-        newScrollPane.setContent(newVBox);
-        newVBox.maxWidth(229);
-        newVBox.maxHeight(440);
-        newVBox.prefWidth(229);
-        newScrollPane.setContent(newVBox);
-        newScrollPane.setPadding(new Insets(5, 0, 5, 5));
-        chatTabPane.getTabs().add(newTab);
-        newTextField.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER && !newTextField.getText().isEmpty()) {
-                sendMessage(newTextField, newTab);
-            }
-            Platform.runLater(() -> newScrollPane.setVvalue(1.0));
-            keyEvent.consume();
-        });
-        newButton.setOnMouseClicked(event -> {
-            if (!newTextField.getText().isEmpty()) {
-                sendMessage(newTextField, newTab);
-            }
-            Platform.runLater(() -> newScrollPane.setVvalue(1.0));
-            event.consume();
-        });
-        Platform.runLater(() -> newScrollPane.setVvalue(1.0));
-        chats.put(nickname, newScrollPane);
-    }
-
-    private void sendMessage(TextField newTextField, Tab newTab) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        try {
-            this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
-        } catch (RemoteException e) {
-            System.out.println("Connection problem, please wait!");
-        }
-        newTextField.clear();
-
-    }
-
-    @Override
-    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
-        if (!chatHasBeenCreated) {
-            this.nickname = nickname;
-            for (String playerNickname : simplifiedGame.getPlayersNicknames()) {
-                if (!playerNickname.equals(nickname)) {
-                    createChatTab(playerNickname);
-                }
-            }
-            createChatTab("Group Chat");
-            chatHasBeenCreated = true;
-        }
-
-    }
-
-    @Override
-    public void changeGUIChat(SimplifiedChat simplifiedChat) {
-        Message newMessage = simplifiedChat.getMessages().getLast();
-        if (!newMessage.getSender().getNickname().equals(this.nickname)) {
-            if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-                if (!newMessage.getSender().getNickname().equals(nickname)) {
-                    if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
-                            !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
-                        addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname());
-                    } else {
-                        addMessageInChat(newMessage.getText(), "Group Chat", null);
-                    }
-                }
-            } else {
-                addMessageInChat(newMessage.getText(), newMessage.getSender().getNickname(), null);
-            }
-        } else {
-            if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-                addMessageFromSender(newMessage.getText(), "Group Chat");
-            } else {
-                addMessageFromSender(newMessage.getText(), newMessage.getReceiver().getNickname());
-            }
-        }
-    }
-
-    private void addMessageInChat(String message, String sender, String labelMessage) {
-        HBox labelBox = new HBox();
-        Text labelText;
-        TextFlow labelTextFlow;
-        if (labelMessage != null) {
-            labelBox.setAlignment(Pos.BASELINE_LEFT);
-            labelBox.setPadding(new Insets(0, 30, 0, 5));
-            labelText = new Text(labelMessage);
-            labelText.setStyle("-fx-font-size: 10px;");
-            labelTextFlow = new TextFlow(labelText);
-            labelBox.setMinWidth(150);
-            labelBox.setMaxWidth(150);
-            labelText.setFill(Color.color(0.25, 0.25, 0.25));
-            labelBox.getChildren().add(labelTextFlow);
-        }
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.BASELINE_LEFT);
-        hBox.setPadding(new Insets(5, 30, 5, 5));
-        Text text = new Text(message);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setSnapToPixel(true);
-        textFlow.setStyle("-fx-background-color: rgb(233,233,235);" + "-fx-background-radius: 7px;");
-        hBox.setMinWidth(240);
-        hBox.setMaxWidth(240);
-        textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.setFill(Color.color(0.0, 0.0, 0.0));
-
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    hBox.getChildren().add(textFlow);
-                    if (labelMessage != null) {
-                        ((VBox) chats.get(sender).getContent()).getChildren().add(labelBox);
-                    }
-                    ((VBox) chats.get(sender).getContent()).getChildren().add(hBox);
-                    chats.get(sender).setVvalue(1.0);
-                } catch (NullPointerException e) {
-
-                }
-            }
-        });
-    }
-
     public void toggleScoreBoard(ActionEvent actionEvent) {
         if (chatIsVisible) {
             chatButton.getStyleClass().clear();
@@ -685,15 +534,6 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
-    private void clearScoreBoard() {
-        for (Point pawnPoint : PawnsCoords.getCoords()) {
-            Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
-            if (cell != null) {
-                GridPane miniGrid = ((GridPane) cell);
-                miniGrid.getChildren().clear();
-            }
-        }
-    }
 
     private Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
         for (Node node : gridPane.getChildren()) {
@@ -732,6 +572,16 @@ public class GameFlowController extends SceneController implements Initializable
 
     }
 
+    private void clearScoreBoard() {
+        for (Point pawnPoint : PawnsCoords.getCoords()) {
+            Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
+            if (cell != null) {
+                GridPane miniGrid = ((GridPane) cell);
+                miniGrid.getChildren().clear();
+            }
+        }
+    }
+
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
         Platform.runLater(() -> {
             clearScoreBoard();
@@ -765,26 +615,6 @@ public class GameFlowController extends SceneController implements Initializable
         });
     }
 
-    private void addMessageFromSender(String message, String sender) {
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.BASELINE_RIGHT);
-        hBox.setPadding(new Insets(5, 5, 5, 30));
-        Text text = new Text(message);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setSnapToPixel(true);
-        textFlow.setStyle("-fx-background-color: rgb(15,125,242);" + "-fx-color: rgb(239, 242,255);" + "-fx-background-radius: 7px;");
-        hBox.setMinWidth(240);
-        hBox.setMaxWidth(240);
-        textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.setStyle("-fx-text-fill: white;");
-        text.setFill(Color.color(1, 1, 1));
-        hBox.getChildren().add(textFlow);
-
-        Platform.runLater(() -> {
-            ((VBox) chats.get(sender).getContent()).getChildren().add(hBox);
-            chats.get(sender).setVvalue(1.0);
-        });
-    }
 
     @FXML
     public void onPersonalBoardScroll(ScrollEvent scrollEvent) {

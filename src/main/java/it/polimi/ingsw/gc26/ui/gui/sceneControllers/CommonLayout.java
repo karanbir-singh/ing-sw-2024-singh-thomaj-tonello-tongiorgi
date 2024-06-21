@@ -11,9 +11,13 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 public class CommonLayout {
     private Image gameBackground = new Image(getClass().getResource("images/game-background.png").toExternalForm());
-    public void pageBindings(AnchorPane rootPane, BorderPane rootBorder, ImageView background){
+
+    public void pageBindings(AnchorPane rootPane, BorderPane rootBorder, ImageView background) {
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             rootBorder.setPrefHeight(newVal.doubleValue());
         });
@@ -32,10 +36,10 @@ public class CommonLayout {
         });
     }
 
-    public void cardsLayout(BorderPane rootBorder, ArrayList<ImageView> cards){
+    public void cardsLayout(BorderPane rootBorder, ArrayList<ImageView> cards) {
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
-            for(ImageView card: cards){
-                card.setFitWidth(rootBorder.getWidth()*0.13);
+            for (ImageView card : cards) {
+                card.setFitWidth(rootBorder.getWidth() * 0.13);
             }
         });
     }
@@ -61,7 +65,7 @@ public class CommonLayout {
         });
     }
 
-    public void makeGlow(ImageView card){
+    public void makeGlow(ImageView card) {
         DropShadow glow = new DropShadow();
         glow.setColor(Color.CORNSILK);
         glow.setOffsetX(0f);
