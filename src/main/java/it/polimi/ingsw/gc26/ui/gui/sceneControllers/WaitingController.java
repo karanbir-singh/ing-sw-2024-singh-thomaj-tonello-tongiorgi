@@ -15,14 +15,9 @@ public class WaitingController extends SceneController implements Initializable 
     @FXML
     ImageView background;
 
-
-    private CommonLayout layout = new CommonLayout();
-    private double initialImageHeight;
-    private double initialImageWidth;
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        CommonLayout layout = new CommonLayout();
         layout.setBackground(rootPane, background);
     }
 }

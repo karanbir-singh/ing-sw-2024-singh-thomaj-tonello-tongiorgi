@@ -3,16 +3,25 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 import javax.swing.text.PlainDocument;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 
-public class WinnerController extends SceneController {
+public class WinnerController extends SceneController implements Initializable {
+    @FXML
+    AnchorPane rootPane;
+    @FXML
+    ImageView background;
     @FXML
     private Label title;
 
@@ -48,5 +57,11 @@ public class WinnerController extends SceneController {
         }else{
             status.setText("YOU LOSEEEEE");
         }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        CommonLayout layout = new CommonLayout();
+        layout.setBackground(rootPane, background);
     }
 }
