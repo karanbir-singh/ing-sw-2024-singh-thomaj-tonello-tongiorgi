@@ -6,24 +6,62 @@ import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * This class represents the personal board for a player. It contains the playable positions where a card can be placed,
+ * the occupied positions where a card has been placed and the blocked positions where no card can be placed.
+ * It also contains the methods to play a new card and check if an action is valid.
+ * Finally, it can return the resources on the board and set the secret mission.
+ */
 public class PersonalBoard implements Serializable {
+    /**
+     * This attribute represents the personal board's dimension. It can be a negative number.
+     */
     private int xMin, xMax, yMin, yMax;
+    /**
+     * This attribute represents the score for this personal board (that is associated to a player). From 0 to 30.
+     */
     private int score;
+    /**
+     * This attribute represents the positions where a card has been placed.
+     */
     private final ArrayList<Point> occupiedPositions;
+    /**
+     * This attribute represents the positions where a card car be placed.
+     */
     private final ArrayList<Point> playablePositions;
+    /**
+     * This attribute represents the positions where no card can be placed.
+     */
     private final ArrayList<Point> blockedPositions;
+    /**
+     * This attribute represents the secret mission chosen.
+     */
     private Card secretMission;
+    /**
+     * This attribute represents the visible resources in the board.
+     */
     private final Map<Symbol, Integer> visibleResources;
+    /**
+     * This attribute represents the coordinate X of the selected position.
+     */
     private int selectedX = 0;
+    /**
+     * This attribute represents the coordinate Y of the selected position.
+     */
     private int selectedY = 0;
+    /**
+     * This attribute represents the observable used to notify the client.
+     */
     private final ModelObservable observable;
+    /**
+     * This attribute represents the player's nickname.
+     */
     private String nickname;
 
     /**
@@ -148,19 +186,35 @@ public class PersonalBoard implements Serializable {
         return score;
     }
 
-    public int getxMin() {
+    /**
+     * Returns the min value for x-axis.
+     * @return real number
+     */
+    public int getXMin() {
         return xMin;
     }
 
-    public int getxMax() {
+    /**
+     * Returns the max value for x-axis.
+     * @return real number
+     */
+    public int getXMax() {
         return xMax;
     }
 
-    public int getyMin() {
+    /**
+     * Returns the min value for y-axis.
+     * @return real number
+     */
+    public int getYMin() {
         return yMin;
     }
 
-    public int getyMax() {
+    /**
+     * Returns the max value for y-axis.
+     * @return real number
+     */
+    public int getYMax() {
         return yMax;
     }
 
@@ -187,7 +241,10 @@ public class PersonalBoard implements Serializable {
         return this.occupiedPositions;
     }
 
-    // used for tests
+    /**
+     * Sets manually the score point. Should only be for testing purposes.
+     * @param score value between 0 and 30
+     */
     public void setScore(int score) {
         this.score = score;
     }

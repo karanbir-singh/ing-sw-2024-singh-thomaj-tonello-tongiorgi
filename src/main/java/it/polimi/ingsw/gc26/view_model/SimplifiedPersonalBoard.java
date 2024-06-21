@@ -4,8 +4,6 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Point;
-import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
-import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,10 +38,10 @@ public class SimplifiedPersonalBoard implements Serializable {
     }
 
     public SimplifiedPersonalBoard(PersonalBoard personalBoard, String nickname) {
-        this.xMin = personalBoard.getxMin();
-        this.xMax = personalBoard.getxMax();
-        this.yMax = personalBoard.getyMax();
-        this.yMin = personalBoard.getyMin();
+        this.xMin = personalBoard.getXMin();
+        this.xMax = personalBoard.getXMax();
+        this.yMax = personalBoard.getYMax();
+        this.yMin = personalBoard.getYMin();
         this.score = personalBoard.getScore();
         this.occupiedPositions = personalBoard.getOccupiedPositions();
         this.playablePositions = personalBoard.getPlayablePositions();

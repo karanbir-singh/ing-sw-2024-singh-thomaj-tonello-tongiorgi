@@ -6,13 +6,8 @@ import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
-
-import java.awt.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class represents a mission card with a triplet pattern.

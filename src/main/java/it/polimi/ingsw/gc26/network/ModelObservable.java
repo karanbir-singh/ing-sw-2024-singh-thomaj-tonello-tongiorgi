@@ -1,23 +1,33 @@
 package it.polimi.ingsw.gc26.network;
 
 import it.polimi.ingsw.gc26.model.game.Chat;
-import it.polimi.ingsw.gc26.model.game.Message;
-import it.polimi.ingsw.gc26.model.player.PersonalBoard;
-import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.util.Pair;
-
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+/**
+ * This class contains methods used to notify the client about an update in the model.
+ */
 public class ModelObservable implements Serializable {
+
+    /**
+     * Map clientView - Client ID to be able to filter the updates using the client's ID.
+     */
     private transient ArrayList<Pair<VirtualView, String>> clients;
 
+    /**
+     * Constructor that initialized the array of clients
+     */
     public ModelObservable() {
         this.clients = new ArrayList<>();
     }
 
+    /**
+     * Returns the clients' virtual view and its ID
+     * @return for each client, pair virtualView - clientID
+     */
     public ArrayList<Pair<VirtualView, String>> getClients() {
         // Check if clients list exists
         if (this.clients == null) {
@@ -26,7 +36,12 @@ public class ModelObservable implements Serializable {
         return this.clients;
     }
 
-
+    /**
+     * Adds an observer to the observable.
+     *
+     * @param view client's view
+     * @param clientID string client unique identifier
+     */
     public void addObserver(VirtualView view, String clientID) {
         // Check if clients list exists
         if (this.clients == null) {
@@ -35,11 +50,12 @@ public class ModelObservable implements Serializable {
         this.clients.add(new Pair<>(view, clientID));
     }
 
-
-    public void removeObserver(VirtualView view) {
-        this.clients.remove(view);
-    }
-
+    /**
+     * Notifies the client about an update in the model's game
+     *
+     * @param simplifiedGame simplified game containing only the information needed by the client
+     * @param message information to show during the update
+     */
     public void notifyUpdateGame(SimplifiedGame simplifiedGame, String message) {
         for (Pair client : this.clients) {
             try {
@@ -50,6 +66,12 @@ public class ModelObservable implements Serializable {
         }
     }
 
+    /**
+     * Notifies the client about an update in the model's common table
+     *
+     * @param simplifiedCommonTable simplified common table containing only the information needed by the client
+     * @param message information to show during the update
+     */
     public void notifyUpdateCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message) {
         for (Pair client : this.clients) {
             try {
@@ -60,6 +82,13 @@ public class ModelObservable implements Serializable {
         }
     }
 
+    /**
+     * Notifies the client about an update in the model's hand
+     *
+     * @param simplifiedHand simplified hand containing only the information needed by the client
+     * @param message information to show during the update
+     * @param clientID client receiver of the update
+     */
     public void notifyUpdateHand(SimplifiedHand simplifiedHand, String message, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
@@ -72,6 +101,13 @@ public class ModelObservable implements Serializable {
         }
     }
 
+    /**
+     * Notifies the client about an update in the model's secret hand
+     *
+     * @param simplifiedSecretHand simplified secret hand containing only the information needed by the client
+     * @param message information to show during the update
+     * @param clientID client receiver of the update
+     */
     public void notifyUpdateSecretHand(SimplifiedHand simplifiedSecretHand, String message, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
@@ -84,6 +120,13 @@ public class ModelObservable implements Serializable {
         }
     }
 
+    /**
+     * Notifies the client about an update in the model's personal board
+     *
+     * @param personalBoard simplified personal board containing only the information needed by the client
+     * @param message information to show during the update
+     * @param clientID client receiver of the update
+     */
     public void notifyUpdatePersonalBoard(SimplifiedPersonalBoard personalBoard, String message, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
@@ -102,6 +145,13 @@ public class ModelObservable implements Serializable {
         }
     }
 
+    /**
+     * Notifies the client about an update in the model's personal board of another player.
+     *
+     * @param otherPersonalBoard simplified personal board containing only the information needed by the client
+     * @param message information to show during the update
+     * @param clientID client receiver of the update
+     */
     public void notifyUpdateOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
@@ -114,6 +164,13 @@ public class ModelObservable implements Serializable {
         }
     }
 
+    /**
+     * Notifies the client about an update in the model's player.
+     *
+     * @param simplifiedPlayer simplified player containing only the information needed by the client
+     * @param message information to show during the update
+     * @param clientID client receiver of the update
+     */
     public void notifyUpdatePlayer(SimplifiedPlayer simplifiedPlayer, String message, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
@@ -126,6 +183,12 @@ public class ModelObservable implements Serializable {
         }
     }
 
+    /**
+     * Notifies the client about an update in the model's chat
+     *
+     * @param chat simplified chat containing only the information needed by the client
+     * @param message information to show during the update
+     */
     public void notifyUpdateChat(Chat chat, String message) {
         for (Pair client : this.clients) {
             if (chat.getMessages().getLast().getSender().getID().equals(client.getValue())) {
@@ -142,61 +205,15 @@ public class ModelObservable implements Serializable {
                     e.printStackTrace();
                 }
             }
-
-
-
         }
     }
 
-//    public void notifyUpdateOptionsMenu(OptionsMenu optionsMenu, String message) {
-//        for (Pair client : this.clients) {
-//            if (client.getValue().equals(clientID)) {
-//                try {
-//                    ((VirtualView) client.getKey()).updatePlayer(simplifiedPlayer, message);
-//                } catch (RemoteException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-
-    //    public void notifyChat(Message msg) {
-//        for (Pair client : this.clients) {
-//            if (!msg.getSender().equals(client.getValue())) {
-//                try {
-//                    ((VirtualView) client.getKey()).showChat(msg.toJson());
-//                } catch (RemoteException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//
-//        }
-//    }
-//
-//    public void notifyPersonalBoard(Player player, Player personalBoardOwner, PersonalBoard personalBoard) {
-//        for (Pair client : this.clients) {
-//            if (client.getValue().equals(player.getID())) {
-//                try {
-//                    ((VirtualView) client.getKey()).showPersonalBoard(player.getID(), personalBoardOwner.getNickname(), personalBoard.toString());
-//                } catch (RemoteException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
-//    }
-//
-//    public void notifySelectedCardFromHand(String clientID) throws RemoteException {
-//        for (Pair client : this.clients) {
-//            if (client.getValue().equals(clientID)) {
-//                try {
-//                    ((VirtualView) client.getKey()).updateSelectedCardFromHand(clientID);
-//                } catch (RemoteException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
-//    }
-//
+    /**
+     * Notifies the client about a message to show
+     *
+     * @param msg information to show during the update
+     * @param clientID client receiver of the update
+     */
     public void notifyMessage(String msg, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
@@ -209,6 +226,12 @@ public class ModelObservable implements Serializable {
         }
     }
 
+    /**
+     * Notifies the client about an error to show
+     *
+     * @param errorMsg error to show during the update
+     * @param clientID client receiver of the update
+     */
     public void notifyError(String errorMsg, String clientID) {
         for (Pair client : this.clients) {
             if (client.getValue().equals(clientID)) {
@@ -221,7 +244,9 @@ public class ModelObservable implements Serializable {
         }
     }
 
-
+    /**
+     * Notifies the client that it has to kill the game
+     */
     public void notifyGameClosed() {
         for (Pair client : this.clients) {
             try {

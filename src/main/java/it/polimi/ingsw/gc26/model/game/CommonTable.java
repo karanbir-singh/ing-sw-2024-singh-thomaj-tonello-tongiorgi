@@ -4,8 +4,6 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import javafx.beans.binding.IntegerExpression;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -119,8 +117,6 @@ public class CommonTable implements Serializable {
                 this.observable.notifyError("Select a position!", clientID);
                 return;
         }
-        //this.observable.notifyMessage("Card selected on common table", clientID);
-
         this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(resourceDeck.getTopCard(), goldDeck.getTopCard(), commonMissions, resourceCards, goldCards, cardIndex),"Card selected on common table");
     }
 
@@ -146,8 +142,6 @@ public class CommonTable implements Serializable {
      */
     private Card removeFromTable(ArrayList<Card> list, int index, Deck deck, String clientID) {
         if (list.get(index) == null) {
-            //
-            // TODO gestire quando la posizione selezionata non contiene una carta
             this.observable.notifyError("Position not valid!", clientID);
             return null;
         }
@@ -204,9 +198,7 @@ public class CommonTable implements Serializable {
                         -1),
                 "Card removed from common table"
         );
-
         return toRemove;
-
     }
 
     /**

@@ -16,4 +16,5 @@ public class ErrorController extends SceneController {
     public void setMessage(String message){
         this.message.setText("Server is down, please wait");
     }
+
 }

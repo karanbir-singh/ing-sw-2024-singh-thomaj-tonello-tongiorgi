@@ -1,9 +1,6 @@
 package it.polimi.ingsw.gc26.model.game;
 
-import it.polimi.ingsw.gc26.model.player.Player;
-import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
 import it.polimi.ingsw.gc26.network.ModelObservable;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -52,24 +49,21 @@ public class Chat implements Serializable {
     /**
      * Filters all the messages present by a player
      *
-     * @param receiverPlayer the player that receives the message
+     * @param playerID the player's that receives the message
      * @return arrayList containing the messages for the player
      */
     public ArrayList<Message> filterMessages(String playerID){
         ArrayList<Message> copy = new ArrayList<>();
         for(Message m : this.messages){
             if (playerID!= null) {
-                if (m.getReceiver() == null || (m.getReceiver() != null && m.getReceiver().getID().equals(playerID))) {
-                    copy.add(m);
-                }
-                if (m.getSender().getID().equals(playerID)) {
+                if (m.getReceiver() == null || (m.getReceiver() != null && m.getReceiver().getID().equals(playerID)) ||
+                        m.getSender().getID().equals(playerID)) {
                     copy.add(m);
                 }
             } else {
                 copy.add(m);
             }
         }
-
         return copy;
     }
 }

@@ -6,6 +6,8 @@ import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.view_model.*;
 
+import java.io.IOException;
+
 public class TUIUpdate implements UpdateInterface {
 
     private SimplifiedModel miniModel;
@@ -130,16 +132,16 @@ public class TUIUpdate implements UpdateInterface {
     }
 
     private void clearConsole() {
-        System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        //System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
-//        try {
-//            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-        //System.out.print("\033[H\033[2J");
-        // System.out.print("\033\143");
-        //}
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch ( IOException e) {
+            System.out.print("\033[H\033[2J");
+            System.out.print("\033\143");
+        }
     }
 
     /**

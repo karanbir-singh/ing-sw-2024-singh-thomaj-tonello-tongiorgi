@@ -63,8 +63,8 @@ abstract public class SceneController {
     public void openRulebook(ActionEvent actionEvent) {
         Platform.runLater(() -> {
             try {
-                GUIApplication.openRulebook(getClass().getResource("CODEX_Rulebook_EN.pdf").toURI().getPath());
-            } catch (URISyntaxException e) {
+                GUIApplication.openRulebook(getClass().getResourceAsStream("CODEX_Rulebook_EN.pdf"));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });

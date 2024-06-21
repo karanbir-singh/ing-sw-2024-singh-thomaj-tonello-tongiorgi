@@ -5,10 +5,13 @@ import it.polimi.ingsw.gc26.network.PingManager;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketGameController;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
-
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * This class implements a ping to the server in order to notice when the server has gone down.
+ * Implementation for socket network connection.
+ */
 public class SocketPingManager implements PingManager {
     /**
      * This attribute represents the main client this thread for pinging RMI server is launched by
@@ -25,6 +28,9 @@ public class SocketPingManager implements PingManager {
      */
     private long lastPingTime;
 
+    /**
+     * This attribute represents a flag indicating if the first ping from the server has arrived.
+     */
     private boolean firstPingArrived;
 
     /**
@@ -45,7 +51,7 @@ public class SocketPingManager implements PingManager {
     }
 
     /**
-     * Resets the timer
+     * Resets timer in order to identify when the connection has been interrupted.
      */
     @Override
     public void reset() {
@@ -99,13 +105,6 @@ public class SocketPingManager implements PingManager {
 
                         // Reset virtual socket main controller
                         mainClient.setVirtualMainController(new VirtualSocketMainController(socketOut));
-
-                        // TODO Gabi controlla sincronizzazione e vedi se togliere questa sleep
-                        /*try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ex) {
-                            throw new RuntimeException(ex);
-                        }*/
 
                         // Get virtual socket game controller
                         mainClient.getVirtualMainController().getVirtualGameController(mainClient.getViewController().getGameID());
