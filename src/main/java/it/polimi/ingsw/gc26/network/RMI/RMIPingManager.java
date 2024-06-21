@@ -3,6 +3,7 @@ package it.polimi.ingsw.gc26.network.RMI;
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.network.PingManager;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -73,9 +74,9 @@ public class RMIPingManager implements PingManager {
             // Check how much time has passed
             long elapsed;
             synchronized (lock) {
-                if(firstPingArrived) {
+                if (firstPingArrived) {
                     elapsed = (currentTime - lastPingTime) / 1000;
-                }else{
+                } else {
                     elapsed = 0;
 
                 }

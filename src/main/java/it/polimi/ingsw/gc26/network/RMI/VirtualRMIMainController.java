@@ -7,6 +7,7 @@ import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.main_request.ConnectionRequest;
 import it.polimi.ingsw.gc26.request.main_request.GameCreationRequest;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -22,6 +23,7 @@ public class VirtualRMIMainController implements VirtualMainController {
 
     /**
      * Virtual controller's constructor. It exports the remote object.
+     *
      * @param mainController unique main controller in the server.
      * @throws RemoteException if the remote object cannot be called
      */
@@ -34,8 +36,8 @@ public class VirtualRMIMainController implements VirtualMainController {
      * Joins the new client to an existing game if there's any game with available player,
      * otherwise it set the client's state to creator.
      *
-     * @param client Virtual view representing the client
-     * @param nickname client's nickname
+     * @param client      Virtual view representing the client
+     * @param nickname    client's nickname
      * @param clientState client's current state
      * @throws RemoteException if the remote method cannot be called
      */
@@ -76,7 +78,7 @@ public class VirtualRMIMainController implements VirtualMainController {
     }
 
     @Override
-    public void resetServerTimer(String clientID){
+    public void resetServerTimer(String clientID) {
         this.mainController.resetServerTimer(clientID);
     }
 }

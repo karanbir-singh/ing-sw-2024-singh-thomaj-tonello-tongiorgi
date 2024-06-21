@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.model.deck;
 
 import it.polimi.ingsw.gc26.model.card.Card;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;

@@ -29,7 +29,7 @@ public enum TextStyle {
      */
     BACKGROUND_RED("\u001B[48;2;248;49;47m"),
     /**
-    This attribute represent the background yellow character.
+     * This attribute represent the background yellow character.
      */
     BACKGROUND_YELLOW("\u001B[48;2;255;209;56m"),
     /**
@@ -66,23 +66,25 @@ public enum TextStyle {
     STYLE_RESET("\u001B[0m");
 
     /**
-    This attribute represents the style code.
+     * This attribute represents the style code.
      */
     private final String styleCode;
 
     /**
      * Constructor for text style enumeration.
+     *
      * @param styleCode
      */
-    TextStyle(String styleCode){
+    TextStyle(String styleCode) {
         this.styleCode = styleCode;
     }
 
     /**
      * Return the style code
+     *
      * @return ansi code character
      */
-    public String getStyleCode(){
+    public String getStyleCode() {
         return this.styleCode;
     }
 }

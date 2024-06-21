@@ -9,6 +9,7 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.utils.ParserCore;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -178,12 +179,12 @@ public class Game implements Serializable {
         // Change player's state
         this.currentPlayer.setState(PlayerState.PLAYING, currentPlayer.getID());
 
-        HashMap<String,Integer> points = new HashMap<>();
-        for(Player player : this.players){
-            if(player.getPersonalBoard() != null){
-                points.put(player.getNickname(),player.getPersonalBoard().getScore());
-            }else{
-                points.put(player.getNickname(),0);
+        HashMap<String, Integer> points = new HashMap<>();
+        for (Player player : this.players) {
+            if (player.getPersonalBoard() != null) {
+                points.put(player.getNickname(), player.getPersonalBoard().getScore());
+            } else {
+                points.put(player.getNickname(), 0);
             }
 
         }
@@ -193,13 +194,13 @@ public class Game implements Serializable {
             // Then increase the round
             this.increaseRound();
         }
-        this.observable.notifyMessage("It's you turn now",this.currentPlayer.getID());
+        this.observable.notifyMessage("It's you turn now", this.currentPlayer.getID());
         ArrayList<String> nicknameWinners = new ArrayList<>();
-        for(Player winner : this.winners){
+        for (Player winner : this.winners) {
             nicknameWinners.add(winner.getNickname());
         }
         String currentPlayerNickname = null;
-        if(this.currentPlayer != null){
+        if (this.currentPlayer != null) {
             currentPlayerNickname = this.currentPlayer.getNickname();
         }
 
@@ -449,6 +450,7 @@ public class Game implements Serializable {
 
     /**
      * Return the game's winners (it can be more than one)
+     *
      * @return winners
      */
     public ArrayList<Player> getWinners() {
@@ -457,6 +459,7 @@ public class Game implements Serializable {
 
     /**
      * Returns a reference to the observable of this class to notify the client
+     *
      * @return observable
      */
     public ModelObservable getObservable() {

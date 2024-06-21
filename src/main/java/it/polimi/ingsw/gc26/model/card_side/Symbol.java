@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.model.card_side;
 
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
+
 import java.io.Serializable;
 
 /**
@@ -11,7 +12,7 @@ public enum Symbol implements Serializable {
     /**
      * Fungi character, color red .
      */
-    FUNGI(SpecialCharacters.MUSHROOM.getCharacter(),SpecialCharacters.BACKGROUND_RED.getCharacter(),TextStyle.RED.getStyleCode(), TextStyle.BACKGROUND_RED.getStyleCode()),
+    FUNGI(SpecialCharacters.MUSHROOM.getCharacter(), SpecialCharacters.BACKGROUND_RED.getCharacter(), TextStyle.RED.getStyleCode(), TextStyle.BACKGROUND_RED.getStyleCode()),
     /**
      * Animal character, color blue.
      */
@@ -23,19 +24,19 @@ public enum Symbol implements Serializable {
     /**
      * Insect character, color purple.
      */
-    INSECT(SpecialCharacters.BUTTERFLY.getCharacter(), SpecialCharacters.BACKGROUND_PURPLE.getCharacter(),TextStyle.PURPLE.getStyleCode(),TextStyle.BACKGROUND_PURPLE.getStyleCode()),
+    INSECT(SpecialCharacters.BUTTERFLY.getCharacter(), SpecialCharacters.BACKGROUND_PURPLE.getCharacter(), TextStyle.PURPLE.getStyleCode(), TextStyle.BACKGROUND_PURPLE.getStyleCode()),
     /**
      * Inkwell character, similar to a vase or an amphora.
      */
-    INKWELL(SpecialCharacters.AMPHORA.getCharacter(), "", "",TextStyle.BACKGROUND_BEIGE.getStyleCode()),
+    INKWELL(SpecialCharacters.AMPHORA.getCharacter(), "", "", TextStyle.BACKGROUND_BEIGE.getStyleCode()),
     /**
      * Quill character, similar to a feather.
      */
-    QUILL(SpecialCharacters.FEATHER.getCharacter(), "", "",TextStyle.BACKGROUND_BEIGE.getStyleCode()),
+    QUILL(SpecialCharacters.FEATHER.getCharacter(), "", "", TextStyle.BACKGROUND_BEIGE.getStyleCode()),
     /**
      * Manuscript character, similar to a manuscript sheet.
      */
-    MANUSCRIPT(SpecialCharacters.SHEET.getCharacter(), "", "",TextStyle.BACKGROUND_BEIGE.getStyleCode());
+    MANUSCRIPT(SpecialCharacters.SHEET.getCharacter(), "", "", TextStyle.BACKGROUND_BEIGE.getStyleCode());
     /**
      * Alias for the symbol.
      */
@@ -55,6 +56,7 @@ public enum Symbol implements Serializable {
 
     /**
      * Create the enumeration
+     *
      * @param alias
      * @param filler
      * @param fontColor
@@ -69,6 +71,7 @@ public enum Symbol implements Serializable {
 
     /**
      * Returns symbol's alias.
+     *
      * @return alias attribute
      */
     public String getAlias() {
@@ -77,21 +80,28 @@ public enum Symbol implements Serializable {
 
     /**
      * Returns symbol's filler.
+     *
      * @return filler attribute
      */
-    public String getFiller() {return filler;}
+    public String getFiller() {
+        return filler;
+    }
 
     /**
      * Returns symbol's font color.
+     *
      * @return font color attribute
      */
-    public String getFontColor() {return fontColor;}
+    public String getFontColor() {
+        return fontColor;
+    }
 
     /**
      * Returns symbol's background.
+     *
      * @return background attribute
      */
-    public String getBackground(){
+    public String getBackground() {
         return background;
     }
 }

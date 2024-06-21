@@ -61,7 +61,7 @@ public enum SpecialCharacters {
      */
     MUSHROOM("🍄"),
     /**
-    This attribute represents the orange diamond character.
+     * This attribute represents the orange diamond character.
      */
     ORANGE_DIAMOND("🔸"),
     /**
@@ -71,7 +71,7 @@ public enum SpecialCharacters {
     /**
      * This attribute represents the black square character.
      */
-    SQUARE_BLACK ("▪️"),
+    SQUARE_BLACK("▪️"),
     /**
      * This attribute represents the white square character.
      */
@@ -92,17 +92,19 @@ public enum SpecialCharacters {
 
     /**
      * Constructor for the enumeration characters.
+     *
      * @param character
      */
-    SpecialCharacters(String character){
+    SpecialCharacters(String character) {
         this.character = character;
     }
 
     /**
      * This method returns the symbol's character.
+     *
      * @return
      */
-    public String getCharacter(){
+    public String getCharacter() {
         return this.character;
     }
 }

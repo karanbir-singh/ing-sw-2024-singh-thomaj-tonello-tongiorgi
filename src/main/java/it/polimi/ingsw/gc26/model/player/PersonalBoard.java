@@ -6,6 +6,7 @@ import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -188,6 +189,7 @@ public class PersonalBoard implements Serializable {
 
     /**
      * Returns the min value for x-axis.
+     *
      * @return real number
      */
     public int getXMin() {
@@ -196,6 +198,7 @@ public class PersonalBoard implements Serializable {
 
     /**
      * Returns the max value for x-axis.
+     *
      * @return real number
      */
     public int getXMax() {
@@ -204,6 +207,7 @@ public class PersonalBoard implements Serializable {
 
     /**
      * Returns the min value for y-axis.
+     *
      * @return real number
      */
     public int getYMin() {
@@ -212,6 +216,7 @@ public class PersonalBoard implements Serializable {
 
     /**
      * Returns the max value for y-axis.
+     *
      * @return real number
      */
     public int getYMax() {
@@ -243,6 +248,7 @@ public class PersonalBoard implements Serializable {
 
     /**
      * Sets manually the score point. Should only be for testing purposes.
+     *
      * @param score value between 0 and 30
      */
     public void setScore(int score) {

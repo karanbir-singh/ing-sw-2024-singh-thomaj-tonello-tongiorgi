@@ -86,7 +86,7 @@ public class VirtualRMIView implements VirtualView {
      * It also displays a message with information about the update.
      *
      * @param simplifiedCommonTable updated common table
-     * @param message updated message
+     * @param message               updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -99,7 +99,7 @@ public class VirtualRMIView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param simplifiedHand updated hand
-     * @param message updated message
+     * @param message        updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -112,7 +112,7 @@ public class VirtualRMIView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param simplifiedSecretHand updated hand
-     * @param message updated message
+     * @param message              updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -125,7 +125,7 @@ public class VirtualRMIView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param personalBoard updated personal board
-     * @param message updated message
+     * @param message       updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -138,7 +138,7 @@ public class VirtualRMIView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param otherPersonalBoard updated personal board
-     * @param message updated message
+     * @param message            updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -151,7 +151,7 @@ public class VirtualRMIView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param simplifiedPlayer updated player
-     * @param message updated message
+     * @param message          updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -164,7 +164,7 @@ public class VirtualRMIView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param simplifiedChat updated chat
-     * @param message updated message
+     * @param message        updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -180,7 +180,7 @@ public class VirtualRMIView implements VirtualView {
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
-    public void updateIDGame(int gameID) throws RemoteException{
+    public void updateIDGame(int gameID) throws RemoteException {
         this.viewController.setGameID(gameID);
     }
 
@@ -189,7 +189,7 @@ public class VirtualRMIView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param simplifiedGame updated game
-     * @param message updated message
+     * @param message        updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
