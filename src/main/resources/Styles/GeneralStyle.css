@@ -194,3 +194,87 @@
 
     -fx-effect: dropshadow( gaussian , #fffff0  , 20,0.8,0,1 );
 }
+
+.RED {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #d93d3d;
+}
+
+.RED:hover {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: linear-gradient(to right, #d93d3d 100%, #fffb8f );
+}
+
+.RED:selected {
+    -fx-border-radius: 0px;
+    -fx-background-color: rgba(255, 137, 133, 0.8);
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #d93d3d;
+}
+
+.BLUE {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #d93d3d;
+}
+
+.BLUE:hover {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: linear-gradient(to right, #d93d3d 100%, #fffb8f );
+}
+
+.BLUE:selected {
+    -fx-border-radius: 0px;
+    -fx-background-color: rgba(255, 137, 133, 0.8);
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #d93d3d;
+}
+
+.GREEN {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #d93d3d;
+}
+
+.GREEN:hover {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: linear-gradient(to right, #d93d3d 100%, #fffb8f );
+}
+
+.GREEN:selected {
+    -fx-border-radius: 0px;
+    -fx-background-color: rgba(255, 137, 133, 0.8);
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #d93d3d;
+}
+
+.YELLOW {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #fffb8f;
+}
+
+.YELLOW:hover {
+    -fx-border-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: linear-gradient(to right, #d93d3d 100%, #fffb8f );
+}
+
+.YELLOW:selected {
+    -fx-border-radius: 0px;
+    -fx-background-color: rgba(255, 137, 133, 0.8);
+    -fx-border-width: 0px 0px 3px 0px;
+    -fx-border-color: #d93d3d;
+}

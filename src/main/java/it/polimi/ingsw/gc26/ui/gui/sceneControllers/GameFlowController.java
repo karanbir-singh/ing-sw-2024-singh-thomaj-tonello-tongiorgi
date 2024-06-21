@@ -93,10 +93,6 @@ public class GameFlowController extends SceneController implements Initializable
     private VBox commonMissionsBox;
     @FXML
     private VBox secretMissionBox;
-    @FXML
-    private ImageView commonMissionLabel;
-    @FXML
-    private ImageView secretMissionLabel;
 
     private ArrayList<ImageView> resources = new ArrayList<>();
     private ArrayList<ImageView> goldens = new ArrayList<>();
@@ -295,6 +291,17 @@ public class GameFlowController extends SceneController implements Initializable
                 this.xPositionStarterCard + otherPersonalBoard.getOccupiedPositions().getLast().getX(),
                 this.yPositionStarterCard - otherPersonalBoard.getOccupiedPositions().getLast().getY(), otherGridPane);
 
+    }
+
+    @Override
+    public void changeGUIGame (SimplifiedGame simplifiedGame) {
+        Pawn pawn;
+        for (Tab tab : personalBoardTabPane.getTabs()) {
+            pawn = simplifiedGame.getPawnsSelected().get(tab.getText());
+            if(pawn != null) {
+                tab.getStyleClass().add(pawn.toString());
+            }
+        }
     }
 
 
