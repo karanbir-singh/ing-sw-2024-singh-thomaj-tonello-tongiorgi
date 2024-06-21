@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.WinnerController">
+    <children>
+        <Label fx:id="title" layoutX="258.0" layoutY="50.0" text="Label">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+        <Label fx:id="status" layoutX="401.0" layoutY="173.0" text="Label">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+        <Label layoutX="100.0" layoutY="145.0" text="Winner">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <VBox fx:id="winner" alignment="TOP_CENTER" layoutX="79.0" layoutY="173.0" prefHeight="165.0" prefWidth="100.0" />
+    </children>
+</AnchorPane>

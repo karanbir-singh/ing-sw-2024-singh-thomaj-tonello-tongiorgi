@@ -62,13 +62,13 @@
                   <right>
                       <VBox fx:id="rightVBox" alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="200.0" minWidth="50.0" spacing="20.0" BorderPane.alignment="CENTER">
                           <children>
-                              <ImageView fx:id="commonMissionLabel" fitHeight="30.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="commonMissionLabel" fitHeight="30.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true" styleClass="customLabel">
                                   <image>
                                       <Image url="@sceneControllers/images/labels/CommonMissionsLabel.png" />
                                   </image>
                               </ImageView>
                               <VBox fx:id="commonMissionsBox" spacing="20.0" />
-                              <ImageView fx:id="secretMissionLabel" fitHeight="29.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="secretMissionLabel" fitHeight="29.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true" styleClass="customLabel">
                                   <image>
                                       <Image url="@sceneControllers/images/labels/SecretMissionLabel.png" />
                                   </image>
@@ -102,7 +102,7 @@
                       </VBox>
                   </right>
                   <padding>
-                      <Insets bottom="20.0" left="20.0" top="20.0" />
+                      <Insets bottom="10.0" left="20.0" top="20.0" />
                   </padding>
                   <left>
                       <HBox fx:id="HBoxLeftPanel" minWidth="40.0" prefHeight="100.0" prefWidth="40.0" BorderPane.alignment="CENTER">

@@ -259,8 +259,7 @@ public class GameFlowController extends SceneController implements Initializable
                 this.xPositionStarterCard + personalBoard.getOccupiedPositions().getLast().getX(),
                 this.yPositionStarterCard - personalBoard.getOccupiedPositions().getLast().getY(), this.gridPane);
         for (Point point : personalBoard.getPlayablePositions()) {
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "backSide/img_1.jpeg")), 415, 278, true, false, false));
-            //il path di prima è solo per prova
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "playable-position.png")), 415, 278, true, false, false));
             imageView.setOpacity(0.3);
             imageView.setVisible(false);
             addImage(imageView, this.xPositionStarterCard + point.getX(),
@@ -293,6 +292,7 @@ public class GameFlowController extends SceneController implements Initializable
         if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
+            consideredTab.setId("1");
             personalBoardTabPane.getTabs().add(consideredTab);
             otherScrollPane = new ScrollPane();
             otherScrollPane.setHvalue(0.5);
@@ -315,6 +315,8 @@ public class GameFlowController extends SceneController implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        this.personalBoardTabPane.getTabs().getFirst().setId("0");
 
         this.resourceCommonTableImages = new ArrayList<>();
         for(int i = 0; i < 3; i++){
@@ -416,10 +418,10 @@ public class GameFlowController extends SceneController implements Initializable
         // Set on card released
         imageView.setOnMouseReleased(event -> {
             for (ImageView target : targets) {
-                if (isInTargetSpot(imageView, target)) {
-                    //TODO VERIFICARE SE é IL TAB DEL GIOCATORE CORRETTO E FIXARE PROBLEMA VIEW PORT
+                //control if is a target and if the tab is the right one
+                if (isInTargetSpot(imageView, target) && this.personalBoardTabPane.getSelectionModel().getSelectedItem().getId().equals("0")) {
+
                     try {
-                        //TODO da controllare se G minuscola
                         int row = GridPane.getRowIndex(target);
                         int column = GridPane.getColumnIndex(target);
 
@@ -450,7 +452,7 @@ public class GameFlowController extends SceneController implements Initializable
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
             this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait!");
         }
     }
 
@@ -528,7 +530,7 @@ public class GameFlowController extends SceneController implements Initializable
         try {
             this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
         } catch (RemoteException e) {
-            System.err.println("RemoteException while sending message!");
+            System.out.println("Connection problem, please wait!");
         }
         newTextField.clear();
 
@@ -710,6 +712,9 @@ public class GameFlowController extends SceneController implements Initializable
 
         try {
             Platform.runLater(() -> {
+                if (serverMessagesDisplayer.getChildren().size() > 10) {
+                    serverMessagesDisplayer.getChildren().remove(0);
+                }
                 serverMessagesDisplayer.getChildren().add(textFlow);
                 serverMessagesDisplayer.layout();
                 serverMessagesScrollPane.layout();
@@ -783,6 +788,8 @@ public class GameFlowController extends SceneController implements Initializable
             final double zoomFactor = scrollEvent.getDeltaY() > 0 ? 1.05 : 1 / 1.05;
 
             Scale newScale = new Scale();
+            newScale.setPivotX(scrollEvent.getX());
+            newScale.setPivotY(scrollEvent.getY());
             newScale.setX(zoomFactor);
             newScale.setY(zoomFactor);
 
@@ -797,6 +804,8 @@ public class GameFlowController extends SceneController implements Initializable
         final double zoomFactor = zoomEvent.getZoomFactor() > 1 ? 1.01 : 1 / 1.01;
 
         Scale newScale = new Scale();
+        newScale.setPivotX(zoomEvent.getX());
+        newScale.setPivotY(zoomEvent.getY());
         newScale.setX(zoomFactor);
         newScale.setY(zoomFactor);
 

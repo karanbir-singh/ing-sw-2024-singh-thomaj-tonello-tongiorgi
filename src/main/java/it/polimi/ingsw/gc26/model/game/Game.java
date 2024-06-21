@@ -168,7 +168,10 @@ public class Game implements Serializable {
             winners = players.stream()
                     .filter(player -> player.getPersonalBoard().getScore() == (maxScore % 29))
                     .collect(Collectors.toCollection(ArrayList::new));
-            //TODO CAMBIARE STATO DEL GAME IN WINNER E NOTIFICARE
+
+            winners.forEach((player) -> System.out.println(player.getNickname()));
+
+            this.setState(GameState.WINNER);
         }
 
         // Change current player
@@ -323,6 +326,10 @@ public class Game implements Serializable {
                 break;
             case GAME_STARTED:
                 message = "GAME STARTED!";
+                break;
+            case WINNER:
+                message = "Game ended, here are the winners";
+                System.out.println("WINNNERR");
                 break;
         }
 

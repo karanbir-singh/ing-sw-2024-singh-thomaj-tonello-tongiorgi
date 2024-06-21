@@ -5,6 +5,13 @@
     -fx-text-fill: white;
 }
 
+.label {
+    -fx-font-size: 18px;
+    -fx-font-family: -apple-system;
+    -fx-text-alignment: center center;
+    -fx-text-fill: white;
+}
+
 .error-label {
     -fx-font-size: 16px;
     -fx-font-family: -apple-system;
@@ -15,7 +22,7 @@
 }
 
 .customLabel {
-    -fx-effect: dropshadow( gaussian , #e3fff2  , 20,0,0,1 );;
+    -fx-effect: dropshadow( gaussian , #e3fff2  , 20,0.1,0,1 );;
 }
 
 .button {
@@ -155,27 +162,6 @@
     -fx-padding: 0 5 0 5;
 }
 
-.tabScrollPane {
-    -fx-background-radius: 50px;
-    -fx-border-radius: 50px;
-}
-
-.tabScrollPane .viewport {
-    -fx-border-radius: 50px;
-    -fx-background-radius: 50px;
-}
-
-.number-button {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-}
-
-.number-button:hover {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-
-    -fx-effect: dropshadow( gaussian , #fffff0  , 10,0,0,1 );
-}
 
 .scroll-pane {
     -fx-background-color: transparent;
@@ -183,4 +169,28 @@
 
 .scroll-pane > .viewport{
     -fx-background-color: transparent;
+}
+
+.tabScrollPane {
+    -fx-background-radius: 50px;
+    -fx-border-radius: 50px;
+}
+
+.tabScrollPane > .viewport {
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+}
+
+.number-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow( gaussian , #fffff0  , 20,0.7,0,1 );
+}
+
+.number-button:hover {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+
+    -fx-effect: dropshadow( gaussian , #fffff0  , 20,0.8,0,1 );
 }

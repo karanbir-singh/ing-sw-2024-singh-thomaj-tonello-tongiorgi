@@ -66,8 +66,8 @@ public class CommonLayout {
         glow.setColor(Color.CORNSILK);
         glow.setOffsetX(0f);
         glow.setOffsetY(0f);
-        glow.setWidth(30);
-        glow.setHeight(30);
+        glow.setWidth(50);
+        glow.setHeight(50);
         card.setEffect(glow);
     }
 

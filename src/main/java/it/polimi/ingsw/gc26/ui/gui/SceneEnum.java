@@ -9,7 +9,9 @@ public enum SceneEnum {
     SECRETMISSIONCHOICE("secretMissionChoice.fxml"),
     GAMEFLOW("gameFlow.fxml"),
     INFO("info.fxml"),
-    ERROR("error.fxml");
+    ERROR("error.fxml"),
+    WINNER("winner.fxml");
+
     //altre
 
     //all the scenes
