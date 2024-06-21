@@ -203,14 +203,6 @@ public class GameFlowController extends SceneController implements Initializable
             index++;
         }
 
-        Platform.runLater(() -> {
-            this.commonMissionsBox.getChildren().setAll(commonMissionsCommonTableImages);
-            this.resourceCardBox.getChildren().setAll(resourceCommonTableImages);
-            this.goldCardBox.getChildren().setAll(goldCommonTableImages);
-            layout.cardsLayout(rootBorder, resourceCommonTableImages);
-            layout.cardsLayout(rootBorder, goldCommonTableImages);
-            layout.cardsLayout(rootBorder, commonMissionsCommonTableImages);
-        });
     }
 
     @Override
@@ -232,12 +224,6 @@ public class GameFlowController extends SceneController implements Initializable
         if(simplifiedHand.getCards().size() == 2){
             handImages.get(2).setImage(null);
         }
-
-
-        Platform.runLater(() -> {
-            this.handPane.getChildren().setAll(handImages);
-            layout.handLayout(rootBorder, handImages, handPane);
-        });
 
     }
 
@@ -326,6 +312,11 @@ public class GameFlowController extends SceneController implements Initializable
             handImages.add(imageView);
         }
 
+        Platform.runLater(() -> {
+            this.handPane.getChildren().setAll(handImages);
+            layout.handLayout(rootBorder, handImages, handPane);
+        });
+
         this.resourceCommonTableImages = new ArrayList<>();
         for(int i = 0; i < 3; i++){
             ImageView imageView = new ImageView();
@@ -342,13 +333,20 @@ public class GameFlowController extends SceneController implements Initializable
             this.goldCommonTableImages.add(imageView);
         }
 
-
         this.commonMissionsCommonTableImages = new ArrayList<>();
         for(int i = 6; i < 8; i++){
             ImageView imageView = new ImageView();
             this.setCardImageParameters(imageView,i);
             this.commonMissionsCommonTableImages.add(imageView);
         }
+        Platform.runLater(() -> {
+            this.commonMissionsBox.getChildren().setAll(commonMissionsCommonTableImages);
+            this.resourceCardBox.getChildren().setAll(resourceCommonTableImages);
+            this.goldCardBox.getChildren().setAll(goldCommonTableImages);
+            layout.cardsLayout(rootBorder, resourceCommonTableImages);
+            layout.cardsLayout(rootBorder, goldCommonTableImages);
+            layout.cardsLayout(rootBorder, commonMissionsCommonTableImages);
+        });
 
         //buttons setup
         layout.buttonSetup(scoreIcon, scoreBoardButton);
@@ -359,7 +357,6 @@ public class GameFlowController extends SceneController implements Initializable
 
         //page layout and dimensions bindings
         layout.pageBindings(rootPane, rootBorder, background);
-        layout.handLayout(rootBorder, handCards, handPane);
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);
