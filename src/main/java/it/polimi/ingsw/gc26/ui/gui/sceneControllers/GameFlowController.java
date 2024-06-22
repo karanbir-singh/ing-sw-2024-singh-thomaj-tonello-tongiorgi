@@ -362,6 +362,7 @@ public class GameFlowController extends SceneController implements Initializable
         scoreBoardButton.setOnAction(this::toggleScoreBoard);
         layout.buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
+        layout.buttonSetup(rulesIcon, rulesButton);
 
 
         //page layout and dimensions bindings

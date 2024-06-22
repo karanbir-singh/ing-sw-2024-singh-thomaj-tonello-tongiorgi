@@ -675,7 +675,7 @@ public class GameController implements Serializable {
                     player.setState(PlayerState.CARD_DRAWN, player.getID());
 
                     // Check if player's score is greater or equal then 20 points OR decks are both empty
-                    if (game.getState() != GameState.END_STAGE && player.getPersonalBoard().getScore() >= 1 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
+                    if (game.getState() != GameState.END_STAGE && player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
                         // Change game state into END_STAGE
                         game.setState(GameState.END_STAGE);
 

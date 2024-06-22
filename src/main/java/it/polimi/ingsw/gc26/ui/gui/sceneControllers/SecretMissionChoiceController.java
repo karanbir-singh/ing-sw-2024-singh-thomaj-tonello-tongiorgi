@@ -319,6 +319,7 @@ public class SecretMissionChoiceController extends SceneController implements In
         //buttons setup
         layout.buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
+        layout.buttonSetup(rulesIcon, rulesButton);
     }
 
     @Override

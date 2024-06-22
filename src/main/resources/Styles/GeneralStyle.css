@@ -212,7 +212,7 @@
     -fx-border-radius: 0px;
     -fx-background-color: rgba(29, 207, 61, 0.2);
     -fx-border-width: 0px 0px 3px 0px;
-    -fx-border-color: linear-gradient(to right, #0dd696, #fffb8f );
+    -fx-border-color: linear-gradient(to right, #0dd696, #abffeb );
 }
 
 #GREEN.tab:selected {

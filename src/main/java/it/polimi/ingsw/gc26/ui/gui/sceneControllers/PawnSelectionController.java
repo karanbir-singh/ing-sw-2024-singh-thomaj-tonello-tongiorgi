@@ -68,7 +68,11 @@ public class PawnSelectionController extends SceneController implements Initiali
 
     private boolean chatIsVisible = false;
     private boolean chatHasBeenCreated = false;
-    private ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+    private final ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
+    @FXML
+    private Button rulesButton;
+    private final ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
+
 
     public void onClickButton(ActionEvent event){
         String pawnColor = ((Button)event.getSource()).getAccessibleText();
@@ -96,6 +100,7 @@ public class PawnSelectionController extends SceneController implements Initiali
         //buttons setup
         layout.buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
+        layout.buttonSetup(rulesIcon, rulesButton);
     }
 
     @Override

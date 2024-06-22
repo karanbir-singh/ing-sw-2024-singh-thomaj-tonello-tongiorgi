@@ -15,7 +15,7 @@
       </ImageView>
         <VBox alignment="CENTER" layoutX="79.0" layoutY="173.0" prefHeight="165.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
          <children>
-            <ImageView fx:id="winnerOrLoser" fitHeight="219.0" fitWidth="306.0" pickOnBounds="true" preserveRatio="true" styleClass="customLabel">
+            <ImageView fx:id="winnerOrLoser" fitHeight="253.0" fitWidth="372.0" pickOnBounds="true" preserveRatio="true" styleClass="customLabel">
                <VBox.margin>
                   <Insets top="40.0" />
                </VBox.margin>
