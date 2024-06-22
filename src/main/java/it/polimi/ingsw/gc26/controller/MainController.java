@@ -20,10 +20,6 @@ import java.util.*;
  */
 public class MainController implements Serializable {
     /**
-     * This constant represents the max numbers of reconnection attempts
-     */
-    private static final int NUM_RECONNECTION_ATTEMPTS = 3;
-    /**
      * This attribute represents the file path for saving the main controller
      */
     public static final String MAIN_CONTROLLER_FILE_PATH = "../mainController.bin";
@@ -404,13 +400,7 @@ public class MainController implements Serializable {
         this.createGeneratorPingThread();
         System.out.println("Games recreated");
     }
-
-    /**
-     * Useful for pinging from the client to the server
-     */
-    public void amAlive() {
-        //TODO MAYBE FOR SOCKET IS BETTER IF THIS RETURN A STRING
-    }
+    
 
     /**
      * Thread useful after a server goes up from a crash: called in recreateGame()
