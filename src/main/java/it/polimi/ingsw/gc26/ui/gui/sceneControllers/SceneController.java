@@ -22,12 +22,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.Objects;
 
 abstract public class SceneController {
     public MainClient mainClient;
@@ -131,7 +129,9 @@ abstract public class SceneController {
         newScrollPane.setMaxWidth(262);
         newScrollPane.setLayoutX(9);
         newScrollPane.setLayoutY(14);
-        newScrollPane.setPannable(false);
+        newScrollPane.setPannable(true);
+        newScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        newScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         newAnchorPane.getChildren().add(newScrollPane);
         VBox newVBox = new VBox();
         newScrollPane.setContent(newVBox);
@@ -176,26 +176,26 @@ abstract public class SceneController {
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();
         if (!newMessage.getSender().getNickname().equals(this.nickname)) {
-            if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-                if (!newMessage.getSender().getNickname().equals(nickname)) {
-                    // TODO filter first condition in group chat
-                    if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
-                            !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
-                        addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname());
-                    } else {
-                        addMessageInChat(newMessage.getText(), "Group Chat", null);
-                    }
-                }
+            // message from another player
+            if (isReceiverUnknown(newMessage)) {
+                addMessageInChat(newMessage.getText(), "Group Chat", isLabeled(simplifiedChat) ? newMessage.getSender().getNickname() : null);
             } else {
                 addMessageInChat(newMessage.getText(), newMessage.getSender().getNickname(), null);
             }
         } else {
-            if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-                addMessageFromSender(newMessage.getText(), "Group Chat");
-            } else {
-                addMessageFromSender(newMessage.getText(), newMessage.getReceiver().getNickname());
-            }
+            // message from myself
+            addMessageFromSender(newMessage.getText(), isReceiverUnknown(newMessage) ? "Group Chat" : newMessage.getReceiver().getNickname());
         }
+    }
+
+    private boolean isReceiverUnknown(Message message) {
+        return message.getReceiver() == null || message.getReceiver().getNickname().isEmpty();
+    }
+
+    private boolean isLabeled(SimplifiedChat simplifiedChat) {
+        return simplifiedChat.getMessages().stream().filter(m -> m.getReceiver() == null || m.getReceiver().getNickname().isEmpty()).count() == 1
+                || (simplifiedChat.getMessages().size() > 1 &&
+                !simplifiedChat.getMessages().getLast().getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()));
     }
 
     protected void addMessageInChat(String message, String sender, String labelMessage) {
