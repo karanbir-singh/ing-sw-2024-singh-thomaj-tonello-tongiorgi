@@ -277,9 +277,11 @@ public class SecretMissionChoiceController extends SceneController implements In
 
     private void addImage(ImageView imageView, int x, int y, GridPane gridPane) {
         setParameters(imageView, "0");
-        Platform.runLater(() -> {
-            gridPane.add(imageView, x, y);
-        });
+        if(gridPane != null){
+            Platform.runLater(() -> {
+                gridPane.add(imageView, x, y);
+            });
+        }
     }
 
 
