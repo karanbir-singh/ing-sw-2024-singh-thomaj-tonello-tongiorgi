@@ -10,12 +10,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -25,11 +27,14 @@ import javafx.scene.text.TextFlow;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 abstract public class SceneController {
     public MainClient mainClient;
     public String nickname;
+    private Image gameBackground = new Image(getClass().getResource("images/game-background.png").toExternalForm());
+
     private HashMap<String, ScrollPane> chats = new HashMap<>();
     @FXML
     public TabPane chatTabPane;
@@ -81,6 +86,102 @@ abstract public class SceneController {
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
     }
 
+    // common layout
+    public void pageBindings(AnchorPane rootPane, BorderPane rootBorder, ImageView background) {
+        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            rootBorder.setPrefHeight(newVal.doubleValue());
+        });
+
+        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
+            rootBorder.setPrefWidth(newVal.doubleValue());
+        });
+
+        background.setImage(gameBackground);
+        setBackground(rootPane, background);
+    }
+
+
+    public void cardsLayout(BorderPane rootBorder, ArrayList<ImageView> cards) {
+        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
+            for (ImageView card : cards) {
+                card.setFitWidth(rootBorder.getWidth() * 0.13);
+            }
+        });
+    }
+
+    public void handLayout(BorderPane rootBorder, ArrayList<ImageView> handCards, AnchorPane handPane) {
+        double spacing = 20.0;
+        handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
+
+        for (int i = 0; i < handCards.size(); i++) {
+            ImageView card = handCards.get(i);
+            card.setFitWidth(rootBorder.getWidth() * 0.13);
+            card.setLayoutX(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * i);
+        }
+
+        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
+            handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
+
+            for (int i = 0; i < handCards.size(); i++) {
+                ImageView card = handCards.get(i);
+                card.setFitWidth(rootBorder.getWidth() * 0.13);
+                card.setLayoutX(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * i);
+            }
+        });
+    }
+
+    public void makeGlow(ImageView card) {
+        DropShadow glow = new DropShadow();
+        glow.setColor(Color.CORNSILK);
+        glow.setOffsetX(0f);
+        glow.setOffsetY(0f);
+        glow.setWidth(50);
+        glow.setHeight(50);
+        card.setEffect(glow);
+    }
+
+    public void buttonSetup(ImageView icon, Button button) {
+        double iconDimension = 30;
+        double buttonDim = 50;
+
+        icon.setFitWidth(iconDimension);
+        icon.setFitHeight(iconDimension);
+        button.setGraphic(icon);
+        button.setPrefWidth(buttonDim);
+        button.setPrefHeight(buttonDim);
+
+        button.getStyleClass().clear();
+        button.getStyleClass().add("buttonClose");
+    }
+
+    public void setBackground(AnchorPane rootPane, ImageView background) {
+        double initialImageWidth = background.getImage().getWidth();
+        double initialImageHeight = background.getImage().getHeight();
+
+        background.fitHeightProperty().bind(rootPane.heightProperty());
+        background.fitWidthProperty().bind(rootPane.widthProperty());
+
+        rootPane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            updateViewport(rootPane.getWidth(), rootPane.getHeight(), background, initialImageWidth, initialImageHeight);
+        });
+
+        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            updateViewport(rootPane.getWidth(), rootPane.getHeight(), background, initialImageWidth, initialImageHeight);
+        });
+    }
+
+    public void updateViewport(double paneWidth, double paneHeight, ImageView background, double initialImageWidth, double initialImageHeight) {
+        double viewportWidth = Math.min(initialImageWidth, paneWidth);
+        double viewportHeight = Math.min(initialImageHeight, paneHeight);
+
+        double x = (initialImageWidth - viewportWidth) / 2;
+        double y = (initialImageHeight - viewportHeight) / 2;
+
+        background.setViewport(new Rectangle2D(x, y, viewportWidth, viewportHeight));
+    }
+
+    // chat methods
+
     public void addMessageFromSender(String message, String sender) {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.BASELINE_RIGHT);
@@ -100,6 +201,19 @@ abstract public class SceneController {
             ((VBox) chats.get(sender).getContent()).getChildren().add(hBox);
             chats.get(sender).setVvalue(1.0);
         });
+    }
+
+    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
+        if (!chatHasBeenCreated) {
+            this.nickname = nickname;
+            for (String playerNickname : simplifiedGame.getPlayersNicknames()) {
+                if (!playerNickname.equals(nickname)) {
+                    createChatTab(playerNickname);
+                }
+            }
+            createChatTab("Group Chat");
+            chatHasBeenCreated = true;
+        }
     }
 
     public void createChatTab(String nickname) {
@@ -159,19 +273,6 @@ abstract public class SceneController {
         chats.put(nickname, newScrollPane);
     }
 
-
-    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
-        if (!chatHasBeenCreated) {
-            this.nickname = nickname;
-            for (String playerNickname : simplifiedGame.getPlayersNicknames()) {
-                if (!playerNickname.equals(nickname)) {
-                    createChatTab(playerNickname);
-                }
-            }
-            createChatTab("Group Chat");
-            chatHasBeenCreated = true;
-        }
-    }
 
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();

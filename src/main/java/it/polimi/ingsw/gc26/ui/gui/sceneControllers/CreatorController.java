@@ -45,7 +45,6 @@ public class CreatorController extends SceneController implements Initializable{
     private ImageView selector2;
 
     private int numMaxPlayer = 2;
-    private final CommonLayout layout = new CommonLayout();
 
     @FXML
     public void onSecondButtonClick(ActionEvent actionEvent){
@@ -93,7 +92,7 @@ public class CreatorController extends SceneController implements Initializable{
         fourButton.setOnAction(this::onFourthButtonClick);
         fourButton.getStyleClass().add("number-button");
 
-        layout.setBackground(rootPane, background);
+        setBackground(rootPane, background);
     }
 
 }

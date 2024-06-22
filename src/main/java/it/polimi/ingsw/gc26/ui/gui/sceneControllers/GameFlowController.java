@@ -114,8 +114,6 @@ public class GameFlowController extends SceneController implements Initializable
     private final RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
 
 
-    //layout
-    CommonLayout layout = new CommonLayout();
     @FXML
     private AnchorPane rootPane;
     @FXML
@@ -209,7 +207,7 @@ public class GameFlowController extends SceneController implements Initializable
         for (Card card : simplifiedHand.getCards()) {
             if (card.equals(simplifiedHand.getSelectedCard())) {
                 handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())),831,556,true,true,false));
-                layout.makeGlow(handImages.get(index));
+                makeGlow(handImages.get(index));
             } else {
                 handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())),831,556,true,true,false));
                 handImages.get(index).setEffect(null);
@@ -320,7 +318,7 @@ public class GameFlowController extends SceneController implements Initializable
 
         Platform.runLater(() -> {
             this.handPane.getChildren().setAll(handImages);
-            layout.handLayout(rootBorder, handImages, handPane);
+            handLayout(rootBorder, handImages, handPane);
         });
 
         this.resourceCommonTableImages = new ArrayList<>();
@@ -349,20 +347,20 @@ public class GameFlowController extends SceneController implements Initializable
             this.commonMissionsBox.getChildren().setAll(commonMissionsCommonTableImages);
             this.resourceCardBox.getChildren().setAll(resourceCommonTableImages);
             this.goldCardBox.getChildren().setAll(goldCommonTableImages);
-            layout.cardsLayout(rootBorder, resourceCommonTableImages);
-            layout.cardsLayout(rootBorder, goldCommonTableImages);
-            layout.cardsLayout(rootBorder, commonMissionsCommonTableImages);
+            cardsLayout(rootBorder, resourceCommonTableImages);
+            cardsLayout(rootBorder, goldCommonTableImages);
+            cardsLayout(rootBorder, commonMissionsCommonTableImages);
         });
 
         //buttons setup
-        layout.buttonSetup(scoreIcon, scoreBoardButton);
+        buttonSetup(scoreIcon, scoreBoardButton);
         scoreBoardButton.setOnAction(this::toggleScoreBoard);
-        layout.buttonSetup(chatIcon, chatButton);
+        buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
 
 
         //page layout and dimensions bindings
-        layout.pageBindings(rootPane, rootBorder, background);
+        pageBindings(rootPane, rootBorder, background);
 
         columnConstraints.setHalignment(HPos.CENTER);
         rowConstraints.setValignment(VPos.CENTER);

@@ -72,8 +72,6 @@ public class StarterCardChoiceController extends SceneController implements Init
     @FXML
     private ImageView handCard2;
 
-    //layout
-    CommonLayout layout = new CommonLayout();
     @FXML
     private HBox HBoxLeftPanel;
     @FXML
@@ -134,7 +132,7 @@ public class StarterCardChoiceController extends SceneController implements Init
         if(simplifiedHand.getSelectedSide() != null){
             this.image.setImage(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getSelectedSide().getImagePath()))));
             this.image.setOnMouseClicked(this::onImageClick);
-            layout.makeGlow(this.image);
+            makeGlow(this.image);
         }
 
     }
@@ -159,9 +157,9 @@ public class StarterCardChoiceController extends SceneController implements Init
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        layout.pageBindings(rootPane, rootBorder, background);
+        pageBindings(rootPane, rootBorder, background);
         //buttons setup
-        layout.buttonSetup(chatIcon, chatButton);
+        buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
     }
 

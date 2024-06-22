@@ -41,9 +41,6 @@ public class LoginController extends SceneController implements Initializable {
     private VBox loginVBox;
 
 
-    private CommonLayout layout = new CommonLayout();
-
-
     public void setStatus(String message) {
         this.status.setText(message);
         this.status.setVisible(true);
@@ -70,7 +67,7 @@ public class LoginController extends SceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        layout.setBackground(rootPane, background);
+        setBackground(rootPane, background);
 
         loginButton.setOnAction(this::onLoginButtonClick);
         nicknameTXT.setOnAction(event -> {

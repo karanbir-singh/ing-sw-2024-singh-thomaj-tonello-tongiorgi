@@ -25,7 +25,6 @@ public class PawnSelectionController extends SceneController implements Initiali
     @FXML
     private Label status;
 
-    CommonLayout layout = new CommonLayout();
 
     @FXML
     private TilePane pawnsTile;
@@ -62,10 +61,10 @@ public class PawnSelectionController extends SceneController implements Initiali
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        layout.pageBindings(rootPane, rootBorder, background);
+        pageBindings(rootPane, rootBorder, background);
 
         //buttons setup
-        layout.buttonSetup(chatIcon, chatButton);
+        buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
     }
 

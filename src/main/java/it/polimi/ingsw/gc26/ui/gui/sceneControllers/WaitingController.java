@@ -16,7 +16,6 @@ public class WaitingController extends SceneController implements Initializable 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        CommonLayout layout = new CommonLayout();
-        layout.setBackground(rootPane, background);
+        setBackground(rootPane, background);
     }
 }

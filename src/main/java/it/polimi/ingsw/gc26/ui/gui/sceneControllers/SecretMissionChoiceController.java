@@ -61,8 +61,7 @@ public class SecretMissionChoiceController extends SceneController implements In
     @FXML
     TabPane personalBoardTabPane;
 
-    //layout
-    CommonLayout layout = new CommonLayout();
+
     @FXML
     private HBox HBoxLeftPanel;
     @FXML
@@ -242,7 +241,7 @@ public class SecretMissionChoiceController extends SceneController implements In
             imageView.setOnMouseClicked(this::onClickSecretMission);
             secretHand.add(imageView);
             if(card == simplifiedSecretHand.getSelectedCard()) {
-                layout.makeGlow(imageView);
+                makeGlow(imageView);
             }
             index++;
         }
@@ -290,9 +289,9 @@ public class SecretMissionChoiceController extends SceneController implements In
 
         this.creationAndSettingGridContraints(this.gridPane);
 
-        layout.pageBindings(rootPane, rootBorder, background);
+        pageBindings(rootPane, rootBorder, background);
         //buttons setup
-        layout.buttonSetup(chatIcon, chatButton);
+        buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
     }
 }
