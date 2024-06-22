@@ -172,6 +172,7 @@ public class GUIUpdate implements UpdateInterface {
             this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().setOnCloseRequest((WindowEvent event)->{});
             //close the error scene
             this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().hide();
+            this.guiApplication.getCurrentScene().getScene().getRoot().setDisable(false);
         });
     }
 }

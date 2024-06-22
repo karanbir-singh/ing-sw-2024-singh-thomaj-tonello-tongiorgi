@@ -416,7 +416,38 @@ public class MainController implements Serializable {
      * Thread useful after a server goes up from a crash: called in recreateGame()
      */
     private void createGeneratorPingThread() {
-        new Thread(() -> {
+        for (Integer gameControllerID : gamesControllers.keySet()) {
+            new Thread(()->{
+                Game game = gamesControllers.get(gameControllerID).getGame();
+                int maxSecondsToWaitForClientReconnection = 30;
+                long currentTime = System.currentTimeMillis();
+                while (game.getNumberOfPlayers() != game.getObservable().getClients().size()) {
+                    // wait here so that everything is reloading, because not necessary the virtual views are already there
+
+
+                    //if a client isn't reconnecting for more than 30 seconds, the server closes the game
+                    if((System.currentTimeMillis() - currentTime) / 1000 >= maxSecondsToWaitForClientReconnection){
+                        this.destroyGame(gameControllerID);
+                        return;
+                    }
+                    System.out.println("we are in the while, game " + gameControllerID );
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                // Launch thread for pinging clients
+                this.startClientsPing(game.getObservable().getClients(), gameControllerID);
+                System.out.println("thread creati, game " + gameControllerID );
+            }).start();
+        }
+
+
+
+
+        /*new Thread(() -> {
             for (Integer gameControllerID : gamesControllers.keySet()) {
                 Game game = gamesControllers.get(gameControllerID).getGame();
                 while (game.getNumberOfPlayers() != game.getObservable().getClients().size()) {
@@ -425,8 +456,9 @@ public class MainController implements Serializable {
 
                 // Launch thread for pinging clients
                 this.startClientsPing(game.getObservable().getClients(), gameControllerID);
+                System.out.println("thread creati");
             }
-        }).start();
+        }).start();*/
     }
 
 

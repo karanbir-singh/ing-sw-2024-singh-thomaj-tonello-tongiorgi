@@ -38,6 +38,10 @@ public class SocketPingManager implements PingManager {
      */
     private final Object lock;
 
+    private final long maxTimeoutWhenServerDown = 30;
+
+    private long timeWhenServerDown;
+
     /**
      * Constructor of this socket server ping runnable
      *
@@ -87,8 +91,16 @@ public class SocketPingManager implements PingManager {
                 // Server is down
                 boolean isServerUp = false;
 
+                this.timeWhenServerDown = System.currentTimeMillis() / 1000;
+
                 // Until server is down...
                 while (!isServerUp) {
+                    //if the server is down for more than 30 seconds, we close the clients
+                    if(System.currentTimeMillis()/ 1000 - this.timeWhenServerDown >= maxTimeoutWhenServerDown){
+                        System.exit(0);
+                    }
+
+
                     try {
                         // ...try to recreate connection with server
                         Socket serverSocket = new Socket(MainClient.SERVER_IP, MainClient.SERVER_SOCKET_PORT);

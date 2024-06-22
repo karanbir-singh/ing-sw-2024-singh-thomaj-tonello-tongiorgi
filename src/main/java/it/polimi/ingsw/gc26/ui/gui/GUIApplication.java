@@ -287,6 +287,7 @@ public class GUIApplication extends Application implements UIInterface {
     }
 
     public void openErrorPopup(String message) {
+        this.getCurrentScene().getScene().getRoot().setDisable(true);
         this.popupStage = new Stage();
         SceneInfo sceneInfo = this.getSceneInfo(SceneEnum.ERROR);
         sceneInfo.getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
@@ -295,6 +296,7 @@ public class GUIApplication extends Application implements UIInterface {
         this.popupStage.setOnCloseRequest(Event::consume);
         this.popupStage.alwaysOnTopProperty();
         this.popupStage.show();
+
     }
 
 
