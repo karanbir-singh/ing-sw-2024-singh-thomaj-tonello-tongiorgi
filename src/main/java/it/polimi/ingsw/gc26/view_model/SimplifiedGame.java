@@ -1,9 +1,7 @@
 package it.polimi.ingsw.gc26.view_model;
 
 import it.polimi.ingsw.gc26.model.game.GameState;
-import it.polimi.ingsw.gc26.model.hand.Hand;
 import it.polimi.ingsw.gc26.model.player.Pawn;
-import it.polimi.ingsw.gc26.model.player.Player;
 
 import java.io.Serializable;
 import java.util.ArrayList;

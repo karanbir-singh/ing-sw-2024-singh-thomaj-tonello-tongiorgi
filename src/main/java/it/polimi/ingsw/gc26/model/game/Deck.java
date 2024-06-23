@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.model.deck;
+package it.polimi.ingsw.gc26.model.game;
 
 import it.polimi.ingsw.gc26.model.card.Card;
 import java.io.Serializable;

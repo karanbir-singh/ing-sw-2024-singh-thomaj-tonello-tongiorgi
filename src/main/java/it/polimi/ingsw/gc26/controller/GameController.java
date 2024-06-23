@@ -6,7 +6,7 @@ import it.polimi.ingsw.gc26.model.game.CommonTable;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.game.Message;
-import it.polimi.ingsw.gc26.model.hand.Hand;
+import it.polimi.ingsw.gc26.model.player.Hand;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.PersonalBoard;
 import it.polimi.ingsw.gc26.model.player.Player;

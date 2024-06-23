@@ -1,8 +1,5 @@
 package it.polimi.ingsw.gc26.model.player;
 
-import it.polimi.ingsw.gc26.model.hand.Hand;
-import it.polimi.ingsw.gc26.model.utils.TextStyle;
-import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
 

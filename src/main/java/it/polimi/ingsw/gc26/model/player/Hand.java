@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.model.hand;
+package it.polimi.ingsw.gc26.model.player;
 
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card.MissionCard;

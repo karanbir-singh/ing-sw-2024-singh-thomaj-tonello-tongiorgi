@@ -2,7 +2,7 @@ package it.polimi.ingsw.gc26.parser;
 
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
-import it.polimi.ingsw.gc26.model.deck.Deck;
+import it.polimi.ingsw.gc26.model.game.Deck;
 import it.polimi.ingsw.gc26.utils.ParserCore;
 import org.junit.jupiter.api.Test;
 

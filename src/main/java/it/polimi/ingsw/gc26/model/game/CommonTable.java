@@ -1,7 +1,6 @@
 package it.polimi.ingsw.gc26.model.game;
 
 import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import java.io.Serializable;

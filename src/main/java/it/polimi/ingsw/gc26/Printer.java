@@ -1,6 +1,6 @@
 package it.polimi.ingsw.gc26;
 
-import it.polimi.ingsw.gc26.model.deck.Deck;
+import it.polimi.ingsw.gc26.model.game.Deck;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
