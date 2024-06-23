@@ -10,26 +10,24 @@ import it.polimi.ingsw.gc26.network.socket.SocketPingManager;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
 import it.polimi.ingsw.gc26.network.socket.server.VirtualSocketView;
-import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
-import it.polimi.ingsw.gc26.ui.gui.GUIUpdate;
 import it.polimi.ingsw.gc26.ui.tui.TUIApplication;
-import it.polimi.ingsw.gc26.ui.tui.TUIUpdate;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.io.*;
 import java.net.Socket;
-import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
+/**
+ * Main client class representing a client in the game system.
+ * Manages client identification, connection states, server communication, and user interfaces.
+ */
 public class MainClient {
     /**
      * ID of the client
@@ -255,6 +253,7 @@ public class MainClient {
 
     /**
      * Return the client's nickname
+     *
      * @return
      */
     public String getNickname() {
@@ -263,12 +262,18 @@ public class MainClient {
 
     /**
      * Set's the client's nickname
+     *
      * @param nickname
      */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
+    /**
+     * Get client's configuration from user
+     *
+     * @param args
+     */
     public static void main(String args[]) {
         // print logo
         System.out.println(asciiCodexNaturalis + "\n");
@@ -333,6 +338,13 @@ public class MainClient {
         }
     }
 
+    /**
+     * Starts rmi client
+     *
+     * @param graphicType TUI or GUI
+     * @return main client to manage the requests
+     * @throws RemoteException if the connection cannot be made
+     */
     public static MainClient startRMIClient(GraphicType graphicType) throws RemoteException {
         // Create RMI Client
         MainClient mainClient = new MainClient();
@@ -340,7 +352,7 @@ public class MainClient {
         try {
             mainClient.registry = LocateRegistry.getRegistry(SERVER_IP, RMI_SERVER_PORT);
         } catch (RemoteException e) {
-            throw new RemoteException("[ERROR]: unable to find RMI registry");
+            throw new RemoteException("Unable to find RMI registry");
         }
 
         // Get remote object
@@ -348,14 +360,14 @@ public class MainClient {
         try {
             remoteObject = mainClient.registry.lookup(remoteObjectName);
         } catch (RemoteException | NotBoundException e) {
-            throw new RemoteException("[ERROR]: unable to lookup remote object");
+            throw new RemoteException("Unable to lookup remote object");
         }
 
         mainClient.setVirtualMainController((VirtualMainController) remoteObject);
         try {
             mainClient.setVirtualView(new VirtualRMIView(mainClient.getViewController()));
         } catch (RemoteException e) {
-            throw new RemoteException("[ERROR]: unable to create virtual RMI view");
+            throw new RemoteException("Unable to create virtual RMI view");
         }
 
         // Set RMI server ping manager
@@ -364,6 +376,13 @@ public class MainClient {
         return mainClient;
     }
 
+    /**
+     * Starts socket client
+     *
+     * @param graphicType TUI or GUI
+     * @return ain client to manage the requests
+     * @throws IOException if the connection cannot be established
+     */
     public static MainClient startSocketClient(GraphicType graphicType) throws IOException {
         // Create connection with the server
         Socket serverSocket;
@@ -403,5 +422,4 @@ public class MainClient {
 
         return mainClient;
     }
-
 }

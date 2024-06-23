@@ -78,7 +78,7 @@ public class TUIApplication implements UIInterface {
             new Thread(new ClientResetTimerToServer(this.mainClient)).start();
 
         } catch (RemoteException e) {
-            ConsoleColors.printError("[ERROR]: unable to communicate with the server");
+            ConsoleColors.printError("Unable to communicate with the server");
             System.exit(-1);
         }
 

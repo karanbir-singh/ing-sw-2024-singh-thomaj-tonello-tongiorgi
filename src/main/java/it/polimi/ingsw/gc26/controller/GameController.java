@@ -85,7 +85,7 @@ public class GameController implements Serializable {
             outputStream.close();
             fileOutputStream.close();
         } catch (IOException e) {
-            ConsoleColors.printError("[ERROR]: error while saving game on file");
+            ConsoleColors.printError("Error while saving game on file");
         }
     }
 
@@ -237,16 +237,16 @@ public class GameController implements Serializable {
                             this.preparePlayersHand();
                         }
                     } else {
-                        game.sendError(playerID, "[ERROR]: pawn color not available");
+                        game.sendError(playerID, "Pawn color not available");
                     }
                 } catch (IllegalArgumentException e) {
-                    game.sendError(playerID, "[ERROR]: invalid input, retry again");
+                    game.sendError(playerID, "Invalid input, retry again");
                 }
             } else {
-                game.sendError(playerID, "[ERROR]: you have already chosen the pawn color]");
+                game.sendError(playerID, "You have already chosen the pawn color]");
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know]");
+            game.sendError(playerID, "You can't do that know]");
         }
 
         // Backup game controller
@@ -370,10 +370,10 @@ public class GameController implements Serializable {
                     }
                 }
             } else {
-                game.sendError(playerID, "[ERROR]: you have already set the secret mission");
+                game.sendError(playerID, "You have already set the secret mission");
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller
@@ -420,10 +420,10 @@ public class GameController implements Serializable {
                     }
                 }
             } else {
-                game.sendError(playerID, "[ERROR]: you have already set the secret mission");
+                game.sendError(playerID, "You have already set the secret mission");
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller
@@ -486,7 +486,7 @@ public class GameController implements Serializable {
                 }
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller
@@ -532,7 +532,7 @@ public class GameController implements Serializable {
             // Set the selected position
             personalBoard.setPosition(selectedX, selectedY, playerID);
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller
@@ -602,13 +602,13 @@ public class GameController implements Serializable {
                         // Change player state
                         player.setState(PlayerState.CARD_PLAYED, player.getID());
                     } else {
-                        game.sendError(playerID, "[ERROR]: you need to select a card");
+                        game.sendError(playerID, "You need to select a card");
                     }
                 } else {
-                    game.sendError(playerID, "[ERROR]: it's not you turn, you can't play a card");
+                    game.sendError(playerID, "It's not you turn, you can't play a card");
                 }
             } else {
-                game.sendError(playerID, "[ERROR]: you can't do that know");
+                game.sendError(playerID, "You can't do that know");
             }
         }
 
@@ -634,10 +634,10 @@ public class GameController implements Serializable {
                 // Set the selected card on the common table
                 game.getCommonTable().selectCard(cardIndex, playerID);
             } else {
-                game.sendError(playerID, "[ERROR]: it's not your turn, you can't select a card on the common table");
+                game.sendError(playerID, "It's not your turn, you can't select a card on the common table");
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller

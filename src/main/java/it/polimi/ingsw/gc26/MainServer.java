@@ -16,6 +16,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
 
+/**
+ * Main server class holding default and configurable port numbers for both Socket and RMI servers.
+ */
 public class MainServer {
     /**
      * Default port of Socket server
@@ -51,7 +54,7 @@ public class MainServer {
             System.out.println("Getting registry...");
             registry = LocateRegistry.createRegistry(RMI_SERVER_PORT);
         } catch (RemoteException e) {
-            throw new RemoteException("[ERROR]: Cannot find RMI registry");
+            throw new RemoteException("Cannot find RMI registry");
         }
 
         // Bind main controller
@@ -59,7 +62,7 @@ public class MainServer {
             System.out.println("Binding Main Controller to RMI registry...");
             registry.rebind(serverName, virtualMainController);
         } catch (RemoteException e) {
-            throw new RemoteException("[ERROR]: Main Controller binding on RMI registry failed");
+            throw new RemoteException("Main Controller binding on RMI registry failed");
         }
 
         System.out.println("Server RMI on listening...");
@@ -77,6 +80,11 @@ public class MainServer {
         new SocketServer(listenSocket, mainController).runServer();
     }
 
+    /**
+     * Get client's configuration from user
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         // Create main controller
         MainController mainController = new MainController();
@@ -171,5 +179,4 @@ public class MainServer {
             System.exit(-1);
         }
     }
-
 }

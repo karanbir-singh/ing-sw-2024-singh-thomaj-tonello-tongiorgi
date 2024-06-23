@@ -159,7 +159,6 @@ public class SecretMissionChoiceController extends SceneController implements In
 
     /**
      * Handles the event when the button is clicked. Creates the set secret mission in the server
-     * <
      */
     public void onClickConfirmButton() {
         try {
