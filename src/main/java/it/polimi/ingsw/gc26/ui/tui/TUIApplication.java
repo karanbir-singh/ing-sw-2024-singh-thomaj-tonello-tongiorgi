@@ -1,15 +1,11 @@
 package it.polimi.ingsw.gc26.ui.tui;
 
 import it.polimi.ingsw.gc26.ClientState;
+import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.game.Message;
-import it.polimi.ingsw.gc26.MainClient;
-import it.polimi.ingsw.gc26.network.PingManager;
 import it.polimi.ingsw.gc26.network.ClientResetTimerToServer;
-import it.polimi.ingsw.gc26.network.RMI.RMIPingManager;
-import it.polimi.ingsw.gc26.network.socket.SocketPingManager;
 import it.polimi.ingsw.gc26.ui.UIInterface;
-import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
 import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneController;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
@@ -17,7 +13,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.rmi.RemoteException;
@@ -26,14 +21,31 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The TUIApplication class implements the UIInterface to provide a text-based user interface for the application.
+ * It interacts with the MainClient to handle the logic for initializing and running the application.
+ */
 public class TUIApplication implements UIInterface {
+    /**
+     * The main client instance that this application interacts with.
+     */
     MainClient mainClient;
 
+    /**
+     * Initializes the application with the specified network type.
+     *
+     * @param networkType The type of network to initialize.
+     */
     @Override
     public void init(MainClient.NetworkType networkType) {
         this.start(networkType.toString());
     }
 
+    /**
+     * Sets network parameters and starts pinging the server
+     *
+     * @param args array with custom parameters
+     */
     public void start(String... args) {
         String networkType = args[0];
 
@@ -77,6 +89,11 @@ public class TUIApplication implements UIInterface {
         }
     }
 
+    /**
+     * Connects the client to the server and sets game controller
+     *
+     * @throws RemoteException if the network is now working
+     */
     @Override
     public void runConnection() throws RemoteException {
         //Initial state in CONNECTION
@@ -175,6 +192,9 @@ public class TUIApplication implements UIInterface {
         System.out.println("Game begin");
     }
 
+    /**
+     * Start with game interface
+     */
     @Override
     public void runGame() throws RemoteException {
         // Declare scanner
@@ -303,7 +323,7 @@ public class TUIApplication implements UIInterface {
                                 mainClient.getViewController().getSimplifiedModel().getView().updateViewOtherPersonalBoard(mainClient.getViewController().getSimplifiedModel().getOthersPersonalBoards().get(playerNickname));
                                 break;
                             }
-                            System.out.println(playerNickname +  "'s Personal Board not found!");
+                            System.out.println(playerNickname + "'s Personal Board not found!");
                             break;
                         case "8":
                             openChat(gameState);
@@ -350,6 +370,9 @@ public class TUIApplication implements UIInterface {
         }
     }
 
+    /**
+     * Opens with the predetermine application a pdf containing the game rules
+     */
     private void openRulebook() {
         InputStream inputStream = SceneController.class.getResourceAsStream("CODEX_Rulebook_EN.pdf");
         try {
@@ -363,20 +386,26 @@ public class TUIApplication implements UIInterface {
                 // Open the temporary file
                 Desktop.getDesktop().open(tempFile);
             } else {
-                System.err.println("Resource not found: " );
+                System.err.println("Resource not found: ");
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
+    /**
+     * Manages the chat action that can be performed by the user, such as send a new message or see previous messages
+     *
+     * @param gameState current game's state
+     * @throws RemoteException if the connection has gone down
+     */
     private void openChat(GameState gameState) throws RemoteException {
         int function = 0;
         do {
             System.out.println("1) Open Chat.\n" +
                     "2) Send new message.");
             try {
-                function = Integer.parseInt( new Scanner(System.in).nextLine());
+                function = Integer.parseInt(new Scanner(System.in).nextLine());
             } catch (Exception ex) {
                 // pass
             }
@@ -386,7 +415,7 @@ public class TUIApplication implements UIInterface {
             System.out.println("Insert the player's nickname to filter the messages: (Press enter for a all messages)");
             String playerNickname = new Scanner(System.in).nextLine();
             ArrayList<String> playersNicknames = this.mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getPlayersNicknames();
-            if ( mainClient.getViewController().getSimplifiedModel().getSimplifiedChat() == null) {
+            if (mainClient.getViewController().getSimplifiedModel().getSimplifiedChat() == null) {
                 System.out.println("No messages!");
                 return;
             }
@@ -405,6 +434,5 @@ public class TUIApplication implements UIInterface {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             mainClient.getVirtualGameController().addMessage(message, receiverNickname, this.mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
         }
-
     }
 }

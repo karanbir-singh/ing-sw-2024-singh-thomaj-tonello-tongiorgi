@@ -57,26 +57,26 @@ public class WinnerController extends SceneController implements Initializable {
      * @param simplifiedGame new simplified game
      */
     @Override
-    public void changeGUIGame(SimplifiedGame simplifiedGame){
+    public void changeGUIGame(SimplifiedGame simplifiedGame) {
         ArrayList<Label> rank = new ArrayList<>();
         title.setText("Game ended, here are the results: ");
         boolean areYouWinner = false;
-        for(String winnerNickname : simplifiedGame.getWinners()){
+        for (String winnerNickname : simplifiedGame.getWinners()) {
             Label label = new Label();
             label.setFont(new Font(rankTextDimension));
             label.setText(winnerNickname);
             rank.add(label);
-            if(this.nickname.equals(winnerNickname)){
+            if (this.nickname.equals(winnerNickname)) {
                 areYouWinner = true;
             }
         }
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             winner.getChildren().setAll(rank);
         });
 
-        if(areYouWinner){
+        if (areYouWinner) {
             status.setText("Congratulations! You won!");
-        }else{
+        } else {
             status.setText("You can do better next time!");
         }
     }
@@ -85,7 +85,7 @@ public class WinnerController extends SceneController implements Initializable {
      * Initializes the controller.
      * Initializes the background.
      *
-     * @param url the location used to resolve relative paths for the root object, or null if the location is not known
+     * @param url            the location used to resolve relative paths for the root object, or null if the location is not known
      * @param resourceBundle the resources used to localize the root object, or null if the resources are not specified
      */
     @Override
