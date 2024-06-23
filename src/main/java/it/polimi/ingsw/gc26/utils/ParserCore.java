@@ -17,9 +17,7 @@ import it.polimi.ingsw.gc26.model.card_side.mission.MissionLPattern;
 import it.polimi.ingsw.gc26.model.card_side.mission.MissionTripletPattern;
 import it.polimi.ingsw.gc26.model.deck.Deck;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
