@@ -135,7 +135,7 @@ public class SimplifiedModel {
      */
     public void setOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard, String message) {
         this.otherPersonalBoards.put(otherPersonalBoard.getNickname(), otherPersonalBoard);
-        // view.updateViewOtherPersonalBoard(otherPersonalBoard); // Uncomment if view update is desired
+        view.updateViewOtherPersonalBoard(otherPersonalBoard); // Uncomment if view update is desired
         // view.showMessage(message); // Uncomment if message display is desired
     }
 

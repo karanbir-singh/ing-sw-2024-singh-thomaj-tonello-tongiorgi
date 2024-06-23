@@ -320,7 +320,7 @@ public class TUIApplication implements UIInterface {
                             System.out.println("Insert the player's nickname owner of the board: ");
                             String playerNickname = new Scanner(System.in).nextLine();
                             if (mainClient.getViewController().getSimplifiedModel().getOthersPersonalBoards().containsKey(playerNickname)) {
-                                mainClient.getViewController().getSimplifiedModel().getView().updateViewOtherPersonalBoard(mainClient.getViewController().getSimplifiedModel().getOthersPersonalBoards().get(playerNickname));
+                                mainClient.getViewController().getSimplifiedModel().getView().showOtherPersonalBoard(playerNickname);
                                 break;
                             }
                             System.out.println(playerNickname + "'s Personal Board not found!");

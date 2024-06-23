@@ -120,9 +120,9 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @FXML
     private GridPane gridPane;
-    /**
-     * Tab containing player's personal board
-     */
+    @FXML
+    private AnchorPane personalBoardPane;
+
     @FXML
     private TabPane personalBoardTabPane;
     /**

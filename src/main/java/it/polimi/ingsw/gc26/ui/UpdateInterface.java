@@ -81,4 +81,11 @@ public interface UpdateInterface {
      * Closes the error popup, if one is displayed.
      */
     void closeErrorPopup();
+
+    /**
+     * Prints another player's personal board
+     *
+     * @param nickname other player's nickname
+     */
+    void showOtherPersonalBoard(String nickname);
 }

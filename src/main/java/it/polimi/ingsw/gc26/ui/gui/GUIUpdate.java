@@ -231,4 +231,13 @@ public class GUIUpdate implements UpdateInterface {
             this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().hide();
         });
     }
+
+    /**
+     * Method not implemented in GUI
+     *
+     * @param nickname other player's nickname
+     */
+    @Override
+    public void showOtherPersonalBoard(String nickname) {
+    }
 }

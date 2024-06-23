@@ -123,14 +123,15 @@ public class TUIUpdate implements UpdateInterface {
      */
     @Override
     public void updateViewOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
+        return;
         //clearConsole(); i do not want to hide my personal board
-        cli = new CLI(miniModel);
-        try {
-            cli.printOtherGame(otherPersonalBoard); //TODO si puà prendere nickname direttamente da la board senza parametro
-        } catch (Exception e) {
-            System.out.println("Other personal board not available yet!");
-        }
-        printOptions(getGameState());
+//        cli = new CLI(miniModel);
+//        try {
+//            cli.printOtherGame(otherPersonalBoard); //TODO si puà prendere nickname direttamente da la board senza parametro
+//        } catch (Exception e) {
+//            System.out.println("Other personal board not available yet!");
+//        }
+//        printOptions(getGameState());
 
     }
 
@@ -200,6 +201,21 @@ public class TUIUpdate implements UpdateInterface {
             System.out.print("\033[H\033[2J");
             System.out.print("\033\143");
         }
+    }
+
+    /**
+     * Prints another player's personal board
+     *
+     * @param nickname other player's nickname
+     */
+    public void showOtherPersonalBoard(String nickname) {
+        cli = new CLI(miniModel);
+        try {
+            cli.printOtherGame(miniModel.getOthersPersonalBoards().get(nickname));
+        } catch (Exception e) {
+            System.out.println("Other personal board not available yet!");
+        }
+        printOptions(getGameState());
     }
 
     /**
