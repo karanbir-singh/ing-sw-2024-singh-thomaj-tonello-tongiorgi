@@ -132,46 +132,9 @@ public class CLI {
     }
 
     public void printOtherGame(SimplifiedPersonalBoard miniPB) {
+        System.out.println("\n" + miniPB.getNickname().toUpperCase() + "'S PERSONAL BOARD:");
 
-        //SCORES
-        //TODO aggiungere gli score
-        String[][] scores;
-        //if(miniModel.getSimplifiedGame().getGameState() == GameState.GAME_STARTED ||
-        //      miniModel.getSimplifiedGame().getGameState() == GameState.END_STAGE){
-        //scores = printableScores();
-        //} else {
-        scores = new String[1][1];
-        scores[0][0] = "\t";
-        //}
-
-        //PERSONAL BOARD
-        String[][] personalBoardPrint;
-        if(miniPB != null){
-            personalBoardPrint = printablePersonalBoard(miniPB);
-        } else {
-            personalBoardPrint = new String[1][1];
-            personalBoardPrint[0][0] = "\t";
-        }
-
-        //calculate dimensions
-        int yDim =  personalBoardPrint.length  + 2;
-        int xDim = Math.max( scores[0].length + 1, personalBoardPrint[0].length);
-
-        //utils
-        int y=0;
-
-        //initialize empty matrix
-        String[][] printableGame = new String[yDim][xDim];
-        for(int i=0; i<yDim; i++){
-            for(int j=0; j<xDim; j++){
-                printableGame[i][j] = "\t";
-            }
-        }
-
-        addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
-
-
-        showPrintable(printableGame);
+        showPrintable(printablePersonalBoard(miniPB));
     }
 
     public String[][] allPrintableScores() {
@@ -640,7 +603,7 @@ public class CLI {
             y++;
         }
 
-        reverseBoard[yDim+1][0] = "\nYour resources: ";
+        reverseBoard[yDim+1][0] = "\nResources: ";
         for (Symbol s: Symbol.values()) {
             reverseBoard[yDim+1][1] = reverseBoard[yDim+1][1] + miniPB.getVisibleResources().get(s) + " " + s.name() + "   ";
         }
