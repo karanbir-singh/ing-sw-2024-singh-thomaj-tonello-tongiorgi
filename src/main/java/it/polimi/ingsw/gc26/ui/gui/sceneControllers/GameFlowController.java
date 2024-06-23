@@ -4,10 +4,7 @@ import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.ui.gui.PawnsCoords;
-import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
-import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
+import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -315,6 +312,7 @@ public class GameFlowController extends SceneController implements Initializable
         for (Tab tab : personalBoardTabPane.getTabs()) {
             if (tab.getText().equals(otherPersonalBoard.getNickname())) {
                 exist = true;
+                consideredTab = tab;
                 otherScrollPane = (ScrollPane) tab.getContent();
                 otherGridPane = (GridPane) otherScrollPane.getContent();
                 otherScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -328,7 +326,7 @@ public class GameFlowController extends SceneController implements Initializable
         if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
-            consideredTab.setId("1");
+            //consideredTab.setText("1");
             personalBoardTabPane.getTabs().add(consideredTab);
             otherScrollPane = new ScrollPane();
             otherScrollPane.setHvalue(0.5);
@@ -356,9 +354,16 @@ public class GameFlowController extends SceneController implements Initializable
         Pawn pawn;
         for (Tab tab : personalBoardTabPane.getTabs()) {
             pawn = simplifiedGame.getPawnsSelected().get(tab.getText());
-            if (pawn != null) {
-                tab.getStyleClass().add(pawn.toString());
+            if(pawn != null) {
+                tab.setId(pawn.name());
             }
+        }
+    }
+
+    @Override
+    public void changeGUIPlayer (SimplifiedPlayer simplifiedPlayer) {
+        if(simplifiedPlayer.getPawnColor() != null) {
+            personalBoardTabPane.getTabs().getFirst().setId(simplifiedPlayer.getPawnColor().name());
         }
     }
 
@@ -371,13 +376,11 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        this.personalBoardTabPane.getTabs().getFirst().setId("0");
-
         this.handImages = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             ImageView imageView = new ImageView();
             this.setCardImageParameters(imageView, i);
+            imageView.getStyleClass().add("cardHover");
             makeDraggable(imageView, playablePositions);
             imageView.setOnMouseClicked(this::onHandCardClicked);
             handImages.add(imageView);
@@ -393,6 +396,7 @@ public class GameFlowController extends SceneController implements Initializable
             ImageView imageView = new ImageView();
             this.setCardImageParameters(imageView, i);
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageView.getStyleClass().add("cardHover");
             this.resourceCommonTableImages.add(imageView);
         }
 
@@ -401,6 +405,7 @@ public class GameFlowController extends SceneController implements Initializable
             ImageView imageView = new ImageView();
             this.setCardImageParameters(imageView, i);
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageView.getStyleClass().add("cardHover");
             this.goldCommonTableImages.add(imageView);
         }
 
@@ -424,6 +429,7 @@ public class GameFlowController extends SceneController implements Initializable
         scoreBoardButton.setOnAction(this::toggleScoreBoard);
         buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
+        buttonSetup(rulesIcon, rulesButton);
 
 
         //page layout and dimensions bindings
@@ -476,9 +482,12 @@ public class GameFlowController extends SceneController implements Initializable
      */
     private void addImage(ImageView imageView, int x, int y, GridPane gridPane) {
         setCardImageParameters(imageView, 0);
-        Platform.runLater(() -> {
-            gridPane.add(imageView, x, y);
-        });
+        //TODO capire perché a volte è nullo
+        if(gridPane != null) {
+            Platform.runLater(() -> {
+                gridPane.add(imageView, x, y);
+            });
+        }
     }
 
     /**
@@ -520,7 +529,8 @@ public class GameFlowController extends SceneController implements Initializable
         imageView.setOnMouseReleased(event -> {
             for (ImageView target : targets) {
                 //control if is a target and if the tab is the right one
-                if (isInTargetSpot(imageView, target) && this.personalBoardTabPane.getSelectionModel().getSelectedItem().getId().equals("0")) {
+                if (isInTargetSpot(imageView, target) && this.personalBoardTabPane.getSelectionModel().getSelectedItem().equals(
+                        this.personalBoardTabPane.getTabs().getFirst())) {
 
                     try {
                         int row = GridPane.getRowIndex(target);

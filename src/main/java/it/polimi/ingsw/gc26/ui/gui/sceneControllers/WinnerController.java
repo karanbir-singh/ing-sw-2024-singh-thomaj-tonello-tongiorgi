@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -50,6 +51,15 @@ public class WinnerController extends SceneController implements Initializable {
      */
     @FXML
     private VBox winner;
+    /**
+     * Image of player final result
+     */
+    ImageView winnerOrLoser;
+    /**
+     * Box containing the final result
+     */
+    @FXML
+    private VBox results;
 
     /**
      * Modifies the color of each tab for every player that has selected its pawn
@@ -59,26 +69,51 @@ public class WinnerController extends SceneController implements Initializable {
     @Override
     public void changeGUIGame(SimplifiedGame simplifiedGame) {
         ArrayList<Label> rank = new ArrayList<>();
-        title.setText("Game ended, here are the results: ");
+        Label title = new Label();
+        Label status = new Label();
         boolean areYouWinner = false;
-        for (String winnerNickname : simplifiedGame.getWinners()) {
+
+        if(simplifiedGame.getWinners().size() > 1) {
+            title.setText("Winners:");
+        } else {
+            title.setText("Winner:");
+        }
+        title.getStyleClass().add("winnerTitle");
+        rank.add(title);
+
+        for(String winnerNickname : simplifiedGame.getWinners()){
             Label label = new Label();
-            label.setFont(new Font(rankTextDimension));
+            Label score = new Label();
             label.setText(winnerNickname);
+            label.getStyleClass().add("winnerName");
+            score.setText("score: " + simplifiedGame.getScores().get(winnerNickname) + " points");
+            score.getStyleClass().add("winnerLabel");
             rank.add(label);
-            if (this.nickname.equals(winnerNickname)) {
+            rank.add(score);
+            if(this.nickname.equals(winnerNickname)){
                 areYouWinner = true;
             }
         }
-        Platform.runLater(() -> {
-            winner.getChildren().setAll(rank);
+
+        if(areYouWinner){
+            winnerOrLoser.setImage(new Image(getClass().getResource("images/labels/WinnerLabel.png").toExternalForm()));
+            status.setText("\n\nCongratulations!");
+            status.getStyleClass().add("winnerLabel");
+            rank.add(status);
+        }else{
+            winnerOrLoser.setImage(new Image(getClass().getResource("images/labels/LoserLabel.png").toExternalForm()));
+            status.setText("\n\nNext time you will do better!\nYour score: " + simplifiedGame.getScores().get(this.nickname) + " points");
+            status.getStyleClass().add("winnerLabel");
+            rank.add(status);
+        }
+
+        winnerOrLoser.getStyleClass().add("winnerOrLoser");
+
+        Platform.runLater(()->{
+            results.getChildren().setAll(rank);
+            results.getStyleClass().add("winnerBox");
         });
 
-        if (areYouWinner) {
-            status.setText("Congratulations! You won!");
-        } else {
-            status.setText("You can do better next time!");
-        }
     }
 
     /**

@@ -49,6 +49,16 @@ public class PawnSelectionController extends SceneController implements Initiali
      */
     @FXML
     public VBox centerVBox, rightVBox;
+    /**
+     * Button to trigger rules pdf
+     */
+    @FXML
+    private Button rulesButton;
+    /**
+     * Icon for rules button
+     */
+    private final ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
+
 
 
     /**
@@ -78,6 +88,7 @@ public class PawnSelectionController extends SceneController implements Initiali
         image.setFitWidth(100);
         image.setFitHeight(100);
         button.setGraphic(image);
+        button.getStyleClass().add("pawn");
     }
 
     /**
@@ -94,6 +105,7 @@ public class PawnSelectionController extends SceneController implements Initiali
         //buttons setup
         buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
+        buttonSetup(rulesIcon, rulesButton);
     }
 
     /**
