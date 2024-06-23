@@ -56,8 +56,7 @@ public class LoginController extends SceneController implements Initializable {
             status.setVisible(true);
         } else {
             try {
-                this.setNickName(nicknameTXT.getText());
-                this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), this.nickname, this.mainClient.getClientState());
+                this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), nicknameTXT.getText(), this.mainClient.getClientState());
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
