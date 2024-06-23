@@ -120,7 +120,7 @@ public class CommonTable implements Serializable {
                 this.observable.notifyError("Select a position!", clientID);
                 return;
         }
-        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(resourceDeck.getTopCard(), goldDeck.getTopCard(), commonMissions, resourceCards, goldCards, cardIndex), "Card selected on common table");
+        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(resourceDeck.getTopCard(), goldDeck.getTopCard(), commonMissions, resourceCards, goldCards, cardIndex), "Card selected on common table", clientID);
     }
 
     /**

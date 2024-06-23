@@ -1,8 +1,10 @@
 package it.polimi.ingsw.gc26.network;
 
 import it.polimi.ingsw.gc26.model.game.Chat;
+import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.util.Pair;
+
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -67,6 +69,30 @@ public class ModelObservable implements Serializable {
     }
 
     /**
+     * Notifies the client about an update in the model's game
+     *
+     * @param simplifiedGame simplified game containing only the information needed by the client
+     * @param currentPlayer current player
+     */
+    public void notifyUpdateGame(SimplifiedGame simplifiedGame, Player currentPlayer) {
+        for (Pair client : this.clients) {
+            if (client.getValue().equals(currentPlayer.getID())) {
+                try {
+                    ((VirtualView) client.getKey()).updateGame(simplifiedGame, "It's you turn now!");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    ((VirtualView) client.getKey()).updateGame(simplifiedGame, "It's " + currentPlayer.getNickname() + " turn now!");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
      * Notifies the client about an update in the model's common table
      *
      * @param simplifiedCommonTable simplified common table containing only the information needed by the client
@@ -78,6 +104,26 @@ public class ModelObservable implements Serializable {
                 ((VirtualView) client.getKey()).updateCommonTable(simplifiedCommonTable, message);
             } catch (RemoteException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Notifies the client about an update in the model's common table
+     *
+     * @param simplifiedCommonTable simplified common table containing only the information needed by the client
+     * @param message information to show during the update
+     * @param clientID only receiver of update
+     */
+    public void notifyUpdateCommonTable(SimplifiedCommonTable simplifiedCommonTable, String message, String clientID) {
+        for (Pair client : this.clients) {
+            if (client.getValue().equals(clientID)) {
+                try {
+                    ((VirtualView) client.getKey()).updateCommonTable(simplifiedCommonTable, message);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                break;
             }
         }
     }

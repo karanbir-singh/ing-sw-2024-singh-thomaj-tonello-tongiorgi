@@ -41,7 +41,6 @@ public class ClientResetTimerToServer implements Runnable {
                 this.mainClient.getVirtualMainController().resetServerTimer(
                         this.mainClient.getClientID());
             } catch (RemoteException e) {
-                System.out.println("Network failure!");
             }
         }
     }

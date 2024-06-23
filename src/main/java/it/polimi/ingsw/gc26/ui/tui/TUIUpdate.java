@@ -186,7 +186,6 @@ public class TUIUpdate implements UpdateInterface {
     @Override
     public void showError(String message) {
         System.err.println("[ERROR]: " + message);
-        printOptions(getGameState());
     }
 
     /**
@@ -291,8 +290,10 @@ public class TUIUpdate implements UpdateInterface {
     }
 
     /**
-     * Not implemented method
+     * Print options after the connection is restored
      */
     public void closeErrorPopup() {
+        System.out.println("Server is up, you can restart to play");
+        TUIUpdate.printOptions(miniModel.getSimplifiedGame().getGameState());
     }
 }

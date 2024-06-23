@@ -210,7 +210,7 @@ public class Game implements Serializable {
             pawnsSelected.put(player.getNickname(), player.getPawnColor());
         }
         String message = "Current player has changed!";
-        this.observable.notifyUpdateGame(new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected), message);
+        this.observable.notifyUpdateGame(new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected), currentPlayer);
         // TODO update simplified player
     }
 
@@ -307,7 +307,7 @@ public class Game implements Serializable {
                 message = "Waiting players for placing starter card...";
                 break;
             case WAITING_PAWNS_SELECTION:
-                message = "Waiting players for selecting pawns...\n" + getAvailablePawns();
+                message = "Waiting players for selecting pawns...";
                 break;
             case HAND_PREPARATION:
                 message = "Prepare players hand...";
@@ -354,7 +354,11 @@ public class Game implements Serializable {
         for (Player player : this.players) {
             pawnsSelected.put(player.getNickname(), player.getPawnColor());
         }
-        this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState, currentPlayerNickname, points, nicknameWinners, this.availablePawns, pawnsSelected), message);
+        if (gameState.equals(GameState.GAME_STARTED)) {
+            this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState, currentPlayerNickname, points, nicknameWinners, this.availablePawns, pawnsSelected), currentPlayer);
+        } else {
+            this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState, currentPlayerNickname, points, nicknameWinners, this.availablePawns, pawnsSelected), message);
+        }
     }
 
     /**
