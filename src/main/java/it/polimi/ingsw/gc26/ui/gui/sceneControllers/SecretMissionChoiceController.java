@@ -115,7 +115,7 @@ public class SecretMissionChoiceController extends SceneController implements In
         try {
             this.mainClient.getVirtualGameController().setSecretMission(this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait");
         }
     }
 

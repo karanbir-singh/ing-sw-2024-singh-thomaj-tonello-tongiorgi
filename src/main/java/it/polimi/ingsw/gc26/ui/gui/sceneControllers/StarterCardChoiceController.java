@@ -112,7 +112,7 @@ public class StarterCardChoiceController extends SceneController implements Init
         try {
             this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait");
         }
         status.setText("Wow you are so fast, now wait other players!");
     }
@@ -124,7 +124,7 @@ public class StarterCardChoiceController extends SceneController implements Init
                 this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
 
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                System.out.println("Connection problem, please wait");
             }
         }
     }
@@ -265,7 +265,7 @@ public class StarterCardChoiceController extends SceneController implements Init
         try {
             this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
         } catch (RemoteException e) {
-            System.err.println("RemoteException while sending message!");
+            System.out.println("Connection problem, please wait");
         }
         newTextField.clear();
 

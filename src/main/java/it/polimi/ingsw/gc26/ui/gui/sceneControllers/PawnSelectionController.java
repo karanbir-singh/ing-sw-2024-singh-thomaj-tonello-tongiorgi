@@ -75,7 +75,7 @@ public class PawnSelectionController extends SceneController implements Initiali
         try {
             this.mainClient.getVirtualGameController().choosePawnColor(pawnColor, this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait");
         }
     }
 

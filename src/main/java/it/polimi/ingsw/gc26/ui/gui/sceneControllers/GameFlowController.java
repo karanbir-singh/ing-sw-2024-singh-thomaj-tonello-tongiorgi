@@ -447,7 +447,7 @@ public class GameFlowController extends SceneController implements Initializable
                         this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
                         this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
                     } catch (RemoteException e) {
-                        // throw new RuntimeException(e);
+                        System.out.println("Connection problem, please wait");
                     }
 
                     break;

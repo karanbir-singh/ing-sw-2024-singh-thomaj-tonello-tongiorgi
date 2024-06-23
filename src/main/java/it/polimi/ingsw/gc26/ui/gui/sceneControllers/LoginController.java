@@ -59,7 +59,7 @@ public class LoginController extends SceneController implements Initializable {
                 this.setNickName(nicknameTXT.getText());
                 this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), this.nickname, this.mainClient.getClientState());
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                System.out.println("Connection problem, please wait");
             }
         }
     }
