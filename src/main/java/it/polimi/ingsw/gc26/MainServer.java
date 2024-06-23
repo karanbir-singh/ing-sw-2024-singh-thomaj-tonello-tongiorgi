@@ -78,6 +78,9 @@ public class MainServer {
     }
 
     public static void main(String[] args) {
+        //set a rmi property
+        System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2000");
+
         // Create main controller
         MainController mainController = new MainController();
 

@@ -36,6 +36,7 @@ public class TUIApplication implements UIInterface {
 
     public void start(String... args) {
         String networkType = args[0];
+        System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2000");
 
         if (MainClient.NetworkType.valueOf(networkType) == MainClient.NetworkType.rmi) {
             try {

@@ -50,6 +50,9 @@ public class GUIApplication extends Application implements UIInterface {
         // Get value from args
         String networkType = getParameters().getUnnamed().get(0);
 
+        //To try with a network
+        System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2000");
+
         //lanchaure prima startSocketClient e startRMiCLient
         if (MainClient.NetworkType.valueOf(networkType) == MainClient.NetworkType.rmi) {
             try {
