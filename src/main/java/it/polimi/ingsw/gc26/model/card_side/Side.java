@@ -155,7 +155,7 @@ abstract public class Side implements Serializable {
     /**
      * Sets side's symbol
      *
-     * @param sideSymbol
+     * @param sideSymbol new side symbol
      */
     public void setSideSymbol(Symbol sideSymbol) {
         this.sideSymbol = sideSymbol;
@@ -272,7 +272,7 @@ abstract public class Side implements Serializable {
     /**
      * Sets the path representing the image
      *
-     * @param imagePath
+     * @param imagePath path to corresponding image
      */
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;

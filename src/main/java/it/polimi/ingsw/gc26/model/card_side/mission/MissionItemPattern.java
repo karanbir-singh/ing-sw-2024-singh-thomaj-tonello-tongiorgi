@@ -18,6 +18,7 @@ public class MissionItemPattern extends MissionCardFront implements Serializable
      * Creates a new instance of MissionItemPattern
      *
      * @param type represent which item combination is needed to this card give points
+     * @param imagePath path to corresponding image
      */
     public MissionItemPattern(int type, String imagePath) {
         setType(type);

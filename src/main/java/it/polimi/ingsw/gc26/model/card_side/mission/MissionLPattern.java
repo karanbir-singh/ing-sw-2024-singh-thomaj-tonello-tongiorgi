@@ -19,6 +19,7 @@ public class MissionLPattern extends MissionCardFront implements Serializable {
      * Creates a new instance of MissionLPattern
      *
      * @param type represent which L combination is needed to this card give points
+     * @param imagePath path to corresponding image
      */
     public MissionLPattern(int type, String imagePath) {
         setType(type);

@@ -66,12 +66,28 @@ public class MainClient {
     /**
      * User interface types
      */
-    public enum GraphicType {tui, gui}
+    public enum GraphicType {
+        /**
+         * terminal interface
+         */
+        tui,
+        /**
+         * graphical interface
+         */
+        gui}
 
     /**
      * Client view types
      */
-    public enum NetworkType {rmi, socket}
+    public enum NetworkType {
+        /**
+         * rmi connection
+         */
+        rmi,
+        /**
+         * socket connection
+         */
+        socket}
 
     /**
      * Remote interface of the main controller
@@ -98,6 +114,9 @@ public class MainClient {
      */
     public final Object lock;
 
+    /**
+     * First string to be printed as welcome message
+     */
     public static String asciiCodexNaturalis = "\n" +
             "░█████╗░░█████╗░██████╗░███████╗██╗░░██╗  ███╗░░██╗░█████╗░████████╗██╗░░░██╗██████╗░░█████╗░██╗░░░░░██╗░██████╗\n" +
             "██╔══██╗██╔══██╗██╔══██╗██╔════╝╚██╗██╔╝  ████╗░██║██╔══██╗╚══██╔══╝██║░░░██║██╔══██╗██╔══██╗██║░░░░░██║██╔════╝\n" +
@@ -254,7 +273,7 @@ public class MainClient {
     /**
      * Return the client's nickname
      *
-     * @return
+     * @return nickname
      */
     public String getNickname() {
         return nickname;

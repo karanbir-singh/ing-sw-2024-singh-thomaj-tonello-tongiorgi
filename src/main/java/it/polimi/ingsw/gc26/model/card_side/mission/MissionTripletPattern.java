@@ -18,6 +18,7 @@ public class MissionTripletPattern extends MissionCardFront implements Serializa
      * Creates a new instance of MissionTripletPattern
      *
      * @param type represent which Triplet combination is needed to this card give points
+     * @param imagePath path to corresponding image
      */
     public MissionTripletPattern(int type, String imagePath) {
         setType(type);

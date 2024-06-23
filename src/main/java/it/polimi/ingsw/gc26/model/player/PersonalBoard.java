@@ -67,6 +67,9 @@ public class PersonalBoard implements Serializable {
 
     /**
      * The constructor initializes everything: the score, the resource, missions occupiedPositions , playablePositions, blockedPositions.
+     *
+     * @param observable observable to notify client
+     * @param nickname personal board owner
      */
     public PersonalBoard(ModelObservable observable, String nickname) {
         score = 0;
@@ -108,6 +111,7 @@ public class PersonalBoard implements Serializable {
      * Sets the secret mission
      *
      * @param secretMission card that you want to set
+     * @param clientID unique client's id
      */
     public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {

@@ -22,6 +22,7 @@ public class Chat implements Serializable {
 
     /**
      * Initializes the chat with an empty ArrayList
+     * @param observable observable to notify client
      */
     public Chat(ModelObservable observable) {
         this.observable = observable;

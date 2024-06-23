@@ -62,6 +62,7 @@ public class CommonTable implements Serializable {
      * @param goldDeck     gold cards deck
      * @param starterDeck  initial cards deck
      * @param missionDeck  mission cards deck
+     * @param observable observable to notify client
      */
     public CommonTable(Deck resourceDeck, Deck goldDeck, Deck starterDeck, Deck missionDeck, ModelObservable observable) {
         commonMissions = new ArrayList<>();
@@ -80,6 +81,7 @@ public class CommonTable implements Serializable {
      * Sets the attribute selectedX and selectedY of the chosen card to select
      *
      * @param cardIndex index of the selected card on the common table
+     * @param clientID client unique ID
      */
     public void selectCard(int cardIndex, String clientID) {
         // Check if the card index are correct
@@ -157,6 +159,7 @@ public class CommonTable implements Serializable {
     /**
      * Removes the selected card from the table and returns it
      *
+     * @param clientID client unique ID
      * @return removed card
      */
     public Card removeSelectedCard(String clientID) {

@@ -275,6 +275,7 @@ public class MainController implements Serializable {
     /**
      * Adds a player into the waiting list, if exists
      *
+     * @param client view to call methods in the client side
      * @param nickname Nickname of the player who is joining the waiting list
      */
     public void joinWaitingList(VirtualView client, String nickname) {
@@ -378,8 +379,8 @@ public class MainController implements Serializable {
     /**
      * Reconstruct every game controller from the disk
      *
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @throws IOException if connection is not restored
+     * @throws ClassNotFoundException if class is not found
      */
     public void recreateGames() throws IOException, ClassNotFoundException {
         for (Integer gameControllerID : gamesControllers.keySet()) {

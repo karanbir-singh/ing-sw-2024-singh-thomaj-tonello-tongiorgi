@@ -40,9 +40,9 @@ public enum Pawn implements Serializable {
     }
 
     /**
-     * This method returm the pawn's font color.
+     * This method return the pawn's font color.
      *
-     * @return
+     * @return color ascii
      */
     public String getFontColor() {
         return this.fontColor;

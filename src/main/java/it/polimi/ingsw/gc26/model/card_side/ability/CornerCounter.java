@@ -22,6 +22,7 @@ public class CornerCounter extends GoldCardFront implements Serializable {
      * @param DOWNLEFT           Symbol in the down left corner.
      * @param UPRIGHT            Symbol in the up right corner.
      * @param DOWNRIGHT          Symbol in the down right corner.
+     * @param imagePath path to corresponding image
      */
     public CornerCounter(Symbol sideSymbol, Map<Symbol, Integer> requestedResources, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, String imagePath) {
         super(sideSymbol, requestedResources, 0, UPLEFT, DOWNLEFT, UPRIGHT, DOWNRIGHT, imagePath);

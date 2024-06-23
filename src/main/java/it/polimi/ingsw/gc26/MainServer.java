@@ -83,7 +83,7 @@ public class MainServer {
     /**
      * Get client's configuration from user
      *
-     * @param args
+     * @param args main args
      */
     public static void main(String[] args) {
         // Create main controller

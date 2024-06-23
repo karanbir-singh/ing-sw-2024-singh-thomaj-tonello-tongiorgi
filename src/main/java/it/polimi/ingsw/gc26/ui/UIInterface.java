@@ -18,11 +18,12 @@ public interface UIInterface {
     /**
      * Connects the client to the server and sets game controller
      *
-     * @throws RemoteException if the network is now working
+     * @throws RemoteException if the network is not working
      */
     void runConnection() throws RemoteException;
     /**
      * Start with game interface
+     * @throws RemoteException if the network is not working
      */
     void runGame() throws RemoteException;
 }

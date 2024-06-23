@@ -59,6 +59,7 @@ public class GameController implements Serializable {
      * Initializes the game (provided by the main controller)
      *
      * @param game the object that represents the game
+     * @param ID game unique identifier to recreate or destroy de game
      */
     public GameController(Game game, int ID) {
         this.game = game;

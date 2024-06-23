@@ -573,6 +573,7 @@ abstract public class SceneController {
 
     /**
      * Opens the PDF containing the game's rule
+     * @param actionEvent event that triggers the action
      */
     public void openRulebook(ActionEvent actionEvent) {
         Platform.runLater(() -> {

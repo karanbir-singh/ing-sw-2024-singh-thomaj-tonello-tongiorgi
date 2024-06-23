@@ -66,7 +66,7 @@ public class LoginController extends SceneController implements Initializable {
 
     /**
      * Displayes message from the server
-     * @param message
+     * @param message string to be displayed
      */
     public void setStatus(String message) {
         this.status.setText(message);

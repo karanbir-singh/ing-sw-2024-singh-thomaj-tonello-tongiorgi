@@ -25,7 +25,7 @@ public class ConnectionRequest implements MainRequest {
     /**
      * Creates the new request.
      *
-     * @param client
+     * @param client client view to call methods in its side
      * @param nickname client's nickname to be set
      * @param priority integer between zero and two. The higher the number, the higher the priority is.
      */

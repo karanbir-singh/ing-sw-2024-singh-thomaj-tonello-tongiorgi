@@ -73,6 +73,7 @@ public class Game implements Serializable {
      * Setups the games
      *
      * @param players list of players of the game
+     * @param clients clients in the current game
      */
     public Game(ArrayList<Player> players, ArrayList<VirtualView> clients) {
         this.numberOfPlayers = players.size();
