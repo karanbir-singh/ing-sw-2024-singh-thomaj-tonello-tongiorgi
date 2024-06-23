@@ -264,7 +264,7 @@ public class TUIUpdate implements UpdateInterface {
                         "4) Exit game.\n" +
                         "5) Open rulebook.");
                 break;
-            case GAME_STARTED:
+            case GAME_STARTED, END_STAGE:
                 System.out.println("" +
                         "1) Select a card.\n" +
                         "2) Turn selected card side.\n" +
@@ -277,7 +277,7 @@ public class TUIUpdate implements UpdateInterface {
                         "9) Exit game.\n" +
                         "10) Open rulebook.");
                 break;
-            case END_STAGE:
+            case WINNER:
                 System.out.println("" +
                         "1) Open chat.\n" +
                         "2) Exit game.\n" +

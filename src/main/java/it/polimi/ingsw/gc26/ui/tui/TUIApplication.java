@@ -205,14 +205,21 @@ public class TUIApplication implements UIInterface {
         // Infinite loop
         while (true) {
             int cardIndex;
-            String option = scan.nextLine();
-
             GameState gameState;
             try {
                 gameState = this.mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getGameState();
             } catch (NullPointerException e) {
                 gameState = GameState.WAITING_STARTER_CARD_PLACEMENT;
             }
+            if (gameState == GameState.WINNER) {
+                System.out.println("Winners are:");
+                int numberWinner = 0;
+                for (String winner: mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners()) {
+                    System.out.println(numberWinner + ") " + winner);
+                    numberWinner++;
+                }
+            }
+            String option = scan.nextLine();
             if (!mainClient.getPingManager().isServerUp()) {
                 System.out.println("Please wait for the connection to be restored!");
                 continue;
@@ -371,11 +378,6 @@ public class TUIApplication implements UIInterface {
                     }
                     break;
                 case WINNER:
-                    System.out.println("Winners are:");
-                    int numberWinner = 0;
-                    for (String winner: mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners()) {
-                        System.out.println(String.valueOf(numberWinner) + ") " + winner);
-                    }
                     switch (option) {
                         case "1":
                             openChat(gameState);
