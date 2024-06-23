@@ -11,7 +11,10 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,63 +33,168 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This abstract controller contains methods and attributes used by all the controllers.
+ * It contains the methods to update the chat and set the common layout.
+ */
 abstract public class SceneController {
+    /**
+     * The main client associated with this controller
+     */
     public MainClient mainClient;
+    /**
+     * The nickname of the user
+     */
     public String nickname;
+    /**
+     * The background image for the game scene.
+     */
     private Image gameBackground = new Image(getClass().getResource("images/game-background.png").toExternalForm());
-
+    /**
+     * A map to hold chat windows identified by their names
+     */
     private HashMap<String, ScrollPane> chats = new HashMap<>();
+    /**
+     * Tab pane to display different chat tabs
+     */
     @FXML
     public TabPane chatTabPane;
+    /**
+     * The left panel HBox containing the chat and scoreboard
+     */
     @FXML
     public HBox HBoxLeftPanel;
+    /**
+     * The anchor pane to hold chat related components
+     */
     @FXML
     public AnchorPane anchorPaneChat;
+    /**
+     * Button to toggle chat visibility
+     */
     @FXML
     public Button chatButton;
+    /**
+     * Flag to track the visibility state of the chat
+     */
     protected boolean chatIsVisible = false;
+    /**
+     * Flag to track the creation of the chat tabs
+     */
     private boolean chatHasBeenCreated = false;
+    /**
+     * Chat icon
+     */
+    public ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
 
+    /**
+     * Sets main client reference
+     *
+     * @param mainClient
+     */
     public void setMainClient(MainClient mainClient) {
         this.mainClient = mainClient;
     }
 
+    /**
+     * Sets player's nickname
+     *
+     * @param nickname string != ""
+     */
     public void setNickName(String nickname) {
         this.nickname = nickname;
     }
 
+    /**
+     * Return player's nickname
+     *
+     * @return string != ""
+     */
     public String getNickName() {
         return this.nickname;
     }
 
+    /**
+     * Updates images in common table with the new values in simplified common table
+     *
+     * @param simplifiedCommonTable new common table
+     */
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
     }
 
+    /**
+     * Updates player information
+     *
+     * @param simplifiedPlayer new simplified player
+     */
     public void changeGUIPlayer(SimplifiedPlayer simplifiedPlayer) {
     }
 
+    /**
+     * Updates hand images with the new value in simplified hand
+     *
+     * @param simplifiedHand new player's hand
+     */
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
     }
 
+    /**
+     * Updates secret hand images with the new ones in the update hand
+     *
+     * @param simplifiedSecretHand new hand
+     */
     public void changeGUISecretHand(SimplifiedHand simplifiedSecretHand) {
     }
 
+    /**
+     * Updates cards drawn in the personal board with the new cards.
+     *
+     * @param personalBoard new player's personal board
+     */
     public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard) {
     }
 
+    /**
+     * Updates the personal board of another player
+     *
+     * @param otherPersonalBoard other player's personal board
+     */
     public void changeGUIotherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
     }
 
+    /**
+     * Modifies the color of each tab for every player that has selected its pawn
+     *
+     * @param simplifiedGame new simplified game
+     */
     public void changeGUIGame(SimplifiedGame simplifiedGame) {
     }
 
+    /**
+     * Adds a message in the box where the messages from the server are displayed.
+     *
+     * @param messageFromServer new info message
+     * @param isErrorMessage    if it is an error message, it will be displayed with red font
+     */
     public void addMessageServerDisplayer(String messageFromServer, boolean isErrorMessage) {
     }
 
+    /**
+     * Updates points in the score board
+     *
+     * @param scores        map containing the updated scores
+     * @param pawnsSelected pawns that have been selected by players
+     */
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
     }
 
-    // common layout
+    /**
+     * Sets styles and binding to base panes
+     *
+     * @param rootPane
+     * @param rootBorder
+     * @param background
+     */
     public void pageBindings(AnchorPane rootPane, BorderPane rootBorder, ImageView background) {
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             rootBorder.setPrefHeight(newVal.doubleValue());
@@ -100,7 +208,12 @@ abstract public class SceneController {
         setBackground(rootPane, background);
     }
 
-
+    /**
+     * Sets styles for generic card
+     *
+     * @param rootBorder
+     * @param cards
+     */
     public void cardsLayout(BorderPane rootBorder, ArrayList<ImageView> cards) {
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
             for (ImageView card : cards) {
@@ -109,6 +222,13 @@ abstract public class SceneController {
         });
     }
 
+    /**
+     * Sets styles for generic hand
+     *
+     * @param rootBorder
+     * @param handCards
+     * @param handPane
+     */
     public void handLayout(BorderPane rootBorder, ArrayList<ImageView> handCards, AnchorPane handPane) {
         double spacing = 20.0;
         handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
@@ -130,6 +250,11 @@ abstract public class SceneController {
         });
     }
 
+    /**
+     * Adds the effect of glow to a generic card
+     *
+     * @param card card to be set the effect
+     */
     public void makeGlow(ImageView card) {
         DropShadow glow = new DropShadow();
         glow.setColor(Color.CORNSILK);
@@ -140,6 +265,12 @@ abstract public class SceneController {
         card.setEffect(glow);
     }
 
+    /**
+     * Sets styles for generic button
+     *
+     * @param icon   button's icon
+     * @param button button to set styles
+     */
     public void buttonSetup(ImageView icon, Button button) {
         double iconDimension = 30;
         double buttonDim = 50;
@@ -154,6 +285,12 @@ abstract public class SceneController {
         button.getStyleClass().add("buttonClose");
     }
 
+    /**
+     * Sets a new background to the root pane
+     *
+     * @param rootPane   scene's root pane
+     * @param background new background
+     */
     public void setBackground(AnchorPane rootPane, ImageView background) {
         double initialImageWidth = background.getImage().getWidth();
         double initialImageHeight = background.getImage().getHeight();
@@ -170,6 +307,15 @@ abstract public class SceneController {
         });
     }
 
+    /**
+     * Updates viewport when the dimension of the application changes.
+     *
+     * @param paneWidth
+     * @param paneHeight
+     * @param background
+     * @param initialImageWidth
+     * @param initialImageHeight
+     */
     public void updateViewport(double paneWidth, double paneHeight, ImageView background, double initialImageWidth, double initialImageHeight) {
         double viewportWidth = Math.min(initialImageWidth, paneWidth);
         double viewportHeight = Math.min(initialImageHeight, paneHeight);
@@ -180,8 +326,13 @@ abstract public class SceneController {
         background.setViewport(new Rectangle2D(x, y, viewportWidth, viewportHeight));
     }
 
-    // chat methods
 
+    /**
+     * Adds a message in chat from the player itself
+     *
+     * @param message new message
+     * @param sender  nickname sender
+     */
     public void addMessageFromSender(String message, String sender) {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.BASELINE_RIGHT);
@@ -203,6 +354,12 @@ abstract public class SceneController {
         });
     }
 
+    /**
+     * Creates one chat with each player and the group chat
+     *
+     * @param simplifiedGame updated game
+     * @param nickname       nickname player itself
+     */
     public void createChats(SimplifiedGame simplifiedGame, String nickname) {
         if (!chatHasBeenCreated) {
             this.nickname = nickname;
@@ -216,6 +373,11 @@ abstract public class SceneController {
         }
     }
 
+    /**
+     * Creates a new chat tab for a player
+     *
+     * @param nickname nickname player new chat
+     */
     public void createChatTab(String nickname) {
         Tab newTab = new Tab();
         newTab.setText(nickname);
@@ -273,7 +435,13 @@ abstract public class SceneController {
         chats.put(nickname, newScrollPane);
     }
 
-
+    /**
+     * Updates chat adding the last message received
+     * If the last messages comes from another player, it adds the new message on the left side, but if it is a message
+     * from the player itself, the new message is added on the right side
+     *
+     * @param simplifiedChat updated chat
+     */
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();
         if (!newMessage.getSender().getNickname().equals(this.nickname)) {
@@ -289,16 +457,35 @@ abstract public class SceneController {
         }
     }
 
+    /**
+     * Return true if the receiver nickname it has been explicit
+     *
+     * @param message new message in chat
+     * @return true if the nickname is present
+     */
     private boolean isReceiverUnknown(Message message) {
         return message.getReceiver() == null || message.getReceiver().getNickname().isEmpty();
     }
 
+    /**
+     * Return true if a message needs a label with the sender's nickname in the group chat
+     *
+     * @param simplifiedChat new chat
+     * @return true if label is needed
+     */
     private boolean isLabeled(SimplifiedChat simplifiedChat) {
         return simplifiedChat.getMessages().stream().filter(m -> m.getReceiver() == null || m.getReceiver().getNickname().isEmpty()).count() == 1
                 || (simplifiedChat.getMessages().size() > 1 &&
                 !simplifiedChat.getMessages().getLast().getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()));
     }
 
+    /**
+     * Adds message received from the server when the sender is not the player itself
+     *
+     * @param message      message to display
+     * @param sender       nickname sender
+     * @param labelMessage name to be shown in group chat
+     */
     protected void addMessageInChat(String message, String sender, String labelMessage) {
         HBox labelBox = new HBox();
         Text labelText;
@@ -344,6 +531,12 @@ abstract public class SceneController {
         });
     }
 
+    /**
+     * Sent a new message request to the server
+     *
+     * @param newTextField filed containing the message in the chat tab
+     * @param newTab       tab where the send button has been clicked
+     */
     protected void sendMessage(javafx.scene.control.TextField newTextField, Tab newTab) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         try {
@@ -355,6 +548,11 @@ abstract public class SceneController {
 
     }
 
+    /**
+     * Toggles chat. If the scoreboard is opened, it is closed.
+     *
+     * @param actionEvent the event triggered by clicking the chat button
+     */
     protected void toggleChat(ActionEvent actionEvent) {
         if (chatIsVisible) {
             chatButton.getStyleClass().clear();
@@ -373,6 +571,9 @@ abstract public class SceneController {
         }
     }
 
+    /**
+     * Opens the PDF containing the game's rule
+     */
     public void openRulebook(ActionEvent actionEvent) {
         Platform.runLater(() -> {
             try {
@@ -382,4 +583,5 @@ abstract public class SceneController {
             }
         });
     }
+
 }

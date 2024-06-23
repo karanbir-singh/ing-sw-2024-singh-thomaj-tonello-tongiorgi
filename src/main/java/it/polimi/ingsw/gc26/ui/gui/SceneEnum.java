@@ -8,13 +8,9 @@ public enum SceneEnum {
     PAWNSELECTION("pawnSelection.fxml"),
     SECRETMISSIONCHOICE("secretMissionChoice.fxml"),
     GAMEFLOW("gameFlow.fxml"),
-    INFO("info.fxml"),
     ERROR("error.fxml"),
     WINNER("winner.fxml");
 
-    //altre
-
-    //all the scenes
     private final String value;
 
     SceneEnum(final String value) {

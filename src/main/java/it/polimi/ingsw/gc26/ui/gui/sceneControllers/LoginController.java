@@ -3,51 +3,82 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * This controller manages the login scene.
+ * It allows the user to insert his nickname.
+ */
 public class LoginController extends SceneController implements Initializable {
 
     @FXML
     private Label status;
+    /**
+     * Text field where the player is writes its name
+     */
     @FXML
     private TextField nicknameTXT;
+    /**
+     * Button that triggers connection request
+     */
     @FXML
     private Button loginButton;
+    /**
+     * Scene's background
+     */
     @FXML
     private ImageView background;
+    /**
+     * Codex naturalis logo
+     */
     @FXML
     private ImageView logo;
+    /**
+     * Root object containing all other panes and objects as children.
+     */
     @FXML
     private AnchorPane rootPane;
+    /**
+     * Pane where the logo is contained
+     */
     @FXML
     private AnchorPane logoPane;
+    /**
+     * Logo box
+     */
     @FXML
     private HBox logoBox;
+    /**
+     * Vbox containing the login button and the text field
+     */
     @FXML
     private VBox loginVBox;
 
-
+    /**
+     * Displayes message from the server
+     * @param message
+     */
     public void setStatus(String message) {
         this.status.setText(message);
         this.status.setVisible(true);
     }
 
+    /**
+     * Manages the click event and performs the connection request to the sever.
+     *
+     * @param event the event triggered by clicking the login button
+     */
     public void onLoginButtonClick(ActionEvent event) {
-        //chiedere se il thread viene creato in modo automatico o devo crearlo io
         if (nicknameTXT.getText().isEmpty()) {
             status.setText("Insert again, not valid nickname");
             status.setVisible(true);
@@ -61,10 +92,22 @@ public class LoginController extends SceneController implements Initializable {
         }
     }
 
+    /**
+     * Returns player's nickname
+     *
+     * @return
+     */
     public String getText() {
         return this.nicknameTXT.getText();
     }
 
+    /**
+     * Initializes the controller.
+     * Sets up event handlers for nickname text field and styles.
+     *
+     * @param url            the location used to resolve relative paths for the root object, or null if the location is not known
+     * @param resourceBundle the resources used to localize the root object, or null if the resources are not specified
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setBackground(rootPane, background);
@@ -94,7 +137,7 @@ public class LoginController extends SceneController implements Initializable {
         });
 
         rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            logo.setFitHeight(rootPane.getHeight()*0.5);
+            logo.setFitHeight(rootPane.getHeight() * 0.5);
 
             if (rootPane.getHeight() < 650 && rootPane.getWidth() < 800) {
                 AnchorPane.setBottomAnchor(logoBox, 0.0);

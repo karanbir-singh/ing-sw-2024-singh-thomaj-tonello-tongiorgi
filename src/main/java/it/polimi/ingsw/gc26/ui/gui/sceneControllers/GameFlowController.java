@@ -1,33 +1,27 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.ui.gui.PawnsCoords;
-import it.polimi.ingsw.gc26.view_model.*;
-import javafx.application.Platform;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
+import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
@@ -39,123 +33,175 @@ import javafx.scene.transform.Scale;
 
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * This controller manages the game flow scene where the user can play tge game.
+ * It allows the user to chat with other player, play cards in its personal board, see the point is the scoreboard
+ * see common mission and common table.
+ */
 public class GameFlowController extends SceneController implements Initializable {
-
-    //Chat
-    @FXML
-    private TitledPane chat;
+    /**
+     * Pane with chat tabs as children
+     */
     @FXML
     private AnchorPane anchorPaneChat;
-    @FXML
-    private TabPane chatTabPane;
+    /**
+     * When clicked, it toggles the chat
+     */
     @FXML
     private Button chatButton;
-    private HashMap<String, ScrollPane> chats = new HashMap<>();
-    private boolean chatHasBeenCreated = false;
+    /**
+     * Icon for chat button
+     */
     private final ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
-
-    //ScoreBoard
-    @FXML
-    private ImageView scoreBoard;
+    /**
+     * When clicked, it toggles the score board
+     */
     @FXML
     private Button scoreBoardButton;
+    /**
+     * Pane with grid pane and score board image as children
+     */
     @FXML
     private AnchorPane anchorPaneScoreBoard;
+    /**
+     * Grid to map every point as a cell
+     */
     @FXML
     private GridPane scoreBoardGrid;
+    /**
+     * Flag used to toggle scoreboard
+     */
     private boolean scoreBoardIsVisible = false;
+    /**
+     * Icon for score board
+     */
     private final ImageView scoreIcon = new ImageView(new Image(getClass().getResource("images/icons/sparkle-icon-white.png").toExternalForm()));
-
-
-    @FXML
-    private Button rulesButton;
-    private final ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
-
-    //Hand
+    /**
+     * Pane with card in hand as children
+     */
     @FXML
     private AnchorPane handPane;
-    //end hand
-
-    //CommonTable
+    /**
+     * Box with resource card as children
+     */
     @FXML
     private HBox resourceCardBox;
+    /**
+     * bod with gold cards as children
+     */
     @FXML
     private HBox goldCardBox;
+    /**
+     * Box with two common mission as children
+     */
     @FXML
     private VBox commonMissionsBox;
+    /**
+     * Box with secret mission as children
+     */
     @FXML
     private VBox secretMissionBox;
-
+    /**
+     * Resources in the personal board
+     */
     private ArrayList<ImageView> resources = new ArrayList<>();
+    /**
+     * Gold cards' list
+     */
     private ArrayList<ImageView> goldens = new ArrayList<>();
+    /**
+     * Common missions. Two images as children.
+     */
     private ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
-
-    //end CommonTable
-
-
-    //PersonalBoard
+    /**
+     * Grid where to place the played cards
+     */
     @FXML
     private GridPane gridPane;
-    @FXML
-    private AnchorPane personalBoardPane;
-
+    /**
+     * Tab containing player's personal board
+     */
     @FXML
     private TabPane personalBoardTabPane;
+    /**
+     * Coordinate 0 in the grid where the cards are placed.
+     */
     private final int xPositionStarterCard = 40;
+    /**
+     * Coordinate 0 in the grid where the cards are placed.
+     */
     private final int yPositionStarterCard = 40;
+    /**
+     * Default dimensions for each column
+     */
     private final ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
+    /**
+     * Default dimensions for each row
+     */
     private final RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
-
-
+    /**
+     * Root object containing all other panes and objects as children.
+     */
     @FXML
     private AnchorPane rootPane;
+    /**
+     * Box used to give space to chat and scoreboard. Contains the scroll pane.
+     */
     @FXML
     private HBox HBoxLeftPanel;
-    @FXML
-    private VBox centerVBox;
-    @FXML
-    private VBox rightVBox;
+    /**
+     * Pane containing the main structure of the scene.
+     */
     @FXML
     private BorderPane rootBorder;
-    @FXML
-    private ScrollPane rootScrollPane;
+    /**
+     * Scene's background
+     */
     @FXML
     private ImageView background;
-
+    /**
+     * Positions in the grid where a card can be played
+     */
     private final ArrayList<ImageView> playablePositions = new ArrayList<>();
-    private final ArrayList<ImageView> handCards = new ArrayList<>();
-
+    /**
+     * Path to images resources
+     */
     private String path = "images/";
 
-    //forDraggability
-    private double mouseAnchorX;
-    private double mouseAnchorY;
-    private double initialX;
-    private double initialY;
-
+    /**
+     * Positions needed to drag the cards in the personal board
+     */
+    private double mouseAnchorX, mouseAnchorY, initialX, initialY;
+    /**
+     * Box where info messages from the server are displayed
+     */
     @FXML
     public VBox serverMessagesDisplayer;
+    /**
+     * Scroll pane containing the VBox serverMessagesDisplayer object
+     */
     @FXML
     private ScrollPane serverMessagesScrollPane;
 
+    /**
+     * List of images to use during the game
+     */
+    private ArrayList<ImageView> handImages, resourceCommonTableImages, goldCommonTableImages, commonMissionsCommonTableImages;
 
-    private ArrayList<ImageView> handImages;
-    private ArrayList<ImageView> resourceCommonTableImages;
-    private ArrayList<ImageView> goldCommonTableImages;
-    private ArrayList<ImageView> commonMissionsCommonTableImages;
-    private ImageView secretMission = new ImageView();
 
-    //azioni carte commonBoard
+    /**
+     * Selects the position and draws the card that has been double-clicked
+     *
+     * @param mouseEvent the event triggered by clicking the card
+     */
     @FXML
     public void onClickCommonTableCard(MouseEvent mouseEvent) {
-        if(mouseEvent.getClickCount() == 2) {
+        if (mouseEvent.getClickCount() == 2) {
             try {
                 int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
                 this.mainClient.getVirtualGameController().selectCardFromCommonTable(index, this.mainClient.getClientID());
@@ -165,61 +211,68 @@ public class GameFlowController extends SceneController implements Initializable
             }
         }
     }
-    //fine azioni per la commonTable
-
-    private static int toIndex(Integer value) {
-        return value == null ? 0 : value;
-    }
 
 
-    // String.valueOf(getClass().getResource
+    /**
+     * Updates images in common table with the new values in simplified common table
+     *
+     * @param simplifiedCommonTable new common table
+     */
     @Override
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         int index = 0;
         for (Card card : simplifiedCommonTable.getResourceCards()) {
-            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())),831,556,true,true,false));
+            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
             index++;
         }
-        resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())),831,556,true,true,false));
+        resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 831, 556, true, true, false));
 
         index = 0;
         for (Card card : simplifiedCommonTable.getGoldCards()) {
-            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())),831,556,true,true,false));
+            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
 
             index++;
         }
-        goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())),831,556,true,true,false));
+        goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 831, 556, true, true, false));
 
         index = 0;
         for (Card card : simplifiedCommonTable.getCommonMissions()) {
-            commonMissionsCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())),831,556,true,true,false));
+            commonMissionsCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
             index++;
         }
 
     }
 
+    /**
+     * Updates hans images with the new value in simplified hand
+     *
+     * @param simplifiedHand new player's hand
+     */
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
-
-
         // Update hand
         int index = 0;
         for (Card card : simplifiedHand.getCards()) {
             if (card.equals(simplifiedHand.getSelectedCard())) {
-                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())),831,556,true,true,false));
+                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())), 831, 556, true, true, false));
                 makeGlow(handImages.get(index));
             } else {
-                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())),831,556,true,true,false));
+                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
                 handImages.get(index).setEffect(null);
             }
             index++;
         }
-        if(simplifiedHand.getCards().size() == 2){
+        if (simplifiedHand.getCards().size() == 2) {
             handImages.get(2).setImage(null);
         }
 
     }
 
+    /**
+     * Updates cards drawn in the personal board with the new cards.
+     *
+     * @param personalBoard new player's personal board
+     */
     @Override
     public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         playablePositions.clear();
@@ -247,26 +300,31 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
+    /**
+     * Updates the personal board of another player
+     *
+     * @param otherPersonalBoard other player's personal board
+     */
     @Override
     public void changeGUIotherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
         boolean exist = false;
         Tab consideredTab = null;
         ScrollPane otherScrollPane = null;
         GridPane otherGridPane = null;
-        //controlla che se esiste gia un tab con lo stesso nickname, e se esiste prendere i riferimenti allo scrollPane e griPane
+        // if already exists a tab for the personal board's owner, gets its scroll pane and grid pane
         for (Tab tab : personalBoardTabPane.getTabs()) {
             if (tab.getText().equals(otherPersonalBoard.getNickname())) {
                 exist = true;
-                consideredTab = tab;
                 otherScrollPane = (ScrollPane) tab.getContent();
                 otherGridPane = (GridPane) otherScrollPane.getContent();
                 otherScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 otherScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 otherScrollPane.getStyleClass().add("tabScrollPane");
+                break;
             }
         }
 
-        //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
+        // if there's no tab for the personal board's owner, creates a new tab pane for its personal board
         if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
@@ -275,7 +333,6 @@ public class GameFlowController extends SceneController implements Initializable
             otherScrollPane = new ScrollPane();
             otherScrollPane.setHvalue(0.5);
             otherScrollPane.setVvalue(0.5);
-
             otherGridPane = new GridPane();
             otherScrollPane.setContent(otherGridPane);
             this.creationAndSettingGridContraints(otherGridPane);
@@ -287,28 +344,38 @@ public class GameFlowController extends SceneController implements Initializable
         this.addImage(imageCardToPlay,
                 this.xPositionStarterCard + otherPersonalBoard.getOccupiedPositions().getLast().getX(),
                 this.yPositionStarterCard - otherPersonalBoard.getOccupiedPositions().getLast().getY(), otherGridPane);
-
     }
 
+    /**
+     * Modifies the color of each tab for every player that has selected its pawn
+     *
+     * @param simplifiedGame new simplified game
+     */
     @Override
-    public void changeGUIGame (SimplifiedGame simplifiedGame) {
+    public void changeGUIGame(SimplifiedGame simplifiedGame) {
         Pawn pawn;
         for (Tab tab : personalBoardTabPane.getTabs()) {
             pawn = simplifiedGame.getPawnsSelected().get(tab.getText());
-            if(pawn != null) {
+            if (pawn != null) {
                 tab.getStyleClass().add(pawn.toString());
             }
         }
     }
 
-
+    /**
+     * Initializes the controller.
+     * Sets up event handlers for buttons and initializes the background, cards, chats and scoreboard.
+     *
+     * @param url            the location used to resolve relative paths for the root object, or null if the location is not known
+     * @param resourceBundle the resources used to localize the root object, or null if the resources are not specified
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         this.personalBoardTabPane.getTabs().getFirst().setId("0");
 
         this.handImages = new ArrayList<>();
-        for(int i = 0; i< 3; i++){
+        for (int i = 0; i < 3; i++) {
             ImageView imageView = new ImageView();
             this.setCardImageParameters(imageView, i);
             makeDraggable(imageView, playablePositions);
@@ -322,25 +389,25 @@ public class GameFlowController extends SceneController implements Initializable
         });
 
         this.resourceCommonTableImages = new ArrayList<>();
-        for(int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             ImageView imageView = new ImageView();
-            this.setCardImageParameters(imageView,i);
+            this.setCardImageParameters(imageView, i);
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
             this.resourceCommonTableImages.add(imageView);
         }
 
         this.goldCommonTableImages = new ArrayList<>();
-        for(int i = 3; i < 6; i++){
+        for (int i = 3; i < 6; i++) {
             ImageView imageView = new ImageView();
-            this.setCardImageParameters(imageView,i);
+            this.setCardImageParameters(imageView, i);
             imageView.setOnMouseClicked(this::onClickCommonTableCard);
             this.goldCommonTableImages.add(imageView);
         }
 
         this.commonMissionsCommonTableImages = new ArrayList<>();
-        for(int i = 6; i < 8; i++){
+        for (int i = 6; i < 8; i++) {
             ImageView imageView = new ImageView();
-            this.setCardImageParameters(imageView,i);
+            this.setCardImageParameters(imageView, i);
             this.commonMissionsCommonTableImages.add(imageView);
         }
         Platform.runLater(() -> {
@@ -368,6 +435,11 @@ public class GameFlowController extends SceneController implements Initializable
         this.creationAndSettingGridContraints(this.gridPane);
     }
 
+    /**
+     * Populates the grid pane representing the personal board
+     *
+     * @param gridPane pane inside players tab
+     */
     private void creationAndSettingGridContraints(GridPane gridPane) {
         gridPane.setPrefWidth(8000);
         gridPane.setPrefHeight(4000);
@@ -381,6 +453,12 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
+    /**
+     * Standards card images parameters
+     *
+     * @param imageView image to be standard
+     * @param index     card's index in the hand
+     */
     private void setCardImageParameters(ImageView imageView, int index) {
         imageView.setId(String.valueOf(index));
         imageView.setFitWidth(150);
@@ -388,6 +466,14 @@ public class GameFlowController extends SceneController implements Initializable
         imageView.setPreserveRatio(true);
     }
 
+    /**
+     * Adds an image in the personal board using the run later function
+     *
+     * @param imageView new image to be added in the grid
+     * @param x         x coordinate
+     * @param y         y coordinate
+     * @param gridPane  destination grid pane
+     */
     private void addImage(ImageView imageView, int x, int y, GridPane gridPane) {
         setCardImageParameters(imageView, 0);
         Platform.runLater(() -> {
@@ -395,6 +481,12 @@ public class GameFlowController extends SceneController implements Initializable
         });
     }
 
+    /**
+     * Sets properties on image to make it draggable
+     *
+     * @param imageView image to make draggable
+     * @param targets   positions where a card can be placed on the personal board
+     */
     public void makeDraggable(ImageView imageView, ArrayList<ImageView> targets) {
         // Set on card pressed
         imageView.setOnMousePressed(event -> {
@@ -434,7 +526,7 @@ public class GameFlowController extends SceneController implements Initializable
                         int row = GridPane.getRowIndex(target);
                         int column = GridPane.getColumnIndex(target);
 
-                        for(ImageView p: playablePositions) {
+                        for (ImageView p : playablePositions) {
                             this.gridPane.getChildren().remove(p);
                         }
 
@@ -456,6 +548,11 @@ public class GameFlowController extends SceneController implements Initializable
         });
     }
 
+    /**
+     * Handles the event when the card is clicked. Selects a card from hand in the server
+     *
+     * @param mouseEvent the event triggered by clicking the card
+     */
     public void onHandCardClicked(MouseEvent mouseEvent) {
         try {
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
@@ -465,6 +562,13 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
+    /**
+     * Checks if a card has been released in a playable position
+     *
+     * @param imageView image released by player
+     * @param target    playable position
+     * @return true if the imageView covers a playable position
+     */
     private boolean isInTargetSpot(ImageView imageView, ImageView target) {
         Bounds imageViewBounds = imageView.localToScene(imageView.getBoundsInLocal());
         Bounds targetBounds = target.localToScene(target.getBoundsInLocal());
@@ -480,6 +584,11 @@ public class GameFlowController extends SceneController implements Initializable
         );
     }
 
+    /**
+     * Toggles scoreboard. If the chat is opened, it is closed.
+     *
+     * @param actionEvent the event triggered by clicking the score board button
+     */
     public void toggleScoreBoard(ActionEvent actionEvent) {
         if (chatIsVisible) {
             chatButton.getStyleClass().clear();
@@ -506,6 +615,11 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
+    /**
+     * Toggles chat. If the scoreboard is opened, it is closed.
+     *
+     * @param actionEvent the event triggered by clicking the chat button
+     */
     public void toggleChat(ActionEvent actionEvent) {
         if (scoreBoardIsVisible) {
             scoreBoardButton.getStyleClass().clear();
@@ -532,7 +646,14 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
-
+    /**
+     * Returns the element in a specific position in a grid pane
+     *
+     * @param row      row index. int > 0
+     * @param column   column index. int > 0
+     * @param gridPane grid pane containing the cell to be obtained
+     * @return Node object is the position is valid and there's an object in the cell, null otherwise
+     */
     private Node getNodeByRowColumnIndex(final int row, final int column, GridPane gridPane) {
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) == row
@@ -543,6 +664,12 @@ public class GameFlowController extends SceneController implements Initializable
         return null;
     }
 
+    /**
+     * Adds a message in the box where the messages from the server are displayed.
+     *
+     * @param messageFromServer new info message
+     * @param isErrorMessage    if it is an error message, it will be displayed with red font
+     */
     public void addMessageServerDisplayer(String messageFromServer, boolean isErrorMessage) {
         Text text = new Text(messageFromServer);
         TextFlow textFlow = new TextFlow(text);
@@ -570,6 +697,9 @@ public class GameFlowController extends SceneController implements Initializable
 
     }
 
+    /**
+     * Clears all nodes in scoreboard
+     */
     private void clearScoreBoard() {
         for (Point pawnPoint : PawnsCoords.getCoords()) {
             Node cell = getNodeByRowColumnIndex(pawnPoint.getY(), pawnPoint.getX(), scoreBoardGrid);
@@ -580,6 +710,12 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
+    /**
+     * Updates points in the score board
+     *
+     * @param scores        map containing the updated scores
+     * @param pawnsSelected pawns that have been selected by players
+     */
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
         Platform.runLater(() -> {
             clearScoreBoard();
@@ -613,7 +749,11 @@ public class GameFlowController extends SceneController implements Initializable
         });
     }
 
-
+    /**
+     * Manages the scroll event on the personal board
+     *
+     * @param scrollEvent the event triggered by scrolling on personal board
+     */
     @FXML
     public void onPersonalBoardScroll(ScrollEvent scrollEvent) {
         if (scrollEvent.isControlDown()) {
@@ -631,6 +771,11 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
+    /**
+     * Manages the zoom event on the personal board
+     *
+     * @param zoomEvent the event triggered by zooming on the personal board
+     */
     @FXML
     public void onPersonalBoardZoom(ZoomEvent zoomEvent) {
         zoomEvent.consume();
