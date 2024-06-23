@@ -4,15 +4,12 @@ import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
-import javax.swing.text.PlainDocument;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -54,6 +51,7 @@ public class WinnerController extends SceneController implements Initializable {
     /**
      * Image of player final result
      */
+    @FXML
     ImageView winnerOrLoser;
     /**
      * Box containing the final result

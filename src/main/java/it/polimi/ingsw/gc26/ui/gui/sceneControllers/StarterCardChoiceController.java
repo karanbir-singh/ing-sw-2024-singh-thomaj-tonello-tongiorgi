@@ -228,7 +228,7 @@ public class StarterCardChoiceController extends SceneController implements Init
         //buttons setup
         buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
-        layout.buttonSetup(rulesIcon, rulesButton);
+        buttonSetup(rulesIcon, rulesButton);
     }
 
 }

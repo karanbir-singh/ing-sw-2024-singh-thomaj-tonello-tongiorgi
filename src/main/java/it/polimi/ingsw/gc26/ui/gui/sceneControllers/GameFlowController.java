@@ -189,6 +189,15 @@ public class GameFlowController extends SceneController implements Initializable
      * List of images to use during the game
      */
     private ArrayList<ImageView> handImages, resourceCommonTableImages, goldCommonTableImages, commonMissionsCommonTableImages;
+    /**
+     * The button to show the rules.
+     */
+    @FXML
+    private Button rulesButton;
+    /**
+     * The image view for the rules icon.
+     */
+    private final ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
 
 
     /**

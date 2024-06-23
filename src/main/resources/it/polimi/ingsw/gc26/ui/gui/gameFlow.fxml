@@ -89,7 +89,7 @@
                                                       <Cursor fx:constant="DISAPPEAR" />
                                                   </cursor>
                                               </TextField>
-                                              <ScrollPane fx:id="serverMessagesScrollPane" prefHeight="200.0" prefWidth="200.0" vvalue="1.0">
+                                              <ScrollPane fx:id="serverMessagesScrollPane" hbarPolicy="NEVER" pannable="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" vvalue="1.0">
                                                   <content>
                                                       <VBox fx:id="serverMessagesDisplayer" prefHeight="168.0" prefWidth="178.0" />
                                                   </content>
