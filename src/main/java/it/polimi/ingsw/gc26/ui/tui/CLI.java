@@ -44,7 +44,6 @@ public class CLI {
                 commonTablePrint[0][0] = "\t";
             }
             //SCORES
-            //TODO aggiungere gli score
             String[][] scores;
             if(miniModel.getSimplifiedGame() != null &&
                     (miniModel.getSimplifiedGame().getGameState() == GameState.GAME_STARTED ||
@@ -89,7 +88,7 @@ public class CLI {
             }
 
             //calculate dimensions
-            int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + secretHand.length + 2;
+            int yDim = commonTablePrint.length + personalBoardPrint.length + handPrint.length + secretHand.length + 3;
             int xDim = Math.max(Math.max(commonTablePrint[0].length + scores[0].length + 1, personalBoardPrint[0].length), Math.max(handPrint[0].length, secretHand[0].length));
 
             //utils
@@ -115,6 +114,8 @@ public class CLI {
             y += commonTablePrint.length;
 
             //show personal board
+            printableGame[y][0] = "YOUR PERSONAL BOARD:";
+            y++;
             addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
             y += personalBoardPrint.length;
 
@@ -130,17 +131,7 @@ public class CLI {
         }
     }
 
-    public void printOtherGame(String nickname) {
-        //SimplifiedCommonTable simplifiedCommonTable = miniModel.getSimplifiedCommonTable();
-        SimplifiedPersonalBoard personalBoard = miniModel.getOthersPersonalBoards().get(nickname);
-
-        //COMMON TABLE: check if missions are already present
-//        String[][] commonTablePrint;
-//        if(simplifiedCommonTable.getCommonMissions().isEmpty()){
-//            commonTablePrint = printableCommonTable();
-//        } else {
-//            commonTablePrint = printableCommonTableAndMissions();
-//        }
+    public void printOtherGame(SimplifiedPersonalBoard miniPB) {
 
         //SCORES
         //TODO aggiungere gli score
@@ -155,34 +146,12 @@ public class CLI {
 
         //PERSONAL BOARD
         String[][] personalBoardPrint;
-        if(personalBoard != null){
-            personalBoardPrint = printablePersonalBoard(personalBoard);
+        if(miniPB != null){
+            personalBoardPrint = printablePersonalBoard(miniPB);
         } else {
             personalBoardPrint = new String[1][1];
             personalBoardPrint[0][0] = "\t";
         }
-
-        //HAND: check if secret mission is already present
-//        String[][] handPrint;
-//        if(miniModel.getSimplifiedHand() != null) {
-//            if(miniModel.getOtherPersonalBoard() != null && miniModel.getOtherPersonalBoard().getSecretMission() != null) {
-//                handPrint = printableHandAndMission();
-//            } else {
-//                handPrint = printableHand();
-//            }
-//        } else {
-//            handPrint = new String[1][1];
-//            handPrint[0][0] = "\t";
-//        }
-
-//        //SECRET HAND
-//        String[][] secretHand;
-//        if(miniModel.getSimplifiedGame().getGameState() == GameState.WAITING_SECRET_MISSION_CHOICE && miniModel.getSimplifiedSecretHand().getCards().size() == 2) {
-//            secretHand = printableSecretHand();
-//        } else {
-//            secretHand = new String[1][1];
-//            secretHand[0][0] = "\t";
-//        }
 
         //calculate dimensions
         int yDim =  personalBoardPrint.length  + 2;
@@ -199,27 +168,8 @@ public class CLI {
             }
         }
 
-        //DESIGN THE MATRIX
-        //show common table
-//        printableGame[y][0] = "COMMON TABLE:";
-//        y++;
-//        addPrintable(commonTablePrint, printableGame, 0, y);
-
-        //show scores
-
-//        addPrintable(scores, printableGame, commonTablePrint[0].length + 1, y + 1);
-//        y += commonTablePrint.length;
-
-        //show personal board
         addPrintable(personalBoardPrint, printableGame, (xDim-personalBoardPrint[0].length)/2, y);
-        y += personalBoardPrint.length;
 
-//        //show player's hand
-//        addPrintable(handPrint, printableGame, 0, y);
-//        y += handPrint.length;
-//
-//        //show secret hand
-//        addPrintable(secretHand, printableGame, 0, y);
 
         showPrintable(printableGame);
     }
@@ -304,7 +254,7 @@ public class CLI {
         int xCardDim = 3;
         int yCardDim = 3;
         int xDim = 3*(xCardDim+2) + 1;
-        int yDim = 2*(yCardDim+4);
+        int yDim = 2*(yCardDim+3) + 1;
         //components offsets
         int xResource = 1, yResource = 1;
         int xGold = 1, yGold = yResource + yCardDim + 4;
@@ -322,25 +272,30 @@ public class CLI {
         for(int i=0; i<yDim; i++){
             if((i>0 && i<4) || (i>7 && i<11)){
                 ct[i][0] = "           ";
-            }
-
-            if(i == 0 || i == 7){
+            } else if(i == 0 || i == 7){
                 ct[i][0] = "Card:      " ;
-            }
-            if(i == 4 || i == 11){
-                ct[i][0] = "Points:    " ;
-            }
-            if(i == 5 || i == 12){
-                ct[i][0] = "Requires:  " ;
+            } else if(i == 4 || i == 11){
+                ct[i][0] = "Points:    " + leftPadding;
+            } else if(i == 5 || i == 12){
+                ct[i][0] = "Requires:   " + leftPadding;
+            } else {
+                ct[i][0] = "";
             }
 
-            for(int j=1; j<xDim; j+=5){
-                ct[i][j] = leftPadding;
-                ct[i][j+1] = "";
-                ct[i][j+2] = "";
-                ct[i][j+3] = "";
-                ct[i][j+4] = rightPadding;
+            if((i>0 && i<4) || (i>7 && i<11)) {
+                for(int j=1; j<xDim; j+=5){
+                    ct[i][j] = leftPadding;
+                    ct[i][j+1] = "";
+                    ct[i][j+2] = "";
+                    ct[i][j+3] = "";
+                    ct[i][j+4] = rightPadding;
+                }
+            } else {
+                for(int j=1; j<xDim; j++){
+                    ct[i][j] = "";
+                }
             }
+
         }
 
         //RESOURCES
@@ -459,7 +414,9 @@ public class CLI {
             } else {
                 ct[y][x+1] = blackSquare + blackSquare + blackSquare;
             }
-            ct[y][x+2] = "    ";
+            if(i != 2 && i != 5) {
+                ct[y][x+2] = "    ";
+            }
             y++;
 
             //requirements
@@ -478,8 +435,12 @@ public class CLI {
                 ct[y][x] = ct[y][x] +  blackSquare;
                 spaces--;
             }
-            ct[y][x+1] = "      " + blackSquare ;
-            ct[y][x+2] = "    ";
+            if(i != 2 && i != 5) {
+                ct[y][x+1] = "      " + blackSquare ;
+                ct[y][x+2] = "    ";
+            } else {
+                ct[y][x+1] = "        ";
+            }
         }
 
         return ct;
@@ -533,7 +494,9 @@ public class CLI {
 
         //insert vertical separator between drawable and missions
         for(int i=0; i<yDim; i++){
-            commonTableAndMissions[i][xSeparator] = "||      ";
+            if(i != 6) {
+                commonTableAndMissions[i][xSeparator] = "||      ";
+            }
         }
 
         //insert common mission cards (vertical)
@@ -664,8 +627,7 @@ public class CLI {
             }
         }
 
-        reverseBoard[0][0] = "\nYOUR PERSONAL BOARD:\n";
-        for (int i=1; i<xDim; i++){
+        for (int i=0; i<xDim; i++){
             reverseBoard[0][i] = "\t";
             reverseBoard[yDim+1][i] = "\t";
         }
