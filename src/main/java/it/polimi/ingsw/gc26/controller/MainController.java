@@ -497,7 +497,7 @@ public class MainController implements Serializable {
                     }
 
                     if (elapsed >= TIMEOUT) {
-                        System.out.println("Client " + client.getValue());
+                        System.out.println("Client " + client.getValue() + " disconnected");
                         isAlive = false;
                         synchronized (this.timers) {
                             this.timers.remove(client.getValue());
