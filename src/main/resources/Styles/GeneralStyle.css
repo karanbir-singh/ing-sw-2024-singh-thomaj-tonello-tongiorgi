@@ -25,6 +25,27 @@
     -fx-effect: dropshadow( gaussian , #e3fff2  , 20,0.1,0,1 );
 }
 
+.text-field {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 40px;
+    -fx-min-width: 150px;
+    -fx-border: none;
+    -fx-font-size: 16px;
+    -fx-min-height: 40px;
+    -fx-text-alignment: center center;
+    -fx-effect: dropshadow( gaussian , transparent , 0,0,0,0 );
+}
+
+.text-field:hover{
+    -fx-background-color: rgba(255, 255, 255, 0.85);
+    -fx-effect: dropshadow( gaussian , #e3fff2 , 20,0,0,0 );
+}
+
+.text-field:focused{
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-effect: dropshadow( gaussian , #e3fff2 , 5,0,0,0 );
+}
+
 .cardHover:hover {
     -fx-effect: dropshadow( gaussian , #e3fff2  , 20,0.1,0,1 );
 }
@@ -318,4 +339,27 @@
     -fx-font-size: 42px;
     -fx-font-family: 'Old English Text MT';
     -fx-text-fill: black;
+}
+
+#welcomeLabel{
+    -fx-font-size: 30px;
+}
+
+.btn-grad {
+    -fx-background-color: linear-gradient(to right, #77A1D3 0%, #79CBCA  51%, #77A1D3  100%);
+    -fx-margin: 10px;
+    -fx-padding: 15px 45px;
+    -fx-text-align: center;
+    -fx-text-transform: uppercase;
+    -fx-transition: 0.5s;
+    -fx-background-size: 200% auto;
+    -fx-color: white;
+    -fx-border-radius: 10px;
+    -fx-display: block;
+}
+
+.btn-grad:hover {
+    -fx-background-position: right center; /* change the direction of the change here */
+    -fx-color: #fff;
+    -fx-text-decoration: none;
 }

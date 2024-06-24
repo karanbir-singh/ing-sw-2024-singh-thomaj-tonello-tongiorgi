@@ -196,7 +196,7 @@ public class GUIApplication extends Application implements UIInterface {
         Platform.runLater(() -> {
             // Update stage
             scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
-            scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/LOGIN.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/chat.css")).toExternalForm());
             this.primaryStage.setOnCloseRequest((WindowEvent windowEvent) -> {
                 this.mainClient.killProcesses();
             });
@@ -223,7 +223,6 @@ public class GUIApplication extends Application implements UIInterface {
     public void runConnection() throws RemoteException {
         // Set login scene
         this.getSceneInfo(SceneEnum.LOGIN).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
-        this.getSceneInfo(SceneEnum.LOGIN).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/LOGIN.css")).toExternalForm());
         this.setCurrentScene(SceneEnum.LOGIN);
 
 

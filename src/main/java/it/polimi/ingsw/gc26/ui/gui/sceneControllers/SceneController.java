@@ -266,7 +266,7 @@ abstract public class SceneController {
     }
 
     /**
-     * Sets styles for generic button
+     * Sets the dimensions and adds the icon to a button
      *
      * @param icon   button's icon
      * @param button button to set styles
@@ -308,7 +308,7 @@ abstract public class SceneController {
     }
 
     /**
-     * Updates viewport when the dimension of the application changes.
+     * Updates the viewport of an image to center it when the dimension of the application changes.
      *
      * @param paneWidth
      * @param paneHeight
@@ -340,12 +340,11 @@ abstract public class SceneController {
         Text text = new Text(message);
         TextFlow textFlow = new TextFlow(text);
         textFlow.setSnapToPixel(true);
-        textFlow.setStyle("-fx-background-color: rgb(15,125,242);" + "-fx-color: rgb(239, 242,255);" + "-fx-background-radius: 7px;");
+        textFlow.getStyleClass().add("senderMessageBox");
         hBox.setMinWidth(240);
         hBox.setMaxWidth(240);
         textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.setStyle("-fx-text-fill: white;");
-        text.setFill(Color.color(1, 1, 1));
+        text.getStyleClass().add("senderMessageText");
         hBox.getChildren().add(textFlow);
 
         Platform.runLater(() -> {
@@ -381,21 +380,20 @@ abstract public class SceneController {
     public void createChatTab(String nickname) {
         Tab newTab = new Tab();
         newTab.setText(nickname);
-        newTab.setStyle("-fx-border-radius: 0px 0px 5px 5px;");
+        newTab.getStyleClass().add("chatTab");
         AnchorPane newAnchorPane = new AnchorPane();
         newTab.setContent(newAnchorPane);
-        newAnchorPane.setStyle("-fx-background-color: #e8f4f8");
+        newAnchorPane.getStyleClass().add("chatPane");
         javafx.scene.control.TextField newTextField = new javafx.scene.control.TextField();
         newTextField.setPrefWidth(208);
         newTextField.setPrefHeight(26);
         newTextField.setLayoutX(9);
         newTextField.setLayoutY(489);
         newTextField.setPromptText("Type Message");
-        newTextField.setStyle("-fx-border-radius: 5px;");
         newAnchorPane.getChildren().add(newTextField);
         Button newButton = new Button();
         newButton.setText("Send");
-        newButton.setLayoutX(230);
+        newButton.setLayoutX(227);
         newButton.setLayoutY(489);
         newAnchorPane.getChildren().add(newButton);
         javafx.scene.control.ScrollPane newScrollPane = new javafx.scene.control.ScrollPane();
@@ -494,7 +492,7 @@ abstract public class SceneController {
             labelBox.setAlignment(Pos.BASELINE_LEFT);
             labelBox.setPadding(new javafx.geometry.Insets(0, 30, 0, 5));
             labelText = new Text(labelMessage);
-            labelText.setStyle("-fx-font-size: 10px;");
+            labelText.getStyleClass().add("chatLabelText");
             labelTextFlow = new TextFlow(labelText);
             labelBox.setMinWidth(150);
             labelBox.setMaxWidth(150);
@@ -507,7 +505,7 @@ abstract public class SceneController {
         Text text = new Text(message);
         TextFlow textFlow = new TextFlow(text);
         textFlow.setSnapToPixel(true);
-        textFlow.setStyle("-fx-background-color: rgb(233,233,235);" + "-fx-background-radius: 7px;");
+        textFlow.getStyleClass().add("messageBox");
         hBox.setMinWidth(240);
         hBox.setMaxWidth(240);
         textFlow.setPadding(new Insets(2, 5, 2, 5));
