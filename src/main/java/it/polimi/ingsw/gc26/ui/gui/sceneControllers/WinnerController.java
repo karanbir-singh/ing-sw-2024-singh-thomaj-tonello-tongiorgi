@@ -43,7 +43,7 @@ public class WinnerController extends SceneController implements Initializable {
             label.setFont(new Font(rankTextDimension));
             label.setText(winnerNickname);
             rank.add(label);
-            if(this.nickname.equals(winnerNickname)){
+            if(this.mainClient.getNickname().equals(winnerNickname)){
                 areYouWinner = true;
             }
         }

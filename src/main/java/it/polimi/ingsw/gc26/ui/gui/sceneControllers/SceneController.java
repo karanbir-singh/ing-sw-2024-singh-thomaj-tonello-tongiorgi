@@ -13,19 +13,11 @@ import java.util.Objects;
 
 abstract public class SceneController {
     public MainClient mainClient;
-    public String nickname;
 
     public void setMainClient(MainClient mainClient) {
         this.mainClient = mainClient;
     }
 
-    public void setNickName(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getNickName() {
-        return this.nickname;
-    }
 
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
     }
@@ -48,7 +40,7 @@ abstract public class SceneController {
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
     }
 
-    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
+    public void createChats(SimplifiedGame simplifiedGame) {
     }
 
     public void changeGUIGame(SimplifiedGame simplifiedGame) {

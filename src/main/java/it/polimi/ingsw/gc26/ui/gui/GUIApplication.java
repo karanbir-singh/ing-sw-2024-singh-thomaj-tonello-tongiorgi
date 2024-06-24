@@ -13,7 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -21,7 +20,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.rmi.RemoteException;
@@ -51,7 +49,7 @@ public class GUIApplication extends Application implements UIInterface {
         String networkType = getParameters().getUnnamed().get(0);
 
         //To try with a network
-        System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2000");
+        //System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2000");
 
         //lanchaure prima startSocketClient e startRMiCLient
         if (MainClient.NetworkType.valueOf(networkType) == MainClient.NetworkType.rmi) {
@@ -204,11 +202,10 @@ public class GUIApplication extends Application implements UIInterface {
             }
         }
 
-        mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
+        //mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             Platform.runLater(() -> {
                 this.getSceneInfo(SceneEnum.CREATOR).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
-                this.getSceneController(SceneEnum.CREATOR).setNickName(this.getSceneController(SceneEnum.LOGIN).getNickName());
             });
 
             // Set creator scene
@@ -256,10 +253,7 @@ public class GUIApplication extends Application implements UIInterface {
             }
         }
 
-        mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
-
-        // Set nickname for all scene controllers
-        this.setToAllControllersNickname();
+        this.mainClient.setNickname(((LoginController) this.getSceneController(SceneEnum.LOGIN)).getNickname());
 
         // Set waiting scene
         this.setCurrentScene(SceneEnum.WAITING);
@@ -304,15 +298,6 @@ public class GUIApplication extends Application implements UIInterface {
 
     }
 
-
-    private void setToAllControllersNickname() {
-        scenes.forEach(scene -> scene.getSceneController().setNickName(((LoginController) this.getSceneController(SceneEnum.LOGIN)).getText()));
-    }
-
-    public String getNickname() {
-        return mainClient.getNickname();
-    }
-
     public static void openRulebook(InputStream inputStream) {
         try {
             if (inputStream != null) {
@@ -330,6 +315,10 @@ public class GUIApplication extends Application implements UIInterface {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public String getNickname(){
+        return this.mainClient.getNickname();
     }
 
 

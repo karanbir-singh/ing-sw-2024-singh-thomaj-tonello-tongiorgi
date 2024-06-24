@@ -209,7 +209,7 @@ public class SecretMissionChoiceController extends SceneController implements In
         }
 
         //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
-        if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
+        if (!otherPersonalBoard.getNickname().equals(this.mainClient.getNickname()) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
             this.personalBoardTabPane.getTabs().add(consideredTab);
@@ -301,9 +301,9 @@ public class SecretMissionChoiceController extends SceneController implements In
     @Override
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();
-        if (!newMessage.getSender().getNickname().equals(this.nickname)) {
+        if (!newMessage.getSender().getNickname().equals(this.mainClient.getNickname())) {
             if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-                if (!newMessage.getSender().getNickname().equals(nickname)) {
+                if (!newMessage.getSender().getNickname().equals(this.mainClient.getNickname())) {
                     if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
                             !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
                         addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname());
@@ -324,11 +324,10 @@ public class SecretMissionChoiceController extends SceneController implements In
     }
 
     @Override
-    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
+    public void createChats(SimplifiedGame simplifiedGame) {
         if (!chatHasBeenCreated) {
-            this.nickname = nickname;
             for (String playerNickname : simplifiedGame.getPlayersNicknames()) {
-                if (!playerNickname.equals(nickname)) {
+                if (!playerNickname.equals(this.mainClient.getNickname())) {
                     createChatTab(playerNickname);
                 }
             }

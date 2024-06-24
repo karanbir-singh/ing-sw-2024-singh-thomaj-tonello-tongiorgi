@@ -3,20 +3,14 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class LoginController extends SceneController implements Initializable {
@@ -56,15 +50,14 @@ public class LoginController extends SceneController implements Initializable {
             status.setVisible(true);
         } else {
             try {
-                this.setNickName(nicknameTXT.getText());
-                this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), this.nickname, this.mainClient.getClientState());
+                this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), this.nicknameTXT.getText(), this.mainClient.getClientState());
             } catch (RemoteException e) {
                 System.out.println("Connection problem, please wait");
             }
         }
     }
 
-    public String getText() {
+    public String getNickname() {
         return this.nicknameTXT.getText();
     }
 

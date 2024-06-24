@@ -170,9 +170,9 @@ public class StarterCardChoiceController extends SceneController implements Init
     @Override
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();
-        if (!newMessage.getSender().getNickname().equals(this.nickname)) {
+        if (!newMessage.getSender().getNickname().equals(this.mainClient.getNickname())) {
             if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-                if (!newMessage.getSender().getNickname().equals(nickname)) {
+                if (!newMessage.getSender().getNickname().equals(this.mainClient.getNickname())) {
                     if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
                             !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
                         addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname());
@@ -193,11 +193,10 @@ public class StarterCardChoiceController extends SceneController implements Init
     }
 
     @Override
-    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
+    public void createChats(SimplifiedGame simplifiedGame) {
         if (!chatHasBeenCreated) {
-            this.nickname = nickname;
             for (String playerNickname : simplifiedGame.getPlayersNicknames()) {
-                if (!playerNickname.equals(nickname)) {
+                if (!playerNickname.equals(this.mainClient.getNickname())) {
                     createChatTab(playerNickname);
                 }
             }
