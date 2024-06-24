@@ -100,7 +100,7 @@ public class WinnerController extends SceneController implements Initializable {
             rank.add(status);
         }else{
             winnerOrLoser.setImage(new Image(getClass().getResource("images/labels/LoserLabel.png").toExternalForm()));
-            status.setText("\n\nNext time you will do better!\nYour score: " + simplifiedGame.getScores().get(this.nickname) + " points");
+            status.setText("\n\nNext time you will do better!\nYour score: " + simplifiedGame.getScores().get(this.mainClient.getNickname()) + " points");
             status.getStyleClass().add("winnerLabel");
             rank.add(status);
         }

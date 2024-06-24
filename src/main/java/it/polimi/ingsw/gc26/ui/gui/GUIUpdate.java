@@ -232,4 +232,8 @@ public class GUIUpdate implements UpdateInterface {
             this.guiApplication.getCurrentScene().getScene().getRoot().setDisable(false);
         });
     }
+
+    @Override
+    public void showOtherPersonalBoard(String nickname) {
+    }
 }
