@@ -209,6 +209,7 @@ public class GUIApplication extends Application implements UIInterface {
             });
 
             // Set creator scene
+            this.mainClient.setNickname(((LoginController) this.getSceneController(SceneEnum.LOGIN)).getNickname());
             this.setCurrentScene(SceneEnum.CREATOR);
 
             synchronized (this.mainClient.getLock()) {

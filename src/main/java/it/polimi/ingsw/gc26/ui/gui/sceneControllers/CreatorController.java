@@ -16,7 +16,7 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
-public class CreatorController extends SceneController implements Initializable{
+public class CreatorController extends SceneController implements Initializable {
 
     @FXML
     private AnchorPane rootPane;
@@ -48,21 +48,23 @@ public class CreatorController extends SceneController implements Initializable{
     private final CommonLayout layout = new CommonLayout();
 
     @FXML
-    public void onSecondButtonClick(ActionEvent actionEvent){
+    public void onSecondButtonClick(ActionEvent actionEvent) {
         this.numMaxPlayer = 2;
         selector.setVisible(true);
         selector1.setVisible(false);
         selector2.setVisible(false);
     }
+
     @FXML
-    public void onThirdButtonClick(ActionEvent actionEvent){
+    public void onThirdButtonClick(ActionEvent actionEvent) {
         this.numMaxPlayer = 3;
         selector1.setVisible(true);
         selector.setVisible(false);
         selector2.setVisible(false);
     }
+
     @FXML
-    public void onFourthButtonClick(ActionEvent actionEvent){
+    public void onFourthButtonClick(ActionEvent actionEvent) {
         this.numMaxPlayer = 4;
         selector2.setVisible(true);
         selector1.setVisible(false);
@@ -71,8 +73,8 @@ public class CreatorController extends SceneController implements Initializable{
 
     @FXML
     public void onClickButton(ActionEvent actionEvent) {
-        try { //TODO da cambiare il nickname
-            this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(),this.mainClient.getNickname(),this.numMaxPlayer);
+        try {
+            this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(), this.mainClient.getNickname(), this.numMaxPlayer);
             this.status.setText("Waiting for other players...");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
