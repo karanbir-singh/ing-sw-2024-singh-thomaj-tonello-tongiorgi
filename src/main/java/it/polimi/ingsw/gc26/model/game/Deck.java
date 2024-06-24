@@ -36,7 +36,7 @@ public class Deck implements Serializable {
      * @return the top card in the deck
      */
     public Card getTopCard() {
-        return cards.get(cards.size() - 1);
+        return cards.getLast();
     }
 
     /**
@@ -45,7 +45,7 @@ public class Deck implements Serializable {
      * @return top card
      */
     public Card removeCard() {
-        return cards.remove(cards.size() - 1);
+        return cards.removeLast();
     }
 
     /**

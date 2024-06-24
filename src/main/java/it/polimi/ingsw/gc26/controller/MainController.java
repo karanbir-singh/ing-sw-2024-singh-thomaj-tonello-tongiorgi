@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.player.Player;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.main_request.MainRequest;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import javafx.util.Pair;
 
 import java.io.*;
@@ -86,7 +87,7 @@ public class MainController implements Serializable {
     /**
      * Max time the server has to wait to suppose that a client is down
      */
-    private final long TIMEOUT = 5;
+    private static final int TIMEOUT = 5;
 
     /**
      * Initializes waiting players' list and games controllers' list
@@ -110,13 +111,18 @@ public class MainController implements Serializable {
      *
      * @throws IOException
      */
-    private void backup() throws IOException {
-//        FileOutputStream fileOutputStream = new FileOutputStream(MAIN_CONTROLLER_FILE_PATH);
-        FileOutputStream fileOutputStream = new FileOutputStream(MAIN_CONTROLLER_FILE_PATH);
-        ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
-        outputStream.writeObject(this);
-        outputStream.close();
-        fileOutputStream.close();
+    private void backup() {
+        FileOutputStream fileOutputStream;
+        ObjectOutputStream outputStream;
+        try {
+            fileOutputStream = new FileOutputStream(MAIN_CONTROLLER_FILE_PATH);
+            outputStream = new ObjectOutputStream(fileOutputStream);
+            outputStream.writeObject(this);
+            outputStream.close();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            ConsoleColors.printError("[ERROR]: error while saving main controller data on file");
+        }
     }
 
     /**
@@ -201,12 +207,7 @@ public class MainController implements Serializable {
         }
 
         // Copy on disk
-        try {
-            this.backup();
-        } catch (IOException e) {
-            System.out.println("COLPA DI COPYTODISK CONNECT");
-            e.printStackTrace();
-        }
+        this.backup();
     }
 
     /**
@@ -264,12 +265,7 @@ public class MainController implements Serializable {
         }
 
         //copy on the disk
-        try {
-            this.backup();
-        } catch (IOException e) {
-            System.out.println("COLPA DI COPYTODISK DI CREATEWAITING LIST");
-            e.printStackTrace();
-        }
+        this.backup();
     }
 
     /**
@@ -354,12 +350,7 @@ public class MainController implements Serializable {
         }
 
         //copy on the disk
-        try {
-            this.backup();
-        } catch (IOException e) {
-            System.out.println("COLPA COPY TO DISK DI JOINWAITINGLIST");
-            e.printStackTrace();
-        }
+        this.backup();
     }
 
     /**
@@ -438,7 +429,6 @@ public class MainController implements Serializable {
      * @param gameControllerID
      */
     private void startClientsPing(ArrayList<Pair<VirtualView, String>> clients, int gameControllerID) {
-
         // Ping each client of the game
         for (Pair<VirtualView, String> client : clients) {
             new Thread(() -> {
@@ -446,7 +436,7 @@ public class MainController implements Serializable {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                     try {
                         client.getKey().ping();
@@ -454,8 +444,6 @@ public class MainController implements Serializable {
                         //System.out.println("Connection Problem, thread ping server to client");
                     }
                 }
-
-
             }).start();
 
             new Thread(() -> {
@@ -464,7 +452,7 @@ public class MainController implements Serializable {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                     long elapsed;
                     long currentTime = System.currentTimeMillis();
@@ -503,11 +491,7 @@ public class MainController implements Serializable {
         gamesControllers.remove(gameControllerID);
 
         // Copy to disk again
-        try {
-            this.backup();
-        } catch (IOException e) {
-            System.out.println("COLPA DEL COPY TO DISK in DESTROY GAME");
-        }
+        this.backup();
 
         // Delete game controller file
         Path fileToDeletePath = Paths.get(GameController.GAME_CONTROLLER_FILE_PATH + gameControllerID + ".bin");

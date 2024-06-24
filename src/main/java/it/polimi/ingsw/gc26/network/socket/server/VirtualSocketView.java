@@ -45,7 +45,7 @@ public class VirtualSocketView implements VirtualView {
      *
      * @return base structure
      */
-    private static HashMap<String, String> getBaseMessage() {
+    private HashMap<String, String> getBaseMessage() {
         HashMap<String, String> data = new HashMap<>();
         data.put("function", "");
         data.put("value", "");
@@ -68,8 +68,6 @@ public class VirtualSocketView implements VirtualView {
             this.outputToClient.write(mappedData.writeValueAsString(data));
             this.outputToClient.newLine();
             this.outputToClient.flush();
-        } catch (JsonProcessingException e) {
-            throw new RemoteException();
         } catch (IOException ex) {
             throw new RemoteException();
         }
@@ -90,8 +88,6 @@ public class VirtualSocketView implements VirtualView {
             this.outputToClient.write(mappedData.writeValueAsString(data));
             this.outputToClient.newLine();
             this.outputToClient.flush();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

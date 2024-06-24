@@ -39,7 +39,7 @@ public class VirtualSocketMainController implements VirtualMainController {
      */
     @Override
     public void connect(VirtualView client, String nickName, ClientState clientState) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "connect");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("nickname", nickName);
@@ -57,7 +57,7 @@ public class VirtualSocketMainController implements VirtualMainController {
      */
     @Override
     public void createWaitingList(VirtualView client, String nickname, int numPlayers) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "createWaitingList");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("nickname", nickname);
@@ -73,7 +73,7 @@ public class VirtualSocketMainController implements VirtualMainController {
      */
     @Override
     public VirtualGameController getVirtualGameController(int id) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "getVirtualGameController");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("id", String.valueOf(id));
@@ -83,7 +83,7 @@ public class VirtualSocketMainController implements VirtualMainController {
 
     @Override
     public void resetServerTimer(String clientID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "resetServerTimer");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("clientID", String.valueOf(clientID));
@@ -96,7 +96,7 @@ public class VirtualSocketMainController implements VirtualMainController {
      *
      * @return base structure
      */
-    private static HashMap<String, String> getBaseMessage() {
+    private HashMap<String, String> getBaseMessage() {
         HashMap<String, String> data = new HashMap<>();
         data.put("function", "");
         data.put("value", "");

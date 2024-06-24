@@ -38,7 +38,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void choosePawnColor(String color, String playerID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "choosePawnColor");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("color", color);
@@ -55,7 +55,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void selectSecretMission(int cardIndex, String playerID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "selectSecretMission");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("cardIndex", String.valueOf(cardIndex));
@@ -71,7 +71,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void setSecretMission(String playerID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "setSecretMission");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("playerID", playerID);
@@ -86,7 +86,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void selectCardFromHand(int cardIndex, String playerID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "selectCardFromHand");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("cardIndex", String.valueOf(cardIndex));
@@ -102,7 +102,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void turnSelectedCardSide(String playerID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "turnSelectedCardSide");
         HashMap<String, String> value = new HashMap<>();
         value.put("playerID", playerID);
@@ -118,7 +118,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void selectPositionOnBoard(int x, int y, String playerID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "selectPositionOnBoard");
         HashMap<String, String> value = new HashMap<>();
         value.put("x", String.valueOf(x));
@@ -134,7 +134,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void playCardFromHand(String playerID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "playCardFromHand");
         HashMap<String, String> value = new HashMap<>();
         value.put("playerID", playerID);
@@ -150,7 +150,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void selectCardFromCommonTable(int cardIndex, String playerID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "selectCardFromCommonTable");
         HashMap<String, String> value = new HashMap<>();
         value.put("cardIndex", String.valueOf(cardIndex));
@@ -166,7 +166,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void drawSelectedCard(String playerID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "drawSelectedCard");
         HashMap<String, String> value = new HashMap<>();
         value.put("playerID", playerID);
@@ -184,7 +184,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void addMessage(String line, String nicknameReceiver, String senderID, String time) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "addMessage");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("text", line);
@@ -200,7 +200,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      *
      * @return base structure
      */
-    private static HashMap<String, String> getBaseMessage() {
+    private HashMap<String, String> getBaseMessage() {
         HashMap<String, String> data = new HashMap<>();
         data.put("function", "");
         data.put("value", "");
@@ -237,7 +237,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      */
     @Override
     public void reAddView(VirtualView view, String clientID) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketGameController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "reAddView");
         HashMap<String, String> value = new HashMap<>();
         value.put("clientID", clientID);
