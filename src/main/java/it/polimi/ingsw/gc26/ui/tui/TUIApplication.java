@@ -342,7 +342,7 @@ public class TUIApplication implements UIInterface {
                         case "7":
                             System.out.print("Nickname players: ");
                             System.out.println(mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getPlayersNicknames().stream().
-                                    filter(nickname -> !nickname.equals(mainClient.getNickname())));
+                                    filter(nickname -> !nickname.equals(this.mainClient.getNickname())).collect(toList()));
                             System.out.println("Insert the player's nickname owner of the board: ");
                             String playerNickname = new Scanner(System.in).nextLine();
                             if (mainClient.getViewController().getSimplifiedModel().getOthersPersonalBoards().containsKey(playerNickname)) {
