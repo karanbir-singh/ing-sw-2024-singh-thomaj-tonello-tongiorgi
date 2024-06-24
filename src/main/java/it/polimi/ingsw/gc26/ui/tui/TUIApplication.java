@@ -359,25 +359,7 @@ public class TUIApplication implements UIInterface {
                             System.exit(0);
                             break;
                         case "10":
-                            if (Desktop.isDesktopSupported()) {
-                                try {
-                                    InputStream inputStream = getClass().getResourceAsStream("CODEX_Rulebook_EN.pdf");
-                                    if (inputStream != null) {
-                                        File tempFile = File.createTempFile("CODEX_Rulebook_EN", ".pdf");
-                                        tempFile.deleteOnExit();
-
-                                        // Copy the input stream to a temporary file
-                                        Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                                        // Open the temporary file
-                                        Desktop.getDesktop().open(tempFile);
-                                    } else {
-                                        System.err.println("Resource not found: ");
-                                    }
-                                } catch (IOException ex) {
-                                    System.out.println("No application found to open the rulebook!");
-                                }
-                            }
+                            openRulebook();
                             TUIUpdate.printOptions(gameState);
                             break;
                         case null, default:
@@ -415,7 +397,7 @@ public class TUIApplication implements UIInterface {
      * Opens with the predetermine application a pdf containing the game rules
      */
     private void openRulebook() {
-        InputStream inputStream = SceneController.class.getResourceAsStream("CODEX_Rulebook_EN.pdf");
+        InputStream inputStream = getClass().getResourceAsStream("CODEX_Rulebook_EN.pdf");
         try {
             if (inputStream != null) {
                 File tempFile = File.createTempFile("CODEX_Rulebook_EN", ".pdf");
