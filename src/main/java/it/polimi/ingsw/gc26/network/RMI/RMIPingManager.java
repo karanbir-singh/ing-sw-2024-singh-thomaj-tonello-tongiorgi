@@ -39,6 +39,11 @@ public class RMIPingManager implements PingManager {
      */
     private final Object lock;
 
+
+    private final int maxTimeoutWhenServerDown = 30;
+
+    private long timeWhenServerDown;
+
     /**
      * Flag equals true if the server is reachable
      */
@@ -101,8 +106,16 @@ public class RMIPingManager implements PingManager {
                 // Server is down
                 isServerUp = false;
 
+
+                this.timeWhenServerDown = System.currentTimeMillis() / 1000;
+
                 // Until server is down...
                 while (!isServerUp) {
+                    //if server is down for more than 30 seconds, we close the client
+                    if(System.currentTimeMillis()/ 1000 - this.timeWhenServerDown >= maxTimeoutWhenServerDown){
+                        System.exit(0);
+                    }
+
                     // ...try to recreate connection with server
                     Registry registry;
                     try {

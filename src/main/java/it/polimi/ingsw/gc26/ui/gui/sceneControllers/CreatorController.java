@@ -123,7 +123,7 @@ public class CreatorController extends SceneController implements Initializable 
     @FXML
     public void onClickButton(ActionEvent actionEvent) {
         try {
-            this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(), this.nickname, this.numMaxPlayer);
+            this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(), this.mainClient.getNickname(), this.numMaxPlayer);
             this.status.setText("Waiting for other players...");
         } catch (RemoteException e) {
             throw new RuntimeException(e);

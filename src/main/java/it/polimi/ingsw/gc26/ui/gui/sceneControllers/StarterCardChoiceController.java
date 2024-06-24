@@ -156,7 +156,7 @@ public class StarterCardChoiceController extends SceneController implements Init
         try {
             this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait");
         }
         status.setText("Card selected! Please, wait for other players to select their side!");
     }
@@ -172,7 +172,7 @@ public class StarterCardChoiceController extends SceneController implements Init
                 this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
 
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                System.out.println("Connection problem, please wait");
             }
         }
     }
@@ -210,8 +210,6 @@ public class StarterCardChoiceController extends SceneController implements Init
             goldCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldCards().get(1).getFront().getImagePath()))));
             goldDeck.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
         }
-
-
     }
 
     /**

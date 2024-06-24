@@ -88,7 +88,7 @@ public class WinnerController extends SceneController implements Initializable {
             score.getStyleClass().add("winnerLabel");
             rank.add(label);
             rank.add(score);
-            if(this.nickname.equals(winnerNickname)){
+            if(this.mainClient.getNickname().equals(winnerNickname)){
                 areYouWinner = true;
             }
         }

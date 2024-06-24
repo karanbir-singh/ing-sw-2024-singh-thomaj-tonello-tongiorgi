@@ -163,7 +163,7 @@ public class SecretMissionChoiceController extends SceneController implements In
         try {
             this.mainClient.getVirtualGameController().setSecretMission(this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait");
         }
     }
 
@@ -273,8 +273,8 @@ public class SecretMissionChoiceController extends SceneController implements In
             }
         }
 
-        // if there's no tab for the personal board's owner, creates a new tab pane for its personal board
-        if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
+        //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
+        if (!otherPersonalBoard.getNickname().equals(this.mainClient.getNickname()) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
             this.personalBoardTabPane.getTabs().add(consideredTab);
@@ -369,8 +369,7 @@ public class SecretMissionChoiceController extends SceneController implements In
      */
     private void addImage(ImageView imageView, int x, int y, GridPane gridPane) {
         setParameters(imageView, "0");
-        //TODO capire perché a volte è null
-        if(gridPane != null) {
+        if(gridPane != null){
             Platform.runLater(() -> {
                 gridPane.add(imageView, x, y);
             });

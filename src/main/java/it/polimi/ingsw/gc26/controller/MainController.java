@@ -21,10 +21,6 @@ import java.util.*;
  */
 public class MainController implements Serializable {
     /**
-     * This constant represents the max numbers of reconnection attempts
-     */
-    private static final int NUM_RECONNECTION_ATTEMPTS = 3;
-    /**
      * This attribute represents the file path for saving the main controller
      */
     public static final String MAIN_CONTROLLER_FILE_PATH = "../mainController.bin";
@@ -396,19 +392,44 @@ public class MainController implements Serializable {
         this.createGeneratorPingThread();
         System.out.println("Games recreated");
     }
-
-    /**
-     * Useful for pinging from the client to the server
-     */
-    public void amAlive() {
-        //TODO MAYBE FOR SOCKET IS BETTER IF THIS RETURN A STRING
-    }
+    
 
     /**
      * Thread useful after a server goes up from a crash: called in recreateGame()
      */
     private void createGeneratorPingThread() {
-        new Thread(() -> {
+        for (Integer gameControllerID : gamesControllers.keySet()) {
+            new Thread(()->{
+                Game game = gamesControllers.get(gameControllerID).getGame();
+                int maxSecondsToWaitForClientReconnection = 30;
+                long currentTime = System.currentTimeMillis();
+                while (game.getNumberOfPlayers() != game.getObservable().getClients().size()) {
+                    // wait here so that everything is reloading, because not necessary the virtual views are already there
+
+
+                    //if a client isn't reconnecting for more than 30 seconds, the server closes the game
+                    if((System.currentTimeMillis() - currentTime) / 1000 >= maxSecondsToWaitForClientReconnection){
+                        this.destroyGame(gameControllerID);
+                        return;
+                    }
+                    System.out.println("we are in the while, game " + gameControllerID );
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                // Launch thread for pinging clients
+                this.startClientsPing(game.getObservable().getClients(), gameControllerID);
+                System.out.println("thread creati, game " + gameControllerID );
+            }).start();
+        }
+
+
+
+
+        /*new Thread(() -> {
             for (Integer gameControllerID : gamesControllers.keySet()) {
                 Game game = gamesControllers.get(gameControllerID).getGame();
                 while (game.getNumberOfPlayers() != game.getObservable().getClients().size()) {
@@ -417,8 +438,9 @@ public class MainController implements Serializable {
 
                 // Launch thread for pinging clients
                 this.startClientsPing(game.getObservable().getClients(), gameControllerID);
+                System.out.println("thread creati");
             }
-        }).start();
+        }).start();*/
     }
 
 
@@ -464,7 +486,7 @@ public class MainController implements Serializable {
                     }
 
                     if (elapsed >= TIMEOUT) {
-                        System.out.println("Client " + client.getValue());
+                        System.out.println("Client " + client.getValue() + " disconnected");
                         isAlive = false;
                         synchronized (this.timers) {
                             this.timers.remove(client.getValue());

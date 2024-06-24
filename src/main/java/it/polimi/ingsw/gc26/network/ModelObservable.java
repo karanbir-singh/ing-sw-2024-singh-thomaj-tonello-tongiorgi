@@ -294,6 +294,10 @@ public class ModelObservable implements Serializable {
      * Notifies the client that it has to kill the game
      */
     public void notifyGameClosed() {
+        if(this.clients == null){//when both clients shout down when server is down,
+            // and when server goes up this.clients will remain null since nobody will reconnected
+            this.clients = new ArrayList<>();
+        }
         for (Pair client : this.clients) {
             try {
                 ((VirtualView) client.getKey()).killProcess();

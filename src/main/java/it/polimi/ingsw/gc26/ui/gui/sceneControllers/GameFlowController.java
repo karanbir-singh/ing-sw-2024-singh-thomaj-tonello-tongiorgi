@@ -89,7 +89,7 @@ public class GameFlowController extends SceneController implements Initializable
     @FXML
     private HBox resourceCardBox;
     /**
-     * bod with gold cards as children
+     * Box with gold cards as children
      */
     @FXML
     private HBox goldCardBox;
@@ -331,11 +331,10 @@ public class GameFlowController extends SceneController implements Initializable
             }
         }
 
-        // if there's no tab for the personal board's owner, creates a new tab pane for its personal board
-        if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
+        //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
+        if (!otherPersonalBoard.getNickname().equals(this.mainClient.getNickname()) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
-            //consideredTab.setText("1");
             personalBoardTabPane.getTabs().add(consideredTab);
             otherScrollPane = new ScrollPane();
             otherScrollPane.setHvalue(0.5);
@@ -491,8 +490,7 @@ public class GameFlowController extends SceneController implements Initializable
      */
     private void addImage(ImageView imageView, int x, int y, GridPane gridPane) {
         setCardImageParameters(imageView, 0);
-        //TODO capire perché a volte è nullo
-        if(gridPane != null) {
+        if(gridPane != null){
             Platform.runLater(() -> {
                 gridPane.add(imageView, x, y);
             });
@@ -553,7 +551,7 @@ public class GameFlowController extends SceneController implements Initializable
                         this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
                         this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
                     } catch (RemoteException e) {
-                        // throw new RuntimeException(e);
+                        System.out.println("Connection problem, please wait");
                     }
 
                     break;

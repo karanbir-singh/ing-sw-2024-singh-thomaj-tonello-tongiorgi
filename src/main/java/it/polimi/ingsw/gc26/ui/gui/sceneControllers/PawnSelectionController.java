@@ -59,8 +59,6 @@ public class PawnSelectionController extends SceneController implements Initiali
      */
     private final ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
 
-
-
     /**
      * Handles the click on a pawn image. It performs the choose pawn color request to the server
      *
@@ -71,7 +69,7 @@ public class PawnSelectionController extends SceneController implements Initiali
         try {
             this.mainClient.getVirtualGameController().choosePawnColor(pawnColor, this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait");
         }
     }
 

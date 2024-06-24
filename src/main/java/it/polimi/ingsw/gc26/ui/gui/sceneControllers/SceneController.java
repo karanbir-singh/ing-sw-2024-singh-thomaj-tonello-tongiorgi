@@ -43,10 +43,6 @@ abstract public class SceneController {
      */
     public MainClient mainClient;
     /**
-     * The nickname of the user
-     */
-    public String nickname;
-    /**
      * The background image for the game scene.
      */
     private Image gameBackground = new Image(getClass().getResource("images/game-background.png").toExternalForm());
@@ -94,24 +90,6 @@ abstract public class SceneController {
      */
     public void setMainClient(MainClient mainClient) {
         this.mainClient = mainClient;
-    }
-
-    /**
-     * Sets player's nickname
-     *
-     * @param nickname string != ""
-     */
-    public void setNickName(String nickname) {
-        this.nickname = nickname;
-    }
-
-    /**
-     * Return player's nickname
-     *
-     * @return string != ""
-     */
-    public String getNickName() {
-        return this.nickname;
     }
 
     /**
@@ -358,13 +336,11 @@ abstract public class SceneController {
      * Creates one chat with each player and the group chat
      *
      * @param simplifiedGame updated game
-     * @param nickname       nickname player itself
      */
-    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
+    public void createChats(SimplifiedGame simplifiedGame) {
         if (!chatHasBeenCreated) {
-            this.nickname = nickname;
             for (String playerNickname : simplifiedGame.getPlayersNicknames()) {
-                if (!playerNickname.equals(nickname)) {
+                if (!playerNickname.equals(this.mainClient.getNickname())) {
                     createChatTab(playerNickname);
                 }
             }
@@ -444,7 +420,7 @@ abstract public class SceneController {
      */
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();
-        if (!newMessage.getSender().getNickname().equals(this.nickname)) {
+        if (!newMessage.getSender().getNickname().equals(this.mainClient.getNickname())) {
             // message from another player
             if (isReceiverUnknown(newMessage)) {
                 addMessageInChat(newMessage.getText(), "Group Chat", isLabeled(simplifiedChat) ? newMessage.getSender().getNickname() : null);
@@ -584,5 +560,4 @@ abstract public class SceneController {
             }
         });
     }
-
 }
