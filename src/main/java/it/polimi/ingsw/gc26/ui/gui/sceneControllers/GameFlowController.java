@@ -104,18 +104,6 @@ public class GameFlowController extends SceneController implements Initializable
     @FXML
     private VBox secretMissionBox;
     /**
-     * Resources in the personal board
-     */
-    private ArrayList<ImageView> resources = new ArrayList<>();
-    /**
-     * Gold cards' list
-     */
-    private ArrayList<ImageView> goldens = new ArrayList<>();
-    /**
-     * Common missions. Two images as children.
-     */
-    private ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
-    /**
      * Grid where to place the played cards
      */
     @FXML
@@ -428,9 +416,9 @@ public class GameFlowController extends SceneController implements Initializable
             this.commonMissionsBox.getChildren().setAll(commonMissionsCommonTableImages);
             this.resourceCardBox.getChildren().setAll(resourceCommonTableImages);
             this.goldCardBox.getChildren().setAll(goldCommonTableImages);
-            cardsLayout(rootBorder, resourceCommonTableImages);
-            cardsLayout(rootBorder, goldCommonTableImages);
-            cardsLayout(rootBorder, commonMissionsCommonTableImages);
+            //cardsLayout(rootBorder, resourceCommonTableImages);
+            //cardsLayout(rootBorder, goldCommonTableImages);
+            //cardsLayout(rootBorder, commonMissionsCommonTableImages);
         });
 
         //buttons setup
