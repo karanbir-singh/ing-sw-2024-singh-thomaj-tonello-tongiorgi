@@ -1,6 +1,5 @@
 package it.polimi.ingsw.gc26.network.socket.server;
 
-
 import it.polimi.ingsw.gc26.controller.MainController;
 
 import java.io.*;
@@ -13,10 +12,7 @@ import java.util.ArrayList;
  * It creates a new client handler for each new socket client
  */
 public class SocketServer {
-    /**
-     * File's path with the server configuration
-     */
-    public final static String filePath = "src/main/resources/envServer.json";
+
     /**
      * This attribute represents all the client handlers connected to the server
      */
@@ -49,18 +45,18 @@ public class SocketServer {
      */
     public void runServer() throws IOException {
         Socket clientSocket;
-        System.out.println(STR."\nStarting Socket Server... \nListening in port: \{this.listenSocket.getLocalPort()}");
+        System.out.println("\nStarting Socket Server... \nListening in port: " + this.listenSocket.getLocalPort());
 
         // Keep server on listening for connection
         while ((clientSocket = this.listenSocket.accept()) != null) {
-            System.out.println(STR."Client\{clientSocket.getRemoteSocketAddress()}connected");
+            System.out.println("Client " + clientSocket.getRemoteSocketAddress() + " connected");
 
             // Get input and out stream from the client
             InputStreamReader socketRx = new InputStreamReader(clientSocket.getInputStream());
             OutputStreamWriter socketTx = new OutputStreamWriter(clientSocket.getOutputStream());
 
             // Create client handler
-            SocketClientHandler handler = new SocketClientHandler(this.mainController, new BufferedReader(socketRx), new PrintWriter(socketTx));
+            SocketClientHandler handler = new SocketClientHandler(this.mainController, new BufferedReader(socketRx), new BufferedWriter(socketTx));
 
             // Add to clients list
             synchronized (this.clients) {

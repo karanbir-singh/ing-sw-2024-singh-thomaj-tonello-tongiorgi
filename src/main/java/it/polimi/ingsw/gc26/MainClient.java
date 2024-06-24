@@ -1,46 +1,93 @@
 package it.polimi.ingsw.gc26;
 
+import it.polimi.ingsw.gc26.network.PingManager;
+import it.polimi.ingsw.gc26.network.RMI.RMIPingManager;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
-import it.polimi.ingsw.gc26.network.ViewController;
+import it.polimi.ingsw.gc26.network.socket.SocketPingManager;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
 import it.polimi.ingsw.gc26.network.socket.server.VirtualSocketView;
+import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
+import it.polimi.ingsw.gc26.ui.tui.TUIApplication;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
+import it.polimi.ingsw.gc26.view_model.ViewController;
 
 import java.io.*;
 import java.net.Socket;
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.time.LocalTime;
 import java.util.Scanner;
 
+/**
+ * Main client class representing a client in the game system.
+ * Manages client identification, connection states, server communication, and user interfaces.
+ */
 public class MainClient {
     /**
-     * Default port of server socket
+     * ID of the client
      */
-    private static final int DEFAULT_SOCKET_SERVER_PORT = 3060;
+    private String clientID;
+
     /**
-     * Default port of RMI server
+     * Client's nickname
      */
-    private static final int DEFAULT_RMI_SERVER_PORT = 1099;
+    private String nickname;
+
+    /**
+     * State of the client
+     */
+    private ClientState clientState;
+    /**
+     * Default port of server socket
+     * Server IP
+     */
+    public static String SERVER_IP = "127.0.0.1";
+    /**
+     * Port of Socket server
+     */
+    public static int SERVER_SOCKET_PORT = MainServer.DEFAULT_SOCKET_SERVER_PORT;
+
+    /**
+     * Port of RMI server
+     */
+    public static int RMI_SERVER_PORT = MainServer.DEFAULT_RMI_SERVER_PORT;
+
     /**
      * RMI bound object name
      */
-    private static final String remoteObjectName = "RMIMainController";
+    public static final String remoteObjectName = "RMIMainController";
 
     /**
      * User interface types
      */
-    private enum UserInterface {tui, gui}
+    public enum GraphicType {
+        /**
+         * terminal interface
+         */
+        tui,
+        /**
+         * graphical interface
+         */
+        gui}
 
     /**
      * Client view types
      */
-    private enum NetworkType {rmi, socket}
+    public enum NetworkType {
+        /**
+         * rmi connection
+         */
+        rmi,
+        /**
+         * socket connection
+         */
+        socket}
 
     /**
      * Remote interface of the main controller
@@ -60,16 +107,100 @@ public class MainClient {
     /**
      * Client controller
      */
-    private ViewController viewController;
+    private final ViewController viewController;
 
     /**
      * Attribute used for synchronize actions between server and client
      */
-    private final Object lock;
+    public final Object lock;
+
+    /**
+     * First string to be printed as welcome message
+     */
+    public static String asciiCodexNaturalis = "\n" +
+            "░█████╗░░█████╗░██████╗░███████╗██╗░░██╗\t███╗░░██╗░█████╗░████████╗██╗░░░██╗██████╗░░█████╗░██╗░░░░░██╗░██████╗\n" +
+            "██╔══██╗██╔══██╗██╔══██╗██╔════╝╚██╗██╔╝\t████╗░██║██╔══██╗╚══██╔══╝██║░░░██║██╔══██╗██╔══██╗██║░░░░░██║██╔════╝\n" +
+            "██║░░╚═╝██║░░██║██║░░██║█████╗░░░╚███╔╝░\t██╔██╗██║███████║░░░██║░░░██║░░░██║██████╔╝███████║██║░░░░░██║╚█████╗░\n" +
+            "██║░░██╗██║░░██║██║░░██║██╔══╝░░░██╔██╗░\t██║╚████║██╔══██║░░░██║░░░██║░░░██║██╔══██╗██╔══██║██║░░░░░██║░╚═══██╗\n" +
+            "╚█████╔╝╚█████╔╝██████╔╝███████╗██╔╝╚██╗\t██║░╚███║██║░░██║░░░██║░░░╚██████╔╝██║░░██║██║░░██║███████╗██║██████╔╝\n" +
+            "░╚════╝░░╚════╝░╚═════╝░╚══════╝╚═╝░░╚═╝\t╚═╝░░╚══╝╚═╝░░╚═╝░░░╚═╝░░░░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚══════╝╚═╝╚═════╝░";
+    /**
+     * Server RMI registry
+     */
+    private Registry registry;
+
+    /**
+     * Runnable of the thread that manage the server ping
+     */
+    private PingManager pingManager;
 
     public MainClient() {
+        this.clientID = null;
+        this.clientState = ClientState.CONNECTION;
         this.lock = new Object();
-        this.viewController = new ViewController(this, null, null, ClientState.CONNECTION, lock);
+        this.viewController = new ViewController(this);
+
+    }
+
+    /**
+     * Set client's state
+     *
+     * @param clientState new client state
+     */
+    public void setClientState(ClientState clientState) {
+        synchronized (this.lock) {
+            this.clientState = clientState;
+            this.lock.notifyAll();
+        }
+    }
+
+    /**
+     * @return client's state
+     */
+    public ClientState getClientState() {
+        return this.clientState;
+    }
+
+    /**
+     * Sets client's ID
+     *
+     * @param clientID ID
+     */
+    public void setClientID(String clientID) {
+        synchronized (this.lock) {
+            this.clientID = clientID;
+            this.lock.notifyAll();
+        }
+    }
+
+    /**
+     * @return client's ID
+     */
+    public String getClientID() {
+        return clientID;
+    }
+
+    /**
+     * @return main client's lock
+     */
+    public Object getLock() {
+        return this.lock;
+    }
+
+    /**
+     * Sets main client's server ping manager
+     *
+     * @param pingManager the server ping manager
+     */
+    public void setPingManager(PingManager pingManager) {
+        this.pingManager = pingManager;
+    }
+
+    /**
+     * @return main client's server ping manager
+     */
+    public PingManager getPingManager() {
+        return pingManager;
     }
 
     /**
@@ -87,8 +218,26 @@ public class MainClient {
      * @param virtualGameController virtual game controller to set
      */
     public void setVirtualGameController(VirtualGameController virtualGameController) {
-        this.virtualGameController = virtualGameController;
+        synchronized (this.lock) {
+            this.virtualGameController = virtualGameController;
+            this.lock.notifyAll();
+        }
     }
+
+    /**
+     * @return virtual main controller
+     */
+    public VirtualMainController getVirtualMainController() {
+        return virtualMainController;
+    }
+
+    /**
+     * @return virtual game controller
+     */
+    public VirtualGameController getVirtualGameController() {
+        return virtualGameController;
+    }
+
 
     /**
      * Sets virtual view passed by parameter
@@ -100,279 +249,196 @@ public class MainClient {
     }
 
     /**
-     * Starts RMI Client view
-     *
-     * @param userInterface selected user interface type
-     * @throws RemoteException
-     * @throws NotBoundException
+     * @return virtual view
      */
-    private static void startRMIClient(String RMIServerAddress, int RMIServerPort, UserInterface userInterface) throws RemoteException, NotBoundException {
-        // Finding the registry and getting the stub of virtualMainController in the registry
-        Registry registry = LocateRegistry.getRegistry(RMIServerAddress, RMIServerPort);
+    public VirtualView getVirtualView() {
+        return virtualView;
+    }
 
+    /**
+     * @return view controller
+     */
+    public ViewController getViewController() {
+        return viewController;
+    }
+
+    /**
+     * Set's the client's flag to true to kill all threads
+     */
+    public void killProcesses() {
+        System.out.println("Game ended because another player disconnected itself!");
+        System.exit(0);
+    }
+
+    /**
+     * Return the client's nickname
+     *
+     * @return nickname
+     */
+    public String getNickname() {
+        return nickname;
+    }
+
+    /**
+     * Set's the client's nickname
+     *
+     * @param nickname
+     */
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    /**
+     * Get client's configuration from user
+     *
+     * @param args
+     */
+    public static void main(String args[]) {
+        // print logo
+        System.out.println(asciiCodexNaturalis + "\n");
+
+        // Get server IP and port
+        Scanner scanner = new Scanner(System.in);
+
+        // Insert server IP
+        System.out.print("Enter server IP address (default: 127.0.0.1): ");
+        String serverIP = scanner.nextLine();
+        if (serverIP.matches(".*[a-zA-Z]+.*")) {
+            ConsoleColors.printError("[ERROR]: Invalid input -> Set default server IP address");
+        } else if (!serverIP.isEmpty()) {
+            SERVER_IP = serverIP;
+        }
+
+        // Insert RMI Server port
+        System.out.print("Enter server RMI port (default 1099): ");
+        String rmiServerPort = scanner.nextLine();
+        if (rmiServerPort.matches(".*[a-zA-Z]+.*")) {
+            ConsoleColors.printError("[ERROR]: Invalid input -> Set default RMI Server port");
+        } else if (!rmiServerPort.isEmpty()) {
+            RMI_SERVER_PORT = Integer.parseInt(rmiServerPort);
+        }
+
+        // Insert server socket port
+        System.out.print("Enter server socket port (default 3060): ");
+        String socketServerPort = scanner.nextLine();
+        if (socketServerPort.matches(".*[a-zA-Z]+.*")) {
+            ConsoleColors.printError("[ERROR]: Invalid input -> Set default Server socket port");
+        } else if (!socketServerPort.isEmpty()) {
+            SERVER_SOCKET_PORT = Integer.parseInt(socketServerPort);
+        }
+
+        // Get type of communication from user
+        NetworkType networkType = null;
+        do {
+            System.out.println("What type of communication do you want to use? (rmi/socket)");
+            try {
+                networkType = NetworkType.valueOf(scanner.nextLine().toLowerCase());
+            } catch (IllegalArgumentException e) {
+                ConsoleColors.printError("[ERROR]: Invalid input");
+            }
+        } while (networkType == null);
+
+        // Get user interface from user
+        GraphicType graphicType = null;
+        do {
+            System.out.println("What type of user interface do you want to use? (tui/gui)");
+            try {
+                graphicType = GraphicType.valueOf(scanner.nextLine().toLowerCase());
+            } catch (IllegalArgumentException e) {
+                ConsoleColors.printError("[ERROR]: Invalid input");
+            }
+        } while (graphicType == null);
+
+        // Launch the chosen user interface
+        if (graphicType.equals(GraphicType.tui)) {
+            new TUIApplication().init(networkType);
+        } else {
+            new GUIApplication().init(networkType);
+        }
+    }
+
+    /**
+     * Starts rmi client
+     *
+     * @param graphicType TUI or GUI
+     * @return main client to manage the requests
+     * @throws RemoteException if the connection cannot be made
+     */
+    public static MainClient startRMIClient(GraphicType graphicType) throws RemoteException {
         // Create RMI Client
         MainClient mainClient = new MainClient();
-        mainClient.setVirtualMainController((VirtualMainController) registry.lookup(remoteObjectName));
-        mainClient.setVirtualView(new VirtualRMIView(mainClient.viewController));
 
-        // Check chosen user interface
-        if (userInterface == UserInterface.tui) {
-            mainClient.runConnectionTUI();
-            mainClient.runGameTUI();
-        } else if (userInterface == UserInterface.gui) {
-            //new VirtualRMIView(virtualMainController).runGUI();
+        try {
+            mainClient.registry = LocateRegistry.getRegistry(SERVER_IP, RMI_SERVER_PORT);
+        } catch (RemoteException e) {
+            throw new RemoteException("Unable to find RMI registry");
         }
+
+        // Get remote object
+        Remote remoteObject;
+        try {
+            remoteObject = mainClient.registry.lookup(remoteObjectName);
+        } catch (RemoteException | NotBoundException e) {
+            throw new RemoteException("Unable to lookup remote object");
+        }
+
+        mainClient.setVirtualMainController((VirtualMainController) remoteObject);
+        try {
+            mainClient.setVirtualView(new VirtualRMIView(mainClient.getViewController()));
+        } catch (RemoteException e) {
+            throw new RemoteException("Unable to create virtual RMI view");
+        }
+
+        // Set RMI server ping manager
+        mainClient.setPingManager(new RMIPingManager(mainClient));
+
+        return mainClient;
     }
 
     /**
      * Starts socket client
      *
-     * @param socketServerAddress IP address of the server
-     * @param socketServerPort      port of the server
-     * @param userInterface         selected user interface type
-     * @throws IOException
+     * @param graphicType TUI or GUI
+     * @return ain client to manage the requests
+     * @throws IOException if the connection cannot be established
      */
-    private static void startSocketClient(String socketServerAddress, int socketServerPort, UserInterface userInterface) throws IOException {
+    public static MainClient startSocketClient(GraphicType graphicType) throws IOException {
         // Create connection with the server
-        Socket serverSocket = new Socket(socketServerAddress, socketServerPort);
+        Socket serverSocket;
+        try {
+            serverSocket = new Socket(SERVER_IP, SERVER_SOCKET_PORT);
+        } catch (IOException e) {
+            throw new IOException("[ERROR]: unable to locate server");
+        }
 
         // Get input and out stream from the server
-        InputStreamReader socketRx = new InputStreamReader(serverSocket.getInputStream());
-        OutputStreamWriter socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
+        InputStreamReader socketRx;
+        OutputStreamWriter socketTx;
+        try {
+            socketRx = new InputStreamReader(serverSocket.getInputStream());
+            socketTx = new OutputStreamWriter(serverSocket.getOutputStream());
+        } catch (IOException e) {
+            throw new IOException("[ERROR]: unable to get server input and output server");
+        }
 
         // Reader
         BufferedReader socketIn = new BufferedReader(socketRx);
 
         // Writer
-        PrintWriter socketOut = new PrintWriter(socketTx);
+        BufferedWriter socketOut = new BufferedWriter(socketTx);
 
         // Create socket client
         MainClient mainClient = new MainClient();
+
         mainClient.setVirtualMainController(new VirtualSocketMainController(socketOut));
         mainClient.setVirtualView(new VirtualSocketView(null));
+
         // Launch a thread for managing server requests
-        new SocketServerHandler(mainClient.viewController, socketIn, socketOut);
+        new SocketServerHandler(mainClient.getViewController(), socketIn, socketOut);
 
-        // Check chosen user interface
-        if (userInterface == UserInterface.tui) {
-            mainClient.runConnectionTUI();
-            mainClient.runGameTUI();
-        } else if (userInterface == UserInterface.gui) {
-            //new SocketClient(new BufferedReader(socketRx), new PrintWriter(socketTx)).runGUI();
-        }
-    }
+        // Set Socket server ping manager
+        mainClient.setPingManager(new SocketPingManager(mainClient));
 
-    public void runConnectionTUI() throws RemoteException {
-        // TODO gestire la Remote Exception
-        //Initial state in CONNECTION
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Connected to the server successfully!");
-        System.out.println("Insert your nickname: ");
-        String input = scanner.nextLine();
-        viewController.setNickname(input);
-        this.virtualMainController.connect(this.virtualView, viewController.getNickname(), viewController.getClientState());
-
-        synchronized (this.lock) {
-            while (viewController.getClientState() == ClientState.CONNECTION) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        if (viewController.getClientState() == ClientState.CREATOR) {
-            System.out.println("You must initialize a new game \nInsert number of players: (2/3/4)");
-            input = scanner.nextLine();
-            this.virtualMainController.createWaitingList(this.virtualView, viewController.getNickname(), Integer.parseInt(input));
-
-            synchronized (this.lock) {
-                while (viewController.getClientState() == ClientState.CREATOR) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            while (viewController.getClientState() == ClientState.INVALID_NUMBER_OF_PLAYER) {
-                viewController.updateClientState(ClientState.CREATOR);
-                System.err.println("Invalid number of players!");
-                System.err.flush();
-                System.out.println("Insert number of players: (2/3/4)");
-                input = scanner.nextLine();
-                this.virtualMainController.createWaitingList(this.virtualView, viewController.getNickname(), Integer.parseInt(input));
-
-                synchronized (this.lock) {
-                    while (viewController.getClientState() == ClientState.CREATOR) {
-                        try {
-                            lock.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        } else if (viewController.getClientState() == ClientState.INVALID_NICKNAME) {
-            while (viewController.getClientState() == ClientState.INVALID_NICKNAME) {
-                System.err.println("Nickname not available!");
-                System.err.flush();
-                System.out.println("Insert new nickname: ");
-                input = scanner.nextLine();
-                viewController.setNickname(input);
-
-                this.virtualMainController.connect(this.virtualView, viewController.getNickname(), viewController.getClientState());
-
-                synchronized (this.lock) {
-                    while (viewController.getClientState() == ClientState.CONNECTION) {
-                        try {
-                            lock.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }
-
-        System.out.println("Waiting for other players ...");
-        while (viewController.getClientState() == ClientState.WAITING) {
-            System.out.flush();
-        }
-
-        synchronized (this.lock) {
-            this.virtualGameController = this.virtualMainController.getVirtualGameController();
-            while (this.virtualGameController == null) {
-                try {
-                    this.lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        System.out.println("Game begin");
-    }
-
-    public void runGameTUI() throws RemoteException {
-        // Declare scanner
-        Scanner scan = new Scanner(System.in);
-
-        // Infinite loop
-        while (true) {
-            Integer option = printOptions();
-            switch (option) {
-                case 1:
-                    System.out.println("Select the card position: (0/1/2)");
-                    String xPosition = scan.nextLine();
-                    virtualGameController.selectCardFromHand(Integer.parseInt(xPosition), viewController.getClientID());
-                    break;
-                case 2:
-                    virtualGameController.turnSelectedCardSide(viewController.getClientID());
-                    break;
-                case 3:
-                    virtualGameController.playCardFromHand(viewController.getClientID());
-                    break;
-                case 4:
-                    System.out.println("Insert the X coordinate: ");
-                    String XPosition = scan.nextLine();
-                    System.out.println("Insert the Y coordinate: ");
-                    String YPosition = scan.nextLine();
-                    virtualGameController.selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), viewController.getClientID());
-                    break;
-                case 5:
-                    //TODO use only one number
-                    System.out.println("Insert the X coordinate: ");
-                    XPosition = scan.nextLine();
-                    System.out.println("Insert the X coordinate: ");
-                    YPosition = scan.nextLine();
-                    virtualGameController.selectCardFromCommonTable(Integer.parseInt(XPosition), Integer.parseInt(YPosition), viewController.getClientID());
-                    break;
-                case 6:
-                    virtualGameController.drawSelectedCard(viewController.getClientID());
-                    break;
-                case 7:
-                    System.out.println("Insert the pawn color: ");
-                    String color = scan.nextLine();
-                    virtualGameController.choosePawnColor(color , viewController.getClientID());
-                    break;
-                case 8:
-                    System.out.println("Insert the card index: (0/1) ");
-                    int cardIndex = Integer.parseInt(scan.nextLine());
-                    virtualGameController.selectSecretMission(cardIndex, viewController.getClientID());
-                    break;
-                case 9:
-                    virtualGameController.setSecretMission(viewController.getClientID());
-                    break;
-                case 10:
-                    System.out.println("Insert the player's nickname owner of the board: ");
-                    String playerNickname = scan.nextLine();
-                    virtualGameController.printPersonalBoard(playerNickname, viewController.getClientID());
-                    break;
-                case 11:
-                    System.out.println("Insert the receiver's nickname: ");
-                    String receiverNickname = scan.nextLine();
-                    System.out.println("Insert message: ");
-                    String message = scan.nextLine();
-                    virtualGameController.addMessage(message, receiverNickname, viewController.getClientID(), LocalTime.now().toString());
-                    break;
-            }
-        }
-    }
-
-    private int printOptions() {
-        System.out.println("Select your option:");
-        System.out.println("" +
-                "1) Select a card.\n" +
-                "2) Turn selected card side.\n" +
-                "3) Play card from hand.\n" +
-                "4) Select position on board.\n" +
-                "5) Select card from common table.\n" +
-                "6) Draw selected card.\n" +
-                "7) Choose pawn color.\n" +
-                "8) Select secret mission.\n" +
-                "9) Set secret mission.\n" +
-                "10) Print player's personal board.\n" +
-                "11) Open chat.\n");
-
-
-        Scanner scan = new Scanner(System.in);
-        return scan.nextInt();
-    }
-
-    public static void main(String args[]) {
-        String socketServerAddress = "127.0.0.1";
-        int socketServerPort = DEFAULT_SOCKET_SERVER_PORT;
-
-        // Default values
-        NetworkType networkType;
-
-        // Check if the client passes server IP address and his port
-        if (args.length == 2) {
-            socketServerAddress = args[0];
-            socketServerPort = Integer.parseInt(args[1]);
-        }
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("What technology do you want to connect with? (rmi/socket)");
-        networkType = NetworkType.valueOf(scanner.nextLine().toLowerCase());
-
-        UserInterface userInterface;
-        System.out.println("What type of user interface do you want to use? (tui/gui)");
-        userInterface = UserInterface.valueOf(scanner.nextLine());
-        try {
-            if (networkType == NetworkType.rmi) {
-                // Start RMI Client
-                String RMIServerAddress = socketServerAddress;
-                startRMIClient(RMIServerAddress, DEFAULT_RMI_SERVER_PORT, userInterface);
-            } else if (networkType == NetworkType.socket) {
-                // Start Socket Client
-                startSocketClient(socketServerAddress, socketServerPort, userInterface);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NotBoundException e) {
-            e.printStackTrace();
-        }
+        return mainClient;
     }
 }

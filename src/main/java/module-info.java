@@ -9,7 +9,12 @@ module it.polimi.ingsw.gc26 {
     requires jdk.compiler;
     requires java.management;
 
-
+    exports it.polimi.ingsw.gc26.request.view_request;
+    opens it.polimi.ingsw.gc26.request.view_request to javafx.fxml;
+    exports it.polimi.ingsw.gc26.model.player;
+    opens it.polimi.ingsw.gc26.model.player to javafx.fxml;
+    exports it.polimi.ingsw.gc26.model.game;
+    opens it.polimi.ingsw.gc26.model.game to javafx.fxml;
     exports it.polimi.ingsw.gc26.model.card_side;
     opens it.polimi.ingsw.gc26.model.card_side to javafx.fxml;
     exports it.polimi.ingsw.gc26.model.card;
@@ -30,4 +35,14 @@ module it.polimi.ingsw.gc26 {
     opens it.polimi.ingsw.gc26.request.game_request to javafx.fxml;
     exports it.polimi.ingsw.gc26.request.main_request;
     opens it.polimi.ingsw.gc26.request.main_request to javafx.fxml;
+    exports it.polimi.ingsw.gc26.view_model;
+    opens it.polimi.ingsw.gc26.view_model to javafx.fxml;
+    exports it.polimi.ingsw.gc26.ui.gui.sceneControllers;
+    opens it.polimi.ingsw.gc26.ui.gui.sceneControllers to javafx.fxml;
+    exports it.polimi.ingsw.gc26.ui.tui;
+    opens it.polimi.ingsw.gc26.ui.tui to javafx.fxml;
+    exports it.polimi.ingsw.gc26.ui.gui;
+    opens it.polimi.ingsw.gc26.ui.gui to javafx.fxml;
+    exports it.polimi.ingsw.gc26.ui;
+    opens it.polimi.ingsw.gc26.ui to javafx.fxml;
 }

@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Optional;
 /**
  * This abstract class represents a Side, two Sides form a Card
  */
-abstract public class Side {
+abstract public class Side implements Serializable {
     /**
      * This attribute represents the points given by this side
      */
@@ -51,16 +52,22 @@ abstract public class Side {
     private Corner DOWNRIGHT;
 
     /**
+     * this attribute represents the path where the side's image is located
+     */
+    private String imagePath;
+
+    /**
      * This method returns the points that a Mission cards gives based on the Player's board
-     * @param firstX X coordinate of the first card
-     * @param firstY Y coordinate of the first card
-     * @param secondX X coordinate of the second card
-     * @param secondY Y coordinate of the second card
+     *
+     * @param firstX            X coordinate of the first card
+     * @param firstY            Y coordinate of the first card
+     * @param secondX           X coordinate of the second card
+     * @param secondY           Y coordinate of the second card
      * @param occupiedPositions Position occupied by Player's cards in the Player's Board
-     * @param diagSymbol Symbol that represent the cards to be checked
-     * @param vertSymbol Symbol that represent the cards to be checked
-     * @param flag flag that equals true if the card has already been count in a pattern
-     * @param points points given for every combination found
+     * @param diagSymbol        Symbol that represent the cards to be checked
+     * @param vertSymbol        Symbol that represent the cards to be checked
+     * @param flag              flag that equals true if the card has already been count in a pattern
+     * @param points            points given for every combination found
      * @return total points given by this card
      */
     protected int calculatePoints(int firstX, int firstY, int secondX, int secondY, ArrayList<Point> occupiedPositions, Symbol diagSymbol, Symbol vertSymbol, int flag, int points) {
@@ -69,9 +76,10 @@ abstract public class Side {
 
     /**
      * This method returns the points for abilities
-     * @param resources Resources required to use the ability
+     *
+     * @param resources         Resources required to use the ability
      * @param occupiedPositions list of occupied position in the Player's board
-     * @param p point where the card is placed
+     * @param p                 point where the card is placed
      * @return total point for the ability
      */
     public int useAbility(Map<Symbol, Integer> resources, ArrayList<Point> occupiedPositions, Point p) {
@@ -80,7 +88,8 @@ abstract public class Side {
 
     /**
      * This method returns the extra points that are awarded considering the card position in the Player's board.
-     * @param resources Player's visible resources in the board
+     *
+     * @param resources         Player's visible resources in the board
      * @param occupiedPositions list of the position occupied in the Player's board
      * @return points given by this card
      */
@@ -90,6 +99,7 @@ abstract public class Side {
 
     /**
      * Returns true if the sideSymbol (the card's kingdom) equals the parameter given
+     *
      * @param sideSymbol symbol to check against the actual side's symbol
      * @return boolean
      */
@@ -99,6 +109,7 @@ abstract public class Side {
 
     /**
      * Returns the points for this side
+     *
      * @return points
      */
     public int getPoints() {
@@ -107,6 +118,7 @@ abstract public class Side {
 
     /**
      * Sets the points for this side
+     *
      * @param points new points for this side
      */
     public void setPoints(int points) {
@@ -115,6 +127,7 @@ abstract public class Side {
 
     /**
      * Return side's type
+     *
      * @return type
      */
     public int getType() {
@@ -123,6 +136,7 @@ abstract public class Side {
 
     /**
      * Sets side's type
+     *
      * @param type new side's type
      */
     public void setType(int type) {
@@ -131,6 +145,7 @@ abstract public class Side {
 
     /**
      * Returns the side's symbol (side's kingdom)
+     *
      * @return an optional that contains the side's symbol
      */
     public Optional<Symbol> getSideSymbol() {
@@ -139,7 +154,8 @@ abstract public class Side {
 
     /**
      * Sets side's symbol
-     * @param sideSymbol
+     *
+     * @param sideSymbol new side symbol
      */
     public void setSideSymbol(Symbol sideSymbol) {
         this.sideSymbol = sideSymbol;
@@ -147,6 +163,7 @@ abstract public class Side {
 
     /**
      * Returns an arrayList with the side's permanent resources
+     *
      * @return permanent resources
      */
     public ArrayList<Symbol> getPermanentResources() {
@@ -155,6 +172,7 @@ abstract public class Side {
 
     /**
      * Sets the side's permanent resources
+     *
      * @param permanentResources new permanent resources
      */
     public void setPermanentResources(ArrayList<Symbol> permanentResources) {
@@ -163,6 +181,7 @@ abstract public class Side {
 
     /**
      * Returns the requested resources to be able to play this side
+     *
      * @return requested resources
      */
     public Map<Symbol, Integer> getRequestedResources() {
@@ -171,6 +190,7 @@ abstract public class Side {
 
     /**
      * Set's the requested resources to be able to play this side
+     *
      * @param requestedResources new requested resources
      */
     public void setRequestedResources(Map<Symbol, Integer> requestedResources) {
@@ -179,6 +199,7 @@ abstract public class Side {
 
     /**
      * Returns a corner representing the corner up left
+     *
      * @return UPLEFT
      */
     public Corner getUPLEFT() {
@@ -187,6 +208,7 @@ abstract public class Side {
 
     /**
      * Sets the corner representing the corner up left
+     *
      * @param UPLEFT new corner up left
      */
     public void setUPLEFT(Corner UPLEFT) {
@@ -195,6 +217,7 @@ abstract public class Side {
 
     /**
      * Return a corner representing the corner down left
+     *
      * @return DOWNLEFT
      */
     public Corner getDOWNLEFT() {
@@ -203,6 +226,7 @@ abstract public class Side {
 
     /**
      * Sets the corner representing the corner down left
+     *
      * @param DOWNLEFT new corner down left
      */
     public void setDOWNLEFT(Corner DOWNLEFT) {
@@ -211,6 +235,7 @@ abstract public class Side {
 
     /**
      * Returns a corner represeting the corner up right
+     *
      * @return UPRIGHT
      */
     public Corner getUPRIGHT() {
@@ -219,6 +244,7 @@ abstract public class Side {
 
     /**
      * Sets the corner representing the corner up right
+     *
      * @param UPRIGHT new corner up right
      */
     public void setUPRIGHT(Corner UPRIGHT) {
@@ -227,6 +253,7 @@ abstract public class Side {
 
     /**
      * Returns a corner representing the corner down right
+     *
      * @return DOWNRIGHT
      */
     public Corner getDOWNRIGHT() {
@@ -235,6 +262,7 @@ abstract public class Side {
 
     /**
      * Sets the corner representing the corner down right
+     *
      * @param DOWNRIGHT new corner down right
      */
     public void setDOWNRIGHT(Corner DOWNRIGHT) {
@@ -242,10 +270,29 @@ abstract public class Side {
     }
 
     /**
+     * Sets the path representing the image
+     *
+     * @param imagePath path to corresponding image
+     */
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    /**
+     * Returns the card's path
+     *
+     * @return
+     */
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    /**
      * Creates a String matrix with a printable representation of the side
+     *
      * @return String[][] s
      */
-    public String[][] printableSide(){
+    public String[][] printableSide() {
         String[][] s = new String[3][3];
 
         String empty = SpecialCharacters.SQUARE_WHITE.getCharacter();
@@ -258,7 +305,7 @@ abstract public class Side {
         String kingdomColor;
 
         //fetch the special characters and color based on the side's kingdom
-        if (sideSymbol != null){
+        if (sideSymbol != null) {
             filler = sideSymbol.getFiller();
             kingdomColor = sideSymbol.getBackground();
         } else {
@@ -267,36 +314,36 @@ abstract public class Side {
         }
 
 
-        if(UPLEFT.getSymbol().isPresent()){
+        if (UPLEFT.getSymbol().isPresent()) {
             s[0][0] = cornerBackground + UPLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
-        } else if(UPLEFT.isEvil()) {
-            s[0][0] = filler ;
+        } else if (UPLEFT.isEvil()) {
+            s[0][0] = filler;
         } else {
-            s[0][0] = cornerBackground + empty + kingdomColor ;
+            s[0][0] = cornerBackground + empty + kingdomColor;
         }
 
-        s[0][1] = blank + filler  + blank;
+        s[0][1] = blank + filler + blank;
 
-        if(UPRIGHT.getSymbol().isPresent()){
+        if (UPRIGHT.getSymbol().isPresent()) {
             s[0][2] = cornerBackground + UPRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
 
-        } else if(UPRIGHT.isEvil()) {
+        } else if (UPRIGHT.isEvil()) {
             s[0][2] = filler;
         } else {
-            s[0][2] = cornerBackground + empty  + kingdomColor ;
+            s[0][2] = cornerBackground + empty + kingdomColor;
         }
 
         s[1][0] = blank;
 
-        if(permanentResources.isEmpty()){
+        if (permanentResources.isEmpty()) {
             s[1][1] = filler + filler + filler;
         } else {
             s[1][1] = "";
-            if(permanentResources.size() == 1){
+            if (permanentResources.size() == 1) {
                 s[1][1] = filler + cornerBackground + permanentResources.get(0).getAlias() + kingdomColor + filler;
-            } else if(permanentResources.size() == 2){
+            } else if (permanentResources.size() == 2) {
                 s[1][1] = cornerBackground + permanentResources.get(0).getAlias() + kingdomColor + filler + cornerBackground + permanentResources.get(1).getAlias() + kingdomColor;
-            } else if(permanentResources.size() == 3){
+            } else if (permanentResources.size() == 3) {
                 s[1][1] = cornerBackground;
                 for (Symbol permanentResource : permanentResources) {
                     s[1][1] = s[1][1] + permanentResource.getAlias();
@@ -307,34 +354,34 @@ abstract public class Side {
 
         s[1][2] = blank;
 
-        if(DOWNLEFT.getSymbol().isPresent()){
-        s[2][0] = cornerBackground + DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+        if (DOWNLEFT.getSymbol().isPresent()) {
+            s[2][0] = cornerBackground + DOWNLEFT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
 
-        } else if(DOWNLEFT.isEvil()) {
-        s[2][0] = filler ;
+        } else if (DOWNLEFT.isEvil()) {
+            s[2][0] = filler;
         } else {
-        s[2][0] =  cornerBackground + empty + kingdomColor;
+            s[2][0] = cornerBackground + empty + kingdomColor;
         }
 
-        s[2][1] = blank  + filler  + blank;
+        s[2][1] = blank + filler + blank;
 
-        if(DOWNRIGHT.getSymbol().isPresent()){
-        s[2][2] = cornerBackground + DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
+        if (DOWNRIGHT.getSymbol().isPresent()) {
+            s[2][2] = cornerBackground + DOWNRIGHT.getSymbol().orElseThrow(NullPointerException::new).getAlias() + kingdomColor;
 
-        } else if(DOWNRIGHT.isEvil()) {
-        s[2][2] = filler;
+        } else if (DOWNRIGHT.isEvil()) {
+            s[2][2] = filler;
         } else {
-        s[2][2] = cornerBackground +  empty  + kingdomColor;
+            s[2][2] = cornerBackground + empty + kingdomColor;
         }
 
         //apply background color
-        for(int i=0; i<3; i++){
-            for(int j=0; j<3; j++){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
                 s[i][j] = kingdomColor + s[i][j] + styleReset;
             }
         }
 
         return s;
-        }
+    }
 
 }

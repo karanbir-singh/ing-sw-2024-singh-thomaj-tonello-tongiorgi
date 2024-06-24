@@ -1,37 +1,83 @@
 package it.polimi.ingsw.gc26.model.player;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import it.polimi.ingsw.gc26.model.ModelObservable;
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
-import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
-import it.polimi.ingsw.gc26.model.utils.TextStyle;
+import it.polimi.ingsw.gc26.network.ModelObservable;
+import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
-public class PersonalBoard {
+/**
+ * This class represents the personal board for a player. It contains the playable positions where a card can be placed,
+ * the occupied positions where a card has been placed and the blocked positions where no card can be placed.
+ * It also contains the methods to play a new card and check if an action is valid.
+ * Finally, it can return the resources on the board and set the secret mission.
+ */
+public class PersonalBoard implements Serializable {
+    /**
+     * This attribute represents the personal board's dimension. It can be a negative number.
+     */
     private int xMin, xMax, yMin, yMax;
+    /**
+     * This attribute represents the score for this personal board (that is associated to a player). From 0 to 30.
+     */
     private int score;
+    /**
+     * This attribute represents the positions where a card has been placed.
+     */
     private final ArrayList<Point> occupiedPositions;
+    /**
+     * This attribute represents the positions where a card car be placed.
+     */
     private final ArrayList<Point> playablePositions;
+    /**
+     * This attribute represents the positions where no card can be placed.
+     */
     private final ArrayList<Point> blockedPositions;
+    /**
+     * This attribute represents the secret mission chosen.
+     */
     private Card secretMission;
+    /**
+     * This attribute represents the visible resources in the board.
+     */
     private final Map<Symbol, Integer> visibleResources;
+    /**
+     * This attribute represents the coordinate X of the selected position.
+     */
     private int selectedX = 0;
+    /**
+     * This attribute represents the coordinate Y of the selected position.
+     */
     private int selectedY = 0;
+    /**
+     * This attribute represents the observable used to notify the client.
+     */
+    private final ModelObservable observable;
+    /**
+     * This attribute represents the player's nickname.
+     */
+    private String nickname;
 
     /**
      * The constructor initializes everything: the score, the resource, missions occupiedPositions , playablePositions, blockedPositions.
-     * Here, the first move is made playing the initial card.
+     *
+     * @param observable observable to notify client
+     * @param nickname personal board owner
      */
-    public PersonalBoard() {
+    public PersonalBoard(ModelObservable observable, String nickname) {
         score = 0;
         xMin = 0;
         xMax = 0;
         yMin = 0;
         yMax = 0;
+
         visibleResources = new HashMap<>();
         visibleResources.put(Symbol.FUNGI, 0);
         visibleResources.put(Symbol.ANIMAL, 0);
@@ -42,39 +88,45 @@ public class PersonalBoard {
         visibleResources.put(Symbol.MANUSCRIPT, 0);
 
         this.secretMission = null;
+        this.nickname = nickname;
 
         occupiedPositions = new ArrayList<>();
         playablePositions = new ArrayList<>();
         blockedPositions = new ArrayList<>();
 
         addPoint(0, 0, playablePositions);
+        this.observable = observable;
     }
 
     /**
-     * secretMission getter
-     * @return the reference of the secretMission card
+     * Returns personal secret mission
+     *
+     * @return the reference of the secret mission card
      */
     public Card getSecretMission() {
         return secretMission;
     }
 
     /**
-     * secretMission setter
+     * Sets the secret mission
+     *
      * @param secretMission card that you want to set
+     * @param clientID unique client's id
      */
     public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {
             this.secretMission = secretMission.get();
-            ModelObservable.getInstance().notifyUpdateSelectedMission(clientID);
+            this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this, nickname), "Secret mission set", clientID);
             return this.secretMission;
         }
         // TODO notify view
-        ModelObservable.getInstance().notifyError("Secret mission not present!", clientID);
+        this.observable.notifyError("Secret mission not present!", clientID);
         return null;
     }
 
     /**
      * Check if a position is playable or not
+     *
      * @param x a coordinate x of the personal board
      * @param y a coordinate t of the personal board
      * @return true if the position is playable, false otherwise
@@ -85,6 +137,7 @@ public class PersonalBoard {
 
     /**
      * Check if the player has enough resources to play a particular card
+     *
      * @param side side that the player wants to play
      * @return true if the board has enough resources, otherwise false
      */
@@ -99,6 +152,7 @@ public class PersonalBoard {
 
     /**
      * Calculate the points earned from commonMissions and secretMission at the end of the game
+     *
      * @param commonMissions commonMissions that are present in CommonBoard
      */
     public void endGame(ArrayList<Card> commonMissions) {
@@ -110,9 +164,8 @@ public class PersonalBoard {
     }
 
     /**
-     * set the position chosen by the player.
-     * if valid, the position is set
-     * otherwise we print NOT VALID POSITION
+     * Sets the position chosen by the player.
+     *
      * @param selectedX the X coordinate of the personalBoard that the player wants to choose
      * @param selectedY the Y coordinate of the personalBoard that the player wants to choose
      */
@@ -120,17 +173,18 @@ public class PersonalBoard {
     public void setPosition(int selectedX, int selectedY, String clientID) {
         //check if the position is valid
         if (!checkIfPlayablePosition(selectedX, selectedY)) {
-            //update view
-            ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 0);
+            this.observable.notifyError("It's not a playable position!", clientID);
             return;
         }
         this.selectedX = selectedX;
         this.selectedY = selectedY;
-        ModelObservable.getInstance().notifyUpdateSelectedPositionOnBoard(selectedX, selectedY, clientID, 1);
+        this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this, nickname), "Position selected!", clientID);
+
     }
 
     /**
-     * score player getter
+     * Returns player's score
+     *
      * @return score of a particular player
      */
     public int getScore() {
@@ -138,16 +192,76 @@ public class PersonalBoard {
     }
 
     /**
-     * set score
+     * Returns the min value for x-axis.
      *
-     * @param score
+     * @return real number
+     */
+    public int getXMin() {
+        return xMin;
+    }
+
+    /**
+     * Returns the max value for x-axis.
+     *
+     * @return real number
+     */
+    public int getXMax() {
+        return xMax;
+    }
+
+    /**
+     * Returns the min value for y-axis.
+     *
+     * @return real number
+     */
+    public int getYMin() {
+        return yMin;
+    }
+
+    /**
+     * Returns the max value for y-axis.
+     *
+     * @return real number
+     */
+    public int getYMax() {
+        return yMax;
+    }
+
+    /**
+     * @return the list of the playable positions
+     */
+    public ArrayList<Point> getPlayablePositions() {
+        return playablePositions;
+    }
+
+    /**
+     * @return the list of the blocked positions
+     */
+    public ArrayList<Point> getBlockedPositions() {
+        return blockedPositions;
+    }
+
+    /**
+     * Getter of all the occupied positions
+     *
+     * @return the List of occupied Positions
+     */
+    public ArrayList<Point> getOccupiedPositions() {
+        return this.occupiedPositions;
+    }
+
+    /**
+     * Sets manually the score point. Should only be for testing purposes.
+     *
+     * @param score value between 0 and 30
      */
     public void setScore(int score) {
         this.score = score;
     }
 
     /**
-     * check if there is a point with coordinate x and y in an arrayList l and return it, otherwise return Optional.empty()
+     * Check if there is a point with coordinate x and y in an arrayList l and returns it, otherwise return Optional.empty()
+     *
      * @param x coordinate x that you want to search
      * @param y coordinate y that you want to search
      * @param l arrayList where you need to search
@@ -164,28 +278,23 @@ public class PersonalBoard {
     }
 
     /**
-     * move a point from list L2 to L1
-     * @param x coordinate X
-     * @param y coordinate Y
+     * Moves a point from list l2 to l1
+     *
+     * @param x  coordinate X
+     * @param y  coordinate Y
      * @param l1 arrayList where you want to add the point
      * @param l2 arrayList where you want to remove the point
      */
-    private void movePoint(int x, int y, ArrayList<Point> l1, ArrayList<Point> l2) {
+    private void movePoint(int x, int y, ArrayList<Point> l1, ArrayList<Point> l2) throws NullPointerException {
         Point p;
-        try {
-            p = ifPresent(x, y, l2).orElseThrow(NullPointerException::new);
-        } catch (NullPointerException nullPointerException) {
-            nullPointerException.printStackTrace();
-            System.err.println("null pointer exception in movePoint");
-            return;
-        }
-
+        p = ifPresent(x, y, l2).orElseThrow(NullPointerException::new);
         removePoint(x, y, l2);
         l1.add(p);
     }
 
     /**
-     * add point with coordinate x and y to an arrayList
+     * Adds a point with coordinate x and y to the passed list
+     *
      * @param x coordinate x of the point
      * @param y coordinate y of the point
      * @param l arrayList where you want to add the point
@@ -196,7 +305,8 @@ public class PersonalBoard {
     }
 
     /**
-     * remove point with coordinate x and y from an arrayList
+     * Removes a point with coordinate x and y from the passed list
+     *
      * @param x coordinate x of the point
      * @param y coordinate y of the point
      * @param l arrayList where you want to remove the point
@@ -211,7 +321,8 @@ public class PersonalBoard {
     }
 
     /**
-     * selectedX getter
+     * Returns selected X coordinate
+     *
      * @return the selected X
      */
     public int getSelectedX() {
@@ -219,7 +330,8 @@ public class PersonalBoard {
     }
 
     /**
-     * selectedY getter
+     * Returns selected Y coordinate
+     *
      * @return the selected Y
      */
     public int getSelectedY() {
@@ -228,7 +340,8 @@ public class PersonalBoard {
 
 
     /**
-     * return how many resources of a certain kind the player has
+     * Returns how many resources of passed symbol are in the personal board
+     *
      * @param symbol symbol that you want to find
      * @return number of symbols "symbol" in your personalBoard
      */
@@ -237,7 +350,8 @@ public class PersonalBoard {
     }
 
     /**
-     * increase by 1 the number of symbols of a given kind in the player's personalBoard
+     * Increases by 1 the number of symbols of a given kind in the player's personalBoard
+     *
      * @param symbol symbol that you want to find
      */
     public void increaseResource(Optional<Symbol> symbol) {
@@ -245,7 +359,8 @@ public class PersonalBoard {
     }
 
     /**
-     * decrease by 1 the number of symbols of a given kind in the player's personalBoard
+     * Decreases by 1 the number of symbols of a given kind in the player's personalBoard
+     *
      * @param symbol symbol that you want to find
      */
     public void decreaseResource(Optional<Symbol> symbol) {
@@ -253,123 +368,25 @@ public class PersonalBoard {
     }
 
     /**
-     * getter of all the resource counters in the player's personalBoard
+     * Getter of all the resource counters
+     *
      * @return map which contains all the resources on the personal boards
      */
     public Map<Symbol, Integer> getResources() {
         return new HashMap<>(this.visibleResources);
     }
 
-    public void showBoard() {
-        int xDim = (xMax - xMin)*2 + 3;
-        int yDim = (yMax - yMin)*2 + 3;
-        int xOff = xMin*2 -1;
-        int yOff = yMin*2 -1;
-        String[][] board = new String[yDim][xDim];
-
-        String blackSquare = SpecialCharacters.SQUARE_BLACK.getCharacter();
-        String verticalLine = SpecialCharacters.WHITE_VERTICAL_STRING.getCharacter();
-        String blocked =  SpecialCharacters.BLOCKED_POSITION.getCharacter();
-        String background = SpecialCharacters.BACKGROUND_BLANK_WIDE.getCharacter();
-        String playableSeparator = SpecialCharacters.ORANGE_DIAMOND.getCharacter();
-        String styleReset = TextStyle.STYLE_RESET.getStyleCode();
-
-        //initialize empty board
-        for(int j=0; j<yDim; j++) {
-            for(int i=0; i<xDim; i+=2){
-                board[j][i] = blackSquare;
-            }
-            for(int i=1; i<xDim; i+=2){
-                board[j][i]= background + blackSquare + background;
-            }
-        }
-
-        //mark playable positions
-        for(Point p: playablePositions) {
-            int x = p.getX()*2 - xOff;
-            int y = p.getY()*2 - yOff;
-
-            //align x
-            if(p.getX() <= -10){
-                board[y][x] = p.getX() + playableSeparator;
-            } else if (p.getX() < 0 || p.getX() >= 10){
-                board[y][x] = " " + p.getX() + playableSeparator;
-            } else {
-                board[y][x] = "  " + p.getX() + playableSeparator;
-            }
-
-            //align y
-            if(p.getY() <= -10){
-                board[y][x] = board[y][x] + p.getY();
-            } else if (p.getY() < 0 || p.getY() >= 10){
-                board[y][x] = board[y][x] + p.getY() + " ";
-            } else {
-                board[y][x] = board[y][x] + p.getY() + "  ";
-            }
-
-            board[y+1][x] = "‾‾‾" + blackSquare + "‾‾‾";
-            board[y-1][x] = "___" + blackSquare + "___";
-            board[y-1][x-1] = blackSquare;
-            board[y][x-1] = verticalLine;
-            board[y+1][x-1] = blackSquare;
-            board[y][x+1] = verticalLine;
-            board[y-1][x+1] = blackSquare;
-            board[y+1][x+1] = blackSquare;
-        }
-
-        //mark blocked positions
-        for(Point p: blockedPositions) {
-            int x = p.getX()*2 - xOff;
-            int y = p.getY()*2 - yOff;
-            board[y][x] = background + blocked + background;
-        }
-
-        //represent played cards
-        for(Point p: occupiedPositions) {
-            String[][] s = p.getSide().printableSide();
-            int j=0;
-            for(int y=(p.getY())*2 -yOff +1; y>=(p.getY())*2 -yOff - 1; y--){
-                int i=2;
-                for(int x = p.getX()*2 - xOff +1; x >= (p.getX())*2 - xOff -1; x--){
-                board[y][x] = s[j][i];
-                i--;
-                }
-                j++;
-            }
-        }
-
-        //print the board
-        for(int j=yDim-1; j>=0; j--){
-            for(int i=0; i<xDim; i++){
-
-                System.out.print(board[j][i]);
-            }
-            System.out.print(styleReset + "\n");
-        }
-        System.out.print("\nYour resources: " );
-        for (Symbol s: Symbol.values()) {
-            System.out.print(visibleResources.get(s) + " " + s.name() + "   ");
-        }
-        System.out.print("\n");
-    }
-
-    /**
-     * getter of all the occupied positions on the personalBoard
-     * @return the List of occupied Positions
-     */
-    public ArrayList<Point> getOccupiedPositions() {
-        return this.occupiedPositions;
-    }
-
     /**
      * private methods that handles the effects that a certain corner of the last played card has on the adjacent points
      * if the point is in occupiedPositions, the eventual covered resource is removed from the counter
      * otherwise, the point is moved in blockedPosition or playablePositions, depending on the corner's nature
+     *
      * @param checkingCorner corner that you want to check
      * @param checkingX      coordinate X of the point that you want to check
      * @param checkingY      coordinate Y of the point that you want to check
+     * @throws NullPointerException throws null pointer if
      */
-    private void analyzePoint(Corner checkingCorner, int checkingX, int checkingY) {
+    private void analyzePoint(Corner checkingCorner, int checkingX, int checkingY) throws NullPointerException {
         Optional<Point> checkingPoint = ifPresent(selectedX + checkingX, selectedY + checkingY, occupiedPositions);
         if (checkingPoint.isPresent()) {
             Side checkingSide = checkingPoint.get().getSide();
@@ -426,61 +443,62 @@ public class PersonalBoard {
 
     /**
      * permits to play the selected card and update all the resources and points
+     *
      * @param side side selected of the card chosen by the player
      */
     public boolean playSide(Side side, String clientID) {
-        // you need to check if the board has enough resources for the side.
+        // You need to check if the board has enough resources for the side.
         if (!checkIfEnoughResources(side)) {
-            //TODO update show error
-            ModelObservable.getInstance().notifyError("Not enough resources!", clientID);
-            //update della view
+            this.observable.notifyError("Not enough resources!", clientID);
             return false;
         }
 
+        // Check if there is selected position
         Point playingPoint;
         try {
             playingPoint = ifPresent(selectedX, selectedY, playablePositions).orElseThrow(NullPointerException::new);
             playingPoint.setSide(side);
-        } catch (NullPointerException nullEx) {
-            //nullEx.printStackTrace();
-            ModelObservable.getInstance().notifyError("Select a position first!", clientID);
+        } catch (NullPointerException e) {
+            this.observable.notifyError("Select a position first!", clientID);
             return false;
         }
 
+        try {
+            movePoint(selectedX, selectedY, occupiedPositions, playablePositions);
 
-        movePoint(selectedX, selectedY, occupiedPositions, playablePositions);
+            // Analyze point selectedX+1, selectedY+1
+            analyzePoint(side.getUPRIGHT(), 1, 1);
 
-        // Analyze point selectedX+1, selectedY+1
-        analyzePoint(side.getUPRIGHT(), 1, 1);
+            // Analyze point selectedX-1, selectedY+1
+            analyzePoint(side.getUPLEFT(), -1, 1);
 
-        // Analyze point selectedX-1, selectedY+1
-        analyzePoint(side.getUPLEFT(), -1, 1);
+            // Analyze point selectedX+1, selectedY-1
+            analyzePoint(side.getDOWNRIGHT(), 1, -1);
 
-        // Analyze point selectedX+1, selectedY-1
-        analyzePoint(side.getDOWNRIGHT(), 1, -1);
+            // Analyze point selectedX-1, selectedY-1
+            analyzePoint(side.getDOWNLEFT(), -1, -1);
+        } catch (NullPointerException e) {
+            this.observable.notifyError("Select a position first!", clientID);
+            return false;
+        }
 
-        // Analyze point selectedX-1, selectedY-1
-        analyzePoint(side.getDOWNLEFT(), -1, -1);
-
-        // Increase
+        // Increase available resources from permanent resources of the cardss
         for (Symbol resource : side.getPermanentResources()) {
             this.increaseResource(Optional.ofNullable(resource));
         }
 
-        // qua conviene usare una notazione funzionale con gli optional
-        // cioè decrementa valore se c'è il simbolo, altrimenti niente
+        // Increase available resources from corners
         this.increaseResource(side.getUPRIGHT().getSymbol());
         this.increaseResource(side.getUPLEFT().getSymbol());
         this.increaseResource(side.getDOWNLEFT().getSymbol());
         this.increaseResource(side.getDOWNRIGHT().getSymbol());
 
-        // Add points of the played side
+        // Update score
         this.score = this.score + side.getPoints();
 
         // Use card ability to add points if it has it
         this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
-
-        ModelObservable.getInstance().notifyUpdatePlayedCardFromHand(clientID,1);
+        this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this, nickname), "Card placed!", clientID);
         return true;
     }
 

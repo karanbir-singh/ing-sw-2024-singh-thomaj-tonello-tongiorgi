@@ -1,22 +1,24 @@
 package it.polimi.ingsw.gc26.model.game;
 
-import it.polimi.ingsw.gc26.model.ModelObservable;
-import it.polimi.ingsw.gc26.model.deck.Deck;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
-import it.polimi.ingsw.gc26.Parser.ParserCore;
 import it.polimi.ingsw.gc26.model.player.PlayerState;
+import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.network.VirtualView;
+import it.polimi.ingsw.gc26.utils.ParserCore;
+import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
+import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 
-import java.rmi.RemoteException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 /**
  * This class represents an entire Game play. It has a minimum number of player of two and a maximum number of player of four.
  * To play more than one game, more instances of game have to be created
  */
-public class Game {
+public class Game implements Serializable {
     /**
      * This attribute represents the maximum number of players per game
      */
@@ -61,45 +63,59 @@ public class Game {
      * This attribute represents the available pawns in the game
      */
     private final ArrayList<Pawn> availablePawns;
-
-    private ModelObservable observable;
+    /**
+     * This attribute represents the observers if this game
+     */
+    private final ModelObservable observable;
 
     /**
-     * Initializes the game, creates the decks and sets the common table
+     * Setups the games
      *
      * @param players list of players of the game
+     * @param clients clients in the current game
      */
     public Game(ArrayList<Player> players, ArrayList<VirtualView> clients) {
         this.numberOfPlayers = players.size();
 
         this.players = new ArrayList<>();
         this.players.addAll(players);
-        this.winners = null;
 
-        ParserCore p = new ParserCore("src/main/resources/Data/CodexNaturalisCards.json");
+        // Add observers
+        this.observable = new ModelObservable();
+        for (int i = 0; i < clients.size(); i++) {
+            this.observable.addObserver(clients.get(i), players.get(i).getID());
+        }
+        for (Player player : players) {
+            player.setObservable(this.observable);
+        }
+
+        // Create each deck
+        ParserCore p = new ParserCore("CodexNaturalisCards.json");
         Deck goldCardDeck = p.getGoldCards();
         Deck resourceCardDeck = p.getResourceCards();
         Deck missionDeck = p.getMissionCards();
         Deck starterDeck = p.getStarterCards();
 
-        this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck);
-        this.round = 0;
-        this.finalRound = -1;
-        this.chat = new Chat();
+        // Create common table
+        this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck, this.observable);
 
+        // Fill list of available pawns
         availablePawns = new ArrayList<>();
         availablePawns.add(Pawn.BLUE);
         availablePawns.add(Pawn.RED);
         availablePawns.add(Pawn.YELLOW);
         availablePawns.add(Pawn.GREEN);
-        this.observable = ModelObservable.getInstance();
-        for (int i = 0; i < clients.size(); i++) {
-            this.observable.addObserver(clients.get(i), players.get(i).getID());
-        }
+
+        this.winners = new ArrayList<>();
+        this.round = 0;
+        this.finalRound = -1;
+
+        // Create chat box
+        this.chat = new Chat(this.observable);
     }
 
     /**
-     * Returns the player associated to the playerID
+     * Returns the player by his ID
      *
      * @param playerID ID of the searched player
      */
@@ -108,28 +124,18 @@ public class Game {
     }
 
     /**
-     * Returns the player associated to the playerNickname
+     * Returns the player by his nickname
      *
      * @param playerNickname Nickname of the searched player
      */
     public Player getPlayerByNickname(String playerNickname) {
-        if (playerNickname.equals("")) {
+        if (playerNickname.isEmpty()) {
             return null;
         }
-        return players.stream().filter((Player p) -> p.getNickname().equals(playerNickname)).findAny().get();
-    }
-
-    /**
-     * Adds a player in the game
-     *
-     * @param newPlayer new player to be added in the game
-     */
-    public void addPlayer(Player newPlayer) {
-        if (this.players.size() < numberOfPlayers) {
-            this.players.add(newPlayer);
-        }
-        if (this.players.size() == numberOfPlayers) {
-            gameState = GameState.COMMON_TABLE_PREPARATION;
+        try {
+            return players.stream().filter((Player p) -> p.getNickname().equals(playerNickname)).findAny().get();
+        } catch (Exception e) {
+            return null;
         }
     }
 
@@ -161,29 +167,54 @@ public class Game {
             winners = players.stream()
                     .filter(player -> player.getPersonalBoard().getScore() == (maxScore % 29))
                     .collect(Collectors.toCollection(ArrayList::new));
+
+            winners.forEach((player) -> System.out.println(player.getNickname()));
+
+            this.setState(GameState.WINNER);
         }
 
         // Change current player
         this.currentPlayer = getNextPlayer();
 
         // Change player's state
-        this.currentPlayer.setState(PlayerState.PLAYING);
+        this.currentPlayer.setState(PlayerState.PLAYING, currentPlayer.getID());
+
+        HashMap<String, Integer> points = new HashMap<>();
+        for (Player player : this.players) {
+            if (player.getPersonalBoard() != null) {
+                points.put(player.getNickname(), player.getPersonalBoard().getScore());
+            } else {
+                points.put(player.getNickname(), 0);
+            }
+
+        }
 
         // Check if the next current player is the first player
         if (this.currentPlayer.isFirstPlayer()) {
             // Then increase the round
             this.increaseRound();
         }
-
-        try {
-            ModelObservable.getInstance().notifyMessage("It's you turn now",this.currentPlayer.getID());
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
+        this.observable.notifyMessage("It's you turn now", this.currentPlayer.getID());
+        ArrayList<String> nicknameWinners = new ArrayList<>();
+        for (Player winner : this.winners) {
+            nicknameWinners.add(winner.getNickname());
         }
+        String currentPlayerNickname = null;
+        if (this.currentPlayer != null) {
+            currentPlayerNickname = this.currentPlayer.getNickname();
+        }
+
+        HashMap<String, Pawn> pawnsSelected = new HashMap<>();
+        for (Player player : this.players) {
+            pawnsSelected.put(player.getNickname(), player.getPawnColor());
+        }
+        String message = "Current player has changed!";
+        this.observable.notifyUpdateGame(new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected), currentPlayer);
+        // TODO update simplified player
     }
 
     /**
-     * Sets the current Player to the parameter given
+     * Sets the current player to the parameter given
      *
      * @param currentPlayer new current player
      */
@@ -255,20 +286,78 @@ public class Game {
         String message = null;
 
         switch (newGameState) {
-            case COMMON_TABLE_PREPARATION -> message = "Common Table Preparation...";
-            case STARTER_CARDS_DISTRIBUTION -> message = "Starter Cards Distribution...";
-            case WAITING_STARTER_CARD_PLACEMENT -> message = "Waiting players for placing starter card...";
-            case WAITING_PAWNS_SELECTION -> message = "Waiting players for selecting pawns...\n" + getAvailablePawns();
-            case HAND_PREPARATION -> message = "Prepare players hand...";
-            case COMMON_MISSION_PREPARATION -> message = "Common Mission Preparation...";
-            case SECRET_MISSION_DISTRIBUTION -> message = "Secret Mission Distribution...";
-            case WAITING_SECRET_MISSION_CHOICE -> message = "Waiting players for choosing secret mission...";
-            case FIRST_PLAYER_EXTRACTION -> message = "First player extraction...";
-            case GAME_STARTED -> message = "GAME STARTED!";
+            case COMMON_TABLE_PREPARATION:
+                message = "Common Table Preparation...";
+                break;
+            case STARTER_CARDS_DISTRIBUTION:
+                message = "Starter Cards Distribution...";
+                this.observable.notifyUpdateCommonTable(
+                        new SimplifiedCommonTable(
+                                commonTable.getResourceDeck().getTopCard(),
+                                commonTable.getGoldDeck().getTopCard(),
+                                commonTable.getCommonMissions(),
+                                commonTable.getResourceCards(),
+                                commonTable.getGoldCards(),
+                                -1),
+                        "Card added from common table"
+                );
+                break;
+            case WAITING_STARTER_CARD_PLACEMENT:
+                message = "Waiting players for placing starter card...";
+                break;
+            case WAITING_PAWNS_SELECTION:
+                message = "Waiting players for selecting pawns...";
+                break;
+            case HAND_PREPARATION:
+                message = "Prepare players hand...";
+                break;
+            case COMMON_MISSION_PREPARATION:
+                message = "Common Mission Preparation...";
+                break;
+            case SECRET_MISSION_DISTRIBUTION:
+                message = "Secret Mission Distribution...";
+                break;
+            case WAITING_SECRET_MISSION_CHOICE:
+                message = "Waiting players for choosing secret mission...";
+                break;
+            case FIRST_PLAYER_EXTRACTION:
+                message = "First player extraction...";
+                break;
+            case GAME_STARTED:
+                message = "GAME STARTED!";
+                break;
+            case WINNER:
+                message = "Game ended, here are the winners";
+                break;
         }
 
-        // TODO Update view
-        ModelObservable.getInstance().notifyUpdateGameState(newGameState);
+        HashMap<String, Integer> points = new HashMap<>();
+        for (Player player : this.players) {
+            if (player.getPersonalBoard() != null) {
+                points.put(player.getNickname(), player.getPersonalBoard().getScore());
+            } else {
+                points.put(player.getNickname(), 0);
+            }
+
+        }
+        ArrayList<String> nicknameWinners = new ArrayList<>();
+        for (Player winner : this.winners) {
+            nicknameWinners.add(winner.getNickname());
+        }
+        String currentPlayerNickname = null;
+        if (this.currentPlayer != null) {
+            currentPlayerNickname = this.currentPlayer.getNickname();
+        }
+
+        HashMap<String, Pawn> pawnsSelected = new HashMap<>();
+        for (Player player : this.players) {
+            pawnsSelected.put(player.getNickname(), player.getPawnColor());
+        }
+        if (gameState.equals(GameState.GAME_STARTED)) {
+            this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState, currentPlayerNickname, points, nicknameWinners, this.availablePawns, pawnsSelected), currentPlayer);
+        } else {
+            this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState, currentPlayerNickname, points, nicknameWinners, this.availablePawns, pawnsSelected), message);
+        }
     }
 
     /**
@@ -290,9 +379,55 @@ public class Game {
     }
 
     /**
+     * Checks if the passed pawn is available
+     *
+     * @param pawn pawn to check
+     * @return true if availablePawn contains pawn
+     */
+    public boolean checkPawnAvailability(Pawn pawn) {
+        return availablePawns.contains(pawn);
+    }
+
+    /**
+     * Removes passed pawn from availablePawns
+     *
+     * @param pawn pawn to remove
+     */
+    public void removePawn(Pawn pawn) {
+        availablePawns.remove(pawn);
+
+        HashMap<String, Integer> points = new HashMap<>();
+        for (Player player : this.players) {
+            if (player.getPersonalBoard() != null) {
+                points.put(player.getNickname(), player.getPersonalBoard().getScore());
+            } else {
+                points.put(player.getNickname(), 0);
+            }
+        }
+        ArrayList<String> nicknameWinners = new ArrayList<>();
+        for (Player winner : this.winners) {
+            nicknameWinners.add(winner.getNickname());
+        }
+        String currentPlayerNickname = null;
+        if (this.currentPlayer != null) {
+            currentPlayerNickname = this.currentPlayer.getNickname();
+        }
+
+        HashMap<String, Pawn> pawnsSelected = new HashMap<>();
+        for (Player player : this.players) {
+            pawnsSelected.put(player.getNickname(), player.getPawnColor());
+        }
+
+        this.observable.notifyUpdateGame(
+                new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected),
+                pawn.toString() + " color has been chosen"
+        );
+    }
+
+    /**
      * Sets final round
      *
-     * @param finalRound
+     * @param finalRound the last round, after that there will be declared the winners
      */
     public void setFinalRound(int finalRound) {
         this.finalRound = finalRound;
@@ -307,44 +442,31 @@ public class Game {
         return this.chat;
     }
 
-    // THIS IS FOR TESTING
+    /**
+     * Notifies the clients of triggered error
+     *
+     * @param clientID     id of the client
+     * @param errorMessage error message
+     */
+    public void sendError(String clientID, String errorMessage) {
+        this.observable.notifyError(errorMessage, clientID);
+    }
+
+    /**
+     * Return the game's winners (it can be more than one)
+     *
+     * @return winners
+     */
     public ArrayList<Player> getWinners() {
         return winners;
     }
 
-    public void errorState(String clientID){
-        ModelObservable.getInstance().notifyError("YOU CANNOT DO THAT NOW",clientID);
-    }
-
-    public void showCommonTable(){
-        String[][] ct = commonTable.printableCommonTable();
-        int maxLenght = 0;
-        StringBuilder spaces;
-
-        System.out.println("\t\t\tCOMMON TABLE:\n");
-        for (String[] row: ct) {
-            for (String col: row) {
-                System.out.print(col);
-            }
-            System.out.print("\n");
-        }
-
-        System.out.print("\n\t\t\tCURRENT SCORES:\n\n");
-
-        for (Player p: players) {
-            maxLenght = Math.max(maxLenght, p.getNickname().length());
-        }
-
-        maxLenght ++;
-
-        for (Player p: players) {
-            int i = 0;
-            spaces = new StringBuilder();
-            while(i + p.getNickname().length() < maxLenght){
-                spaces.append(" ");
-                i++;
-            }
-            System.out.println(p.getNickname() + spaces + p.printableScore());
-        }
+    /**
+     * Returns a reference to the observable of this class to notify the client
+     *
+     * @return observable
+     */
+    public ModelObservable getObservable() {
+        return this.observable;
     }
 }

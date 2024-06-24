@@ -1,15 +1,16 @@
 package it.polimi.ingsw.gc26.model.card_side;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
  * This class represent a generic corner in the card
  */
-public class Corner {
+public class Corner implements Serializable {
     /**
      * This attribute equals true if there is no corner in the card
      */
-    private boolean isEvil;
+    private final boolean isEvil;
     /**
      * This attribute equals true if the corner is hidden by another corner in the player's board
      */
@@ -17,10 +18,11 @@ public class Corner {
     /**
      * This attribute represents the symbol in the corner. Symbol is empty if there is no symbol in the card.
      */
-    private Symbol symbol;
+    private final Symbol symbol;
 
     /**
-     * Creates a new instance of MissionLPattern
+     * Constructor to build MissionLPattern
+     *
      * @param isEvil boolean that is true if the corner is no playable
      * @param symbol symbol in the corner, empty() if there is no symbol
      */
@@ -31,7 +33,21 @@ public class Corner {
     }
 
     /**
-     * Returns a boolean indicating if the card has no playable corner
+     * Constructor to build corners for socket stream
+     *
+     * @param isEvil
+     * @param symbol
+     * @param isHidden
+     */
+    public Corner(boolean isEvil, Symbol symbol, boolean isHidden) {
+        this.isEvil = isEvil;
+        this.isHidden = isHidden;
+        this.symbol = symbol;
+    }
+
+    /**
+     * Returns a boolean indicating if the corner exists
+     *
      * @return boolean isEvil
      */
     public boolean isEvil() {
@@ -39,15 +55,8 @@ public class Corner {
     }
 
     /**
-     * Sets isEvil = evil
-     * @param evil True if the corner is not playable, false otherwise
-     */
-    public void setEvil(boolean evil) {
-        isEvil = evil;
-    }
-
-    /**
-     * Returns a boolean indicating is the card is covered by another card in the Player's board
+     * Returns a boolean indicating is the card is covered by another card in the personal board
+     *
      * @return boolean isHidden
      */
     public boolean isHidden() {
@@ -56,7 +65,8 @@ public class Corner {
 
     /**
      * Sets isHidden = hidden
-     * @param hidden True if the corner is hidden by another corner in the Player's board
+     *
+     * @param hidden True if the corner is hidden by another corner in the personal board
      */
     public void setHidden(boolean hidden) {
         isHidden = hidden;
@@ -64,17 +74,10 @@ public class Corner {
 
     /**
      * Returns an optional containing the corner's symbol if there is one, or an optional.empty() otherwise
+     *
      * @return symbol
      */
     public Optional<Symbol> getSymbol() {
         return Optional.ofNullable(symbol);
-    }
-
-    /**
-     * Sets symbol in the corner
-     * @param symbol Symbol in the corner
-     */
-    public void setSymbol(Symbol symbol) {
-        this.symbol = symbol;
     }
 }

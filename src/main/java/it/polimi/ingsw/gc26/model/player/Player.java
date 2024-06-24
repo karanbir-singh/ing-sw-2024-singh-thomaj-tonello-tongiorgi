@@ -1,17 +1,15 @@
 package it.polimi.ingsw.gc26.model.player;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import it.polimi.ingsw.gc26.model.ModelObservable;
-import it.polimi.ingsw.gc26.model.card_side.Side;
-import it.polimi.ingsw.gc26.model.hand.Hand;
-import it.polimi.ingsw.gc26.model.utils.TextStyle;
+import it.polimi.ingsw.gc26.network.ModelObservable;
+import it.polimi.ingsw.gc26.view_model.SimplifiedPlayer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * This class represents the player in the game
  */
-public class Player {
+public class Player implements Serializable {
     /**
      * This attributes represents the player with a unique id
      */
@@ -19,7 +17,7 @@ public class Player {
     /**
      * This attribute represents the player's name and will be shown to the other players
      */
-    private String nickname;
+    private final String nickname;
     /**
      * This attribute represents the pawn, which represent the player in the board
      */
@@ -47,6 +45,11 @@ public class Player {
     private PlayerState state;
 
     /**
+     * Observable to notify client
+     */
+    private ModelObservable observable;
+
+    /**
      * Initializes the player with an id and a name
      *
      * @param id   unique number that represent the player
@@ -71,12 +74,12 @@ public class Player {
     }
 
     /**
-     * Sets the player nickname
+     * This method set the observable
      *
-     * @param name new nickname
+     * @param observable contains a list of the observers
      */
-    public void setNickname(String name) {
-        this.nickname = name;
+    public void setObservable(ModelObservable observable) {
+        this.observable = observable;
     }
 
     /**
@@ -91,29 +94,22 @@ public class Player {
     /**
      * Sets the pawn color to the chosen one
      *
-     * @param color new pawn color
+     * @param pawn player's pawn
      */
-    public void setPawn(String color, ArrayList<Pawn> availableColors, String clientID) {
-        Pawn pawn;
-        switch (color) {
-            case "BLUE" -> pawn = Pawn.BLUE;
-            case "RED" -> pawn = Pawn.RED;
-            case "YELLOW" -> pawn = Pawn.YELLOW;
-            case "GREEN" -> pawn = Pawn.GREEN;
-            default -> pawn = null;
-        }
+    public void setPawn(Pawn pawn, String clientID) {
+        this.pawnColor = pawn;
 
-        if (pawn == null) {
-            // TODO gestire cosa fare nella view quando l'utente passa un colore non corretto
-            ModelObservable.getInstance().notifyError("Color not available!", clientID);
-        } else if (!availableColors.contains(pawn)) {
-            // TODO gestire cosa fare nella view quando l'utente passa un colore non disponibile
-            ModelObservable.getInstance().notifyError("Color not available!", clientID);
-        } else {
-            availableColors.remove(pawn);
-            this.pawnColor = pawn;
-            ModelObservable.getInstance().notifyUpdateChosenPawn(pawn, clientID);
-        }
+        // Notify client
+        this.observable.notifyUpdatePlayer(
+                new SimplifiedPlayer(
+                        ID,
+                        nickname,
+                        pawnColor,
+                        amIFirstPlayer,
+                        state
+                ),
+                "Color " + pawn.toString() + " set",
+                clientID);
     }
 
     /**
@@ -128,15 +124,13 @@ public class Player {
     /**
      * Sets boolean that indicates the player is the first one to true
      */
-    public void setFirstPlayer() {
+    public void setFirstPlayer(String clientID) {
         this.amIFirstPlayer = true;
-    }
 
-    /**
-     * Sets boolean that indicates the player is not the first one to false
-     */
-    public void setNotFirstPlayer() {
-        this.amIFirstPlayer = false;
+        this.observable.notifyUpdatePlayer(
+                new SimplifiedPlayer(clientID, nickname, pawnColor, true, state),
+                "You are the first player!",
+                clientID);
     }
 
     /**
@@ -152,19 +146,18 @@ public class Player {
      * Creates an empty hand
      */
     public void createHand() {
-        this.hand = new Hand(new ArrayList<>());
+        this.hand = new Hand(new ArrayList<>(), this.observable);
     }
 
     /**
      * Creates an empty secret mission hand
      */
     public void createSecretMissionHand() {
-        this.secretMissionHand = new Hand(new ArrayList<>());
-        ;
+        this.secretMissionHand = new Hand(new ArrayList<>(), this.observable);
     }
 
     /**
-     * Return the player's secret mission hand
+     * Returns the player's secret mission hand
      *
      * @return secretMissionHand
      */
@@ -173,7 +166,7 @@ public class Player {
     }
 
     /**
-     * Return the player's hand
+     * Returns the player's hand
      *
      * @return hand
      */
@@ -185,7 +178,7 @@ public class Player {
      * Creates the player's personal board
      */
     public void createPersonalBoard() {
-        this.personalBoard = new PersonalBoard();
+        this.personalBoard = new PersonalBoard(this.observable, this.nickname);
     }
 
     /**
@@ -211,30 +204,12 @@ public class Player {
      *
      * @param state new state
      */
-    public void setState(PlayerState state) {
+    public void setState(PlayerState state, String clientID) {
         this.state = state;
-    }
 
-    public String printableScore(){
-        int score = this.personalBoard.getScore();
-        int i;
-        StringBuilder s = new StringBuilder();
-        String background = "▒";
-        String fill = "█";
-
-        s.append(pawnColor.getFontColor());
-
-        for (i=0; i<score; i++){
-            s.append(fill);
-        }
-        while (i<20){
-            s.append(background);
-            i++;
-        }
-
-        s.append(TextStyle.STYLE_RESET.getStyleCode()).append(" ").append(score);
-
-        return s.toString();
+        this.observable.notifyUpdatePlayer(
+                new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
+                "Your new state is " + this.state.toString(), clientID);
     }
 }
 

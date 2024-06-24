@@ -7,7 +7,8 @@ import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualMainController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 
-import java.io.PrintWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
@@ -18,28 +19,28 @@ public class VirtualSocketMainController implements VirtualMainController {
     /**
      * This attribute represent the print writer to send json to the server
      */
-    private final PrintWriter outputToServer;
+    private final BufferedWriter outputToServer;
 
     /**
      * Virtual socket main controller's constructor. Initializes the print writer.
      *
      * @param output
      */
-    public VirtualSocketMainController(PrintWriter output) {
-        this.outputToServer = new PrintWriter(output);
+    public VirtualSocketMainController(BufferedWriter output) {
+        this.outputToServer = new BufferedWriter(output);
     }
 
     /**
      * This method creates the json encoding to call in the server's main controller the connect method
      *
-     * @param client   virtualView
-     * @param nickName client's nickname
-     * @return clientID
+     * @param client      virtualView
+     * @param nickName    client's nickname
+     * @param clientState current client's state
      * @throws RemoteException
      */
     @Override
     public void connect(VirtualView client, String nickName, ClientState clientState) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "connect");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("nickname", nickName);
@@ -57,7 +58,7 @@ public class VirtualSocketMainController implements VirtualMainController {
      */
     @Override
     public void createWaitingList(VirtualView client, String nickname, int numPlayers) throws RemoteException {
-        HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "createWaitingList");
         HashMap<String, String> msg = new HashMap<>();
         msg.put("nickname", nickname);
@@ -72,19 +73,31 @@ public class VirtualSocketMainController implements VirtualMainController {
      * @throws RemoteException
      */
     @Override
-    public VirtualGameController getVirtualGameController() throws RemoteException {
-        HashMap<String, String> data = VirtualSocketMainController.getBaseMessage();
+    public VirtualGameController getVirtualGameController(int id) throws RemoteException {
+        HashMap<String, String> data = this.getBaseMessage();
         data.replace("function", "getVirtualGameController");
-        writeToServer(data, new HashMap<>());
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("id", String.valueOf(id));
+        writeToServer(data, msg);
         return null;
     }
+
+    @Override
+    public void resetServerTimer(String clientID) throws RemoteException {
+        HashMap<String, String> data = this.getBaseMessage();
+        data.replace("function", "resetServerTimer");
+        HashMap<String, String> msg = new HashMap<>();
+        msg.put("clientID", String.valueOf(clientID));
+        writeToServer(data, msg);
+    }
+
 
     /**
      * This method creates the basic structure for this protocol.
      *
      * @return base structure
      */
-    private static HashMap<String, String> getBaseMessage() {
+    private HashMap<String, String> getBaseMessage() {
         HashMap<String, String> data = new HashMap<>();
         data.put("function", "");
         data.put("value", "");
@@ -97,19 +110,20 @@ public class VirtualSocketMainController implements VirtualMainController {
      * @param data     base message with the correct function name
      * @param valueMsg data associated to the value key
      */
-    private void writeToServer(HashMap<String, String> data, HashMap<String, String> valueMsg) {
+    private void writeToServer(HashMap<String, String> data, HashMap<String, String> valueMsg) throws RemoteException {
         ObjectMapper mappedmsg = new ObjectMapper();
         try {
             data.replace("value", mappedmsg.writeValueAsString(valueMsg));
             ObjectMapper mappedData = new ObjectMapper();
-            this.outputToServer.println(mappedData.writeValueAsString(data));
+            this.outputToServer.write(mappedData.writeValueAsString(data));
+            this.outputToServer.newLine();
             this.outputToServer.flush();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            throw new RemoteException();
         }
     }
-
-
 }
 
 
