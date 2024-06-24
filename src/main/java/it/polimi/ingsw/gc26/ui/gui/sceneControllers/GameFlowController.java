@@ -427,9 +427,9 @@ public class GameFlowController extends SceneController implements Initializable
             this.commonMissionsBox.getChildren().setAll(commonMissionsCommonTableImages);
             this.resourceCardBox.getChildren().setAll(resourceCommonTableImages);
             this.goldCardBox.getChildren().setAll(goldCommonTableImages);
-            cardsLayout(rootBorder, resourceCommonTableImages);
-            cardsLayout(rootBorder, goldCommonTableImages);
-            cardsLayout(rootBorder, commonMissionsCommonTableImages);
+            //cardsLayout(rootBorder, resourceCommonTableImages);
+            //cardsLayout(rootBorder, goldCommonTableImages);
+            //cardsLayout(rootBorder, commonMissionsCommonTableImages);
         });
 
         //buttons setup
