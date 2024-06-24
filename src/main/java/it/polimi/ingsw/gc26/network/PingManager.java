@@ -8,4 +8,10 @@ public interface PingManager extends Runnable{
      * Resets timer in order to identify when the connection has been interrupted.
      */
     void reset();
+
+    /**
+     * Returns true if server is uo, false otherwise
+     */
+    boolean isServerUp();
 }
+

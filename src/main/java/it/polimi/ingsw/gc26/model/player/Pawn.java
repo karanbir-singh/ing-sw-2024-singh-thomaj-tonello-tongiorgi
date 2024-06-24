@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.model.player;
 
 import it.polimi.ingsw.gc26.model.utils.TextStyle;
+
 import java.io.Serializable;
 
 /**
@@ -31,13 +32,19 @@ public enum Pawn implements Serializable {
 
     /**
      * Constructor for pawn enumeration.
+     *
      * @param fontColor
      */
-    Pawn(String fontColor) { this.fontColor = fontColor; }
+    Pawn(String fontColor) {
+        this.fontColor = fontColor;
+    }
 
     /**
-     * This method returm the pawn's font color.
-     * @return
+     * This method return the pawn's font color.
+     *
+     * @return color ascii
      */
-    public String getFontColor(){ return this.fontColor; }
+    public String getFontColor() {
+        return this.fontColor;
+    }
 }

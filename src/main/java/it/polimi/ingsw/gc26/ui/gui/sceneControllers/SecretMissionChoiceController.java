@@ -1,106 +1,152 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.game.Message;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.scene.layout.*;
 
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
+/**
+ * This controller manages the secret mission selection scene.
+ * It allows the user to select the secret mission and chat with other players.
+ */
 public class SecretMissionChoiceController extends SceneController implements Initializable {
+    /**
+     * Tab pane for displaying chat tabs.
+     */
     @FXML
     public TabPane chatTabPane;
+    /**
+     * Button to toggle chat visibility.
+     */
     @FXML
     public Button chatButton;
+    /**
+     * Anchor pane to hold chat related components.
+     */
     @FXML
     public AnchorPane anchorPaneChat;
     //CommonTable
-    @FXML
-    private VBox commonTableBox;
-
+    /**
+     * The label to display the status of the game or player.
+     */
     @FXML
     private Label status;
-
+    /**
+     * HBox that contains card elements.
+     */
     @FXML
     private HBox cardHBox;
+    /**
+     * The HBox to hold secret mission cards.
+     */
     @FXML
     private HBox secretMissionHBox;
-
-
+    /**
+     * The HBox to hold resource cards.
+     */
     @FXML
     private HBox resourceHbox;
+    /**
+     * The HBox to hold gold cards.
+     */
     @FXML
     private HBox goldHbox;
-
-
     //layout
+    /**
+     * Pane for displaying personal board tabs.
+     */
     @FXML
     TabPane personalBoardTabPane;
-
-    //layout
-    CommonLayout layout = new CommonLayout();
+    /**
+     * The HBox for the left panel layout.
+     */
     @FXML
     private HBox HBoxLeftPanel;
-    @FXML
-    private VBox centerVBox;
+    /**
+     * VBox for the right panel layout.
+     */
     @FXML
     private VBox rightVBox;
+    /**
+     * The root border pane for the main layout.
+     */
     @FXML
     private BorderPane rootBorder;
+    /**
+     * The root anchor pane for the main layout.
+     */
     @FXML
     private AnchorPane rootPane;
+    /**
+     * The background image view for the scene.
+     */
     @FXML
     private ImageView background;
+    /**
+     * The button to confirm selected mission.
+     */
     @FXML
     private Button confirmButton;
-    private HashMap<String, ScrollPane> chats = new HashMap<>();
-    private boolean chatIsVisible = false;
-    private boolean chatHasBeenCreated = false;
+    /**
+     * The image view for the chat icon.
+     */
     private final ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
-
+    /**
+     * The button to show the rules.
+     */
     @FXML
     private Button rulesButton;
+    /**
+     * The image view for the rules icon.
+     */
     private final ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
-
-
-    private ArrayList<ImageView> cards = new ArrayList<>();
-    private ImageView image1 = new ImageView(new Image(getClass().getResource("images/game-background.png").toExternalForm()));
-    BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false);
-
-
+    /**
+     * The grid pane for cards.
+     */
     @FXML
     GridPane gridPane;
+    /**
+     * The starting x-position for cards in the grid pane.
+     */
     private final int xPositionStarterCard = 40;
+    /**
+     * The starting y-position for cards in the grid pane.
+     */
+
     private final int yPositionStarterCard = 40;
+    /**
+     * The column constraints for the grid pane.
+     */
     private ColumnConstraints columnConstraints = new ColumnConstraints(115, 115, 115);
+    /**
+     * The row constraints for the grid pane.
+     */
     private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
 
+    /**
+     * Path to locate images
+     */
     String path = "images/";
 
+    /**
+     * Handles the event when the button is clicked. Creates the select secret mission in the server
+     *
+     * @param mouseEvent event that triggers the function
+     */
     public void onClickSecretMission(MouseEvent mouseEvent) {
         try {
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getAccessibleText());
@@ -108,9 +154,11 @@ public class SecretMissionChoiceController extends SceneController implements In
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-
     }
 
+    /**
+     * Handles the event when the button is clicked. Creates the set secret mission in the server
+     */
     public void onClickConfirmButton() {
         try {
             this.mainClient.getVirtualGameController().setSecretMission(this.mainClient.getClientID());
@@ -119,6 +167,11 @@ public class SecretMissionChoiceController extends SceneController implements In
         }
     }
 
+    /**
+     * Updates images in common table with the new values in simplified common table
+     *
+     * @param simplifiedCommonTable new common table
+     */
     @Override
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         ArrayList<ImageView> resources = new ArrayList<>();
@@ -153,16 +206,19 @@ public class SecretMissionChoiceController extends SceneController implements In
             index++;
         }
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             this.rightVBox.getChildren().setAll(imageViewsCommonMissions);
             this.resourceHbox.getChildren().setAll(resources);
             this.goldHbox.getChildren().setAll(goldens);
 
         });
-
-        //da controllare se vanno messi in platform.runlater
     }
 
+    /**
+     * Updates hans images with the new value in simplified hand
+     *
+     * @param simplifiedHand new player's hand
+     */
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
         ArrayList<ImageView> handCards = new ArrayList<>();
@@ -179,6 +235,11 @@ public class SecretMissionChoiceController extends SceneController implements In
 
     }
 
+    /**
+     * Updates cards drawn in the personal board with the new cards.
+     *
+     * @param personalBoard new player's personal board
+     */
     @Override
     public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         ImageView imageCardToPlay = new ImageView(new Image(String.valueOf(
@@ -189,17 +250,21 @@ public class SecretMissionChoiceController extends SceneController implements In
 
     }
 
+    /**
+     * Updates the personal board of another player
+     *
+     * @param otherPersonalBoard other player's personal board
+     */
     @Override
     public void changeGUIotherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
         boolean exist = false;
         Tab consideredTab = null;
         ScrollPane otherScrollPane = null;
         GridPane otherGridPane = null;
-        //controlla che se esiste gia un tab con lo stesso nickname, e se esiste prendere i riferimenti allo scrollPane e griPane
+        // if already exists a tab for the personal board's owner, gets its scroll pane and grid pane
         for (Tab tab : personalBoardTabPane.getTabs()) {
             if (tab.getText().equals(otherPersonalBoard.getNickname())) {
                 exist = true;
-                consideredTab = tab;
                 otherScrollPane = (ScrollPane) tab.getContent();
                 otherGridPane = (GridPane) otherScrollPane.getContent();
                 otherScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -208,7 +273,7 @@ public class SecretMissionChoiceController extends SceneController implements In
             }
         }
 
-        //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
+        // if there's no tab for the personal board's owner, creates a new tab pane for its personal board
         if (!otherPersonalBoard.getNickname().equals(this.nickname) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());
@@ -221,6 +286,10 @@ public class SecretMissionChoiceController extends SceneController implements In
             otherScrollPane.setContent(otherGridPane);
             this.creationAndSettingGridContraints(otherGridPane);
             consideredTab.setContent(otherScrollPane);
+
+            otherScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            otherScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            otherScrollPane.getStyleClass().add("tabScrollPane");
         }
 
         ImageView imageCardToPlay = new ImageView(new Image(String.valueOf(
@@ -231,6 +300,11 @@ public class SecretMissionChoiceController extends SceneController implements In
     }
 
 
+    /**
+     * Updates the secret hand with the new mission cards
+     *
+     * @param simplifiedSecretHand new mission cards
+     */
     @Override
     public void changeGUISecretHand(SimplifiedHand simplifiedSecretHand) {
         ArrayList<ImageView> secretHand = new ArrayList<>();
@@ -241,8 +315,8 @@ public class SecretMissionChoiceController extends SceneController implements In
             this.setParameters(imageView, String.valueOf(index));
             imageView.setOnMouseClicked(this::onClickSecretMission);
             secretHand.add(imageView);
-            if(card == simplifiedSecretHand.getSelectedCard()) {
-                layout.makeGlow(imageView);
+            if (card == simplifiedSecretHand.getSelectedCard()) {
+                makeGlow(imageView);
             }
             index++;
         }
@@ -253,6 +327,12 @@ public class SecretMissionChoiceController extends SceneController implements In
         });
     }
 
+    /**
+     * Set styles for generic image view
+     *
+     * @param imageView
+     * @param accessibleText
+     */
     private void setParameters(ImageView imageView, String accessibleText) {
         imageView.setFitWidth(150);
         imageView.setFitHeight(98);
@@ -261,7 +341,11 @@ public class SecretMissionChoiceController extends SceneController implements In
 
     }
 
-
+    /**
+     * Populates the grid pane representing the personal board
+     *
+     * @param gridPane pane inside players tab
+     */
     private void creationAndSettingGridContraints(GridPane gridPane) {
         gridPane.setPrefWidth(8000);
         gridPane.setPrefHeight(4000);
@@ -275,14 +359,49 @@ public class SecretMissionChoiceController extends SceneController implements In
         }
     }
 
+    /**
+     * Adds an image in the grid pane. Used to set the starter card
+     *
+     * @param imageView card to be placed
+     * @param x         x coordinate
+     * @param y         y coordinate
+     * @param gridPane  grid pane representing the personal board
+     */
     private void addImage(ImageView imageView, int x, int y, GridPane gridPane) {
         setParameters(imageView, "0");
-        Platform.runLater(() -> {
-            gridPane.add(imageView, x, y);
-        });
+        //TODO capire perché a volte è null
+        if(gridPane != null) {
+            Platform.runLater(() -> {
+                gridPane.add(imageView, x, y);
+            });
+        }
     }
 
+    @Override
+    public void changeGUIGame (SimplifiedGame simplifiedGame) {
+        Pawn pawn;
+        for (Tab tab : personalBoardTabPane.getTabs()) {
+            pawn = simplifiedGame.getPawnsSelected().get(tab.getText());
+            if(pawn != null) {
+                tab.setId(pawn.name());
+            }
+        }
+    }
 
+    @Override
+    public void changeGUIPlayer (SimplifiedPlayer simplifiedPlayer) {
+        if(simplifiedPlayer.getPawnColor() != null) {
+            personalBoardTabPane.getTabs().getFirst().setId(simplifiedPlayer.getPawnColor().name());
+        }
+    }
+
+    /**
+     * Initializes the controller.
+     * Sets up event handlers for buttons, cards and initializes the background styles.
+     *
+     * @param url            the location used to resolve relative paths for the root object, or null if the location is not known
+     * @param resourceBundle the resources used to localize the root object, or null if the resources are not specified
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         columnConstraints.setHalignment(HPos.CENTER);
@@ -290,202 +409,10 @@ public class SecretMissionChoiceController extends SceneController implements In
 
         this.creationAndSettingGridContraints(this.gridPane);
 
-        layout.pageBindings(rootPane, rootBorder, background);
+        pageBindings(rootPane, rootBorder, background);
         //buttons setup
-        layout.buttonSetup(chatIcon, chatButton);
+        buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
+        buttonSetup(rulesIcon, rulesButton);
     }
-
-    @Override
-    public void changeGUIChat(SimplifiedChat simplifiedChat) {
-        Message newMessage = simplifiedChat.getMessages().getLast();
-        if (!newMessage.getSender().getNickname().equals(this.nickname)) {
-            if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-                if (!newMessage.getSender().getNickname().equals(nickname)) {
-                    if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
-                            !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
-                        addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname());
-                    } else {
-                        addMessageInChat(newMessage.getText(), "Group Chat", null);
-                    }
-                }
-            } else {
-                addMessageInChat(newMessage.getText(), newMessage.getSender().getNickname(), null);
-            }
-        } else {
-            if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-                addMessageFromSender(newMessage.getText(), "Group Chat");
-            } else {
-                addMessageFromSender(newMessage.getText(), newMessage.getReceiver().getNickname());
-            }
-        }
-    }
-
-    @Override
-    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
-        if (!chatHasBeenCreated) {
-            this.nickname = nickname;
-            for (String playerNickname : simplifiedGame.getPlayersNicknames()) {
-                if (!playerNickname.equals(nickname)) {
-                    createChatTab(playerNickname);
-                }
-            }
-            createChatTab("Group Chat");
-            chatHasBeenCreated = true;
-        }
-    }
-
-    private void createChatTab(String nickname) {
-        Tab newTab = new Tab();
-        newTab.setText(nickname);
-        newTab.setStyle("-fx-border-radius: 0px 0px 5px 5px;");
-        AnchorPane newAnchorPane = new AnchorPane();
-        newTab.setContent(newAnchorPane);
-        newAnchorPane.setStyle("-fx-background-color: #e8f4f8");
-        javafx.scene.control.TextField newTextField = new javafx.scene.control.TextField();
-        newTextField.setPrefWidth(208);
-        newTextField.setPrefHeight(26);
-        newTextField.setLayoutX(9);
-        newTextField.setLayoutY(489);
-        newTextField.setPromptText("Type Message");
-        newTextField.setStyle("-fx-border-radius: 5px;");
-        newAnchorPane.getChildren().add(newTextField);
-        Button newButton = new Button();
-        newButton.setText("Send");
-        newButton.setLayoutX(231);
-        newButton.setLayoutY(489);
-        newAnchorPane.getChildren().add(newButton);
-        javafx.scene.control.ScrollPane newScrollPane = new javafx.scene.control.ScrollPane();
-        newScrollPane.setMinHeight(440);
-        newScrollPane.setPrefHeight(440);
-        newScrollPane.setMinWidth(262);
-        newScrollPane.setMaxWidth(262);
-        newScrollPane.setLayoutX(9);
-        newScrollPane.setLayoutY(14);
-        newAnchorPane.getChildren().add(newScrollPane);
-        VBox newVBox = new VBox();
-        newScrollPane.setContent(newVBox);
-        newVBox.maxWidth(229);
-        newVBox.maxHeight(440);
-        newVBox.prefWidth(229);
-        newScrollPane.setContent(newVBox);
-        newScrollPane.setPadding(new Insets(5, 0, 5, 5));
-        chatTabPane.getTabs().add(newTab);
-        newTextField.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER && !newTextField.getText().isEmpty()) {
-                sendMessage(newTextField, newTab);
-            }
-            Platform.runLater(() -> newScrollPane.setVvalue(1.0));
-            keyEvent.consume();
-        });
-        newButton.setOnMouseClicked(event -> {
-            if (!newTextField.getText().isEmpty()) {
-                sendMessage(newTextField, newTab);
-            }
-            Platform.runLater(() -> newScrollPane.setVvalue(1.0));
-            event.consume();
-        });
-        Platform.runLater(() -> newScrollPane.setVvalue(1.0));
-        chats.put(nickname, newScrollPane);
-    }
-
-    private void sendMessage(javafx.scene.control.TextField newTextField, Tab newTab) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        try {
-            this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
-        } catch (RemoteException e) {
-            System.err.println("RemoteException while sending message!");
-        }
-        newTextField.clear();
-
-    }
-
-    private void addMessageFromSender(String message, String sender) {
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.BASELINE_RIGHT);
-        hBox.setPadding(new Insets(5, 5, 5, 30));
-        Text text = new Text(message);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setSnapToPixel(true);
-        textFlow.setStyle("-fx-background-color: rgb(15,125,242);" + "-fx-color: rgb(239, 242,255);" + "-fx-background-radius: 7px;");
-        hBox.setMinWidth(240);
-        hBox.setMaxWidth(240);
-        textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.setStyle("-fx-text-fill: white;");
-        text.setFill(Color.color(1, 1, 1));
-        hBox.getChildren().add(textFlow);
-
-        Platform.runLater(() -> {
-            ((VBox) chats.get(sender).getContent()).getChildren().add(hBox);
-            chats.get(sender).setVvalue(1.0);
-        });
-    }
-
-    private void addMessageInChat(String message, String sender, String labelMessage) {
-        HBox labelBox = new HBox();
-        Text labelText;
-        TextFlow labelTextFlow;
-        if (labelMessage != null) {
-            labelBox.setAlignment(Pos.BASELINE_LEFT);
-            labelBox.setPadding(new Insets(0, 30, 0, 5));
-            labelText = new Text(labelMessage);
-            labelText.setStyle("-fx-font-size: 10px;");
-            labelTextFlow = new TextFlow(labelText);
-            labelBox.setMinWidth(150);
-            labelBox.setMaxWidth(150);
-            labelText.setFill(Color.color(0.25, 0.25, 0.25));
-            labelBox.getChildren().add(labelTextFlow);
-        }
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.BASELINE_LEFT);
-        hBox.setPadding(new Insets(5, 30, 5, 5));
-        Text text = new Text(message);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setSnapToPixel(true);
-        textFlow.setStyle("-fx-background-color: rgb(233,233,235);" + "-fx-background-radius: 7px;");
-        hBox.setMinWidth(240);
-        hBox.setMaxWidth(240);
-        textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.setFill(Color.color(0.0, 0.0, 0.0));
-
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    hBox.getChildren().add(textFlow);
-                    if (labelMessage != null) {
-                        ((VBox) chats.get(sender).getContent()).getChildren().add(labelBox);
-                    }
-                    ((VBox) chats.get(sender).getContent()).getChildren().add(hBox);
-                    chats.get(sender).setVvalue(1.0);
-                } catch (NullPointerException e) {
-
-                }
-            }
-        });
-    }
-
-    public void toggleChat(ActionEvent actionEvent) {
-
-        if (chatIsVisible) {
-            chatButton.getStyleClass().clear();
-            chatButton.getStyleClass().add("buttonClose");
-            anchorPaneChat.setTranslateX(-2000);
-            HBoxLeftPanel.setMinWidth(40);
-            HBoxLeftPanel.setMaxWidth(40);
-            chatIsVisible = false;
-            //buttonHBox.setTranslateX(0);
-        } else {
-            chatButton.getStyleClass().clear();
-            chatButton.getStyleClass().add("buttonVisible");
-            anchorPaneChat.setTranslateX(30);
-            HBoxLeftPanel.setMinWidth(380);
-            HBoxLeftPanel.setMaxWidth(380);
-            chatIsVisible = true;
-            //buttonHBox.setTranslateX(500);
-        }
-    }
-
-
 }

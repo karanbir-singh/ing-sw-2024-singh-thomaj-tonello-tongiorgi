@@ -35,6 +35,7 @@ public class Hand implements Serializable {
      * Initializes the hand for the player
      *
      * @param cards new cards in hand
+     * @param observable observable to notify client
      */
     public Hand(ArrayList<Card> cards, ModelObservable observable) {
         this.observable = observable;
@@ -107,6 +108,8 @@ public class Hand implements Serializable {
 
     /**
      * Sets selected side to the opposite side if there is a selected card
+     *
+     * @param clientID client unique identifier
      */
     public void turnSide(String clientID) {
         Optional<Card> selectedCard = Optional.ofNullable(this.selectedCard);
@@ -131,6 +134,7 @@ public class Hand implements Serializable {
      * Removes the card given as parameter from the hand
      *
      * @param card card to be removed
+     * @param clientID client unique identifier
      */
     public void removeCard(Card card, String clientID) {
         cards.remove(card);
@@ -148,6 +152,7 @@ public class Hand implements Serializable {
      * Removes the secret mission card given as parameter from the secret hand
      *
      * @param card card to be removed
+     * @param clientID client unique identifier
      */
     public void removeCard(MissionCard card, String clientID) {
         cards.remove(card);
@@ -178,6 +183,7 @@ public class Hand implements Serializable {
      * Adds a secret mission card into secret hand
      *
      * @param card new secret mission card in secret hand
+     * @param clientID unique client identifier
      */
     public void addCard(MissionCard card, String clientID) {
         cards.add(card);
@@ -201,6 +207,9 @@ public class Hand implements Serializable {
      * Return the card in cardIndex position
      *
      * @param cardIndex index of the card
+     * @param clientID client's identifier
+     * @param leftLimit  min value for index
+     * @param rightLimit max value for index
      * @return card in cards at position cardIndex
      */
     public Card getCard(int leftLimit, int rightLimit, int cardIndex, String clientID) {

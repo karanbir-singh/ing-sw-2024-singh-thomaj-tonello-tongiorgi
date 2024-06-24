@@ -1,19 +1,15 @@
 package it.polimi.ingsw.gc26.view_model;
 
-import it.polimi.ingsw.gc26.Printer;
-import it.polimi.ingsw.gc26.model.card.*;
+import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.card_side.Side;
-import it.polimi.ingsw.gc26.model.card_side.Symbol;
-import it.polimi.ingsw.gc26.model.card_side.ability.CornerCounter;
-import it.polimi.ingsw.gc26.model.card_side.ability.InkwellCounter;
-import it.polimi.ingsw.gc26.model.card_side.ability.ManuscriptCounter;
-import it.polimi.ingsw.gc26.model.card_side.ability.QuillCounter;
-import it.polimi.ingsw.gc26.model.utils.SpecialCharacters;
-import it.polimi.ingsw.gc26.model.utils.TextStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * This class represents a simplified version of a hand.
+ * It provides methods to access the attributes.
+ */
 public class SimplifiedHand implements Serializable {
     /**
      * This attribute represent the current cards in the hand
@@ -39,14 +35,29 @@ public class SimplifiedHand implements Serializable {
         this.selectedSide = selectedSide;
     }
 
+    /**
+     * Returns the list of cards available for selection.
+     *
+     * @return the list of cards.
+     */
     public ArrayList<Card> getCards() {
         return cards;
     }
 
+    /**
+     * Returns the currently selected card.
+     *
+     * @return the selected card.
+     */
     public Card getSelectedCard() {
         return selectedCard;
     }
 
+    /**
+     * Returns the selected side of the card.
+     *
+     * @return the selected side of the card.
+     */
     public Side getSelectedSide() {
         return selectedSide;
     }

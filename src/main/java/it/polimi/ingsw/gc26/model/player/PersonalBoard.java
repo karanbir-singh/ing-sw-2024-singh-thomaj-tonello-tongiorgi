@@ -6,6 +6,7 @@ import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.network.ModelObservable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +67,9 @@ public class PersonalBoard implements Serializable {
 
     /**
      * The constructor initializes everything: the score, the resource, missions occupiedPositions , playablePositions, blockedPositions.
+     *
+     * @param observable observable to notify client
+     * @param nickname personal board owner
      */
     public PersonalBoard(ModelObservable observable, String nickname) {
         score = 0;
@@ -107,6 +111,7 @@ public class PersonalBoard implements Serializable {
      * Sets the secret mission
      *
      * @param secretMission card that you want to set
+     * @param clientID unique client's id
      */
     public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {
@@ -188,6 +193,7 @@ public class PersonalBoard implements Serializable {
 
     /**
      * Returns the min value for x-axis.
+     *
      * @return real number
      */
     public int getXMin() {
@@ -196,6 +202,7 @@ public class PersonalBoard implements Serializable {
 
     /**
      * Returns the max value for x-axis.
+     *
      * @return real number
      */
     public int getXMax() {
@@ -204,6 +211,7 @@ public class PersonalBoard implements Serializable {
 
     /**
      * Returns the min value for y-axis.
+     *
      * @return real number
      */
     public int getYMin() {
@@ -212,6 +220,7 @@ public class PersonalBoard implements Serializable {
 
     /**
      * Returns the max value for y-axis.
+     *
      * @return real number
      */
     public int getYMax() {
@@ -243,6 +252,7 @@ public class PersonalBoard implements Serializable {
 
     /**
      * Sets manually the score point. Should only be for testing purposes.
+     *
      * @param score value between 0 and 30
      */
     public void setScore(int score) {

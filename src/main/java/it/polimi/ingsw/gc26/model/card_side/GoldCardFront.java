@@ -19,6 +19,7 @@ public class GoldCardFront extends Side implements Serializable {
      * @param DOWNLEFT           Symbol in the down left corner.
      * @param UPRIGHT            Symbol in the up right corner.
      * @param DOWNRIGHT          Symbol in the down right corner.
+     * @param imagePath path to corresponding image
      */
     public GoldCardFront(Symbol sideSymbol, Map<Symbol, Integer> requestedResources, int points, Corner UPLEFT, Corner DOWNLEFT, Corner UPRIGHT, Corner DOWNRIGHT, String imagePath) {
         setSideSymbol(sideSymbol);

@@ -59,6 +59,7 @@ public class GameController implements Serializable {
      * Initializes the game (provided by the main controller)
      *
      * @param game the object that represents the game
+     * @param ID game unique identifier to recreate or destroy de game
      */
     public GameController(Game game, int ID) {
         this.game = game;
@@ -85,7 +86,7 @@ public class GameController implements Serializable {
             outputStream.close();
             fileOutputStream.close();
         } catch (IOException e) {
-            ConsoleColors.printError("[ERROR]: error while saving game on file");
+            ConsoleColors.printError("Error while saving game on file");
         }
     }
 
@@ -237,16 +238,16 @@ public class GameController implements Serializable {
                             this.preparePlayersHand();
                         }
                     } else {
-                        game.sendError(playerID, "[ERROR]: pawn color not available");
+                        game.sendError(playerID, "Pawn color not available");
                     }
                 } catch (IllegalArgumentException e) {
-                    game.sendError(playerID, "[ERROR]: invalid input, retry again");
+                    game.sendError(playerID, "Invalid input, retry again");
                 }
             } else {
-                game.sendError(playerID, "[ERROR]: you have already chosen the pawn color]");
+                game.sendError(playerID, "You have already chosen the pawn color]");
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know]");
+            game.sendError(playerID, "You can't do that know]");
         }
 
         // Backup game controller
@@ -370,10 +371,10 @@ public class GameController implements Serializable {
                     }
                 }
             } else {
-                game.sendError(playerID, "[ERROR]: you have already set the secret mission");
+                game.sendError(playerID, "You have already set the secret mission");
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller
@@ -420,10 +421,10 @@ public class GameController implements Serializable {
                     }
                 }
             } else {
-                game.sendError(playerID, "[ERROR]: you have already set the secret mission");
+                game.sendError(playerID, "You have already set the secret mission");
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller
@@ -486,7 +487,7 @@ public class GameController implements Serializable {
                 }
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller
@@ -532,7 +533,7 @@ public class GameController implements Serializable {
             // Set the selected position
             personalBoard.setPosition(selectedX, selectedY, playerID);
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller
@@ -602,13 +603,13 @@ public class GameController implements Serializable {
                         // Change player state
                         player.setState(PlayerState.CARD_PLAYED, player.getID());
                     } else {
-                        game.sendError(playerID, "[ERROR]: you need to select a card");
+                        game.sendError(playerID, "You need to select a card");
                     }
                 } else {
-                    game.sendError(playerID, "[ERROR]: it's not you turn, you can't play a card");
+                    game.sendError(playerID, "It's not you turn, you can't play a card");
                 }
             } else {
-                game.sendError(playerID, "[ERROR]: you can't do that know");
+                game.sendError(playerID, "You can't do that know");
             }
         }
 
@@ -634,10 +635,10 @@ public class GameController implements Serializable {
                 // Set the selected card on the common table
                 game.getCommonTable().selectCard(cardIndex, playerID);
             } else {
-                game.sendError(playerID, "[ERROR]: it's not your turn, you can't select a card on the common table");
+                game.sendError(playerID, "It's not your turn, you can't select a card on the common table");
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller
@@ -675,7 +676,7 @@ public class GameController implements Serializable {
                     player.setState(PlayerState.CARD_DRAWN, player.getID());
 
                     // Check if player's score is greater or equal then 20 points OR decks are both empty
-                    if (game.getState() != GameState.END_STAGE && player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
+                    if (game.getState() != GameState.END_STAGE && player.getPersonalBoard().getScore() >= 2 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
                         // Change game state into END_STAGE
                         game.setState(GameState.END_STAGE);
 
@@ -740,7 +741,7 @@ public class GameController implements Serializable {
     /**
      * Readds the virtual view after the server has gone down, because the connection must be recreated
      *
-     * @param view client's view
+     * @param view     client's view
      * @param clientID client's original ID
      */
     public void reAddView(VirtualView view, String clientID) {
@@ -749,13 +750,16 @@ public class GameController implements Serializable {
 
     /**
      * Sets debug flag
+     *
      * @param debug
      */
     public void setDebug(boolean debug) {
         isDebug = debug;
     }
+
     /**
      * A queue of requests from the client to be executed later
+     *
      * @return all the game requests
      */
     public Queue<GameRequest> getGameRequests() {

@@ -1,23 +1,40 @@
 package it.polimi.ingsw.gc26.ui.tui;
 
-import it.polimi.ingsw.gc26.model.player.PersonalBoard;
-import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.view_model.*;
 
 import java.io.IOException;
 
+/**
+ * The TUIUpdate class implements the UpdateInterface to provide updates to the text-based user interface (TUI).
+ * It manages the updates of the simplified game model and interacts with the CLI for displaying information.
+ */
 public class TUIUpdate implements UpdateInterface {
-
+    /**
+     * The simplified game model instance that this class updates.
+     */
     private SimplifiedModel miniModel;
 
+    /**
+     * Constructor for this class
+     *
+     * @param miniModel updated mini-model
+     */
     public TUIUpdate(SimplifiedModel miniModel) {
         this.miniModel = miniModel;
     }
 
+    /**
+     * The CLI instance used for displaying information in the text-based user interface.
+     */
     private CLI cli;
 
+    /**
+     * Updates the view of the common table.
+     *
+     * @param simplifiedCommonTable the simplified representation of the common table.
+     */
     @Override
     public void updateViewCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         clearConsole();
@@ -30,6 +47,11 @@ public class TUIUpdate implements UpdateInterface {
         printOptions(getGameState());
     }
 
+    /**
+     * Updates the view of a player.
+     *
+     * @param simplifiedPlayer the simplified representation of a player.
+     */
     @Override
     public void updateViewPlayer(SimplifiedPlayer simplifiedPlayer) {
         clearConsole();
@@ -42,6 +64,11 @@ public class TUIUpdate implements UpdateInterface {
         printOptions(getGameState());
     }
 
+    /**
+     * Updates the view of the hand.
+     *
+     * @param simplifiedHand the simplified representation of the hand.
+     */
     @Override
     public void updateViewHand(SimplifiedHand simplifiedHand) {
         clearConsole();
@@ -55,6 +82,11 @@ public class TUIUpdate implements UpdateInterface {
         printOptions(getGameState());
     }
 
+    /**
+     * Updates the view of the secret hand.
+     *
+     * @param simplifiedSecretHand the simplified representation of the secret hand.
+     */
     @Override
     public void updateViewSecretHand(SimplifiedHand simplifiedSecretHand) {
         clearConsole();
@@ -67,6 +99,11 @@ public class TUIUpdate implements UpdateInterface {
         printOptions(getGameState());
     }
 
+    /**
+     * Updates the view of the personal board.
+     *
+     * @param personalBoard the simplified representation of the personal board.
+     */
     @Override
     public void updateViewPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         clearConsole();
@@ -79,19 +116,30 @@ public class TUIUpdate implements UpdateInterface {
         printOptions(getGameState());
     }
 
+    /**
+     * Updates the view of another player's personal board.
+     *
+     * @param otherPersonalBoard the simplified representation of the other player's personal board.
+     */
     @Override
     public void updateViewOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
+        return;
         //clearConsole(); i do not want to hide my personal board
-        cli = new CLI(miniModel);
-        try {
-            cli.printOtherGame(otherPersonalBoard.getNickname()); //TODO si puà prendere nickname direttamente da la board senza parametro
-        } catch (Exception e) {
-            System.out.println("Other personal board not available yet!");
-        }
-        printOptions(getGameState());
+//        cli = new CLI(miniModel);
+//        try {
+//            cli.printOtherGame(otherPersonalBoard); //TODO si puà prendere nickname direttamente da la board senza parametro
+//        } catch (Exception e) {
+//            System.out.println("Other personal board not available yet!");
+//        }
+//        printOptions(getGameState());
 
     }
 
+    /**
+     * Updates the view of the chat.
+     *
+     * @param simplifiedChat the simplified representation of the chat.
+     */
     @Override
     public void updateViewSimplifiedChat(SimplifiedChat simplifiedChat) {
         clearConsole();
@@ -104,7 +152,9 @@ public class TUIUpdate implements UpdateInterface {
     }
 
     /**
-     * @param simplifiedGame
+     * Updates the game view with the simplified game state.
+     *
+     * @param simplifiedGame the simplified representation of the game state.
      */
     @Override
     public void updateGame(SimplifiedGame simplifiedGame) {
@@ -118,28 +168,53 @@ public class TUIUpdate implements UpdateInterface {
         printOptions(getGameState());
     }
 
+    /**
+     * Displays a message to the user.
+     *
+     * @param message the message to be displayed.
+     */
     @Override
     public void showMessage(String message) {
-        //clearConsole();
         System.out.println("[SERVER]: " + message);
-        //printOptions();
     }
 
+    /**
+     * Displays an error message to the user.
+     *
+     * @param message the error message to be displayed.
+     */
     @Override
     public void showError(String message) {
         System.err.println("[ERROR]: " + message);
-        printOptions(getGameState());
     }
 
+    /**
+     * Clears previous print in the interface
+     */
     private void clearConsole() {
         try {
             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        } catch ( IOException e) {
+        } catch (IOException e) {
             System.out.print("\033[H\033[2J");
             System.out.print("\033\143");
         }
+    }
+
+    /**
+     * Prints another player's personal board
+     *
+     * @param nickname other player's nickname
+     */
+    public void showOtherPersonalBoard(String nickname) {
+        cli = new CLI(miniModel);
+        try {
+            cli.printOtherGame(miniModel.getOthersPersonalBoards().get(nickname));
+        } catch (Exception e) {
+            System.out.println("Other personal board not available yet!");
+        }
+        printOptions(getGameState());
     }
 
     /**
@@ -189,7 +264,7 @@ public class TUIUpdate implements UpdateInterface {
                         "4) Exit game.\n" +
                         "5) Open rulebook.");
                 break;
-            case GAME_STARTED:
+            case GAME_STARTED, END_STAGE:
                 System.out.println("" +
                         "1) Select a card.\n" +
                         "2) Turn selected card side.\n" +
@@ -202,7 +277,7 @@ public class TUIUpdate implements UpdateInterface {
                         "9) Exit game.\n" +
                         "10) Open rulebook.");
                 break;
-            case END_STAGE:
+            case WINNER:
                 System.out.println("" +
                         "1) Open chat.\n" +
                         "2) Exit game.\n" +
@@ -214,8 +289,11 @@ public class TUIUpdate implements UpdateInterface {
         }
     }
 
-
-    public void closeErrorPopup(){
-
+    /**
+     * Print options after the connection is restored
+     */
+    public void closeErrorPopup() {
+        System.out.println("Server is up, you can restart to play");
+        TUIUpdate.printOptions(miniModel.getSimplifiedGame().getGameState());
     }
 }

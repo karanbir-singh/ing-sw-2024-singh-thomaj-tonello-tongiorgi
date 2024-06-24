@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.controller.GameController;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.request.game_request.*;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -20,6 +21,7 @@ public class VirtualRMIGameController implements VirtualGameController {
 
     /**
      * Constructor of the virtual controller.
+     *
      * @param gameController game controller where the methods will be called.
      * @throws RemoteException if the remote method cannot be called
      */
@@ -149,13 +151,12 @@ public class VirtualRMIGameController implements VirtualGameController {
     }
 
     /**
-     *
-     * @param view client's view
+     * @param view     client's view
      * @param clientID client's original ID
      * @throws RemoteException if the remote object cannot be called
      */
     @Override
-    public void reAddView(VirtualView view, String clientID) throws RemoteException{
-        this.gameController.addRequest(new ReAddViewRequest(view,clientID));
+    public void reAddView(VirtualView view, String clientID) throws RemoteException {
+        this.gameController.addRequest(new ReAddViewRequest(view, clientID));
     }
 }

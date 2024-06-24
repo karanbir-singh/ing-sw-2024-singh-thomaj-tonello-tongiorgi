@@ -3,8 +3,11 @@ package it.polimi.ingsw.gc26.ui.gui;
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.network.ClientResetTimerToServer;
-import it.polimi.ingsw.gc26.ui.gui.sceneControllers.*;
 import it.polimi.ingsw.gc26.ui.UIInterface;
+import it.polimi.ingsw.gc26.ui.gui.sceneControllers.ErrorController;
+import it.polimi.ingsw.gc26.ui.gui.sceneControllers.LoginController;
+import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneController;
+import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneInfo;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -13,7 +16,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -21,7 +23,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.rmi.RemoteException;
@@ -29,22 +30,51 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 
+/**
+ * The GUIApplication class serves as the main entry point for the JavaFX application.
+ * It manages the primary stage and integrates with the MainClient for networking.
+ */
 public class GUIApplication extends Application implements UIInterface {
-
+    /**
+     * Path to the scenes resources.
+     */
     public static final String scenesPath = "/it/polimi/ingsw/gc26";
-
+    /**
+     * The main client for handling network operations.
+     */
     private MainClient mainClient;
-    private ArrayList<SceneInfo> scenes; //scene in order
+    /**
+     * A list of SceneInfo objects representing the scenes in order.
+     */
+    private ArrayList<SceneInfo> scenes;
+    /**
+     * The primary stage of the application whe it is started.
+     */
     private Stage primaryStage;
+    /**
+     * The current scene information being displayed.
+     */
     private SceneInfo currentSceneInfo;
+    /**
+     * The stage for displaying pop-up windows.
+     */
     private Stage popupStage;
 
-
+    /**
+     * Initializes the application with the specified network type.
+     *
+     * @param networkType The type of network to initialize.
+     */
     @Override
     public void init(MainClient.NetworkType networkType) {
         launch(networkType.toString());
     }
 
+    /**
+     * Sets network parameters and starts pinging the server
+     *
+     * @param primaryStage
+     */
     @Override
     public void start(Stage primaryStage) {
         // Get value from args
@@ -104,22 +134,22 @@ public class GUIApplication extends Application implements UIInterface {
     private void loadScenes() {
         scenes = new ArrayList<>();
 
-        for(SceneEnum sceneEnum : SceneEnum.values()){
+        for (SceneEnum sceneEnum : SceneEnum.values()) {
             FXMLLoader loader = null;
 
             loader = new FXMLLoader(this.getClass().getResource(sceneEnum.value()));
 
 
             Parent root = null;
-                    try {
-                        root = loader.load();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        ConsoleColors.printError("[ERROR]: cannot load " + sceneEnum.name());
-                        System.exit(-1);
-                    }
-                    SceneController sceneController = loader.getController();
-                    sceneController.setMainClient(mainClient);
+            try {
+                root = loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+                ConsoleColors.printError("[ERROR]: cannot load " + sceneEnum.name());
+                System.exit(-1);
+            }
+            SceneController sceneController = loader.getController();
+            sceneController.setMainClient(mainClient);
 
             // Add scene
             scenes.add(new SceneInfo(sceneController, new Scene(root), sceneEnum));
@@ -153,6 +183,7 @@ public class GUIApplication extends Application implements UIInterface {
                 .findFirst()
                 .orElse(null);
     }
+
     /**
      * Changes the showing scene
      *
@@ -166,7 +197,7 @@ public class GUIApplication extends Application implements UIInterface {
             // Update stage
             scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
             scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/LOGIN.css")).toExternalForm());
-            this.primaryStage.setOnCloseRequest((WindowEvent windowEvent) ->{
+            this.primaryStage.setOnCloseRequest((WindowEvent windowEvent) -> {
                 this.mainClient.killProcesses();
             });
             this.primaryStage.setScene(scene);
@@ -183,6 +214,11 @@ public class GUIApplication extends Application implements UIInterface {
     }
 
 
+    /**
+     * Connects the client to the server and sets game controller
+     *
+     * @throws RemoteException if the network is now working
+     */
     @Override
     public void runConnection() throws RemoteException {
         // Set login scene
@@ -282,10 +318,18 @@ public class GUIApplication extends Application implements UIInterface {
         }
     }
 
+    /**
+     * Start with game interface
+     */
     @Override
     public void runGame() {
     }
 
+    /**
+     * Opens a new popup when an unexpected behaviour has occurred
+     *
+     * @param message message to be displayed
+     */
     public void openErrorPopup(String message) {
         this.popupStage = new Stage();
         SceneInfo sceneInfo = this.getSceneInfo(SceneEnum.ERROR);
@@ -297,15 +341,27 @@ public class GUIApplication extends Application implements UIInterface {
         this.popupStage.show();
     }
 
-
+    /**
+     * Sets nickname value in all game's controllers
+     */
     private void setToAllControllersNickname() {
         scenes.forEach(scene -> scene.getSceneController().setNickName(((LoginController) this.getSceneController(SceneEnum.LOGIN)).getText()));
     }
 
+    /**
+     * Returns players nickname
+     *
+     * @return string not empty
+     */
     public String getNickname() {
         return mainClient.getNickname();
     }
 
+    /**
+     * Opens with the predetermine application a pdf containing the game rules
+     *
+     * @param inputStream source file
+     */
     public static void openRulebook(InputStream inputStream) {
         try {
             if (inputStream != null) {
@@ -318,12 +374,10 @@ public class GUIApplication extends Application implements UIInterface {
                 // Open the temporary file
                 Desktop.getDesktop().open(tempFile);
             } else {
-                System.err.println("Resource not found: " );
+                System.err.println("Resource not found: ");
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
-
-
 }

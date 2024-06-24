@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gc26.request.game_request;
 
 import it.polimi.ingsw.gc26.controller.GameController;
+
 import java.io.Serializable;
 
 /**
@@ -27,10 +28,10 @@ public class AddMessageRequest implements GameRequest, Serializable {
     /**
      * Creates the new message request.
      *
-     * @param message Message to be added in the chat
+     * @param message          Message to be added in the chat
      * @param receiverNickname Player who is going to receive the message. Empty string if is a group message.
-     * @param senderID Player's Unique ID. Must be not null.
-     * @param time Local time of client.
+     * @param senderID         Player's Unique ID. Must be not null.
+     * @param time             Local time of client.
      */
     public AddMessageRequest(String message, String receiverNickname, String senderID, String time) {
         this.message = message;
@@ -41,6 +42,7 @@ public class AddMessageRequest implements GameRequest, Serializable {
 
     /**
      * Adds the message using the game controller.
+     *
      * @param gameController game's controller, must be not equals to null
      */
     @Override

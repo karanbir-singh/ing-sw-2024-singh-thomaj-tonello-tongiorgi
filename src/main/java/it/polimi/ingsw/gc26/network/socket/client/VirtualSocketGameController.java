@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.network.VirtualGameController;
 import it.polimi.ingsw.gc26.network.VirtualView;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -146,7 +147,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      * Encodes the parameters to play this function in the real controller.
      *
      * @param cardIndex position of the selected card on common table
-     * @param playerID client's ID
+     * @param playerID  client's ID
      */
     @Override
     public void selectCardFromCommonTable(int cardIndex, String playerID) throws RemoteException {
@@ -213,7 +214,7 @@ public class VirtualSocketGameController implements VirtualGameController {
      * @param data     base message with the correct function name
      * @param valueMsg data associated to the value key
      */
-    private void writeToServer(HashMap<String, String> data, HashMap<String, String> valueMsg) throws RemoteException{
+    private void writeToServer(HashMap<String, String> data, HashMap<String, String> valueMsg) throws RemoteException {
         ObjectMapper mappedmsg = new ObjectMapper();
         try {
             data.replace("value", mappedmsg.writeValueAsString(valueMsg));
@@ -224,14 +225,14 @@ public class VirtualSocketGameController implements VirtualGameController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            throw  new RemoteException();
+            throw new RemoteException();
         }
     }
 
     /**
      * Readds the virtual view after the server has gone down, because the connection must be recreated
      *
-     * @param view client's view
+     * @param view     client's view
      * @param clientID client's original ID
      * @throws RemoteException if the remote object cannot be called
      */

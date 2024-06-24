@@ -18,11 +18,11 @@ public class MissionDiagonalPattern extends MissionCardFront implements Serializ
      * Creates a new instance of MissionDiagonalPattern
      *
      * @param type represent which diagonal combination is needed to this card give points
+     * @param imagePath path to corresponding image
      */
     public MissionDiagonalPattern(int type, String imagePath) {
         setType(type);
         setPoints(0);
-
         setSideSymbol(null);
         setDOWNLEFT(new Corner(true, null));
         setDOWNRIGHT(new Corner(true, null));
@@ -57,10 +57,11 @@ public class MissionDiagonalPattern extends MissionCardFront implements Serializ
 
     /**
      * Creates a String matrix with a printable representation of the side
+     *
      * @return String[][] s
      */
     @Override
-    public String[][] printableSide(){
+    public String[][] printableSide() {
         String[][] s = new String[5][3];
 
         String styleReset = TextStyle.STYLE_RESET.getStyleCode();
@@ -76,17 +77,17 @@ public class MissionDiagonalPattern extends MissionCardFront implements Serializ
         s[0][0] = fontColor + " ╔";
         s[0][2] = "╗ ";
         s[0][1] = "═════" + decoration + diamond + decoration + "═════";
-        for(int i=1; i<4; i++){
+        for (int i = 1; i < 4; i++) {
             s[i][0] = diamond + " ";
-            s[i][2] = " " + diamond ;
+            s[i][2] = " " + diamond;
         }
         s[4][0] = " ╚";
         s[4][1] = "═════" + diamond + diamond + diamond + "═════";
         s[4][2] = "╝ ";
 
         //fill center based on card's type
-        if(getType() == 1 || getType() == 3){
-            if(getType() == 1){
+        if (getType() == 1 || getType() == 3) {
+            if (getType() == 1) {
                 alias = Symbol.FUNGI.getAlias();
                 background = Symbol.FUNGI.getBackground();
                 //filler = Symbol.FUNGI.getFiller();
@@ -94,17 +95,17 @@ public class MissionDiagonalPattern extends MissionCardFront implements Serializ
                 alias = Symbol.ANIMAL.getAlias();
                 background = Symbol.ANIMAL.getBackground();
             }
-            for(int i=0; i<5; i++){
+            for (int i = 0; i < 5; i++) {
                 s[i][0] = fontColor + background + s[i][0];
                 s[i][2] = s[i][2] + styleReset;
             }
-            s[1][1] =  "        " + whiteBackground + "[" + alias + "]" + background + "  ";
-            s[2][1] =  "     " + whiteBackground + "[" + alias + "]" + background +"     ";
+            s[1][1] = "        " + whiteBackground + "[" + alias + "]" + background + "  ";
+            s[2][1] = "     " + whiteBackground + "[" + alias + "]" + background + "     ";
             s[3][1] = "  " + whiteBackground + "[" + alias + "]" + background + "        ";
         }
 
-        if(getType() == 2 || getType() == 4){
-            if(getType() == 2){
+        if (getType() == 2 || getType() == 4) {
+            if (getType() == 2) {
                 alias = Symbol.PLANT.getAlias();
                 background = Symbol.PLANT.getBackground();
                 //filler = Symbol.FUNGI.getFiller();
@@ -112,12 +113,12 @@ public class MissionDiagonalPattern extends MissionCardFront implements Serializ
                 alias = Symbol.INSECT.getAlias();
                 background = Symbol.INSECT.getBackground();
             }
-            for(int i=0; i<5; i++){
+            for (int i = 0; i < 5; i++) {
                 s[i][0] = fontColor + background + s[i][0];
                 s[i][2] = s[i][2] + styleReset;
             }
-            s[3][1] =  "        " + whiteBackground + "[" + alias + "]" + background + "  ";
-            s[2][1] =  "     " + whiteBackground + "[" + alias + "]" + background +"     ";
+            s[3][1] = "        " + whiteBackground + "[" + alias + "]" + background + "  ";
+            s[2][1] = "     " + whiteBackground + "[" + alias + "]" + background + "     ";
             s[1][1] = "  " + whiteBackground + "[" + alias + "]" + background + "        ";
         }
 

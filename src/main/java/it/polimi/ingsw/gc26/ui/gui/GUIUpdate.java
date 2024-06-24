@@ -1,17 +1,35 @@
 package it.polimi.ingsw.gc26.ui.gui;
 
+import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
-import it.polimi.ingsw.gc26.ui.UpdateInterface;
 import javafx.stage.WindowEvent;
 
+/**
+ * The GUIUpdate class implements the UpdateInterface to provide updates to the GUI components
+ * in the GUIApplication. It handles the logic for updating the game's view based on the changes
+ * in the model.
+ */
 public class GUIUpdate implements UpdateInterface {
+    /**
+     * The GUIApplication instance that this class updates.
+     */
     GUIApplication guiApplication;
 
+    /**
+     * Constructs a new GUIUpdate instance with the specified GUIApplication.
+     *
+     * @param guiApplication the GUIApplication instance to be updated.
+     */
     public GUIUpdate(GUIApplication guiApplication) {
         this.guiApplication = guiApplication;
     }
 
+    /**
+     * Updates the view of the common table.
+     *
+     * @param simplifiedCommonTable the simplified representation of the common table.
+     */
     @Override
     public void updateViewCommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
@@ -23,6 +41,11 @@ public class GUIUpdate implements UpdateInterface {
         }
     }
 
+    /**
+     * Updates the view of a player.
+     *
+     * @param simplifiedPlayer the simplified representation of a player.
+     */
     @Override
     public void updateViewPlayer(SimplifiedPlayer simplifiedPlayer) {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
@@ -35,6 +58,11 @@ public class GUIUpdate implements UpdateInterface {
         }
     }
 
+    /**
+     * Updates the view of the hand.
+     *
+     * @param simplifiedHand the simplified representation of the hand.
+     */
     @Override
     public void updateViewHand(SimplifiedHand simplifiedHand) {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
@@ -46,6 +74,11 @@ public class GUIUpdate implements UpdateInterface {
         }
     }
 
+    /**
+     * Updates the view of the secret hand.
+     *
+     * @param simplifiedSecretHand the simplified representation of the secret hand.
+     */
     @Override
     public void updateViewSecretHand(SimplifiedHand simplifiedSecretHand) {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
@@ -58,6 +91,11 @@ public class GUIUpdate implements UpdateInterface {
         }
     }
 
+    /**
+     * Updates the view of the personal board.
+     *
+     * @param personalBoard the simplified representation of the personal board.
+     */
     @Override
     public void updateViewPersonalBoard(SimplifiedPersonalBoard personalBoard) {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
@@ -69,6 +107,11 @@ public class GUIUpdate implements UpdateInterface {
         }
     }
 
+    /**
+     * Updates the view of another player's personal board.
+     *
+     * @param otherPersonalBoard the simplified representation of the other player's personal board.
+     */
     @Override
     public void updateViewOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW)) {
@@ -80,6 +123,11 @@ public class GUIUpdate implements UpdateInterface {
         }
     }
 
+    /**
+     * Updates the view of the chat.
+     *
+     * @param simplifiedChat the simplified representation of the chat.
+     */
     @Override
     public void updateViewSimplifiedChat(SimplifiedChat simplifiedChat) {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW) ||
@@ -87,10 +135,10 @@ public class GUIUpdate implements UpdateInterface {
                 this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.PAWNSELECTION) ||
                 this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.WAITING) ||
                 this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.STARTERCARDCHOICE)) {
-        this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().changeGUIChat(simplifiedChat);
-        this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIChat(simplifiedChat);
-        this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIChat(simplifiedChat);
-        this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIChat(simplifiedChat);
+            this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().changeGUIChat(simplifiedChat);
+            this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIChat(simplifiedChat);
+            this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIChat(simplifiedChat);
+            this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIChat(simplifiedChat);
         }
     }
 
@@ -126,7 +174,6 @@ public class GUIUpdate implements UpdateInterface {
             case WINNER:
                 this.guiApplication.setCurrentScene(SceneEnum.WINNER);
                 break;
-
         }
 
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW) || this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.WINNER)) {
@@ -138,40 +185,59 @@ public class GUIUpdate implements UpdateInterface {
             this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIGame(simplifiedGame);
             this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().changeGUIGame(simplifiedGame);
             this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().changeGUIGame(simplifiedGame);
-
         }
-
-
     }
 
+    /**
+     * Displays a message to the user.
+     *
+     * @param message the message to be displayed.
+     */
     @Override
     public void showMessage(String message) {
         try {
-            Platform.runLater(()-> this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, false));
+            Platform.runLater(() -> this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, false));
         } catch (Exception e) {
         }
-        //Platform.runLater(()->this.guiApplication.openInfoPopup(message)); //TODO kevin
     }
 
+    /**
+     * Displays an error message to the user.
+     *
+     * @param message the error message to be displayed.
+     */
     @Override
     public void showError(String message) {
-        if(message.equals("Server is down, wait for reconnection...")){
-            Platform.runLater(()->this.guiApplication.openErrorPopup(message));
+        if (message.equals("Server is down, wait for reconnection...")) {
+            Platform.runLater(() -> this.guiApplication.openErrorPopup(message));
         }
         try {
-            Platform.runLater(()->this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, true));
+            Platform.runLater(() -> this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, true));
         } catch (Exception e) {
         }
 
     }
 
+    /**
+     * Closes the error popup, if one is displayed.
+     */
     @Override
-    public void closeErrorPopup(){ //this is called in the client ping thread
-        Platform.runLater(()->{
+    public void closeErrorPopup() { //this is called in the client ping thread
+        Platform.runLater(() -> {
             //so that it can be closed
-            this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().setOnCloseRequest((WindowEvent event)->{});
+            this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().setOnCloseRequest((WindowEvent event) -> {
+            });
             //close the error scene
             this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().hide();
         });
+    }
+
+    /**
+     * Method not implemented in GUI
+     *
+     * @param nickname other player's nickname
+     */
+    @Override
+    public void showOtherPersonalBoard(String nickname) {
     }
 }

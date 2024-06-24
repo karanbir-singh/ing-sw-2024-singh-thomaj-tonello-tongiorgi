@@ -19,6 +19,7 @@ public class MissionLPattern extends MissionCardFront implements Serializable {
      * Creates a new instance of MissionLPattern
      *
      * @param type represent which L combination is needed to this card give points
+     * @param imagePath path to corresponding image
      */
     public MissionLPattern(int type, String imagePath) {
         setType(type);
@@ -57,10 +58,11 @@ public class MissionLPattern extends MissionCardFront implements Serializable {
 
     /**
      * Creates a String matrix with a printable representation of the side
+     *
      * @return String[][] s
      */
     @Override
-    public String[][] printableSide(){
+    public String[][] printableSide() {
         String[][] s = new String[5][3];
 
         String styleReset = TextStyle.STYLE_RESET.getStyleCode();
@@ -76,21 +78,21 @@ public class MissionLPattern extends MissionCardFront implements Serializable {
         s[0][0] = fontColor + " ╔";
         s[0][2] = "╗ ";
         s[0][1] = "═════" + decoration + decoration + decoration + "═════";
-        for(int i=1; i<4; i++){
+        for (int i = 1; i < 4; i++) {
             s[i][0] = diamond + " ";
-            s[i][2] = " " + diamond ;
+            s[i][2] = " " + diamond;
         }
         s[4][0] = " ╚";
         s[4][1] = "═════" + diamond + diamond + diamond + "═════";
         s[4][2] = "╝ ";
 
         //fill center based on the card's type
-        if(getType() == 1){
+        if (getType() == 1) {
             alias = Symbol.FUNGI.getAlias();
             background = Symbol.FUNGI.getBackground();
             secondAlias = Symbol.PLANT.getAlias();
 
-            for(int i=0; i<5; i++){
+            for (int i = 0; i < 5; i++) {
                 s[i][0] = fontColor + background + s[i][0];
                 s[i][2] = s[i][2] + styleReset;
             }
@@ -99,12 +101,12 @@ public class MissionLPattern extends MissionCardFront implements Serializable {
             s[3][1] = "      " + whiteBackground + "[" + secondAlias + "]" + background + "    ";
         }
 
-        if(getType() == 2){
+        if (getType() == 2) {
             alias = Symbol.PLANT.getAlias();
             background = Symbol.PLANT.getBackground();
             secondAlias = Symbol.INSECT.getAlias();
 
-            for(int i=0; i<5; i++){
+            for (int i = 0; i < 5; i++) {
                 s[i][0] = fontColor + background + s[i][0];
                 s[i][2] = s[i][2] + styleReset;
             }
@@ -113,11 +115,11 @@ public class MissionLPattern extends MissionCardFront implements Serializable {
             s[3][1] = "    " + whiteBackground + "[" + secondAlias + "]" + background + "      ";
         }
 
-        if(getType() == 3){
+        if (getType() == 3) {
             alias = Symbol.ANIMAL.getAlias();
             background = Symbol.ANIMAL.getBackground();
             secondAlias = Symbol.FUNGI.getAlias();
-            for(int i=0; i<5; i++){
+            for (int i = 0; i < 5; i++) {
                 s[i][0] = fontColor + background + s[i][0];
                 s[i][2] = s[i][2] + styleReset;
             }
@@ -126,12 +128,12 @@ public class MissionLPattern extends MissionCardFront implements Serializable {
             s[2][1] = "   " + whiteBackground + "[" + alias + "]" + background + "       ";
         }
 
-        if(getType() == 4){
+        if (getType() == 4) {
             alias = Symbol.INSECT.getAlias();
             background = Symbol.INSECT.getBackground();
             secondAlias = Symbol.ANIMAL.getAlias();
 
-            for(int i=0; i<5; i++){
+            for (int i = 0; i < 5; i++) {
                 s[i][0] = fontColor + background + s[i][0];
                 s[i][2] = s[i][2] + styleReset;
             }

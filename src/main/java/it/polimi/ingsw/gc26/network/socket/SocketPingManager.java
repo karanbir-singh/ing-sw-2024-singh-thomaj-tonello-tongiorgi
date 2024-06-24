@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.network.PingManager;
 import it.polimi.ingsw.gc26.network.socket.client.SocketServerHandler;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketGameController;
 import it.polimi.ingsw.gc26.network.socket.client.VirtualSocketMainController;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -39,6 +40,11 @@ public class SocketPingManager implements PingManager {
     private final Object lock;
 
     /**
+     * Flag equals true if the server is reachable
+     */
+    private boolean isServerUp = true;
+
+    /**
      * Constructor of this socket server ping runnable
      *
      * @param mainClient main client reference
@@ -62,6 +68,14 @@ public class SocketPingManager implements PingManager {
     }
 
     /**
+     * Returns true if server is uo, false otherwise
+     */
+    @Override
+    public boolean isServerUp() {
+        return isServerUp;
+    }
+
+    /**
      * Runs Socket server ping manager
      */
     @Override
@@ -82,10 +96,9 @@ public class SocketPingManager implements PingManager {
 
             // Manage when it's timeout
             if (elapsed >= TIMEOUT) {
-                System.out.println("Server is down, wait for reconnection...");
                 mainClient.getViewController().showError("Server is down, wait for reconnection...");
                 // Server is down
-                boolean isServerUp = false;
+                isServerUp = false;
 
                 // Until server is down...
                 while (!isServerUp) {
@@ -125,12 +138,10 @@ public class SocketPingManager implements PingManager {
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException ex1) {
-                            System.out.println("Thread interrupted");
                         }
                     }
                 }
                 firstPingArrived = false;
-                System.out.println("Server is up, you can restart to play");
                 mainClient.getViewController().closeErrorPopup();
 
                 synchronized (lock) {

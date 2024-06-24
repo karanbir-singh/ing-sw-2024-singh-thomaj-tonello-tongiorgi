@@ -13,6 +13,7 @@ import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.view_model.*;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -77,7 +78,7 @@ public class VirtualSocketView implements VirtualView {
      * This method writes the message in the output stream to the client.
      *
      * @param functionName name of the function to be called client side
-     * @param valueMsg data to send
+     * @param valueMsg     data to send
      */
     private void sendToClient(String functionName, String valueMsg) {
         HashMap<String, String> data = getBaseMessage();
@@ -160,7 +161,7 @@ public class VirtualSocketView implements VirtualView {
      * It also displays a message with information about the update.
      *
      * @param simplifiedCommonTable updated common table
-     * @param message updated message
+     * @param message               updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -213,7 +214,7 @@ public class VirtualSocketView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param simplifiedHand updated hand
-     * @param message updated message
+     * @param message        updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -229,7 +230,7 @@ public class VirtualSocketView implements VirtualView {
         root.set("cards", cards);
         for (Card card : simplifiedHand.getCards()) {
             ObjectNode genericCard = om.createObjectNode();
-            switch(card.getClass().getSimpleName()){
+            switch (card.getClass().getSimpleName()) {
                 case "GoldCard":
                     genericCard.put("type", "goldCard");
                     genericCard.set("card", createGoldCardNode(card));
@@ -249,7 +250,7 @@ public class VirtualSocketView implements VirtualView {
         }
         root.put("selectedCard", simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard()));
         if (simplifiedHand.getSelectedCard() != null) {
-            root.put("selectedSide", simplifiedHand.getSelectedSide().equals(simplifiedHand.getCards().get(simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard())).getFront()) ? "0" : "1" ); // T
+            root.put("selectedSide", simplifiedHand.getSelectedSide().equals(simplifiedHand.getCards().get(simplifiedHand.getCards().indexOf(simplifiedHand.getSelectedCard())).getFront()) ? "0" : "1"); // T
         } else {
             root.put("selectedSide", -1);
         }
@@ -265,7 +266,7 @@ public class VirtualSocketView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param simplifiedSecretHand updated hand
-     * @param message updated message
+     * @param message              updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -281,7 +282,7 @@ public class VirtualSocketView implements VirtualView {
         root.set("cards", cards);
         for (Card card : simplifiedSecretHand.getCards()) {
             ObjectNode genericCard = om.createObjectNode();
-            switch(card.getClass().getSimpleName()){
+            switch (card.getClass().getSimpleName()) {
                 case "MissionCard":
                     genericCard.put("type", "MissionCard");
                     genericCard.set("card", createMissionCardNode(card));
@@ -293,7 +294,7 @@ public class VirtualSocketView implements VirtualView {
         }
         root.put("selectedCard", simplifiedSecretHand.getCards().indexOf(simplifiedSecretHand.getSelectedCard()));
         if (simplifiedSecretHand.getSelectedCard() != null) {
-            root.put("selectedSide", simplifiedSecretHand.getSelectedSide().equals(simplifiedSecretHand.getCards().get(simplifiedSecretHand.getCards().indexOf(simplifiedSecretHand.getSelectedCard())).getFront()) ? "0" : "1" );
+            root.put("selectedSide", simplifiedSecretHand.getSelectedSide().equals(simplifiedSecretHand.getCards().get(simplifiedSecretHand.getCards().indexOf(simplifiedSecretHand.getSelectedCard())).getFront()) ? "0" : "1");
         } else {
             root.put("selectedSide", -1);
         }
@@ -309,7 +310,7 @@ public class VirtualSocketView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param personalBoard updated personal board
-     * @param message updated message
+     * @param message       updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -363,7 +364,7 @@ public class VirtualSocketView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param otherPersonalBoard updated personal board
-     * @param message updated message
+     * @param message            updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -420,7 +421,7 @@ public class VirtualSocketView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param simplifiedPlayer updated player
-     * @param message updated message
+     * @param message          updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -454,7 +455,7 @@ public class VirtualSocketView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param simplifiedGame updated game
-     * @param message updated message
+     * @param message        updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -480,7 +481,7 @@ public class VirtualSocketView implements VirtualView {
 
         // winners
         ArrayNode winners = om.createArrayNode();
-        for ( String winner : simplifiedGame.getWinners() ) {
+        for (String winner : simplifiedGame.getWinners()) {
             winners.add(winner);
         }
         root.set("winners", winners);
@@ -495,7 +496,7 @@ public class VirtualSocketView implements VirtualView {
         // selected pawns
         ObjectNode selectedPawns = om.createObjectNode();
         root.set("selectedPawns", selectedPawns);
-        for(Map.Entry<String, Pawn> pawn : simplifiedGame.getPawnsSelected().entrySet()) {
+        for (Map.Entry<String, Pawn> pawn : simplifiedGame.getPawnsSelected().entrySet()) {
             selectedPawns.put(pawn.getKey(), pawn.getValue() != null ? pawn.getValue().toString() : null);
         }
 
@@ -511,7 +512,7 @@ public class VirtualSocketView implements VirtualView {
      * It also displays a message with the information about the update.
      *
      * @param simplifiedChat updated chat
-     * @param message updated message
+     * @param message        updated message
      * @throws RemoteException if the remote method cannot be called
      */
     @Override
@@ -579,7 +580,7 @@ public class VirtualSocketView implements VirtualView {
     private ObjectNode createResourceCardNode(Card resourceCard) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
-        cardNode.put("sideSymbol", resourceCard.getFront().getSideSymbol().isPresent() ? resourceCard.getFront().getSideSymbol().get().toString() : "" );
+        cardNode.put("sideSymbol", resourceCard.getFront().getSideSymbol().isPresent() ? resourceCard.getFront().getSideSymbol().get().toString() : "");
         cardNode.put("points", String.valueOf(resourceCard.getFront().getPoints()));
         // images
         cardNode.put("imagePathFront", resourceCard.getFront().getImagePath());
@@ -597,7 +598,7 @@ public class VirtualSocketView implements VirtualView {
     private ObjectNode createResourceCardNode(Side resourceSide) {
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
-        cardNode.put("sideSymbol", resourceSide.getSideSymbol().isPresent() ? resourceSide.getSideSymbol().get().toString() : "" );
+        cardNode.put("sideSymbol", resourceSide.getSideSymbol().isPresent() ? resourceSide.getSideSymbol().get().toString() : "");
         cardNode.put("points", String.valueOf(resourceSide.getPoints()));
         // images
         cardNode.put("imagePathFront", resourceSide.getImagePath());
@@ -757,8 +758,8 @@ public class VirtualSocketView implements VirtualView {
     /**
      * Encodes all the corners of a card to a json object
      *
-     * @param side corner's side to be encoded
-     * @param om mapper
+     * @param side     corner's side to be encoded
+     * @param om       mapper
      * @param cardNode card side encoded where to add the corners encode
      * @return card node with corners encoded
      */
@@ -766,22 +767,22 @@ public class VirtualSocketView implements VirtualView {
         ObjectNode UPLEFT = om.createObjectNode();
         cardNode.set("UPLEFT", UPLEFT);
         UPLEFT.put("isEvil", side.getUPLEFT().isEvil());
-        UPLEFT.put("symbol", side.getUPLEFT().getSymbol().isPresent() ? side.getUPLEFT().getSymbol().get().toString() : "" );
+        UPLEFT.put("symbol", side.getUPLEFT().getSymbol().isPresent() ? side.getUPLEFT().getSymbol().get().toString() : "");
         UPLEFT.put("isHidden", side.getUPLEFT().isHidden());
         ObjectNode DOWNLEFT = om.createObjectNode();
         cardNode.set("DOWNLEFT", DOWNLEFT);
         DOWNLEFT.put("isEvil", side.getDOWNLEFT().isEvil());
-        DOWNLEFT.put("symbol", side.getDOWNLEFT().getSymbol().isPresent() ? side.getDOWNLEFT().getSymbol().get().toString() : "" ) ;
+        DOWNLEFT.put("symbol", side.getDOWNLEFT().getSymbol().isPresent() ? side.getDOWNLEFT().getSymbol().get().toString() : "");
         DOWNLEFT.put("isHidden", side.getDOWNLEFT().isHidden());
         ObjectNode UPRIGHT = om.createObjectNode();
         cardNode.set("UPRIGHT", UPRIGHT);
         UPRIGHT.put("isEvil", side.getUPRIGHT().isEvil());
-        UPRIGHT.put("symbol", side.getUPRIGHT().getSymbol().isPresent() ? side.getUPRIGHT().getSymbol().get().toString() : "" ) ;
+        UPRIGHT.put("symbol", side.getUPRIGHT().getSymbol().isPresent() ? side.getUPRIGHT().getSymbol().get().toString() : "");
         UPRIGHT.put("isHidden", side.getUPRIGHT().isHidden());
         ObjectNode DOWNRIGHT = om.createObjectNode();
         cardNode.set("DOWNRIGHT", DOWNRIGHT);
         DOWNRIGHT.put("isEvil", side.getDOWNRIGHT().isEvil());
-        DOWNRIGHT.put("symbol", side.getDOWNRIGHT().getSymbol().isPresent() ? side.getDOWNRIGHT().getSymbol().get().toString() : "" ) ;
+        DOWNRIGHT.put("symbol", side.getDOWNRIGHT().getSymbol().isPresent() ? side.getDOWNRIGHT().getSymbol().get().toString() : "");
         DOWNRIGHT.put("isHidden", side.getDOWNRIGHT().isHidden());
         return cardNode;
     }
@@ -796,7 +797,7 @@ public class VirtualSocketView implements VirtualView {
         ObjectMapper om = new ObjectMapper();
         ObjectNode sideNode = om.createObjectNode();
         // side symbol
-        sideNode.put("sideSymbol", side.getSideSymbol().isPresent() ? side.getSideSymbol().get().toString() : "" );
+        sideNode.put("sideSymbol", side.getSideSymbol().isPresent() ? side.getSideSymbol().get().toString() : "");
         // permanent resource
         if (!side.getPermanentResources().isEmpty()) {
             sideNode.put("permanentResources", side.getPermanentResources().getFirst().toString());
@@ -844,7 +845,7 @@ public class VirtualSocketView implements VirtualView {
                     case "ResourceCardFront":
                         genericPoint.set("side", createResourceCardNode(point.getSide()));
                         break;
-                    case "CornerCounter","QuillCounter", "InkwellCounter", "ManuscriptCounter", "GoldCardFront":
+                    case "CornerCounter", "QuillCounter", "InkwellCounter", "ManuscriptCounter", "GoldCardFront":
                         genericPoint.set("side", createGoldCardNode(point.getSide()));
                         break;
                     case null, default:

@@ -8,6 +8,7 @@ import it.polimi.ingsw.gc26.network.VirtualView;
 import it.polimi.ingsw.gc26.utils.ParserCore;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
 import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,6 +72,7 @@ public class Game implements Serializable {
      * Setups the games
      *
      * @param players list of players of the game
+     * @param clients clients in the current game
      */
     public Game(ArrayList<Player> players, ArrayList<VirtualView> clients) {
         this.numberOfPlayers = players.size();
@@ -177,12 +179,12 @@ public class Game implements Serializable {
         // Change player's state
         this.currentPlayer.setState(PlayerState.PLAYING, currentPlayer.getID());
 
-        HashMap<String,Integer> points = new HashMap<>();
-        for(Player player : this.players){
-            if(player.getPersonalBoard() != null){
-                points.put(player.getNickname(),player.getPersonalBoard().getScore());
-            }else{
-                points.put(player.getNickname(),0);
+        HashMap<String, Integer> points = new HashMap<>();
+        for (Player player : this.players) {
+            if (player.getPersonalBoard() != null) {
+                points.put(player.getNickname(), player.getPersonalBoard().getScore());
+            } else {
+                points.put(player.getNickname(), 0);
             }
 
         }
@@ -192,13 +194,13 @@ public class Game implements Serializable {
             // Then increase the round
             this.increaseRound();
         }
-        this.observable.notifyMessage("It's you turn now",this.currentPlayer.getID());
+        this.observable.notifyMessage("It's you turn now", this.currentPlayer.getID());
         ArrayList<String> nicknameWinners = new ArrayList<>();
-        for(Player winner : this.winners){
+        for (Player winner : this.winners) {
             nicknameWinners.add(winner.getNickname());
         }
         String currentPlayerNickname = null;
-        if(this.currentPlayer != null){
+        if (this.currentPlayer != null) {
             currentPlayerNickname = this.currentPlayer.getNickname();
         }
 
@@ -207,7 +209,7 @@ public class Game implements Serializable {
             pawnsSelected.put(player.getNickname(), player.getPawnColor());
         }
         String message = "Current player has changed!";
-        this.observable.notifyUpdateGame(new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected), message);
+        this.observable.notifyUpdateGame(new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected), currentPlayer);
         // TODO update simplified player
     }
 
@@ -304,7 +306,7 @@ public class Game implements Serializable {
                 message = "Waiting players for placing starter card...";
                 break;
             case WAITING_PAWNS_SELECTION:
-                message = "Waiting players for selecting pawns...\n" + getAvailablePawns();
+                message = "Waiting players for selecting pawns...";
                 break;
             case HAND_PREPARATION:
                 message = "Prepare players hand...";
@@ -351,7 +353,11 @@ public class Game implements Serializable {
         for (Player player : this.players) {
             pawnsSelected.put(player.getNickname(), player.getPawnColor());
         }
-        this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState, currentPlayerNickname, points, nicknameWinners, this.availablePawns, pawnsSelected), message);
+        if (gameState.equals(GameState.GAME_STARTED)) {
+            this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState, currentPlayerNickname, points, nicknameWinners, this.availablePawns, pawnsSelected), currentPlayer);
+        } else {
+            this.observable.notifyUpdateGame(new SimplifiedGame(this.gameState, currentPlayerNickname, points, nicknameWinners, this.availablePawns, pawnsSelected), message);
+        }
     }
 
     /**
@@ -448,6 +454,7 @@ public class Game implements Serializable {
 
     /**
      * Return the game's winners (it can be more than one)
+     *
      * @return winners
      */
     public ArrayList<Player> getWinners() {
@@ -456,6 +463,7 @@ public class Game implements Serializable {
 
     /**
      * Returns a reference to the observable of this class to notify the client
+     *
      * @return observable
      */
     public ModelObservable getObservable() {

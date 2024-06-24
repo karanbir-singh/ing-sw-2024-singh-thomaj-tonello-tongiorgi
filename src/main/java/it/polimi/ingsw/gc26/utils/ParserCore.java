@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * Parser to create card from json file
+ */
 public class ParserCore {
     /**
      * File path where the json file is located

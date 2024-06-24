@@ -1,125 +1,173 @@
 package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
-import it.polimi.ingsw.gc26.model.card.Card;
-import it.polimi.ingsw.gc26.model.game.Message;
-import it.polimi.ingsw.gc26.view_model.SimplifiedChat;
 import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import it.polimi.ingsw.gc26.view_model.SimplifiedGame;
 import it.polimi.ingsw.gc26.view_model.SimplifiedHand;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
+/**
+ * This controller manages the starter card selection scene.
+ * It allows the user to select the starter card.
+ */
 public class StarterCardChoiceController extends SceneController implements Initializable {
+    /**
+     * Pane to hold chat-related components.
+     */
     @FXML
     private AnchorPane anchorPaneChat;
+    /**
+     * The tab pane for displaying chat tabs.
+     */
     @FXML
     private TabPane chatTabPane;
+    /**
+     * Button to toggle chat visibility.
+     */
     @FXML
     public Button chatButton;
+    /**
+     * The HBox to hold hand elements.
+     */
     @FXML
     private HBox handHbox;
-    //CommonTable
+
+    // CommonTable elements
+    /**
+     * The image view for the first resource card.
+     */
     @FXML
     private ImageView resourceCard0;
+    /**
+     * The image view for the second resource card.
+     */
     @FXML
     private ImageView resourceCard1;
+    /**
+     * The image view for the resource deck.
+     */
     @FXML
     private ImageView resourceDeck;
-
+    /**
+     * The image view for the first gold card.
+     */
     @FXML
     private ImageView goldCard0;
+    /**
+     * The image view for the second gold card.
+     */
     @FXML
     private ImageView goldCard1;
+    /**
+     * The image view for the gold deck.
+     */
     @FXML
     private ImageView goldDeck;
-
+    /**
+     * VBox to hold common table elements.
+     */
     @FXML
     private VBox commonTableBox;
 
-    //hand
-    @FXML
-    private ImageView handCard0;
-    @FXML
-    private ImageView handCard1;
-    @FXML
-    private ImageView handCard2;
-
-    //layout
-    CommonLayout layout = new CommonLayout();
+    // Layout elements
+    /**
+     * The HBox for the left panel layout.
+     */
     @FXML
     private HBox HBoxLeftPanel;
+    /**
+     * The VBox for the center panel layout.
+     */
     @FXML
     private VBox centerVBox;
+    /**
+     * VBox for the right panel layout.
+     */
     @FXML
     private VBox rightVBox;
+    /**
+     * The root border pane for the main layout.
+     */
     @FXML
     private BorderPane rootBorder;
+    /**
+     * The root anchor pane for the main layout.
+     */
     @FXML
     private AnchorPane rootPane;
+    /**
+     * Background image view for the scene.
+     */
     @FXML
     private ImageView background;
-
-    private ArrayList<ImageView> cards = new ArrayList<>();
-    private HashMap<String, ScrollPane> chats = new HashMap<>();
-    private boolean chatIsVisible = false;
-    private boolean chatHasBeenCreated = false;
+    /**
+     * Image view for the chat icon.
+     */
     private ImageView chatIcon = new ImageView(new Image(getClass().getResource("images/icons/chat-icon-white.png").toExternalForm()));
-
+    /**
+     * The button to show the rules.
+     */
     @FXML
     private Button rulesButton;
+    /**
+     * The image view for the rules icon.
+     */
     private ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
-
+    /**
+     * VBox for card and play button.
+     */
     @FXML
-    VBox choosingBox;
-
+    private VBox choosingBox;
+    /**
+     * The image view for the image.
+     */
     @FXML
-    ImageView image;
+    private ImageView image;
+    /**
+     * The label to display the status of the game or player.
+     */
     @FXML
-    Label status;
+    private Label status;
+    /**
+     * Path for images used in the scene.
+     */
+    private String path = "images/";
 
-
-    String path = "images/";
-
-    public void onClickGoToNextStep(ActionEvent event){
+    /**
+     * Handles the confirm button. Creates a request on the server to play the selected card.
+     *
+     * @param event event that triggers the function
+     */
+    public void onClickGoToNextStep(ActionEvent event) {
         try {
             this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        status.setText("Wow you are so fast, now wait other players!");
+        status.setText("Card selected! Please, wait for other players to select their side!");
     }
 
-
-    public void onImageClick(MouseEvent event){
-        if(event.getClickCount() == 2){
+    /**
+     * Handles the click on the cards. Crates a request to turn the selected side on the server.
+     *
+     * @param event event that triggers the function
+     */
+    public void onImageClick(MouseEvent event) {
+        if (event.getClickCount() == 2) {
             try {
                 this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
 
@@ -129,27 +177,35 @@ public class StarterCardChoiceController extends SceneController implements Init
         }
     }
 
+    /**
+     * Updates hans images with the new value in simplified hand
+     *
+     * @param simplifiedHand new player's hand
+     */
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
-        if(simplifiedHand.getSelectedSide() != null){
-            this.image.setImage(new Image(String.valueOf(getClass().getResource(path+ simplifiedHand.getSelectedSide().getImagePath()))));
+        if (simplifiedHand.getSelectedSide() != null) {
+            this.image.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath()))));
             this.image.setOnMouseClicked(this::onImageClick);
-            layout.makeGlow(this.image);
+            makeGlow(this.image);
         }
 
     }
 
+    /**
+     * Updates images in common table with the new values in simplified common table
+     *
+     * @param simplifiedCommonTable new common table
+     */
     @Override
-    public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable){
-        if(simplifiedCommonTable.getResourceCards().size() >= 2){
+    public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
+        if (simplifiedCommonTable.getResourceCards().size() >= 2) {
             resourceCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceCards().get(0).getFront().getImagePath()))));
             resourceCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceCards().get(1).getFront().getImagePath()))));
             resourceDeck.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
         }
 
-
-
-        if(simplifiedCommonTable.getGoldCards().size() >= 2){
+        if (simplifiedCommonTable.getGoldCards().size() >= 2) {
             goldCard0.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldCards().get(0).getFront().getImagePath()))));
             goldCard1.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldCards().get(1).getFront().getImagePath()))));
             goldDeck.setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
@@ -158,204 +214,21 @@ public class StarterCardChoiceController extends SceneController implements Init
 
     }
 
+    /**
+     * Initializes the controller.
+     * Sets up event handlers for button, starter card and initializes the background.
+     *
+     * @param url            the location used to resolve relative paths for the root object, or null if the location is not known
+     * @param resourceBundle the resources used to localize the root object, or null if the resources are not specified
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        layout.pageBindings(rootPane, rootBorder, background);
+        pageBindings(rootPane, rootBorder, background);
         //buttons setup
-        layout.buttonSetup(chatIcon, chatButton);
+        buttonSetup(chatIcon, chatButton);
         chatButton.setOnAction(this::toggleChat);
-    }
-
-    @Override
-    public void changeGUIChat(SimplifiedChat simplifiedChat) {
-        Message newMessage = simplifiedChat.getMessages().getLast();
-        if (!newMessage.getSender().getNickname().equals(this.nickname)) {
-            if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-                if (!newMessage.getSender().getNickname().equals(nickname)) {
-                    if (simplifiedChat.getMessages().size() == 1 || (simplifiedChat.getMessages().size() > 1 &&
-                            !newMessage.getSender().getNickname().equals(simplifiedChat.getMessages().get(simplifiedChat.getMessages().size() - 2).getSender().getNickname()))) {
-                        addMessageInChat(newMessage.getText(), "Group Chat", newMessage.getSender().getNickname());
-                    } else {
-                        addMessageInChat(newMessage.getText(), "Group Chat", null);
-                    }
-                }
-            } else {
-                addMessageInChat(newMessage.getText(), newMessage.getSender().getNickname(), null);
-            }
-        } else {
-            if (newMessage.getReceiver() == null || newMessage.getReceiver().getNickname().isEmpty()) {
-                addMessageFromSender(newMessage.getText(), "Group Chat");
-            } else {
-                addMessageFromSender(newMessage.getText(), newMessage.getReceiver().getNickname());
-            }
-        }
-    }
-
-    @Override
-    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
-        if (!chatHasBeenCreated) {
-            this.nickname = nickname;
-            for (String playerNickname : simplifiedGame.getPlayersNicknames()) {
-                if (!playerNickname.equals(nickname)) {
-                    createChatTab(playerNickname);
-                }
-            }
-            createChatTab("Group Chat");
-            chatHasBeenCreated = true;
-        }
-    }
-
-    private void createChatTab(String nickname) {
-        Tab newTab = new Tab();
-        newTab.setText(nickname);
-        newTab.setStyle("-fx-border-radius: 0px 0px 5px 5px;");
-        AnchorPane newAnchorPane = new AnchorPane();
-        newTab.setContent(newAnchorPane);
-        newAnchorPane.setStyle("-fx-background-color: #e8f4f8");
-        javafx.scene.control.TextField newTextField = new javafx.scene.control.TextField();
-        newTextField.setPrefWidth(208);
-        newTextField.setPrefHeight(26);
-        newTextField.setLayoutX(9);
-        newTextField.setLayoutY(489);
-        newTextField.setPromptText("Type Message");
-        newTextField.setStyle("-fx-border-radius: 5px;");
-        newAnchorPane.getChildren().add(newTextField);
-        Button newButton = new Button();
-        newButton.setText("Send");
-        newButton.setLayoutX(231);
-        newButton.setLayoutY(489);
-        newAnchorPane.getChildren().add(newButton);
-        javafx.scene.control.ScrollPane newScrollPane = new javafx.scene.control.ScrollPane();
-        newScrollPane.setMinHeight(440);
-        newScrollPane.setPrefHeight(440);
-        newScrollPane.setMinWidth(262);
-        newScrollPane.setMaxWidth(262);
-        newScrollPane.setLayoutX(9);
-        newScrollPane.setLayoutY(14);
-        newAnchorPane.getChildren().add(newScrollPane);
-        VBox newVBox = new VBox();
-        newScrollPane.setContent(newVBox);
-        newVBox.maxWidth(229);
-        newVBox.maxHeight(440);
-        newVBox.prefWidth(229);
-        newScrollPane.setContent(newVBox);
-        newScrollPane.setPadding(new Insets(5, 0, 5, 5));
-        chatTabPane.getTabs().add(newTab);
-        newTextField.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER && !newTextField.getText().isEmpty()) {
-                sendMessage(newTextField, newTab);
-            }
-            Platform.runLater(() -> newScrollPane.setVvalue(1.0));
-            keyEvent.consume();
-        });
-        newButton.setOnMouseClicked(event -> {
-            if (!newTextField.getText().isEmpty()) {
-                sendMessage(newTextField, newTab);
-            }
-            Platform.runLater(() -> newScrollPane.setVvalue(1.0));
-            event.consume();
-        });
-        Platform.runLater(() -> newScrollPane.setVvalue(1.0));
-        chats.put(nickname, newScrollPane);
-    }
-
-    private void sendMessage(javafx.scene.control.TextField newTextField, Tab newTab) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        try {
-            this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
-        } catch (RemoteException e) {
-            System.err.println("RemoteException while sending message!");
-        }
-        newTextField.clear();
-
-    }
-
-    private void addMessageFromSender(String message, String sender) {
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.BASELINE_RIGHT);
-        hBox.setPadding(new Insets(5, 5, 5, 30));
-        Text text = new Text(message);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setSnapToPixel(true);
-        textFlow.setStyle("-fx-background-color: rgb(15,125,242);" + "-fx-color: rgb(239, 242,255);" + "-fx-background-radius: 7px;");
-        hBox.setMinWidth(240);
-        hBox.setMaxWidth(240);
-        textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.setStyle("-fx-text-fill: white;");
-        text.setFill(Color.color(1, 1, 1));
-        hBox.getChildren().add(textFlow);
-
-        Platform.runLater(() -> {
-            ((VBox) chats.get(sender).getContent()).getChildren().add(hBox);
-            chats.get(sender).setVvalue(1.0);
-        });
-    }
-
-    private void addMessageInChat(String message, String sender, String labelMessage) {
-        HBox labelBox = new HBox();
-        Text labelText;
-        TextFlow labelTextFlow;
-        if (labelMessage != null) {
-            labelBox.setAlignment(Pos.BASELINE_LEFT);
-            labelBox.setPadding(new Insets(0, 30, 0, 5));
-            labelText = new Text(labelMessage);
-            labelText.setStyle("-fx-font-size: 10px;");
-            labelTextFlow = new TextFlow(labelText);
-            labelBox.setMinWidth(150);
-            labelBox.setMaxWidth(150);
-            labelText.setFill(Color.color(0.25, 0.25, 0.25));
-            labelBox.getChildren().add(labelTextFlow);
-        }
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.BASELINE_LEFT);
-        hBox.setPadding(new Insets(5, 30, 5, 5));
-        Text text = new Text(message);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setSnapToPixel(true);
-        textFlow.setStyle("-fx-background-color: rgb(233,233,235);" + "-fx-background-radius: 7px;");
-        hBox.setMinWidth(240);
-        hBox.setMaxWidth(240);
-        textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.setFill(Color.color(0.0, 0.0, 0.0));
-
-
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    hBox.getChildren().add(textFlow);
-                    if (labelMessage != null) {
-                        ((VBox) chats.get(sender).getContent()).getChildren().add(labelBox);
-                    }
-                    ((VBox) chats.get(sender).getContent()).getChildren().add(hBox);
-                    chats.get(sender).setVvalue(1.0);
-                } catch (NullPointerException e) {
-
-                }
-            }
-        });
-    }
-
-    public void toggleChat(ActionEvent actionEvent) {
-
-        if (chatIsVisible) {
-            chatButton.getStyleClass().clear();
-            chatButton.getStyleClass().add("buttonClose");
-            anchorPaneChat.setTranslateX(-2000);
-            HBoxLeftPanel.setMinWidth(40);
-            HBoxLeftPanel.setMaxWidth(40);
-            chatIsVisible = false;
-            //buttonHBox.setTranslateX(0);
-        } else {
-            chatButton.getStyleClass().clear();
-            chatButton.getStyleClass().add("buttonVisible");
-            anchorPaneChat.setTranslateX(30);
-            HBoxLeftPanel.setMinWidth(380);
-            HBoxLeftPanel.setMaxWidth(380);
-            chatIsVisible = true;
-            //buttonHBox.setTranslateX(500);
-        }
+        buttonSetup(rulesIcon, rulesButton);
     }
 
 }
