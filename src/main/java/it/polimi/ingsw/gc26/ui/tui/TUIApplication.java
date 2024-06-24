@@ -105,7 +105,6 @@ public class TUIApplication implements UIInterface {
 
         System.out.println("Insert your nickname: ");
         String nickname = scanner.nextLine();
-        this.mainClient.setNickname(nickname);
         this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), nickname, this.mainClient.getClientState());
 
         synchronized (this.mainClient.getLock()) {
@@ -119,6 +118,7 @@ public class TUIApplication implements UIInterface {
         }
 
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
+            this.mainClient.setNickname(nickname);
             System.out.println("You must initialize a new game \nInsert number of players: (2/3/4)");
             String input = scanner.nextLine();
             this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(), nickname, Integer.parseInt(input));
@@ -155,7 +155,6 @@ public class TUIApplication implements UIInterface {
                 System.err.println("Nickname not available!"); System.err.flush();
                 System.out.println("Insert new nickname: ");
                 nickname = scanner.nextLine();
-                this.mainClient.setNickname(nickname);
 
                 this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), nickname, this.mainClient.getClientState());
 
@@ -170,6 +169,9 @@ public class TUIApplication implements UIInterface {
                 }
             }
         }
+
+        // Set main client nickname
+        this.mainClient.setNickname(nickname);
 
         System.out.println("Waiting for other players ...");
         synchronized (this.mainClient.getLock()) {
