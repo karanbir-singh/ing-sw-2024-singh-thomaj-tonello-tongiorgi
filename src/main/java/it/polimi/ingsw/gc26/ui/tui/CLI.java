@@ -121,7 +121,7 @@ public class CLI {
 
             //DESIGN THE MATRIX
             //show common table
-            printableGame[y][0] = "COMMON TABLE:";
+            printableGame[y][0] = "\nCOMMON TABLE:";
             y++;
             addPrintable(commonTablePrint, printableGame, 0, y);
 
@@ -131,7 +131,7 @@ public class CLI {
             y += commonTablePrint.length;
 
             //show personal board
-            printableGame[y][0] = "YOUR PERSONAL BOARD:";
+            printableGame[y][0] = "\nYOUR PERSONAL BOARD:";
             y++;
             addPrintable(personalBoardPrint, printableGame, (xDim - personalBoardPrint[0].length) / 2, y);
             y += personalBoardPrint.length;
@@ -160,7 +160,7 @@ public class CLI {
     }
 
     /**
-     * Creates a matrix with scores for each player
+     * Creates a matrix with the current scores of each player
      *
      * @return string containing the scores
      */
@@ -204,14 +204,13 @@ public class CLI {
     }
 
     /**
-     * Return a string with the score string for a pawn color
+     * Return a string representing a bar coloured like the pawn of a given player, representing their current score
      *
      * @param score     points reached by player
-     * @param pawnColor pawn color
+     * @param pawnColor pawn color of the player
      * @return encoded string
      */
     public String printableScore(int score, Pawn pawnColor) {
-        System.out.println(score);
         int i;
         StringBuilder s = new StringBuilder();
         String background = "▒";
@@ -237,7 +236,7 @@ public class CLI {
     //COMMON TABLE
 
     /**
-     * Add styles to deck
+     * Add decorations to the deck to make it recognizable from the other cards on the CommonTable
      *
      * @param ct
      * @param xDeck
@@ -288,8 +287,10 @@ public class CLI {
                 ct[i][0] = "Card:      ";
             } else if (i == 4 || i == 11) {
                 ct[i][0] = "Points:    " + leftPadding;
-            } else if (i == 5 || i == 12) {
+            } else if (i == 12) {
                 ct[i][0] = "Requires:   " + leftPadding;
+            } else if (i == 5) {
+                ct[i][0] = "            " + leftPadding;
             } else {
                 ct[i][0] = "";
             }
@@ -395,70 +396,75 @@ public class CLI {
 
         //insert details
         for (int i = 0; i < 6; i++) {
-            Card c;
             int y;
             int x = 2 + xCardDim * (i % 3);
-            if (i < 2) {
-                c = miniCT.getResourceCards().get(i);
-                y = yResource + yCardDim;
-            } else if (i == 2) {
-                c = miniCT.getResourceDeck();
-                y = yResource + yCardDim;
-            } else if (i < 5) {
-                c = miniCT.getGoldCards().get(i % 3);
-                y = yGold + yCardDim;
-            } else {
-                c = miniCT.getGoldDeck();
-                y = yGold + yCardDim;
-            }
 
-            //points
-            switch (c.getFront()) {
-                case CornerCounter cornerCounter -> ct[y][x] = "2 pt " + "x" + Character.toString(0x2B1C);
-                case InkwellCounter inkwellCounter -> ct[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
-                case ManuscriptCounter manuscriptCounter -> ct[y][x] = "1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
-                case QuillCounter quillCounter -> ct[y][x] = "1 pt " + "x" + Symbol.QUILL.getAlias();
-                case null, default -> ct[y][x] = c.getFront().getPoints() + " pt " + "        ";
-            }
-            if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
-                ct[y][x + 1] = "       " + blackSquare + blackSquare;
-            } else {
-                ct[y][x + 1] = blackSquare + blackSquare + blackSquare;
-            }
-            if (i != 2 && i != 5) {
-                ct[y][x + 2] = "    ";
-            }
-            y++;
-
-            //requirements
-            ct[y][x] = "";
-            int n;
-            int spaces = 5;
-
-            for (Symbol s : c.getFront().getRequestedResources().keySet()) {
-                n = c.getFront().getRequestedResources().get(s);
-                for (int j = 0; j < n; j++) {
-                    ct[y][x] = ct[y][x] + s.getAlias();
+            if(i==2 || i==5){
+                if(i==2) {
+                    y = yResource + yCardDim;
+                } else {
+                    y = yGold + yCardDim;
                 }
-                spaces = spaces - n;
-            }
-            while (spaces > 0) {
-                ct[y][x] = ct[y][x] + blackSquare;
-                spaces--;
-            }
-            if (i != 2 && i != 5) {
+                ct[y][x] = "             ";
+                ct[y][x + 1] = blackSquare + blackSquare + blackSquare;
+                y++;
+                ct[y][x] = blackSquare + blackSquare + blackSquare + blackSquare + blackSquare;
+                ct[y][x + 1] = "        ";
+
+            } else {
+                Card c;
+                if (i < 2) {
+                    c = miniCT.getResourceCards().get(i);
+                    y = yResource + yCardDim;
+                } else {
+                    c = miniCT.getGoldCards().get(i % 3);
+                    y = yGold + yCardDim;
+                }
+
+                //points
+                switch (c.getFront()) {
+                    case CornerCounter cornerCounter -> ct[y][x] = "2 pt " + "x" + Character.toString(0x2B1C);
+                    case InkwellCounter inkwellCounter -> ct[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
+                    case ManuscriptCounter manuscriptCounter -> ct[y][x] = "1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
+                    case QuillCounter quillCounter -> ct[y][x] = "1 pt " + "x" + Symbol.QUILL.getAlias();
+                    case null, default -> ct[y][x] = c.getFront().getPoints() + " pt " + "        ";
+                }
+                if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
+                    ct[y][x + 1] = "       " + blackSquare + blackSquare;
+                } else {
+                    ct[y][x + 1] = blackSquare + blackSquare + blackSquare;
+                }
+                ct[y][x + 2] = "    ";
+                y++;
+
+                //requirements
+                ct[y][x] = "";
+                int n;
+                int spaces = 5;
+
+                for (Symbol s : c.getFront().getRequestedResources().keySet()) {
+                    n = c.getFront().getRequestedResources().get(s);
+                    for (int j = 0; j < n; j++) {
+                        ct[y][x] = ct[y][x] + s.getAlias();
+                    }
+                    spaces = spaces - n;
+                }
+                while (spaces > 0) {
+                    ct[y][x] = ct[y][x] + blackSquare;
+                    spaces--;
+                }
                 ct[y][x + 1] = "      " + blackSquare;
                 ct[y][x + 2] = "    ";
-            } else {
-                ct[y][x + 1] = "        ";
+
             }
         }
+
 
         return ct;
     }
 
     /**
-     * Creates a matrix with common table and mission for client
+     * Creates a matrix with common table and missions for client
      *
      * @return matrix string
      */
@@ -558,7 +564,7 @@ public class CLI {
     //PERSONAL BOARD
 
     /**
-     * Creates a matrix of adaptive dimension with cards in the personal board
+     * Creates a matrix of adaptive dimension with the cards placed in the personal board
      *
      * @param miniPB personal board
      * @return string matrix
