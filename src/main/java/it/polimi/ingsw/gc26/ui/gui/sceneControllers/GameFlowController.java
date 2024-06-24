@@ -534,7 +534,7 @@ public class GameFlowController extends SceneController implements Initializable
                         int column = GridPane.getColumnIndex(target);
 
                         for (ImageView p : playablePositions) {
-                            this.gridPane.getChildren().remove(p);
+                            target.setVisible(false);
                         }
 
                         this.mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(imageView.getId()), this.mainClient.getClientID());
