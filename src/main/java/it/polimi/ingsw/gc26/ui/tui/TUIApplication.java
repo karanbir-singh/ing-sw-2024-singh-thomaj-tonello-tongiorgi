@@ -11,6 +11,7 @@ import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -360,10 +361,21 @@ public class TUIApplication implements UIInterface {
                         case "10":
                             if (Desktop.isDesktopSupported()) {
                                 try {
-                                    File myFile = new File("src/main/resources/Rulebook/CODEX_Rulebook_EN.pdf");
-                                    Desktop.getDesktop().open(myFile);
+                                    InputStream inputStream = getClass().getResourceAsStream("CODEX_Rulebook_EN.pdf");
+                                    if (inputStream != null) {
+                                        File tempFile = File.createTempFile("CODEX_Rulebook_EN", ".pdf");
+                                        tempFile.deleteOnExit();
+
+                                        // Copy the input stream to a temporary file
+                                        Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                                        // Open the temporary file
+                                        Desktop.getDesktop().open(tempFile);
+                                    } else {
+                                        System.err.println("Resource not found: ");
+                                    }
                                 } catch (IOException ex) {
-                                    System.out.println("Np application found to open the rulebook!");
+                                    System.out.println("No application found to open the rulebook!");
                                 }
                             }
                             TUIUpdate.printOptions(gameState);
