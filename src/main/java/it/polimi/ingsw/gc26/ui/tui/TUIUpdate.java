@@ -302,6 +302,6 @@ public class TUIUpdate implements UpdateInterface {
      */
     public void closeErrorPopup() {
         System.out.println("Server is up, you can restart to play");
-        TUIUpdate.printOptions(miniModel.getSimplifiedGame().getGameState(), null);
+        TUIUpdate.printOptions(miniModel.getSimplifiedGame().getGameState(), miniModel.getSimplifiedGame().getWinners());
     }
 }
