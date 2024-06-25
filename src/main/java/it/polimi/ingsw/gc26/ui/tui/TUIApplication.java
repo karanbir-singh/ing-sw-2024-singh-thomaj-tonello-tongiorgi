@@ -103,9 +103,12 @@ public class TUIApplication implements UIInterface {
     public void runConnection() throws RemoteException {
         //Initial state in CONNECTION
         Scanner scanner = new Scanner(System.in);
+        String nickname;
+        do {
+            System.out.println("Insert your nickname: ");
+            nickname = scanner.nextLine().trim();
+        } while (nickname.isEmpty());
 
-        System.out.println("Insert your nickname: ");
-        String nickname = scanner.nextLine();
         this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), nickname, this.mainClient.getClientState());
 
         synchronized (this.mainClient.getLock()) {
@@ -159,8 +162,10 @@ public class TUIApplication implements UIInterface {
         } else if (this.mainClient.getClientState() == ClientState.INVALID_NICKNAME) {
             while (this.mainClient.getClientState() == ClientState.INVALID_NICKNAME) {
                 ConsoleColors.printError("Nickname not available!");
-                System.out.println("Insert new nickname: ");
-                nickname = scanner.nextLine();
+                do {
+                    System.out.println("Insert new nickname: ");
+                    nickname = scanner.nextLine().trim();
+                } while(nickname.isEmpty());
 
                 this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), nickname, this.mainClient.getClientState());
                 this.mainClient.setClientState(ClientState.CONNECTION);
