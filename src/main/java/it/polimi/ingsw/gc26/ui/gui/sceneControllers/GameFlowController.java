@@ -744,8 +744,8 @@ public class GameFlowController extends SceneController implements Initializable
                     if (cell != null) {
                         GridPane miniGrid = ((GridPane) cell);
                         ImageView image = new ImageView(new Image(getClass().getResource("images/pawns/" + pawnsSelected.get(playerScore.getKey()).toString().toLowerCase() + ".png").toExternalForm()));
-                        image.setFitHeight(20);
-                        image.setFitWidth(20);
+                        image.setFitHeight(23);
+                        image.setFitWidth(23);
                         switch (miniGrid.getChildren().size()) {
                             case 0:
                                 miniGrid.add(image, 0, 0);
