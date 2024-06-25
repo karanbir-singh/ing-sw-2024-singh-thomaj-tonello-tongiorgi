@@ -71,11 +71,15 @@ public enum SpecialCharacters {
     /**
      * This attribute represents the black square character.
      */
-    SQUARE_BLACK("▪️"),
+    SQUARE_BLACK("\u001B[30m⬜\u001B[0m"),
     /**
      * This attribute represents the white square character.
      */
     SQUARE_WHITE("▫️"),
+    /**
+     * This attribute represents the white large square character, used to represent the corner in the card's details in the hand and common table.
+     */
+    SQUARE_WHITE_LARGE("⬛️"),
     /**
      * This attribute represents the white vertical pipe character.
      */
