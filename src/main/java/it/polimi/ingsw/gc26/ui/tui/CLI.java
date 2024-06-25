@@ -288,7 +288,7 @@ public class CLI {
             } else if (i == 4 || i == 11) {
                 ct[i][0] = "Points:    " + leftPadding;
             } else if (i == 12) {
-                ct[i][0] = "Requires:   " + leftPadding;
+                ct[i][0] = "Requires:  " + leftPadding;
             } else if (i == 5) {
                 ct[i][0] = "            " + leftPadding;
             } else {
@@ -405,11 +405,11 @@ public class CLI {
                 } else {
                     y = yGold + yCardDim;
                 }
-                ct[y][x] = "             ";
+                ct[y][x] = "              ";
                 ct[y][x + 1] = blackSquare + blackSquare + blackSquare;
                 y++;
                 ct[y][x] = blackSquare + blackSquare + blackSquare + blackSquare + blackSquare;
-                ct[y][x + 1] = "        ";
+                ct[y][x + 1] = "           ";
 
             } else {
                 Card c;
@@ -423,7 +423,7 @@ public class CLI {
 
                 //points
                 switch (c.getFront()) {
-                    case CornerCounter cornerCounter -> ct[y][x] = "2 pt " + "x" + Character.toString(0x2B1C);
+                    case CornerCounter cornerCounter -> ct[y][x] = "2 pt " + "x" + SpecialCharacters.SQUARE_WHITE_LARGE.getCharacter();
                     case InkwellCounter inkwellCounter -> ct[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
                     case ManuscriptCounter manuscriptCounter -> ct[y][x] = "1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
                     case QuillCounter quillCounter -> ct[y][x] = "1 pt " + "x" + Symbol.QUILL.getAlias();
@@ -813,7 +813,7 @@ public class CLI {
                     if (!(c == miniHand.getSelectedCard() && miniHand.getSelectedSide().equals(c.getBack()))) {
                         switch (c.getFront()) {
                             case CornerCounter cornerCounter ->
-                                    myHand[y][x] = "2 pt " + "x" + Character.toString(0x2B1C);
+                                    myHand[y][x] = "2 pt " + "x" + SpecialCharacters.SQUARE_WHITE_LARGE.getCharacter();
                             case InkwellCounter inkwellCounter ->
                                     myHand[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
                             case ManuscriptCounter manuscriptCounter ->
@@ -850,7 +850,7 @@ public class CLI {
                         myHand[y][x] = myHand[y][x] + blackSquare;
                         spaces--;
                     }
-                    myHand[y][x] = myHand[y][x] + "      " + blackSquare;
+                    myHand[y][x] = myHand[y][x] + "       " + blackSquare;
 
                 } else if (!(!miniHand.getCards().isEmpty() && miniHand.getCards().get(0) instanceof StarterCard)) {
                     //EMPTY CARDS
@@ -873,7 +873,7 @@ public class CLI {
                     y++;
 
                     //requirements
-                    myHand[y][x] = blackSquare + blackSquare + blackSquare + blackSquare + blackSquare + "    " + blackSquare;
+                    myHand[y][x] = blackSquare + blackSquare + blackSquare + blackSquare + blackSquare + "       " + blackSquare;
                 }
                 index++;
             }
