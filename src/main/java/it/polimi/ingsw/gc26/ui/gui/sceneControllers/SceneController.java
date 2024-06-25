@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -518,7 +519,7 @@ abstract public class SceneController {
         try {
             this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
         } catch (RemoteException e) {
-            System.err.println("RemoteException while sending message!");
+            ConsoleColors.printError("RemoteException while sending message!");
         }
         newTextField.clear();
 

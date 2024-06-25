@@ -606,7 +606,7 @@ public class GameController implements Serializable {
                         game.sendError(playerID, "You need to select a card");
                     }
                 } else {
-                    game.sendError(playerID, "It's not you turn, you can't play a card");
+                    game.sendError(playerID, "You have already played a card. Please draw a card from the common table.");
                 }
             } else {
                 game.sendError(playerID, "You can't do that know");
@@ -676,7 +676,7 @@ public class GameController implements Serializable {
                     player.setState(PlayerState.CARD_DRAWN, player.getID());
 
                     // Check if player's score is greater or equal then 20 points OR decks are both empty
-                    if (game.getState() != GameState.END_STAGE && player.getPersonalBoard().getScore() >= 2 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
+                    if (game.getState() != GameState.END_STAGE && player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
                         // Change game state into END_STAGE
                         game.setState(GameState.END_STAGE);
 
@@ -688,10 +688,10 @@ public class GameController implements Serializable {
                     this.changeTurn();
                 }
             } else {
-                game.sendError(playerID, "[ERROR]: it's not your turn, you can't draw a card");
+                game.sendError(playerID, "You must play a card before drawing a card!");
             }
         } else {
-            game.sendError(playerID, "[ERROR]: you can't do that know");
+            game.sendError(playerID, "You can't do that know");
         }
 
         // Backup game controller

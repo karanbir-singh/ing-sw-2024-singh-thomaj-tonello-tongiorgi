@@ -120,8 +120,11 @@ public class TUIApplication implements UIInterface {
 
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             this.mainClient.setNickname(nickname);
-            System.out.println("You must initialize a new game \nInsert number of players: (2/3/4)");
-            String input = scanner.nextLine();
+            String input;
+            do {
+                System.out.println("You must initialize a new game \nInsert number of players: (2/3/4)");
+                input = scanner.nextLine().trim();
+            } while (!input.equals("2") && !input.equals("3") && !input.equals("4"));
             this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(), nickname, Integer.parseInt(input));
 
             synchronized (this.mainClient.getLock()) {
@@ -135,9 +138,11 @@ public class TUIApplication implements UIInterface {
             }
             while (this.mainClient.getClientState() == ClientState.INVALID_NUMBER_OF_PLAYER) {
                 this.mainClient.setClientState(ClientState.CREATOR);
-                System.err.println("Invalid number of players!"); System.err.flush();
-                System.out.println("Insert number of players: (2/3/4)");
-                input = scanner.nextLine();
+                do {
+                    ConsoleColors.printError("Invalid number of players!");
+                    System.out.println("Insert number of players: (2/3/4)");
+                    input = scanner.nextLine().trim();
+                } while (!input.equals("2") && !input.equals("3") && !input.equals("4"));
                 this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(), nickname, Integer.parseInt(input));
                 this.mainClient.setNickname(nickname);
 
@@ -153,12 +158,12 @@ public class TUIApplication implements UIInterface {
             }
         } else if (this.mainClient.getClientState() == ClientState.INVALID_NICKNAME) {
             while (this.mainClient.getClientState() == ClientState.INVALID_NICKNAME) {
-                System.err.println("Nickname not available!"); System.err.flush();
+                ConsoleColors.printError("Nickname not available!");
                 System.out.println("Insert new nickname: ");
                 nickname = scanner.nextLine();
 
                 this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), nickname, this.mainClient.getClientState());
-
+                this.mainClient.setClientState(ClientState.CONNECTION);
                 synchronized (this.mainClient.getLock()) {
                     while (this.mainClient.getClientState() == ClientState.CONNECTION) {
                         try {
@@ -239,11 +244,11 @@ public class TUIApplication implements UIInterface {
                             break;
                         case "5":
                             openRulebook();
-                            TUIUpdate.printOptions(gameState);
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                             break;
                         case null, default:
                             System.out.println("Invalid option!");
-                            TUIUpdate.printOptions(gameState);
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                             break;
                     }
                     break;
@@ -255,7 +260,7 @@ public class TUIApplication implements UIInterface {
                                             stream().map(Object::toString).
                                             map(String::toUpperCase).collect(toList()));
                             System.out.println("Insert the pawn color: ");
-                            String color = new Scanner(System.in).nextLine();
+                            String color = new Scanner(System.in).nextLine().toUpperCase();
                             mainClient.getVirtualGameController().choosePawnColor(color, this.mainClient.getClientID());
                             break;
                         case "2":
@@ -266,11 +271,11 @@ public class TUIApplication implements UIInterface {
                             break;
                         case "4":
                             openRulebook();
-                            TUIUpdate.printOptions(gameState);
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                             break;
                         case null, default:
                             System.out.println("Invalid option!");
-                            TUIUpdate.printOptions(gameState);
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                             break;
                     }
                     break;
@@ -279,7 +284,11 @@ public class TUIApplication implements UIInterface {
                         case "1":
                             do {
                                 System.out.println("Insert the card index: (0/1) ");
-                                cardIndex = Integer.parseInt(new Scanner(System.in).nextLine());
+                                try {
+                                    cardIndex = Integer.parseInt(new Scanner(System.in).nextLine());
+                                } catch (NumberFormatException e) {
+                                    cardIndex = -1;
+                                }
                             } while (cardIndex != 0 && cardIndex != 1);
                             mainClient.getVirtualGameController().selectSecretMission(cardIndex, this.mainClient.getClientID());
                             break;
@@ -294,23 +303,27 @@ public class TUIApplication implements UIInterface {
                             break;
                         case "5":
                             openRulebook();
-                            TUIUpdate.printOptions(gameState);
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                             break;
                         case null, default:
                             System.out.println("Invalid option!");
-                            TUIUpdate.printOptions(gameState);
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                             break;
                     }
                     break;
                 case GAME_STARTED, END_STAGE:
                     switch (option) {
                         case "1":
-                            String xPosition;
+                            int xPosition;
                             do {
                                 System.out.println("Select the card position: (0/1/2)");
-                                xPosition = new Scanner(System.in).nextLine();
-                            } while (Integer.parseInt(xPosition) < 0 || Integer.parseInt(xPosition) > 2);
-                            mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(xPosition), this.mainClient.getClientID());
+                                try {
+                                    xPosition = Integer.parseInt(new Scanner(System.in).nextLine());
+                                } catch (NumberFormatException e) {
+                                    xPosition = -1;
+                                }
+                            } while (xPosition < 0 || xPosition > 2);
+                            mainClient.getVirtualGameController().selectCardFromHand(xPosition, this.mainClient.getClientID());
                             break;
                         case "2":
                             mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
@@ -327,13 +340,17 @@ public class TUIApplication implements UIInterface {
                                 mainClient.getVirtualGameController().selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), this.mainClient.getClientID());
                             } catch (NumberFormatException e) {
                                 System.out.println("Invalid coordinate");
-                                TUIUpdate.printOptions(gameState);
+                                TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                             }
                             break;
                         case "5":
                             do {
                                 System.out.println("Insert the card index (0/1/2/3/4/5): ");
-                                cardIndex = Integer.parseInt(new Scanner(System.in).nextLine());
+                                try {
+                                    cardIndex = Integer.parseInt(new Scanner(System.in).nextLine());
+                                } catch (NumberFormatException e) {
+                                    cardIndex = -1;
+                                }
                             } while (cardIndex < 0 || cardIndex > 5);
                             mainClient.getVirtualGameController().selectCardFromCommonTable(cardIndex, this.mainClient.getClientID());
                             break;
@@ -360,11 +377,11 @@ public class TUIApplication implements UIInterface {
                             break;
                         case "10":
                             openRulebook();
-                            TUIUpdate.printOptions(gameState);
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                             break;
                         case null, default:
                             System.out.println("Invalid option!");
-                            TUIUpdate.printOptions(gameState);
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                             break;
                     }
                     break;
@@ -381,13 +398,13 @@ public class TUIApplication implements UIInterface {
                             break;
                         case null, default:
                             System.out.println("Invalid option!");
-                            TUIUpdate.printOptions(gameState);
                             break;
                     }
+                    TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                     break;
                 case null, default:
                     System.out.println("Invalid option!");
-                    TUIUpdate.printOptions(gameState);
+                    TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
                     break;
             }
         }
@@ -409,7 +426,7 @@ public class TUIApplication implements UIInterface {
                 // Open the temporary file
                 Desktop.getDesktop().open(tempFile);
             } else {
-                System.err.println("Resource not found: ");
+                ConsoleColors.printError("Resource not found: ");
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -448,7 +465,7 @@ public class TUIApplication implements UIInterface {
             for (Message message : mainClient.getViewController().getSimplifiedModel().getSimplifiedChat().filterMessagesByPlayer(playerNickname, playersNicknames)) {
                 System.out.println(message);
             }
-            TUIUpdate.printOptions(gameState);
+            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
         } else {
             System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
             String receiverNickname = new Scanner(System.in).nextLine();

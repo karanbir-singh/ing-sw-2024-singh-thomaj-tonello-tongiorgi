@@ -2,9 +2,11 @@ package it.polimi.ingsw.gc26.ui.tui;
 
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.ui.UpdateInterface;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import it.polimi.ingsw.gc26.view_model.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * The TUIUpdate class implements the UpdateInterface to provide updates to the text-based user interface (TUI).
@@ -44,7 +46,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Common table not available yet!");
         }
-        printOptions(getGameState());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
     }
 
     /**
@@ -61,7 +63,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Player not available yet!");
         }
-        printOptions(getGameState());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
     }
 
     /**
@@ -79,7 +81,7 @@ public class TUIUpdate implements UpdateInterface {
             e.printStackTrace();
             System.out.println("Hand not available yet!");
         }
-        printOptions(getGameState());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
     }
 
     /**
@@ -96,7 +98,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Secret hand not available yet!");
         }
-        printOptions(getGameState());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
     }
 
     /**
@@ -113,7 +115,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Personal not available yet!");
         }
-        printOptions(getGameState());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
     }
 
     /**
@@ -148,7 +150,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Simplified chat not available yet!");
         }
-        printOptions(getGameState());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
     }
 
     /**
@@ -165,7 +167,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Game not available yet!");
         }
-        printOptions(getGameState());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
     }
 
     /**
@@ -185,7 +187,7 @@ public class TUIUpdate implements UpdateInterface {
      */
     @Override
     public void showError(String message) {
-        System.err.println("[ERROR]: " + message);
+        ConsoleColors.printError("[ERROR]: " + message);
     }
 
     /**
@@ -214,7 +216,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Other personal board not available yet!");
         }
-        printOptions(getGameState());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
     }
 
     /**
@@ -237,7 +239,7 @@ public class TUIUpdate implements UpdateInterface {
      *
      * @param gameState
      */
-    public static void printOptions(GameState gameState) {
+    public static void printOptions(GameState gameState, ArrayList<String> winners) {
         System.out.println("\nSelect your option:");
 
         switch (gameState) {
@@ -278,6 +280,12 @@ public class TUIUpdate implements UpdateInterface {
                         "10) Open rulebook.");
                 break;
             case WINNER:
+                System.out.println("Winners are: ");
+                int index = 1;
+                for (String winner : winners) {
+                    System.out.println(index + ") " + winner);
+                }
+                System.out.println("\n");
                 System.out.println("" +
                         "1) Open chat.\n" +
                         "2) Exit game.\n" +
@@ -294,6 +302,6 @@ public class TUIUpdate implements UpdateInterface {
      */
     public void closeErrorPopup() {
         System.out.println("Server is up, you can restart to play");
-        TUIUpdate.printOptions(miniModel.getSimplifiedGame().getGameState());
+        TUIUpdate.printOptions(miniModel.getSimplifiedGame().getGameState(), null);
     }
 }
