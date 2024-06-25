@@ -71,7 +71,7 @@ public enum SpecialCharacters {
     /**
      * This attribute represents the black square character.
      */
-    SQUARE_BLACK("\u001B[30m⬛\u001B[0m"),
+    SQUARE_BLACK("\u001B[30m⬜\u001B[0m"),
     /**
      * This attribute represents the white square character.
      */
