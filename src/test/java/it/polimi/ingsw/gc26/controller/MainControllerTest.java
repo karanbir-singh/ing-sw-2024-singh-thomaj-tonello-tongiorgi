@@ -7,8 +7,6 @@ import it.polimi.ingsw.gc26.network.RMI.VirtualRMIMainController;
 import it.polimi.ingsw.gc26.network.RMI.VirtualRMIView;
 import it.polimi.ingsw.gc26.request.main_request.ConnectionRequest;
 import it.polimi.ingsw.gc26.ui.tui.TUIUpdate;
-import it.polimi.ingsw.gc26.view_model.SimplifiedCommonTable;
-import it.polimi.ingsw.gc26.view_model.SimplifiedModel;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -39,7 +37,11 @@ class MainControllerTest {
                 MainClient client = new MainClient();
                 client.setVirtualMainController(new VirtualRMIMainController(mainController));
                 client.setVirtualView(new VirtualRMIView(client.getViewController()));
-                client.getViewController().getSimplifiedModel().setViewUpdater(new TUIUpdate(new SimplifiedModel()));
+                client.getViewController()
+                        .getSimplifiedModel()
+                        .setViewUpdater(
+                                new TUIUpdate(client.getViewController().getSimplifiedModel())
+                        );
                 client.setPingManager(new RMIPingManager(client));
 
                 clients.add(client);
@@ -88,6 +90,16 @@ class MainControllerTest {
     }
 
     @Test
+    void createWrongWaitingList() throws RemoteException, InterruptedException {
+        beforeAll();
+
+        mainController.createWaitingList(clients.get(0).getVirtualView(), "User1", 5);
+
+        assertEquals(ClientState.INVALID_NUMBER_OF_PLAYER, clients.get(0).getClientState());
+        assertEquals(0, mainController.getWaitingClients().size());
+    }
+
+    @Test
     void joinWaitingList() throws RemoteException, InterruptedException {
         beforeAll();
 
@@ -121,5 +133,19 @@ class MainControllerTest {
         mainController.connect(clients.get(2).getVirtualView(), "User3");
 
         assertNotNull(mainController.getGameController(1));
+    }
+
+    @Test
+    void resetServerTimer() throws RemoteException, InterruptedException {
+        beforeAll();
+
+        mainController.connect(clients.get(0).getVirtualView(), "User1");
+        mainController.createWaitingList(clients.get(0).getVirtualView(), "User1", 2);
+        mainController.connect(clients.get(1).getVirtualView(), "User2");
+        mainController.connect(clients.get(2).getVirtualView(), "User3");
+
+        mainController.resetServerTimer(clients.get(0).getClientID());
+
+        assertEquals(System.currentTimeMillis(), mainController.getTimers().get(clients.get(0).getClientID()));
     }
 }

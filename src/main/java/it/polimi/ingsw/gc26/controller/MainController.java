@@ -267,7 +267,7 @@ public class MainController implements Serializable {
     /**
      * Adds a player into the waiting list, if exists
      *
-     * @param client view to call methods in the client side
+     * @param client   view to call methods in the client side
      * @param nickname Nickname of the player who is joining the waiting list
      */
     public void joinWaitingList(VirtualView client, String nickname) {
@@ -366,7 +366,7 @@ public class MainController implements Serializable {
     /**
      * Reconstruct every game controller from the disk
      *
-     * @throws IOException if connection is not restored
+     * @throws IOException            if connection is not restored
      * @throws ClassNotFoundException if class is not found
      */
     public void recreateGames() throws IOException, ClassNotFoundException {
@@ -392,14 +392,14 @@ public class MainController implements Serializable {
         this.createGeneratorPingThread();
         System.out.println("Games recreated");
     }
-    
+
 
     /**
      * Thread useful after a server goes up from a crash: called in recreateGame()
      */
     private void createGeneratorPingThread() {
         for (Integer gameControllerID : gamesControllers.keySet()) {
-            new Thread(()->{
+            new Thread(() -> {
                 Game game = gamesControllers.get(gameControllerID).getGame();
                 int maxSecondsToWaitForClientReconnection = 30;
                 long currentTime = System.currentTimeMillis();
@@ -408,11 +408,11 @@ public class MainController implements Serializable {
 
 
                     //if a client isn't reconnecting for more than 30 seconds, the server closes the game
-                    if((System.currentTimeMillis() - currentTime) / 1000 >= maxSecondsToWaitForClientReconnection){
+                    if ((System.currentTimeMillis() - currentTime) / 1000 >= maxSecondsToWaitForClientReconnection) {
                         this.destroyGame(gameControllerID);
                         return;
                     }
-                    System.out.println("we are in the while, game " + gameControllerID );
+                    System.out.println("we are in the while, game " + gameControllerID);
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -422,25 +422,9 @@ public class MainController implements Serializable {
 
                 // Launch thread for pinging clients
                 this.startClientsPing(game.getObservable().getClients(), gameControllerID);
-                System.out.println("thread creati, game " + gameControllerID );
+                System.out.println("thread creati, game " + gameControllerID);
             }).start();
         }
-
-
-
-
-        /*new Thread(() -> {
-            for (Integer gameControllerID : gamesControllers.keySet()) {
-                Game game = gamesControllers.get(gameControllerID).getGame();
-                while (game.getNumberOfPlayers() != game.getObservable().getClients().size()) {
-                    // wait here so that everything is reloading, because not necessary the virtual views are already there
-                }
-
-                // Launch thread for pinging clients
-                this.startClientsPing(game.getObservable().getClients(), gameControllerID);
-                System.out.println("thread creati");
-            }
-        }).start();*/
     }
 
 
@@ -545,6 +529,14 @@ public class MainController implements Serializable {
         }
     }
 
+    /**
+     * Returns client's timers saved on server
+     *
+     * @return
+     */
+    public Map<String, Long> getTimers() {
+        return timers;
+    }
 
     /**
      * Returns the queue of requests
