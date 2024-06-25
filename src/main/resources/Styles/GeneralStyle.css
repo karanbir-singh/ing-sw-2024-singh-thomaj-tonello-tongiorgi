@@ -1,6 +1,4 @@
 .root-pane{
-    -fx-background-image: url("/it/polimi/ingsw/gc26/ui/gui/sceneControllers/images/game-background.png");
-    -fx-background-size: cover;
     -fx-font-size: 18px;
     -fx-text-fill: white;
 }
@@ -22,7 +20,7 @@
 }
 
 .customLabel {
-    -fx-effect: dropshadow( gaussian , #e3fff2  , 20,0.1,0,1 );
+    -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0.1,0,1 );
 }
 
 .text-field {
@@ -38,7 +36,7 @@
 
 .text-field:hover{
     -fx-background-color: rgba(255, 255, 255, 0.85);
-    -fx-effect: dropshadow( gaussian , #e3fff2 , 20,0,0,0 );
+    -fx-effect: dropshadow( gaussian , #e3fff2 , 10,0,0,0 );
 }
 
 .text-field:focused{
@@ -47,7 +45,7 @@
 }
 
 .cardHover:hover {
-    -fx-effect: dropshadow( gaussian , #e3fff2  , 20,0.1,0,1 );
+    -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0.1,0,1 );
 }
 
 .button {
@@ -286,14 +284,14 @@
 .number-button {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-effect: dropshadow( gaussian , #fffff0  , 20,0.7,0,1 );
+    -fx-effect: dropshadow( gaussian , #fffff0  , 10,0.7,0,1 );
 }
 
 .number-button:hover {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 
-    -fx-effect: dropshadow( gaussian , #fffff0  , 20,0.8,0,1 );
+    -fx-effect: dropshadow( gaussian , #fffff0  , 10,0.8,0,1 );
 }
 
 .pawn {
