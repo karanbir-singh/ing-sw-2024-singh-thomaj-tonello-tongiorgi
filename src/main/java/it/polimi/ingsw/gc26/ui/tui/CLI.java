@@ -64,7 +64,7 @@ public class CLI {
             String[][] scores;
             if (miniModel.getSimplifiedGame() != null &&
                     (miniModel.getSimplifiedGame().getGameState() == GameState.GAME_STARTED ||
-                            miniModel.getSimplifiedGame().getGameState() == GameState.END_STAGE)) {
+                            miniModel.getSimplifiedGame().getGameState() == GameState.END_STAGE || miniModel.getSimplifiedGame().getGameState() == GameState.WINNER)) {
                 scores = allPrintableScores();
             } else {
                 scores = new String[1][1];
