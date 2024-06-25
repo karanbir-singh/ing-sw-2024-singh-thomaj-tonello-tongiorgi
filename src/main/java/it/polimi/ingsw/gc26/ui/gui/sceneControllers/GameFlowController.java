@@ -104,6 +104,18 @@ public class GameFlowController extends SceneController implements Initializable
     @FXML
     private VBox secretMissionBox;
     /**
+     * Resources in the personal board
+     */
+    private ArrayList<ImageView> resources = new ArrayList<>();
+    /**
+     * Gold cards' list
+     */
+    private ArrayList<ImageView> goldens = new ArrayList<>();
+    /**
+     * Common missions. Two images as children.
+     */
+    private ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
+    /**
      * Grid where to place the played cards
      */
     @FXML
@@ -502,7 +514,7 @@ public class GameFlowController extends SceneController implements Initializable
                     this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
                     this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("Connection problem, please wait");
                 }
             }
 
@@ -534,14 +546,14 @@ public class GameFlowController extends SceneController implements Initializable
                         int column = GridPane.getColumnIndex(target);
 
                         for (ImageView p : playablePositions) {
-                            target.setVisible(false);
+                            p.setVisible(false);
                         }
 
                         this.mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(imageView.getId()), this.mainClient.getClientID());
                         this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
                         this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
                     } catch (RemoteException e) {
-                        // throw new RuntimeException(e);
+                        System.out.println("Connection problem, please wait");
                     }
 
                     break;
@@ -615,7 +627,7 @@ public class GameFlowController extends SceneController implements Initializable
         } else {
             scoreBoardButton.getStyleClass().clear();
             scoreBoardButton.getStyleClass().add("buttonVisible");
-            anchorPaneScoreBoard.setTranslateX(0);
+            anchorPaneScoreBoard.setTranslateX(50);
             HBoxLeftPanel.setMinWidth(380);
             HBoxLeftPanel.setMaxWidth(380);
             scoreBoardIsVisible = true;

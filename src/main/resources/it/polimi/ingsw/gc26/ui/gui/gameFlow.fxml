@@ -62,7 +62,7 @@
                       </VBox>
                   </center>
                   <right>
-                      <VBox fx:id="rightVBox" alignment="TOP_CENTER" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="200.0" minWidth="50.0" spacing="20.0" BorderPane.alignment="CENTER">
+                      <VBox fx:id="rightVBox" alignment="TOP_CENTER" fillWidth="false" minWidth="100.0" prefWidth="210.0" spacing="20.0" BorderPane.alignment="CENTER">
                           <children>
                               <ImageView fitHeight="30.0" fitWidth="195.0" pickOnBounds="true" preserveRatio="true" styleClass="customLabel">
                                   <image>

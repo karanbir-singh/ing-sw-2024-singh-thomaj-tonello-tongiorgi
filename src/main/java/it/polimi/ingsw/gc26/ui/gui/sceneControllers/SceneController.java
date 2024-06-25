@@ -196,13 +196,8 @@ abstract public class SceneController {
      * @param background
      */
     public void pageBindings(AnchorPane rootPane, BorderPane rootBorder, ImageView background) {
-        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            rootBorder.setPrefHeight(newVal.doubleValue());
-        });
-
-        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
-            rootBorder.setPrefWidth(newVal.doubleValue());
-        });
+        rootBorder.prefWidthProperty().bind(rootPane.widthProperty());
+        rootBorder.prefHeightProperty().bind(rootPane.heightProperty());
 
         background.setImage(gameBackground);
         setBackground(rootPane, background);
@@ -216,9 +211,11 @@ abstract public class SceneController {
      */
     public void cardsLayout(BorderPane rootBorder, ArrayList<ImageView> cards) {
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
-            for (ImageView card : cards) {
-                card.setFitWidth(rootBorder.getWidth() * 0.13);
-            }
+            Platform.runLater(() -> {
+                for (ImageView card : cards) {
+                    card.setFitWidth(rootBorder.getWidth() * 0.13);
+                }
+            });
         });
     }
 
@@ -231,13 +228,6 @@ abstract public class SceneController {
      */
     public void handLayout(BorderPane rootBorder, ArrayList<ImageView> handCards, AnchorPane handPane) {
         double spacing = 20.0;
-        handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
-
-        for (int i = 0; i < handCards.size(); i++) {
-            ImageView card = handCards.get(i);
-            card.setFitWidth(rootBorder.getWidth() * 0.13);
-            card.setLayoutX(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * i);
-        }
 
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
             handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
@@ -262,7 +252,7 @@ abstract public class SceneController {
         glow.setOffsetY(0f);
         glow.setWidth(50);
         glow.setHeight(50);
-        card.setEffect(glow);
+        Platform.runLater(() -> {card.setEffect(glow);});
     }
 
     /**
