@@ -207,9 +207,9 @@ public class Player implements Serializable {
     public void setState(PlayerState state, String clientID) {
         this.state = state;
 
-        this.observable.notifyUpdatePlayer(
-                new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
-                "Your new state is " + this.state.toString(), clientID);
+//        this.observable.notifyUpdatePlayer(
+//                new SimplifiedPlayer(clientID, nickname, pawnColor, amIFirstPlayer, state),
+//                "Your new state is " + this.state.toString(), clientID);
     }
 }
 
