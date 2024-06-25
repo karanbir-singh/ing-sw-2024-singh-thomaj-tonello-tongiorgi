@@ -20,9 +20,9 @@ public class SocketPingManager implements PingManager {
     private final MainClient mainClient;
 
     /**
-     * This attribute represents the server timeout seconds
+     * This attribute represents the server timeout seconds (10 seconds)
      */
-    private static final int TIMEOUT = 5;
+    private static final int TIMEOUT = 10;
 
     /**
      * This attributes represents the last ping time from the server
@@ -39,9 +39,10 @@ public class SocketPingManager implements PingManager {
      */
     private final Object lock;
 
-    private final long maxTimeoutWhenServerDown = 30;
-
-    private long timeWhenServerDown;
+    /**
+     * This attributes represents the max amount of time to wait after the server crush (60 seconds)
+     */
+    private static final long MAX_TIMEOUT_WHEN_SERVER_DOWN = 60;
 
     /**
      * Flag equals true if the server is reachable
@@ -104,12 +105,13 @@ public class SocketPingManager implements PingManager {
                 // Server is down
                 isServerUp = false;
 
-                this.timeWhenServerDown = System.currentTimeMillis() / 1000;
+                // Current time when the timer elapsed
+                long timeWhenServerDown = System.currentTimeMillis() / 1000;
 
                 // Until server is down...
                 while (!isServerUp) {
                     //if the server is down for more than 30 seconds, we close the clients
-                    if(System.currentTimeMillis()/ 1000 - this.timeWhenServerDown >= maxTimeoutWhenServerDown){
+                    if(System.currentTimeMillis()/ 1000 - timeWhenServerDown >= MAX_TIMEOUT_WHEN_SERVER_DOWN){
                         System.exit(0);
                     }
 

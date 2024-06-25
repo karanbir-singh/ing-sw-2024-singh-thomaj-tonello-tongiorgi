@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-/**
+    /**
  * This class contains methods used to notify the client about an update in the model.
  */
 public class ModelObservable implements Serializable {
@@ -311,7 +311,7 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).killProcess();
                 } catch (RemoteException e) {
-                    //client is down, no need to notify
+                    System.out.println("network problem");
                 }
             }
         }

@@ -81,9 +81,9 @@ public class MainController implements Serializable {
     transient private Map<String, Long> timers;
 
     /**
-     * Max time the server has to wait to suppose that a client is down
+     * Max time the server has to wait to suppose that a client is down (10 seconds)
      */
-    private static final int TIMEOUT = 5;
+    private static final int TIMEOUT = 10;
 
     /**
      * Initializes waiting players' list and games controllers' list

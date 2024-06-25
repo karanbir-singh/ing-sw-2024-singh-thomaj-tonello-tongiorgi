@@ -20,9 +20,9 @@ public class RMIPingManager implements PingManager {
     private final MainClient mainClient;
 
     /**
-     * This attribute represents the server timeout seconds
+     * This attribute represents the server timeout seconds (10 seconds)
      */
-    private static final int TIMEOUT = 5;
+    private static final int TIMEOUT = 10;
 
     /**
      * This attribute represents a flag indicating if the first ping from the server has arrived.
@@ -39,10 +39,10 @@ public class RMIPingManager implements PingManager {
      */
     private final Object lock;
 
-
-    private final int maxTimeoutWhenServerDown = 60;
-
-    private long timeWhenServerDown;
+    /**
+     * This attributes represents the max amount of time to wait after the server crush (60 seconds)
+     */
+    private static final int MAX_TIMEOUT_WHEN_SERVER_DOWN = 60;
 
     /**
      * Flag equals true if the server is reachable
@@ -106,13 +106,13 @@ public class RMIPingManager implements PingManager {
                 // Server is down
                 isServerUp = false;
 
-
-                this.timeWhenServerDown = System.currentTimeMillis() / 1000;
+                // Current time when the timer elapsed
+                long timeWhenServerDown = System.currentTimeMillis() / 1000;
 
                 // Until server is down...
                 while (!isServerUp) {
                     //if server is down for more than 30 seconds, we close the client
-                    if(System.currentTimeMillis()/ 1000 - this.timeWhenServerDown >= maxTimeoutWhenServerDown){
+                    if (System.currentTimeMillis() / 1000 - timeWhenServerDown >= MAX_TIMEOUT_WHEN_SERVER_DOWN) {
                         System.exit(0);
                     }
 
@@ -135,6 +135,7 @@ public class RMIPingManager implements PingManager {
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException ex1) {
+                            ex1.printStackTrace();
                         }
                     }
                 }
