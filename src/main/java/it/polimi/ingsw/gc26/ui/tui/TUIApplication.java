@@ -468,7 +468,7 @@ public class TUIApplication implements UIInterface {
                 return;
             }
             for (Message message : mainClient.getViewController().getSimplifiedModel().getSimplifiedChat().filterMessagesByPlayer(playerNickname, playersNicknames)) {
-                System.out.println(message);
+                System.out.println(message.toString(message.getSender().getPawnColor()));
             }
             TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
         } else {

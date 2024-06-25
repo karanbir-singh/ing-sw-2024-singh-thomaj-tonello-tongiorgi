@@ -3,7 +3,11 @@ package it.polimi.ingsw.gc26.model.game;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
+import it.polimi.ingsw.gc26.model.utils.TextStyle;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
+
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -130,9 +134,25 @@ public class Message implements Serializable {
      */
     @Override
     public String toString() {
-        if (this.receiver != null) {
-            return "[ " + this.sender.getNickname() + " -> " + this.receiver.getNickname() + " | " + this.time.toString() + " ]: " + this.text;
+        if (this.receiver != null && this.receiver.getNickname() != null && this.getReceiver().getNickname().isEmpty()) {
+            return "[ " + this.sender.getNickname() + " -> " + this.receiver.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + this.text;
         }
-        return "[ " + this.sender.getNickname() + " | " + this.time.toString() + " ]: " + this.text;
+        return "[ " + this.sender.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + this.text;
+    }
+
+    /**
+     * Prints the message and if the pawn color is available, it colors the message
+     *
+     * @param pawnColor  pawn to color the sender
+     * @return string
+     */
+    public String toString(Pawn pawnColor) {
+        if (pawnColor == null) {
+            return toString();
+        }
+        if (this.receiver != null && this.receiver.getNickname() != null && this.getReceiver().getNickname().isEmpty()) {
+            return pawnColor.getFontColor() + "[ " + this.sender.getNickname() + " -> " + this.receiver.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + ConsoleColors.RESET + this.text;
+        }
+        return pawnColor.getFontColor() + "[ " + this.sender.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + ConsoleColors.RESET + this.text;
     }
 }
