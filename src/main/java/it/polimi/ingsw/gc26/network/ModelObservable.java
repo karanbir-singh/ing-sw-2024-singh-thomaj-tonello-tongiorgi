@@ -86,7 +86,7 @@ public class ModelObservable implements Serializable {
         for (Pair client : this.clients) {
             if (client.getValue().equals(currentPlayer.getID())) {
                 try {
-                    ((VirtualView) client.getKey()).updateGame(simplifiedGame, "It's you turn now!");
+                    ((VirtualView) client.getKey()).updateGame(simplifiedGame, "It's your turn now!");
                 } catch (RemoteException e) {
                     System.out.println("network problem");
                 }

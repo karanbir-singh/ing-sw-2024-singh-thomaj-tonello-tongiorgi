@@ -59,7 +59,7 @@ public class GameController implements Serializable {
      * Initializes the game (provided by the main controller)
      *
      * @param game the object that represents the game
-     * @param ID game unique identifier to recreate or destroy de game
+     * @param ID   game unique identifier to recreate or destroy de game
      */
     public GameController(Game game, int ID) {
         this.game = game;
@@ -582,31 +582,37 @@ public class GameController implements Serializable {
         } else {
             if (game.getState().equals(GameState.GAME_STARTED) || game.getState().equals(GameState.END_STAGE)) {
                 // Check if it's the player's turn
-                if (player.equals(game.getCurrentPlayer()) && player.getState().equals(PlayerState.PLAYING)) {
-                    if (isDebug) {
-                        System.out.println(player.getNickname() + " played card from hand");
-                    }
-                    // Otherwise get the player's personal board and his hand
-                    PersonalBoard personalBoard = player.getPersonalBoard();
-                    Hand hand = player.getHand();
+                if (player.equals(game.getCurrentPlayer())) {
+                    if (player.getState().equals(PlayerState.PLAYING)) {
 
-                    // Check if there is a selected card on the hand
-                    if (hand.getSelectedCard().isPresent()) {
-                        // Place the selected card side on the personal board
-                        if (!personalBoard.playSide(hand.getSelectedSide().get(), playerID)) {
-                            return;
+
+                        if (isDebug) {
+                            System.out.println(player.getNickname() + " played card from hand");
                         }
+                        // Otherwise get the player's personal board and his hand
+                        PersonalBoard personalBoard = player.getPersonalBoard();
+                        Hand hand = player.getHand();
 
-                        // Remove card from the hand
-                        hand.removeCard(hand.getSelectedCard().get(), player.getID());
+                        // Check if there is a selected card on the hand
+                        if (hand.getSelectedCard().isPresent()) {
+                            // Place the selected card side on the personal board
+                            if (!personalBoard.playSide(hand.getSelectedSide().get(), playerID)) {
+                                return;
+                            }
 
-                        // Change player state
-                        player.setState(PlayerState.CARD_PLAYED, player.getID());
-                    } else {
-                        game.sendError(playerID, "You need to select a card");
+                            // Remove card from the hand
+                            hand.removeCard(hand.getSelectedCard().get(), player.getID());
+
+                            // Change player state
+                            player.setState(PlayerState.CARD_PLAYED, player.getID());
+                        } else {
+                            game.sendError(playerID, "You need to select a card");
+                        }
+                    }else {
+                        game.sendError(playerID, "You have already played a card. Please draw a card from the common table.");
                     }
                 } else {
-                    game.sendError(playerID, "You have already played a card. Please draw a card from the common table.");
+                    game.sendError(playerID, "It's not your turn, you can't play a card");
                 }
             } else {
                 game.sendError(playerID, "You can't do that know");
@@ -656,39 +662,43 @@ public class GameController implements Serializable {
             Player player = game.getPlayerByID(playerID);
 
             // Check if it's the turn of the player
-            if (player.equals(game.getCurrentPlayer()) && player.getState().equals(PlayerState.CARD_PLAYED)) {
-                // Get the common table and hand
-                CommonTable commonTable = game.getCommonTable();
-                Hand hand = player.getHand();
+            if (player.equals(game.getCurrentPlayer())) {
+                if (player.getState().equals(PlayerState.CARD_PLAYED)) {
+                    // Get the common table and hand
+                    CommonTable commonTable = game.getCommonTable();
+                    Hand hand = player.getHand();
 
-                // Get removed card
-                Card removedCard = commonTable.removeSelectedCard(playerID);
+                    // Get removed card
+                    Card removedCard = commonTable.removeSelectedCard(playerID);
 
-                if (removedCard != null) {
-                    // Add card in player's hand
-                    hand.addCard(removedCard, playerID);
+                    if (removedCard != null) {
+                        // Add card in player's hand
+                        hand.addCard(removedCard, playerID);
 
-                    if (isDebug) {
-                        System.out.println(player.getNickname() + " drew selected card");
+                        if (isDebug) {
+                            System.out.println(player.getNickname() + " drew selected card");
+                        }
+
+                        // Change player's state
+                        player.setState(PlayerState.CARD_DRAWN, player.getID());
+
+                        // Check if player's score is greater or equal then 20 points OR decks are both empty
+                        if (game.getState() != GameState.END_STAGE && player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
+                            // Change game state into END_STAGE
+                            game.setState(GameState.END_STAGE);
+
+                            // Set the final round
+                            game.setFinalRound(game.getRound() + 1);
+                        }
+
+                        // Change turn to next player
+                        this.changeTurn();
                     }
-
-                    // Change player's state
-                    player.setState(PlayerState.CARD_DRAWN, player.getID());
-
-                    // Check if player's score is greater or equal then 20 points OR decks are both empty
-                    if (game.getState() != GameState.END_STAGE && player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
-                        // Change game state into END_STAGE
-                        game.setState(GameState.END_STAGE);
-
-                        // Set the final round
-                        game.setFinalRound(game.getRound() + 1);
-                    }
-
-                    // Change turn to next player
-                    this.changeTurn();
+                } else {
+                    game.sendError(playerID, "You must play a card before drawing a card!");
                 }
             } else {
-                game.sendError(playerID, "You must play a card before drawing a card!");
+                game.sendError(playerID, "It's not your turn, you can't draw a card on the common table");
             }
         } else {
             game.sendError(playerID, "You can't do that know");

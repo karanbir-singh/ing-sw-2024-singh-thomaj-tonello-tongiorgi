@@ -194,7 +194,6 @@ public class Game implements Serializable {
             // Then increase the round
             this.increaseRound();
         }
-        this.observable.notifyMessage("It's you turn now", this.currentPlayer.getID());
         ArrayList<String> nicknameWinners = new ArrayList<>();
         for (Player winner : this.winners) {
             nicknameWinners.add(winner.getNickname());
