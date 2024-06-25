@@ -129,9 +129,7 @@ public class SocketServerHandler implements Runnable {
                 }
 
             }
-        } catch (IOException e) {
-            System.out.println("Server down");
-        }
+        } catch (IOException e) {}
     }
 
     /**

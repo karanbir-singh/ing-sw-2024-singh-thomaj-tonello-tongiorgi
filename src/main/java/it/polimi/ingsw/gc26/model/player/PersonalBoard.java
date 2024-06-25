@@ -5,6 +5,7 @@ import it.polimi.ingsw.gc26.model.card_side.Corner;
 import it.polimi.ingsw.gc26.model.card_side.Side;
 import it.polimi.ingsw.gc26.model.card_side.Symbol;
 import it.polimi.ingsw.gc26.network.ModelObservable;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import it.polimi.ingsw.gc26.view_model.SimplifiedPersonalBoard;
 
 import java.io.Serializable;
@@ -316,7 +317,7 @@ public class PersonalBoard implements Serializable {
             l.remove(ifPresent(x, y, l).orElseThrow(NullPointerException::new));
         } catch (NullPointerException nullPointerException) {
             nullPointerException.printStackTrace();
-            System.err.println("Null Pointer Exception in removePoint");
+            ConsoleColors.printError("Null Pointer Exception in removePoint");
         }
     }
 

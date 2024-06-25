@@ -40,7 +40,7 @@ public class RMIPingManager implements PingManager {
     private final Object lock;
 
 
-    private final int maxTimeoutWhenServerDown = 30;
+    private final int maxTimeoutWhenServerDown = 60;
 
     private long timeWhenServerDown;
 

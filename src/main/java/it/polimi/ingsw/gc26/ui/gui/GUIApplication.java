@@ -362,7 +362,7 @@ public class GUIApplication extends Application implements UIInterface {
                 // Open the temporary file
                 Desktop.getDesktop().open(tempFile);
             } else {
-                System.err.println("Resource not found: ");
+                ConsoleColors.printError("Resource not found: ");
             }
         } catch (IOException ex) {
             ex.printStackTrace();
