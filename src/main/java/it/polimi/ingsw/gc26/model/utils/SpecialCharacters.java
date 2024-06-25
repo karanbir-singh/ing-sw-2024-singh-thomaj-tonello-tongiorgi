@@ -79,7 +79,7 @@ public enum SpecialCharacters {
     /**
      * This attribute represents the white large square character, used to represent the corner in the card's details in the hand and common table.
      */
-    SQUARE_WHITE_LARGE("▫️"),
+    SQUARE_WHITE_LARGE("⬛️"),
     /**
      * This attribute represents the white vertical pipe character.
      */

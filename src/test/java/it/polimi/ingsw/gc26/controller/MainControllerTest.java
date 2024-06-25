@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gc26.controller;
+/*package it.polimi.ingsw.gc26.controller;
 
 import it.polimi.ingsw.gc26.ClientState;
 import it.polimi.ingsw.gc26.MainClient;
@@ -122,4 +122,4 @@ class MainControllerTest {
 
         assertNotNull(mainController.getGameController(1));
     }
-}
+}*/

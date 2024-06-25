@@ -290,7 +290,7 @@ public class CLI {
             } else if (i == 12) {
                 ct[i][0] = "Requires:  " + leftPadding;
             } else if (i == 5) {
-                ct[i][0] = "            " + leftPadding;
+                ct[i][0] = "           " + leftPadding;
             } else {
                 ct[i][0] = "";
             }
@@ -315,8 +315,8 @@ public class CLI {
         for (int i = 0; i < 2; i++) {
             int offSet = index * 5 + 1;
             //titles and separators for alignment
-            ct[yResource - 1][offSet] = "(" + index + ")";
-            ct[yResource - 1][offSet + 1] = " Resource Card";
+            ct[yResource - 1][offSet] = "(" + index + ") ";
+            ct[yResource - 1][offSet + 1] = "Resource Card";
             if (index == miniCT.getSelectedIndex()) {
                 ct[yResource - 1][offSet + 1] = selectedStyle + ct[yResource - 1][offSet + 1] + styleReset;
             }
@@ -338,9 +338,10 @@ public class CLI {
         }
 
         //insert resource deck
-        ct[yResource - 1][index * 5 + 1] = "(" + index + ") Resource Deck"; //title
         if (index == miniCT.getSelectedIndex()) {
-            ct[yResource - 1][index * 5] = selectedStyle + ct[yResource - 1][index * 5] + styleReset;
+            ct[yResource - 1][index * 5 + 1] = "(" + index + ") " + selectedStyle + "Resource Deck" + styleReset;
+        } else {
+            ct[yResource - 1][index * 5 + 1] = "(" + index + ") Resource Deck"; //title
         }
         ct[yResource - 1][index * 5 + 4] = blackSquare + blackSquare + blackSquare; //decoration for alignment
         xResource++;
@@ -356,10 +357,11 @@ public class CLI {
         //insert uncovered gold cards
         for (int i = 0; i < 2; i++) {
             int offSet = (index - 3) * 5 + 1;
-            ct[yGold - 1][offSet] = "(" + index + ")";
-            ct[yGold - 1][offSet + 1] = " Gold Card    ";
+            ct[yGold - 1][offSet] = "(" + index + ") ";
             if (index == miniCT.getSelectedIndex()) {
-                ct[yGold - 1][offSet + 1] = selectedStyle + ct[yGold - 1][offSet + 1] + styleReset;
+                ct[yGold - 1][offSet + 1] = selectedStyle + "Gold Card" + styleReset + "    ";
+            } else {
+                ct[yGold - 1][offSet + 1] = "Gold Card    ";
             }
             ct[yGold - 1][offSet + 2] = blackSquare;
             ct[yGold - 1][offSet + 3] = blackSquare;
@@ -379,9 +381,10 @@ public class CLI {
         }
 
         //insert gold deck
-        ct[yGold - 1][(index - 3) * 5 + 1] = "(" + index + ") Gold Deck    ";
         if (index == miniCT.getSelectedIndex()) {
-            ct[yGold - 1][(index - 3) * 5] = selectedStyle + ct[yGold - 1][(index - 3) * 5] + styleReset;
+            ct[yGold - 1][(index - 3) * 5 + 1] = "(" + index + ") " + selectedStyle + "Gold Deck" + styleReset + "    " ;
+        } else {
+            ct[yGold - 1][(index - 3) * 5 + 1] = "(" + index + ") Gold Deck    ";
         }
         ct[yGold - 1][(index - 3) * 5 + 4] = blackSquare + blackSquare + blackSquare;
 
@@ -405,7 +408,7 @@ public class CLI {
                 } else {
                     y = yGold + yCardDim;
                 }
-                ct[y][x] = "              ";
+                ct[y][x] = "             ";
                 ct[y][x + 1] = blackSquare + blackSquare + blackSquare;
                 y++;
                 ct[y][x] = blackSquare + blackSquare + blackSquare + blackSquare + blackSquare;
@@ -430,7 +433,7 @@ public class CLI {
                     case null, default -> ct[y][x] = c.getFront().getPoints() + " pt " + "        ";
                 }
                 if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
-                    ct[y][x + 1] = "       " + blackSquare + blackSquare;
+                    ct[y][x + 1] = "      " + blackSquare + blackSquare;
                 } else {
                     ct[y][x + 1] = blackSquare + blackSquare + blackSquare;
                 }
@@ -815,14 +818,14 @@ public class CLI {
                             case CornerCounter cornerCounter ->
                                     myHand[y][x] = "2 pt " + "x" + SpecialCharacters.SQUARE_WHITE_LARGE.getCharacter();
                             case InkwellCounter inkwellCounter ->
-                                    myHand[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
+                                    myHand[y][x] = "1 pt " + "x " + Symbol.INKWELL.getAlias();
                             case ManuscriptCounter manuscriptCounter ->
-                                    myHand[y][x] = "1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
-                            case QuillCounter quillCounter -> myHand[y][x] = "1 pt " + "x" + Symbol.QUILL.getAlias();
+                                    myHand[y][x] = "1 pt " + "x " + Symbol.MANUSCRIPT.getAlias();
+                            case QuillCounter quillCounter -> myHand[y][x] = "1 pt " + "x " + Symbol.QUILL.getAlias();
                             case null, default -> myHand[y][x] = c.getFront().getPoints() + " pt " + "        ";
                         }
                         if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
-                            myHand[y][x] = myHand[y][x] + "       " + blackSquare + blackSquare;
+                            myHand[y][x] = myHand[y][x] + "      " + blackSquare + blackSquare;
                         } else {
                             myHand[y][x] = myHand[y][x] + blackSquare + blackSquare + blackSquare;
                         }
