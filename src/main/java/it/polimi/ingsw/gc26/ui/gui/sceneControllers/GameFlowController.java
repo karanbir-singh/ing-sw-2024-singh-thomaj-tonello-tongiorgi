@@ -257,6 +257,9 @@ public class GameFlowController extends SceneController implements Initializable
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
         // Update hand
+        if (simplifiedHand.getCards().size() == 2) {
+            handImages.get(2).setImage(null);
+        }
         int index = 0;
         for (Card card : simplifiedHand.getCards()) {
             if (card.equals(simplifiedHand.getSelectedCard())) {
@@ -268,9 +271,7 @@ public class GameFlowController extends SceneController implements Initializable
             }
             index++;
         }
-        if (simplifiedHand.getCards().size() == 2) {
-            handImages.get(2).setImage(null);
-        }
+
 
     }
 
@@ -539,21 +540,22 @@ public class GameFlowController extends SceneController implements Initializable
                 if (isInTargetSpot(imageView, target) && this.personalBoardTabPane.getSelectionModel().getSelectedItem().equals(
                         this.personalBoardTabPane.getTabs().getFirst())) {
 
-                    try {
+
                         int row = GridPane.getRowIndex(target);
                         int column = GridPane.getColumnIndex(target);
 
                         for (ImageView p : playablePositions) {
                             p.setVisible(false);
                         }
-
-                        this.mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(imageView.getId()), this.mainClient.getClientID());
-                        this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
-                        this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
-                    } catch (RemoteException e) {
-                        System.out.println("Connection problem, please wait");
-                    }
-
+                        new Thread(()->
+                        {
+                            try{
+                                this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
+                                this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
+                            }catch(RemoteException exception){
+                                System.out.println("Connection problem, please wait");
+                            }
+                        }).start();
                     break;
                 }
             }
