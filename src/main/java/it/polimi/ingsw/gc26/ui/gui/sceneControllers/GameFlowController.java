@@ -512,7 +512,7 @@ public class GameFlowController extends SceneController implements Initializable
                     this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
                     this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("Connection problem, please wait");
                 }
             }
 
@@ -544,7 +544,7 @@ public class GameFlowController extends SceneController implements Initializable
                         int column = GridPane.getColumnIndex(target);
 
                         for (ImageView p : playablePositions) {
-                            this.gridPane.getChildren().remove(p);
+                            p.setVisible(false);
                         }
 
                         this.mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(imageView.getId()), this.mainClient.getClientID());

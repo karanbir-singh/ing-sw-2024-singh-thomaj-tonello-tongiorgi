@@ -49,7 +49,15 @@ public class ModelObservable implements Serializable {
         if (this.clients == null) {
             this.clients = new ArrayList<>();
         }
-        this.clients.add(new Pair<>(view, clientID));
+
+        synchronized (this.clients){
+            for(Pair client : this.clients){
+                if(client.getValue().equals(clientID)){
+                    this.clients.remove(client);
+                }
+            }
+            this.clients.add(new Pair<>(view, clientID));
+        }
     }
 
     /**
@@ -63,7 +71,7 @@ public class ModelObservable implements Serializable {
             try {
                 ((VirtualView) client.getKey()).updateGame(simplifiedGame, message);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                System.out.println("network problem");
             }
         }
     }
@@ -80,13 +88,13 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).updateGame(simplifiedGame, "It's you turn now!");
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             } else {
                 try {
                     ((VirtualView) client.getKey()).updateGame(simplifiedGame, "It's " + currentPlayer.getNickname() + " turn now!");
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             }
         }
@@ -103,7 +111,7 @@ public class ModelObservable implements Serializable {
             try {
                 ((VirtualView) client.getKey()).updateCommonTable(simplifiedCommonTable, message);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                System.out.println("network problem");
             }
         }
     }
@@ -121,7 +129,7 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).updateCommonTable(simplifiedCommonTable, message);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
                 break;
             }
@@ -141,7 +149,7 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).updateHand(simplifiedHand, message);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             }
         }
@@ -160,7 +168,7 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).updateSecretHand(simplifiedSecretHand, message);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             }
         }
@@ -179,13 +187,13 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).updatePersonalBoard(personalBoard, message);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             } else {
                 try {
                     ((VirtualView) client.getKey()).updateOtherPersonalBoard(personalBoard, message);
                 } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                    System.out.println("network problem");
                 }
             }
         }
@@ -204,7 +212,7 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).updateOtherPersonalBoard(otherPersonalBoard, message);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             }
         }
@@ -223,7 +231,7 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).updatePlayer(simplifiedPlayer, message);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             }
         }
@@ -242,13 +250,13 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).updateChat(new SimplifiedChat(chat.filterMessages(client.getValue().toString())), "Message sent!");
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             } else if (chat.getMessages().getLast().getReceiver() == null || chat.getMessages().getLast().getSender().getID().equals(client.getValue()) || chat.getMessages().getLast().getReceiver().getID().equals(client.getValue())) {
                 try {
                     ((VirtualView) client.getKey()).updateChat(new SimplifiedChat(chat.filterMessages(client.getValue().toString())), message);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             }
         }
@@ -266,7 +274,7 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).showMessage(msg);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             }
         }
@@ -284,7 +292,7 @@ public class ModelObservable implements Serializable {
                 try {
                     ((VirtualView) client.getKey()).showError(errorMsg);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.out.println("network problem");
                 }
             }
         }
@@ -298,12 +306,15 @@ public class ModelObservable implements Serializable {
             // and when server goes up this.clients will remain null since nobody will reconnected
             this.clients = new ArrayList<>();
         }
-        for (Pair client : this.clients) {
-            try {
-                ((VirtualView) client.getKey()).killProcess();
-            } catch (RemoteException e) {
-                //client is down, no need to notify
+        synchronized (this.clients){
+            for (Pair client : this.clients) {
+                try {
+                    ((VirtualView) client.getKey()).killProcess();
+                } catch (RemoteException e) {
+                    //client is down, no need to notify
+                }
             }
         }
+
     }
 }

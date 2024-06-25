@@ -80,7 +80,7 @@ public class VirtualSocketView implements VirtualView {
      * @param functionName name of the function to be called client side
      * @param valueMsg     data to send
      */
-    private void sendToClient(String functionName, String valueMsg) {
+    private void sendToClient(String functionName, String valueMsg) throws RemoteException {
         HashMap<String, String> data = getBaseMessage();
         data.replace("function", functionName);
         try {
@@ -90,7 +90,7 @@ public class VirtualSocketView implements VirtualView {
             this.outputToClient.newLine();
             this.outputToClient.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RemoteException();
         }
     }
 

@@ -152,7 +152,7 @@ public class SecretMissionChoiceController extends SceneController implements In
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getAccessibleText());
             this.mainClient.getVirtualGameController().selectSecretMission(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("Connection problem, please wait");
         }
     }
 
