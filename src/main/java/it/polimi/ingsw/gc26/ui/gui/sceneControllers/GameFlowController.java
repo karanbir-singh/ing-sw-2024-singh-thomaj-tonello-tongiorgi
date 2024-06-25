@@ -625,7 +625,7 @@ public class GameFlowController extends SceneController implements Initializable
         } else {
             scoreBoardButton.getStyleClass().clear();
             scoreBoardButton.getStyleClass().add("buttonVisible");
-            anchorPaneScoreBoard.setTranslateX(0);
+            anchorPaneScoreBoard.setTranslateX(50);
             HBoxLeftPanel.setMinWidth(380);
             HBoxLeftPanel.setMaxWidth(380);
             scoreBoardIsVisible = true;
