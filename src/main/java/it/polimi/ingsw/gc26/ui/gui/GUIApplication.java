@@ -106,15 +106,14 @@ public class GUIApplication extends Application implements UIInterface {
                         new GUIUpdate(this)
                 );
 
-        // Load all scenes
-        this.loadScenes();
-
         // Setup starting stage
         this.primaryStage = primaryStage;
-        primaryStage.setHeight(800);
-        primaryStage.setWidth(1000);
+        primaryStage.setMaximized(true);
         primaryStage.setTitle(" Codex Naturalis");
         primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("sceneControllers/images/icon.png"))));
+
+        // Load all scenes
+        this.loadScenes();
 
         // Launch thread for managing connection
         new Thread(() -> {
