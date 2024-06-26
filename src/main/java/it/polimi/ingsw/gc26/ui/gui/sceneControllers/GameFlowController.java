@@ -229,12 +229,23 @@ public class GameFlowController extends SceneController implements Initializable
         int index = 0;
         for (Card card : simplifiedCommonTable.getResourceCards()) {
             int finalIndex = index;
+            if(card == null){
+                Platform.runLater(()->{
+                    resourceCommonTableImages.get(finalIndex).setImage(null);
+                });
+            }
             Platform.runLater(()->{
                 resourceCommonTableImages.get(finalIndex).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
             });
             index++;
         }
         int finalIndex1 = index;
+        if(simplifiedCommonTable.getResourceDeck() == null){
+            Platform.runLater(()->{
+                resourceCommonTableImages.get(finalIndex1).setImage(null);
+
+            });
+        }
         Platform.runLater(()->{
             resourceCommonTableImages.get(finalIndex1).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 831, 556, true, true, false));
 
@@ -243,6 +254,12 @@ public class GameFlowController extends SceneController implements Initializable
         for (Card card : simplifiedCommonTable.getGoldCards()) {
 
             int finalIndex4 = index;
+            if(card == null){
+                Platform.runLater(()->{
+                    goldCommonTableImages.get(finalIndex4).setImage(null);
+
+                });
+            }
             Platform.runLater(()->{
                 goldCommonTableImages.get(finalIndex4).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
 
@@ -250,6 +267,12 @@ public class GameFlowController extends SceneController implements Initializable
             index++;
         }
         int finalIndex3 = index;
+        if(simplifiedCommonTable.getGoldDeck() == null){
+            Platform.runLater(()->{
+                goldCommonTableImages.get(finalIndex3).setImage(null);
+
+            });
+        }
         Platform.runLater(()->{
             goldCommonTableImages.get(finalIndex3).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 831, 556, true, true, false));
 
@@ -538,12 +561,16 @@ public class GameFlowController extends SceneController implements Initializable
         imageView.setOnMousePressed(event -> {
             if (event.getClickCount() == 2) {
                 try {
-                    int index = Integer.parseInt(((ImageView) event.getSource()).getId());
-                    this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
                     this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
                 } catch (RemoteException e) {
                     System.out.println("Connection problem, please wait");
                 }
+            }
+            int index = Integer.parseInt(((ImageView) event.getSource()).getId());
+            try {
+                this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
+            } catch (RemoteException e) {
+                System.out.println("Connection problem, please wait");
             }
 
             initialX = imageView.getLayoutX();
