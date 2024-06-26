@@ -321,9 +321,38 @@ public class GameFlowController extends SceneController implements Initializable
         for (Tab tab : personalBoardTabPane.getTabs()) {
             if (tab.getText().equals(otherPersonalBoard.getNickname())) {
                 exist = true;
-                consideredTab = tab;
                 otherScrollPane = (ScrollPane) tab.getContent();
                 otherGridPane = (GridPane) otherScrollPane.getContent();
+                GridPane finalOtherGridPane = otherGridPane;
+                otherGridPane.setOnScroll(scrollEvent -> {
+                    if (scrollEvent.isControlDown()) {
+                        scrollEvent.consume();
+
+                        final double zoomFactor = scrollEvent.getDeltaY() > 0 ? 1.05 : 1 / 1.05;
+
+                        Scale newScale = new Scale();
+                        newScale.setPivotX(scrollEvent.getX());
+                        newScale.setPivotY(scrollEvent.getY());
+                        newScale.setX(zoomFactor);
+                        newScale.setY(zoomFactor);
+
+                        finalOtherGridPane.getTransforms().add(newScale);
+                    }
+                });
+                otherGridPane.setOnZoom(zoomEvent -> {
+                    zoomEvent.consume();
+
+                    final double zoomFactor = zoomEvent.getZoomFactor() > 1 ? 1.1 : 1 / 1.1;
+
+                    Scale newScale = new Scale();
+                    newScale.setPivotX(zoomEvent.getX());
+                    newScale.setPivotY(zoomEvent.getY());
+                    newScale.setX(zoomFactor);
+                    newScale.setY(zoomFactor);
+
+                    finalOtherGridPane.getTransforms().add(newScale);
+                });
+
                 otherScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 otherScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
                 otherScrollPane.getStyleClass().add("tabScrollPane");
@@ -427,9 +456,6 @@ public class GameFlowController extends SceneController implements Initializable
             this.commonMissionsBox.getChildren().setAll(commonMissionsCommonTableImages);
             this.resourceCardBox.getChildren().setAll(resourceCommonTableImages);
             this.goldCardBox.getChildren().setAll(goldCommonTableImages);
-            //cardsLayout(rootBorder, resourceCommonTableImages);
-            //cardsLayout(rootBorder, goldCommonTableImages);
-            //cardsLayout(rootBorder, commonMissionsCommonTableImages);
         });
 
         //buttons setup
