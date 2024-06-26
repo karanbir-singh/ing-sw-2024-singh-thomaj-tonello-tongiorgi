@@ -281,19 +281,6 @@
     -fx-background-color: rgba(255, 255, 255, 0.8);
 }
 
-.number-button {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-effect: dropshadow( gaussian , #fffff0  , 10,0.7,0,1 );
-}
-
-.number-button:hover {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-
-    -fx-effect: dropshadow( gaussian , #fffff0  , 10,0.8,0,1 );
-}
-
 .pawn {
     -fx-background-color: transparent;
 }
@@ -304,60 +291,4 @@
 
 .pawn:pressed {
     -fx-background-color: transparent;
-}
-
-.winnerBox {
-    -fx-border-radius: 50px;
-    -fx-background-radius: 50px;
-    -fx-background-color: rgba(255, 255, 255, 0.8);
-}
-
-.winnerOrLoser {
-    -fx-font-size: 90px;
-    -fx-font-family: 'Old English Text MT';
-    -fx-text-fill: black;
-    -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0,0,1 );
-}
-
-.winnerTitle {
-    -fx-font-size: 30px;
-    -fx-font-family: 'Georgia';
-    -fx-text-alignment: center center;
-    -fx-text-fill: black;
-}
-
-.winnerLabel {
-    -fx-font-size: 20px;
-    -fx-font-family: 'Georgia';
-    -fx-text-alignment: center center;
-    -fx-text-fill: black;
-}
-
-.winnerName {
-    -fx-font-size: 42px;
-    -fx-font-family: 'Old English Text MT';
-    -fx-text-fill: black;
-}
-
-#welcomeLabel{
-    -fx-font-size: 30px;
-}
-
-.btn-grad {
-    -fx-background-color: linear-gradient(to right, #77A1D3 0%, #79CBCA  51%, #77A1D3  100%);
-    -fx-margin: 10px;
-    -fx-padding: 15px 45px;
-    -fx-text-align: center;
-    -fx-text-transform: uppercase;
-    -fx-transition: 0.5s;
-    -fx-background-size: 200% auto;
-    -fx-color: white;
-    -fx-border-radius: 10px;
-    -fx-display: block;
-}
-
-.btn-grad:hover {
-    -fx-background-position: right center; /* change the direction of the change here */
-    -fx-color: #fff;
-    -fx-text-decoration: none;
 }

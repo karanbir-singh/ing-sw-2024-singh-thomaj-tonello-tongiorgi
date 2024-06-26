@@ -135,6 +135,7 @@ public class GUIApplication extends Application implements UIInterface {
         scenes = new ArrayList<>();
 
         for (SceneEnum sceneEnum : SceneEnum.values()) {
+            Scene scene;
             FXMLLoader loader = null;
 
             loader = new FXMLLoader(this.getClass().getResource(sceneEnum.value()));
@@ -150,9 +151,11 @@ public class GUIApplication extends Application implements UIInterface {
             }
             SceneController sceneController = loader.getController();
             sceneController.setMainClient(mainClient);
+            scene = new Scene(root);
+            //scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
 
             // Add scene
-            scenes.add(new SceneInfo(sceneController, new Scene(root), sceneEnum));
+            scenes.add(new SceneInfo(sceneController, scene, sceneEnum));
         }
 
     }
@@ -195,8 +198,7 @@ public class GUIApplication extends Application implements UIInterface {
         Scene scene = getSceneInfo(sceneEnum).getScene();
         Platform.runLater(() -> {
             // Update stage
-            scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
-            scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/chat.css")).toExternalForm());
+            //scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/chat.css")).toExternalForm());
             this.primaryStage.setOnCloseRequest((WindowEvent windowEvent) -> {
                 this.mainClient.killProcesses();
             });
@@ -222,7 +224,6 @@ public class GUIApplication extends Application implements UIInterface {
     @Override
     public void runConnection() throws RemoteException {
         // Set login scene
-        this.getSceneInfo(SceneEnum.LOGIN).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
         this.setCurrentScene(SceneEnum.LOGIN);
 
 
@@ -239,7 +240,7 @@ public class GUIApplication extends Application implements UIInterface {
         mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             Platform.runLater(() -> {
-                this.getSceneInfo(SceneEnum.CREATOR).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
+                //this.getSceneInfo(SceneEnum.CREATOR).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/creator.css")).toExternalForm());
                 this.getSceneController(SceneEnum.CREATOR).setNickName(this.getSceneController(SceneEnum.LOGIN).getNickName());
             });
 
@@ -332,7 +333,6 @@ public class GUIApplication extends Application implements UIInterface {
     public void openErrorPopup(String message) {
         this.popupStage = new Stage();
         SceneInfo sceneInfo = this.getSceneInfo(SceneEnum.ERROR);
-        sceneInfo.getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
         this.popupStage.setScene(sceneInfo.getScene());
         ((ErrorController) sceneInfo.getSceneController()).setMessage(message);
         this.popupStage.setOnCloseRequest(Event::consume);

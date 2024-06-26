@@ -1,0 +1,12 @@
+.number-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow( gaussian , #fffff0  , 10,0.7,0,1 );
+}
+
+.number-button:hover {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+
+    -fx-effect: dropshadow( gaussian , #fffff0  , 10,0.8,0,1 );
+}

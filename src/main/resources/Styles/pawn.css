@@ -1,0 +1,12 @@
+
+.pawn {
+    -fx-background-color: transparent;
+}
+
+.pawn:hover {
+    -fx-background-color: transparent;
+}
+
+.pawn:pressed {
+    -fx-background-color: transparent;
+}
