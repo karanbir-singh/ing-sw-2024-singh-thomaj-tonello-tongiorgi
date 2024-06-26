@@ -120,8 +120,6 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @FXML
     private GridPane gridPane;
-    @FXML
-    private AnchorPane personalBoardPane;
 
     @FXML
     private TabPane personalBoardTabPane;
@@ -281,9 +279,9 @@ public class GameFlowController extends SceneController implements Initializable
             this.commonMissionsBox.getChildren().setAll(imageViewsCommonMissions);
             this.resourceCardBox.getChildren().setAll(resources);
             this.goldCardBox.getChildren().setAll(goldens);
-            cardsLayout(rootBorder, resources);
-            cardsLayout(rootBorder, goldens);
-            cardsLayout(rootBorder, imageViewsCommonMissions);
+            //cardsLayout(rootBorder, resources);
+            //cardsLayout(rootBorder, goldens);
+            //cardsLayout(rootBorder, imageViewsCommonMissions);
         });
 
     }

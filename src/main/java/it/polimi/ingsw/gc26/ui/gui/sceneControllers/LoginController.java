@@ -116,6 +116,8 @@ public class LoginController extends SceneController implements Initializable {
         nicknameTXT.setOnAction(event -> {
             loginButton.fire();
         });
+        nicknameTXT.setPromptText("Insert here your nickname");
+        nicknameTXT.setFocusTraversable(false);
 
         logo.fitWidthProperty().bind(rootPane.heightProperty());
         logoPane.setPrefHeight(rootPane.getHeight());

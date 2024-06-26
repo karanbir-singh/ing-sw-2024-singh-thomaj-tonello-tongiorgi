@@ -1,5 +1,6 @@
 .root-pane{
     -fx-font-size: 18px;
+    -fx-font-family: 'Georgia';
     -fx-text-fill: white;
 }
 
@@ -24,13 +25,15 @@
 }
 
 .text-field {
-    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-color: rgba(255, 255, 255, 0.85);
     -fx-background-radius: 40px;
     -fx-min-width: 150px;
     -fx-border: none;
-    -fx-font-size: 16px;
     -fx-min-height: 40px;
     -fx-text-alignment: center center;
+    -fx-font-size: 16px;
+    -fx-font-family: 'Georgia';
+    -fx-text-fill: grey;
     -fx-effect: dropshadow( gaussian , transparent , 0,0,0,0 );
 }
 
@@ -41,6 +44,7 @@
 
 .text-field:focused{
     -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-text-fill: black;
     -fx-effect: dropshadow( gaussian , #e3fff2 , 5,0,0,0 );
 }
 
@@ -58,6 +62,8 @@
     -fx-border-radius: 50px;
     -fx-text-fill: white;
     -fx-font-size: 16px;
+    -fx-font-family: 'Georgia';
+    -fx-padding: 10 10 10 10;
 }
 
 .button:hover {
@@ -65,16 +71,12 @@
     -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0,0,1 );
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
 }
 
 .button:pressed{
     -fx-background-color: linear-gradient(to right, #e3fff2, #0dd696 100%,  #fffb8f 80% );
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
 }
 
 .buttonClose {
@@ -83,9 +85,6 @@
     -fx-background-color: linear-gradient(to right, #0bbdd9 100%, #0dd696 100%, #fffb8f );
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
-    -fx-text-fill: black;
-    -fx-font-size: 12px;
-    -fx-wrap-text: true;
 }
 
 .buttonClose:hover {
@@ -93,18 +92,12 @@
     -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0,0,1 );
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
-    -fx-text-fill: black;
-    -fx-font-size: 12px;
-    -fx-wrap-text: true;
 }
 
 .buttonClose:pressed{
     -fx-background-color: linear-gradient(to bottom, #abffeb 2%, #0dd696 100% );
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
-    -fx-text-fill: black;
-    -fx-font-size: 12px;
-    -fx-wrap-text: true;
 }
 
 .buttonVisible {
@@ -114,28 +107,19 @@
     -fx-background-color: linear-gradient(to right, #0bbdd9 40%, #0dd696 100%);
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
-    -fx-text-fill: black;
-    -fx-font-size: 12px;
-    -fx-wrap-text: true;
 }
 
 .buttonVisible:hover {
     -fx-background-color: linear-gradient(to top, #0bbdd9 10%, #0dd696 100%, #fffb8f );
     -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0,0,1 );
-    -fx-text-fill: black;
-    -fx-font-size: 12px;
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
-    -fx-wrap-text: true;
 }
 
 .buttonVisible:pressed{
     -fx-background-color: linear-gradient(to bottom, #abffeb 2%, #0dd696 100% );
-    -fx-text-fill: black;
-    -fx-font-size: 12px;
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
-    -fx-wrap-text: true;
 }
 
 .tab-pane {
@@ -183,6 +167,8 @@
 }
 
 .tab .tab-label {
+    -fx-font-size: 16px;
+    -fx-font-family: 'Georgia';
     -fx-alignment: CENTER;
     -fx-text-fill: white;
     -fx-padding: 0 5 0 5;
@@ -289,6 +275,24 @@
     -fx-border-radius: 50px;
     -fx-background-radius: 50px;
     -fx-background-color: rgba(255, 255, 255, 0.8);
+}
+
+.context-menu {
+    -fx-background-color: #006699;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 0 6 6 6, 0 5 5 5, 0 4 4 4;
+    -fx-padding: 4 1 8 1; /* 4 1 8 1 */
+}
+
+.context-menu .scroll-arrow {
+    -fx-padding: 5 5 5 5; /* 5 */
+    -fx-background-color: #006699;
+}
+
+.context-menu .scroll-arrow:hover {
+    -fx-background: -fx-accent;
+    -fx-background-color: #006699;
+    -fx-text-fill: -fx-selection-bar-text;
 }
 
 .pawn {
