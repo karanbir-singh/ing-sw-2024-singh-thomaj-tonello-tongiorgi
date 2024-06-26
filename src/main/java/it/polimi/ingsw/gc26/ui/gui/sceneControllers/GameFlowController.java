@@ -228,11 +228,11 @@ public class GameFlowController extends SceneController implements Initializable
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
         int index = 0;
         for (Card card : simplifiedCommonTable.getResourceCards()) {
-            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
             index++;
         }
         if(simplifiedCommonTable.getResourceDeck() != null) {
-            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 831, 556, true, true, false));
+            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 415, 278, true, true, false));
         } else {
             resourceCommonTableImages.get(index).setImage(null);
             resourceCommonTableImages.get(index).setOnMouseClicked(null);
@@ -240,13 +240,13 @@ public class GameFlowController extends SceneController implements Initializable
 
         index = 0;
         for (Card card : simplifiedCommonTable.getGoldCards()) {
-            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
 
             index++;
         }
 
         if(simplifiedCommonTable.getGoldDeck() != null) {
-            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 831, 556, true, true, false));
+            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 415, 278, true, true, false));
         } else {
             goldCommonTableImages.get(index).setImage(null);
             goldCommonTableImages.get(index).setOnMouseClicked(null);
@@ -254,7 +254,7 @@ public class GameFlowController extends SceneController implements Initializable
 
         index = 0;
         for (Card card : simplifiedCommonTable.getCommonMissions()) {
-            commonMissionsCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+            commonMissionsCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
             index++;
         }
     }
@@ -270,10 +270,10 @@ public class GameFlowController extends SceneController implements Initializable
         int index = 0;
         for (Card card : simplifiedHand.getCards()) {
             if (card.equals(simplifiedHand.getSelectedCard())) {
-                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())), 831, 556, true, true, false));
+                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())), 415, 278, true, true, false));
                 makeGlow(handImages.get(index));
             } else {
-                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
                 handImages.get(index).setEffect(null);
             }
             index++;
