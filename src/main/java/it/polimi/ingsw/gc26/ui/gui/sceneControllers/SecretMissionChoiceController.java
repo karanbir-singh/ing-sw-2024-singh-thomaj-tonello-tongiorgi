@@ -165,6 +165,7 @@ public class SecretMissionChoiceController extends SceneController implements In
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+        confirmButton.setVisible(false);
     }
 
     /**

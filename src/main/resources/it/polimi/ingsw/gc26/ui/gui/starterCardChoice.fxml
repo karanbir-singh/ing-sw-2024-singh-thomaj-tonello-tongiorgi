@@ -75,6 +75,9 @@
                                  <font>
                                     <Font size="24.0" />
                                  </font>
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" top="30.0" />
+                                 </VBox.margin>
                               </Label>
                               <ImageView fx:id="image" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -84,7 +87,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Button mnemonicParsing="false" onAction="#onClickGoToNextStep" text="Play Card">
+                              <Button fx:id="playButton" mnemonicParsing="false" onAction="#onClickGoToNextStep" text="Play Card">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

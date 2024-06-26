@@ -143,6 +143,11 @@ public class StarterCardChoiceController extends SceneController implements Init
     @FXML
     private Label status;
     /**
+     * Button to choose the starter card's side to play.
+     */
+    @FXML
+    private Button playButton;
+    /**
      * Path for images used in the scene.
      */
     private String path = "images/";
@@ -158,6 +163,7 @@ public class StarterCardChoiceController extends SceneController implements Init
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+        playButton.setVisible(false);
         status.setText("Card selected! Please, wait for other players to select their side!");
     }
 
@@ -223,7 +229,6 @@ public class StarterCardChoiceController extends SceneController implements Init
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         pageBindings(rootPane, rootBorder, background);
         //buttons setup
         buttonSetup(chatIcon, chatButton);
