@@ -13,12 +13,21 @@
 }
 
 .chatLabelText {
-    -fx-font-size: 10px;
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(79, 122, 232, 0.3);
+    -fx-font-family: Georgia;
 }
 
 .messageBox {
     -fx-background-color: rgb(233,233,235);
     -fx-background-radius: 7px;
+}
+
+.messageText {
+    -fx-text-fill: rgba(0, 0, 0, 1);
+    -fx-color: rgb(239, 242,255);
+    -fx-font-size: 18;
+    -fx-font-family: Georgia;
 }
 
 .senderMessageBox {
@@ -31,4 +40,5 @@
     -fx-text-fill: rgb(239, 242,255);
     -fx-color: rgb(239, 242,255);
     -fx-font-size: 18;
+    -fx-font-family: Georgia;
 }

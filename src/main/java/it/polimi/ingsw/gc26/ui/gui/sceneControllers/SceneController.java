@@ -332,13 +332,15 @@ abstract public class SceneController {
         hBox.setAlignment(Pos.BASELINE_RIGHT);
         hBox.setPadding(new Insets(5, 5, 5, 30));
         Text text = new Text(message);
+        text.getStyleClass().add("senderMessageText");
         TextFlow textFlow = new TextFlow(text);
         textFlow.setSnapToPixel(true);
         textFlow.getStyleClass().add("senderMessageBox");
         hBox.setMinWidth(240);
         hBox.setMaxWidth(240);
-        textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.getStyleClass().add("senderMessageText");
+        textFlow.setPadding(new Insets(5, 10, 5, 10));
+        text.setStyle("-fx-text-fill: white;");
+        text.setFill(Color.color(1, 1, 1));
         hBox.getChildren().add(textFlow);
 
         Platform.runLater(() -> {
@@ -378,7 +380,7 @@ abstract public class SceneController {
         AnchorPane newAnchorPane = new AnchorPane();
         newTab.setContent(newAnchorPane);
         newAnchorPane.getStyleClass().add("chatPane");
-        TextField newTextField = new javafx.scene.control.TextField();
+        TextField newTextField = new TextField();
         newTextField.setPrefWidth(208);
         newTextField.setPrefHeight(26);
         newTextField.setLayoutX(9);
@@ -388,9 +390,9 @@ abstract public class SceneController {
         Button newButton = new Button();
         newButton.setText("Send");
         newButton.setLayoutX(227);
-        newButton.setLayoutY(524);
+        newButton.setLayoutY(519);
         newAnchorPane.getChildren().add(newButton);
-        ScrollPane newScrollPane = new javafx.scene.control.ScrollPane();
+        ScrollPane newScrollPane = new ScrollPane();
         newScrollPane.setMinHeight(440);
         newScrollPane.setPrefHeight(440);
         newScrollPane.setMinWidth(262);
@@ -484,26 +486,25 @@ abstract public class SceneController {
         TextFlow labelTextFlow;
         if (labelMessage != null) {
             labelBox.setAlignment(Pos.BASELINE_LEFT);
-            labelBox.setPadding(new javafx.geometry.Insets(0, 30, 0, 5));
+            labelBox.setPadding(new Insets(0, 30, 0, 5));
             labelText = new Text(labelMessage);
             labelText.getStyleClass().add("chatLabelText");
             labelTextFlow = new TextFlow(labelText);
             labelBox.setMinWidth(150);
             labelBox.setMaxWidth(150);
-            labelText.setFill(Color.color(0.25, 0.25, 0.25));
             labelBox.getChildren().add(labelTextFlow);
         }
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.BASELINE_LEFT);
-        hBox.setPadding(new javafx.geometry.Insets(5, 30, 5, 5));
+        hBox.setPadding(new Insets(5, 30, 5, 5));
         Text text = new Text(message);
+        text.getStyleClass().add("messageText");
         TextFlow textFlow = new TextFlow(text);
         textFlow.setSnapToPixel(true);
         textFlow.getStyleClass().add("messageBox");
         hBox.setMinWidth(240);
         hBox.setMaxWidth(240);
-        textFlow.setPadding(new Insets(2, 5, 2, 5));
-        text.setFill(Color.color(0.0, 0.0, 0.0));
+        textFlow.setPadding(new Insets(5, 10, 5, 10));
 
 
         Platform.runLater(new Runnable() {
