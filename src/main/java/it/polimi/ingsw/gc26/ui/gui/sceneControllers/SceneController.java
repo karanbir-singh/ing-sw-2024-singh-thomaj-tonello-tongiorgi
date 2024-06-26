@@ -228,6 +228,13 @@ abstract public class SceneController {
      */
     public void handLayout(BorderPane rootBorder, ArrayList<ImageView> handCards, AnchorPane handPane) {
         double spacing = 20.0;
+        handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
+
+        for (int i = 0; i < handCards.size(); i++) {
+            ImageView card = handCards.get(i);
+            card.setFitWidth(rootBorder.getWidth() * 0.13);
+            card.setLayoutX(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * i);
+        }
 
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
             handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);

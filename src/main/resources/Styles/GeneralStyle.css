@@ -44,6 +44,10 @@
     -fx-effect: dropshadow( gaussian , #e3fff2 , 5,0,0,0 );
 }
 
+.cardHover {
+
+}
+
 .cardHover:hover {
     -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0.1,0,1 );
 }
@@ -133,7 +137,13 @@
     -fx-border-radius: 50px;
     -fx-wrap-text: true;
 }
-.tab-pane .tab-header-area .tab-header-background {
+
+.tab-pane {
+
+}
+
+
+.tab-header-area .tab-header-background {
     -fx-background-color: transparent;
 }
 

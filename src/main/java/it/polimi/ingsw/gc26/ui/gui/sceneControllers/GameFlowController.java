@@ -164,7 +164,9 @@ public class GameFlowController extends SceneController implements Initializable
     /**
      * Positions in the grid where a card can be played
      */
-    private final ArrayList<ImageView> playablePositions = new ArrayList<>();
+    private ArrayList<ImageView> playablePositions = new ArrayList<>();
+
+    private ArrayList<ImageView> handCards = new ArrayList<>();
     /**
      * Path to images resources
      */
@@ -226,26 +228,63 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @Override
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
+        ArrayList<ImageView> resources = new ArrayList<>();
+        ArrayList<ImageView> goldens = new ArrayList<>();
+        ArrayList<ImageView> imageViewsCommonMissions = new ArrayList<>();
+
         int index = 0;
         for (Card card : simplifiedCommonTable.getResourceCards()) {
-            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
+            this.setCardImageParameters(imageView, index);
+            resources.add(imageView);
+            if (index == simplifiedCommonTable.getSelectedIndex()) {
+                makeGlow(imageView);
+            }
+            imageView.setOnMouseClicked(this::onClickCommonTableCard);
             index++;
         }
-        resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 831, 556, true, true, false));
-
-        index = 0;
+        ImageView resourceDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath()))));
+        this.setCardImageParameters(resourceDeck, index);
+        resources.add(resourceDeck);
+        if (index == simplifiedCommonTable.getSelectedIndex()) {
+            makeGlow(resourceDeck);
+        }
+        resourceDeck.setOnMouseClicked(this::onClickCommonTableCard);
+        index++;
         for (Card card : simplifiedCommonTable.getGoldCards()) {
-            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
-
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
+            this.setCardImageParameters(imageView, index);
+            goldens.add(imageView);
+            if (index == simplifiedCommonTable.getSelectedIndex()) {
+                makeGlow(imageView);
+            }
+            imageView.setOnMouseClicked(this::onClickCommonTableCard);
             index++;
         }
-        goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 831, 556, true, true, false));
-
-        index = 0;
+        ImageView goldDeck = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath()))));
+        this.setCardImageParameters(goldDeck, index);
+        goldens.add(goldDeck);
+        if (index == simplifiedCommonTable.getSelectedIndex()) {
+            makeGlow(goldDeck);
+        }
+        goldDeck.setOnMouseClicked(this::onClickCommonTableCard);
+        index++;
         for (Card card : simplifiedCommonTable.getCommonMissions()) {
-            commonMissionsCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
+            this.setCardImageParameters(imageView, index);
+            imageView.setOnMouseClicked(this::onClickCommonTableCard);
+            imageViewsCommonMissions.add(imageView);
             index++;
         }
+
+        Platform.runLater(() -> {
+            this.commonMissionsBox.getChildren().setAll(imageViewsCommonMissions);
+            this.resourceCardBox.getChildren().setAll(resources);
+            this.goldCardBox.getChildren().setAll(goldens);
+            cardsLayout(rootBorder, resources);
+            cardsLayout(rootBorder, goldens);
+            cardsLayout(rootBorder, imageViewsCommonMissions);
+        });
 
     }
 
@@ -256,21 +295,34 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
+        // List of card images
+        handCards = new ArrayList<>();
+
+        // Hand cards
+        ArrayList<Card> hand = simplifiedHand.getCards();
+
         // Update hand
         int index = 0;
-        for (Card card : simplifiedHand.getCards()) {
+        for (Card card : hand) {
+            ImageView imageView;
             if (card.equals(simplifiedHand.getSelectedCard())) {
-                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())), 831, 556, true, true, false));
-                makeGlow(handImages.get(index));
+                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath()))));
+                makeGlow(imageView);
             } else {
-                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
-                handImages.get(index).setEffect(null);
+                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
             }
+            this.setCardImageParameters(imageView, index);
+            makeDraggable(imageView, playablePositions);
+            imageView.setOnMouseClicked(this::onHandCardClicked);
+
+            handCards.add(imageView);
             index++;
         }
-        if (simplifiedHand.getCards().size() == 2) {
-            handImages.get(2).setImage(null);
-        }
+
+        Platform.runLater(() -> {
+            this.handPane.getChildren().setAll(handCards);
+            handLayout(rootBorder, handCards, handPane);
+        });
 
     }
 
@@ -281,22 +333,22 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @Override
     public void changeGUIPersonalBoard(SimplifiedPersonalBoard personalBoard) {
-        playablePositions.clear();
+        playablePositions = new ArrayList<>();
 
         if (personalBoard.getSecretMission() != null) {
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + personalBoard.getSecretMission().getFront().getImagePath())), 415, 278, true, false, false));
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + personalBoard.getSecretMission().getFront().getImagePath())), 415, 278, true, true, false));
             this.setCardImageParameters(imageView, 0);
             Platform.runLater(() -> {
                 this.secretMissionBox.getChildren().setAll(imageView);
             });
         }
         ImageView imageCardToPlay = new ImageView(new Image(String.valueOf(
-                getClass().getResource(path + personalBoard.getOccupiedPositions().getLast().getSide().getImagePath())), 415, 278, true, false, false));
+                getClass().getResource(path + personalBoard.getOccupiedPositions().getLast().getSide().getImagePath())), 415, 278, true, true, false));
         this.addImage(imageCardToPlay,
                 this.xPositionStarterCard + personalBoard.getOccupiedPositions().getLast().getX(),
                 this.yPositionStarterCard - personalBoard.getOccupiedPositions().getLast().getY(), this.gridPane);
         for (Point point : personalBoard.getPlayablePositions()) {
-            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "playable-position.png")), 415, 278, true, false, false));
+            ImageView imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + "playable-position.png")), 415, 278, true, true, false));
             imageView.setOpacity(0.3);
             imageView.setVisible(false);
             addImage(imageView, this.xPositionStarterCard + point.getX(),
@@ -347,7 +399,7 @@ public class GameFlowController extends SceneController implements Initializable
         }
 
         ImageView imageCardToPlay = new ImageView(new Image(String.valueOf(
-                getClass().getResource(path + otherPersonalBoard.getOccupiedPositions().getLast().getSide().getImagePath())), 415, 278, true, false, false));
+                getClass().getResource(path + otherPersonalBoard.getOccupiedPositions().getLast().getSide().getImagePath())), 415, 278, true, true, false));
         this.addImage(imageCardToPlay,
                 this.xPositionStarterCard + otherPersonalBoard.getOccupiedPositions().getLast().getX(),
                 this.yPositionStarterCard - otherPersonalBoard.getOccupiedPositions().getLast().getY(), otherGridPane);
@@ -385,53 +437,6 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.handImages = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            ImageView imageView = new ImageView();
-            this.setCardImageParameters(imageView, i);
-            imageView.getStyleClass().add("cardHover");
-            makeDraggable(imageView, playablePositions);
-            imageView.setOnMouseClicked(this::onHandCardClicked);
-            handImages.add(imageView);
-        }
-
-        Platform.runLater(() -> {
-            this.handPane.getChildren().setAll(handImages);
-            handLayout(rootBorder, handImages, handPane);
-        });
-
-        this.resourceCommonTableImages = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            ImageView imageView = new ImageView();
-            this.setCardImageParameters(imageView, i);
-            imageView.setOnMouseClicked(this::onClickCommonTableCard);
-            imageView.getStyleClass().add("cardHover");
-            this.resourceCommonTableImages.add(imageView);
-        }
-
-        this.goldCommonTableImages = new ArrayList<>();
-        for (int i = 3; i < 6; i++) {
-            ImageView imageView = new ImageView();
-            this.setCardImageParameters(imageView, i);
-            imageView.setOnMouseClicked(this::onClickCommonTableCard);
-            imageView.getStyleClass().add("cardHover");
-            this.goldCommonTableImages.add(imageView);
-        }
-
-        this.commonMissionsCommonTableImages = new ArrayList<>();
-        for (int i = 6; i < 8; i++) {
-            ImageView imageView = new ImageView();
-            this.setCardImageParameters(imageView, i);
-            this.commonMissionsCommonTableImages.add(imageView);
-        }
-        Platform.runLater(() -> {
-            this.commonMissionsBox.getChildren().setAll(commonMissionsCommonTableImages);
-            this.resourceCardBox.getChildren().setAll(resourceCommonTableImages);
-            this.goldCardBox.getChildren().setAll(goldCommonTableImages);
-            //cardsLayout(rootBorder, resourceCommonTableImages);
-            //cardsLayout(rootBorder, goldCommonTableImages);
-            //cardsLayout(rootBorder, commonMissionsCommonTableImages);
-        });
 
         //buttons setup
         buttonSetup(scoreIcon, scoreBoardButton);
@@ -510,8 +515,6 @@ public class GameFlowController extends SceneController implements Initializable
         imageView.setOnMousePressed(event -> {
             if (event.getClickCount() == 2) {
                 try {
-                    int index = Integer.parseInt(((ImageView) event.getSource()).getId());
-                    this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
                     this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
                 } catch (RemoteException e) {
                     System.out.println("Connection problem, please wait");
@@ -544,10 +547,6 @@ public class GameFlowController extends SceneController implements Initializable
                     try {
                         int row = GridPane.getRowIndex(target);
                         int column = GridPane.getColumnIndex(target);
-
-                        for (ImageView p : playablePositions) {
-                            p.setVisible(false);
-                        }
 
                         this.mainClient.getVirtualGameController().selectCardFromHand(Integer.parseInt(imageView.getId()), this.mainClient.getClientID());
                         this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
