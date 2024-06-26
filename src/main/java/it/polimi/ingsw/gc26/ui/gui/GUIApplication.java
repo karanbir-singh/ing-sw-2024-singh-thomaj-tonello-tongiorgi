@@ -13,6 +13,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -77,6 +78,7 @@ public class GUIApplication extends Application implements UIInterface {
      */
     @Override
     public void start(Stage primaryStage) {
+
         // Get value from args
         String networkType = getParameters().getUnnamed().get(0);
 

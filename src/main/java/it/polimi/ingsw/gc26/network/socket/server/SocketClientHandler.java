@@ -62,64 +62,67 @@ public class SocketClientHandler implements Runnable {
                 ObjectMapper jsonMapper = new ObjectMapper();
                 JsonNode msg = jsonMapper.readTree(line);
                 ObjectMapper valueMapper = new ObjectMapper();
-                JsonNode value = valueMapper.readTree(msg.get("value").asText());
+                if(msg.get("value") != null){
+                    JsonNode value = valueMapper.readTree(msg.get("value").asText());
 
-                // Execute requested command
-                switch (msg.get("function").textValue()) {
-                    case "connect":
-                        ClientState clientState = ClientState.valueOf(value.get("clientState").asText());
-                        if (clientState == ClientState.CONNECTION) {
-                            this.mainController.addRequest(new ConnectionRequest(this.virtualSocketView, value.get("nickname").asText(), 0));
-                        } else if (clientState.equals(ClientState.INVALID_NICKNAME)) {
-                            this.mainController.addRequest(new ConnectionRequest(this.virtualSocketView, value.get("nickname").asText(), 2));
-                        }
-                        break;
-                    case "createWaitingList":
-                        this.mainController.addRequest(new GameCreationRequest(this.virtualSocketView, value.get("nickname").asText(), value.get("numPlayers").asInt(), 1));
-                        break;
-                    case "getVirtualGameController":
-                        this.gameController = this.mainController.getGameController(value.get("id").asInt());
-                        this.virtualSocketView.setGameController();
-                        break;
-                    case "addMessage":
-                        this.gameController.addRequest(new AddMessageRequest(value.get("text").asText(), value.get("receiver").asText(), value.get("sender").asText(), value.get("time").asText()));
-                        break;
-                    case "selectCardFromHand":
-                        this.gameController.addRequest(new SelectCardFromHandRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
-                        break;
-                    case "turnSelectedCardSide":
-                        this.gameController.addRequest(new TurnSelectedSideRequest(value.get("playerID").asText()));
-                        break;
-                    case "selectPositionOnBoard":
-                        this.gameController.addRequest(new SelectPositionOnBoardRequest(value.get("x").asInt(), value.get("y").asInt(), value.get("playerID").asText()));
-                        break;
-                    case "playCardFromHand":
-                        this.gameController.addRequest(new PlayCardFromHandRequest(value.get("playerID").asText()));
-                        break;
-                    case "selectCardFromCommonTable":
-                        this.gameController.addRequest(new SelectCardFromCommonTableRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
-                        break;
-                    case "drawSelectedCard":
-                        this.gameController.addRequest(new DrawSelectedCardRequest(value.get("playerID").asText()));
-                        break;
-                    case "choosePawnColor":
-                        this.gameController.addRequest(new ChoosePawnColorRequest(value.get("color").asText(), value.get("playerID").asText()));
-                        break;
-                    case "selectSecretMission":
-                        this.gameController.addRequest(new SelectSecretMissionRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
-                        break;
-                    case "setSecretMission":
-                        this.gameController.addRequest(new SetSecretMissionRequest(value.get("playerID").asText()));
-                        break;
-                    case "reAddView":
-                        this.gameController.addRequest(new ReAddViewRequest(this.virtualSocketView, value.get("clientID").asText()));
-                        break;
-                    case "resetServerTimer":
-                        this.mainController.resetServerTimer(value.get("clientID").asText());
-                        break;
-                    case null, default:
-                        break;
+                    // Execute requested command
+                    switch (msg.get("function").textValue()) {
+                        case "connect":
+                            ClientState clientState = ClientState.valueOf(value.get("clientState").asText());
+                            if (clientState == ClientState.CONNECTION) {
+                                this.mainController.addRequest(new ConnectionRequest(this.virtualSocketView, value.get("nickname").asText(), 0));
+                            } else if (clientState.equals(ClientState.INVALID_NICKNAME)) {
+                                this.mainController.addRequest(new ConnectionRequest(this.virtualSocketView, value.get("nickname").asText(), 2));
+                            }
+                            break;
+                        case "createWaitingList":
+                            this.mainController.addRequest(new GameCreationRequest(this.virtualSocketView, value.get("nickname").asText(), value.get("numPlayers").asInt(), 1));
+                            break;
+                        case "getVirtualGameController":
+                            this.gameController = this.mainController.getGameController(value.get("id").asInt());
+                            this.virtualSocketView.setGameController();
+                            break;
+                        case "addMessage":
+                            this.gameController.addRequest(new AddMessageRequest(value.get("text").asText(), value.get("receiver").asText(), value.get("sender").asText(), value.get("time").asText()));
+                            break;
+                        case "selectCardFromHand":
+                            this.gameController.addRequest(new SelectCardFromHandRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
+                            break;
+                        case "turnSelectedCardSide":
+                            this.gameController.addRequest(new TurnSelectedSideRequest(value.get("playerID").asText()));
+                            break;
+                        case "selectPositionOnBoard":
+                            this.gameController.addRequest(new SelectPositionOnBoardRequest(value.get("x").asInt(), value.get("y").asInt(), value.get("playerID").asText()));
+                            break;
+                        case "playCardFromHand":
+                            this.gameController.addRequest(new PlayCardFromHandRequest(value.get("playerID").asText()));
+                            break;
+                        case "selectCardFromCommonTable":
+                            this.gameController.addRequest(new SelectCardFromCommonTableRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
+                            break;
+                        case "drawSelectedCard":
+                            this.gameController.addRequest(new DrawSelectedCardRequest(value.get("playerID").asText()));
+                            break;
+                        case "choosePawnColor":
+                            this.gameController.addRequest(new ChoosePawnColorRequest(value.get("color").asText(), value.get("playerID").asText()));
+                            break;
+                        case "selectSecretMission":
+                            this.gameController.addRequest(new SelectSecretMissionRequest(value.get("cardIndex").asInt(), value.get("playerID").asText()));
+                            break;
+                        case "setSecretMission":
+                            this.gameController.addRequest(new SetSecretMissionRequest(value.get("playerID").asText()));
+                            break;
+                        case "reAddView":
+                            this.gameController.addRequest(new ReAddViewRequest(this.virtualSocketView, value.get("clientID").asText()));
+                            break;
+                        case "resetServerTimer":
+                            this.mainController.resetServerTimer(value.get("clientID").asText());
+                            break;
+                        case null, default:
+                            break;
+                    }
                 }
+
             }
         } catch (IOException e) {
             System.out.println("Socket client disconnected!");
