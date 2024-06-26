@@ -119,7 +119,18 @@ public class CommonTable implements Serializable {
                 this.observable.notifyError("Select a position!", clientID);
                 return;
         }
-        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(resourceDeck.getTopCard(), goldDeck.getTopCard(), commonMissions, resourceCards, goldCards, cardIndex), "Card selected on common table", clientID);
+
+        Card resourceDeckTopCard = null;
+        if(!resourceDeck.getCards().isEmpty()) {
+            resourceDeckTopCard = resourceDeck.getTopCard();
+        }
+
+        Card goldDeckTopCard = null;
+        if (!goldDeck.getCards().isEmpty()) {
+           goldDeckTopCard = goldDeck.getTopCard();
+        }
+
+        this.observable.notifyUpdateCommonTable(new SimplifiedCommonTable(resourceDeckTopCard, goldDeckTopCard, commonMissions, resourceCards, goldCards, cardIndex), "Card selected on common table", clientID);
     }
 
     /**
@@ -176,12 +187,6 @@ public class CommonTable implements Serializable {
                 if (!resourceDeck.getCards().isEmpty()) {
                     // if not, remove the top card
                     toRemove = resourceDeck.removeCard();
-
-                    // Check again if is empty
-                    if (!resourceDeck.getCards().isEmpty()) {
-                        // if not, set the new top card
-                        resourceDeckTopCard = resourceDeck.getTopCard();
-                    }
                 }else{
                     // if yes, send error
                     this.observable.notifyError("Position not valid!", clientID);
@@ -196,12 +201,6 @@ public class CommonTable implements Serializable {
                 if (!goldDeck.getCards().isEmpty()) {
                     // if not, remove the top card
                     toRemove = goldDeck.removeCard();
-
-                    // Check again if is empty
-                    if (!goldDeck.getCards().isEmpty()) {
-                        // if not, set the new top card
-                        goldDeckTopCard = goldDeck.getTopCard();
-                    }
                 }else{
                     // if yes, send error
                     this.observable.notifyError("Position not valid!", clientID);
@@ -211,8 +210,17 @@ public class CommonTable implements Serializable {
                 toRemove = removeFromTable(goldCards, selectedX, goldDeck, clientID);
             }
         }
+
         selectedX = -1;
         selectedY = -1;
+
+        if(!resourceDeck.getCards().isEmpty()) {
+            resourceDeckTopCard = resourceDeck.getTopCard();
+        }
+
+        if (!goldDeck.getCards().isEmpty()) {
+            goldDeckTopCard = goldDeck.getTopCard();
+        }
 
         this.observable.notifyUpdateCommonTable(
                 new SimplifiedCommonTable(

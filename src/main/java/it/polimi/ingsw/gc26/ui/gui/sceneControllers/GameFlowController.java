@@ -231,7 +231,12 @@ public class GameFlowController extends SceneController implements Initializable
             resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
             index++;
         }
-        resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 831, 556, true, true, false));
+        if(simplifiedCommonTable.getResourceDeck() != null) {
+            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 831, 556, true, true, false));
+        } else {
+            resourceCommonTableImages.get(index).setImage(null);
+            resourceCommonTableImages.get(index).setOnMouseClicked(null);
+        }
 
         index = 0;
         for (Card card : simplifiedCommonTable.getGoldCards()) {
@@ -239,14 +244,19 @@ public class GameFlowController extends SceneController implements Initializable
 
             index++;
         }
-        goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 831, 556, true, true, false));
+
+        if(simplifiedCommonTable.getGoldDeck() != null) {
+            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 831, 556, true, true, false));
+        } else {
+            goldCommonTableImages.get(index).setImage(null);
+            goldCommonTableImages.get(index).setOnMouseClicked(null);
+        }
 
         index = 0;
         for (Card card : simplifiedCommonTable.getCommonMissions()) {
             commonMissionsCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
             index++;
         }
-
     }
 
     /**
@@ -271,7 +281,6 @@ public class GameFlowController extends SceneController implements Initializable
         if (simplifiedHand.getCards().size() == 2) {
             handImages.get(2).setImage(null);
         }
-
     }
 
     /**

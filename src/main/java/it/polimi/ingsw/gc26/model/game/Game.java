@@ -96,6 +96,14 @@ public class Game implements Serializable {
         Deck missionDeck = p.getMissionCards();
         Deck starterDeck = p.getStarterCards();
 
+        // FOR TESTING
+        for (int i = 0; i < 25; i++) {
+            resourceCardDeck.removeCard();
+        }
+        for (int i = 0; i < 25; i++) {
+            goldCardDeck.removeCard();
+        }
+
         // Create common table
         this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck, this.observable);
 
@@ -207,7 +215,6 @@ public class Game implements Serializable {
         for (Player player : this.players) {
             pawnsSelected.put(player.getNickname(), player.getPawnColor());
         }
-        String message = "Current player has changed!";
         this.observable.notifyUpdateGame(new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected), currentPlayer);
         // TODO update simplified player
     }
