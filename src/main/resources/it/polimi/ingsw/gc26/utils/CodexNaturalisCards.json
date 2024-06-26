@@ -189,7 +189,7 @@
     "Front" : {
       "Points" : 0,
       "Requirements" : ["Fungi", "Fungi", "Fungi"],
-      "Subclass" : "Triplet",
+      "Subclass" : "Item",
       "Type" : 1,
       "ImgFile" : "frontSide/img_95.jpeg"
     },
@@ -200,7 +200,7 @@
     "Front" : {
       "Points" : 0,
       "Requirements" : ["Plant", "Plant", "Plant"],
-      "Subclass" : "Triplet",
+      "Subclass" : "Item",
       "Type" : 2,
       "ImgFile" : "frontSide/img_96.jpeg"
     },
@@ -211,7 +211,7 @@
     "Front" : {
       "Points" : 0,
       "Requirements" : ["Animal", "Animal", "Animal"],
-      "Subclass" : "Triplet",
+      "Subclass" : "Item",
       "Type" : 3,
       "ImgFile" : "frontSide/img_97.jpeg"
     },
@@ -222,7 +222,7 @@
     "Front" : {
       "Points" : 0,
       "Requirements" : ["Insect", "Insect", "Insect"],
-      "Subclass" : "Triplet",
+      "Subclass" : "Item",
       "Type" : 4,
       "ImgFile" : "frontSide/img_98.jpeg"
     },
@@ -233,7 +233,7 @@
     "Front" : {
       "Points" : 0,
       "Requirements" : ["Quill", "Inkwell", "Manuscript"],
-      "Subclass" : "Item",
+      "Subclass" : "Triplet",
       "Type" : 1,
       "ImgFile" : "frontSide/img_99.jpeg"
     },
@@ -244,20 +244,9 @@
     "Front" : {
       "Points" : 0,
       "Requirements" : ["Manuscript", "Manuscript"],
-      "Subclass" : "Item",
+      "Subclass" : "Triplet",
       "Type" : 2,
       "ImgFile" : "frontSide/img_100.jpeg"
-    },
-    "Back" : {
-      "ImgFile" : "backSide/img_15.jpeg"
-    }
-  },{
-    "Front" : {
-      "Points" : 0,
-      "Requirements" : ["Inkwell", "Inkwell"],
-      "Subclass" : "Item",
-      "Type" : 3,
-      "ImgFile" : "frontSide/img_101.jpeg"
     },
     "Back" : {
       "ImgFile" : "backSide/img_15.jpeg"
@@ -266,9 +255,20 @@
     "Front" : {
       "Points" : 0,
       "Requirements" : ["Quill", "Quill"],
-      "Subclass" : "Item",
-      "Type" : 4,
+      "Subclass" : "Triplet",
+      "Type" : 3,
       "ImgFile" : "frontSide/img_102.jpeg"
+    },
+    "Back" : {
+      "ImgFile" : "backSide/img_15.jpeg"
+    }
+  }, {
+    "Front" : {
+      "Points" : 0,
+      "Requirements" : ["Inkwell", "Inkwell"],
+      "Subclass" : "Triplet",
+      "Type" : 4,
+      "ImgFile" : "frontSide/img_101.jpeg"
     },
     "Back" : {
       "ImgFile" : "backSide/img_15.jpeg"

@@ -108,7 +108,8 @@ public class GUIApplication extends Application implements UIInterface {
 
         // Setup starting stage
         this.primaryStage = primaryStage;
-        primaryStage.setMaximized(true);
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(800);
         primaryStage.setTitle(" Codex Naturalis");
         primaryStage.getIcons().add(new Image(String.valueOf(getClass().getResource("sceneControllers/images/icon.png"))));
 
