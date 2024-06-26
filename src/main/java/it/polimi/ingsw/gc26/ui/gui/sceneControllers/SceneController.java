@@ -387,11 +387,13 @@ abstract public class SceneController {
         newTextField.setLayoutY(519);
         newTextField.setPromptText("Type Message");
         newAnchorPane.getChildren().add(newTextField);
+        AnchorPane.setBottomAnchor(newTextField, 10.0);
+        AnchorPane.setLeftAnchor(newTextField, 10.0);
         Button newButton = new Button();
         newButton.setText("Send");
-        newButton.setLayoutX(227);
-        newButton.setLayoutY(519);
         newAnchorPane.getChildren().add(newButton);
+        AnchorPane.setBottomAnchor(newButton, 10.0);
+        AnchorPane.setRightAnchor(newButton, 10.0);
         ScrollPane newScrollPane = new ScrollPane();
         newScrollPane.setMinHeight(440);
         newScrollPane.setPrefHeight(440);

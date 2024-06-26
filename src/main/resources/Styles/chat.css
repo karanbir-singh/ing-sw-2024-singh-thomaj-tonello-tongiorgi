@@ -19,8 +19,8 @@
 }
 
 .messageBox {
-    -fx-background-color: rgb(233,233,235);
-    -fx-background-radius: 7px;
+    -fx-background-color: #d3f0e6;
+    -fx-background-radius: 20 20 20 0;
 }
 
 .messageText {
@@ -31,9 +31,9 @@
 }
 
 .senderMessageBox {
-    -fx-background-color: rgb(15,125,242);
+    -fx-background-color: #006699;
     -fx-color: rgb(239, 242,255);
-    -fx-background-radius: 7px;
+    -fx-background-radius: 20 20 0 20;
 }
 
 .senderMessageText {

@@ -85,6 +85,10 @@
     -fx-background-color: linear-gradient(to right, #0bbdd9 100%, #0dd696 100%, #fffb8f );
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+    -fx-padding: 0 0 0 0;
 }
 
 .buttonClose:hover {
@@ -92,12 +96,18 @@
     -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0,0,1 );
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
 }
 
 .buttonClose:pressed{
     -fx-background-color: linear-gradient(to bottom, #abffeb 2%, #0dd696 100% );
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
 }
 
 .buttonVisible {
@@ -107,6 +117,9 @@
     -fx-background-color: linear-gradient(to right, #0bbdd9 40%, #0dd696 100%);
     -fx-background-radius: 50px;
     -fx-border-radius: 50px;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
 }
 
 .buttonVisible:hover {
