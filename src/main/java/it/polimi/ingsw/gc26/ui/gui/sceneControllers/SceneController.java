@@ -33,10 +33,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
-
 /**
  * This abstract controller contains methods and attributes used by all the controllers.
  * It contains the methods to update the chat and set the common layout.
@@ -191,12 +187,7 @@ abstract public class SceneController {
      */
     public void updatePointScoreBoard(HashMap<String, Integer> scores, HashMap<String, Pawn> pawnsSelected) {
     }
-    //TODO vedere se funzia e aggiungere javadoc
-    private void debounce(Runnable runnable, Duration delay) {
-        Timeline timeline = new Timeline(new KeyFrame(delay, event -> runnable.run()));
-        timeline.setCycleCount(1);
-        timeline.play();
-    }
+
     /**
      * Sets styles and binding to base panes
      *
@@ -239,15 +230,13 @@ abstract public class SceneController {
         double spacing = 20.0;
 
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
-            debounce(() -> {
-                handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
+            handPane.setPrefWidth(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * 3);
 
-                for (int i = 0; i < handCards.size(); i++) {
-                    ImageView card = handCards.get(i);
-                    card.setFitWidth(rootBorder.getWidth() * 0.13);
-                    card.setLayoutX(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * i);
-                }
-            }, Duration.millis(100));
+            for (int i = 0; i < handCards.size(); i++) {
+                ImageView card = handCards.get(i);
+                card.setFitWidth(rootBorder.getWidth() * 0.13);
+                card.setLayoutX(spacing * 2 + (rootBorder.getWidth() * 0.13 + spacing) * i);
+            }
         });
     }
 

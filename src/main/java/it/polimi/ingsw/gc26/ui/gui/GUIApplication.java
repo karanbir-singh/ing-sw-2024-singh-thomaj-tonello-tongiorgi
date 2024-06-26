@@ -152,7 +152,7 @@ public class GUIApplication extends Application implements UIInterface {
             SceneController sceneController = loader.getController();
             sceneController.setMainClient(mainClient);
             scene = new Scene(root);
-            //scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
 
             // Add scene
             scenes.add(new SceneInfo(sceneController, scene, sceneEnum));
@@ -198,7 +198,7 @@ public class GUIApplication extends Application implements UIInterface {
         Scene scene = getSceneInfo(sceneEnum).getScene();
         Platform.runLater(() -> {
             // Update stage
-            //scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/chat.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/chat.css")).toExternalForm());
             this.primaryStage.setOnCloseRequest((WindowEvent windowEvent) -> {
                 this.mainClient.killProcesses();
             });
@@ -240,7 +240,7 @@ public class GUIApplication extends Application implements UIInterface {
         mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             Platform.runLater(() -> {
-                //this.getSceneInfo(SceneEnum.CREATOR).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/creator.css")).toExternalForm());
+                this.getSceneInfo(SceneEnum.CREATOR).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/creator.css")).toExternalForm());
                 this.getSceneController(SceneEnum.CREATOR).setNickName(this.getSceneController(SceneEnum.LOGIN).getNickName());
             });
 
