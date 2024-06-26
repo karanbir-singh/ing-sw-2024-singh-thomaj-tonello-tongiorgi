@@ -209,11 +209,16 @@ public class GameFlowController extends SceneController implements Initializable
     public void onClickCommonTableCard(MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
             try {
-                int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
-                this.mainClient.getVirtualGameController().selectCardFromCommonTable(index, this.mainClient.getClientID());
                 this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
             } catch (RemoteException e) {
-                System.out.println("Connection problem, please wait!");
+                System.out.println("Connection problem, please wait");
+            }
+        } else {
+            int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+            try {
+                this.mainClient.getVirtualGameController().selectCardFromCommonTable(index, this.mainClient.getClientID());
+            } catch (RemoteException e) {
+                System.out.println("Connection problem, please wait");
             }
         }
     }
@@ -226,37 +231,50 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @Override
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
-        int index = 0;
-        for (Card card : simplifiedCommonTable.getResourceCards()) {
-            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
-            index++;
-        }
-        if(simplifiedCommonTable.getResourceDeck() != null) {
-            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 415, 278, true, true, false));
-        } else {
-            resourceCommonTableImages.get(index).setImage(null);
-            resourceCommonTableImages.get(index).setOnMouseClicked(null);
-        }
+        // Update resource cards and deck
+        Platform.runLater(() -> {
+            int index = 0;
+            for (Card card : simplifiedCommonTable.getResourceCards()) {
+                if (card == null) {
+                    resourceCommonTableImages.get(index).setImage(null);
+                } else {
+                    resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
+                }
+                index++;
+            }
+            if (simplifiedCommonTable.getResourceDeck() == null) {
+                resourceCommonTableImages.get(index).setImage(null);
+            } else {
+                resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 415, 278, true, true, false));
+            }
+        });
 
-        index = 0;
-        for (Card card : simplifiedCommonTable.getGoldCards()) {
-            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
+        // Update gold cards and deck
+        Platform.runLater(() -> {
+            int index = 0;
+            for (Card card : simplifiedCommonTable.getGoldCards()) {
+                if (card == null) {
+                    goldCommonTableImages.get(index).setImage(null);
+                } else {
+                    goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
+                }
+                index++;
+            }
+            if (simplifiedCommonTable.getGoldDeck() == null) {
+                goldCommonTableImages.get(index).setImage(null);
+            } else {
+                goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 415, 278, true, true, false));
+            }
+        });
 
-            index++;
-        }
-
-        if(simplifiedCommonTable.getGoldDeck() != null) {
-            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 415, 278, true, true, false));
-        } else {
-            goldCommonTableImages.get(index).setImage(null);
-            goldCommonTableImages.get(index).setOnMouseClicked(null);
-        }
-
-        index = 0;
-        for (Card card : simplifiedCommonTable.getCommonMissions()) {
-            commonMissionsCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
-            index++;
-        }
+        // Update common missions
+        Platform.runLater(() -> {
+            int index = 0;
+            for (Card card : simplifiedCommonTable.getCommonMissions()) {
+                commonMissionsCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
+                index++;
+            }
+        });
     }
 
     /**
@@ -267,22 +285,22 @@ public class GameFlowController extends SceneController implements Initializable
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
         // Update hand
-        if (simplifiedHand.getCards().size() == 2) {
-            handImages.get(2).setImage(null);
-        }
-        int index = 0;
-        for (Card card : simplifiedHand.getCards()) {
-            if (card.equals(simplifiedHand.getSelectedCard())) {
-                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())), 415, 278, true, true, false));
-                makeGlow(handImages.get(index));
-            } else {
-                handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
-                handImages.get(index).setEffect(null);
+        Platform.runLater(() -> {
+            if (simplifiedHand.getCards().size() == 2) {
+                handImages.get(2).setImage(null);
             }
-            index++;
-        }
-
-
+            int index = 0;
+            for (Card card : simplifiedHand.getCards()) {
+                if (card.equals(simplifiedHand.getSelectedCard())) {
+                    handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())), 415, 278, true, true, false));
+                    makeGlow(handImages.get(index));
+                } else {
+                    handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 415, 278, true, true, false));
+                    handImages.get(index).setEffect(null);
+                }
+                index++;
+            }
+        });
     }
 
     /**
@@ -402,15 +420,15 @@ public class GameFlowController extends SceneController implements Initializable
         Pawn pawn;
         for (Tab tab : personalBoardTabPane.getTabs()) {
             pawn = simplifiedGame.getPawnsSelected().get(tab.getText());
-            if(pawn != null) {
+            if (pawn != null) {
                 tab.setId(pawn.name());
             }
         }
     }
 
     @Override
-    public void changeGUIPlayer (SimplifiedPlayer simplifiedPlayer) {
-        if(simplifiedPlayer.getPawnColor() != null) {
+    public void changeGUIPlayer(SimplifiedPlayer simplifiedPlayer) {
+        if (simplifiedPlayer.getPawnColor() != null) {
             personalBoardTabPane.getTabs().getFirst().setId(simplifiedPlayer.getPawnColor().name());
         }
     }
@@ -527,7 +545,7 @@ public class GameFlowController extends SceneController implements Initializable
      */
     private void addImage(ImageView imageView, int x, int y, GridPane gridPane) {
         setCardImageParameters(imageView, 0);
-        if(gridPane != null){
+        if (gridPane != null) {
             Platform.runLater(() -> {
                 gridPane.add(imageView, x, y);
             });
@@ -545,9 +563,14 @@ public class GameFlowController extends SceneController implements Initializable
         imageView.setOnMousePressed(event -> {
             if (event.getClickCount() == 2) {
                 try {
-                    int index = Integer.parseInt(((ImageView) event.getSource()).getId());
-                    this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
                     this.mainClient.getVirtualGameController().turnSelectedCardSide(this.mainClient.getClientID());
+                } catch (RemoteException e) {
+                    System.out.println("Connection problem, please wait");
+                }
+            }else{
+                int index = Integer.parseInt(((ImageView) event.getSource()).getId());
+                try {
+                    this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
                 } catch (RemoteException e) {
                     System.out.println("Connection problem, please wait");
                 }
@@ -576,22 +599,22 @@ public class GameFlowController extends SceneController implements Initializable
                 if (isInTargetSpot(imageView, target) && this.personalBoardTabPane.getSelectionModel().getSelectedItem().equals(
                         this.personalBoardTabPane.getTabs().getFirst())) {
 
+                    int row = GridPane.getRowIndex(target);
+                    int column = GridPane.getColumnIndex(target);
 
-                        int row = GridPane.getRowIndex(target);
-                        int column = GridPane.getColumnIndex(target);
+                    for (ImageView p : playablePositions) {
+                        p.setVisible(false);
+                    }
 
-                        for (ImageView p : playablePositions) {
-                            p.setVisible(false);
+                    new Thread(() ->
+                    {
+                        try {
+                            this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
+                            this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
+                        } catch (RemoteException exception) {
+                            System.out.println("Connection problem, please wait");
                         }
-                        new Thread(()->
-                        {
-                            try{
-                                this.mainClient.getVirtualGameController().selectPositionOnBoard(column - xPositionStarterCard, yPositionStarterCard - row, this.mainClient.getClientID());
-                                this.mainClient.getVirtualGameController().playCardFromHand(this.mainClient.getClientID());
-                            }catch(RemoteException exception){
-                                System.out.println("Connection problem, please wait");
-                            }
-                        }).start();
+                    }).start();
                     break;
                 }
             }
