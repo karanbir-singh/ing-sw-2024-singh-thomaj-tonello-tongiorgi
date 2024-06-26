@@ -208,13 +208,17 @@ public class GameFlowController extends SceneController implements Initializable
     @FXML
     public void onClickCommonTableCard(MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
-            try {
-                int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
-                this.mainClient.getVirtualGameController().selectCardFromCommonTable(index, this.mainClient.getClientID());
-                this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
-            } catch (RemoteException e) {
-                System.out.println("Connection problem, please wait!");
-            }
+
+            int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+            new Thread(() -> {
+                try {
+                    this.mainClient.getVirtualGameController().selectCardFromCommonTable(index, this.mainClient.getClientID());
+                    this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
+                } catch (RemoteException ex) {
+                    System.out.println("Connection problem, please wait");
+                }
+
+            }).start();
         }
     }
 
@@ -226,67 +230,53 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @Override
     public void changeGUICommonTable(SimplifiedCommonTable simplifiedCommonTable) {
-        int index = 0;
-        for (Card card : simplifiedCommonTable.getResourceCards()) {
-            int finalIndex = index;
-            if(card == null){
-                Platform.runLater(()->{
-                    resourceCommonTableImages.get(finalIndex).setImage(null);
-                });
+        Platform.runLater(() -> {
+            int index = 0;
+            for (Card card : simplifiedCommonTable.getResourceCards()) {
+                if (card == null) {
+                    resourceCommonTableImages.get(index).setImage(null);
+                }
+                resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+                index++;
             }
-            Platform.runLater(()->{
-                resourceCommonTableImages.get(finalIndex).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
-            });
-            index++;
-        }
-        int finalIndex1 = index;
-        if(simplifiedCommonTable.getResourceDeck() == null){
-            Platform.runLater(()->{
-                resourceCommonTableImages.get(finalIndex1).setImage(null);
-
-            });
-        }
-        Platform.runLater(()->{
-            resourceCommonTableImages.get(finalIndex1).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 831, 556, true, true, false));
+            if (simplifiedCommonTable.getResourceDeck() == null) {
+                resourceCommonTableImages.get(index).setImage(null);
+            }
+            resourceCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getResourceDeck().getBack().getImagePath())), 831, 556, true, true, false));
 
         });
-        index = 0;
-        for (Card card : simplifiedCommonTable.getGoldCards()) {
 
-            int finalIndex4 = index;
-            if(card == null){
-                Platform.runLater(()->{
-                    goldCommonTableImages.get(finalIndex4).setImage(null);
+        Platform.runLater(() -> {
+            int index = 0;
+            for (Card card : simplifiedCommonTable.getGoldCards()) {
 
-                });
+                if (card == null) {
+                    goldCommonTableImages.get(index).setImage(null);
+                }
+                goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+
+                index++;
             }
-            Platform.runLater(()->{
-                goldCommonTableImages.get(finalIndex4).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+            if (simplifiedCommonTable.getGoldDeck() == null) {
+                goldCommonTableImages.get(index).setImage(null);
 
-            });
-            index++;
-        }
-        int finalIndex3 = index;
-        if(simplifiedCommonTable.getGoldDeck() == null){
-            Platform.runLater(()->{
-                goldCommonTableImages.get(finalIndex3).setImage(null);
-
-            });
-        }
-        Platform.runLater(()->{
-            goldCommonTableImages.get(finalIndex3).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 831, 556, true, true, false));
+            }
+            goldCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedCommonTable.getGoldDeck().getBack().getImagePath())), 831, 556, true, true, false));
 
         });
-        index = 0;
-        for (Card card : simplifiedCommonTable.getCommonMissions()) {
-            int finalIndex2 = index;
-            Platform.runLater(()->{
-                commonMissionsCommonTableImages.get(finalIndex2).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
 
-            });
-            index++;
-        }
 
+        Platform.runLater(() -> {
+            int index = 0;
+            for (
+                    Card card : simplifiedCommonTable.getCommonMissions()) {
+
+                commonMissionsCommonTableImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+
+
+                index++;
+            }
+        });
 
     }
 
@@ -297,32 +287,24 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @Override
     public void changeGUIHand(SimplifiedHand simplifiedHand) {
-        // Update hand
-        if (simplifiedHand.getCards().size() == 2) {
-            Platform.runLater(()->{
+        Platform.runLater(() -> {
+            // Update hand
+            if (simplifiedHand.getCards().size() == 2) {
                 handImages.get(2).setImage(null);
-            });
-
-        }
-        int index = 0;
-        for (Card card : simplifiedHand.getCards()) {
-            if (card.equals(simplifiedHand.getSelectedCard())) {
-                int finalIndex = index;
-                Platform.runLater(()->{
-                    handImages.get(finalIndex).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())), 831, 556, true, true, false));
-                    makeGlow(handImages.get(finalIndex));
-                });
-
-            } else {
-                int finalIndex1 = index;
-                Platform.runLater(()->{
-                    handImages.get(finalIndex1).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
-                    handImages.get(finalIndex1).setEffect(null);
-                });
             }
-            index++;
-        }
+            int index = 0;
+            for (Card card : simplifiedHand.getCards()) {
+                if (card.equals(simplifiedHand.getSelectedCard())) {
+                    handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + simplifiedHand.getSelectedSide().getImagePath())), 831, 556, true, true, false));
+                    makeGlow(handImages.get(index));
+                } else {
+                    handImages.get(index).setImage(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath())), 831, 556, true, true, false));
+                    handImages.get(index).setEffect(null);
 
+                }
+                index++;
+            }
+        });
     }
 
     /**
