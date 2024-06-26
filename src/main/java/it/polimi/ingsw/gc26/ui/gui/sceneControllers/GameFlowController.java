@@ -209,16 +209,19 @@ public class GameFlowController extends SceneController implements Initializable
     public void onClickCommonTableCard(MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
 
-            int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
-            new Thread(() -> {
-                try {
-                    this.mainClient.getVirtualGameController().selectCardFromCommonTable(index, this.mainClient.getClientID());
-                    this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
-                } catch (RemoteException ex) {
-                    System.out.println("Connection problem, please wait");
-                }
+            try {
+                this.mainClient.getVirtualGameController().drawSelectedCard(this.mainClient.getClientID());
+            } catch (RemoteException e) {
+                System.out.println("Connection problem, please wait");
+            }
 
-            }).start();
+        }else{
+            int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
+            try {
+                this.mainClient.getVirtualGameController().selectCardFromCommonTable(index, this.mainClient.getClientID());
+            } catch (RemoteException e) {
+                System.out.println("Connection problem, please wait");
+            }
         }
     }
 
@@ -547,13 +550,15 @@ public class GameFlowController extends SceneController implements Initializable
                 } catch (RemoteException e) {
                     System.out.println("Connection problem, please wait");
                 }
+            }else{
+                int index = Integer.parseInt(((ImageView) event.getSource()).getId());
+                try {
+                    this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
+                } catch (RemoteException e) {
+                    System.out.println("Connection problem, please wait");
+                }
             }
-            int index = Integer.parseInt(((ImageView) event.getSource()).getId());
-            try {
-                this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
-            } catch (RemoteException e) {
-                System.out.println("Connection problem, please wait");
-            }
+
 
             initialX = imageView.getLayoutX();
             initialY = imageView.getLayoutY();
