@@ -61,7 +61,7 @@ public class CommonTable implements Serializable {
      * @param goldDeck     gold cards deck
      * @param starterDeck  initial cards deck
      * @param missionDeck  mission cards deck
-     * @param observable observable to notify client
+     * @param observable   observable to notify client
      */
     public CommonTable(Deck resourceDeck, Deck goldDeck, Deck starterDeck, Deck missionDeck, ModelObservable observable) {
         commonMissions = new ArrayList<>();
@@ -80,7 +80,7 @@ public class CommonTable implements Serializable {
      * Sets the attribute selectedX and selectedY of the chosen card to select
      *
      * @param cardIndex index of the selected card on the common table
-     * @param clientID client unique ID
+     * @param clientID  client unique ID
      */
     public void selectCard(int cardIndex, String clientID) {
         // Check if the card index are correct
@@ -166,23 +166,46 @@ public class CommonTable implements Serializable {
             this.observable.notifyError("Select a position first!", clientID);
             return null;
         }
+
+        Card resourceDeckTopCard = null;
+        Card goldDeckTopCard = null;
         Card toRemove = null;
         if (selectedY == 0) {
             if (selectedX == 2) {
-                if (!resourceDeck.getCards().isEmpty())
+                // Check if resource deck is empty
+                if (!resourceDeck.getCards().isEmpty()) {
+                    // if not, remove the top card
                     toRemove = resourceDeck.removeCard();
-                else {
-                    // TODO gestire quando il mazzo è finito
+
+                    // Check again if is empty
+                    if (!resourceDeck.getCards().isEmpty()) {
+                        // if not, set the new top card
+                        resourceDeckTopCard = resourceDeck.getTopCard();
+                    }
+                }else{
+                    // if yes, send error
+                    this.observable.notifyError("Position not valid!", clientID);
+                    return null;
                 }
             } else {
                 toRemove = removeFromTable(resourceCards, selectedX, resourceDeck, clientID);
             }
         } else if (selectedY == 1) {
             if (selectedX == 2) {
-                if (!goldDeck.getCards().isEmpty())
+                // Check if gold deck is empty
+                if (!goldDeck.getCards().isEmpty()) {
+                    // if not, remove the top card
                     toRemove = goldDeck.removeCard();
-                else {
-                    // TODO gestire quando il mazzo è finito
+
+                    // Check again if is empty
+                    if (!goldDeck.getCards().isEmpty()) {
+                        // if not, set the new top card
+                        goldDeckTopCard = goldDeck.getTopCard();
+                    }
+                }else{
+                    // if yes, send error
+                    this.observable.notifyError("Position not valid!", clientID);
+                    return null;
                 }
             } else {
                 toRemove = removeFromTable(goldCards, selectedX, goldDeck, clientID);
@@ -193,14 +216,15 @@ public class CommonTable implements Serializable {
 
         this.observable.notifyUpdateCommonTable(
                 new SimplifiedCommonTable(
-                        resourceDeck.getTopCard(),
-                        goldDeck.getTopCard(),
+                        resourceDeckTopCard,
+                        goldDeckTopCard,
                         commonMissions,
                         resourceCards,
                         goldCards,
                         -1),
                 "Card removed from common table"
         );
+
         return toRemove;
     }
 
