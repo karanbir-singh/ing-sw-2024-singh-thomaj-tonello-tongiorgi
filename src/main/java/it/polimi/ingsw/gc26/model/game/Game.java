@@ -324,6 +324,9 @@ public class Game implements Serializable {
             case GAME_STARTED:
                 message = "GAME STARTED!";
                 break;
+            case END_STAGE:
+                message = "Starting end of the game!";
+                break;
             case WINNER:
                 message = "Game ended, here are the winners";
                 break;
