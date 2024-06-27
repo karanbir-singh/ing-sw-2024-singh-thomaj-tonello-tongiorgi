@@ -333,6 +333,10 @@ public class MainController implements Serializable {
                 // Start game
                 gameController.prepareCommonTable();
 
+                // Reset flag
+                gameOnCreation = false;
+                invalidNickname = false;
+
                 // Clear waiting lists
                 waitingClients.clear();
                 waitingPlayers.clear();
