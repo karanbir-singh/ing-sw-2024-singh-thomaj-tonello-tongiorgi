@@ -136,6 +136,12 @@ public class SecretMissionChoiceController extends SceneController implements In
      * The row constraints for the grid pane.
      */
     private RowConstraints rowConstraints = new RowConstraints(60, 60, 60);
+    /**
+     * Saves the mission chosen by the user to display it while waiting for the other players.
+     */
+    private ImageView chosenMission;
+
+    private final Label waitMessage = new Label("Great choice!\nNow please wait for the other players...");
 
     /**
      * Path to locate images
@@ -149,6 +155,7 @@ public class SecretMissionChoiceController extends SceneController implements In
      */
     public void onClickSecretMission(MouseEvent mouseEvent) {
         try {
+            chosenMission = (ImageView) mouseEvent.getSource();
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getAccessibleText());
             this.mainClient.getVirtualGameController().selectSecretMission(index, this.mainClient.getClientID());
         } catch (RemoteException e) {
@@ -165,6 +172,10 @@ public class SecretMissionChoiceController extends SceneController implements In
         } catch (RemoteException e) {
             System.out.println("Connection problem, please wait");
         }
+        secretMissionHBox.getChildren().clear();
+        secretMissionHBox.getChildren().add(chosenMission);
+        waitMessage.wrapTextProperty().set(true);
+        secretMissionHBox.getChildren().add(waitMessage);
     }
 
     /**
@@ -307,24 +318,26 @@ public class SecretMissionChoiceController extends SceneController implements In
      */
     @Override
     public void changeGUISecretHand(SimplifiedHand simplifiedSecretHand) {
-        ArrayList<ImageView> secretHand = new ArrayList<>();
-        int index = 0;
-        for (Card card : simplifiedSecretHand.getCards()) {
-            ImageView imageView;
-            imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
-            this.setParameters(imageView, String.valueOf(index));
-            imageView.setOnMouseClicked(this::onClickSecretMission);
-            secretHand.add(imageView);
-            if (card == simplifiedSecretHand.getSelectedCard()) {
-                makeGlow(imageView);
+        if(simplifiedSecretHand.getCards().size() > 1) {
+            ArrayList<ImageView> secretHand = new ArrayList<>();
+            int index = 0;
+            for (Card card : simplifiedSecretHand.getCards()) {
+                ImageView imageView;
+                imageView = new ImageView(new Image(String.valueOf(getClass().getResource(path + card.getFront().getImagePath()))));
+                this.setParameters(imageView, String.valueOf(index));
+                imageView.setOnMouseClicked(this::onClickSecretMission);
+                secretHand.add(imageView);
+                if (card == simplifiedSecretHand.getSelectedCard()) {
+                    makeGlow(imageView);
+                }
+                index++;
             }
-            index++;
-        }
 
-        Platform.runLater(() -> {
-            this.secretMissionHBox.getChildren().setAll(secretHand);
-            this.secretMissionHBox.getChildren().add(confirmButton);
-        });
+            Platform.runLater(() -> {
+                this.secretMissionHBox.getChildren().setAll(secretHand);
+                this.secretMissionHBox.getChildren().add(confirmButton);
+            });
+        }
     }
 
     /**

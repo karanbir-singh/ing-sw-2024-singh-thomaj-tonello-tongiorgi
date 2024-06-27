@@ -427,9 +427,9 @@ public class CLI {
                 //points
                 switch (c.getFront()) {
                     case CornerCounter cornerCounter -> ct[y][x] = "2 pt " + "x" + SpecialCharacters.SQUARE_WHITE_LARGE.getCharacter();
-                    case InkwellCounter inkwellCounter -> ct[y][x] = "1 pt " + "x " + Symbol.INKWELL.getAlias();
-                    case ManuscriptCounter manuscriptCounter -> ct[y][x] = "1 pt " + "x " + Symbol.MANUSCRIPT.getAlias();
-                    case QuillCounter quillCounter -> ct[y][x] = "1 pt " + "x " + Symbol.QUILL.getAlias();
+                    case InkwellCounter inkwellCounter -> ct[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
+                    case ManuscriptCounter manuscriptCounter -> ct[y][x] = "1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
+                    case QuillCounter quillCounter -> ct[y][x] = "1 pt " + "x" + Symbol.QUILL.getAlias();
                     case null, default -> ct[y][x] = c.getFront().getPoints() + " pt " + "        ";
                 }
                 if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
@@ -458,7 +458,6 @@ public class CLI {
                 }
                 ct[y][x + 1] = "      " + blackSquare;
                 ct[y][x + 2] = "    ";
-
             }
         }
 
@@ -495,27 +494,6 @@ public class CLI {
 
         //insert decks and drawable cards
         addPrintable(commonTable, commonTableAndMissions, 0, 0);
-
-        //insert empty lines for alignment
-        /*for(int j=0; j<(missions.length - commonTable.length); j++){
-            if(j==0){
-                for(int i=0; i<(xDim-5); i+=5){
-                    commonTableAndMissions[j][i] = "    ";
-                    commonTableAndMissions[j][i+1] = blackSquare;
-                    commonTableAndMissions[j][i+2] = "   " + blackSquare + "   ";
-                    commonTableAndMissions[j][i+3] = blackSquare;
-                    commonTableAndMissions[j][i+4] = "       ";
-                }
-            } else {
-                for(int i=0; i<(xDim-5); i+=5){
-                    commonTableAndMissions[yLine + j][i] = "    ";
-                    commonTableAndMissions[yLine + j][i+1] = blackSquare;
-                    commonTableAndMissions[yLine + j][i+2] = "   " + blackSquare + "   ";
-                    commonTableAndMissions[yLine + j][i+3] = blackSquare;
-                    commonTableAndMissions[yLine + j][i+4] = "       ";
-                }
-            }
-        }*/
 
         //insert vertical separator between drawable and missions
         for (int i = 0; i < yDim; i++) {

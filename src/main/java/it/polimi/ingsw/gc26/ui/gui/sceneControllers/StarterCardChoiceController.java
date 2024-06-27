@@ -143,6 +143,11 @@ public class StarterCardChoiceController extends SceneController implements Init
     @FXML
     private Label status;
     /**
+     * Button to choose the starter card's side to play.
+     */
+    @FXML
+    private Button playButton;
+    /**
      * Path for images used in the scene.
      */
     private String path = "images/";
@@ -158,6 +163,7 @@ public class StarterCardChoiceController extends SceneController implements Init
         } catch (RemoteException e) {
             System.out.println("Connection problem, please wait");
         }
+        playButton.setVisible(false);
         status.setText("Card selected! Please, wait for other players to select their side!");
     }
 

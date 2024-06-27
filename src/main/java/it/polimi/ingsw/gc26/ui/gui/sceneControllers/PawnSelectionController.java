@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -54,6 +55,11 @@ public class PawnSelectionController extends SceneController implements Initiali
      */
     @FXML
     private Button rulesButton;
+
+    /**
+     * Flag to know whether keep displaying the available colors or not
+     */
+    private boolean hasChosen = false;
     /**
      * Icon for rules button
      */
@@ -68,9 +74,13 @@ public class PawnSelectionController extends SceneController implements Initiali
         String pawnColor = ((Button) event.getSource()).getAccessibleText();
         try {
             this.mainClient.getVirtualGameController().choosePawnColor(pawnColor, this.mainClient.getClientID());
+            hasChosen = true;
         } catch (RemoteException e) {
             System.out.println("Connection problem, please wait");
         }
+        pawnsTile.getChildren().clear();
+        pawnsTile.getChildren().add((Button) event.getSource());
+        pawnsTile.getChildren().add(new Label("Wow, you're so fast!\nNow wait fot the other players..."));
     }
 
     /**
@@ -113,16 +123,18 @@ public class PawnSelectionController extends SceneController implements Initiali
      */
     @Override
     public void changeGUIGame(SimplifiedGame simplifiedGame) {
-        ArrayList<Button> buttons = new ArrayList<>();
-        for (Pawn pawn : simplifiedGame.getAvailablePawns()) {
-            Button button = new Button();
-            button.setAccessibleText(pawn.toString());
-            this.setDimensionAndColor(button, pawn.toString());
-            button.setOnAction((this::onClickButton));
-            buttons.add(button);
+        if(!hasChosen) {
+            ArrayList<Button> buttons = new ArrayList<>();
+            for (Pawn pawn : simplifiedGame.getAvailablePawns()) {
+                Button button = new Button();
+                button.setAccessibleText(pawn.toString());
+                this.setDimensionAndColor(button, pawn.toString());
+                button.setOnAction((this::onClickButton));
+                buttons.add(button);
+            }
+            Platform.runLater(() -> {
+                pawnsTile.getChildren().setAll(buttons);
+            });
         }
-        Platform.runLater(() -> {
-            pawnsTile.getChildren().setAll(buttons);
-        });
     }
 }

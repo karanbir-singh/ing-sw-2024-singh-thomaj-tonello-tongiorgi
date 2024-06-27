@@ -120,9 +120,9 @@ public class GameFlowController extends SceneController implements Initializable
      */
     @FXML
     private GridPane gridPane;
-    @FXML
-    private AnchorPane personalBoardPane;
-
+    /**
+     * Tab pane with personal boards of all players
+     */
     @FXML
     private TabPane personalBoardTabPane;
     /**
@@ -389,7 +389,7 @@ public class GameFlowController extends SceneController implements Initializable
             }
         }
 
-        //se invece non esiste un tab, con quel nickname, crea un nuovo tab e crea un nuovo scrollPane e GridPane
+        // if there's no tab for the personal board's owner, creates a new tab pane for its personal board
         if (!otherPersonalBoard.getNickname().equals(this.mainClient.getNickname()) && !exist) {
             consideredTab = new Tab();
             consideredTab.setText(otherPersonalBoard.getNickname());

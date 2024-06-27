@@ -1,3 +1,44 @@
-.tab {
-    -fx-background-color: blue;
+.chatTab {
+    -fx-border-radius: 0px 0px 5px 5px;
+}
+
+.chatTab .tab-header-area {
+    -fx-padding: 0 0 0 0;
+}
+
+.chatPane {
+    -fx-background-color: #e8f4f8;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+.chatLabelText {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(79, 122, 232, 0.3);
+    -fx-font-family: Georgia;
+}
+
+.messageBox {
+    -fx-background-color: #d3f0e6;
+    -fx-background-radius: 20 20 20 0;
+}
+
+.messageText {
+    -fx-text-fill: rgba(0, 0, 0, 1);
+    -fx-color: rgb(239, 242,255);
+    -fx-font-size: 18;
+    -fx-font-family: Georgia;
+}
+
+.senderMessageBox {
+    -fx-background-color: #006699;
+    -fx-color: rgb(239, 242,255);
+    -fx-background-radius: 20 20 0 20;
+}
+
+.senderMessageText {
+    -fx-text-fill: rgb(239, 242,255);
+    -fx-color: rgb(239, 242,255);
+    -fx-font-size: 18;
+    -fx-font-family: Georgia;
 }
