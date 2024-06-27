@@ -243,7 +243,7 @@ public class GUIApplication extends Application implements UIInterface {
 
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             Platform.runLater(() -> {
-                this.getSceneInfo(SceneEnum.CREATOR).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/GeneralStyle.css")).toExternalForm());
+                this.getSceneInfo(SceneEnum.CREATOR).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/creator.css")).toExternalForm());
             });
 
             // Set creator scene and nickname
