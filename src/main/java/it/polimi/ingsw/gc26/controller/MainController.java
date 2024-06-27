@@ -289,12 +289,6 @@ public class MainController implements Serializable {
             // For now, ID it's random string
             String clientID = UUID.randomUUID().toString();
 
-            invalidNickname = false;
-
-            synchronized (mainRequests) {
-                this.mainRequests.notifyAll();
-            }
-
             // Otherwise, add client in waiting list
             this.waitingClients.add(client);
             this.waitingPlayers.add(new Player(clientID, nickname));
@@ -347,6 +341,10 @@ public class MainController implements Serializable {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
+            }
+
+            synchronized (mainRequests) {
+                this.mainRequests.notifyAll();
             }
         }
 
