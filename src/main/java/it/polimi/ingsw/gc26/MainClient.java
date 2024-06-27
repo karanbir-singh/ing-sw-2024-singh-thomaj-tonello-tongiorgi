@@ -311,8 +311,6 @@ public class MainClient {
             }
         } else {
             SERVER_IP = serverIP;
-            // Set a rmi response property
-            System.setProperty("java.rmi.server.hostname", serverIP);
         }
 
         // Insert RMI Server port
