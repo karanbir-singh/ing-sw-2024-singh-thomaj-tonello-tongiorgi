@@ -70,7 +70,7 @@ public class PersonalBoard implements Serializable {
      * The constructor initializes everything: the score, the resource, missions occupiedPositions , playablePositions, blockedPositions.
      *
      * @param observable observable to notify client
-     * @param nickname personal board owner
+     * @param nickname   personal board owner
      */
     public PersonalBoard(ModelObservable observable, String nickname) {
         score = 0;
@@ -112,7 +112,7 @@ public class PersonalBoard implements Serializable {
      * Sets the secret mission
      *
      * @param secretMission card that you want to set
-     * @param clientID unique client's id
+     * @param clientID      unique client's id
      */
     public Card setSecretMission(Optional<Card> secretMission, String clientID) {
         if (secretMission.isPresent()) {
@@ -499,6 +499,9 @@ public class PersonalBoard implements Serializable {
 
         // Use card ability to add points if it has it
         this.score = this.score + side.useAbility(this.getResources(), occupiedPositions, playingPoint);
+        if(this.score > 29){
+            this.score = 29;
+        }
         this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this, nickname), "Card placed!", clientID);
         return true;
     }

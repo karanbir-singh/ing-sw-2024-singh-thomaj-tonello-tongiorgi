@@ -165,7 +165,7 @@ public class Game implements Serializable {
 
             // Get winners of the game
             winners = players.stream()
-                    .filter(player -> player.getPersonalBoard().getScore() == (maxScore % 29))
+                    .filter(player -> player.getPersonalBoard().getScore() == maxScore)
                     .collect(Collectors.toCollection(ArrayList::new));
 
             winners.forEach((player) -> System.out.println(player.getNickname()));
