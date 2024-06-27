@@ -327,7 +327,7 @@ public class MainController implements Serializable {
                 // Start game
                 gameController.prepareCommonTable();
 
-                // Reset flagx
+                // Reset flags
                 gameOnCreation = false;
                 invalidNickname = false;
 

@@ -86,7 +86,7 @@ public class MainServer {
      * @param args main args
      */
     public static void main(String[] args) {
-        //set a rmi property
+        // Set a rmi response property
         System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2000");
 
         // Create main controller
@@ -96,6 +96,18 @@ public class MainServer {
         System.out.println("Welcome to the game server!");
 
         System.out.println("---------------------------");
+
+        // Insert server IP
+        System.out.print("Enter server IP address for clients (default: 127.0.0.1): ");
+        String serverIP = scanner.nextLine().trim();
+        if (!serverIP.matches("^\\d{1,3}[.]\\d{1,3}[.]\\d{1,3}[.]\\d{1,3}$")) {
+            if(!serverIP.isEmpty()) {
+                ConsoleColors.printError("[ERROR]: Invalid input -> Set default server IP address");
+            }
+        } else {
+            // Set a rmi response property
+            System.setProperty("java.rmi.server.hostname", serverIP);
+        }
 
         // Insert RMI server port
         System.out.print("Enter RMI server port (default: " + DEFAULT_RMI_SERVER_PORT + "): ");
