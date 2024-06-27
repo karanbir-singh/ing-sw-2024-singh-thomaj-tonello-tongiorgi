@@ -448,7 +448,6 @@ public class GameFlowController extends SceneController implements Initializable
             this.setCardImageParameters(imageView, i);
             imageView.getStyleClass().add("cardHover");
             makeDraggable(imageView, playablePositions);
-            imageView.setOnMouseClicked(this::onHandCardClicked);
             handImages.add(imageView);
         }
 
@@ -624,20 +623,6 @@ public class GameFlowController extends SceneController implements Initializable
                 target.setVisible(false);
             }
         });
-    }
-
-    /**
-     * Handles the event when the card is clicked. Selects a card from hand in the server
-     *
-     * @param mouseEvent the event triggered by clicking the card
-     */
-    public void onHandCardClicked(MouseEvent mouseEvent) {
-        try {
-            int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
-            this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
-        } catch (RemoteException e) {
-            System.out.println("Connection problem, please wait!");
-        }
     }
 
     /**
