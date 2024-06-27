@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.player.Pawn;
+import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.ui.gui.PawnsCoords;
 import it.polimi.ingsw.gc26.view_model.*;
@@ -13,10 +14,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -41,6 +39,12 @@ import java.util.ResourceBundle;
  * see common mission and common table.
  */
 public class GameFlowController extends SceneController implements Initializable {
+    /**
+     * Text with the player state information
+     */
+    @FXML
+    private Label statusPlayer;
+
     /**
      * Pane with chat tabs as children
      */
@@ -424,6 +428,11 @@ public class GameFlowController extends SceneController implements Initializable
                 tab.setId(pawn.name());
             }
         }
+        if(simplifiedGame.getCurrentPlayer() != null){
+            Platform.runLater(()->{
+                statusPlayer.setText("It's " + simplifiedGame.getCurrentPlayer() + " turn");
+            });
+        }
     }
 
     @Override
@@ -431,6 +440,7 @@ public class GameFlowController extends SceneController implements Initializable
         if (simplifiedPlayer.getPawnColor() != null) {
             personalBoardTabPane.getTabs().getFirst().setId(simplifiedPlayer.getPawnColor().name());
         }
+
     }
 
     /**
