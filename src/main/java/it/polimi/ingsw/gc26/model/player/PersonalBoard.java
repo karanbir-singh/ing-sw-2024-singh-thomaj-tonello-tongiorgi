@@ -120,7 +120,6 @@ public class PersonalBoard implements Serializable {
             this.observable.notifyUpdatePersonalBoard(new SimplifiedPersonalBoard(this, nickname), "Secret mission set", clientID);
             return this.secretMission;
         }
-        // TODO notify view
         this.observable.notifyError("Secret mission not present!", clientID);
         return null;
     }
@@ -161,6 +160,10 @@ public class PersonalBoard implements Serializable {
 
         for (Card mission : commonMissions) {
             this.score = this.score + mission.getFront().checkPattern(this.getResources(), occupiedPositions);
+        }
+
+        if(this.score > 29){
+            this.score = 29;
         }
     }
 

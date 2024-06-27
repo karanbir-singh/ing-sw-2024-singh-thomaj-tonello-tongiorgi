@@ -158,6 +158,8 @@ public class SecretMissionChoiceController extends SceneController implements In
             chosenMission = (ImageView) mouseEvent.getSource();
             int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getAccessibleText());
             this.mainClient.getVirtualGameController().selectSecretMission(index, this.mainClient.getClientID());
+
+            this.confirmButton.setVisible(true);
         } catch (RemoteException e) {
             System.out.println("Connection problem, please wait");
         }
@@ -420,6 +422,8 @@ public class SecretMissionChoiceController extends SceneController implements In
         rowConstraints.setValignment(VPos.CENTER);
 
         this.creationAndSettingGridContraints(this.gridPane);
+
+        this.confirmButton.setVisible(false);
 
         pageBindings(rootPane, rootBorder, background);
         //buttons setup
