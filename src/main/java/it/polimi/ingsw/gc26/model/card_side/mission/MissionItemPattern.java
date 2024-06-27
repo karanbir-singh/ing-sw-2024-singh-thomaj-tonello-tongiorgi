@@ -68,52 +68,47 @@ public class MissionItemPattern extends MissionCardFront implements Serializable
         String decoration = SpecialCharacters.CUP.getCharacter();
         String diamond = SpecialCharacters.ORANGE_DIAMOND.getCharacter();
         String alias = "";
-        String background = TextStyle.BACKGROUND_BEIGE.getStyleCode();
+        String background = "";
         String fontColor = TextStyle.YELLOW.getStyleCode();
         String whiteBackground = TextStyle.BACKGROUND_WHITE.getStyleCode();
 
         //fill borders
         s[0][0] = fontColor + " ╔";
         s[0][2] = "╗ ";
+        s[0][1] = "═════" + decoration + diamond + decoration + "═════";
+        for (int i = 1; i < 4; i++) {
+            s[i][0] = diamond + " ";
+            s[i][2] = " " + diamond;
+        }
         s[4][0] = " ╚";
         s[4][1] = "═════" + diamond + diamond + diamond + "═════";
         s[4][2] = "╝ ";
 
-        for (int i = 1; i < 4; i += 2) {
-            s[i][0] = diamond + " ";
-            s[i][2] = " " + diamond;
-        }
-
-        s[2][0] = "  ";
-        s[1][1] = "      " + diamond + "      ";
-        s[2][2] = "  ";
-        s[3][1] = "      " + diamond + "      ";
-
-
-        //Mission with 3 items upper border and center
+        //fetch special characters and colors based on the card's type
         if (getType() == 1) {
-            s[0][1] = "═════" + decoration + decoration + decoration + "═════";
-            s[2][1] = "     " + whiteBackground + Symbol.INKWELL.getAlias() + Symbol.QUILL.getAlias() + Symbol.MANUSCRIPT.getAlias() + background + "     ";
-
-        } else {
-            //Mission with 2 items upper border and center
-            s[0][1] = "═════" + decoration + diamond + decoration + "═════";
-            if (getType() == 2) {
-                alias = Symbol.MANUSCRIPT.getAlias();
-            } else if (getType() == 3) {
-                alias = Symbol.QUILL.getAlias();
-            } else if (getType() == 4) {
-                alias = Symbol.INKWELL.getAlias();
-            }
-
-            s[2][1] = "     " + whiteBackground + alias + "▫️" + alias + background + "     ";
+            alias = Symbol.FUNGI.getAlias();
+            background = Symbol.FUNGI.getBackground();
+        } else if (getType() == 2) {
+            alias = Symbol.PLANT.getAlias();
+            background = Symbol.PLANT.getBackground();
+        } else if (getType() == 3) {
+            alias = Symbol.ANIMAL.getAlias();
+            background = Symbol.ANIMAL.getBackground();
+        } else if (getType() == 4) {
+            alias = Symbol.INSECT.getAlias();
+            background = Symbol.INSECT.getBackground();
         }
 
-        //Add font and background color
+        //add font and background color
         for (int i = 0; i < 5; i++) {
             s[i][0] = fontColor + background + s[i][0];
             s[i][2] = s[i][2] + styleReset;
         }
+
+        //fill center
+        s[1][1] = "      " + whiteBackground + alias + background + "      ";
+        s[2][1] = "      " + whiteBackground + alias + background + "      ";
+        s[3][1] = "      " + whiteBackground + alias + background + "      ";
 
         return s;
     }
