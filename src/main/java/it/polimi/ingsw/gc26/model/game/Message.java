@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.model.player.Player;
-import it.polimi.ingsw.gc26.model.utils.TextStyle;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
 import java.io.Serializable;
@@ -120,10 +119,12 @@ public class Message implements Serializable {
         data.put("text", this.getText());
         try {
             data.put("receiver", this.getReceiver().getNickname());
-            data.put("receiverPawn", this.getReceiver().getPawnColor().toString());
         } catch (NullPointerException e) {
             data.put("receiver", "");
         }
+        try {
+            data.put("receiverPawn", this.getReceiver().getPawnColor().toString());
+        } catch (NullPointerException e) {}
         data.put("sender", this.getSender().getNickname());
         try {
             data.put("senderPawn", this.getSender().getPawnColor().toString());
