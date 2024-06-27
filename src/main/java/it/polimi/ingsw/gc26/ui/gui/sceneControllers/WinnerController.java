@@ -30,25 +30,6 @@ public class WinnerController extends SceneController implements Initializable {
     @FXML
     ImageView background;
     /**
-     * Scene's title
-     */
-    @FXML
-    private Label title;
-    /**
-     * The label to display the status of the game or player.
-     */
-    @FXML
-    private Label status;
-    /**
-     * Font style
-     */
-    private final int rankTextDimension = 16;
-    /**
-     * Box containing the game's winners
-     */
-    @FXML
-    private VBox winner;
-    /**
      * Image of player final result
      */
     @FXML

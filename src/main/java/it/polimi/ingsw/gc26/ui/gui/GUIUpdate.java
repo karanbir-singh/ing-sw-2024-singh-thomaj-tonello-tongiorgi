@@ -5,6 +5,8 @@ import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import javafx.stage.WindowEvent;
 
+import java.util.Objects;
+
 /**
  * The GUIUpdate class implements the UpdateInterface to provide updates to the GUI components
  * in the GUIApplication. It handles the logic for updating the game's view based on the changes
@@ -179,7 +181,6 @@ public class GUIUpdate implements UpdateInterface {
         if (this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.GAMEFLOW) || this.guiApplication.getCurrentScene().getSceneEnum().equals(SceneEnum.WINNER)) {
             this.guiApplication.getCurrentScene().getSceneController().changeGUIGame(simplifiedGame);
             this.guiApplication.getSceneInfo(SceneEnum.WINNER).getSceneController().changeGUIGame(simplifiedGame);
-            ; //cosi aggiorno solo questa
         } else {
             this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().changeGUIGame(simplifiedGame);
             this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().changeGUIGame(simplifiedGame);
