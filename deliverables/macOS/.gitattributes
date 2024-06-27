@@ -1,2 +1,0 @@
-GC26-1.0-Server.jar filter=lfs diff=lfs merge=lfs -text
-GC26-1.0-Client.jar filter=lfs diff=lfs merge=lfs -text

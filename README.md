@@ -30,9 +30,9 @@ We have implemented, in addiction to the `Game Specific` and `Game Agnostic` req
 
 ## How to Use
 ### From Github
-1. Go to *deliverables*
-2. Download `Codex_Naturalis_Server.jar`
-2. Download `Codex_Naturalis_Client.jar`
+1. Go to *deliverables/(Windows/macOS)*
+2. Download `GC26-1.0-Server.jar`
+2. Download `GC26-1.0-Client.jar`
 4. Open `CMD` (or `Terminal` on macOS)
 5. Go to the directory containing the previous downloaded jar files
 6. From here: <br>
