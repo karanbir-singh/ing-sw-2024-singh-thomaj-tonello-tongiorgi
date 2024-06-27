@@ -304,8 +304,10 @@ public class MainClient {
         System.out.print("Enter server IP address (default: 127.0.0.1): ");
         String serverIP = scanner.nextLine().trim();
         if (!serverIP.matches("^\\d{1,3}[.]\\d{1,3}[.]\\d{1,3}[.]\\d{1,3}$")) {
-            ConsoleColors.printError("[ERROR]: Invalid input -> Set default server IP address");
-        } else if (!serverIP.isEmpty()) {
+            if(!serverIP.isEmpty()) {
+                ConsoleColors.printError("[ERROR]: Invalid input -> Set default server IP address");
+            }
+        } else {
             SERVER_IP = serverIP;
         }
 
@@ -313,8 +315,10 @@ public class MainClient {
         System.out.print("Enter server RMI port (default 1099): ");
         String rmiServerPort = scanner.nextLine().trim();
         if (!rmiServerPort.matches("^\\d{1,5}$")) {
-            ConsoleColors.printError("[ERROR]: Invalid input -> Set default RMI Server port");
-        } else if (!rmiServerPort.isEmpty()) {
+            if(!rmiServerPort.isEmpty()) {
+                ConsoleColors.printError("[ERROR]: Invalid input -> Set default RMI Server port");
+            }
+        } else {
             RMI_SERVER_PORT = Integer.parseInt(rmiServerPort);
         }
 
@@ -322,8 +326,10 @@ public class MainClient {
         System.out.print("Enter server socket port (default 3060): ");
         String socketServerPort = scanner.nextLine();
         if (!socketServerPort.matches("^\\d{1,5}$")) {
-            ConsoleColors.printError("[ERROR]: Invalid input -> Set default Server socket port");
-        } else if (!socketServerPort.isEmpty()) {
+            if(!socketServerPort.isEmpty()) {
+                ConsoleColors.printError("[ERROR]: Invalid input -> Set default Server socket port");
+            }
+        } else {
             SERVER_SOCKET_PORT = Integer.parseInt(socketServerPort);
         }
 
