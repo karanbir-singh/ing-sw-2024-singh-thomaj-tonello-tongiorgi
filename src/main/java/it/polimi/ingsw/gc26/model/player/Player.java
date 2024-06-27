@@ -113,6 +113,14 @@ public class Player implements Serializable {
     }
 
     /**
+     * Sets the pawn color to the chosen one
+     *
+     */
+    public void setPawn(Pawn pawn) {
+        this.pawnColor = pawn;
+    }
+
+    /**
      * Return the pawn color
      *
      * @return pawn color

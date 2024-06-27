@@ -64,6 +64,12 @@ public class Message implements Serializable {
         this.text = root.get("text").asText();
         this.receiver = new Player(null, root.get("receiver").asText());
         this.sender = new Player(null, root.get("sender").asText());
+        try {
+            receiver.setPawn(Pawn.valueOf(root.get("receiverPawn").asText()));
+        } catch(NullPointerException e) {};
+        try {
+            sender.setPawn(Pawn.valueOf(root.get("senderPawn").asText()));
+        } catch (NullPointerException e) {};
         this.time = LocalTime.parse(root.get("time").asText());
         //LocalTime.parse(msg.getTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")))
     }
@@ -114,10 +120,14 @@ public class Message implements Serializable {
         data.put("text", this.getText());
         try {
             data.put("receiver", this.getReceiver().getNickname());
+            data.put("receiverPawn", this.getReceiver().getPawnColor().toString());
         } catch (NullPointerException e) {
             data.put("receiver", "");
         }
         data.put("sender", this.getSender().getNickname());
+        try {
+            data.put("senderPawn", this.getSender().getPawnColor().toString());
+        } catch (NullPointerException e) {}
         data.put("time", this.getTime().toString());
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -134,25 +144,17 @@ public class Message implements Serializable {
      */
     @Override
     public String toString() {
-        if (this.receiver != null && this.receiver.getNickname() != null && this.getReceiver().getNickname().isEmpty()) {
-            return "[ " + this.sender.getNickname() + " -> " + this.receiver.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + this.text;
+        if (this.getSender().getPawnColor() == null) {
+            if (this.receiver != null && this.receiver.getNickname() != null && !this.getReceiver().getNickname().isEmpty()) {
+                return "[ " + this.sender.getNickname() + " -> " + this.receiver.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + this.text;
+            }
+            return "[ " + this.sender.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + this.text;
         }
-        return "[ " + this.sender.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + this.text;
+        if (this.receiver != null && this.receiver.getNickname() != null && !this.getReceiver().getNickname().isEmpty()) {
+            return this.getSender().getPawnColor().getFontColor() + "[ " + this.sender.getNickname() + " -> " + this.receiver.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + ConsoleColors.RESET + this.text;
+        }
+        return this.getSender().getPawnColor().getFontColor() + "[ " + this.sender.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + ConsoleColors.RESET + this.text;
+
     }
 
-    /**
-     * Prints the message and if the pawn color is available, it colors the message
-     *
-     * @param pawnColor  pawn to color the sender
-     * @return string
-     */
-    public String toString(Pawn pawnColor) {
-        if (pawnColor == null) {
-            return toString();
-        }
-        if (this.receiver != null && this.receiver.getNickname() != null && this.getReceiver().getNickname().isEmpty()) {
-            return pawnColor.getFontColor() + "[ " + this.sender.getNickname() + " -> " + this.receiver.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + ConsoleColors.RESET + this.text;
-        }
-        return pawnColor.getFontColor() + "[ " + this.sender.getNickname() + " | " + this.time.toString().substring(0, 8) + " ]: " + ConsoleColors.RESET + this.text;
-    }
 }
