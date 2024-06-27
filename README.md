@@ -54,16 +54,14 @@ We have implemented, in addiction to the `Game Specific` and `Game Agnostic` req
 > For a better experience, launch TUI only on Windows CMD
 
 ## Running Server
-You need to insert the port of the RMI registry (press `Enter` to set the default port 1090) 
+* You need to insert the server IP to give to the clients
+* You need to insert the port of the RMI registry (press `Enter` to set the default port 1090) 
 and the port of the ServerSocket (press `Enter` to set the default port 3060).
 
 On the question `Do you want to restore games from backup? (yes/no)`:
 1. press `no` if you want to reset the server (it discards all the backed up games)
 2. press `yes` if you want to restore backed up games when server disconnects <br>
    -> (use it only when the server went down and there were ongoing games)
-
-> [!WARNING]  
-> For macOS, we don't garantee that clients can connect with RMI, if they're not running on the same machine of the server
 
 ## Running Client
 * You need to insert the IP of the server, the port of the RMI Registry and the port of the ServerSocket
