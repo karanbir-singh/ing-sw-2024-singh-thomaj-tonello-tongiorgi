@@ -333,7 +333,7 @@ public class MainController implements Serializable {
                 // Start game
                 gameController.prepareCommonTable();
 
-                // Reset flag
+                // Reset flagx
                 gameOnCreation = false;
                 invalidNickname = false;
 
@@ -410,13 +410,11 @@ public class MainController implements Serializable {
                 while (game.getNumberOfPlayers() != game.getObservable().getClients().size()) {
                     // wait here so that everything is reloading, because not necessary the virtual views are already there
 
-
                     //if a client isn't reconnecting for more than 30 seconds, the server closes the game
                     if ((System.currentTimeMillis() - currentTime) / 1000 >= maxSecondsToWaitForClientReconnection) {
                         this.destroyGame(gameControllerID);
                         return;
                     }
-                    System.out.println("we are in the while, game " + gameControllerID);
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -426,7 +424,6 @@ public class MainController implements Serializable {
 
                 // Launch thread for pinging clients
                 this.startClientsPing(game.getObservable().getClients(), gameControllerID);
-                System.out.println("thread creati, game " + gameControllerID);
             }).start();
         }
     }
