@@ -168,8 +168,6 @@ public class Game implements Serializable {
                     .filter(player -> player.getPersonalBoard().getScore() == maxScore)
                     .collect(Collectors.toCollection(ArrayList::new));
 
-            winners.forEach((player) -> System.out.println(player.getNickname()));
-
             this.setState(GameState.WINNER);
         }
 
@@ -208,7 +206,6 @@ public class Game implements Serializable {
             pawnsSelected.put(player.getNickname(), player.getPawnColor());
         }
         this.observable.notifyUpdateGame(new SimplifiedGame(gameState, currentPlayerNickname, points, nicknameWinners, availablePawns, pawnsSelected), currentPlayer);
-        // TODO update simplified player
     }
 
     /**
