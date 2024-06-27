@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gc26.controller;
 
+import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.game.Game;
 import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.player.Pawn;
@@ -334,6 +335,63 @@ class GameControllerTest {
         assertFalse(game.getCommonTable().getSelectedCard().isPresent());
         assertEquals(31, game.getCommonTable().getResourceDeck().getCards().size());
         assertEquals(2, game.getCommonTable().getResourceCards().size());
+    }
+
+    @Test
+    void containsOnlyNull() {
+        beforeAll();
+
+        ArrayList<Card> cards = new ArrayList<>();
+        cards.add(null);
+        cards.add(null);
+
+        assertTrue(gameController.containsOnlyNull(cards));
+    }
+
+    @Test
+    void emptyCommonTable() {
+        beforeAll();
+
+        // Prepare initial things
+        gameController.prepareCommonTable();
+        gameController.turnSelectedCardSide(players.get(0).getID());
+        gameController.turnSelectedCardSide(players.get(2).getID());
+        for (Player player : game.getPlayers()) {
+            gameController.playCardFromHand(player.getID());
+        }
+        gameController.choosePawnColor("BLUE", players.get(1).getID());
+        gameController.choosePawnColor("GREEN", players.get(0).getID());
+        gameController.choosePawnColor("YELLOW", players.get(2).getID());
+
+        gameController.selectSecretMission(0, players.get(0).getID());
+
+        gameController.selectSecretMission(1, players.get(2).getID());
+        gameController.setSecretMission(players.get(2).getID());
+
+        gameController.selectSecretMission(0, players.get(1).getID());
+
+        gameController.setSecretMission(players.get(1).getID());
+        gameController.setSecretMission(players.get(0).getID());
+
+        Player currentPlayer = game.getCurrentPlayer();
+
+        gameController.selectCardFromHand(1, currentPlayer.getID());
+        gameController.turnSelectedCardSide(currentPlayer.getID());
+        gameController.selectPositionOnBoard(1, 1, currentPlayer.getID());
+        gameController.playCardFromHand(currentPlayer.getID());
+
+
+        // empty common table
+        game.getCommonTable().getResourceDeck().getCards().clear();
+        game.getCommonTable().getGoldDeck().getCards().clear();
+        game.getCommonTable().getResourceCards().set(1, null);
+        game.getCommonTable().getGoldCards().set(0, null);
+        game.getCommonTable().getGoldCards().set(1, null);
+
+        gameController.selectCardFromCommonTable(0, currentPlayer.getID());
+        gameController.drawSelectedCard(currentPlayer.getID());
+
+        assertEquals(GameState.WINNER, game.getState());
     }
 
     @Test

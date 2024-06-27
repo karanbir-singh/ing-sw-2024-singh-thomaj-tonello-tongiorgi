@@ -125,16 +125,6 @@ public class TUIUpdate implements UpdateInterface {
      */
     @Override
     public void updateViewOtherPersonalBoard(SimplifiedPersonalBoard otherPersonalBoard) {
-        return;
-        //clearConsole(); i do not want to hide my personal board
-//        cli = new CLI(miniModel);
-//        try {
-//            cli.printOtherGame(otherPersonalBoard); //TODO si puà prendere nickname direttamente da la board senza parametro
-//        } catch (Exception e) {
-//            System.out.println("Other personal board not available yet!");
-//        }
-//        printOptions(getGameState());
-
     }
 
     /**

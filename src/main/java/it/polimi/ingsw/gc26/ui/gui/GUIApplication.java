@@ -122,13 +122,14 @@ public class GUIApplication extends Application implements UIInterface {
             try {
                 // Run client connection
                 this.runConnection();
-
-                // Launch thread for managing server ping
-                new Thread(this.mainClient.getPingManager()).start();
-                new Thread(new ClientResetTimerToServer(this.mainClient)).start();
             } catch (RemoteException e) {
-                // TODO manage on GUI
+                System.out.println("Error during connection phase!");
+                System.exit(-1);
             }
+
+            // Launch thread for managing server ping
+            new Thread(this.mainClient.getPingManager()).start();
+            new Thread(new ClientResetTimerToServer(this.mainClient)).start();
         }).start();
     }
 
@@ -369,7 +370,7 @@ public class GUIApplication extends Application implements UIInterface {
         }
     }
 
-    public String getNickname(){
+    public String getNickname() {
         return this.mainClient.getNickname();
     }
 

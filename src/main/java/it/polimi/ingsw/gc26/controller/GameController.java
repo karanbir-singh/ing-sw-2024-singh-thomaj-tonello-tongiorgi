@@ -608,7 +608,7 @@ public class GameController implements Serializable {
                         } else {
                             game.sendError(playerID, "You need to select a card");
                         }
-                    }else {
+                    } else {
                         game.sendError(playerID, "You have already played a card. Please draw a card from the common table.");
                     }
                 } else {
@@ -652,6 +652,23 @@ public class GameController implements Serializable {
     }
 
     /**
+     * Checks if a list contains only null
+     *
+     * @param list to check
+     * @return true if contains only null elements
+     */
+    public boolean containsOnlyNull(ArrayList<Card> list) {
+        boolean containsOnlyNull = true;
+        for (int i = 0; i < 2; i++) {
+            if (list.get(i) != null) {
+                containsOnlyNull = false;
+                break;
+            }
+        }
+        return containsOnlyNull;
+    }
+
+    /**
      * Draw a card from the common table and places it on the current player's hand
      *
      * @param playerID ID of the player who is trying to draw the selected card on the common table
@@ -682,8 +699,19 @@ public class GameController implements Serializable {
                         // Change player's state
                         player.setState(PlayerState.CARD_DRAWN, player.getID());
 
+                        // Check if common table is empty
+                        if(this.containsOnlyNull(commonTable.getResourceCards()) &&
+                                this.containsOnlyNull(commonTable.getGoldCards())){
+                            game.setState(GameState.END_STAGE);
+                            game.setFinalRound(game.getRound());
+                            game.getNextPlayer().setFirstPlayer(game.getNextPlayer().getID());
+                        }
+
                         // Check if player's score is greater or equal then 20 points OR decks are both empty
-                        if (game.getState() != GameState.END_STAGE && player.getPersonalBoard().getScore() >= 20 || (commonTable.getResourceDeck().getCards().isEmpty() && commonTable.getGoldDeck().getCards().isEmpty())) {
+                        if (game.getState() != GameState.END_STAGE &&
+                                (player.getPersonalBoard().getScore() >= 20 ||
+                                        (commonTable.getResourceDeck().getCards().isEmpty() &&
+                                                commonTable.getGoldDeck().getCards().isEmpty()))) {
                             // Change game state into END_STAGE
                             game.setState(GameState.END_STAGE);
 
