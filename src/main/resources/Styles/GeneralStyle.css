@@ -20,6 +20,15 @@
     -fx-padding: 10px 45px;
 }
 
+.statusLabel {
+    -fx-font-size: 16px;
+    -fx-text-alignment: center center;
+    -fx-text-fill: black;
+    -fx-background-color: rgba(230, 255, 240, 0.9);
+    -fx-padding: 20px 10px 20px 10px;
+    -fx-background-radius: 30px;
+}
+
 .customLabel {
     -fx-effect: dropshadow( gaussian , #e3fff2  , 10,0.1,0,1 );
 }
@@ -288,6 +297,17 @@
     -fx-border-radius: 50px;
     -fx-background-radius: 50px;
     -fx-background-color: rgba(255, 255, 255, 0.8);
+}
+
+.serverScrollPane {
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}
+
+.serverScrollPane > .viewport {
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-background-color: rgba(230, 255, 240, 0.9);
 }
 
 .context-menu {

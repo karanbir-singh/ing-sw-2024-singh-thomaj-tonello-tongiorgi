@@ -430,7 +430,7 @@ public class GameFlowController extends SceneController implements Initializable
         }
         if(simplifiedGame.getCurrentPlayer() != null){
             Platform.runLater(()->{
-                statusPlayer.setText("It's " + simplifiedGame.getCurrentPlayer() + " turn");
+                statusPlayer.setText("It's " + simplifiedGame.getCurrentPlayer() + "'s turn");
             });
         }
     }
@@ -696,7 +696,7 @@ public class GameFlowController extends SceneController implements Initializable
         } else {
             scoreBoardButton.getStyleClass().clear();
             scoreBoardButton.getStyleClass().add("buttonVisible");
-            anchorPaneScoreBoard.setTranslateX(50);
+            anchorPaneScoreBoard.setTranslateX(40);
             HBoxLeftPanel.setMinWidth(380);
             HBoxLeftPanel.setMaxWidth(380);
             scoreBoardIsVisible = true;
@@ -727,7 +727,7 @@ public class GameFlowController extends SceneController implements Initializable
         } else {
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonVisible");
-            anchorPaneChat.setTranslateX(-270);
+            anchorPaneChat.setTranslateX(-250);
             HBoxLeftPanel.setMinWidth(380);
             HBoxLeftPanel.setMaxWidth(380);
             chatIsVisible = true;
