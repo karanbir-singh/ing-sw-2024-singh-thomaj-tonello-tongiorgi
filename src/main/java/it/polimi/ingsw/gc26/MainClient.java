@@ -302,8 +302,8 @@ public class MainClient {
 
         // Insert server IP
         System.out.print("Enter server IP address (default: 127.0.0.1): ");
-        String serverIP = scanner.nextLine();
-        if (serverIP.matches(".*[a-zA-Z]+.*")) {
+        String serverIP = scanner.nextLine().trim();
+        if (!serverIP.matches("^\\d{1,3}[.]\\d{1,3}[.]\\d{1,3}[.]\\d{1,3}$")) {
             ConsoleColors.printError("[ERROR]: Invalid input -> Set default server IP address");
         } else if (!serverIP.isEmpty()) {
             SERVER_IP = serverIP;
@@ -311,8 +311,8 @@ public class MainClient {
 
         // Insert RMI Server port
         System.out.print("Enter server RMI port (default 1099): ");
-        String rmiServerPort = scanner.nextLine();
-        if (rmiServerPort.matches(".*[a-zA-Z]+.*")) {
+        String rmiServerPort = scanner.nextLine().trim();
+        if (!rmiServerPort.matches("^\\d{1,5}$")) {
             ConsoleColors.printError("[ERROR]: Invalid input -> Set default RMI Server port");
         } else if (!rmiServerPort.isEmpty()) {
             RMI_SERVER_PORT = Integer.parseInt(rmiServerPort);
@@ -321,7 +321,7 @@ public class MainClient {
         // Insert server socket port
         System.out.print("Enter server socket port (default 3060): ");
         String socketServerPort = scanner.nextLine();
-        if (socketServerPort.matches(".*[a-zA-Z]+.*")) {
+        if (!socketServerPort.matches("^\\d{1,5}$")) {
             ConsoleColors.printError("[ERROR]: Invalid input -> Set default Server socket port");
         } else if (!socketServerPort.isEmpty()) {
             SERVER_SOCKET_PORT = Integer.parseInt(socketServerPort);
@@ -332,7 +332,7 @@ public class MainClient {
         do {
             System.out.println("What type of communication do you want to use? (rmi/socket)");
             try {
-                networkType = NetworkType.valueOf(scanner.nextLine().toLowerCase());
+                networkType = NetworkType.valueOf(scanner.nextLine().trim().toLowerCase());
             } catch (IllegalArgumentException e) {
                 ConsoleColors.printError("[ERROR]: Invalid input");
             }
@@ -343,7 +343,7 @@ public class MainClient {
         do {
             System.out.println("What type of user interface do you want to use? (tui/gui)");
             try {
-                graphicType = GraphicType.valueOf(scanner.nextLine().toLowerCase());
+                graphicType = GraphicType.valueOf(scanner.nextLine().trim().toLowerCase());
             } catch (IllegalArgumentException e) {
                 ConsoleColors.printError("[ERROR]: Invalid input");
             }

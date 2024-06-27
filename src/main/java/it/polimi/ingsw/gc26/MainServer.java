@@ -99,11 +99,9 @@ public class MainServer {
 
         // Insert RMI server port
         System.out.print("Enter RMI server port (default: " + DEFAULT_RMI_SERVER_PORT + "): ");
-        String rmiServerPort = scanner.nextLine();
-        if (rmiServerPort.matches(".*[a-zA-Z]+.*")) {
+        String rmiServerPort = scanner.nextLine().trim();
+        if (!rmiServerPort.matches("^\\d{1,5}$")) {
             ConsoleColors.printError("[ERROR]: Invalid input -> Set default RMI server port");
-            RMI_SERVER_PORT = DEFAULT_RMI_SERVER_PORT;
-        } else if (rmiServerPort.isEmpty()) {
             RMI_SERVER_PORT = DEFAULT_RMI_SERVER_PORT;
         } else {
             RMI_SERVER_PORT = Integer.parseInt(rmiServerPort);
@@ -111,11 +109,9 @@ public class MainServer {
 
         // Insert Server socket port
         System.out.print("Enter server socket port (default: " + DEFAULT_SOCKET_SERVER_PORT + "): ");
-        String serverSocketPort = scanner.nextLine();
-        if (serverSocketPort.matches(".*[a-zA-Z]+.*")) {
+        String serverSocketPort = scanner.nextLine().trim();
+        if (!serverSocketPort.matches("^\\d{1,5}$")) {
             ConsoleColors.printError("[ERROR]: Invalid input -> Set default Server socket port");
-            SERVER_SOCKET_PORT = DEFAULT_SOCKET_SERVER_PORT;
-        } else if (serverSocketPort.isEmpty()) {
             SERVER_SOCKET_PORT = DEFAULT_SOCKET_SERVER_PORT;
         } else {
             SERVER_SOCKET_PORT = Integer.parseInt(serverSocketPort);
@@ -125,7 +121,7 @@ public class MainServer {
         String decision = null;
         do {
             System.out.println("Do you want to restore games from backup? (yes/no)");
-            decision = scanner.nextLine().toLowerCase();
+            decision = scanner.nextLine().toLowerCase().trim();
             if (!decision.equals("yes") && !decision.equals("no")) {
                 ConsoleColors.printError("[ERROR]: invalid input");
             }
