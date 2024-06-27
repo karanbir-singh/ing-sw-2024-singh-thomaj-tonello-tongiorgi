@@ -146,6 +146,6 @@ class MainControllerTest {
 
         mainController.resetServerTimer(clients.get(0).getClientID());
 
-        assertEquals(System.currentTimeMillis(), mainController.getTimers().get(clients.get(0).getClientID()));
+        assertTrue(mainController.getTimers().get(clients.get(0).getClientID()) < System.currentTimeMillis() + 100 && mainController.getTimers().get(clients.get(0).getClientID()) > System.currentTimeMillis() - 100);
     }
 }
