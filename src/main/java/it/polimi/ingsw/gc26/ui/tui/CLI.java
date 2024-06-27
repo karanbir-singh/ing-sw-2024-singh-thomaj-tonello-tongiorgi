@@ -427,9 +427,9 @@ public class CLI {
                 //points
                 switch (c.getFront()) {
                     case CornerCounter cornerCounter -> ct[y][x] = "2 pt " + "x" + SpecialCharacters.SQUARE_WHITE_LARGE.getCharacter();
-                    case InkwellCounter inkwellCounter -> ct[y][x] = "1 pt " + "x" + Symbol.INKWELL.getAlias();
-                    case ManuscriptCounter manuscriptCounter -> ct[y][x] = "1 pt " + "x" + Symbol.MANUSCRIPT.getAlias();
-                    case QuillCounter quillCounter -> ct[y][x] = "1 pt " + "x" + Symbol.QUILL.getAlias();
+                    case InkwellCounter inkwellCounter -> ct[y][x] = "1 pt " + "x " + Symbol.INKWELL.getAlias();
+                    case ManuscriptCounter manuscriptCounter -> ct[y][x] = "1 pt " + "x " + Symbol.MANUSCRIPT.getAlias();
+                    case QuillCounter quillCounter -> ct[y][x] = "1 pt " + "x " + Symbol.QUILL.getAlias();
                     case null, default -> ct[y][x] = c.getFront().getPoints() + " pt " + "        ";
                 }
                 if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
