@@ -33,7 +33,7 @@
       </AnchorPane>
       <VBox fx:id="loginVBox" alignment="BOTTOM_CENTER" fillWidth="false" layoutX="271.0" minHeight="300.0" minWidth="200.0" prefHeight="596.0" prefWidth="438.0" spacing="10.0" AnchorPane.bottomAnchor="50.0">
          <children>
-            <Label fx:id="status" styleClass="error-label" text="Status" textAlignment="CENTER" visible="false">
+            <Label fx:id="status" text="Status" textAlignment="CENTER" visible="false">
                <font>
                   <Font size="18.0" />
                </font>

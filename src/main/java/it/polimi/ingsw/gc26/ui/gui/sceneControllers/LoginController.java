@@ -68,6 +68,8 @@ public class LoginController extends SceneController implements Initializable {
      */
     public void setStatus(String message) {
         this.status.setText(message);
+        status.getStyleClass().clear();
+        status.getStyleClass().add("error-label");
         this.status.setVisible(true);
     }
 
@@ -79,6 +81,8 @@ public class LoginController extends SceneController implements Initializable {
     public void onLoginButtonClick(ActionEvent event) {
         if (nicknameTXT.getText().isEmpty()) {
             status.setText("Insert again, not valid nickname");
+            status.getStyleClass().clear();
+            status.getStyleClass().add("error-label");
             status.setVisible(true);
         } else {
             try {
@@ -86,6 +90,10 @@ public class LoginController extends SceneController implements Initializable {
             } catch (RemoteException e) {
                 System.out.println("Connection problem, please wait");
             }
+            status.setText("Validating nickname...");
+            status.getStyleClass().clear();
+            status.getStyleClass().add("info-label");
+            status.setVisible(true);
         }
     }
 

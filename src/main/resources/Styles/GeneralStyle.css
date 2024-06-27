@@ -11,6 +11,15 @@
     -fx-text-fill: white;
 }
 
+.info-label {
+    -fx-font-size: 16px;
+    -fx-font-family: 'Georgia';
+    -fx-text-alignment: center center;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(50, 168, 153, 0.9);
+    -fx-padding: 10px 45px;
+}
+
 .error-label {
     -fx-font-size: 16px;
     -fx-font-family: 'Georgia';

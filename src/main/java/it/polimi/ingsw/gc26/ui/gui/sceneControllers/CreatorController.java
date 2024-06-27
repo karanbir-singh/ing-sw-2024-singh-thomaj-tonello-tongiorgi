@@ -43,11 +43,6 @@ public class CreatorController extends SceneController implements Initializable 
     @FXML
     private Button fourButton;
     /**
-     * Message displayed when the server makes an update.
-     */
-    @FXML
-    private Label status;
-    /**
      * Button that triggers the request to the server
      */
     @FXML
@@ -124,7 +119,6 @@ public class CreatorController extends SceneController implements Initializable 
     public void onClickButton(ActionEvent actionEvent) {
         try {
             this.mainClient.getVirtualMainController().createWaitingList(this.mainClient.getVirtualView(), this.mainClient.getNickname(), this.numMaxPlayer);
-            this.status.setText("Waiting for other players...");
         } catch (RemoteException e) {
             System.out.println("Connection problem, please wait");
         }
