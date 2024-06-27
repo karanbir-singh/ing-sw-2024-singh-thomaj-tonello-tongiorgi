@@ -6,12 +6,10 @@ import it.polimi.ingsw.gc26.model.game.GameState;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.network.ClientResetTimerToServer;
 import it.polimi.ingsw.gc26.ui.UIInterface;
-import it.polimi.ingsw.gc26.ui.gui.sceneControllers.SceneController;
 import it.polimi.ingsw.gc26.utils.ConsoleColors;
 
 import java.awt.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -249,11 +247,13 @@ public class TUIApplication implements UIInterface {
                             break;
                         case "5":
                             openRulebook();
-                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                                    mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                             break;
                         case null, default:
                             System.out.println("Invalid option!");
-                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                                    mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                             break;
                     }
                     break;
@@ -276,11 +276,13 @@ public class TUIApplication implements UIInterface {
                             break;
                         case "4":
                             openRulebook();
-                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                                    mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                             break;
                         case null, default:
                             System.out.println("Invalid option!");
-                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                                    mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                             break;
                     }
                     break;
@@ -308,11 +310,13 @@ public class TUIApplication implements UIInterface {
                             break;
                         case "5":
                             openRulebook();
-                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                                    mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                             break;
                         case null, default:
                             System.out.println("Invalid option!");
-                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                                    mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                             break;
                     }
                     break;
@@ -345,7 +349,8 @@ public class TUIApplication implements UIInterface {
                                 mainClient.getVirtualGameController().selectPositionOnBoard(Integer.parseInt(XPosition), Integer.parseInt(YPosition), this.mainClient.getClientID());
                             } catch (NumberFormatException e) {
                                 System.out.println("Invalid coordinate");
-                                TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                                TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                                        mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                             }
                             break;
                         case "5":
@@ -366,8 +371,11 @@ public class TUIApplication implements UIInterface {
                             System.out.print("Nickname players: ");
                             System.out.println(mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getPlayersNicknames().stream().
                                     filter(nickname -> !nickname.equals(this.mainClient.getNickname())).collect(toList()));
-                            System.out.println("Insert the player's nickname owner of the board: ");
-                            String playerNickname = new Scanner(System.in).nextLine();
+                            String playerNickname;
+                            do {
+                                System.out.println("Insert the player's nickname owner of the board: ");
+                                playerNickname = new Scanner(System.in).nextLine().trim();
+                            } while(playerNickname.isEmpty());
                             if (mainClient.getViewController().getSimplifiedModel().getOthersPersonalBoards().containsKey(playerNickname)) {
                                 mainClient.getViewController().getSimplifiedModel().getView().showOtherPersonalBoard(playerNickname);
                                 break;
@@ -382,11 +390,13 @@ public class TUIApplication implements UIInterface {
                             break;
                         case "10":
                             openRulebook();
-                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                                    mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                             break;
                         case null, default:
                             System.out.println("Invalid option!");
-                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                                    mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                             break;
                     }
                     break;
@@ -405,11 +415,13 @@ public class TUIApplication implements UIInterface {
                             System.out.println("Invalid option!");
                             break;
                     }
-                    TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                    TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                            mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                     break;
                 case null, default:
                     System.out.println("Invalid option!");
-                    TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+                    TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                            mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
                     break;
             }
         }
@@ -468,9 +480,10 @@ public class TUIApplication implements UIInterface {
                 return;
             }
             for (Message message : mainClient.getViewController().getSimplifiedModel().getSimplifiedChat().filterMessagesByPlayer(playerNickname, playersNicknames)) {
-                System.out.println(message.toString(message.getSender().getPawnColor()));
+                System.out.println(message.toString());
             }
-            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
+            TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners(),
+                    mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getCurrentPlayer());
         } else {
             System.out.println("Insert the receiver's nickname: (Press enter for a broadcast message)");
             String receiverNickname = new Scanner(System.in).nextLine();

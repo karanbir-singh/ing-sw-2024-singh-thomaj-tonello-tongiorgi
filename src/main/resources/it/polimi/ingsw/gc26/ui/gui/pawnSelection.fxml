@@ -3,8 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <AnchorPane fx:id="rootPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.gc26.ui.gui.sceneControllers.PawnSelectionController">
     <children>
@@ -53,6 +52,14 @@
             <center>
                 <VBox fx:id="centerVBox" alignment="CENTER" BorderPane.alignment="CENTER">
                     <children>
+                  <ImageView fitHeight="88.0" fitWidth="596.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@sceneControllers/images/labels/ChoosePawnLabel.png" />
+                     </image>
+                     <VBox.margin>
+                        <Insets bottom="50.0" />
+                     </VBox.margin>
+                  </ImageView>
                         <TilePane fx:id="pawnsTile" alignment="CENTER" hgap="20.0" vgap="20.0">
                             <children>
                                 <Button fx:id="greenButton" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #1dcf3d;" textFill="#1dcf3d">
@@ -76,6 +83,9 @@
                                     </font>
                                 </Button>
                             </children>
+                     <VBox.margin>
+                        <Insets bottom="100.0" />
+                     </VBox.margin>
                         </TilePane>
                     </children>
                 </VBox>
@@ -83,13 +93,6 @@
             <right>
                 <VBox fx:id="rightVBox" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
             </right>
-            <top>
-                <Label fx:id="status" text="Select the color of your pawn" BorderPane.alignment="CENTER">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Label>
-            </top>
         </BorderPane>
     </children>
 </AnchorPane>

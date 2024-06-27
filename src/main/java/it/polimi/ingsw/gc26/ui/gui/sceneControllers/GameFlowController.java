@@ -2,6 +2,7 @@ package it.polimi.ingsw.gc26.ui.gui.sceneControllers;
 
 import it.polimi.ingsw.gc26.model.card.Card;
 import it.polimi.ingsw.gc26.model.player.Pawn;
+import it.polimi.ingsw.gc26.model.player.PlayerState;
 import it.polimi.ingsw.gc26.model.player.Point;
 import it.polimi.ingsw.gc26.ui.gui.PawnsCoords;
 import it.polimi.ingsw.gc26.view_model.*;
@@ -13,10 +14,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -41,6 +39,12 @@ import java.util.ResourceBundle;
  * see common mission and common table.
  */
 public class GameFlowController extends SceneController implements Initializable {
+    /**
+     * Text with the player state information
+     */
+    @FXML
+    private Label statusPlayer;
+
     /**
      * Pane with chat tabs as children
      */
@@ -199,7 +203,6 @@ public class GameFlowController extends SceneController implements Initializable
      */
     private final ImageView rulesIcon = new ImageView(new Image(getClass().getResource("images/icons/rules-icon.png").toExternalForm()));
 
-
     /**
      * Selects the position and draws the card that has been double-clicked
      *
@@ -222,7 +225,6 @@ public class GameFlowController extends SceneController implements Initializable
             }
         }
     }
-
 
     /**
      * Updates images in common table with the new values in simplified common table
@@ -424,8 +426,17 @@ public class GameFlowController extends SceneController implements Initializable
                 tab.setId(pawn.name());
             }
         }
+        if(simplifiedGame.getCurrentPlayer() != null){
+            Platform.runLater(()->{
+                statusPlayer.setText("It's " + simplifiedGame.getCurrentPlayer() + "'s turn");
+            });
+        }
     }
 
+    /**
+     * Modify the color of the name in every tab that contains the personalBoard
+     * @param simplifiedPlayer new simplified player
+     */
     @Override
     public void changeGUIPlayer(SimplifiedPlayer simplifiedPlayer) {
         if (simplifiedPlayer.getPawnColor() != null) {
@@ -504,7 +515,7 @@ public class GameFlowController extends SceneController implements Initializable
     }
 
     /**
-     * Populates the grid pane representing the personal board
+     * Set the dimensions and constraints of a gridPane
      *
      * @param gridPane pane inside players tab
      */
@@ -522,7 +533,7 @@ public class GameFlowController extends SceneController implements Initializable
     }
 
     /**
-     * Standards card images parameters
+     * Standard card images parameters
      *
      * @param imageView image to be standard
      * @param index     card's index in the hand
@@ -671,7 +682,7 @@ public class GameFlowController extends SceneController implements Initializable
         } else {
             scoreBoardButton.getStyleClass().clear();
             scoreBoardButton.getStyleClass().add("buttonVisible");
-            anchorPaneScoreBoard.setTranslateX(50);
+            anchorPaneScoreBoard.setTranslateX(40);
             HBoxLeftPanel.setMinWidth(380);
             HBoxLeftPanel.setMaxWidth(380);
             scoreBoardIsVisible = true;
@@ -702,7 +713,7 @@ public class GameFlowController extends SceneController implements Initializable
         } else {
             chatButton.getStyleClass().clear();
             chatButton.getStyleClass().add("buttonVisible");
-            anchorPaneChat.setTranslateX(-270);
+            anchorPaneChat.setTranslateX(-250);
             HBoxLeftPanel.setMinWidth(380);
             HBoxLeftPanel.setMaxWidth(380);
             chatIsVisible = true;

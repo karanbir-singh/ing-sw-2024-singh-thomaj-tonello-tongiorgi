@@ -324,6 +324,7 @@ abstract public class SceneController {
         text.setStyle("-fx-text-fill: white;");
         text.setFill(Color.color(1, 1, 1));
         hBox.getChildren().add(textFlow);
+        AnchorPane.setLeftAnchor(hBox, 0.0);
 
         Platform.runLater(() -> {
             ((VBox) chats.get(sender).getContent()).getChildren().add(hBox);

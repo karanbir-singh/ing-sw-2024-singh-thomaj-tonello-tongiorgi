@@ -73,7 +73,7 @@ public class RMIPingManager implements PingManager {
     }
 
     /**
-     * Returns true if server is uo, false otherwise
+     * Returns true if server is up, false otherwise
      */
     @Override
     public boolean isServerUp() {

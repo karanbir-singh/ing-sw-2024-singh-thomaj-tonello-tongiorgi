@@ -80,7 +80,7 @@ public class PawnSelectionController extends SceneController implements Initiali
         }
         pawnsTile.getChildren().clear();
         pawnsTile.getChildren().add((Button) event.getSource());
-        pawnsTile.getChildren().add(new Label("Wow, you're so fast!\nNow wait fot the other players..."));
+        pawnsTile.getChildren().add(new Label("Nice color!\nNow wait for the other players..."));
     }
 
     /**
