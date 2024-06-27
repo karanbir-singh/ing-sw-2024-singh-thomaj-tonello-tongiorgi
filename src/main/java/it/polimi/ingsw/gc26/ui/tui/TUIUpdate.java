@@ -46,7 +46,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Common table not available yet!");
         }
-        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners(), miniModel.getSimplifiedGame().getCurrentPlayer());
     }
 
     /**
@@ -63,7 +63,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Player not available yet!");
         }
-        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners(), miniModel.getSimplifiedGame().getCurrentPlayer());
     }
 
     /**
@@ -81,7 +81,7 @@ public class TUIUpdate implements UpdateInterface {
             e.printStackTrace();
             System.out.println("Hand not available yet!");
         }
-        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners(), miniModel.getSimplifiedGame().getCurrentPlayer());
     }
 
     /**
@@ -98,7 +98,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Secret hand not available yet!");
         }
-        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners(), miniModel.getSimplifiedGame().getCurrentPlayer());
     }
 
     /**
@@ -115,7 +115,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Personal not available yet!");
         }
-        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners(), miniModel.getSimplifiedGame().getCurrentPlayer());
     }
 
     /**
@@ -150,7 +150,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Simplified chat not available yet!");
         }
-        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners(), miniModel.getSimplifiedGame().getCurrentPlayer());
     }
 
     /**
@@ -167,7 +167,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Game not available yet!");
         }
-        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners(), miniModel.getSimplifiedGame().getCurrentPlayer());
     }
 
     /**
@@ -216,7 +216,7 @@ public class TUIUpdate implements UpdateInterface {
         } catch (Exception e) {
             System.out.println("Other personal board not available yet!");
         }
-        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners());
+        printOptions(getGameState(), miniModel.getSimplifiedGame().getWinners(), miniModel.getSimplifiedGame().getCurrentPlayer());
     }
 
     /**
@@ -239,7 +239,8 @@ public class TUIUpdate implements UpdateInterface {
      *
      * @param gameState
      */
-    public static void printOptions(GameState gameState, ArrayList<String> winners) {
+    public static void printOptions(GameState gameState, ArrayList<String> winners, String currentPlayer) {
+        if (currentPlayer != null && !currentPlayer.equals("null")) System.out.println("Current player: " + currentPlayer);
         System.out.println("\nSelect your option:");
 
         switch (gameState) {
@@ -302,6 +303,6 @@ public class TUIUpdate implements UpdateInterface {
      */
     public void closeErrorPopup() {
         System.out.println("Server is up, you can restart to play");
-        TUIUpdate.printOptions(miniModel.getSimplifiedGame().getGameState(), miniModel.getSimplifiedGame().getWinners());
+        TUIUpdate.printOptions(miniModel.getSimplifiedGame().getGameState(), miniModel.getSimplifiedGame().getWinners(), miniModel.getSimplifiedGame().getCurrentPlayer());
     }
 }
