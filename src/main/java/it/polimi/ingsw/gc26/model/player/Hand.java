@@ -65,9 +65,10 @@ public class Hand implements Serializable {
         }
 
         // Check if the card is already selected
-//        if (this.selectedCard == selectedCard) {
-//            return;
-//        }
+        if (this.selectedCard == selectedCard) {
+            this.observable.notifyMessage("You already selected that card!",clientID);
+            return;
+        }
 
         this.selectedCard = selectedCard;
         this.selectedSide = selectedCard.getFront();
