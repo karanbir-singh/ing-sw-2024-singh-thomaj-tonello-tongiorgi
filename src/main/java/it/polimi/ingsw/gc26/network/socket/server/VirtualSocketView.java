@@ -615,6 +615,7 @@ public class VirtualSocketView implements VirtualView {
      * @return encoded card
      */
     private ObjectNode createGoldCardNode(Card goldCard) {
+        if (goldCard == null) return null;
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
         cardNode.put("cardType", goldCard.getFront().getClass().getSimpleName());

@@ -220,6 +220,7 @@ public class SocketServerHandler implements Runnable {
      * @return gold card instance built from json string
      */
     private GoldCard getGoldCard(JsonNode encodedCard) {
+        if (encodedCard.isNull()) return null;
         if (encodedCard.findValue("card") != null) {
             encodedCard = encodedCard.get("card");
         }
