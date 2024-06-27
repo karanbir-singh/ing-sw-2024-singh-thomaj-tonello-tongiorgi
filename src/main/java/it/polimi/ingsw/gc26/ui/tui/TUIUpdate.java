@@ -220,7 +220,7 @@ public class TUIUpdate implements UpdateInterface {
     }
 
     /**
-     * auxiliary function to get the current game state
+     * Auxiliary function to get the current game state
      *
      * @return
      */

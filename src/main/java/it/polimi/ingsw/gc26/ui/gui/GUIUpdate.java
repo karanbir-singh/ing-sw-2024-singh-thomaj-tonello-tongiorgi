@@ -8,9 +8,8 @@ import javafx.stage.WindowEvent;
 import java.util.Objects;
 
 /**
- * The GUIUpdate class implements the UpdateInterface to provide updates to the GUI components
- * in the GUIApplication. It handles the logic for updating the game's view based on the changes
- * in the model.
+ * The GUIUpdate class implements the UpdateInterface to provide updates to the GUI components in every scene.
+ * It handles the logic for updating the game's view based on the changes in the model.
  */
 public class GUIUpdate implements UpdateInterface {
     /**
@@ -145,7 +144,7 @@ public class GUIUpdate implements UpdateInterface {
     }
 
     /**
-     * Updates the current showed scene
+     * Updates the current showed scene and update the view of every scene
      *
      * @param simplifiedGame game
      */
@@ -212,11 +211,7 @@ public class GUIUpdate implements UpdateInterface {
         if (message.equals("Server is down, wait for reconnection...")) {
             Platform.runLater(() -> this.guiApplication.openErrorPopup(message));
         }
-        try {
-            Platform.runLater(() -> this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, true));
-        } catch (Exception e) {
-        }
-
+        Platform.runLater(() -> this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().addMessageServerDisplayer(message, true));
     }
 
     /**
@@ -234,6 +229,10 @@ public class GUIUpdate implements UpdateInterface {
         });
     }
 
+    /**
+     * Method not implemented in GUI but useful for TUI application
+     * @param nickname other player's nickname
+     */
     @Override
     public void showOtherPersonalBoard(String nickname) {
     }
