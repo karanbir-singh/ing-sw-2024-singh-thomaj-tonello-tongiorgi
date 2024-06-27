@@ -256,6 +256,7 @@ public class SocketServerHandler implements Runnable {
      * @return resource card instance built from json string
      */
     private ResourceCard getResourceCard(JsonNode encodedCard) {
+        if (encodedCard.isNull()) return null;
         if (encodedCard.findValue("card") != null) {
             encodedCard = encodedCard.get("card");
         }

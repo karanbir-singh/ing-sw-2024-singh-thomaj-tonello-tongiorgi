@@ -325,9 +325,10 @@ public class CLI {
             ct[yResource - 1][offSet + 4] = blackSquare;
             xResource++;
 
+            Card r = miniCT.getResourceCards().get(i);
+
             //insert uncovered cards
-            if (i < miniCT.getResourceCards().size()) {
-                Card r = miniCT.getResourceCards().get(i);
+            if (r != null) {
                 addPrintable(r.getFront().printableSide(), ct, xResource, yResource);
             } else {
                 addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xResource, yResource);
@@ -369,8 +370,9 @@ public class CLI {
 
             xGold++;
 
-            if (i < miniCT.getGoldCards().size()) {
-                Card g = miniCT.getGoldCards().get(i);
+            Card g = miniCT.getGoldCards().get(i);
+
+            if (g != null) {
                 addPrintable(g.getFront().printableSide(), ct, xGold, yGold);
             } else {
                 addPrintable(emptyPrintable(xCardDim, yCardDim), ct, xGold, yGold);
@@ -424,40 +426,48 @@ public class CLI {
                     y = yGold + yCardDim;
                 }
 
-                //points
-                switch (c.getFront()) {
-                    case CornerCounter cornerCounter -> ct[y][x] = "2 pt " + "x" + SpecialCharacters.SQUARE_WHITE_LARGE.getCharacter();
-                    case InkwellCounter inkwellCounter -> ct[y][x] = "1 pt " + "x " + Symbol.INKWELL.getAlias();
-                    case ManuscriptCounter manuscriptCounter -> ct[y][x] = "1 pt " + "x " + Symbol.MANUSCRIPT.getAlias();
-                    case QuillCounter quillCounter -> ct[y][x] = "1 pt " + "x " + Symbol.QUILL.getAlias();
-                    case null, default -> ct[y][x] = c.getFront().getPoints() + " pt " + "        ";
-                }
-                if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
-                    ct[y][x + 1] = "      " + blackSquare + blackSquare;
-                } else {
-                    ct[y][x + 1] = blackSquare + blackSquare + blackSquare;
-                }
-                ct[y][x + 2] = "    ";
-                y++;
-
-                //requirements
-                ct[y][x] = "";
-                int n;
-                int spaces = 5;
-
-                for (Symbol s : c.getFront().getRequestedResources().keySet()) {
-                    n = c.getFront().getRequestedResources().get(s);
-                    for (int j = 0; j < n; j++) {
-                        ct[y][x] = ct[y][x] + s.getAlias();
+                if(c != null) {
+                    //points
+                    switch (c.getFront()) {
+                        case CornerCounter cornerCounter -> ct[y][x] = "2 pt " + "x" + SpecialCharacters.SQUARE_WHITE_LARGE.getCharacter();
+                        case InkwellCounter inkwellCounter -> ct[y][x] = "1 pt " + "x " + Symbol.INKWELL.getAlias();
+                        case ManuscriptCounter manuscriptCounter -> ct[y][x] = "1 pt " + "x " + Symbol.MANUSCRIPT.getAlias();
+                        case QuillCounter quillCounter -> ct[y][x] = "1 pt " + "x " + Symbol.QUILL.getAlias();
+                        case null, default -> ct[y][x] = c.getFront().getPoints() + " pt " + "        ";
                     }
-                    spaces = spaces - n;
+                    if (c.getFront() instanceof CornerCounter || c.getFront() instanceof InkwellCounter || c.getFront() instanceof ManuscriptCounter || c.getFront() instanceof QuillCounter) {
+                        ct[y][x + 1] = "      " + blackSquare + blackSquare;
+                    } else {
+                        ct[y][x + 1] = blackSquare + blackSquare + blackSquare;
+                    }
+                    ct[y][x + 2] = "    ";
+                    y++;
+
+                    //requirements
+                    ct[y][x] = "";
+                    int n;
+                    int spaces = 5;
+
+                    for (Symbol s : c.getFront().getRequestedResources().keySet()) {
+                        n = c.getFront().getRequestedResources().get(s);
+                        for (int j = 0; j < n; j++) {
+                            ct[y][x] = ct[y][x] + s.getAlias();
+                        }
+                        spaces = spaces - n;
+                    }
+                    while (spaces > 0) {
+                        ct[y][x] = ct[y][x] + blackSquare;
+                        spaces--;
+                    }
+                    ct[y][x + 1] = "      " + blackSquare;
+                    ct[y][x + 2] = "    ";
+                } else {
+                    ct[y][x] = "                 ";
+                    ct[y][x + 1] = blackSquare + blackSquare + blackSquare;
+                    y++;
+                    ct[y][x] = blackSquare + blackSquare + blackSquare + blackSquare + blackSquare;
+                    ct[y][x + 1] = "            ";
                 }
-                while (spaces > 0) {
-                    ct[y][x] = ct[y][x] + blackSquare;
-                    spaces--;
-                }
-                ct[y][x + 1] = "      " + blackSquare;
-                ct[y][x + 2] = "    ";
             }
         }
 

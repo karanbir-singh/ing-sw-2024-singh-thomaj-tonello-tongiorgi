@@ -578,6 +578,7 @@ public class VirtualSocketView implements VirtualView {
      * @return encoded card
      */
     private ObjectNode createResourceCardNode(Card resourceCard) {
+        if (resourceCard == null) return null;
         ObjectMapper om = new ObjectMapper();
         ObjectNode cardNode = om.createObjectNode();
         cardNode.put("sideSymbol", resourceCard.getFront().getSideSymbol().isPresent() ? resourceCard.getFront().getSideSymbol().get().toString() : "");

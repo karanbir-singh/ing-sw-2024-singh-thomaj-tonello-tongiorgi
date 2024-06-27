@@ -95,6 +95,13 @@ public class Game implements Serializable {
         Deck resourceCardDeck = p.getResourceCards();
         Deck missionDeck = p.getMissionCards();
         Deck starterDeck = p.getStarterCards();
+        for (int i = 0; i < 34; i++ ) {
+            goldCardDeck.removeCard();
+
+        }
+        for (int i = 0; i < 32; i++ ) {
+            resourceCardDeck.removeCard();
+        }
 
         // Create common table
         this.commonTable = new CommonTable(resourceCardDeck, goldCardDeck, starterDeck, missionDeck, this.observable);
