@@ -10,7 +10,7 @@ public interface PingManager extends Runnable{
     void reset();
 
     /**
-     * Returns true if server is uo, false otherwise
+     * Returns true if server is up, false otherwise
      */
     boolean isServerUp();
 }

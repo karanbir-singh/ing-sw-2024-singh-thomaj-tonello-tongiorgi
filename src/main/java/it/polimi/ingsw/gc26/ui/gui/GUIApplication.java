@@ -49,7 +49,7 @@ public class GUIApplication extends Application implements UIInterface {
      */
     private ArrayList<SceneInfo> scenes;
     /**
-     * The primary stage of the application whe it is started.
+     * The primary stage of the application.
      */
     private Stage primaryStage;
     /**
@@ -221,7 +221,7 @@ public class GUIApplication extends Application implements UIInterface {
 
 
     /**
-     * Connects the client to the server and sets game controller
+     * Connects the client to the server and sets the right game controller
      *
      * @throws RemoteException if the network is now working
      */
@@ -369,9 +369,6 @@ public class GUIApplication extends Application implements UIInterface {
         }
     }
 
-    public String getNickname(){
-        return this.mainClient.getNickname();
-    }
 
 
 }

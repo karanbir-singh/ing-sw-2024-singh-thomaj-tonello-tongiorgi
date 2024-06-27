@@ -435,6 +435,10 @@ public class GameFlowController extends SceneController implements Initializable
         }
     }
 
+    /**
+     * Modify the color of the name in every tab that contains the personalBoard
+     * @param simplifiedPlayer new simplified player
+     */
     @Override
     public void changeGUIPlayer(SimplifiedPlayer simplifiedPlayer) {
         if (simplifiedPlayer.getPawnColor() != null) {
@@ -458,7 +462,6 @@ public class GameFlowController extends SceneController implements Initializable
             this.setCardImageParameters(imageView, i);
             imageView.getStyleClass().add("cardHover");
             makeDraggable(imageView, playablePositions);
-            imageView.setOnMouseClicked(this::onHandCardClicked);
             handImages.add(imageView);
         }
 
@@ -515,7 +518,7 @@ public class GameFlowController extends SceneController implements Initializable
     }
 
     /**
-     * Populates the grid pane representing the personal board
+     * Set the dimensions and constraints of a gridPane
      *
      * @param gridPane pane inside players tab
      */
@@ -533,7 +536,7 @@ public class GameFlowController extends SceneController implements Initializable
     }
 
     /**
-     * Standards card images parameters
+     * Standard card images parameters
      *
      * @param imageView image to be standard
      * @param index     card's index in the hand
@@ -636,19 +639,6 @@ public class GameFlowController extends SceneController implements Initializable
         });
     }
 
-    /**
-     * Handles the event when the card is clicked. Selects a card from hand in the server
-     *
-     * @param mouseEvent the event triggered by clicking the card
-     */
-    public void onHandCardClicked(MouseEvent mouseEvent) {
-        try {
-            int index = Integer.parseInt(((ImageView) mouseEvent.getSource()).getId());
-            this.mainClient.getVirtualGameController().selectCardFromHand(index, this.mainClient.getClientID());
-        } catch (RemoteException e) {
-            System.out.println("Connection problem, please wait!");
-        }
-    }
 
     /**
      * Checks if a card has been released in a playable position
