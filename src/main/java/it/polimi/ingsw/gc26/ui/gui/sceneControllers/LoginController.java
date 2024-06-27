@@ -7,9 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -84,10 +82,9 @@ public class LoginController extends SceneController implements Initializable {
             status.setVisible(true);
         } else {
             try {
-                this.setNickName(nicknameTXT.getText());
-                this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), this.nickname, this.mainClient.getClientState());
+                this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), this.nicknameTXT.getText(), this.mainClient.getClientState());
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                System.out.println("Connection problem, please wait");
             }
         }
     }
@@ -97,7 +94,7 @@ public class LoginController extends SceneController implements Initializable {
      *
      * @return
      */
-    public String getText() {
+    public String getNickname() {
         return this.nicknameTXT.getText();
     }
 

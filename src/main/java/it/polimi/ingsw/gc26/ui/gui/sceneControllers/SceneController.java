@@ -4,6 +4,7 @@ import it.polimi.ingsw.gc26.MainClient;
 import it.polimi.ingsw.gc26.model.game.Message;
 import it.polimi.ingsw.gc26.model.player.Pawn;
 import it.polimi.ingsw.gc26.ui.gui.GUIApplication;
+import it.polimi.ingsw.gc26.utils.ConsoleColors;
 import it.polimi.ingsw.gc26.view_model.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -39,10 +40,6 @@ abstract public class SceneController {
      * The main client associated with this controller
      */
     public MainClient mainClient;
-    /**
-     * The nickname of the user
-     */
-    public String nickname;
     /**
      * The background image for the game scene.
      */
@@ -91,24 +88,6 @@ abstract public class SceneController {
      */
     public void setMainClient(MainClient mainClient) {
         this.mainClient = mainClient;
-    }
-
-    /**
-     * Sets player's nickname
-     *
-     * @param nickname string != ""
-     */
-    public void setNickName(String nickname) {
-        this.nickname = nickname;
-    }
-
-    /**
-     * Return player's nickname
-     *
-     * @return string != ""
-     */
-    public String getNickName() {
-        return this.nickname;
     }
 
     /**
@@ -193,8 +172,13 @@ abstract public class SceneController {
      * @param background
      */
     public void pageBindings(AnchorPane rootPane, BorderPane rootBorder, ImageView background) {
-        //rootBorder.prefWidthProperty().bind(rootPane.widthProperty());
-        //rootBorder.prefHeightProperty().bind(rootPane.heightProperty());
+        rootPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            rootBorder.setPrefHeight(newVal.doubleValue());
+        });
+
+        rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
+            rootBorder.setPrefWidth(newVal.doubleValue());
+        });
 
         background.setImage(gameBackground);
         setBackground(rootPane, background);
@@ -208,11 +192,9 @@ abstract public class SceneController {
      */
     public void cardsLayout(BorderPane rootBorder, ArrayList<ImageView> cards) {
         rootBorder.widthProperty().addListener((obs, oldVal, newVal) -> {
-            Platform.runLater(() -> {
-                for (ImageView card : cards) {
-                    card.setFitWidth(rootBorder.getWidth() * 0.13);
-                }
-            });
+            for (ImageView card : cards) {
+                card.setFitWidth(rootBorder.getWidth() * 0.13);
+            }
         });
     }
 
@@ -256,11 +238,11 @@ abstract public class SceneController {
         glow.setOffsetY(0f);
         glow.setWidth(50);
         glow.setHeight(50);
-        Platform.runLater(() -> {card.setEffect(glow);});
+        card.setEffect(glow);
     }
 
     /**
-     * Sets the dimensions and adds the icon to a button
+     * Sets styles for generic button
      *
      * @param icon   button's icon
      * @param button button to set styles
@@ -302,7 +284,7 @@ abstract public class SceneController {
     }
 
     /**
-     * Updates the viewport of an image to center it when the dimension of the application changes.
+     * Updates viewport when the dimension of the application changes.
      *
      * @param paneWidth
      * @param paneHeight
@@ -353,13 +335,11 @@ abstract public class SceneController {
      * Creates one chat with each player and the group chat
      *
      * @param simplifiedGame updated game
-     * @param nickname       nickname player itself
      */
-    public void createChats(SimplifiedGame simplifiedGame, String nickname) {
+    public void createChats(SimplifiedGame simplifiedGame) {
         if (!chatHasBeenCreated) {
-            this.nickname = nickname;
             for (String playerNickname : simplifiedGame.getPlayersNicknames()) {
-                if (!playerNickname.equals(nickname)) {
+                if (!playerNickname.equals(this.mainClient.getNickname())) {
                     createChatTab(playerNickname);
                 }
             }
@@ -383,8 +363,6 @@ abstract public class SceneController {
         TextField newTextField = new TextField();
         newTextField.setPrefWidth(208);
         newTextField.setPrefHeight(26);
-        newTextField.setLayoutX(9);
-        newTextField.setLayoutY(519);
         newTextField.setPromptText("Type Message");
         newAnchorPane.getChildren().add(newTextField);
         AnchorPane.setBottomAnchor(newTextField, 10.0);
@@ -440,7 +418,7 @@ abstract public class SceneController {
      */
     public void changeGUIChat(SimplifiedChat simplifiedChat) {
         Message newMessage = simplifiedChat.getMessages().getLast();
-        if (!newMessage.getSender().getNickname().equals(this.nickname)) {
+        if (!newMessage.getSender().getNickname().equals(this.mainClient.getNickname())) {
             // message from another player
             if (isReceiverUnknown(newMessage)) {
                 addMessageInChat(newMessage.getText(), "Group Chat", isLabeled(simplifiedChat) ? newMessage.getSender().getNickname() : null);
@@ -537,7 +515,7 @@ abstract public class SceneController {
         try {
             this.mainClient.getVirtualGameController().addMessage(newTextField.getText(), newTab.getText(), mainClient.getClientID(), LocalTime.now().toString().formatted(formatter));
         } catch (RemoteException e) {
-            System.err.println("RemoteException while sending message!");
+            ConsoleColors.printError("RemoteException while sending message!");
         }
         newTextField.clear();
 
@@ -579,5 +557,4 @@ abstract public class SceneController {
             }
         });
     }
-
 }

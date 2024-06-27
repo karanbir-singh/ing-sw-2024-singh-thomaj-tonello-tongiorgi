@@ -13,6 +13,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -77,8 +78,12 @@ public class GUIApplication extends Application implements UIInterface {
      */
     @Override
     public void start(Stage primaryStage) {
+
         // Get value from args
         String networkType = getParameters().getUnnamed().get(0);
+
+        //To try with a network
+        System.setProperty("sun.rmi.transport.tcp.responseTimeout", "2000");
 
         //lanchaure prima startSocketClient e startRMiCLient
         if (MainClient.NetworkType.valueOf(networkType) == MainClient.NetworkType.rmi) {
@@ -237,14 +242,13 @@ public class GUIApplication extends Application implements UIInterface {
             }
         }
 
-        mainClient.setNickname(this.getSceneController(SceneEnum.LOGIN).getNickName());
         if (this.mainClient.getClientState() == ClientState.CREATOR) {
             Platform.runLater(() -> {
                 this.getSceneInfo(SceneEnum.CREATOR).getScene().getStylesheets().add(Objects.requireNonNull(this.getClass().getResource("/Styles/creator.css")).toExternalForm());
-                this.getSceneController(SceneEnum.CREATOR).setNickName(this.getSceneController(SceneEnum.LOGIN).getNickName());
             });
 
-            // Set creator scene
+            // Set creator scene and nickname
+            this.mainClient.setNickname(((LoginController) this.getSceneController(SceneEnum.LOGIN)).getNickname());
             this.setCurrentScene(SceneEnum.CREATOR);
 
             synchronized (this.mainClient.getLock()) {
@@ -289,8 +293,8 @@ public class GUIApplication extends Application implements UIInterface {
             }
         }
 
-        // Set nickname for all scene controllers
-        this.setToAllControllersNickname();
+        // Set main client nickname
+        this.mainClient.setNickname(((LoginController) this.getSceneController(SceneEnum.LOGIN)).getNickname());
 
         // Set waiting scene
         this.setCurrentScene(SceneEnum.WAITING);
@@ -331,6 +335,7 @@ public class GUIApplication extends Application implements UIInterface {
      * @param message message to be displayed
      */
     public void openErrorPopup(String message) {
+        this.getCurrentScene().getScene().getRoot().setDisable(true);
         this.popupStage = new Stage();
         SceneInfo sceneInfo = this.getSceneInfo(SceneEnum.ERROR);
         this.popupStage.setScene(sceneInfo.getScene());
@@ -338,22 +343,7 @@ public class GUIApplication extends Application implements UIInterface {
         this.popupStage.setOnCloseRequest(Event::consume);
         this.popupStage.alwaysOnTopProperty();
         this.popupStage.show();
-    }
 
-    /**
-     * Sets nickname value in all game's controllers
-     */
-    private void setToAllControllersNickname() {
-        scenes.forEach(scene -> scene.getSceneController().setNickName(((LoginController) this.getSceneController(SceneEnum.LOGIN)).getText()));
-    }
-
-    /**
-     * Returns players nickname
-     *
-     * @return string not empty
-     */
-    public String getNickname() {
-        return mainClient.getNickname();
     }
 
     /**
@@ -373,10 +363,16 @@ public class GUIApplication extends Application implements UIInterface {
                 // Open the temporary file
                 Desktop.getDesktop().open(tempFile);
             } else {
-                System.err.println("Resource not found: ");
+                ConsoleColors.printError("Resource not found: ");
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
+
+    public String getNickname(){
+        return this.mainClient.getNickname();
+    }
+
+
 }

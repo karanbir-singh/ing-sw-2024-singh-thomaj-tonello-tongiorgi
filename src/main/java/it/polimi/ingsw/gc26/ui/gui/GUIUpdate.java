@@ -152,10 +152,10 @@ public class GUIUpdate implements UpdateInterface {
         switch (simplifiedGame.getGameState()) {
             case WAITING_STARTER_CARD_PLACEMENT:
                 this.guiApplication.setCurrentScene(SceneEnum.STARTERCARDCHOICE);
-                this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
-                this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
-                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
-                this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
+                this.guiApplication.getSceneInfo(SceneEnum.STARTERCARDCHOICE).getSceneController().createChats(simplifiedGame);
+                this.guiApplication.getSceneInfo(SceneEnum.PAWNSELECTION).getSceneController().createChats(simplifiedGame);
+                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame);
+                this.guiApplication.getSceneInfo(SceneEnum.SECRETMISSIONCHOICE).getSceneController().createChats(simplifiedGame);
                 break;
             case WAITING_PAWNS_SELECTION:
                 this.guiApplication.setCurrentScene(SceneEnum.PAWNSELECTION);
@@ -168,7 +168,7 @@ public class GUIUpdate implements UpdateInterface {
                 this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().updatePointScoreBoard(simplifiedGame.getScores(), simplifiedGame.getPawnsSelected());
                 break;
             case END_STAGE:
-                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame, guiApplication.getNickname());
+                this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().createChats(simplifiedGame);
                 this.guiApplication.getSceneInfo(SceneEnum.GAMEFLOW).getSceneController().updatePointScoreBoard(simplifiedGame.getScores(), simplifiedGame.getPawnsSelected());
                 break;
             case WINNER:
@@ -229,6 +229,7 @@ public class GUIUpdate implements UpdateInterface {
             });
             //close the error scene
             this.guiApplication.getSceneInfo(SceneEnum.ERROR).getScene().getWindow().hide();
+            this.guiApplication.getCurrentScene().getScene().getRoot().setDisable(false);
         });
     }
 
