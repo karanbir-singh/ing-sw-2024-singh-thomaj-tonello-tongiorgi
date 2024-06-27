@@ -108,7 +108,7 @@ public class TUIApplication implements UIInterface {
             System.out.println("Insert your nickname: ");
             nickname = scanner.nextLine().trim();
         } while (nickname.isEmpty());
-
+        System.out.println("Validating ...");
         this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), nickname, this.mainClient.getClientState());
 
         synchronized (this.mainClient.getLock()) {
@@ -166,7 +166,7 @@ public class TUIApplication implements UIInterface {
                     System.out.println("Insert new nickname: ");
                     nickname = scanner.nextLine().trim();
                 } while(nickname.isEmpty());
-
+                System.out.println("Validating ...");
                 this.mainClient.getVirtualMainController().connect(this.mainClient.getVirtualView(), nickname, this.mainClient.getClientState());
                 this.mainClient.setClientState(ClientState.CONNECTION);
                 synchronized (this.mainClient.getLock()) {
@@ -468,7 +468,7 @@ public class TUIApplication implements UIInterface {
                 return;
             }
             for (Message message : mainClient.getViewController().getSimplifiedModel().getSimplifiedChat().filterMessagesByPlayer(playerNickname, playersNicknames)) {
-                System.out.println(message);
+                System.out.println(message.toString(message.getSender().getPawnColor()));
             }
             TUIUpdate.printOptions(gameState, mainClient.getViewController().getSimplifiedModel().getSimplifiedGame().getWinners());
         } else {
