@@ -263,7 +263,7 @@ class PersonalBoardTest {
         assertEquals(0, pb.getResourceQuantity(Symbol.QUILL));
         assertEquals(0, pb.getResourceQuantity(Symbol.INKWELL));
 
-        assertEquals(4, pb.getScore());
+        assertEquals(0, pb.getScore());
         //check carta iniziale
         assertFalse(pb.getOccupiedPositions().get(0).getSide().getUPLEFT().isHidden());
         assertTrue(pb.getOccupiedPositions().get(0).getSide().getUPRIGHT().isHidden());
