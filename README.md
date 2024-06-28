@@ -36,8 +36,8 @@ We have implemented, in addiction to the `Game Specific` and `Game Agnostic` req
 4. Open `CMD` (or `Terminal` on macOS)
 5. Go to the directory containing the previous downloaded jar files
 6. From here: <br>
--> `java -jar Codex_Naturalis_Server.jar` (to run the server) <br>
--> `java -jar Codex_Naturalis_Client.jar` (to run the client) <br>
+-> `java -jar GC26-1.0-Server.jar` (to run the server) <br>
+-> `java -jar GC26-1.0-Client.jar` (to run the client) <br>
    *(on Windows, before running client, run this command: C:\\> **chcp 65001**)*
 
 ### From IntelliJ
@@ -51,7 +51,7 @@ We have implemented, in addiction to the `Game Specific` and `Game Agnostic` req
    *(on Windows, before running client, run this command: C:\\> **chcp 65001**)*
 
 > [!WARNING]  
-> For a better experience, launch TUI only on Windows CMD
+> For a better experience, launch TUI only on Windows CMD or bash console
 
 ## Running Server
 * You need to insert the server IP to give to the clients
