@@ -75,3 +75,5 @@ We decided to not modify the game specific, even if we have to manage multiple g
 * The player who creates the game chooses the number of players who will take part in it.
 * If there is a game starting, the player is automatically added to the game.
 * The game starts as soon as the expected number of players is reached (based on the choice made by the first player when creating the game).
+
+*NOTE: Codex Naturalis is a board game developed and published by Cranio Creations Srl. The graphic content of this project related to the board game is used with the approval of Cranio Creations Srl for educational purposes only. Distribution, copying, or reproduction of the content and images in any form outside of this project is prohibited, as is the redistribution and publication of the content and images for purposes other than those mentioned above. Furthermore, the commercial use of these contents is also prohibited.*
